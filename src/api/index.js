@@ -34,13 +34,8 @@ export const getComplaintsDetails = async (id) =>
       token: token,
     },
   });
-export const postComplaintsDetails = async (data) =>
-  axiosInstance.post(`/pms/complaints.json`, {
-    params: {
-      token: token,
-    },
-  }, data,);
 
+  
   export const fetchSubCategories = async (categoryId) =>
   axiosInstance.get(`/pms/admin/get_sub_categories.json`, {
     params: {
@@ -57,3 +52,69 @@ export const postComplaintsDetails = async (data) =>
       token: token,
     },
   })
+
+  // export const getComplaints = async () => axiosInstance.get("/pms/complaints.json", {
+  //   params: {
+  //     token: token
+  //   }
+  // });
+
+
+// post api  
+
+  // export const postComplaintsDetails = async (data) =>
+  //   axiosInstance.post(`/pms/complaints.json`, {
+  //     params: {
+  //       token: token
+  //     }
+  //   });
+
+  
+  // export const postComplaintsDetails = async (data) => 
+  // axiosInstance.post('/pms/complaints.json', {
+  //   params: {
+  //     token: token,
+  //     complaint: [ 
+  //     {
+  //       category_type_id: data.category_type_id,
+  //       sub_category_id: data.sub_category_id,
+  //       text: data.text
+  //     }
+  //   ]
+  //   }
+  // })
+
+
+
+  // export const postComplaintsDetails = async (data) => {
+  //   try {
+  //     const response = await axiosInstance.post('/pms/complaints.json', {
+  //       token: token,
+  // complaint: [
+  //   {
+  //     category_type_id: data.category_type_id,
+  //     sub_category_id: data.sub_category_id,
+  //     text: data.text
+  //   }
+  // ]
+        
+  //     });
+  
+  //     return response.data; // Assuming you want to return the response data
+  //   } catch (error) {
+  //     // Handle error
+  //     console.error("Error:", error);
+  //     throw error; // Rethrow the error to propagate it to the caller
+  //   }
+  // }
+  
+
+  export const postComplaintsDetails = async (data) => {
+    try {
+      const response = await axiosInstance.post(`/pms/complaints.json?token=${token}`, data);
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
+  };
+  

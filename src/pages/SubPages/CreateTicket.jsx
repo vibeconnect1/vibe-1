@@ -6,41 +6,61 @@ import Selector from "../../containers/Selector";
 import { useNavigate } from "react-router-dom";
 import FileInput from "../../Buttons/FileInput";
 import { getItemInLocalStorage } from "../../utils/localStorage";
+import { fetchSubCategories } from "../../api";
 
 const CreateTicket = () => {
   const navigate = useNavigate();
-  const [userName, setUserName] = useState("")
   const [isOpen, setIsOpen] = useState(false);
   const [behalf, setBehalf] = useState("self");
   const [ticketType, setTicketType] = useState("");
+  //   const [selectedOption, setSelectedOption] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("");
   const [selectedSubCategory, setSelectedSubCategory] = useState("");
   const [selectedCustomerPriority, setSelectedCustomerPriority] = useState("");
   const [selectedAdminPriority, setSelectedAdminPriority] = useState("");
-  const [selectedProactiveReactive, setSelectedProactiveReactive] =
-    useState("");
+  const [units, setUnits] = useState([])
   const [user, setUser] = useState("");
-  // const [referenceNumber, setReferenceNumber] = useState("");
   const [attachments, setAttachments] = useState([]);
-  // const options = {
-  //   Catregory: [
-  //     "Air Conditioning",
-  //     "IT Support",
-  //     "Elevator",
-  //     "Cafeteria/Pantry",
-  //     "Technical",
-  //     "Repair & Maintenance",
-  //     "Sanitization",
-  //     "House Keeping",
-  //     "Washing Cleaning",
-  //     "Others",
-  //   ],
-  //   subCategory: [],
-  //   adminPriority: ["P1", "P2", "P3", "P4"],
-  //   priority: ["Low", "Medium", "High"],
-  //   proactiveReactive: ["Proactive", "Reactive"],
-  //   user: ["user1", "user2"],
-  // };
+  const [formData, setFormData] = useState({
+    category_type_id: "18",
+    sub_category_id: "", 
+    assigned_to: "",
+    priority: ""
+  })
+
+  const options = {
+    Catregory: [
+      "Air Conditioning",
+      "IT Support",
+      "Elevator",
+      "Cafeteria/Pantry",
+      "Technical",
+      "Repair & Maintenance",
+      "Sanitization",
+      "House Keeping",
+      "Washing Cleaning",
+      "Others",
+    ],
+    subCategory: [],
+    adminPriority: ["P1", "P2", "P3", "P4"],
+    priority: ["Low", "Medium", "High"],
+    proactiveReactive: ["Proactive", "Reactive"],
+    user: ["user1", "user2"],
+  };
+  
+  console.log(formData);
+  console.log(attachments);
+ 
+  const categories = getItemInLocalStorage("categories");
+  console.log("Categories", categories)
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const response = await fetchSubCategories(14);
+      // console.log("subCategories:", response);
+    };
+    fetchData();
+  }, []);
 
   const handleOptionChange = (event, setState) => {
     setState(event.target.value);
@@ -52,30 +72,61 @@ const CreateTicket = () => {
     setAttachments(fileList);
   };
 
-  useEffect(()=>{
-    // const user = getItemInLocalStorage("Name")
-    const user =  localStorage.getItem("Name");
-    const token = localStorage.getItem("TOKEN");
-    console.log(token)
-    setUserName(user)
-    console.log(user)
-  },[])
+  const handleChange = async (e) => {
+    async function fetchSubCategory(categoryId) {
+      try {
+        const cat = await fetchSubCategories(categoryId);
+        setUnits(cat.data.sub_categories.map((item) => ({ name: item.name, id: item.id })));
+        // console.log(cat);
+      } catch (e) {
+        console.log(e);
+      }
+    }
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    navigate("/tickets");
+    if (e.target.type === "select-one" && e.target.name === "categories") {
+      const categoryId = Number(e.target.value);
+      await fetchSubCategory(categoryId);
+      setFormData({
+        ...formData,
+        category_type_id: categoryId,
+        sub_category_id: "",
+      });
+    } else {
+      setFormData({
+        ...formData,
+        [e.target.name]: e.target.value,
+      });
+    }
   };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await axios.post(
+        'http://3.6.98.113/pms/complaints.json?token=775d6ae27272741669a65456ea10cc56cd4cce2bb99287b6',
+        formData
+      );
+      // console.log('Complaint submitted successfully:', response.data);
+      setFormData({
+        category_type_id: "",
+        sub_category_id: "",
+        text: "",
+        heading: "read",
+        of_phase: "pms",
+        site_id: selectedSiteId,
+      });
+      navigate('/mytickets/userticket');
+    } catch (error) {
+      console.error('Error submitting complaint:', error);
+    }
+  };
+
   const handleReset = () => {
     setAttachments([]);
     setSelectedSubCategory("");
-    setBehalf("self");
-    setSelectedAdminPriority("");
     setSelectedCategory("");
     setSelectedCustomerPriority("");
-    setSelectedProactiveReactive("");
     setSelectedCategory("");
-    setTicketType("");
-    setUser("");
   };
   return (
     <section className="justify-center items-center min-h-screen my-15 md:flex">
@@ -128,7 +179,7 @@ const CreateTicket = () => {
               className="bg-gray-300 p-2 rounded-md font-bold "
             >
               <div className="grid grid-cols-3 bg-gray-300 p-2 rounded-md gap-5 pb-4">
-                <p>Name: {userName}</p>
+                <p>Name:</p>
                 <p>Contact No:</p>
                 <p>Site:</p>
                 <p>Department:</p>
@@ -139,7 +190,6 @@ const CreateTicket = () => {
             <div className="flex items-center  gap-4 my-5">
               <h2 className="font-bold ">Requestor Deatils :</h2>
               <Selector
-                //   heading={"User"}
                 selectedOption={user}
                 handleOptionChange={(e) => handleOptionChange(e, setUser)}
                 subHeading={"Choose User"}
@@ -178,24 +228,38 @@ const CreateTicket = () => {
           </ul> */}
         </div>
         <div className="ml-5 grid sm:grid-cols-3 place-content-center w-full gap-4">
-          <Selector
-            heading={"Category"}
-            selectedOption={selectedCategory}
-            handleOptionChange={(e) =>
-              handleOptionChange(e, setSelectedCategory)
-            }
-            subHeading={"Choose Category"}
-            options={options.Catregory}
-          />
-          <Selector
-            heading={"Sub Category"}
-            subHeading={"Choose Sub Category"}
-            options={options.Catregory}
-            selectedOption={selectedSubCategory}
-            handleOptionChange={(e) =>
-              handleOptionChange(e, setSelectedSubCategory)
-            }
-          />
+        <select
+                  id="two"
+                  value={formData.catogories}
+                  name="categories"
+                  onChange={handleChange}
+                  className="border p-1 px-4 border-gray-500 rounded-md"
+                >
+                  <option value="">Select Category</option>
+                  {categories?.map(
+                    category => (
+                      <option onClick={() => console.log("checking-category")} value={category.id}>{category.name}</option>
+                    )
+                  )}
+                </select>
+
+                <label htmlFor="" className="font-semibold">
+                  Sub Category:
+                </label>
+                <select
+                  id="five"
+                  value={formData.subCategories}
+                  name="sub_category_id"
+                  onChange={handleChange}
+                  className="border p-2 px-4 border-gray-500 rounded-md"
+                >
+                  <option value="">Sub Category</option>
+                  {units?.map(
+                    floor => (
+                      <option value={floor.id}>{floor.name}</option>
+                    )
+                  )}
+                </select>
           {/* <Selector
             heading={"Admin Priority"}
             subHeading={"Choose Admin Priority"}
