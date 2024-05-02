@@ -21,10 +21,19 @@ const Selector = ({
         value={selectedOption}
         onChange={handleOptionChange}
       >
-        <option value="">{subHeading}</option>
+
+        {/* Original */}
+        {/* <option value="">{subHeading}</option>
         {options.map((item, index) => {
           return <option key={index} value={item}>{item}</option>;
-        })}
+        })} */}
+
+        <option value="">{subHeading}</option>
+        {Array.isArray(options) && options.map((item, index) => (
+          <option key={index} value={item}>{item}</option>
+        ))}
+
+
         {/* <option value="option2">Option 2</option>
         <option value="option3">Option 3</option> */}
       </select>

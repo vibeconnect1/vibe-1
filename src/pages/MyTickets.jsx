@@ -22,9 +22,7 @@ function MyTickets() {
                     <Link to={`/tickets/details/${row.id}`}>
                         <BsEye size={15} />
                     </Link>
-                    <Link to={`/edit/${row.id}`}>
-                        <BiEdit size={15} />
-                    </Link>
+                   
                 </div>
             ),
         },
@@ -260,12 +258,6 @@ function MyTickets() {
                             value={searchText}
                             onChange={handleSearch}
                         />
-                        {/* <button
-                className="border-2 font-semibold hover:bg-black hover:text-white duration-150 transition-all border-black p-2 rounded-md text-black cursor-pointer text-center flex items-center w-24 gap-2 justify-center"
-                onClick={handleSearch}
-              >
-                Search
-              </button> */}
                     </div>
                 </div>
                 <div className="flex flex-col gap-4 justify-center items-center overflow-hidden">
@@ -282,7 +274,6 @@ function MyTickets() {
                         highlightOnHover
                     />
                 </div>
-                {/* </div> */}
             </div>
         </section>
     )

@@ -62,6 +62,7 @@ import ProtectedRoute from "./routes/ProtectedRoutes.jsx";
 import AddSupplier from "./pages/SubPages/AddSupplier.jsx";
 import MyTickets from "./pages/MyTickets.jsx";
 import UserTicket from "./pages/SubPages/UserTicket.jsx";
+import DetailsEdit from "./pages/SubPages/details/DetailsEdit.jsx";
 function App() {
   return (
     <>
@@ -74,9 +75,7 @@ function App() {
           <Route
             path="/dashboard"
             element={
-              <ProtectedRoute>
                 <Dashboard />
-              </ProtectedRoute>
             }
           />
           <Route path="/attendance" element={<Attendance />} />
@@ -100,9 +99,11 @@ function App() {
           <Route path="/setup/account/room" element={<Room />} />
           <Route path="/setup/User-role" element={<UserRole />} />
           {/* tickets -Admin*/}
-          <Route path="/tickets" element={<ProtectedRoute><Ticket /></ProtectedRoute>} />
+          <Route path="/tickets" element={<Ticket />} />
           <Route path="/tickets/details/:id" element={<ProtectedRoute><TicketDetails /></ProtectedRoute>} />
-          <Route path="/tickets/create-ticket" element={<ProtectedRoute><CreateTicket /></ProtectedRoute>} />
+          <Route path="/tickets/create-ticket" element={<CreateTicket />} />
+          {/* Edit Details */}
+          <Route path="/edit/:id" element={<ProtectedRoute><DetailsEdit /></ProtectedRoute>} />
           {/* tickets- user */}
           <Route path="/mytickets" element= {<ProtectedRoute> <MyTickets /> </ProtectedRoute>} />
           <Route path="/mytickets/userticket" element= {<ProtectedRoute> <UserTicket /> </ProtectedRoute>} />

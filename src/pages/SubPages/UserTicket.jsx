@@ -14,8 +14,6 @@ const UserTicket = () => {
   const [attachments, setAttachments] = useState([]);
   const [units, setUnits] = useState([]);
   const [selectedSiteId, setSelectedSiteId] = useState(15);
-  const [items, setItems] = useState([])
-  const [heading, setHeading] = useState("");
 
   const [formData, setFormData] = useState({
     category_type_id: "",
@@ -24,7 +22,7 @@ const UserTicket = () => {
     heading: "",
     of_phase: "pms",
     site_id: selectedSiteId,
-    documents: "",
+    documents: [],
   });
 
   console.log(formData);

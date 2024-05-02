@@ -22,31 +22,12 @@ const CreateTicket = () => {
   const [user, setUser] = useState("");
   const [attachments, setAttachments] = useState([]);
   const [formData, setFormData] = useState({
-    category_type_id: "18",
+    category_type_id: "",
     sub_category_id: "", 
-    assigned_to: "",
+    assigned_to: null,
     priority: ""
   })
 
-  const options = {
-    Catregory: [
-      "Air Conditioning",
-      "IT Support",
-      "Elevator",
-      "Cafeteria/Pantry",
-      "Technical",
-      "Repair & Maintenance",
-      "Sanitization",
-      "House Keeping",
-      "Washing Cleaning",
-      "Others",
-    ],
-    subCategory: [],
-    adminPriority: ["P1", "P2", "P3", "P4"],
-    priority: ["Low", "Medium", "High"],
-    proactiveReactive: ["Proactive", "Reactive"],
-    user: ["user1", "user2"],
-  };
   
   console.log(formData);
   console.log(attachments);
@@ -66,10 +47,36 @@ const CreateTicket = () => {
     setState(event.target.value);
   };
 
+
+
+  // const handleFileChange = (event) => {
+  //   const files = event.target.files;
+  //   const fileList = Array.from(files);
+  //   setAttachments(fileList);
+  // };
+
+  // const handleUpload = async () => {
+  //   try {
+  //     const formData = new FormData();
+  //     formData.append('file', selectedFile);
+  //     // Send the file to the server
+  //     await axios.post('/upload', formData);
+  //     alert('File uploaded successfully!');
+  //   } catch (error) {
+  //     console.error('Error uploading file:', error);
+  //     alert('An error occurred while uploading the file.');
+  //   }
+  // };
+
+  // const [selectedFile, setSelectedFile] = useState(null);
+
+  // const handleFileChange = (event) => {
+  //   setAttachments(event.target.files[0]);
+  // };
+
   const handleFileChange = (event) => {
-    const files = event.target.files;
-    const fileList = Array.from(files);
-    setAttachments(fileList);
+    // Append the selected file to the attachments array
+    setAttachments([...attachments, event.target.files[0]]);
   };
 
   const handleChange = async (e) => {
@@ -99,9 +106,14 @@ const CreateTicket = () => {
     }
   };
 
+   
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+
+      const fileData = new FormData();
+      fileData.append('file', attachments);
+       
       const response = await axios.post(
         'http://3.6.98.113/pms/complaints.json?token=775d6ae27272741669a65456ea10cc56cd4cce2bb99287b6',
         formData
@@ -120,6 +132,30 @@ const CreateTicket = () => {
       console.error('Error submitting complaint:', error);
     }
   };
+  
+
+  // const handleSubmit = async (e) => {
+  //   e.preventDefault();
+  //   try {
+  //     const formData = new FormData();
+  //     formData.append('file', attachments[0]); // Assuming only one file is allowed
+
+  //     // Append other form data fields to the FormData object
+  //     formData.append('category_type_id', selectedCategory);
+  //     formData.append('sub_category_id', selectedSubCategory);
+  //     // Add more fields as needed
+
+  //     const response = await axios.post(
+  //       'http://3.6.98.113/pms/complaints.json?token=775d6ae27272741669a65456ea10cc56cd4cce2bb99287b6',
+  //       formData
+  //     );
+
+  //     console.log('Complaint submitted successfully:', response.data);
+  //     // Reset form data and navigate
+  //   } catch (error) {
+  //     console.error('Error submitting complaint:', error);
+  //   }
+  // };
 
   const handleReset = () => {
     setAttachments([]);
@@ -137,6 +173,7 @@ const CreateTicket = () => {
         className="border border-gray-300 rounded-lg sm:w-[60rem] p-8"
         onSubmit={handleSubmit}
       >
+        
         <h2 className="text-center text-xl font-bold p-2 bg-black rounded-full text-white">
           Create Ticket
         </h2>
@@ -227,7 +264,12 @@ const CreateTicket = () => {
             </li>
           </ul> */}
         </div>
-        <div className="ml-5 grid sm:grid-cols-3 place-content-center w-full gap-4">
+        {/* <div className="ml-5 grid sm:grid-cols-3 place-content-center w-full gap-4"> */}
+       
+        <div className="ml-5 flex flex-col items-start w-full gap-4">
+        <label htmlFor="" className="font-semibold">
+                  Category:
+                </label>
         <select
                   id="two"
                   value={formData.catogories}
@@ -260,63 +302,36 @@ const CreateTicket = () => {
                     )
                   )}
                 </select>
-          {/* <Selector
-            heading={"Admin Priority"}
-            subHeading={"Choose Admin Priority"}
-            options={options.adminPriority}
-            selectedOption={selectedAdminPriority}
-            handleOptionChange={(e) =>
-              handleOptionChange(e, setSelectedAdminPriority)
-            }
-          /> */}
           <Selector
             heading={"Assigned To"}
             subHeading={"Assign To"}
-            options={options.Catregory}
+            options={formData.assigned_to}
           />
           <Selector
             heading={"Customer Priority"}
             subHeading={"Choose Priority"}
-            options={options.priority}
+            options={formData.priority}
             selectedOption={selectedCustomerPriority}
             handleOptionChange={(e) =>
               handleOptionChange(e, setSelectedCustomerPriority)
             }
           />
-          {/* <div className="flex flex-col gap-1">
-            <label htmlFor="" className="font-semibold">
-              Reference Number:
-            </label>
-            <input
-              type="text"
-              name=""
-              id=""
-              placeholder="Enter Reference Number"
-              className="border border-black rounded-md w-48 p-2"
-            />
-          </div> */}
-          {/* <Selector
-            heading={"Proactive/Reactive"}
-            subHeading={"Choose Proactive/Reactive"}
-            options={options.proactiveReactive}
-            selectedOption={selectedProactiveReactive}
-            handleOptionChange={(e) =>
-              handleOptionChange(e, setSelectedProactiveReactive)
-            }
-          /> */}
-        </div>
-        <div className="flex flex-col my-5 gap-1">
-          <label htmlFor="" className="font-bold">
-            Description :
-          </label>
-          <textarea
-            name=""
-            id=""
-            cols="80"
-            rows="5"
-            className="border border-black rounded-md"
-          />
-        </div>
+        {/* </div> */}
+        <div className="flex ml-5 flex-col my-5 gap-1">
+              <label htmlFor="" className="font-bold">
+                Description:
+              </label>
+              <textarea
+                name="text"
+                placeholder=" Describe your concern!"
+                id=""
+                cols="80"
+                rows="5"
+                className="border border-black rounded-md"
+                value={formData.text}
+                onChange={handleChange}
+              />
+            </div>
 
         <FileInput handleFileChange={handleFileChange} />
         <div>
@@ -325,6 +340,7 @@ const CreateTicket = () => {
               <p className="text-green">File Name: {file.name}</p>
             </div>
           ))}
+        </div>
         </div>
         <div className="flex gap-5 justify-center items-center my-4">
           <button

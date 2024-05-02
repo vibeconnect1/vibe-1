@@ -22,6 +22,8 @@ export const postSiteAsset = async (id) =>
       token: token,
     },
   });
+
+  
 export const getComplaints = async () =>
   axiosInstance.get(`/pms/complaints.json`, {
     params: {
@@ -52,6 +54,15 @@ export const getComplaintsDetails = async (id) =>
       token: token,
     },
   })
+
+  export const updateComplaintsDetails = async (id, data) => 
+  axiosInstance.put('pms/complaints/${id}.json', data, {
+    params : {
+      token : token,
+    }
+  })
+
+  
 
   // export const getComplaints = async () => axiosInstance.get("/pms/complaints.json", {
   //   params: {
@@ -117,4 +128,3 @@ export const getComplaintsDetails = async (id) =>
       throw error;
     }
   };
-  
