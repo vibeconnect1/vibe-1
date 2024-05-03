@@ -45,18 +45,18 @@ const Login = () => {
         },
       });
 
-      // const categories = response.data.categories;
-      // setItemInLocalStorage("categories", categories);
-      // const token = response.data.user.api_key;
-      // setItemInLocalStorage("TOKEN", token);
-      // const selectedSiteId = response.data.user.selected_site_id
-      // const userName = response.data.user.firstname
-      // localStorage.setItem("Name", userName)
-      // console.log(userName)
-      // console.log(selectedSiteId)
-      // toast.loading("Processing your data please wait...");
-      // navigate("/dashboard");
-      // toast.dismiss();
+      const categories = response.data.categories;
+      setItemInLocalStorage("categories", categories);
+      const token = response.data.user.api_key;
+      setItemInLocalStorage("TOKEN", token);
+      const selectedSiteId = response.data.user.selected_site_id
+      const userName = response.data.user.firstname
+      localStorage.setItem("Name", userName)
+      console.log(userName)
+      console.log(selectedSiteId)
+      toast.loading("Processing your data please wait...");
+      navigate("/dashboard");
+      toast.dismiss();
     } catch (error) {
       console.error("Login failed:", error);
       toast.error("Login failed. Please check your credentials.");
