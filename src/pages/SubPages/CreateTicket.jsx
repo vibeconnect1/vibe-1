@@ -135,7 +135,7 @@ const CreateTicket = () => {
       // fileData.append('file', attachments);
 
       const response = await axios.post(
-        'http://https://admin.vibecopilot.ai/?token=775d6ae27272741669a65456ea10cc56cd4cce2bb99287b6',
+        'https://admin.vibecopilot.ai/?token=775d6ae27272741669a65456ea10cc56cd4cce2bb99287b6',
         formData
       );
       console.log('Complaint submitted successfully:', response.data);

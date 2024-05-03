@@ -34,7 +34,7 @@ const UserTicket = () => {
   useEffect(() => {
     const fetchData = async () => {
       const response = await fetchSubCategories(14);
-      // console.log("subCategories:", response);
+      console.log("subCategories:", response);
     };
     fetchData();
   }, []);
@@ -44,7 +44,7 @@ const UserTicket = () => {
       try {
         const cat = await fetchSubCategories(categoryId);
         setUnits(cat.data.sub_categories.map((item) => ({ name: item.name, id: item.id })));
-        // console.log(cat);
+        console.log(cat);
       } catch (e) {
         console.log(e);
       }
@@ -94,7 +94,7 @@ const UserTicket = () => {
     e.preventDefault();
     try {
       const response = await axios.post(
-        'http://https://admin.vibecopilot.ai/?token=775d6ae27272741669a65456ea10cc56cd4cce2bb99287b6',
+        'https://admin.vibecopilot.ai/pms/complaints.json?token=775d6ae27272741669a65456ea10cc56cd4cce2bb99287b6',
         formData
       );
       console.log('Complaint submitted successfully:', response.data);
