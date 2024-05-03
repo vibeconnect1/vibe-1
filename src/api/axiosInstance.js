@@ -2,7 +2,7 @@ import axios from "axios";
 import { getItemInLocalStorage } from "../utils/localStorage";
 
 const axiosInstance = axios.create({
-  baseURL: "http://admin.vibecopilot.ai/",
+  baseURL: "https://admin.vibecopilot.ai/",
 });
 
 axiosInstance.interceptors.request.use(
