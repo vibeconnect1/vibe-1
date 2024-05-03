@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import Navbar from "../../components/Navbar";
 import { useNavigate } from "react-router-dom";
-import { fetchSubCategories, getComplaints } from "../../api";
+import { fetchSubCategories, getComplaints , postComplaintsDetails} from "../../api";
 import { getItemInLocalStorage } from "../../utils/localStorage";
-import axios from "axios";
+// import axios from "axios";
 import toast from "react-hot-toast";
 
 const UserTicket = () => {
@@ -22,7 +22,7 @@ const UserTicket = () => {
     heading: "",
     of_phase: "pms",
     site_id: selectedSiteId,
-    documents: [],
+    documents: []
   });
 
   console.log(formData);
@@ -140,7 +140,7 @@ const UserTicket = () => {
   };
   
 
-  
+
   const handleReset = () => {
     setDescription("");
     setAttachments([]);
