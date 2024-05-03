@@ -94,7 +94,7 @@ const UserTicket = () => {
     e.preventDefault();
     try {
       const response = await axios.post(
-        'http://13.215.74.38/pms/complaints.json?token=775d6ae27272741669a65456ea10cc56cd4cce2bb99287b6',
+        'http://http://admin.vibecopilot.ai/?token=775d6ae27272741669a65456ea10cc56cd4cce2bb99287b6',
         formData
       );
       console.log('Complaint submitted successfully:', response.data);
