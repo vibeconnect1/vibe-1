@@ -22,7 +22,7 @@ const UserTicket = () => {
     heading: "",
     of_phase: "pms",
     site_id: selectedSiteId,
-    documents: []
+    // attachments : []
   });
 
   console.log(formData);
@@ -86,36 +86,9 @@ const UserTicket = () => {
 
     setFormData({
       ...formData,
-      documents: fileList
+      attachments : fileList
     });
   };
-
-  /*  
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      const response = await axios.post(
-        'https://admin.vibecopilot.ai/pms/complaints.json?token=775d6ae27272741669a65456ea10cc56cd4cce2bb99287b6',
-        formData
-      );
-      console.log('Complaint submitted successfully:', response.data);
-      setFormData({
-        category_type_id: "",
-        sub_category_id: "",
-        text: "",
-        heading: "",
-        of_phase: "pms",
-        site_id: selectedSiteId,
-        documents: []
-      });
-      toast.success("Complaint sent successfully")
-      navigate('/mytickets/userticket');
-    } catch (error) {
-      console.error('Error submitting complaint:', error);
-    }
-  };
-
-  */
 
 
   const handleSubmit = async (e) => {
@@ -130,10 +103,10 @@ const UserTicket = () => {
         heading: "",
         of_phase: "pms",
         site_id: selectedSiteId,
-        documents: []
+        // attachments: []
       });
       toast.success("Complaint sent successfully");
-      navigate('/mytickets/userticket');
+      navigate('/mytickets');
     } catch (error) {
       console.error('Error submitting complaint:', error);
     }
@@ -231,7 +204,7 @@ const UserTicket = () => {
 
 
 
-            <input type="file" name="documents" id="documents" onChange={handleFileChange} multiple className="ml-5"/>
+            <input type="file" name="attachments" id="attachments" onChange={handleFileChange} multiple className="ml-5"/>
             <div>
               {attachments.map((file, index) => (
                 <div key={index}>

@@ -22,3 +22,9 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+
+//Api Instance: 
+
+src/api/axiosInstance.js
+axiosInstance.js

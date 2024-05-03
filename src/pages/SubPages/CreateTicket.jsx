@@ -29,7 +29,7 @@ const CreateTicket = () => {
     priority: "",
     of_phase: "pms",
     site_id: selectedSiteId,
-    documents: [],
+    // documents: [],
   })
 
 
@@ -69,35 +69,6 @@ const CreateTicket = () => {
     });
   };
 
-  // const handleFileChange = (event) => {
-  //   const files = event.target.files;
-  //   const fileList = Array.from(files);
-  //   setAttachments(fileList);
-  // };
-
-  // const handleUpload = async () => {
-  //   try {
-  //     const formData = new FormData();
-  //     formData.append('file', selectedFile);
-  //     // Send the file to the server
-  //     await axios.post('/upload', formData);
-  //     alert('File uploaded successfully!');
-  //   } catch (error) {
-  //     console.error('Error uploading file:', error);
-  //     alert('An error occurred while uploading the file.');
-  //   }
-  // };
-
-  // const [selectedFile, setSelectedFile] = useState(null);
-
-  // const handleFileChange = (event) => {
-  //   setAttachments(event.target.files[0]);
-  // };
-
-  // const handleFileChange = (event) => {
-  //   // Append the selected file to the attachments array
-  //   setAttachments([...attachments, event.target.files[0]]);
-  // };
 
   const handleChange = async (e) => {
     async function fetchSubCategory(categoryId) {
@@ -126,41 +97,11 @@ const CreateTicket = () => {
     }
   };
 
- /*
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-
-      // const fileData = new FormData();
-      // fileData.append('file', attachments);
-
-      const response = await axios.post(
-        'https://admin.vibecopilot.ai/?token=775d6ae27272741669a65456ea10cc56cd4cce2bb99287b6',
-        formData
-      );
-      console.log('Complaint submitted successfully:', response.data);
-      setFormData({
-        category_type_id: "",
-        sub_category_id: "",
-        text: "",
-        heading: "",
-        of_phase: "pms",
-        site_id: selectedSiteId,
-        documents: []
-      });
-      navigate('/mytickets/userticket');
-    } catch (error) {
-      console.error('Error submitting complaint:', error);
-    }
-  };
-  */
-
-
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      // Call the postComplaintsDetails function from index.js
+    
       const response = await postComplaintsDetails(formData);
       console.log('Complaint submitted successfully:', response);
       setFormData({
@@ -170,38 +111,14 @@ const CreateTicket = () => {
         heading: "",
         of_phase: "pms",
         site_id: selectedSiteId,
-        documents: []
+        // documents: []
       });
       toast.success("Complaint sent successfully");
-      navigate('/mytickets/userticket');
+      navigate('/tickets');
     } catch (error) {
       console.error('Error submitting complaint:', error);
     }
   };
-
-
-  // const handleSubmit = async (e) => {
-  //   e.preventDefault();
-  //   try {
-  //     const formData = new FormData();
-  //     formData.append('file', attachments[0]); // Assuming only one file is allowed
-
-  //     // Append other form data fields to the FormData object
-  //     formData.append('category_type_id', selectedCategory);
-  //     formData.append('sub_category_id', selectedSubCategory);
-  //     // Add more fields as needed
-
-  //     const response = await axios.post(
-  //       'http://3.6.98.113/pms/complaints.json?token=775d6ae27272741669a65456ea10cc56cd4cce2bb99287b6',
-  //       formData
-  //     );
-
-  //     console.log('Complaint submitted successfully:', response.data);
-  //     // Reset form data and navigate
-  //   } catch (error) {
-  //     console.error('Error submitting complaint:', error);
-  //   }
-  // };
 
   const handleReset = () => {
     setAttachments([]);
