@@ -245,7 +245,7 @@ function MyTickets() {
                     <Link
                         to={"/mytickets/userticket"}
                         className="border-2 font-semibold hover:bg-black hover:text-white duration-150 transition-all border-black p-2 rounded-md text-black cursor-pointer text-center flex items-center w-44 gap-2 justify-center"
-                        onClick={() => setShowCountry(!showCountry)}
+                        // onClick={() => setShowCountry(!showCountry)}
                     >
                         <PiPlusCircle size={20} />
                         Add

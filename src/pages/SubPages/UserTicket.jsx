@@ -90,6 +90,7 @@ const UserTicket = () => {
     });
   };
 
+  /*  
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -114,6 +115,32 @@ const UserTicket = () => {
     }
   };
 
+  */
+
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await postComplaintsDetails(formData);
+      console.log('Complaint submitted successfully:', response);
+      setFormData({
+        category_type_id: "",
+        sub_category_id: "",
+        text: "",
+        heading: "",
+        of_phase: "pms",
+        site_id: selectedSiteId,
+        documents: []
+      });
+      toast.success("Complaint sent successfully");
+      navigate('/mytickets/userticket');
+    } catch (error) {
+      console.error('Error submitting complaint:', error);
+    }
+  };
+  
+
+  
   const handleReset = () => {
     setDescription("");
     setAttachments([]);
