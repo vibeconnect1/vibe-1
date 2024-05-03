@@ -66,13 +66,29 @@ const UserTicket = () => {
     }
   };
 
+  // const handleFileChange = (event) => {
+  //   const files = event.target.files;
+  //   const fileList = Array.from(files);
+  //   setAttachments(fileList);
+  // };
+
   const handleFileChange = (event) => {
     const files = event.target.files;
-    const fileList = Array.from(files);
+    const fileList = Array.from(files).map(file => ({
+      name: file.name,
+      size: file.size,
+      type: file.type,
+      data: file,
+      lastModified: file.lastModified // Store the file object directly
+      // Add more properties as needed
+    }));
     setAttachments(fileList);
+
+    setFormData({
+      ...formData,
+      documents: fileList
+    });
   };
-
-
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -89,6 +105,7 @@ const UserTicket = () => {
         heading: "",
         of_phase: "pms",
         site_id: selectedSiteId,
+        documents: []
       });
       toast.success("Complaint sent successfully")
       navigate('/mytickets/userticket');
@@ -192,6 +209,10 @@ const UserTicket = () => {
               {attachments.map((file, index) => (
                 <div key={index}>
                   <p className="text-green">File Name: {file.name}</p>
+                  {/* new added */}
+                  <p className="text-green">File Size: {file.size}</p>
+                  <p className="text-green">File Type: {file.type}</p>
+                  <p className="text-green">File LastModified: {file.lastModified}</p>
                 </div>
               ))}
             </div>

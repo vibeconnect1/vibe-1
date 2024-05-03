@@ -75,7 +75,9 @@ function App() {
           <Route
             path="/dashboard"
             element={
+              <ProtectedRoute>
                 <Dashboard />
+                </ProtectedRoute>
             }
           />
           <Route path="/attendance" element={<Attendance />} />
@@ -101,12 +103,12 @@ function App() {
           {/* tickets -Admin*/}
           <Route path="/tickets" element={<Ticket />} />
           <Route path="/tickets/details/:id" element={<ProtectedRoute><TicketDetails /></ProtectedRoute>} />
-          <Route path="/tickets/create-ticket" element={<CreateTicket />} />
+          <Route path="/tickets/create-ticket" element={<CreateTicket /> } />
           {/* Edit Details */}
           <Route path="/edit/:id" element={<ProtectedRoute><DetailsEdit /></ProtectedRoute>} />
           {/* tickets- user */}
-          <Route path="/mytickets" element= {<ProtectedRoute> <MyTickets /> </ProtectedRoute>} />
-          <Route path="/mytickets/userticket" element= {<ProtectedRoute> <UserTicket /> </ProtectedRoute>} />
+          <Route path="/mytickets" element= { <MyTickets /> } />
+          <Route path="/mytickets/userticket" element= {<UserTicket />} />
           {/* business */}
           <Route path="/business" element={<Business />} />
           <Route path="/business/details/:id" element={<BusinessDetails />} />
