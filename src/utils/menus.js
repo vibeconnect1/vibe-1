@@ -78,7 +78,7 @@ export const menus = [
   // { name: "Business", link: "/business", icon: IoBusinessOutline },
   // { name: "Materials", link: "/materials", icon: TbReportAnalytics },
   // { name: "Bookings", link: "/bookings", icon: AiOutlineFieldTime },
-  // { name: "Admin", link: "/tickets", icon: BsTicketPerforated },
+  { name: "Admin", link: "/tickets", icon: BsTicketPerforated },
   { name: "My Tickets", link: "/mytickets", icon: HiMiniTicket },
   { name: "Profile", link: "/profile", icon: HiMiniUser },
 
