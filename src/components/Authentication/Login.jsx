@@ -31,6 +31,7 @@ const Login = () => {
     }
   }, []);
 
+  
   const onSubmit = async (e) => {
     e.preventDefault();
     if (!formData.email || !formData.password) {
@@ -52,6 +53,9 @@ const Login = () => {
       const selectedSiteId = response.data.user.selected_site_id
       const userName = response.data.user.firstname
       localStorage.setItem("Name", userName)
+
+      // const complaints = response.data.complaints;
+      // setItemInLocalStorage("Complaints", complaints)
       console.log(userName)
       console.log(selectedSiteId)
       toast.loading("Processing your data please wait...");

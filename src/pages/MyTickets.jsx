@@ -22,7 +22,7 @@ function MyTickets() {
                     <Link to={`/tickets/details/${row.id}`}>
                         <BsEye size={15} />
                     </Link>
-                   
+
                 </div>
             ),
         },
@@ -80,9 +80,9 @@ function MyTickets() {
         const fetchData = async () => {
             try {
                 const response = await getComplaints();
-                const complaints = response.data.complaints;
+                const complaints = response.data.complaints || [];
                 setFilteredData(complaints);
-
+    
                 const statusCounts = complaints.reduce((acc, curr) => {
                     acc[curr.issue_status] = (acc[curr.issue_status] || 0) + 1;
                     return acc;
@@ -98,7 +98,8 @@ function MyTickets() {
             }
         };
         fetchData();
-    }, []);
+    }, [selectedStatus, searchText]);
+    
 
     // const handleSearch = (e) => {
     //   const searchValue = e.target.value;
@@ -132,9 +133,11 @@ function MyTickets() {
         setSelectedStatus(status);
     };
 
+    
+
     return (
-        <section className="container max-w-min overflow-hidden flex md:justify-between md:items-start">
-            {/* <section className="flex max-w-min overflow-x-auto mr-5 "> */}
+        // <section className="container max-w-min overflow-hidden flex md:justify-between md:items-start">
+        <section className="flex max-w-min overflow-x-auto mr-5 ">
             <Navbar />
             <div className=" w-full flex mx-3 flex-col overflow-hidden">
                 <div className="flex m-5 justify-start w-full sm:gap-5 sm:flex-row flex-col flex-shrink ">
@@ -143,12 +146,12 @@ function MyTickets() {
                         <div
                             key={status}
                             className={`shadow-xl rounded-full border-4 w-52 px-6 p-2 flex flex-col items-center flex-shrink ${status === "Pending"
-                                    ? "border-green-400"
-                                    : status === "Closed"
-                                        ? "border-red-400"
-                                        : status === "Complete"
-                                            ? "border-indigo-400"
-                                            : "bg-gray-200 text-gray-700"
+                                ? "border-green-400"
+                                : status === "Closed"
+                                    ? "border-red-400"
+                                    : status === "Complete"
+                                        ? "border-indigo-400"
+                                        : "bg-gray-200 text-gray-700"
                                 }`}
                         >
                             <p className="font-medium">{status}</p>
@@ -161,14 +164,14 @@ function MyTickets() {
                         <div
                             key={type}
                             className={`shadow-xl rounded-full border-4 w-52 px-6 p-2 flex flex-col items-center flex-shrink ${ticketTypeCounts[type] !== undefined
-                                    ? type === "Complaint"
-                                        ? "border-blue-400"
-                                        : type === "Request"
-                                            ? "border-orange-400"
-                                            : type === "Suggestion"
-                                                ? " border-yellow-400"
-                                                : ""
-                                    : "bg-gray-200 text-gray-700"
+                                ? type === "Complaint"
+                                    ? "border-blue-400"
+                                    : type === "Request"
+                                        ? "border-orange-400"
+                                        : type === "Suggestion"
+                                            ? " border-yellow-400"
+                                            : ""
+                                : "bg-gray-200 text-gray-700"
                                 }`}
                         >
                             <p className="font-medium">{type} </p>
@@ -245,7 +248,6 @@ function MyTickets() {
                     <Link
                         to={"/mytickets/userticket"}
                         className="border-2 font-semibold hover:bg-black hover:text-white duration-150 transition-all border-black p-2 rounded-md text-black cursor-pointer text-center flex items-center w-44 gap-2 justify-center"
-                        // onClick={() => setShowCountry(!showCountry)}
                     >
                         <PiPlusCircle size={20} />
                         Add

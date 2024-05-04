@@ -22,7 +22,7 @@ const UserTicket = () => {
     heading: "",
     of_phase: "pms",
     site_id: selectedSiteId,
-    // attachments : []
+    // documents : []
   });
 
   console.log(formData);
@@ -66,29 +66,68 @@ const UserTicket = () => {
     }
   };
 
-  // const handleFileChange = (event) => {
-  //   const files = event.target.files;
-  //   const fileList = Array.from(files);
-  //   setAttachments(fileList);
+
+
+const handleFileChange = (event) => {
+  const files = event.target.files;
+  const fileList = Array.from(files);
+
+  const promises = fileList.map(file => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+
+      reader.onload = (e) => {
+        const base64Data = e.target.result;
+        resolve(base64Data);
+      };
+
+      reader.onerror = (error) => {
+        reject(error);
+      };
+      reader.readAsDataURL(file);
+    });
+  });
+  Promise.all(promises)
+    .then(base64Array => {
+      setAttachments(base64Array);
+    })
+    .catch(error => {
+      console.error('Error reading files:', error);
+    });
+};
+
+
+  // const handleFileChange = async (event) => {
+  // const files = event.target.files;
+  // const fileList = await Promise.all(
+  //   Array.from(files).map(async (file) => {
+  //     const base64 = await convertFileToBase64(file);
+  //     return {
+  //       name: file.name,
+  //       size: file.size,
+  //       type: file.type,
+  //       data: base64,
+  //       lastModified: file.lastModified // Store the file object directly
+  //       // Add more properties as needed
+  //     };
+  //   })
+  // );
+  // setAttachments(fileList);
+
+  //   setFormData({
+  //     ...formData,
+  //     attachments : fileList
+  //   });
   // };
 
-  const handleFileChange = (event) => {
-    const files = event.target.files;
-    const fileList = Array.from(files).map(file => ({
-      name: file.name,
-      size: file.size,
-      type: file.type,
-      data: file,
-      lastModified: file.lastModified // Store the file object directly
-      // Add more properties as needed
-    }));
-    setAttachments(fileList);
-
-    setFormData({
-      ...formData,
-      attachments : fileList
-    });
-  };
+  // const convertFileToBase64 = (file) => {
+  //   return new Promise((resolve, reject) => {
+  //     const reader = new FileReader();
+  //     reader.readAsDataURL(file);
+  //     reader.onload = () => resolve(reader.result);
+  //     reader.onerror = (error) => reject(error);
+  //   });
+  // };
 
 
   const handleSubmit = async (e) => {
@@ -103,7 +142,7 @@ const UserTicket = () => {
         heading: "",
         of_phase: "pms",
         site_id: selectedSiteId,
-        // attachments: []
+        // documents: []
       });
       toast.success("Complaint sent successfully");
       navigate('/mytickets');
@@ -122,119 +161,126 @@ const UserTicket = () => {
   };
 
   return (
-    <div>
-      <section className="justify-center items-center min-h-screen my-15 md:flex">
-        <div className="fixed left-0 top-0 h-full">
-          <Navbar />
-        </div>
-        <div className="overflow-x-auto w-full max-w-screen-xl">
-          <form
-            className="border border-gray-300 rounded-lg sm:w-full md:w-[60rem] p-8"
-            onSubmit={handleSubmit}
-          >
-            <h2 className="text-center text-xl font-bold p-2 bg-black rounded-full text-white">
-              New Ticket
-            </h2>
-            <div className="ml-5 flex flex-col items-start w-full gap-4">
-              <div className="flex flex-col">
-                <label className="font-semibold">
-                  Categories:
-                </label>
-                <select
-                  id="two"
-                  value={formData.catogories}
-                  name="categories"
-                  onChange={handleChange}
-                  className="border p-1 px-4 border-gray-500 rounded-md"
-                >
-                  <option value="">Select Category</option>
-                  {categories?.map(
-                    category => (
-                      <option onClick={() => console.log("checking-category")} value={category.id}>{category.name}</option>
-                    )
-                  )}
-                </select>
-
-                <label htmlFor="" className="font-semibold">
-                  Sub Category:
-                </label>
-                <select
-                  id="five"
-                  value={formData.subCategories}
-                  name="sub_category_id"
-                  onChange={handleChange}
-                  className="border p-2 px-4 border-gray-500 rounded-md"
-                >
-                  <option value="">Sub Category</option>
-                  {units?.map(
-                    floor => (
-                      <option value={floor.id}>{floor.name}</option>
-                    )
-                  )}
-                </select>
-                  <label htmlFor="" className="font-semibold">
-                    Heading:
-                  </label>
-                  <textarea
-                    name="heading"
-                    placeholder="heading"
-                    cols="15"
-                    rows="1"
-                    value={formData.heading}
-                    onChange={handleChange}
-                    className="border border-black"
-                  ></textarea>
-              </div>
-            </div>
-            <div className="flex ml-5 flex-col my-5 gap-1">
-              <label htmlFor="" className="font-bold">
-                Description:
-              </label>
-              <textarea
-                name="text"
-                placeholder=" Describe your concern!"
-                id=""
-                cols="80"
-                rows="5"
-                className="border border-black rounded-md"
-                value={formData.text}
-                onChange={handleChange}
-              />
-            </div>
-
-
-
-            <input type="file" name="attachments" id="attachments" onChange={handleFileChange} multiple className="ml-5"/>
-            <div>
-              {attachments.map((file, index) => (
-                <div key={index}>
-                  <p className="text-green">File Name: {file.name}</p>
-                  {/* new added */}
-                  <p className="text-green">File Size: {file.size}</p>
-                  <p className="text-green">File Type: {file.type}</p>
-                  <p className="text-green">File LastModified: {file.lastModified}</p>
-                </div>
-              ))}
-            </div>
-            <div className="flex gap-5 justify-center items-center my-4">
-              <button
-                type="submit"
-                className="bg-black text-white hover:bg-gray-700 font-semibold text-xl py-2 px-4 rounded"
-              >
-                Submit
-              </button>
-              <button
-                type="reset"
-                className="bg-gray-400 text-black hover:bg-black hover:text-white font-semibold text-xl py-2 px-4 rounded"
-                onClick={handleReset}
-              >
-                Clear
-              </button>
-            </div>
-          </form>
-        </div>
-      </section>
+    <section className="min-h-screen flex flex-col md:flex-row">
+    <div className="fixed left-0 top-0 h-full md:static md:h-auto md:flex-shrink-0">
+      <Navbar />
     </div>
+    <div className="flex justify-center items-center overflow-x-auto w-full max-w-screen-xl sm:w-full">
+      <form
+        className="border border-gray-300 rounded-lg md:p-8 w-full max-w-[60rem]"
+        onSubmit={handleSubmit}
+      >
+        <h2 className="text-center text-xl font-bold p-2 bg-black rounded-full text-white">
+          New Ticket
+        </h2>
+        <div className="ml-5 flex flex-col items-start w-full gap-4">
+          <div className="flex flex-col">
+            <label className="font-semibold">Categories:</label>
+            <select
+              id="two"
+              value={formData.catogories}
+              name="categories"
+              onChange={handleChange}
+              className="border p-1 px-4 border-gray-500 rounded-md"
+            >
+              <option value="">Select Category</option>
+              {categories?.map(category => (
+                <option
+                  key={category.id}
+                  onClick={() => console.log("checking-category")}
+                  value={category.id}
+                >
+                  {category.name}
+                </option>
+              ))}
+            </select>
+  
+            <label htmlFor="" className="font-semibold">
+              Sub Category:
+            </label>
+            <select
+              id="five"
+              value={formData.subCategories}
+              name="sub_category_id"
+              onChange={handleChange}
+              className="border p-2 px-4 border-gray-500 rounded-md"
+            >
+              <option value="">Sub Category</option>
+              {units?.map(floor => (
+                <option key={floor.id} value={floor.id}>
+                  {floor.name}
+                </option>
+              ))}
+            </select>
+            <label htmlFor="" className="font-semibold">
+              Heading:
+            </label>
+            <textarea
+              name="heading"
+              placeholder="heading"
+              cols="15"
+              rows="1"
+              value={formData.heading}
+              onChange={handleChange}
+              className="border border-black"
+            ></textarea>
+          </div>
+        </div>
+        <div className="flex flex-col my-5 gap-1 md:ml-5">
+          <label htmlFor="" className="font-bold">
+            Description:
+          </label>
+          <textarea
+            name="text"
+            placeholder=" Describe your concern!"
+            id=""
+            cols="80"
+            rows="5"
+            className="border border-black rounded-md"
+            value={formData.text}
+            onChange={handleChange}
+          />
+        </div>
+  
+        <input
+          type="file"
+          name="documents"
+          id="documents"
+          onChange={handleFileChange}
+          multiple
+          className="ml-5"
+        />
+        <div>
+          {attachments.map((file, index) => (
+            <div key={index}>
+              {/* <p className="text-green">File Name: {file.name}</p> */}
+              {/* new added */}
+              {/* <p className="text-green">File Size: {file.size}</p> */}
+              {/* <p className="text-green">File Type: {file.type}</p> */}
+              {/* <p className="text-green">File LastModified: {file.lastModified}</p> */}
+            </div>
+          ))}
+        </div>
+        <div className="flex gap-5 justify-center items-center my-4">
+          <button
+            type="submit"
+            className="bg-black text-white hover:bg-gray-700 font-semibold text-xl py-2 px-4 rounded"
+          >
+            Submit
+          </button>
+          <button
+            type="reset"
+            className="bg-gray-400 text-black hover:bg-black hover:text-white font-semibold text-xl py-2 px-4 rounded"
+            onClick={handleReset}
+          >
+            Clear
+          </button>
+        </div>
+      </form>
+    </div>
+  </section>
+  
+  
   );
 };
 

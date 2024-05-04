@@ -68,41 +68,56 @@ const Ticket = () => {
     },
   };
 
+  useEffect(() => {
+    const fetchData = async () => {
+        try {
+            const response = await getComplaints();
+            const complaints = response?.data?.complaints || []; // Handle undefined or empty complaints array
+            setFilteredData(complaints);
+
+            const statusCounts = complaints.reduce((acc, curr) => {
+                acc[curr.issue_status] = (acc[curr.issue_status] || 0) + 1;
+                return acc;
+            }, {});
+            setTicketStatusCounts(statusCounts);
+
+            const typeCounts = complaints.reduce((acc, curr) => {
+                acc[curr.issue_type] = (acc[curr.issue_type] || 0) + 1;
+                return acc;
+            }, {});
+            setTicketTypeCounts(typeCounts);
+        } catch (error) {
+            console.error("Error fetching data:", error);
+        }
+    };
+
+    fetchData();
+}, []);
+
+
   // useEffect(() => {
   //   const fetchData = async () => {
   //     try {
   //       const response = await getComplaints();
-  //       setFilteredData(response.data.complaints);
+  //       const complaints = response.data.complaints;
+  //       setFilteredData(complaints);
+
+  //       const statusCounts = complaints.reduce((acc, curr) => {
+  //         acc[curr.issue_status] = (acc[curr.issue_status] || 0) + 1;
+  //         return acc;
+  //       }, {});
+  //       setTicketStatusCounts(statusCounts);
+  //       const typeCounts = complaints.reduce((acc, curr) => {
+  //         acc[curr.issue_type] = (acc[curr.issue_type] || 0) + 1;
+  //         return acc;
+  //       }, {});
+  //       setTicketTypeCounts(typeCounts);
   //     } catch (error) {
   //       console.error("Error fetching data:", error);
   //     }
   //   };
   //   fetchData();
   // }, []);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await getComplaints();
-        const complaints = response.data.complaints;
-        setFilteredData(complaints);
-
-        const statusCounts = complaints.reduce((acc, curr) => {
-          acc[curr.issue_status] = (acc[curr.issue_status] || 0) + 1;
-          return acc;
-        }, {});
-        setTicketStatusCounts(statusCounts);
-        const typeCounts = complaints.reduce((acc, curr) => {
-          acc[curr.issue_type] = (acc[curr.issue_type] || 0) + 1;
-          return acc;
-        }, {});
-        setTicketTypeCounts(typeCounts);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
-    fetchData();
-  }, []);
 
   // const handleSearch = (e) => {
   //   const searchValue = e.target.value;
