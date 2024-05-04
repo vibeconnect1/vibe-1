@@ -26,7 +26,7 @@ const Navbar = () => {
   <div
     className={`p-[8px] bg-[#0e0e0e] max-h-screen ${
       open ? "w-full md:w-60" : "w-20"
-    } duration-500 text-gray-100 px-4 rounded-r-2xl shadow-2xl overflow-y-auto custom-scrollbar left-0`}
+    } duration-500 text-gray-100 px-4 rounded-r-2xl shadow-2xl overflow-y-auto h-screen custom-scrollbar left-0`}
     onMouseEnter={handleMouseEnter}
     onMouseLeave={handleMouseLeave}
   >
@@ -39,7 +39,7 @@ const Navbar = () => {
         onClick={() => setOpen(!open)}
       />
     </div>
-    <div className="flex flex-col gap-4 mb-5 relative">
+    <div className="flex flex-col h-full gap-4 mb-5 relative">
       {menus?.map((menu, i) => (
         <NavLink
           to={menu?.link}

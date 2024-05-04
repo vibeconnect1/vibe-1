@@ -29,40 +29,40 @@ import { AiOutlineFileText } from "react-icons/ai";
 import { AiOutlineSchedule } from "react-icons/ai";
 import { BsSpeedometer2 } from "react-icons/bs";
 
-const isAdmin = true;
+// const isAdmin = true;
 
-let menusToShow = [];
+// let menusToShow = [];
 
-if (isAdmin) {
-  menusToShow = [
-    { name: "Dashboard", link: "/dashboard", icon: MdOutlineDashboard },
-    { name: "Assets", link: "/assets", icon: BsBuilding },
-    { name: "Service", link: "/services", icon: LuSettings2 },
-    { name: "Attendance", link: "/attendance", icon: BsFileRuled },
-    { name: "Business", link: "/business", icon: IoBusinessOutline },
-    { name: "Materials", link: "/materials", icon: TbReportAnalytics },
-    { name: "Bookings", link: "/bookings", icon: AiOutlineFieldTime },
-    { name: "Admin", link: "/tickets", icon: BsTicketPerforated },
-    { name: "Communication", link: "/communication", icon: BsBroadcast },
-    { name: "Mail Room", link: "/mail-room", icon: BsMailboxFlag },
-    { name: "Suppliers", link: "/suppliers", icon: AiOutlineUser },
-    { name: "Documents", link: "/documents", icon: SlDocs },
-    { name: "Customer", link: "/customer", icon: HiMiniUser },
-    { name: "Tasks", link: "/task", icon: FaTasks },
-    { name: "Parking", link: "/parking", icon: LuParkingSquare },
-    { name: "Space", link: "/space", icon: RiSettings4Line },
-    { name: "Inventory", link: "/inventory", icon: MdOutlineInventory2 },
-    { name: "Quick Gate", link: "/quick-gate", icon: BsDoorOpen },
-    { name: "AMC", link: "/AMC", icon: RiSettings4Line },
-    { name: "Audit", link: "/audit", icon: AiOutlineAudit },
-    { name: "MOM", link: "/MOM", icon: AiOutlineFileText },
-    { name: "Schedule", link: "/schedule", icon: AiOutlineSchedule },
-  ];
-} else {
-  menusToShow = [
-    { name: "My Tickets", link: "/mytickets", icon: HiMiniTicket }
-  ];
-}
+// if (isAdmin) {
+//   menusToShow = [
+//     { name: "Dashboard", link: "/dashboard", icon: MdOutlineDashboard },
+//     { name: "Assets", link: "/assets", icon: BsBuilding },
+//     { name: "Service", link: "/services", icon: LuSettings2 },
+//     { name: "Attendance", link: "/attendance", icon: BsFileRuled },
+//     { name: "Business", link: "/business", icon: IoBusinessOutline },
+//     { name: "Materials", link: "/materials", icon: TbReportAnalytics },
+//     { name: "Bookings", link: "/bookings", icon: AiOutlineFieldTime },
+//     { name: "Admin", link: "/tickets", icon: BsTicketPerforated },
+//     { name: "Communication", link: "/communication", icon: BsBroadcast },
+//     { name: "Mail Room", link: "/mail-room", icon: BsMailboxFlag },
+//     { name: "Suppliers", link: "/suppliers", icon: AiOutlineUser },
+//     { name: "Documents", link: "/documents", icon: SlDocs },
+//     { name: "Customer", link: "/customer", icon: HiMiniUser },
+//     { name: "Tasks", link: "/task", icon: FaTasks },
+//     { name: "Parking", link: "/parking", icon: LuParkingSquare },
+//     { name: "Space", link: "/space", icon: RiSettings4Line },
+//     { name: "Inventory", link: "/inventory", icon: MdOutlineInventory2 },
+//     { name: "Quick Gate", link: "/quick-gate", icon: BsDoorOpen },
+//     { name: "AMC", link: "/AMC", icon: RiSettings4Line },
+//     { name: "Audit", link: "/audit", icon: AiOutlineAudit },
+//     { name: "MOM", link: "/MOM", icon: AiOutlineFileText },
+//     { name: "Schedule", link: "/schedule", icon: AiOutlineSchedule },
+//   ];
+// } else {
+//   menusToShow = [
+//     { name: "My Tickets", link: "/mytickets", icon: HiMiniTicket }
+//   ];
+// }
 
 // export const menus = menusToShow;
 
@@ -70,29 +70,32 @@ if (isAdmin) {
 
 export const menus = [
   { name: "Dashboard", link: "/dashboard", icon: MdOutlineDashboard },
-  { name: "Assets", link: "/assets", icon: BsBuilding },
-  { name: "Service", link: "/services", icon: LuSettings2 },
-  { name: "Attendance", link: "/attendance", icon: BsFileRuled },
-  { name: "Business", link: "/business", icon: IoBusinessOutline },
-  { name: "Materials", link: "/materials", icon: TbReportAnalytics },
-  { name: "Bookings", link: "/bookings", icon: AiOutlineFieldTime },
-  { name: "Admin", link: "/tickets", icon: BsTicketPerforated },
+
+  
+  // { name: "Assets", link: "/assets", icon: BsBuilding },
+  // { name: "Service", link: "/services", icon: LuSettings2 },
+  // { name: "Attendance", link: "/attendance", icon: BsFileRuled },
+  // { name: "Business", link: "/business", icon: IoBusinessOutline },
+  // { name: "Materials", link: "/materials", icon: TbReportAnalytics },
+  // { name: "Bookings", link: "/bookings", icon: AiOutlineFieldTime },
+  // { name: "Admin", link: "/tickets", icon: BsTicketPerforated },
   { name: "My Tickets", link: "/mytickets", icon: HiMiniTicket },
-  { name: "Communication", link: "/communication", icon: BsBroadcast },
-  { name: "Mail Room", link: "/mail-room", icon: BsMailboxFlag },
-  { name: "Suppliers", link: "/suppliers", icon: AiOutlineUser },
-  { name: "Documents", link: "/documents", icon: SlDocs },
-  { name: "Customer", link: "/customer", icon: HiMiniUser },
-  { name: "Tasks", link: "/task", icon: FaTasks },
-  { name: "Parking", link: "/parking", icon: LuParkingSquare },
-  { name: "Space", link: "/space", icon: RiSettings4Line },
-  { name: "Inventory", link: "/inventory", icon: MdOutlineInventory2 },
-  { name: "Quick Gate", link: "/quick-gate", icon: BsDoorOpen },
-  { name: "AMC", link: "/AMC", icon: RiSettings4Line },
-  { name: "Audit", link: "/audit", icon: AiOutlineAudit },
-  { name: "MOM", link: "/MOM", icon: AiOutlineFileText },
-  { name: "Schedule", link: "/schedule", icon: AiOutlineSchedule },
-  { name: "Report", link: "/report", icon: FiFile },
-  { name: "Setup", link: "/setup", icon: RiSettings4Line },
+
+  // { name: "Communication", link: "/communication", icon: BsBroadcast },
+  // { name: "Mail Room", link: "/mail-room", icon: BsMailboxFlag },
+  // { name: "Suppliers", link: "/suppliers", icon: AiOutlineUser },
+  // { name: "Documents", link: "/documents", icon: SlDocs },
+  // { name: "Customer", link: "/customer", icon: HiMiniUser },
+  // { name: "Tasks", link: "/task", icon: FaTasks },
+  // { name: "Parking", link: "/parking", icon: LuParkingSquare },
+  // { name: "Space", link: "/space", icon: RiSettings4Line },
+  // { name: "Inventory", link: "/inventory", icon: MdOutlineInventory2 },
+  // { name: "Quick Gate", link: "/quick-gate", icon: BsDoorOpen },
+  // { name: "AMC", link: "/AMC", icon: RiSettings4Line },
+  // { name: "Audit", link: "/audit", icon: AiOutlineAudit },
+  // { name: "MOM", link: "/MOM", icon: AiOutlineFileText },
+  // { name: "Schedule", link: "/schedule", icon: AiOutlineSchedule },
+  // { name: "Report", link: "/report", icon: FiFile },
+  // { name: "Setup", link: "/setup", icon: RiSettings4Line },
 ];
 
