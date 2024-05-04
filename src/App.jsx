@@ -63,6 +63,7 @@ import AddSupplier from "./pages/SubPages/AddSupplier.jsx";
 import MyTickets from "./pages/MyTickets.jsx";
 import UserTicket from "./pages/SubPages/UserTicket.jsx";
 import DetailsEdit from "./pages/SubPages/details/DetailsEdit.jsx";
+import User from "./components/Authentication/User.jsx";
 function App() {
   return (
     <>
@@ -72,14 +73,17 @@ function App() {
         <Routes>
           <Route path="/login" element={<Login />} />
           <Route path="/" element={<Navigate to="/login" />} />
+          
           <Route
             path="/dashboard"
             element={
               <ProtectedRoute>
                 <Dashboard />
                 </ProtectedRoute>
-            }
+            } 
           />
+
+          <Route path="/profile" element = {<ProtectedRoute> <User /> </ProtectedRoute>} />
           <Route path="/attendance" element={<Attendance />} />
           <Route path="/setup" element={<Setup />} />
           <Route path="/setup/account" element={<Account />} />

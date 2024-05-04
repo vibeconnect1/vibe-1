@@ -52,7 +52,8 @@ const Login = () => {
       setItemInLocalStorage("TOKEN", token);
       const selectedSiteId = response.data.user.selected_site_id
       const userName = response.data.user.firstname
-      localStorage.setItem("Name", userName)
+      setItemInLocalStorage("Name", userName)
+      console.log(userName)
 
       // const complaints = response.data.complaints;
       // setItemInLocalStorage("Complaints", complaints)

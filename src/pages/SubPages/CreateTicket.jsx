@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 import FileInput from "../../Buttons/FileInput";
 import { getItemInLocalStorage } from "../../utils/localStorage";
 import { fetchSubCategories, getComplaints, postComplaintsDetails } from "../../api";
+import toast from "react-hot-toast";
 
 const CreateTicket = () => {
   const navigate = useNavigate();
@@ -30,7 +31,7 @@ const CreateTicket = () => {
     priority: "",
     of_phase: "pms",
     site_id: selectedSiteId,
-    // documents: [],
+    documents: [],
   })
 
 
@@ -105,7 +106,6 @@ const CreateTicket = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-    
       const response = await postComplaintsDetails (formData);
       console.log('Complaint submitted successfully:', response);
       setFormData({
@@ -117,9 +117,19 @@ const CreateTicket = () => {
         site_id: selectedSiteId,
         assigned_to: null,
         priority: "",
-        // documents: []
+        documents: []
       });
-      toast.success("Complaint sent successfully");
+
+      toast.promise(
+        saveSettings(settings),
+         {
+           loading: 'Saving...',
+           success: <b>Settings saved!</b>,
+           error: <b>Could not save.</b>,
+         }
+       );
+      // toast.success("Complaint sent successfully");
+      // toast.loading("Creating New Ticket Please Wait!")
       navigate('/tickets');
     } catch (error) {
       console.error('Error submitting complaint:', error);

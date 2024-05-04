@@ -71,7 +71,7 @@ import { BsSpeedometer2 } from "react-icons/bs";
 export const menus = [
   { name: "Dashboard", link: "/dashboard", icon: MdOutlineDashboard },
 
-  
+
   // { name: "Assets", link: "/assets", icon: BsBuilding },
   // { name: "Service", link: "/services", icon: LuSettings2 },
   // { name: "Attendance", link: "/attendance", icon: BsFileRuled },
@@ -80,6 +80,7 @@ export const menus = [
   // { name: "Bookings", link: "/bookings", icon: AiOutlineFieldTime },
   // { name: "Admin", link: "/tickets", icon: BsTicketPerforated },
   { name: "My Tickets", link: "/mytickets", icon: HiMiniTicket },
+  { name: "Profile", link: "/profile", icon: HiMiniUser },
 
   // { name: "Communication", link: "/communication", icon: BsBroadcast },
   // { name: "Mail Room", link: "/mail-room", icon: BsMailboxFlag },

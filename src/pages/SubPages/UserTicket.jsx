@@ -14,6 +14,7 @@ const UserTicket = () => {
   const [attachments, setAttachments] = useState([]);
   const [units, setUnits] = useState([]);
   const [selectedSiteId, setSelectedSiteId] = useState(15);
+  const [disSubmit, setDisSubmit] = useState(false);
 
   const [formData, setFormData] = useState({
     category_type_id: "",
@@ -129,10 +130,17 @@ const handleFileChange = (event) => {
   //   });
   // };
 
-
+ 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+      if (!formData.heading || !formData.category_type_id || !formData.sub_category_id) {
+        return toast.error("All Fields Required")
+      } 
+
+      setDisSubmit(true)
+      toast.loading("Submitting request Please Wait!")
+      
       const response = await postComplaintsDetails(formData);
       console.log('Complaint submitted successfully:', response);
       setFormData({
@@ -142,8 +150,12 @@ const handleFileChange = (event) => {
         heading: "",
         of_phase: "pms",
         site_id: selectedSiteId,
-        // documents: []
+        documents: []
       });
+      
+      toast.dismiss();
+
+
       toast.success("Complaint sent successfully");
       navigate('/mytickets');
     } catch (error) {
@@ -264,7 +276,8 @@ const handleFileChange = (event) => {
         <div className="flex gap-5 justify-center items-center my-4">
           <button
             type="submit"
-            className="bg-black text-white hover:bg-gray-700 font-semibold text-xl py-2 px-4 rounded"
+            className={`text-white hover:bg-gray-700 font-semibold text-xl py-2 px-4 rounded ${disSubmit ? "bg-gray-600" : "bg-black"}`}
+            disabled={disSubmit} 
           >
             Submit
           </button>
