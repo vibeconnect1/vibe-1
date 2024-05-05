@@ -306,5 +306,6 @@ const Ticket = () => {
     </section>
   );
 };
+
 // 
 export default Ticket;
