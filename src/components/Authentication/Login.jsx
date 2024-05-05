@@ -54,6 +54,10 @@ const Login = () => {
       const userName = response.data.user.firstname
       setItemInLocalStorage("Name", userName)
       console.log(userName)
+      const userType = response.data.user.user_type
+      setItemInLocalStorage("USERTYPE", userType)
+      console.log(userType)
+      
 
       // const complaints = response.data.complaints;
       // setItemInLocalStorage("Complaints", complaints)

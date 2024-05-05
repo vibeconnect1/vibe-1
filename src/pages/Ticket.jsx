@@ -4,9 +4,10 @@ import Navbar from "../components/Navbar";
 import { PiPlusCircle } from "react-icons/pi";
 import { Link } from "react-router-dom";
 import { ImEye } from "react-icons/im";
-import { getComplaints } from "../api";
+import { getAdminComplaints, getComplaints } from "../api";
 import { BsEye } from "react-icons/bs";
 import { BiEdit } from "react-icons/bi";
+import moment from 'moment';
 
 const Ticket = () => {
   const [filteredData, setFilteredData] = useState([]);
@@ -15,6 +16,20 @@ const Ticket = () => {
   const [ticketTypeCounts, setTicketTypeCounts] = useState({});
   const [ticketStatusCounts, setTicketStatusCounts] = useState({});
   const allTicketTypes = ["Complaint", "Request", "Suggestion"];
+
+  const getTimeAgo = (timestamp) => {
+    const createdTime = moment(timestamp);
+    const now = moment();
+    const diff = now.diff(createdTime, 'minutes');
+    if (diff < 60) {
+      return `${diff} minutes ago`;
+    } else if (diff < 1440) {
+      return `${Math.floor(diff / 60)} hours ago`;
+    } else {
+      return `${Math.floor(diff / 1440)} days ago`;
+    }
+  };
+
   const columns = [
     {
       name: "Action",
@@ -34,21 +49,23 @@ const Ticket = () => {
       selector: (row) => row.ticket_number,
       sortable: true,
     },
-    { name: "Description", selector: (row) => row.text, sortable: true },
+    { name: "Building Name", selector: (row) => row.building_name, sortable: true },
+    { name: "Floor Name", selector: (row) => row.floor_name, sortable: true },
+    { name: "Unit Name", selector: (row) => row.unit, sortable: true },
+    { name: "Customer Name", selector: (row) => row.created_by, sortable: true },
     { name: "Category", selector: (row) => row.category_type, sortable: true },
-    { name: "Sub Category", selector: (row) => row.title, sortable: true },
-    { name: "Created By", selector: (row) => row.created_by, sortable: true },
+    { name: "Sub Category", selector: (row) => row.sub_category, sortable: true },
+    { name: "heading", selector: (row) => row.heading, sortable: true },
+    { name: "Description", selector: (row) => row.text, sortable: true },
     { name: "Status", selector: (row) => row.issue_status, sortable: true },
-    { name: "Site", selector: (row) => row.title, sortable: true },
-    { name: "Unit", selector: (row) => row.unit_name, sortable: true },
-    { name: "Department", selector: (row) => row.title, sortable: true },
-    { name: "Admin Priority", selector: (row) => row.priority, sortable: true },
+    { name: "Created By", selector: (row) => row.created_by, sortable: true },
     { name: "Created On", selector: (row) => row.created_at, sortable: true },
+    { name: "Prioity", selector: (row) => row.priority, sortable: true },
+    { name: "Assigned To", selector: (row) => row.assigned_to, sortable: true },
     { name: "Ticket Type", selector: (row) => row.issue_type, sortable: true },
-    { name: "Refrence Number", selector: (row) => row.title, sortable: true },
-    { name: "Assigned To", selector: (row) => row.title, sortable: true },
-    { name: "Associated To", selector: (row) => row.title, sortable: true },
-    
+    { name: "Related To", selector: (row) => row.issue_related_to, sortable: true },
+    { name: "Total Time", selector: (row) => getTimeAgo(row.created_at), sortable: true },
+    { name: "TAT Resolution Breached", selector: (row) => (row.resolution_breached ? "Yes" : "No"), sortable: true },
   ];
 
   //custom style
@@ -71,7 +88,7 @@ const Ticket = () => {
   useEffect(() => {
     const fetchData = async () => {
         try {
-            const response = await getComplaints();
+            const response = await getAdminComplaints();
             const complaints = response?.data?.complaints || []; // Handle undefined or empty complaints array
             setFilteredData(complaints);
 

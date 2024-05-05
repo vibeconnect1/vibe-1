@@ -30,6 +30,12 @@ export const getComplaints = async () =>
       token: token,
     },
   });
+export const getAdminComplaints = async () =>
+  axiosInstance.get(`/pms/admin/complaints.json`, {
+    params: {
+      token: token,
+    },
+  });
 export const getComplaintsDetails = async (id) =>
   axiosInstance.get(`pms/complaints/${id}.json`, {
     params: {
@@ -56,7 +62,7 @@ export const getComplaintsDetails = async (id) =>
   })
 
   export const updateComplaintsDetails = async (id, data) => 
-  axiosInstance.put('pms/complaints/${id}.json', data, {
+  axiosInstance.put(`pms/complaints/${id}.json`, data, {
     params : {
       token : token,
     }
