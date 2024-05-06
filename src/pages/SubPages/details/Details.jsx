@@ -32,7 +32,7 @@ const TicketDetails = () => {
     { title: "Total Days:", description: ticketinfo.RelatedTo },
     { title: "TAT Resolution Breached:", description: ticketinfo.resolution },
     { title: "Created On :", description: ticketinfo.created_at },
-    { title: "Description :", description: ticketinfo.description },
+    { title: "Description :", description: ticketinfo.text },
   ];
   const Creators = [
     { title: "Created By:", description: ticketinfo.updated_by },
