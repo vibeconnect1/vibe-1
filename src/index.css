@@ -43,6 +43,14 @@ body{
   }
 }
 
+/* CSS */
+@media screen and (max-width: 768px) {
+  .hide-on-small-screen {
+    display: none;
+  }
+}
+
+
 @media screen and (min-width: 1024px) {
   /* Adjust layout for large screens */
   .form-container {

@@ -12,7 +12,7 @@ const DetailsEdit = () => {
   const { id } = useParams();
   const [ticketinfo, setTicketInfo] = useState({});
   const [editTicketInfo, setEditTicketInfo] = useState({});
-  const [unit, setUnits] = useState("");
+  const [subCate, setSubCate] = useState([]);
   const [formData, setFormData] = useState({
     category_type_id: "",
     sub_category_id: "",
@@ -35,16 +35,43 @@ const DetailsEdit = () => {
     fetchDetails();
   }, [id]);
 
+  // const handleChange = async (e) => {
+  //   async function fetchSubCategory(categoryId) {
+  //     try {
+  //       const cat = await fetchSubCategories(categoryId);
+  //       setUnits(
+  //         cat.data.sub_categories.map((item) => ({
+  //           name: item.name,
+  //           id: item.id,
+  //         }))
+  //       );
+  //       console.log(cat);
+  //     } catch (e) {
+  //       console.log(e);
+  //     }
+  //   }
+
+  //   if (e.target.type === "select-one" && e.target.name === "categories") {
+  //     const categoryId = Number(e.target.value);
+  //     await fetchSubCategory(categoryId);
+  //     setFormData({
+  //       ...formData,
+  //       category_type_id: categoryId,
+  //       sub_category_id: "",
+  //     });
+  //   } else {
+  //     setFormData({
+  //       ...formData,
+  //       [e.target.name]: e.target.value,
+  //     });
+  //   }
+  // };
+
   const handleChange = async (e) => {
     async function fetchSubCategory(categoryId) {
       try {
         const cat = await fetchSubCategories(categoryId);
-        setUnits(
-          cat.data.sub_categories.map((item) => ({
-            name: item.name,
-            id: item.id,
-          }))
-        );
+        setSubCate(cat.data.sub_categories.map((item) => ({ name: item.name, id: item.id })));
         console.log(cat);
       } catch (e) {
         console.log(e);
@@ -66,6 +93,7 @@ const DetailsEdit = () => {
       });
     }
   };
+
 
   const handleTicketDetails = (e, key) => {
     setEditTicketInfo({
@@ -151,7 +179,7 @@ const DetailsEdit = () => {
       description: (
         <select
           id="two"
-          value={editTicketInfo.category_type}
+          value={formData.category_type_id || ""}
           name="categories"
           onChange={handleChange}
           className="border p-1 px-4 border-gray-500 rounded-md"
@@ -159,7 +187,7 @@ const DetailsEdit = () => {
           <option value="">Select Category</option>
           {categories?.map((category) => (
             <option
-              key={category.id}
+              key={category.name}
               onClick={() => console.log("checking-category")}
               value={category.id}
             >
@@ -169,9 +197,23 @@ const DetailsEdit = () => {
         </select>
       ),
     },
-
-    { title: "Subcategory:", description: ticketinfo.sub_category },
-    { title: "Subcategory:", description: ticketinfo.sub_category },
+    // ticketinfo.sub_category
+    { title: "Subcategory:", description: (
+              <select
+                id="five"
+                value={formData.subCategories}
+                name="sub_category_id"
+                onChange={handleChange}
+                className="border p-1 px-4 grid border-gray-500 rounded-md"
+              >
+                <option value="">Sub Category</option>
+                {subCate?.map((floor) => (
+                  <option value={floor.id} key={floor.id}>
+                    {floor.name}
+                  </option>
+                ))}
+              </select>
+    )},
     { title: "Assigned To:", description: "" },
     { title: "Description:", description:(
       <textarea

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import Detail from "../../../containers/Detail";
 import { getComplaintsDetails } from "../../../api";
 import { useParams } from "react-router-dom";
+import moment from "moment";
 
 const TicketDetails = () => {
   const { id } = useParams();
@@ -16,28 +17,47 @@ const TicketDetails = () => {
     fetchDetails();
   }, []);
 
+  const getTimeAgo = (timestamp) => {
+    const createdTime = moment(timestamp);
+    const now = moment();
+    const diff = now.diff(createdTime, 'minutes');
+    if (diff < 60) {
+      return `${diff} minutes ago`;
+    } else if (diff < 1440) {
+      return `${Math.floor(diff / 60)} hours ago`;
+    } else {
+      return `${Math.floor(diff / 1440)} days ago`;
+    }
+  };
+
+
+  const dateFormat = (dateString) => {
+    const date = new Date(dateString);
+    return date.toLocaleString(); // Adjust the format as needed
+  };
+
   const ticketDetails = [
     { title: "Ticket No:", description: ticketinfo.ticket_number },
-    { title: "Customer Name:", description: ticketinfo.customer },
-    { title: "Title :", description: ticketinfo.heading },
-    { title: "Status :", description: ticketinfo.issue_status },
-    { title: "Priority :", description: ticketinfo.priority },
-    { title: "Assigned To :", description: ticketinfo.assignedTo },
-    { title: "Category :", description: ticketinfo.category_type },
-    { title: "Sub category :", description: "" },
     { title: "Building Name:", description: "" },
     { title: "Floor Name:", description: "" },
-    { title: "Ticket Type:", description: ticketinfo.issue_type },
-    { title: "Related To:", description: ticketinfo.RelatedTo },
-    { title: "Total Days:", description: ticketinfo.RelatedTo },
-    { title: "TAT Resolution Breached:", description: ticketinfo.resolution },
-    { title: "Created On :", description: ticketinfo.created_at },
-    { title: "Description :", description: ticketinfo.text },
-  ];
-  const Creators = [
-    { title: "Created By:", description: ticketinfo.updated_by },
-    { title: "Site:", description: "" },
+    { title: "Site:", description: ticketinfo.site_id },
     { title: "Unit :", description: ticketinfo.unit_name },
+    { title: "Customer Name:", description: ticketinfo.customer },
+    { title: "Issue Type :", description: ticketinfo.issue_type },
+    { title: "Assigned To :", description: ticketinfo.assignedTo },
+    { title: "Status :", description: ticketinfo.issue_status },
+    { title: "Priority :", description: ticketinfo.priority },
+    { title: "Title :", description: ticketinfo.heading },
+    { title: "Category :", description: ticketinfo.category_type },
+    { title: "Sub category :", description: "" },
+    { title: "Related To:", description: ticketinfo.RelatedTo },
+    { title: "Created On :", description: dateFormat(ticketinfo.created_at) },
+    { title: "Total time:", description: getTimeAgo(ticketinfo.created_at) },
+
+
+    { title: "TAT Resolution Breached:", description: ticketinfo.resolution },
+    { title: "Created By:", description: ticketinfo.updated_by },
+    { title: "Description :", description: ticketinfo.text },
   ];
 
   const Attachments = [{ title: "Attachments", description: " " }];
@@ -47,10 +67,7 @@ const TicketDetails = () => {
         <div className="">
           <Detail details={ticketDetails} heading={"Ticket Details"} />
         </div>
-        <div className="border m-10" />
-        <div>
-          <Detail details={Creators} heading={"Creator's Info"} />
-        </div>
+
         <div className="border m-10" />
         <Detail details={Attachments} heading={"Attachments"} />
         <div className="border m-10" />

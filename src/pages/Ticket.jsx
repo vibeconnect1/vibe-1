@@ -59,7 +59,7 @@ const Ticket = () => {
     { name: "Description", selector: (row) => row.text, sortable: true },
     { name: "Status", selector: (row) => row.issue_status, sortable: true },
     { name: "Created By", selector: (row) => row.created_by, sortable: true },
-    { name: "Created On", selector: (row) => row.created_at, sortable: true },
+    { name: "Created On", selector: (row) =>dateFormat(row.created_at), sortable: true },
     { name: "Prioity", selector: (row) => row.priority, sortable: true },
     { name: "Assigned To", selector: (row) => row.assigned_to, sortable: true },
     { name: "Ticket Type", selector: (row) => row.issue_type, sortable: true },
@@ -67,6 +67,13 @@ const Ticket = () => {
     { name: "Total Time", selector: (row) => getTimeAgo(row.created_at), sortable: true },
     { name: "TAT Resolution Breached", selector: (row) => (row.resolution_breached ? "Yes" : "No"), sortable: true },
   ];
+
+
+ // Date format 
+  const dateFormat = (dateString) => {
+    const date = new Date(dateString);
+    return date.toLocaleString(); // Adjust the format as needed
+  };
 
   //custom style
   const customStyle = {

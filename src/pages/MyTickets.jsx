@@ -57,7 +57,7 @@ function MyTickets() {
           { name: "Description", selector: (row) => row.text, sortable: true },
           { name: "Status", selector: (row) => row.issue_status, sortable: true },
           { name: "Created By", selector: (row) => row.created_by, sortable: true },
-          { name: "Created On", selector: (row) => row.created_at, sortable: true },
+          { name: "Created On", selector: (row) =>dateFormat(row.created_at), sortable: true },
           { name: "Prioity", selector: (row) => row.priority, sortable: true },
           { name: "Assigned To", selector: (row) => row.assigned_to, sortable: true },
           { name: "Ticket Type", selector: (row) => row.issue_type, sortable: true },
@@ -152,6 +152,10 @@ function MyTickets() {
         setSelectedStatus(status);
     };
 
+    const dateFormat = (dateString) => {
+        const date = new Date(dateString);
+        return date.toLocaleString(); // Adjust the format as needed
+      };
     
 
     return (
