@@ -9,7 +9,7 @@ import { getItemInLocalStorage } from "../../utils/localStorage";
 import { fetchSubCategories, getComplaints, postComplaintsDetails } from "../../api";
 import toast from "react-hot-toast";
 
-const CreateTicket = () => {
+const CreateTicket = (data) => {
   const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
   const [behalf, setBehalf] = useState("self");
@@ -66,7 +66,6 @@ const CreateTicket = () => {
     }
     console.log("Array base64-", base64Array);
     const formattedBase64Array = base64Array.map((base64) => {
-      // Extract base64 string without the data URL prefix
       return base64.split(',')[1];
     });
 
@@ -77,8 +76,9 @@ const CreateTicket = () => {
       ...formData,
       documents: formattedBase64Array
     })
-    // Send formattedBase64Array to backend or use it as needed
   };
+
+  
 
   const convertFileToBase64 = (file) => {
     return new Promise((resolve, reject) => {
@@ -88,7 +88,6 @@ const CreateTicket = () => {
       reader.onerror = (error) => reject(error);
     });
   };
-
 
 
 
@@ -154,6 +153,39 @@ const CreateTicket = () => {
     setSelectedCustomerPriority("");
     setSelectedCategory("");
   };
+
+
+
+  useEffect(() => {
+    const footer = document.querySelector(".hideIt");
+
+    const hideFooter = () => {
+      if (window.innerWidth <= 786) {
+        footer.classList.add('hide-on-small-screen');
+      }
+    };
+
+    const handleMouseEnter = () => {
+      if (window.innerWidth <= 786) {
+        footer.classList.remove('hide-on-small-screen');
+      }
+    };
+
+    const handleMouseLeave = () => {
+      if (window.innerWidth <= 786) {
+        footer.classList.add('hide-on-small-screen');
+      }
+    };
+    setTimeout(hideFooter, 5000);
+    footer.addEventListener('mouseenter', handleMouseEnter);
+    footer.addEventListener('mouseleave', handleMouseLeave);
+    return () => {
+      footer.removeEventListener('mouseenter', handleMouseEnter);
+      footer.removeEventListener('mouseleave', handleMouseLeave);
+    };
+  }, []);
+
+
   return (
     <section className="min-h-screen flex flex-col md:flex-row">
       <div className="fixed left-0 top-0 h-full md:static md:h-auto md:flex-shrink-0">

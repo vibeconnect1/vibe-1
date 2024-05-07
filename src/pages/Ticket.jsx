@@ -199,7 +199,6 @@ const Ticket = () => {
               <p>{count}</p>
             </div>
           ))}
-          {/* </div> */}
 
           {allTicketTypes.map((type) => (
             <div
@@ -325,7 +324,6 @@ const Ticket = () => {
             highlightOnHover
           />
         </div>
-        {/* </div> */}
       </div>
     </section>
   );

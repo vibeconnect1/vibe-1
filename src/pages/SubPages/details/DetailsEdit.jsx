@@ -1,7 +1,10 @@
 import React, { useEffect, useState } from "react";
 import Detail from "../../../containers/Detail";
 import {
+  editComplaintsDetails,
+  // editComplaintsDetails,
   fetchSubCategories,
+  getAssignedTo,
   getComplaintsDetails,
   updateComplaintsDetails,
 } from "../../../api";
@@ -13,26 +16,55 @@ const DetailsEdit = () => {
   const [ticketinfo, setTicketInfo] = useState({});
   const [editTicketInfo, setEditTicketInfo] = useState({});
   const [subCate, setSubCate] = useState([]);
+  const [assignedUser, setAssignedUser] = useState();
   const [formData, setFormData] = useState({
-    category_type_id: "",
+    // category_type_id: "",
     sub_category_id: "",
+    heading: "",
+    text: "",
+    assigned_to: "",
+    // status: "",
+    priority: "",
+    issue_status: "",
+    issue_type: "",
+    comment: "",
+    of_phase: "pms",
+    complaint_id: id
+    
   });
   console.log(formData);
 
   const categories = getItemInLocalStorage("categories");
-  console.log("categories-- ", categories);
+
+  const statuses = getItemInLocalStorage("STATUS");
 
   useEffect(() => {
     const fetchDetails = async () => {
       try {
         const response = await getComplaintsDetails(id);
+        setFormData({...formData, heading:response.data.heading, assigned_to: response.data.assigned_to, priority: response.data.priority, text: response.data.text,
+          sub_category_id: response.data.sub_category_id, issue_status: response.data.issue_status ,
+          issue_type: response.data.issue_type,         })
         setTicketInfo(response.data);
         setEditTicketInfo(response.data);
       } catch (error) {
         console.error("Error fetching details:", error);
       }
     };
+
+    const fetchAssignedTo = async () => {
+      try {
+        const response = await getAssignedTo();
+        setAssignedUser(response.data);
+        
+        setEditTicketInfo(response.data);
+      } catch (error) {
+        console.error("Error fetching details:", error);
+      }
+    };
+
     fetchDetails();
+    fetchAssignedTo();
   }, [id]);
 
   // const handleChange = async (e) => {
@@ -71,20 +103,24 @@ const DetailsEdit = () => {
     async function fetchSubCategory(categoryId) {
       try {
         const cat = await fetchSubCategories(categoryId);
-        setSubCate(cat.data.sub_categories.map((item) => ({ name: item.name, id: item.id })));
-        console.log(cat);
+        setSubCate(
+          cat.data.sub_categories.map((item) => ({
+            name: item.name,
+            id: item.id,
+          }))
+        );
       } catch (e) {
         console.log(e);
       }
     }
-
+  
     if (e.target.type === "select-one" && e.target.name === "categories") {
       const categoryId = Number(e.target.value);
       await fetchSubCategory(categoryId);
       setFormData({
         ...formData,
         category_type_id: categoryId,
-        sub_category_id: "",
+        sub_category_id: ""
       });
     } else {
       setFormData({
@@ -93,19 +129,19 @@ const DetailsEdit = () => {
       });
     }
   };
+  
 
-
-  const handleTicketDetails = (e, key) => {
-    setEditTicketInfo({
-      ...editTicketInfo,
-      [key]: e.target.value,
+  const handleTicketDetails = (e, name) => {
+    setFormData({
+      ...formData,
+     [e.target.name]: e.target.value,
     });
   };
 
   const saveEditDetails = async () => {
     try {
-      await updateComplaintsDetails(editTicketInfo);
-      console.log("Edited Ticket Details:", editTicketInfo);
+      await editComplaintsDetails(formData);
+      console.log("Edited Ticket Details:",formData);
     } catch (error) {
       console.error("Error Saving in details update: ", error);
     }
@@ -116,28 +152,27 @@ const DetailsEdit = () => {
     {
       title: "Title :",
       description: (
-        <input
-          type="text"
-          value={editTicketInfo.heading || ""}
-          className="border p-1 px-4 border-gray-400 rounded-md"
-          onChange={(e) => handleTicketDetails(e, "heading")}
-        />
+        
+        <p> 
+          {formData.heading}
+        </p>      
       ),
     },
     {
       title: "Status :",
       description: (
         <select
-          name="status"
-          value={editTicketInfo.issue_status || ""}
-          onChange={(e) => handleTicketDetails(e, "issue_status")}
-          className="border p-1 px-4 border-gray-400 rounded-md"
+          
+          value={formData.issue_status}
+          name="issue_status"
+          onChange={e=> setFormData({...formData, issue_status: e.target.value})}
+          className="border p-1 px-4 grid border-gray-500 rounded-md"
         >
-          <option value="Complete">Complete</option>
-          <option value="Closed">Closed</option>
-          <option value="Open">Open</option>
-          <option value="Pending">Pending</option>
-          <option value="Work In Progress">Work In Progress</option>
+          {statuses?.map((status) => (
+            <option value={status.name} key={status.id}>
+              {status.name}
+            </option>
+          ))}
         </select>
       ),
     },
@@ -145,9 +180,9 @@ const DetailsEdit = () => {
       title: "Issue Type :",
       description: (
         <select
-          name="type"
-          value={editTicketInfo.issue_type || ""}
-          onChange={(e) => handleTicketDetails(e, "issue_type")}
+          name="issue_type"
+          value={formData.issue_type}
+          onChange={e => setFormData({...formData, issue_type: e.target.value})}
           className="border p-1 px-4 border-gray-400 rounded-md"
         >
           <option value="Request">Request</option>
@@ -161,8 +196,8 @@ const DetailsEdit = () => {
       description: (
         <select
           name="priority"
-          value={editTicketInfo.priority || ""}
-          onChange={(e) => handleTicketDetails(e, "priority")}
+          value={formData.priority || ""}
+          onChange={e => setFormData({...formData, priority: e.target.value})}
           className="border p-1 px-4 border-gray-400 rounded-md"
         >
           <option value="P1">P1</option>
@@ -173,22 +208,23 @@ const DetailsEdit = () => {
         </select>
       ),
     },
-   
+
     {
       title: "Category:",
       description: (
         <select
-          id="two"
-          value={formData.category_type_id || ""}
+          id=""
+          value={formData.catogories}
           name="categories"
           onChange={handleChange}
+
           className="border p-1 px-4 border-gray-500 rounded-md"
         >
           <option value="">Select Category</option>
           {categories?.map((category) => (
             <option
               key={category.name}
-              onClick={() => console.log("checking-category")}
+              
               value={category.id}
             >
               {category.name}
@@ -198,39 +234,43 @@ const DetailsEdit = () => {
       ),
     },
     // ticketinfo.sub_category
-    { title: "Subcategory:", description: (
-              <select
-                id="five"
-                value={formData.subCategories}
-                name="sub_category_id"
-                onChange={handleChange}
-                className="border p-1 px-4 grid border-gray-500 rounded-md"
-              >
-                <option value="">Sub Category</option>
-                {subCate?.map((floor) => (
-                  <option value={floor.id} key={floor.id}>
-                    {floor.name}
-                  </option>
-                ))}
-              </select>
-    )},
-    { title: "Assigned To:", description: "" },
-    { title: "Description:", description:(
-      <textarea
-          
-          value={editTicketInfo.text || ""}
-          className="border p-1 px-2 border-gray-400 rounded-md w-full"
-          onChange={(e) => handleTicketDetails(e, "text")}
-        />
-    ) },
-    { title: "Comment:", description:(
-      <textarea
-          placeholder="Add Comment"
-          value={editTicketInfo.feedbacks || ""}
-          className="border p-1 px-2 border-gray-400 rounded-md w-full"
-          onChange={(e) => handleTicketDetails(e, "feedbacks")}
-        />
-    ) },
+    {
+      title: "Sub Category:",
+      description: (
+        <select
+          id="five"
+          value={formData.subCategories}
+          name="sub_category_id"
+          onChange={handleChange}
+          className="border p-1 px-4 grid border-gray-500 rounded-md"
+        >
+          <option value="">Select Sub Category</option>
+          {subCate?.map((floor) => (
+            <option value={floor.id} key={floor.id}>
+              {floor.name}
+            </option>
+          ))}
+        </select>
+      ),
+    },
+    {
+      title: "Assigned To:",
+      description: (
+        <select
+          value={formData.assigned_to}
+          name="assigned_to"
+          onChange={e => setFormData({...formData, assigned_to: e.target.value})}
+          className="border p-1 px-4 border-gray-500 rounded-md"
+        >
+          <option value="">Select Assign To</option>
+          {assignedUser?.map((assign) => (
+            <option key={assign.id} value={assign.firstname}>
+              {assign.firstname} {assign.lastname}
+            </option>
+          ))}
+        </select>
+      ),
+    },
   ];
 
   const Attachments = [{ title: "Attachment 1", description: " " }];
@@ -242,8 +282,22 @@ const DetailsEdit = () => {
           <Detail details={ticketDetails} heading={"Edit Ticket Details"} />
         </div>
 
-        <div className="border m-10" />
-        <Detail details={Attachments} heading={"Attachments"} />
+        <input type="text" 
+        
+        />
+
+        <div className="p-4">
+          <div className="p-4">
+            <label htmlFor="description" className="font-medium">Additonal Notes:</label>
+            <textarea
+               name="text"
+              value={formData.text }
+              className="border p-1 px-2 border-gray-400 rounded-md w-full"
+              onChange={e => setFormData({...formData, text:e.target.value})}
+            />
+          </div>
+        </div>
+        <input type="file" />
       </div>
       <div className=" m-10 w-full flex justify-center  ">
         <button

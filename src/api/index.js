@@ -61,6 +61,16 @@ export const getComplaintsDetails = async (id) =>
     },
   })
 
+  //
+
+  export const getUnits = async (buildId) =>
+    axiosInstance.get(`units.json` ,{
+      params: {
+        token: token,
+        building_id: buildId
+      },
+    },);
+
   export const updateComplaintsDetails = async (id, data) => 
   axiosInstance.put(`pms/complaints/${id}.json`, data, {
     params : {
@@ -68,6 +78,13 @@ export const getComplaintsDetails = async (id) =>
     }
   })
 
+
+  export const getAssignedTo = async () => 
+    axiosInstance.get(`/users/pms_admins.json`, {
+      params : {
+        token : token,
+      }
+    })
   
 
   // export const getComplaints = async () => axiosInstance.get("/pms/complaints.json", {
@@ -134,3 +151,12 @@ export const getComplaintsDetails = async (id) =>
       throw error;
     }
   };
+
+  export const editComplaintsDetails = async (data) => {
+    try {
+      const response = await axiosInstance.post(`/complaint_logs.json?token=${token}`, data)
+      return response.data
+    } catch (error) {
+      throw error;
+    }
+  }

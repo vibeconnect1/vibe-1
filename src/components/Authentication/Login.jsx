@@ -46,6 +46,9 @@ const Login = () => {
         },
       });
 
+      const building = response.data.buildings;
+      setItemInLocalStorage("building", building);
+
       const categories = response.data.categories;
       setItemInLocalStorage("categories", categories);
       const token = response.data.user.api_key;
@@ -58,13 +61,19 @@ const Login = () => {
       setItemInLocalStorage("USERTYPE", userType)
       console.log(userType)
       
+      const statuses = response.data.statuses
+      setItemInLocalStorage("STATUS", statuses)
 
       // const complaints = response.data.complaints;
       // setItemInLocalStorage("Complaints", complaints)
       console.log(userName)
       console.log(selectedSiteId)
       toast.loading("Processing your data please wait...");
-      navigate("/dashboard");
+      if(userType === "pms_admin"){
+        navigate("/dashboard");
+      }else{
+        navigate("/mytickets")
+      }
       toast.dismiss();
     } catch (error) {
       console.error("Login failed:", error);
@@ -118,7 +127,7 @@ const Login = () => {
                 name="password"
                 id="password"
                 className="rounded-sm p-1 px-2 border border-black"
-                placeholder="********"
+                placeholder="****"
                 type={password ? "text" : "password"}
                 onChange={onChange}
                 value={formData.password}

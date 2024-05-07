@@ -28,9 +28,12 @@ import { AiOutlineAudit } from "react-icons/ai";
 import { AiOutlineFileText } from "react-icons/ai";
 import { AiOutlineSchedule } from "react-icons/ai";
 import { BsSpeedometer2 } from "react-icons/bs";
+import { getItemInLocalStorage } from "./localStorage";
+import { useEffect } from "react";
 
-const userType = localStorage.getItem('USERTYPE');
-console.log("User Type:", userType);
+
+// const userType = getItemInLocalStorage(USERTYPE);
+// console.log(userType)
 
 // let menusToShow = [];
 
@@ -70,15 +73,15 @@ console.log("User Type:", userType);
 
 
 export const menus = [
-
-  { name: "Dashboard", link: "/dashboard", icon: MdOutlineDashboard },
+// dashboard admin
+  // { name: "Dashboard", link: "/dashboard", icon: MdOutlineDashboard },
   // { name: "Assets", link: "/assets", icon: BsBuilding },
   // { name: "Service", link: "/services", icon: LuSettings2 },
   // { name: "Attendance", link: "/attendance", icon: BsFileRuled },
   // { name: "Business", link: "/business", icon: IoBusinessOutline },
   // { name: "Materials", link: "/materials", icon: TbReportAnalytics },
   // { name: "Bookings", link: "/bookings", icon: AiOutlineFieldTime },
-  { name: "Admin", link: "/tickets", icon: BsTicketPerforated },
+  // { name: "Admin", link: "/tickets", icon: BsTicketPerforated },
   { name: "My Tickets", link: "/mytickets", icon: HiMiniTicket },
   { name: "Profile", link: "/profile", icon: HiMiniUser },
   // { name: "Communication", link: "/communication", icon: BsBroadcast },
@@ -99,8 +102,6 @@ export const menus = [
   // { name: "Setup", link: "/setup", icon: RiSettings4Line },
 ];
 
-if (userType === "pms_admin") {
-  menus.push({ name: "Admin", link: "/tickets", icon: BsTicketPerforated });
-}
-
-
+// if (userType === "pms_admin") {
+//   menus.push({ name: "Admin", link: "/tickets", icon: BsTicketPerforated });
+// }
