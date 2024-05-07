@@ -64,7 +64,7 @@ export const getComplaintsDetails = async (id) =>
   //
 
   export const getUnits = async (buildId) =>
-    axiosInstance.get(`units.json` ,{
+    axiosInstance.get(`/units.json` ,{
       params: {
         token: token,
         building_id: buildId
@@ -86,63 +86,24 @@ export const getComplaintsDetails = async (id) =>
       }
     })
   
+    export const getIssueType = async () => 
+      axiosInstance.get(`pms/admin/complaint_issue_types.json`, {
+        params : {
+          token : token,
+        }
+      })
 
-  // export const getComplaints = async () => axiosInstance.get("/pms/complaints.json", {
-  //   params: {
-  //     token: token
-  //   }
-  // });
+      export const getfloorsType = async (buildId) => 
+        axiosInstance.get(`/floors.json`, {
+          params : {
+            token : token,
+            building_id  : buildId
+          }
+        })
+      
+      
 
-
-// post api  
-
-  // export const postComplaintsDetails = async (data) =>
-  //   axiosInstance.post(`/pms/complaints.json`, {
-  //     params: {
-  //       token: token
-  //     }
-  //   });
-
-  
-  // export const postComplaintsDetails = async (data) => 
-  // axiosInstance.post('/pms/complaints.json', {
-  //   params: {
-  //     token: token,
-  //     complaint: [ 
-  //     {
-  //       category_type_id: data.category_type_id,
-  //       sub_category_id: data.sub_category_id,
-  //       text: data.text
-  //     }
-  //   ]
-  //   }
-  // })
-
-
-
-  // export const postComplaintsDetails = async (data) => {
-  //   try {
-  //     const response = await axiosInstance.post('/pms/complaints.json', {
-  //       token: token,
-  // complaint: [
-  //   {
-  //     category_type_id: data.category_type_id,
-  //     sub_category_id: data.sub_category_id,
-  //     text: data.text
-  //   }
-  // ]
-        
-  //     });
-  
-  //     return response.data; // Assuming you want to return the response data
-  //   } catch (error) {
-  //     // Handle error
-  //     console.error("Error:", error);
-  //     throw error; // Rethrow the error to propagate it to the caller
-  //   }
-  // }
-  
-
+    
   export const postComplaintsDetails = async (data) => {
     try {
       const response = await axiosInstance.post(`/pms/complaints.json?token=${token}`, data);

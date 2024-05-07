@@ -47,7 +47,8 @@ const Login = () => {
       });
 
       const building = response.data.buildings;
-      setItemInLocalStorage("building", building);
+      setItemInLocalStorage("Building", building);
+      console.log("Buildingss-",building)
 
       const categories = response.data.categories;
       setItemInLocalStorage("categories", categories);
@@ -55,6 +56,7 @@ const Login = () => {
       setItemInLocalStorage("TOKEN", token);
       const selectedSiteId = response.data.user.selected_site_id
       const userName = response.data.user.firstname
+      setItemInLocalStorage("SITEID", selectedSiteId);
       setItemInLocalStorage("Name", userName)
       console.log(userName)
       const userType = response.data.user.user_type
@@ -63,11 +65,13 @@ const Login = () => {
       
       const statuses = response.data.statuses
       setItemInLocalStorage("STATUS", statuses)
+      console.log("Status", statuses)
 
-      // const complaints = response.data.complaints;
-      // setItemInLocalStorage("Complaints", complaints)
+      const complaint = response.data.complanits
+      setItemInLocalStorage("complaint", complaint)
+
       console.log(userName)
-      console.log(selectedSiteId)
+      console.log("Sit",selectedSiteId)
       toast.loading("Processing your data please wait...");
       if(userType === "pms_admin"){
         navigate("/dashboard");

@@ -17,8 +17,9 @@ const DetailsEdit = () => {
   const [editTicketInfo, setEditTicketInfo] = useState({});
   const [subCate, setSubCate] = useState([]);
   const [assignedUser, setAssignedUser] = useState();
+  const [categ , setCateg] = useState([])
   const [formData, setFormData] = useState({
-    // category_type_id: "",
+    category_type_id: "",
     sub_category_id: "",
     heading: "",
     text: "",
@@ -35,8 +36,10 @@ const DetailsEdit = () => {
   console.log(formData);
 
   const categories = getItemInLocalStorage("categories");
-
+  // console.log(categories , "Catss")
   const statuses = getItemInLocalStorage("STATUS");
+
+  const complaint = getItemInLocalStorage("complaint")
 
   useEffect(() => {
     const fetchDetails = async () => {
@@ -44,7 +47,7 @@ const DetailsEdit = () => {
         const response = await getComplaintsDetails(id);
         setFormData({...formData, heading:response.data.heading, assigned_to: response.data.assigned_to, priority: response.data.priority, text: response.data.text,
           sub_category_id: response.data.sub_category_id, issue_status: response.data.issue_status ,
-          issue_type: response.data.issue_type,         })
+          issue_type: response.data.issue_type,   category_type_id: response.data.category_type_id      })
         setTicketInfo(response.data);
         setEditTicketInfo(response.data);
       } catch (error) {
@@ -67,60 +70,30 @@ const DetailsEdit = () => {
     fetchAssignedTo();
   }, [id]);
 
-  // const handleChange = async (e) => {
-  //   async function fetchSubCategory(categoryId) {
-  //     try {
-  //       const cat = await fetchSubCategories(categoryId);
-  //       setUnits(
-  //         cat.data.sub_categories.map((item) => ({
-  //           name: item.name,
-  //           id: item.id,
-  //         }))
-  //       );
-  //       console.log(cat);
-  //     } catch (e) {
-  //       console.log(e);
-  //     }
-  //   }
-
-  //   if (e.target.type === "select-one" && e.target.name === "categories") {
-  //     const categoryId = Number(e.target.value);
-  //     await fetchSubCategory(categoryId);
-  //     setFormData({
-  //       ...formData,
-  //       category_type_id: categoryId,
-  //       sub_category_id: "",
-  //     });
-  //   } else {
-  //     setFormData({
-  //       ...formData,
-  //       [e.target.name]: e.target.value,
-  //     });
-  //   }
-  // };
-
+  
   const handleChange = async (e) => {
     async function fetchSubCategory(categoryId) {
       try {
         const cat = await fetchSubCategories(categoryId);
-        setSubCate(
+        setUnits(
           cat.data.sub_categories.map((item) => ({
             name: item.name,
             id: item.id,
           }))
         );
+        console.log(cat);
       } catch (e) {
         console.log(e);
       }
     }
-  
+
     if (e.target.type === "select-one" && e.target.name === "categories") {
       const categoryId = Number(e.target.value);
       await fetchSubCategory(categoryId);
       setFormData({
         ...formData,
         category_type_id: categoryId,
-        sub_category_id: ""
+        sub_category_id: "",
       });
     } else {
       setFormData({
@@ -129,6 +102,37 @@ const DetailsEdit = () => {
       });
     }
   };
+
+  // const handleChange = async (e , key) => {
+  //   async function editComplaintsDetails(categoryId) {
+  //     try {
+  //       const cat = await editComplaintsDetails(categoryId);
+  //       setSubCate(
+  //         cat.data.category_type.map((item) => ({
+  //           name: item.name,
+  //           id: item.id,
+  //         }))
+  //       );
+  //     } catch (e) {
+  //       console.log(e);
+  //     }
+  //   }
+  
+  //   if (e.target.type === "select-one" && e.target.name === "categories") {
+  //     const categoryId = Number(e.target.value);
+  //     await editComplaintsDetails(categoryId);
+  //     setFormData({
+  //       ...formData,
+  //       // category_type_id: categoryId,
+  //       // sub_category_id: ""
+  //     });
+  //   } else {
+  //     setFormData({
+  //       ...formData,
+  //       [key]: e.target.value,
+  //     });
+  //   }
+  // };
   
 
   const handleTicketDetails = (e, name) => {
@@ -213,21 +217,21 @@ const DetailsEdit = () => {
       title: "Category:",
       description: (
         <select
-          id=""
-          value={formData.catogories}
-          name="categories"
+          id="two"
+          value={formData.complaint_id}
+          name="category_type_id"
           onChange={handleChange}
 
           className="border p-1 px-4 border-gray-500 rounded-md"
         >
           <option value="">Select Category</option>
-          {categories?.map((category) => (
+          {categories?.map((categories) => (
             <option
-              key={category.name}
+              key={categories.name}
               
-              value={category.id}
+              value={categories.id}
             >
-              {category.name}
+              {categories.name}
             </option>
           ))}
         </select>
@@ -239,7 +243,7 @@ const DetailsEdit = () => {
       description: (
         <select
           id="five"
-          value={formData.subCategories}
+          value={formData.sub_category_id}
           name="sub_category_id"
           onChange={handleChange}
           className="border p-1 px-4 grid border-gray-500 rounded-md"
@@ -282,9 +286,6 @@ const DetailsEdit = () => {
           <Detail details={ticketDetails} heading={"Edit Ticket Details"} />
         </div>
 
-        <input type="text" 
-        
-        />
 
         <div className="p-4">
           <div className="p-4">
@@ -297,7 +298,6 @@ const DetailsEdit = () => {
             />
           </div>
         </div>
-        <input type="file" />
       </div>
       <div className=" m-10 w-full flex justify-center  ">
         <button

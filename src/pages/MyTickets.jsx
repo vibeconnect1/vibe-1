@@ -15,6 +15,7 @@ function MyTickets() {
     const [ticketTypeCounts, setTicketTypeCounts] = useState({});
     const [ticketStatusCounts, setTicketStatusCounts] = useState({});
     const allTicketTypes = ["Complaint", "Request", "Suggestion"];
+    const [complaints, setComplaints] = useState([]);
 
     const getTimeAgo = (timestamp) => {
         const createdTime = moment(timestamp);
@@ -101,6 +102,7 @@ function MyTickets() {
                 const response = await getComplaints();
                 const complaints = response.data.complaints || [];
                 setFilteredData(complaints);
+                setComplaints(complaints);
     
                 const statusCounts = complaints.reduce((acc, curr) => {
                     acc[curr.issue_status] = (acc[curr.issue_status] || 0) + 1;
@@ -117,7 +119,7 @@ function MyTickets() {
             }
         };
         fetchData();
-    }, [selectedStatus, searchText]);
+    }, []);
     
 
     // const handleSearch = (e) => {
@@ -134,23 +136,41 @@ function MyTickets() {
     // const handleStatusChange = (status) => {
     //   setSelectedStatus(status);
     // };
-
     const handleSearch = (e) => {
         const searchValue = e.target.value;
         setSearchText(searchValue);
-        const filteredResults = filteredData.filter(
+     
+        if (searchValue.trim() === "") {
+          // If search input is empty, reset to show all data
+          setFilteredData(complaints);
+        } else {
+          // Filter the data based on search input and selected status
+          const filteredResults = complaints.filter(
             (item) =>
-                (selectedStatus === "all" ||
-                    item.issue_status.toLowerCase() === selectedStatus) &&
-                (item.ticket_number.toLowerCase().includes(searchValue.toLowerCase()) ||
-                    item.category_type.toLowerCase().includes(searchValue.toLowerCase()))
-        );
-        setFilteredData(filteredResults);
-    };
+              (selectedStatus === "all" ||
+                item.issue_status.toLowerCase() === selectedStatus.toLowerCase()) &&
+              (item.ticket_number.toLowerCase().includes(searchValue.toLowerCase()) ||
+                item.category_type.toLowerCase().includes(searchValue.toLowerCase()))
+          );
+          setFilteredData(filteredResults);
+        }
+      };
 
     const handleStatusChange = (status) => {
         setSelectedStatus(status);
-    };
+    
+    
+        if (status === "all") {
+          setFilteredData(complaints);
+        } else {
+          const filteredResults = complaints.filter(
+            (item) => item.issue_status.toLowerCase() === status.toLowerCase()
+          );
+    
+    
+          setFilteredData(filteredResults);
+        }
+      };
 
     const dateFormat = (dateString) => {
         const date = new Date(dateString);

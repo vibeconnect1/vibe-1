@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Navbar from "../../components/Navbar";
 import { useNavigate } from "react-router-dom";
-import { fetchSubCategories, getComplaints, getUnits, postComplaintsDetails } from "../../api";
+import { fetchSubCategories, getComplaints, getIssueType, getUnits, getfloorsType, postComplaintsDetails } from "../../api";
 import { getItemInLocalStorage } from "../../utils/localStorage";
 // import axios from "axios";
 import toast from "react-hot-toast";
@@ -14,42 +14,58 @@ const UserTicket = () => {
   const [attachments, setAttachments] = useState([]);
   const [units, setUnits] = useState([]);
   const [unitName, setUnitName] = useState([]);
-  const [selectedSiteId, setSelectedSiteId] = useState(15);
+  const [selectedSiteId, setSelectedSiteId] = useState();
   const [disSubmit, setDisSubmit] = useState(false);
-  const [issuetye, setIssuetye] = useState([])
+  const [floor, setFloor] = useState([])
 
+  const siteID = getItemInLocalStorage("SITEID")
   const [formData, setFormData] = useState({
     category_type_id: "",
     sub_category_id: "",
     text: "",
     heading: "",
     of_phase: "pms",
-    site_id: selectedSiteId,
-    attachments: [],
+    site_id: siteID,
+    documents : [],
     issue_type_id: "",
-    issue_type: "",
+    complaint_type: "",
     building_name: "",
-    unit_id: ""
+    unit_id: "",
+    floor_name: ""
+
   });
 
   console.log(formData);
-  console.log(attachments);
+  // console.log(attachments);
 
   const categories = getItemInLocalStorage("categories");
   console.log("categories-- ", categories);
 
-  const building = getItemInLocalStorage("Buildings");
-  console.log("BB", building)
+  const building = getItemInLocalStorage("Building");
+  console.log("BB", building);
+
+  // const siteID = getItemInLocalStorage("SITEID")
+  // setSelectedSiteId(siteID) 
+  console.log("site--", siteID)
+
+  // const complaitType = getItemInLocalStorage("complaintType")
+  // console.log("complaintType", complaitType)
 
 
+  useEffect(() => {
+    const fetchData = async () => {
+      const response = await fetchSubCategories(14);
+      console.log("subCategories:", response);
+    };
 
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     const response = await fetchSubCategories(14);
-  //     console.log("subCategories:", response);
-  //   };
-  //   fetchData();
-  // }, []);
+
+    const fechIssueType = async () => {
+      const issue = await getIssueType()
+      console.log("Issue", issue.data)
+    }
+    fetchData();
+    fechIssueType();
+  }, []);
 
   const handleChange = async (e) => {
     async function fetchSubCategory(categoryId) {
@@ -80,6 +96,7 @@ const UserTicket = () => {
 
   const buildingChange = async (e) => {
     async function fetchUnits(BuildID) {
+
       try {
         const build = await getUnits(BuildID);
         console.log("units n", build.data);
@@ -89,13 +106,23 @@ const UserTicket = () => {
       }
     }
 
+    async function fectFloors(FloorID) {
+      try {
+        const floor = await getfloorsType(FloorID);
+        console.log("Floors --", floor.data);
+        setFloor(floor.data.map((item) => ({ name: item.name, id: item.id })));
+      } catch (e) {
+        console.log(e);
+      }
+    }
+
     if (e.target.type === "select-one" && e.target.name === "building_name") {
       const BuildID = Number(e.target.value);
       await fetchUnits(BuildID);
+      await fectFloors(BuildID);
       setFormData({
         ...formData,
-        category_type_id: BuildID,
-        sub_category_id: "",
+        building_name: BuildID,
       });
     } else {
       setFormData({
@@ -106,113 +133,105 @@ const UserTicket = () => {
   }
 
 
-
-  // const handleFileChange = (event) => {
-  //   const files = event.target.files;
-  //   const fileList = Array.from(files);
-
-  //   const promises = fileList.map(file => {
-  //     return new Promise((resolve, reject) => {
-  //       const reader = new FileReader();
-
-  //       reader.onload = (e) => {
-  //         const base64Data = e.target.result;
-  //         resolve(base64Data);
-  //       };
-
-  //       reader.onerror = (error) => {
-  //         reject(error);
-  //       };
-  //       reader.readAsDataURL(file);
-  //     });
-  //   });
-  //   Promise.all(promises)
-  //     .then(base64Array => {
-  //       setAttachments(base64Array);
-  //     })
-  //     .catch(error => {
-  //       console.error('Error reading files:', error);
-  //     });
-  // };
-
-
-  // const handleFileChange = async (event) => {
-  //   const files = event.target.files;
-  //   const base64Array = [];
-
-  //   for (const file of files) {
-  //     const base64 = await convertFileToBase64(file);
-  //     base64Array.push(base64);
-  //   }
-  //   console.log("Array base64-", base64Array);
-  //   const formattedBase64Array = base64Array.map((base64) => {
-  //     return base64.split(',')[1];
-  //   });
-
-  //   console.log("Fornat", formattedBase64Array);
-  //   setFormData({
-  //     ...formData,
-  //     documents: formattedBase64Array
-  //   })
-  // };
-
-  // const convertFileToBase64 = (file) => {
-  //   return new Promise((resolve, reject) => {
-  //     const reader = new FileReader();
-  //     reader.readAsDataURL(file);
-  //     reader.onload = () => resolve(reader.result);
-  //     reader.onerror = (error) => reject(error);
-  //   });
-  // };
-
-
-
-  // const handleFileChange = async (event) => {
-  //   const files = event.target.files;
-  //   const formData = new FormData();
+  // const handleFileChange = async (e) => {
+  //   const files =  e.target.files;
+  // const formData = new FormData();
 
   //   for (const file of files) {
   //     formData.append('attachments[]', file);
-  //     // formData.append('fileInfo', JSON.stringify(fileInfo));
   //   }
-
-  //   formData.append('category_type_id', "21");
-  //   formData.append('sub_category_id', "17");
-  //   formData.append('text', "hhhh");
-  //   formData.append('heading', "ppppp");
-  //   formData.append('of_phase', "pms");
-  //   formData.append('site_id', selectedSiteId);
-
+  //   formData.append("category_type_id", 18)
+  //   formData.append("heading", "head")
+  //   formData.append("category_type", "")
   //   try {
-  //     const response = await fetch('http://13.215.74.38/pms/complaints.json?token=775d6ae27272741669a65456ea10cc56cd4cce2bb99287b6', {
-  //       method: 'POST',
-  //       body: formData,
-  //     });
+  //           const response = await fetch('http://13.215.74.38/pms/complaints.json?token=775d6ae27272741669a65456ea10cc56cd4cce2bb99287b6', {
+  //             method: 'POST',
+  //             body: formData,
+  //           })
 
-  //     if (!response.ok) {
-  //       throw new Error('Failed to upload files');
-  //     }
+  //           if (!response.ok) {
+  //             console.log("Not Correct ")
+  //           } else {
+  //             error;
+  //           }
+  //         }catch(error){
+  //           console.error(error);
+  //         }
+          
+  //   setFormData({
+  //     ...formData,
+  //     attachments: files, // Update attachments field instead of attachments
+  //   });
+  // }
+  
 
-  //     console.log(response, "resss");
-
-  //   } catch (error) {
-  //     console.error('Error uploading files:', error);
-  //   }
-  // };
-
+  const convertFileToBase64 = (file) => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = (error) => reject(error);
+    });
+  };
 
   const handleFileChange = async (event) => {
     const files = event.target.files;
-    const formData = new FormData();
+    const base64Array = [];
 
     for (const file of files) {
-    formData.append('attachments[]', file);
-      formData.append('fileInfo', JSON.stringify(fileInfo));
+      const base64 = await convertFileToBase64(file);
+      base64Array.push(base64);
     }
-  }
+    console.log("Array base64-", base64Array);
+    const formattedBase64Array = base64Array.map((base64) => {
+      return base64.split(',')[1];
+    });
+    
+    console.log("Fornat", formattedBase64Array);
+    
+      setFormData({
+        ...formData, 
+        documents : formattedBase64Array
+      })
+  };
+  
 
 
 
+//    const handleFileChange = async (event) => {
+//     const files = event.target.files;
+//     const formData = new FormData();
+
+//     for (const file of files) {
+//       formData.append('attachments[]', file);
+//     }
+// formData.append('complaint_type',  "Complaint" )
+// formData.append('building_name', 41)
+
+// formData.append('unit_id', 245)
+//     formData.append('category_type_id', "21");
+//     formData.append('sub_category_id', "17");
+//     formData.append('text', "hhhh");
+//     formData.append('heading', "ppppp");
+//     formData.append('of_phase', "pms");
+//     formData.append('site_id', selectedSiteId);
+
+//     try {
+//       const response = await fetch('http://13.215.74.38/pms/complaints.json?token=775d6ae27272741669a65456ea10cc56cd4cce2bb99287b6', {
+//         method: 'POST',
+//         body: formData,
+//       });
+
+//       if (!response.ok) {
+//         throw new Error('Failed to upload files');
+//       }
+
+//       console.log(response, "resss");
+
+//     } catch (error) {
+//       console.error('Error uploading files:', error);
+//     }
+//   };
 
 
   const handleSubmit = async (e) => {
@@ -222,7 +241,7 @@ const UserTicket = () => {
         return toast.error("All Fields Required")
       }
 
-      // setDisSubmit(true)
+      setDisSubmit(true)
       toast.loading("Submitting request Please Wait!")
 
       const response = await postComplaintsDetails(formData);
@@ -234,19 +253,18 @@ const UserTicket = () => {
         heading: "",
         of_phase: "pms",
         site_id: selectedSiteId,
-        attachments : [],
+        documents: [],
         issue_type_id: "",
-        issue_type: "",
+        complaint_type: "",
         building_name: "",
+        floor_name: "",
         unit_id: ""
-
       });
 
       toast.dismiss();
 
-
       toast.success("Complaint sent successfully");
-      // navigate('/mytickets');
+      navigate('/mytickets');
     } catch (error) {
       console.error('Error submitting complaint:', error);
     }
@@ -278,98 +296,47 @@ const UserTicket = () => {
 
             {/* Related To :*/}
             <div className="flex gap-5 items-center">
-                <label htmlFor="" className="font-semibold">
-                  Related To:
-                </label>
-                <select
-                  id="" 
-                  value={formData.issue_type_id}
-                  name="building_name"
-                  onChange={buildingChange}
-                  className="border p-1 px-4 border-gray-500 rounded-md"
-                >
-                  <option value="building_name">Type</option>
-                  {building?.map(category => (
-                    <option
-                      key={category.id}
-                      // onClick={() => console.log("checking-category")}
-                      value={category.id}
-                    >
-                      {category.name}
-                    </option>
-                  ))}
-                </select>
-              </div>
+              <label htmlFor="" className="font-semibold">
+                Related To:
+              </label>
+              <select
+                id="five"
+                value={formData.complaint_type}
+                name="complaint_type"
+                onChange={e => setFormData({ ...formData, complaint_type: e.target.value })}
+                className="border p-1 px-4 border-gray-500 rounded-md"
+              >
+                <option value="">Select Issue Type</option>
+                <option value="Complaint">Complaint</option>
+                <option value="Suggestion">Suggestion</option>
+                <option value="Request">Request</option>
 
+              </select>
+            </div>
 
 
 
             {/* Type Area */}
             <div className="flex gap-5 items-center">
-                <label htmlFor="" className="font-semibold">
-                  Tyep of:
-                </label>
-                <select
-                  id="five"
-                  value={formData.issue_type}
-                  name="issue_type"
-                  onChange={buildingChange}
-                  className="border p-1 px-4 border-gray-500 rounded-md"
-                >
-                  <option value="building_name">Type</option>
-                  {building?.map(category => (
-                    <option
-                      key={category.id}
-                      // onClick={() => console.log("checking-category")}
-                      value={category.id}
-                    >
-                      {category.name}
-                    </option>
-                  ))}
-                </select>
-              </div>
+              <label htmlFor="" className="font-semibold">
+                Type of:
+              </label>
+              <select
+                id="five"
+                value={formData.complaint_type}
+                name="complaint_type"
+                onChange={e => setFormData({ ...formData, complaint_type: e.target.value })}
+                className="border p-1 px-4 border-gray-500 rounded-md"
+              >
+                <option value="">Select Issue Type</option>
+                <option value="Complaint">Complaint</option>
+                <option value="Suggestion">Suggestion</option>
+                <option value="Request">Request</option>
 
-            {/* <div className="flex justify-around my-2 w-full">
-              <p className="font-semibold">Type:</p>
-              <div className="flex items-center gap-2">
-                <input
-                  type="radio"
-                  id="Complaint"
-                  name="status"
-                // checked={selectedStatus === "Appartment"}
-                // onChange={() => handleStatusChange("Appartment")}
-                />
-                <label htmlFor="Complaint" className="text-sm">
-                  Complaint
-                </label>
-              </div>
+              </select>
 
 
-              <div className="flex items-center gap-2">
-                <input
-                  type="radio"
-                  id="Suggestion"
-                  name="status"
-                // checked={selectedStatus === "Appartment"}
-                // onChange={() => handleStatusChange("Appartment")}
-                />
-                <label htmlFor="Suggestion" className="text-sm">
-                  Suggestion
-                </label>
-              </div>
-              <div className="flex items-center gap-2">
-                <input
-                  type="radio"
-                  id="Request"
-                  name="status"
-                // checked={selectedStatus === "Appartment"}
-                // onChange={() => handleStatusChange("Appartment")}
-                />
-                <label htmlFor="Request" className="text-sm">
-                  Request
-                </label>
-              </div>
-            </div> */}
+            </div>
 
             <div className="flex justify-around items-start w-full">
               <div className="flex gap-3 items-center">
@@ -383,14 +350,37 @@ const UserTicket = () => {
                   onChange={buildingChange}
                   className="border p-1 px-4 border-gray-500 rounded-md"
                 >
-                  <option value="building_name">Select Tower</option>
-                  {building?.map(category => (
+                  <option value="">Select Tower</option>
+                  {building?.map(build => (
                     <option
-                      key={category.id}
-                      // onClick={() => console.log("checking-category")}
-                      value={category.id}
+                      key={build.id}
+
+                      value={build.id}
                     >
-                      {category.name}
+                      {build.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              {/* Floor Name */}
+              <div className="flex gap-3 items-center">
+                <label htmlFor="" className="font-semibold">
+                  Floor Name :
+                </label>
+                <select
+                  value={formData.floor_name}
+                  name="floor_name"
+                  onChange={buildingChange}
+                  className="border p-1 px-4 border-gray-500 rounded-md"
+                >
+                  <option value="">Select Floor</option>
+                  {floor?.map(floorno => (
+                    <option
+                      key={floorno.id}
+                      // onClick={() => console.log("checking-category")}
+                      value={floorno.id}
+                    >
+                      {floorno.name}
                     </option>
                   ))}
                 </select>
@@ -500,21 +490,13 @@ const UserTicket = () => {
             className="ml-5"
           />
           <div>
-            {attachments.map((file, index) => (
-              <div key={index}>
-                {/* <p className="text-green">File Name: {file.name}</p> */}
-                {/* new added */}
-                {/* <p className="text-green">File Size: {file.size}</p> */}
-                {/* <p className="text-green">File Type: {file.type}</p> */}
-                {/* <p className="text-green">File LastModified: {file.lastModified}</p> */}
-              </div>
-            ))}
+            
           </div>
           <div className="flex gap-5 justify-center items-center my-4">
             <button
               type="submit"
               className={`text-white hover:bg-gray-700 font-semibold text-xl py-2 px-4 rounded ${disSubmit ? "bg-gray-600" : "bg-black"}`}
-              disabled={disSubmit}
+              // disabled={disSubmit}
             >
               Submit
             </button>

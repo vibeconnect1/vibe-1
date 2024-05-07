@@ -3,11 +3,11 @@ import DataTable from "react-data-table-component";
 import Navbar from "../components/Navbar";
 import { PiPlusCircle } from "react-icons/pi";
 import { Link } from "react-router-dom";
-import { ImEye } from "react-icons/im";
 import { getAdminComplaints, getComplaints } from "../api";
 import { BsEye } from "react-icons/bs";
 import { BiEdit } from "react-icons/bi";
-import moment from 'moment';
+import moment from "moment";
+
 
 const Ticket = () => {
   const [filteredData, setFilteredData] = useState([]);
@@ -16,11 +16,13 @@ const Ticket = () => {
   const [ticketTypeCounts, setTicketTypeCounts] = useState({});
   const [ticketStatusCounts, setTicketStatusCounts] = useState({});
   const allTicketTypes = ["Complaint", "Request", "Suggestion"];
+  const [complaints, setComplaints] = useState([]);
+
 
   const getTimeAgo = (timestamp) => {
     const createdTime = moment(timestamp);
     const now = moment();
-    const diff = now.diff(createdTime, 'minutes');
+    const diff = now.diff(createdTime, "minutes");
     if (diff < 60) {
       return `${diff} minutes ago`;
     } else if (diff < 1440) {
@@ -29,6 +31,7 @@ const Ticket = () => {
       return `${Math.floor(diff / 1440)} days ago`;
     }
   };
+
 
   const columns = [
     {
@@ -49,31 +52,49 @@ const Ticket = () => {
       selector: (row) => row.ticket_number,
       sortable: true,
     },
-    { name: "Building Name", selector: (row) => row.building_name, sortable: true },
+    {
+      name: "Building Name",
+      selector: (row) => row.building_name,
+      sortable: true,
+    },
     { name: "Floor Name", selector: (row) => row.floor_name, sortable: true },
     { name: "Unit Name", selector: (row) => row.unit, sortable: true },
-    { name: "Customer Name", selector: (row) => row.created_by, sortable: true },
+    {
+      name: "Customer Name",
+      selector: (row) => row.created_by,
+      sortable: true,
+    },
     { name: "Category", selector: (row) => row.category_type, sortable: true },
-    { name: "Sub Category", selector: (row) => row.sub_category, sortable: true },
+    {
+      name: "Sub Category",
+      selector: (row) => row.sub_category,
+      sortable: true,
+    },
     { name: "heading", selector: (row) => row.heading, sortable: true },
     { name: "Description", selector: (row) => row.text, sortable: true },
     { name: "Status", selector: (row) => row.issue_status, sortable: true },
     { name: "Created By", selector: (row) => row.created_by, sortable: true },
-    { name: "Created On", selector: (row) =>dateFormat(row.created_at), sortable: true },
+    { name: "Created On", selector: (row) => row.created_at, sortable: true },
     { name: "Prioity", selector: (row) => row.priority, sortable: true },
     { name: "Assigned To", selector: (row) => row.assigned_to, sortable: true },
     { name: "Ticket Type", selector: (row) => row.issue_type, sortable: true },
-    { name: "Related To", selector: (row) => row.issue_related_to, sortable: true },
-    { name: "Total Time", selector: (row) => getTimeAgo(row.created_at), sortable: true },
-    { name: "TAT Resolution Breached", selector: (row) => (row.resolution_breached ? "Yes" : "No"), sortable: true },
+    {
+      name: "Related To",
+      selector: (row) => row.issue_related_to,
+      sortable: true,
+    },
+    {
+      name: "Total Time",
+      selector: (row) => getTimeAgo(row.created_at),
+      sortable: true,
+    },
+    {
+      name: "TAT Resolution Breached",
+      selector: (row) => (row.resolution_breached ? "Yes" : "No"),
+      sortable: true,
+    },
   ];
 
-
- // Date format 
-  const dateFormat = (dateString) => {
-    const date = new Date(dateString);
-    return date.toLocaleString(); // Adjust the format as needed
-  };
 
   //custom style
   const customStyle = {
@@ -81,6 +102,7 @@ const Ticket = () => {
       style: {
         backgroundColor: "black",
         color: "white",
+
 
         fontSize: "10px",
       },
@@ -92,31 +114,36 @@ const Ticket = () => {
     },
   };
 
+
   useEffect(() => {
     const fetchData = async () => {
-        try {
-            const response = await getAdminComplaints();
-            const complaints = response?.data?.complaints || []; // Handle undefined or empty complaints array
-            setFilteredData(complaints);
+      try {
+        const response = await getAdminComplaints();
+        const complaints = response?.data?.complaints || []; // Handle undefined or empty complaints array
+        setFilteredData(complaints);
+        setComplaints(complaints);
 
-            const statusCounts = complaints.reduce((acc, curr) => {
-                acc[curr.issue_status] = (acc[curr.issue_status] || 0) + 1;
-                return acc;
-            }, {});
-            setTicketStatusCounts(statusCounts);
 
-            const typeCounts = complaints.reduce((acc, curr) => {
-                acc[curr.issue_type] = (acc[curr.issue_type] || 0) + 1;
-                return acc;
-            }, {});
-            setTicketTypeCounts(typeCounts);
-        } catch (error) {
-            console.error("Error fetching data:", error);
-        }
+        const statusCounts = complaints.reduce((acc, curr) => {
+          acc[curr.issue_status] = (acc[curr.issue_status] || 0) + 1;
+          return acc;
+        }, {});
+        setTicketStatusCounts(statusCounts);
+
+
+        const typeCounts = complaints.reduce((acc, curr) => {
+          acc[curr.issue_type] = (acc[curr.issue_type] || 0) + 1;
+          return acc;
+        }, {});
+        setTicketTypeCounts(typeCounts);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
     };
 
+
     fetchData();
-}, []);
+  }, []);
 
 
   // useEffect(() => {
@@ -125,6 +152,7 @@ const Ticket = () => {
   //       const response = await getComplaints();
   //       const complaints = response.data.complaints;
   //       setFilteredData(complaints);
+
 
   //       const statusCounts = complaints.reduce((acc, curr) => {
   //         acc[curr.issue_status] = (acc[curr.issue_status] || 0) + 1;
@@ -143,6 +171,7 @@ const Ticket = () => {
   //   fetchData();
   // }, []);
 
+
   // const handleSearch = (e) => {
   //   const searchValue = e.target.value;
   //   setSearchText(searchValue);
@@ -154,26 +183,63 @@ const Ticket = () => {
   //   setFilteredData(filteredResults);
   // };
 
+
   // const handleStatusChange = (status) => {
   //   setSelectedStatus(status);
   // };
 
+
+  // const handleSearch = (e) => {
+  //   const searchValue = e.target.value;
+  //   setSearchText(searchValue);
+  //   const filteredResults = filteredData.filter(
+  //     (item) =>
+  //       (selectedStatus === "all" ||
+  //         item.issue_status.toLowerCase() === selectedStatus) &&
+  //       (item.ticket_number.toLowerCase().includes(searchValue.toLowerCase()) ||
+  //         item.category_type.toLowerCase().includes(searchValue.toLowerCase()))
+  //   );
+  //   setFilteredData(filteredResults);
+  // };
+
+
   const handleSearch = (e) => {
     const searchValue = e.target.value;
     setSearchText(searchValue);
-    const filteredResults = filteredData.filter(
-      (item) =>
-        (selectedStatus === "all" ||
-          item.issue_status.toLowerCase() === selectedStatus) &&
-        (item.ticket_number.toLowerCase().includes(searchValue.toLowerCase()) ||
-          item.category_type.toLowerCase().includes(searchValue.toLowerCase()))
-    );
-    setFilteredData(filteredResults);
+ 
+    if (searchValue.trim() === "") {
+      // If search input is empty, reset to show all data
+      setFilteredData(complaints);
+    } else {
+      // Filter the data based on search input and selected status
+      const filteredResults = complaints.filter(
+        (item) =>
+          (selectedStatus === "all" ||
+            item.issue_status.toLowerCase() === selectedStatus.toLowerCase()) &&
+          (item.ticket_number.toLowerCase().includes(searchValue.toLowerCase()) ||
+            item.category_type.toLowerCase().includes(searchValue.toLowerCase()))
+      );
+      setFilteredData(filteredResults);
+    }
   };
+
 
   const handleStatusChange = (status) => {
     setSelectedStatus(status);
+
+
+    if (status === "all") {
+      setFilteredData(complaints);
+    } else {
+      const filteredResults = complaints.filter(
+        (item) => item.issue_status.toLowerCase() === status.toLowerCase()
+      );
+
+
+      setFilteredData(filteredResults);
+    }
   };
+
 
   return (
     <section className="container max-w-min overflow-hidden mr-5 flex md:justify-between md:items-start">
@@ -199,6 +265,8 @@ const Ticket = () => {
               <p>{count}</p>
             </div>
           ))}
+          {/* </div> */}
+
 
           {allTicketTypes.map((type) => (
             <div
@@ -222,6 +290,7 @@ const Ticket = () => {
             </div>
           ))}
         </div>
+
 
         <div className="flex sm:flex-row flex-col gap-10 my-5">
           <div className="sm:flex grid grid-cols-2 items-center justify-center  gap-4 border border-gray-300 rounded-md px-3 p-2 w-auto">
@@ -324,10 +393,14 @@ const Ticket = () => {
             highlightOnHover
           />
         </div>
+        {/* </div> */}
       </div>
     </section>
   );
 };
 
-// 
+
+//
 export default Ticket;
+
+
