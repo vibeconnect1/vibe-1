@@ -18,19 +18,25 @@ const DetailsEdit = () => {
   const [subCate, setSubCate] = useState([]);
   const [assignedUser, setAssignedUser] = useState();
   const [categ , setCateg] = useState([])
+  const [unit, setUnit] = useState([])
   const [formData, setFormData] = useState({
     category_type_id: "",
-    sub_category_id: "",
+    sub_category_id: "",  
     heading: "",
     text: "",
     assigned_to: "",
-    // status: "",
+    status: "",
     priority: "",
     issue_status: "",
     issue_type: "",
     comment: "",
     of_phase: "pms",
-    complaint_id: id
+    complaint_id: id,
+    root_cause: "",
+    impact:"",
+    corrective_action: "",
+    proactive_reactive: "",
+    preventive_action: ""
     
   });
   console.log(formData);
@@ -39,15 +45,15 @@ const DetailsEdit = () => {
   // console.log(categories , "Catss")
   const statuses = getItemInLocalStorage("STATUS");
 
-  const complaint = getItemInLocalStorage("complaint")
+  // const complaint = getItemInLocalStorage("complaint")
 
   useEffect(() => {
     const fetchDetails = async () => {
       try {
         const response = await getComplaintsDetails(id);
         setFormData({...formData, heading:response.data.heading, assigned_to: response.data.assigned_to, priority: response.data.priority, text: response.data.text,
-          sub_category_id: response.data.sub_category_id, issue_status: response.data.issue_status ,
-          issue_type: response.data.issue_type,   category_type_id: response.data.category_type_id      })
+           issue_status: response.data.issue_status , category_type_id: response.data.category_type_id, sub_category_id: response.data.sub_category_id,
+          issue_type: response.data.issue_type })
         setTicketInfo(response.data);
         setEditTicketInfo(response.data);
       } catch (error) {
@@ -71,48 +77,12 @@ const DetailsEdit = () => {
   }, [id]);
 
   
-  const handleChange = async (e) => {
-    async function fetchSubCategory(categoryId) {
-      try {
-        const cat = await fetchSubCategories(categoryId);
-        setUnits(
-          cat.data.sub_categories.map((item) => ({
-            name: item.name,
-            id: item.id,
-          }))
-        );
-        console.log(cat);
-      } catch (e) {
-        console.log(e);
-      }
-    }
-
-    if (e.target.type === "select-one" && e.target.name === "categories") {
-      const categoryId = Number(e.target.value);
-      await fetchSubCategory(categoryId);
-      setFormData({
-        ...formData,
-        category_type_id: categoryId,
-        sub_category_id: "",
-      });
-    } else {
-      setFormData({
-        ...formData,
-        [e.target.name]: e.target.value,
-      });
-    }
-  };
-
-  // const handleChange = async (e , key) => {
-  //   async function editComplaintsDetails(categoryId) {
+  // const handleChange = async (e) => {
+  //   async function fetchSubCategory(id) {
   //     try {
-  //       const cat = await editComplaintsDetails(categoryId);
-  //       setSubCate(
-  //         cat.data.category_type.map((item) => ({
-  //           name: item.name,
-  //           id: item.id,
-  //         }))
-  //       );
+  //       const response = await getComplaintsDetails(id);
+  //      setFormData({...formData, category_type_id: response.data.category_type_id, sub_category_id: response.data.sub_category_id })
+  //       console.log("Categories" ,response);
   //     } catch (e) {
   //       console.log(e);
   //     }
@@ -120,16 +90,16 @@ const DetailsEdit = () => {
   
   //   if (e.target.type === "select-one" && e.target.name === "categories") {
   //     const categoryId = Number(e.target.value);
-  //     await editComplaintsDetails(categoryId);
+  //     await fetchSubCategory(categoryId);
   //     setFormData({
   //       ...formData,
-  //       // category_type_id: categoryId,
-  //       // sub_category_id: ""
+  //       category_type_id: categoryId,
+  //       sub_category_id: "", // Reset sub-category when category changes
   //     });
   //   } else {
   //     setFormData({
   //       ...formData,
-  //       [key]: e.target.value,
+  //       [e.target.name]: e.target.value,
   //     });
   //   }
   // };
@@ -151,6 +121,8 @@ const DetailsEdit = () => {
     }
   };
 
+  console.log("A", assignedUser)
+
   const ticketDetails = [
     { title: "Ticket No.:", description: ticketinfo.ticket_number || "" },
     {
@@ -160,6 +132,54 @@ const DetailsEdit = () => {
         <p> 
           {formData.heading}
         </p>      
+      ),
+    },
+    
+    
+
+    {
+      title: "Categories :",
+      description: (
+        <div className="flex gap-3 items-center">
+          <select
+            id="two"
+            value={formData.category_type_id} 
+            name="categories"
+            onChange={e => setFormData({...formData, category_type_id: e.target.value})}
+            className="border p-1 px-4 border-gray-500 rounded-md"
+          >
+            <option value="">Select Category</option>
+            {categories?.map((category) => (
+              <option
+                value={category.id} key={category.id} // Change value here
+              >
+                {category.name}
+              </option>
+            ))}
+          </select>
+        </div>
+      ),
+    },
+    
+    {
+      title: "SubCategories :",
+  description: (
+    <div className="flex gap-3 items-center">
+      <select
+        id="five"
+        value={formData.sub_category_id} 
+        name="sub_category_id"
+        onChange={e => setFormData({...formData, sub_category_id: e.target.value})}
+        className="border p-2 px-4 border-gray-500 rounded-md"
+      >
+        <option value="">Sub Category</option>
+        {unit?.map((floor) => ( 
+          <option key={floor.id} value={floor.id}>
+            {floor.name}
+          </option>
+        ))}
+      </select>
+    </div>
       ),
     },
     {
@@ -173,13 +193,14 @@ const DetailsEdit = () => {
           className="border p-1 px-4 grid border-gray-500 rounded-md"
         >
           {statuses?.map((status) => (
-            <option value={status.name} key={status.id}>
+            <option value={status.id} key={status.id}>
               {status.name}
             </option>
           ))}
         </select>
       ),
     },
+    
     {
       title: "Issue Type :",
       description: (
@@ -212,67 +233,106 @@ const DetailsEdit = () => {
         </select>
       ),
     },
-
-    {
-      title: "Category:",
-      description: (
-        <select
-          id="two"
-          value={formData.complaint_id}
-          name="category_type_id"
-          onChange={handleChange}
-
-          className="border p-1 px-4 border-gray-500 rounded-md"
-        >
-          <option value="">Select Category</option>
-          {categories?.map((categories) => (
-            <option
-              key={categories.name}
-              
-              value={categories.id}
-            >
-              {categories.name}
-            </option>
-          ))}
-        </select>
-      ),
-    },
-    // ticketinfo.sub_category
-    {
-      title: "Sub Category:",
-      description: (
-        <select
-          id="five"
-          value={formData.sub_category_id}
-          name="sub_category_id"
-          onChange={handleChange}
-          className="border p-1 px-4 grid border-gray-500 rounded-md"
-        >
-          <option value="">Select Sub Category</option>
-          {subCate?.map((floor) => (
-            <option value={floor.id} key={floor.id}>
-              {floor.name}
-            </option>
-          ))}
-        </select>
-      ),
-    },
+   
     {
       title: "Assigned To:",
       description: (
         <select
-          value={formData.assigned_to}
-          name="assigned_to"
-          onChange={e => setFormData({...formData, assigned_to: e.target.value})}
-          className="border p-1 px-4 border-gray-500 rounded-md"
-        >
-          <option value="">Select Assign To</option>
-          {assignedUser?.map((assign) => (
-            <option key={assign.id} value={assign.firstname}>
-              {assign.firstname} {assign.lastname}
-            </option>
-          ))}
-        </select>
+    value={formData.assigned_to}
+    name="assigned_to"
+  onChange={(e) => setFormData({ ...formData, assigned_to: e.target.value })}
+  className="border p-1 px-4 border-gray-500 rounded-md"
+>
+  <option value="">Select Assign To</option>
+  {assignedUser?.map((assign) => (
+    <option key={assign.id} value={assign.id} selected={assign.id === formData.assigned_to}>
+      {assign.firstname} {assign.lastname}
+    </option>
+  ))}
+</select>
+
+      ),
+    },
+    
+    
+    {
+      title: "Root Cause :",
+      description: (
+        <div className="border rounded-lg">
+            <textarea
+              name="heading"
+              // placeholder="heading"
+              cols="15"
+              rows="1"
+              // value={formData.heading}
+              // onChange={handleChange}
+              className="border border-black"
+            ></textarea>
+           </div>   
+      ),
+    },
+    {
+      title: "Impact :",
+      description: (
+        <div className="border rounded-lg">
+            <textarea
+              name="heading"
+              // placeholder="heading"
+              cols="15"
+              rows="1"
+              // value={formData.heading}
+              // onChange={handleChange}
+              className="border border-black"
+            ></textarea>
+           </div>   
+      ),
+    },
+    {
+      title: "Corrective Action :",
+      description: (
+        <div className="border rounded-lg">
+            <textarea
+              name="heading"
+              // placeholder="heading"
+              cols="15"
+              rows="1"
+              // value={formData.heading}
+              // onChange={handleChange}
+              className="border border-black"
+            ></textarea>
+           </div>   
+      ),
+    },
+    {
+      title: "Proactive/Reactive :",
+      description: (
+        <div className="border rounded-lg">
+            <textarea
+              name="heading"
+              // placeholder="heading"
+              cols="15"
+              rows="1"
+              // value={formData.heading}
+              // onChange={handleChange}
+              className="border border-black"
+            ></textarea>
+           </div>   
+      ),
+    },
+    {
+      title: "Preventive Action :",
+      description: (
+        <div className="border rounded-lg ">
+            <textarea
+              name="heading"
+              // placeholder="heading"
+              cols="15"
+              rows="1"
+              // value={formData.heading}
+              // onChange={handleChange}
+              className="border border-black"
+            ></textarea>
+           </div>   
       ),
     },
   ];
@@ -280,34 +340,52 @@ const DetailsEdit = () => {
   const Attachments = [{ title: "Attachment 1", description: " " }];
 
   return (
+
     <div className="">
-      <div className="flex flex-col justify-around my-10 ">
-        <div className="">
-          <Detail details={ticketDetails} heading={"Edit Ticket Details"} />
-        </div>
+    <div className="flex flex-col justify-around my-10 ">
+      <div className="">
+        <Detail details={ticketDetails} heading={"Edit Ticket Details"} />
+      </div>
 
 
+      <div className="p-1">
         <div className="p-4">
-          <div className="p-4">
-            <label htmlFor="description" className="font-medium">Additonal Notes:</label>
-            <textarea
-               name="text"
-              value={formData.text }
-              className="border p-1 px-2 border-gray-400 rounded-md w-full"
-              onChange={e => setFormData({...formData, text:e.target.value})}
-            />
-          </div>
+          <label htmlFor="description" className="font-medium ">Additonal Notes:</label>
+          <textarea
+             name="text"
+            value={formData.text }
+            className="border p-1 px-2 border-gray-400 rounded-md w-full"
+            onChange={e => setFormData({...formData, text:e.target.value})}
+          />
         </div>
       </div>
-      <div className=" m-10 w-full flex justify-center  ">
-        <button
-          onClick={saveEditDetails}
-          className="bg-black px-4 font-medium rounded-md p-2 text-white"
-        >
-          Save
-        </button>
+
+      <div className="p-1">
+        <div className="p-4">
+          <label htmlFor="description" className="font-medium ">Comments:</label>
+          <textarea
+             name="text"
+            value={formData.heading }
+            className="border p-1 px-2 border-gray-400 rounded-md w-full"
+            onChange={e => setFormData({...formData, heading:e.target.value})}
+          />
+        </div>
       </div>
     </div>
+       <div className="items-center gap-6 align-middle">
+    <input type="file" name="attachments" id="" />
+    </div>
+    <div className=" m-10 w-full flex justify-center  ">
+      <button
+        onClick={saveEditDetails}
+        className="bg-black px-4 font-medium rounded-md p-2 text-white"
+      >
+        Save
+      </button>
+    </div>
+  </div>
+
+  
   );
 };
 

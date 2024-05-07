@@ -165,14 +165,6 @@ const UserTicket = () => {
   // }
   
 
-  const convertFileToBase64 = (file) => {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
-      reader.onload = () => resolve(reader.result);
-      reader.onerror = (error) => reject(error);
-    });
-  };
 
   const handleFileChange = async (event) => {
     const files = event.target.files;
@@ -196,6 +188,14 @@ const UserTicket = () => {
   };
   
 
+   const convertFileToBase64 = (file) => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = (error) => reject(error);
+    });
+  };
 
 
 //    const handleFileChange = async (event) => {
