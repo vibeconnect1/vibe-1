@@ -26,7 +26,7 @@ const UserTicket = () => {
     heading: "",
     of_phase: "pms",
     site_id: siteID,
-    documents : [],
+    documents: [],
     issue_type_id: "",
     complaint_type: "",
     building_name: "",
@@ -39,14 +39,14 @@ const UserTicket = () => {
   // console.log(attachments);
 
   const categories = getItemInLocalStorage("categories");
-  console.log("categories-- ", categories);
+  // console.log("categories-- ", categories);
 
   const building = getItemInLocalStorage("Building");
-  console.log("BB", building);
+  // console.log("BB", building);
 
   // const siteID = getItemInLocalStorage("SITEID")
   // setSelectedSiteId(siteID) 
-  console.log("site--", siteID)
+  // console.log("site--", siteID)
 
   // const complaitType = getItemInLocalStorage("complaintType")
   // console.log("complaintType", complaitType)
@@ -55,13 +55,13 @@ const UserTicket = () => {
   useEffect(() => {
     const fetchData = async () => {
       const response = await fetchSubCategories(14);
-      console.log("subCategories:", response);
+      // console.log("subCategories:", response);
     };
 
 
     const fechIssueType = async () => {
       const issue = await getIssueType()
-      console.log("Issue", issue.data)
+      // console.log("Issue", issue.data)
     }
     fetchData();
     fechIssueType();
@@ -72,7 +72,7 @@ const UserTicket = () => {
       try {
         const cat = await fetchSubCategories(categoryId);
         setUnits(cat.data.sub_categories.map((item) => ({ name: item.name, id: item.id })));
-        console.log(cat);
+        // console.log(cat);
       } catch (e) {
         console.log(e);
       }
@@ -99,7 +99,7 @@ const UserTicket = () => {
 
       try {
         const build = await getUnits(BuildID);
-        console.log("units n", build.data);
+        // console.log("units n", build.data);
         setUnitName(build.data.map((item) => ({ name: item.name, id: item.id })));
       } catch (e) {
         console.log(e);
@@ -109,7 +109,7 @@ const UserTicket = () => {
     async function fectFloors(FloorID) {
       try {
         const floor = await getfloorsType(FloorID);
-        console.log("Floors --", floor.data);
+        // console.log("Floors --", floor.data);
         setFloor(floor.data.map((item) => ({ name: item.name, id: item.id })));
       } catch (e) {
         console.log(e);
@@ -133,39 +133,6 @@ const UserTicket = () => {
   }
 
 
-  // const handleFileChange = async (e) => {
-  //   const files =  e.target.files;
-  // const formData = new FormData();
-
-  //   for (const file of files) {
-  //     formData.append('attachments[]', file);
-  //   }
-  //   formData.append("category_type_id", 18)
-  //   formData.append("heading", "head")
-  //   formData.append("category_type", "")
-  //   try {
-  //           const response = await fetch('http://13.215.74.38/pms/complaints.json?token=775d6ae27272741669a65456ea10cc56cd4cce2bb99287b6', {
-  //             method: 'POST',
-  //             body: formData,
-  //           })
-
-  //           if (!response.ok) {
-  //             console.log("Not Correct ")
-  //           } else {
-  //             error;
-  //           }
-  //         }catch(error){
-  //           console.error(error);
-  //         }
-          
-  //   setFormData({
-  //     ...formData,
-  //     attachments: files, // Update attachments field instead of attachments
-  //   });
-  // }
-  
-
-
   const handleFileChange = async (event) => {
     const files = event.target.files;
     const base64Array = [];
@@ -178,17 +145,17 @@ const UserTicket = () => {
     const formattedBase64Array = base64Array.map((base64) => {
       return base64.split(',')[1];
     });
-    
-    console.log("Fornat", formattedBase64Array);
-    
-      setFormData({
-        ...formData, 
-        documents : formattedBase64Array
-      })
-  };
-  
 
-   const convertFileToBase64 = (file) => {
+    console.log("Fornat", formattedBase64Array);
+
+    setFormData({
+      ...formData,
+      documents: formattedBase64Array
+    })
+  };
+
+
+  const convertFileToBase64 = (file) => {
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
       reader.readAsDataURL(file);
@@ -198,40 +165,40 @@ const UserTicket = () => {
   };
 
 
-//    const handleFileChange = async (event) => {
-//     const files = event.target.files;
-//     const formData = new FormData();
+  //    const handleFileChange = async (event) => {
+  //     const files = event.target.files;
+  //     const formData = new FormData();
 
-//     for (const file of files) {
-//       formData.append('attachments[]', file);
-//     }
-// formData.append('complaint_type',  "Complaint" )
-// formData.append('building_name', 41)
+  //     for (const file of files) {
+  //       formData.append('attachments[]', file);
+  //     }
+  // formData.append('complaint_type',  "Complaint" )
+  // formData.append('building_name', 41)
 
-// formData.append('unit_id', 245)
-//     formData.append('category_type_id', "21");
-//     formData.append('sub_category_id', "17");
-//     formData.append('text', "hhhh");
-//     formData.append('heading', "ppppp");
-//     formData.append('of_phase', "pms");
-//     formData.append('site_id', selectedSiteId);
+  // formData.append('unit_id', 245)
+  //     formData.append('category_type_id', "21");
+  //     formData.append('sub_category_id', "17");
+  //     formData.append('text', "hhhh");
+  //     formData.append('heading', "ppppp");
+  //     formData.append('of_phase', "pms");
+  //     formData.append('site_id', selectedSiteId);
 
-//     try {
-//       const response = await fetch('http://13.215.74.38/pms/complaints.json?token=775d6ae27272741669a65456ea10cc56cd4cce2bb99287b6', {
-//         method: 'POST',
-//         body: formData,
-//       });
+  //     try {
+  //       const response = await fetch('http://13.215.74.38/pms/complaints.json?token=775d6ae27272741669a65456ea10cc56cd4cce2bb99287b6', {
+  //         method: 'POST',
+  //         body: formData,
+  //       });
 
-//       if (!response.ok) {
-//         throw new Error('Failed to upload files');
-//       }
+  //       if (!response.ok) {
+  //         throw new Error('Failed to upload files');
+  //       }
 
-//       console.log(response, "resss");
+  //       console.log(response, "resss");
 
-//     } catch (error) {
-//       console.error('Error uploading files:', error);
-//     }
-//   };
+  //     } catch (error) {
+  //       console.error('Error uploading files:', error);
+  //     }
+  //   };
 
 
   const handleSubmit = async (e) => {
@@ -295,48 +262,46 @@ const UserTicket = () => {
           <div className="ml-5 flex flex-col items-start w-full gap-4">
 
             {/* Related To :*/}
-            <div className="flex gap-5 items-center">
-              <label htmlFor="" className="font-semibold">
-                Related To:
-              </label>
-              <select
-                id="five"
-                value={formData.complaint_type}
-                name="complaint_type"
-                onChange={e => setFormData({ ...formData, complaint_type: e.target.value })}
-                className="border p-1 px-4 border-gray-500 rounded-md"
-              >
-                <option value="">Select Issue Type</option>
-                <option value="Complaint">Complaint</option>
-                <option value="Suggestion">Suggestion</option>
-                <option value="Request">Request</option>
+            <div className="flex flex-col md:flex-row justify-between items-center gap-5">
+              <div className="flex gap-3 items-center">
+                <label htmlFor="" className="font-semibold">
+                  Related To:
+                </label>
+                <select
+                  id="issueType"
+                  value={formData.issue_type_id}
+                  name="issue_type_id"
+                  onChange={e => setFormData({ ...formData, issue_type_id: e.target.value })}
+                  className="border p-1 px-4 border-gray-500 rounded-md"
+                >
+                  <option value="">Select Area</option>
+                  <option value="Complaint">Apartment</option>
+                  <option value="Suggestion">Shop</option>
+                  <option value="Request">Common Area</option>
+                </select>
+              </div>
 
-              </select>
+              <div className="flex gap-3 items-center">
+                <label htmlFor="" className="font-semibold">
+                  Type of:
+                </label>
+                <select
+                  id="complaintType"
+                  value={formData.complaint_type}
+                  name="complaint_type"
+                  onChange={e => setFormData({ ...formData, complaint_type: e.target.value })}
+                  className="border p-1 px-4 border-gray-500 rounded-md"
+                >
+                  <option value="">Select Issue Type</option>
+                  <option value="Complaint">Complaint</option>
+                  <option value="Suggestion">Suggestion</option>
+                  <option value="Request">Request</option>
+                </select>
+              </div>
             </div>
-
-
 
             {/* Type Area */}
-            <div className="flex gap-5 items-center">
-              <label htmlFor="" className="font-semibold">
-                Type of:
-              </label>
-              <select
-                id="five"
-                value={formData.complaint_type}
-                name="complaint_type"
-                onChange={e => setFormData({ ...formData, complaint_type: e.target.value })}
-                className="border p-1 px-4 border-gray-500 rounded-md"
-              >
-                <option value="">Select Issue Type</option>
-                <option value="Complaint">Complaint</option>
-                <option value="Suggestion">Suggestion</option>
-                <option value="Request">Request</option>
 
-              </select>
-
-
-            </div>
 
             <div className="flex justify-around items-start w-full">
               <div className="flex gap-3 items-center">
@@ -408,7 +373,10 @@ const UserTicket = () => {
 
 
               </div>
+
             </div>
+
+
             <div className="flex justify-around w-full">
               <div className="flex gap-3 items-center">
                 <label className="font-semibold">Categories:</label>
@@ -490,13 +458,13 @@ const UserTicket = () => {
             className="ml-5"
           />
           <div>
-            
+
           </div>
           <div className="flex gap-5 justify-center items-center my-4">
             <button
               type="submit"
               className={`text-white hover:bg-gray-700 font-semibold text-xl py-2 px-4 rounded ${disSubmit ? "bg-gray-600" : "bg-black"}`}
-              // disabled={disSubmit}
+            // disabled={disSubmit}
             >
               Submit
             </button>

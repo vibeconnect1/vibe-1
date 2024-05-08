@@ -6,7 +6,7 @@ import Selector from "../../containers/Selector";
 import { useNavigate } from "react-router-dom";
 import FileInput from "../../Buttons/FileInput";
 import { getItemInLocalStorage } from "../../utils/localStorage";
-import { fetchSubCategories, getComplaints, postComplaintsDetails } from "../../api";
+import { fetchSubCategories, getAssignedTo, getComplaints, postComplaintsDetails } from "../../api";
 import toast from "react-hot-toast";
 
 const CreateTicket = (data) => {
@@ -21,25 +21,25 @@ const CreateTicket = (data) => {
   const [units, setUnits] = useState([])
   const [user, setUser] = useState("");
   const [attachments, setAttachments] = useState([]);
-  const [selectedSiteId, setSelectedSiteId] = useState(15);
+  const [selectedSiteId, setSelectedSiteId] = useState("");
   const [assined, setAssigned] = useState([]);
   const [formData, setFormData] = useState({
     category_type_id: "",
     sub_category_id: "",
-    assigned_to: null,
+    assigned_to: "",
     priority: "",
     of_phase: "pms",
     site_id: selectedSiteId,
     heading: "",
     attachments: "",
-    documents: [],
+    attachments: [],
   })
 
   console.log(formData);
   // console.log(attachments);
 
   const categories = getItemInLocalStorage("categories");
-  console.log("Categories", categories)
+  // console.log("Categories", categories)
 
   useEffect(() => {
     const fetchData = async () => {
@@ -48,13 +48,21 @@ const CreateTicket = (data) => {
       const responce = await getComplaints();
       // console.log("complaints", responce)
     };
+    const fetchAssignedTo = async () => {
+      try {
+        const response = await getAssignedTo();
+        setAssigned(response.data);
+      } catch (error) {
+        console.error("Error fetching assigned users:", error);
+      }
+    };
     fetchData();
+    fetchAssignedTo();
   }, []);
 
   const handleOptionChange = (event, setState) => {
     setState(event.target.value);
   };
-
 
   const handleFileChange = async (event) => {
     const files = event.target.files;
@@ -68,19 +76,17 @@ const CreateTicket = (data) => {
     const formattedBase64Array = base64Array.map((base64) => {
       return base64.split(',')[1];
     });
-
-
-
+    
     console.log("Fornat", formattedBase64Array);
-    setFormData({
-      ...formData,
-      documents: formattedBase64Array
-    })
+    
+      setFormData({
+        ...formData, 
+        documents : formattedBase64Array
+      })
   };
-
   
 
-  const convertFileToBase64 = (file) => {
+   const convertFileToBase64 = (file) => {
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
       reader.readAsDataURL(file);
@@ -88,8 +94,6 @@ const CreateTicket = (data) => {
       reader.onerror = (error) => reject(error);
     });
   };
-
-
 
 
   const handleChange = async (e) => {
@@ -119,6 +123,11 @@ const CreateTicket = (data) => {
       });
     }
   };
+
+  const handleAssChange = (e) => {
+    setFormData({...formData, assigned_to: e.target.value});
+  };
+  
 
 
   const handleSubmit = async (e) => {
@@ -299,7 +308,7 @@ const CreateTicket = (data) => {
                 id="five"
                 value={formData.assigned_to}
                 name="assigned_to"
-                onChange={handleChange}
+                onChange={handleAssChange}
                 className="border p-1 px-4 grid border-gray-500 rounded-md"
               >
                 <option value="">Assigned to</option>

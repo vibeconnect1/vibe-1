@@ -7,6 +7,7 @@ import { getAdminComplaints, getComplaints } from "../api";
 import { BsEye } from "react-icons/bs";
 import { BiEdit } from "react-icons/bi";
 import moment from "moment";
+import { getItemInLocalStorage } from "../utils/localStorage";
 
 
 const Ticket = () => {
@@ -119,6 +120,8 @@ const Ticket = () => {
     const fetchData = async () => {
       try {
         const response = await getAdminComplaints();
+        console.log("Resp", response)
+        getItemInLocalStorage("complaints", response)
         const complaints = response?.data?.complaints || []; // Handle undefined or empty complaints array
         setFilteredData(complaints);
         setComplaints(complaints);
