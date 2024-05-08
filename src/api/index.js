@@ -115,7 +115,7 @@ export const getComplaintsDetails = async (id) =>
 
   export const editComplaintsDetails = async (data) => {
     try {
-      const response = await axiosInstance.post(`/complaint_logs.json?token=${token}`, data)
+      const response = await axiosInstance.post(`/complaint_logs.json/complaint?token=${token}`, data)
       return response.data
     } catch (error) {
       throw error;

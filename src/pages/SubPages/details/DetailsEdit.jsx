@@ -10,20 +10,21 @@ import {
 } from "../../../api";
 import { useParams } from "react-router-dom";
 import { getItemInLocalStorage } from "../../../utils/localStorage";
+import toast from "react-hot-toast";
 
 const DetailsEdit = () => {
   const { id } = useParams();
   const [ticketinfo, setTicketInfo] = useState({});
   const [editTicketInfo, setEditTicketInfo] = useState({});
   const [assignedUser, setAssignedUser] = useState();
-  const [categ , setCateg] = useState([])
+  const [categ, setCateg] = useState([])
   const [formData, setFormData] = useState({
-    category_type_id: "",
-    sub_category_id: "",  
+    // category_type_id: "",
+    // sub_category_id: "",  
     heading: "",
     text: "",
     assigned_to: "",
-    status: "",
+    // status: "",
     priority: "",
     issue_status: "",
     issue_type: "",
@@ -31,74 +32,84 @@ const DetailsEdit = () => {
     of_phase: "pms",
     complaint_id: id,
     root_cause: "",
-    impact:"",
+    impact: "",
     corrective_action: "",
     proactive_reactive: "",
-    preventive_action: ""
-    
+    correction: "",
+    documents: []
+
   });
   console.log(formData);
 
-  // const categories = getItemInLocalStorage("categories");
+  const categories = getItemInLocalStorage("categories");
   // console.log(categories , "Catss")
   const statuses = getItemInLocalStorage("STATUS");
 
   useEffect(() => {
     const fetchDetails = async () => {
-        try {
-            const response = await getComplaintsDetails(id);
-            // Update state with fetched data
-            setFormData({
-                ...formData,
-                heading: response.data.heading,
-                assigned_to: response.data.assigned_to,
-                priority: response.data.priority,
-                text: response.data.text,
-                issue_status: response.data.issue_status,
-                category_type_id: response.data.category_type_id,
-                sub_category_id: response.data.sub_category_id,
-                issue_type: response.data.issue_type
-            });
-            setTicketInfo(response.data);
-            setEditTicketInfo(response.data);
-        } catch (error) {
-            console.error("Error fetching details:", error)
-        }
+      try {
+        const response = await getComplaintsDetails(id);
+        // Update state with fetched data
+        setFormData({
+          ...formData,
+          heading: response.data.heading,
+          assigned_to: response.data.assigned_to,
+          issue_status: response.data.issue_status,
+          priority: response.data.priority,
+          text: response.data.text,
+          status: response.data.status,
+          category_type_id: response.data.category_type_id,
+          sub_category_id: response.data.sub_category_id,
+          issue_type: response.data.issue_type,
+          root_cause: response.data.root_cause,
+          impact: response.data.impact,
+          proactive_reactive: response.data.proactive_reactive,
+          correction: response.data.correction,
+          corrective_action: response.data.corrective_action
+        });
+        setTicketInfo(response.data);
+        setEditTicketInfo(response.data);
+      } catch (error) {
+        console.error("Error fetching details:", error)
+      }
     };
 
+
+    
+
     const fetchAssignedTo = async () => {
-        try {
-            const response = await getAssignedTo();
-            setAssignedUser(response.data);
-            setEditTicketInfo(response.data);
-        } catch (error) {
-            console.error("Error fetching assigned users:", error);
-        }
+      try {
+        const response = await getAssignedTo();
+        setAssignedUser(response.data);
+        setEditTicketInfo(response.data);
+      } catch (error) {
+        console.error("Error fetching assigned users:", error);
+      }
     };
 
     const fetchSubCategories = async (e) => {
-        try {
-            const cat = await fetchSubCategories(categoryId);
-            // Update state with fetched data
-            setUnits(cat.data.sub_categories.map((item) => ({ name: item.name, id: item.id })));
-            console.log(cat);
-        } catch (error) {
-            console.error("Error fetching sub-categories:", error);
-            // Handle error here, e.g., set a state indicating fetch error
-        }
-        setFormData({
-          ...formData,
-          [e.target.name]: e.target.value,
-        });
+      try {
+        const cat = await fetchSubCategories(categoryId);
+        // Update state with fetched data
+        setUnits(cat.data.sub_categories.map((item) => ({ name: item.name, id: item.id })));
+        console.log(cat);
+      } catch (error) {
+        console.error("Error fetching sub-categories:", error);
+        // Handle error here, e.g., set a state indicating fetch error
+      }
+      setFormData({
+        ...formData,
+        [e.target.name]: e.target.value,
+      });
     };
 
     fetchDetails();
     fetchAssignedTo();
-    fetchSubCategories(); 
-}, [id]);
+    fetchSubCategories();
+  }, [id]);
 
 
-  
+  /*
   const handleChange = async (e) => {
     async function fetchSubCategory(id) {
       try {
@@ -125,19 +136,20 @@ const DetailsEdit = () => {
       });
     }
   };
-  
+  */
 
   const handleTicketDetails = (e, name) => {
     setFormData({
       ...formData,
-     [e.target.name]: e.target.value,
+      [e.target.name]: e.target.value,
     });
   };
 
   const saveEditDetails = async () => {
     try {
       await editComplaintsDetails(formData);
-      console.log("Edited Ticket Details:",formData);
+      console.log("Edited Ticket Details:", formData);
+      toast.success("Updated Successfully")
     } catch (error) {
       console.error("Error Saving in details update: ", error);
     }
@@ -148,14 +160,14 @@ const DetailsEdit = () => {
     {
       title: "Title :",
       description: (
-        
-        <p> 
+
+        <p>
           {formData.heading}
-        </p>      
+        </p>
       ),
     },
-    
-    
+
+
 
     // {
     //   title: "Categories :",
@@ -170,66 +182,66 @@ const DetailsEdit = () => {
     //       >
 
     //         {formData.category_type_id}
-    //         {/* <option value="">Select Category</option>
+    //         <option value="">Select Category</option>
     //         {categ?.map((category) => (
     //           <option
     //             value={category.id} key={category.id}
     //           >
     //             {category.name}
     //           </option>
-    //         ))} */}
+    //         ))}
     //       </select>
     //     </div>
     //   ),
     // },
-    
-  //   {
-  //     title: "SubCategories :",
-  // description: (
-  //   <div className="flex gap-3 items-center">
-  //     <select
-  //       id="five"
-  //       value={formData.sub_category_id} 
-  //       name="sub_category_id"
-  //       onChange={handleChange}
-  //       className="border p-2 px-4 border-gray-500 rounded-md"
-  //     >
-  //       <option value="">Sub Category</option>
-  //       {units?.map((floor) => ( 
-  //         <option key={floor.id} value={floor.id}>
-  //           {floor.name}
-  //         </option>
-  //       ))}
-  //     </select>
-  //   </div>
-  //     ),
-  //   },
+
+    //   {
+    //     title: "SubCategories :",
+    // description: (
+    //   <div className="flex gap-3 items-center">
+    //     <select
+    //       id="five"
+    //       value={formData.sub_category_id} 
+    //       name="sub_category_id"
+    //       onChange={handleChange}
+    //       className="border p-2 px-4 border-gray-500 rounded-md"
+    //     >
+    //       <option value="">Sub Category</option>
+    //       {units?.map((floor) => ( 
+    //         <option key={floor.id} value={floor.id}>
+    //           {floor.name}
+    //         </option>
+    //       ))}
+    //     </select>
+    //   </div>
+    //     ),
+    //   },
     {
       title: "Status :",
       description: (
         <select
-          
-          value={formData.issue_status}
+
+          value={formData.issue_status || ""}
           name="issue_status"
-          onChange={e=> setFormData({...formData, issue_status: e.target.value})}
+          onChange={e => setFormData({ ...formData, issue_status: e.target.value })}
           className="border p-1 px-4 grid border-gray-500 rounded-md"
         >
-          {statuses?.map((status) => (
-            <option value={status.id} key={status.id}>
-              {status.name}
+          {statuses?.map((floor) => (
+            <option value={floor.id} key={floor.id}>
+              {floor.name}
             </option>
           ))}
         </select>
       ),
     },
-    
+
     {
       title: "Issue Type :",
       description: (
         <select
           name="issue_type"
-          value={formData.issue_type}
-          onChange={e => setFormData({...formData, issue_type: e.target.value})}
+          value={formData.issue_type || ""}
+          onChange={e => setFormData({ ...formData, issue_type: e.target.value })}
           className="border p-1 px-4 border-gray-400 rounded-md"
         >
           <option value="Request">Request</option>
@@ -244,7 +256,7 @@ const DetailsEdit = () => {
         <select
           name="priority"
           value={formData.priority || ""}
-          onChange={e => setFormData({...formData, priority: e.target.value})}
+          onChange={e => setFormData({ ...formData, priority: e.target.value })}
           className="border p-1 px-4 border-gray-400 rounded-md"
         >
           <option value="P1">P1</option>
@@ -255,12 +267,12 @@ const DetailsEdit = () => {
         </select>
       ),
     },
-   
+
     {
       title: "Assigned To:",
       description: (
         <select
-          value={formData.assigned_to}
+          value={formData.assigned_to || ""}
           name="assigned_to"
           onChange={(e) => setFormData({ ...formData, assigned_to: e.target.value })}
           className="border p-1 px-4 border-gray-500 rounded-md"
@@ -274,115 +286,145 @@ const DetailsEdit = () => {
         </select>
       ),
     },
-    
-    
-    
+
+
+
     {
       title: "Root Cause :",
       description: (
         <div className="border rounded-lg">
-            <textarea
-              name="heading"
-              // placeholder="heading"
-              cols="15"
-              rows="1"
-              // value={formData.heading}
-              // onChange={handleChange}
-              className="border border-black"
-            ></textarea>
-           </div>   
+          <textarea
+            name="root_cause"
+            // placeholder="heading"
+            cols="15"
+            rows="1"
+            value={formData.root_cause}
+            onChange={e => setFormData({ ...formData, root_cause: e.target.value })}
+            className="border border-black"
+          ></textarea>
+        </div>
       ),
     },
     {
       title: "Impact :",
       description: (
         <div className="border rounded-lg">
-            <textarea
-              name="heading"
-              // placeholder="heading"
-              cols="15"
-              rows="1"
-              // value={formData.heading}
-              // onChange={handleChange}
-              className="border border-black"
-            ></textarea>
-           </div>   
+          <textarea
+            name="impact"
+            // placeholder="heading"
+            cols="15"
+            rows="1"
+            value={formData.impact}
+            onChange={e => setFormData({ ...formData, impact: e.target.value })}
+            className="border border-black"
+          ></textarea>
+        </div>
       ),
     },
     {
       title: "Corrective Action :",
       description: (
         <div className="border rounded-lg">
-            <textarea
-              name="heading"
-              // placeholder="heading"
-              cols="15"
-              rows="1"
-              // value={formData.heading}
-              // onChange={handleChange}
-              className="border border-black"
-            ></textarea>
-           </div>   
+          <textarea
+            name="corrective_action"
+            // placeholder="heading"
+            cols="15"
+            rows="1"
+            value={formData.corrective_action}
+            onChange={e => setFormData({ ...formData, corrective_action: e.target.value })}
+            className="border border-black"
+          ></textarea>
+        </div>
       ),
     },
     {
       title: "Proactive/Reactive :",
       description: (
-        <div className="border rounded-lg">
-            <textarea
-              name="heading"
-              // placeholder="heading"
-              cols="15"
-              rows="1"
-              // value={formData.heading}
-              // onChange={handleChange}
-              className="border border-black"
-            ></textarea>
-           </div>   
+        <select
+          name="proactive_reactive"
+          value={formData.proactive_reactive}
+          onChange={e => setFormData({ ...formData, proactive_reactive: e.target.value })}
+          className="border p-1 px-4 border-gray-400 rounded-md"
+        >
+          <option value="">Select Option</option>
+          <option value="Proactive">Proactive</option>
+          <option value="Reactive">Reactive</option>
+
+        </select>
       ),
     },
     {
       title: "Preventive Action :",
       description: (
         <div className="border rounded-lg ">
-            <textarea
-              name="heading"
-              // placeholder="heading"
-              cols="15"
-              rows="1"
-              // value={formData.heading}
-              // onChange={handleChange}
-              className="border border-black"
-            ></textarea>
-           </div>   
+          <textarea
+            name="correction"
+            // placeholder="heading"
+            cols="15"
+            rows="1"
+            value={formData.correction}
+            onChange={e => setFormData({ ...formData, correction: e.target.value })}
+            className="border border-black"
+          ></textarea>
+        </div>
       ),
     },
   ];
 
-  const Attachments = [{ title: "Attachment 1", description: " " }];
+  const FileChange = async (event) => {
+    const files = event.target.files;
+    const base64Array = [];
+
+    for (const file of files) {
+      const base64 = await convertFileToBase64(file);
+      base64Array.push(base64);
+    }
+    console.log("Array base64-", base64Array);
+    const formattedBase64Array = base64Array.map((base64) => {
+      return base64.split(',')[1];
+    });
+
+    console.log("Fornat", formattedBase64Array);
+
+    setFormData({
+      ...formData,
+      documents: formattedBase64Array
+    })
+  };
+
+
+  const convertFileToBase64 = (file) => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = (error) => reject(error);
+    });
+  };
+
 
   return (
 
     <div className="flex flex-col">
-    <div className="flex flex-col justify-around gap-10 my-10 ">
-      <div className="">
-        <Detail details={ticketDetails} heading={"Edit Ticket Details"} />
-      </div>
-
-
-      <div className="flex flex-col justify-around gap-10 border border-black ">
+      <div className="flex flex-col justify-around gap-10 my-10 ">
         <div className="">
-          <label htmlFor="description" className="font-semibold ">Additonal Notes:</label>
-          <textarea
-             name="text"
-            value={formData.comment }
-            className="border p-1 px-2 border-gray-400 rounded-md w-full"
-            onChange={e => setFormData({...formData, comment:e.target.value})}
-          />
+          <Detail details={ticketDetails} heading={"Edit Ticket Details"} />
         </div>
-      </div>
 
-      {/* <div className="p-1">
+
+        <div className="flex gap-10 border m-4 ">
+          <div className="">
+            <label htmlFor="description" className="font-semibold ">Additonal Notes:</label>
+            <textarea
+              name="text"
+              value={formData.comment}
+              className="border p-1 px-2 border-gray-400 rounded-md w-full"
+              onChange={e => setFormData({ ...formData, comment: e.target.value })}
+            />
+          </div>
+        </div>
+
+        {/* <div className="p-1">
         <div className="p-4">
           <label htmlFor="description" className="font-medium ">Comments:</label>
           <textarea
@@ -393,20 +435,27 @@ const DetailsEdit = () => {
           />
         </div>
       </div> */}
+      </div>
+
+      <input
+        type="file"
+        name="documents"
+        id="documents"
+        onChange={FileChange}
+        multiple
+        className="ml-5"
+      />
+
+      <div className=" m-10 w-full flex justify-center  ">
+        <button
+          onClick={saveEditDetails}
+          className="bg-black px-4 font-medium rounded-md p-2 text-white"
+        >
+          Save
+        </button>
+      </div>
     </div>
-       <div className="items-center gap-6 align-middle">
-    <input type="file" name="attachments" id="" />
-    </div>
-    <div className=" m-10 w-full flex justify-center  ">
-      <button
-        onClick={saveEditDetails}
-        className="bg-black px-4 font-medium rounded-md p-2 text-white"
-      >
-        Save
-      </button>
-    </div>
-  </div>
-  
+
   );
 };
 

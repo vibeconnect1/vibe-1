@@ -31,7 +31,6 @@ const CreateTicket = (data) => {
     of_phase: "pms",
     site_id: selectedSiteId,
     heading: "",
-    attachments: "",
     attachments: [],
   })
 
