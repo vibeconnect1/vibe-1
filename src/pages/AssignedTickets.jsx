@@ -10,15 +10,14 @@ import moment from "moment";
 import { getItemInLocalStorage } from "../utils/localStorage";
 
 
-const Ticket = () => {
-  const [filteredData, setFilteredData] = useState([]);
+const AssignedTickets = () => {
+    const [filteredData, setFilteredData] = useState([]);
   const [searchText, setSearchText] = useState("");
   const [selectedStatus, setSelectedStatus] = useState("all");
   const [ticketTypeCounts, setTicketTypeCounts] = useState({});
   const [ticketStatusCounts, setTicketStatusCounts] = useState({});
   const allTicketTypes = ["Complaint", "Request", "Suggestion"];
   const [complaints, setComplaints] = useState([]);
-
 
   const getTimeAgo = (timestamp) => {
     const createdTime = moment(timestamp);
@@ -72,7 +71,7 @@ const Ticket = () => {
       sortable: true,
     },
     { name: "heading", selector: (row) => row.heading, sortable: true },
-    { name: "Description", selector: (row) => row.text, sortable: true, maxWidth:"500px" }, 
+    { name: "Description", selector: (row) => row.text, sortable: true },
     { name: "Status", selector: (row) => row.issue_status, sortable: true },
     { name: "Created By", selector: (row) => row.created_by, sortable: true },
     { name: "Created On", selector: (row) => row.created_at, sortable: true },
@@ -239,28 +238,18 @@ const Ticket = () => {
       {/* <section className="flex max-w-min overflow-x-auto mr-5 "> */}
       <Navbar />
       <div className="w-full flex mx-3 flex-col overflow-hidden">
-      <div className="flex m-5 justify-start w-fit gap-5 sm:flex-row flex-col flex-shrink flex-wrap ">
+        <div className="flex m-5 justify-start w-fit sm:gap-5 sm:flex-row flex-col flex-shrink ">
           {/* <div className="flex gap-2 mt-2"> */}
           {Object.entries(ticketStatusCounts).map(([status, count]) => (
             <div
               key={status}
               className={`shadow-xl rounded-full border-4 w-52 px-6 p-2 flex flex-col items-center flex-shrink ${
                 status === "Pending"
-                  ? "border-red-400"
+                  ? "border-green-400"
                   : status === "Closed"
                   ? "border-red-400"
                   : status === "Complete"
                   ? "border-indigo-400"
-                  : status === "Approved"
-                  ? "border-yellow-400"
-                  : status === "Completed"
-                  ? "border-green-400"
-                  : status === "Work In Progress"
-                  ? "border-pink-400"
-                  : status === "On Hold"
-                  ? "border-purple-400"
-                  : status === "Re Open"
-                  ? "border-green-800"
                   : "bg-gray-200 text-gray-700"
               }`}
             >
@@ -269,8 +258,6 @@ const Ticket = () => {
             </div>
           ))}
           {/* </div> */}
-
-
 
 
           {allTicketTypes.map((type) => (
@@ -295,8 +282,6 @@ const Ticket = () => {
             </div>
           ))}
         </div>
-
-
 
 
         <div className="flex sm:flex-row flex-col gap-10 my-5">
@@ -404,10 +389,6 @@ const Ticket = () => {
       </div>
     </section>
   );
-};
+}
 
-
-//
-export default Ticket;
-
-
+export default AssignedTickets

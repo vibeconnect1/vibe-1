@@ -89,56 +89,12 @@ const DetailsEdit = () => {
       }
     };
 
-    // const fetchSubCategories = async (e) => {
-    //   try {
-    //     const cat = await fetchSubCategories(categoryId);
-    //     // Update state with fetched data
-    //     setUnits(cat.data.sub_categories.map((item) => ({ name: item.name, id: item.id })));
-    //     console.log(cat);
-    //   } catch (error) {
-    //     console.error("Error fetching sub-categories:", error);
-    //     // Handle error here, e.g., set a state indicating fetch error
-    //   }
-    //   setFormData({
-    //     ...formData,
-    //     [e.target.name]: e.target.value,
-    //   });
-    // };
 
     fetchDetails();
     fetchAssignedTo();
     // fetchSubCategories();
   }, [id]);
 
-
-  /*
-  const handleChange = async (e) => {
-    async function fetchSubCategory(id) {
-      try {
-        const cat = await fetchSubCategories(categoryId);
-        setUnits(cat.data.sub_categories.map((item) => ({ name: item.name, id: item.id })));
-        console.log(cat);
-      } catch (e) {
-        console.log(e);
-      }
-    }
-  
-    if (e.target.type === "select-one" && e.target.name === "categories") {
-      const categoryId = Number(e.target.value);
-      await fetchSubCategory(categoryId);
-      setFormData({
-        ...formData,
-        category_type_id: categoryId,
-        sub_category_id: "", // Reset sub-category when category changes
-      });
-    } else {
-      setFormData({
-        ...formData,
-        [e.target.name]: e.target.value,
-      });
-    }
-  };
-  */
 
   const handleTicketDetails = (e, name) => {
     setFormData({
@@ -188,7 +144,6 @@ const DetailsEdit = () => {
       console.log("Edited Ticket Details:", formData);
       toast.success("Updated Successfully");
       navigate('/tickets');
-      navigate
     } catch (error) {
       console.error("Error Saving in details update: ", error);
     }
@@ -208,64 +163,17 @@ const DetailsEdit = () => {
     },
 
 
-
-    // {
-    //   title: "Categories :",
-    //   description: (
-    //     <div className="flex gap-3 items-center">
-    //       <select
-    //         id="two"
-    //         // value={formData.category_type_id} 
-    //         name="category_type_id"
-    //         // onChange={handleChange}
-    //         className="border p-1 px-4 border-gray-500 rounded-md"
-    //       >
-
-    //         {formData.category_type_id}
-    //         <option value="">Select Category</option>
-    //         {categ?.map((category) => (
-    //           <option
-    //             value={category.id} key={category.id}
-    //           >
-    //             {category.name}
-    //           </option>
-    //         ))}
-    //       </select>
-    //     </div>
-    //   ),
-    // },
-
-    //   {
-    //     title: "SubCategories :",
-    // description: (
-    //   <div className="flex gap-3 items-center">
-    //     <select
-    //       id="five"
-    //       value={formData.sub_category_id} 
-    //       name="sub_category_id"
-    //       onChange={handleChange}
-    //       className="border p-2 px-4 border-gray-500 rounded-md"
-    //     >
-    //       <option value="">Sub Category</option>
-    //       {units?.map((floor) => ( 
-    //         <option key={floor.id} value={floor.id}>
-    //           {floor.name}
-    //         </option>
-    //       ))}
-    //     </select>
-    //   </div>
-    //     ),
-    //   },
+    { title: "Status  :", description: ticketinfo.issue_status },
     {
       title: "Status :",
       description: (
         <select
-
           value={formData.issue_status || ""}
           name="issue_status"
           onChange={e => setFormData({ ...formData, issue_status: e.target.value })}
           className="border p-1 px-4 grid border-gray-500 rounded-md"
         >
+          <option value="">Select Option</option>
           {statuses?.map((floor) => (
             <option value={floor.id} key={floor.id}>
               {floor.name}
@@ -275,6 +183,7 @@ const DetailsEdit = () => {
       ),
     },
 
+    { title: "Issue Type  :", description: ticketinfo.issue_type },
     {
       title: "Issue Type :",
       description: (
@@ -290,6 +199,7 @@ const DetailsEdit = () => {
         </select>
       ),
     },
+    { title: "Priority  :", description: ticketinfo.priority },
     {
       title: "Priority :",
       description: (
@@ -307,7 +217,7 @@ const DetailsEdit = () => {
         </select>
       ),
     },
-
+    { title: "Assigned To  :", description: ticketinfo.assigned_to },
     {
       title: "Assigned To:",
       description: (

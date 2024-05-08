@@ -36,7 +36,7 @@ function MyTickets() {
             name: "Action",
             cell: (row) => (
                 <div className="flex items-center gap-4">
-                    <Link to={`/tickets/details/${row.id}`}>
+                    <Link to={`/tickets/user-details/${row.id}`}>
                         <BsEye size={15} />
                     </Link>
 
@@ -48,19 +48,19 @@ function MyTickets() {
             selector: (row) => row.ticket_number,
             sortable: true,
           },
-          { name: "Building Name", selector: (row) => row.building_name, sortable: true },
-          { name: "Floor Name", selector: (row) => row.floor_name, sortable: true },
-          { name: "Unit Name", selector: (row) => row.unit, sortable: true },
+        //   { name: "Building Name", selector: (row) => row.building_name, sortable: true },
+        //   { name: "Floor Name", selector: (row) => row.floor_name, sortable: true },
+        //   { name: "Unit Name", selector: (row) => row.unit, sortable: true },
           { name: "Customer Name", selector: (row) => row.created_by, sortable: true },
           { name: "Category", selector: (row) => row.category_type, sortable: true },
           { name: "Sub Category", selector: (row) => row.sub_category, sortable: true },
           { name: "Heading", selector: (row) => row.heading, sortable: true },
-          { name: "Description", selector: (row) => row.text, sortable: true },
+          { name: "Description", selector: (row) => row.text, sortable: true, maxWidth:"500px" },
           { name: "Status", selector: (row) => row.issue_status, sortable: true },
           { name: "Created By", selector: (row) => row.created_by, sortable: true },
           { name: "Created On", selector: (row) =>dateFormat(row.created_at), sortable: true },
         //   { name: "Prioity", selector: (row) => row.priority, sortable: true },
-          { name: "Assigned To", selector: (row) => row.assigned_to, sortable: true },
+        //   { name: "Assigned To", selector: (row) => row.assigned_to, sortable: true },
           { name: "Ticket Type", selector: (row) => row.issue_type, sortable: true },
           { name: "Total Time", selector: (row) => getTimeAgo(row.created_at), sortable: true },
         //   { name: "TAT Resolution Breached", selector: (row) => (row.resolution_breached ? "Yes" : "No"), sortable: true },
@@ -179,50 +179,67 @@ function MyTickets() {
 
     return (
         // <section className="container max-w-min overflow-hidden flex md:justify-between md:items-start">
-        <section className="flex max-w-min overflow-x-auto mr-5 ">
+        <section className="flex">
             <Navbar />
             <div className=" w-full flex mx-3 flex-col overflow-hidden">
-                <div className="flex m-5 justify-start w-full sm:gap-5 sm:flex-row flex-col flex-shrink ">
-                    {/* <div className="flex gap-2 mt-2"> */}
-                    {Object.entries(ticketStatusCounts).map(([status, count]) => (
-                        <div
-                            key={status}
-                            className={`shadow-xl rounded-full border-4 w-52 px-6 p-2 flex flex-col items-center flex-shrink ${status === "Pending"
-                                ? "border-green-400"
-                                : status === "Closed"
-                                    ? "border-red-400"
-                                    : status === "Complete"
-                                        ? "border-indigo-400"
-                                        : "bg-gray-200 text-gray-700"
-                                }`}
-                        >
-                            <p className="font-medium">{status}</p>
-                            <p>{count}</p>
-                        </div>
-                    ))}
-                    {/* </div> */}
+            <div className="flex m-5 justify-start w-fit gap-5 sm:flex-row flex-col flex-shrink flex-wrap ">
+          {/* <div className="flex gap-2 mt-2"> */}
+          {Object.entries(ticketStatusCounts).map(([status, count]) => (
+            <div
+              key={status}
+              className={`shadow-xl rounded-full border-4 w-52 px-6 p-2 flex flex-col items-center flex-shrink ${
+                status === "Pending"
+                  ? "border-red-400"
+                  : status === "Closed"
+                  ? "border-red-400"
+                  : status === "Complete"
+                  ? "border-indigo-400"
+                  : status === "Approved"
+                  ? "border-yellow-400"
+                  : status === "Completed"
+                  ? "border-green-400"
+                  : status === "Work In Progress"
+                  ? "border-pink-400"
+                  : status === "On Hold"
+                  ? "border-purple-400"
+                  : status === "Re Open"
+                  ? "border-green-800"
+                  : "bg-gray-200 text-gray-700"
+              }`}
+            >
+              <p className="font-medium">{status}</p>
+              <p>{count}</p>
+            </div>
+          ))}
+          {/* </div> */}
 
-                    {allTicketTypes.map((type) => (
-                        <div
-                            key={type}
-                            className={`shadow-xl rounded-full border-4 w-52 px-6 p-2 flex flex-col items-center flex-shrink ${ticketTypeCounts[type] !== undefined
-                                ? type === "Complaint"
-                                    ? "border-blue-400"
-                                    : type === "Request"
-                                        ? "border-orange-400"
-                                        : type === "Suggestion"
-                                            ? " border-yellow-400"
-                                            : ""
-                                : "bg-gray-200 text-gray-700"
-                                }`}
-                        >
-                            <p className="font-medium">{type} </p>
-                            {ticketTypeCounts[type] !== undefined
-                                ? ticketTypeCounts[type]
-                                : 0}
-                        </div>
-                    ))}
-                </div>
+
+
+
+          {allTicketTypes.map((type) => (
+            <div
+              key={type}
+              className={`shadow-xl rounded-full border-4 w-52 px-6 p-2 flex flex-col items-center flex-shrink ${
+                ticketTypeCounts[type] !== undefined
+                  ? type === "Complaint"
+                    ? "border-blue-400"
+                    : type === "Request"
+                    ? "border-orange-400"
+                    : type === "Suggestion"
+                    ? " border-yellow-400"
+                    : ""
+                  : "bg-gray-200 text-gray-700"
+              }`}
+            >
+              <p className="font-medium">{type} </p>
+              {ticketTypeCounts[type] !== undefined
+                ? ticketTypeCounts[type]
+                : 0}
+            </div>
+          ))}
+        </div>
+
+
 
                 <div className="flex sm:flex-row flex-col gap-10 my-5">
                     <div className="sm:flex grid grid-cols-2 items-center justify-center  gap-4 border border-gray-300 rounded-md px-3 p-2 w-auto">
@@ -304,7 +321,7 @@ function MyTickets() {
                         />
                     </div>
                 </div>
-                <div className="flex flex-col gap-4 justify-center items-center overflow-hidden">
+                {/* <div className="flex flex-col gap-4 justify-center items-center overflow-hidden"> */}
                     <DataTable
                         responsive
                         selectableRows
@@ -313,11 +330,11 @@ function MyTickets() {
                         customStyles={customStyle}
                         pagination
                         fixedHeader
-                        fixedHeaderScrollHeight="420px"
+                        fixedHeaderScrollHeight="450px"
                         selectableRowsHighlight
                         highlightOnHover
                     />
-                </div>
+                {/* </div> */}
             </div>
         </section>
     )

@@ -1,17 +1,15 @@
 import Collapsible from "react-collapsible";
 import React, { useEffect, useState } from "react";
 import Navbar from "../../components/Navbar";
-import CustomTrigger from "../../containers/CustomTrigger";
-import Selector from "../../containers/Selector";
 import { useNavigate } from "react-router-dom";
 import FileInput from "../../Buttons/FileInput";
-import { getItemInLocalStorage } from "../../utils/localStorage";
-import { fetchSubCategories, getAssignedTo, getComplaints, postComplaintsDetails } from "../../api";
+import { getItemInLocalStorage, setItemInLocalStorage } from "../../utils/localStorage";
+import { fetchSubCategories, getAssignedTo, getComplaints, getFloors, getUnits, postComplaintsDetails } from "../../api";
 import toast from "react-hot-toast";
 
 const CreateTicket = (data) => {
   const navigate = useNavigate();
-  const [isOpen, setIsOpen] = useState(false);
+
   const [behalf, setBehalf] = useState("self");
   const [ticketType, setTicketType] = useState("");
   //   const [selectedOption, setSelectedOption] = useState("");
@@ -22,16 +20,27 @@ const CreateTicket = (data) => {
   const [user, setUser] = useState("");
   const [attachments, setAttachments] = useState([]);
   const [selectedSiteId, setSelectedSiteId] = useState("");
+  const [assignedUser, setAssignedUser] = useState([]);
   const [assined, setAssigned] = useState([]);
+  const [reqName, setReqName] = useState("");
+  const [floor, setFloor] = useState([])
+  const [unitName, setUnitName] = useState([]);
+
   const [formData, setFormData] = useState({
     category_type_id: "",
     sub_category_id: "",
     assigned_to: "",
     priority: "",
     of_phase: "pms",
-    site_id: selectedSiteId,
+    // site_id: selectedSiteId,
     heading: "",
     attachments: [],
+    building_name: "",
+    unit_id: "",
+    floor_name: "",
+    assigned_to: "",
+    issue_type_id: "",
+    complaint_type: "",
   })
 
   console.log(formData);
@@ -40,6 +49,14 @@ const CreateTicket = (data) => {
   const categories = getItemInLocalStorage("categories");
   // console.log("Categories", categories)
 
+  const userName = localStorage.getItem("Name");
+
+  const siteID = getItemInLocalStorage("SITEID")
+  // setSelectedSiteId(siteID) 
+
+  const building = getItemInLocalStorage("Building");
+  // console.log("BB", building);
+
   useEffect(() => {
     const fetchData = async () => {
       const response = await fetchSubCategories(14);
@@ -47,16 +64,30 @@ const CreateTicket = (data) => {
       const responce = await getComplaints();
       // console.log("complaints", responce)
     };
+
     const fetchAssignedTo = async () => {
       try {
         const response = await getAssignedTo();
-        setAssigned(response.data);
+        setAssignedUser(response.data);
+        // setEditTicketInfo(response.data);
       } catch (error) {
         console.error("Error fetching assigned users:", error);
       }
     };
+
+    const fetchFloor = async () => {
+      try {
+        const fetchFloor = await getFloors();
+        // console.log("Floors", fetchFloor)
+      } catch (error) {
+        error
+      }
+    }
+
     fetchData();
     fetchAssignedTo();
+    fetchFloor();
+    // fetchUnits();
   }, []);
 
   const handleOptionChange = (event, setState) => {
@@ -71,21 +102,21 @@ const CreateTicket = (data) => {
       const base64 = await convertFileToBase64(file);
       base64Array.push(base64);
     }
-    console.log("Array base64-", base64Array);
+    // console.log("Array base64-", base64Array);
     const formattedBase64Array = base64Array.map((base64) => {
       return base64.split(',')[1];
     });
-    
-    console.log("Fornat", formattedBase64Array);
-    
-      setFormData({
-        ...formData, 
-        documents : formattedBase64Array
-      })
-  };
-  
 
-   const convertFileToBase64 = (file) => {
+    console.log("Fornat", formattedBase64Array);
+
+    setFormData({
+      ...formData,
+      documents: formattedBase64Array
+    })
+  };
+
+
+  const convertFileToBase64 = (file) => {
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
       reader.readAsDataURL(file);
@@ -124,9 +155,58 @@ const CreateTicket = (data) => {
   };
 
   const handleAssChange = (e) => {
-    setFormData({...formData, assigned_to: e.target.value});
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
   };
-  
+
+  const buildingChange = async (e) => {
+    async function fetchFloor(floorID) {
+      try {
+        const build = await getFloors(floorID);
+        // console.log("units n", build.data);
+        setFloor(build.data.map((item) => ({ name: item.name, id: item.id })));
+      } catch (e) {
+        console.log(e);
+      }
+    }
+
+    async function getUnit(UnitID) {
+      try {
+        const unit = await getUnits(UnitID)
+        setUnitName(unit.data.map((item) => ({ name: item.name, id: item.id })));
+      } catch (error) {
+        console.log(error);
+      }
+    }
+
+    if (e.target.type === "select-one" && e.target.name === "building_name") {
+      const BuildID = Number(e.target.value);
+      await fetchFloor(BuildID);
+
+      setFormData({
+        ...formData,
+        building_name: BuildID,
+      });
+    } else if (e.target.type === "select-one" && e.target.name === "floor_name") {
+      const UnitID = Number(e.target.value);
+      await getUnit(UnitID);
+      setFormData({
+        ...formData,
+        floor_name: UnitID,
+      });
+
+    }
+    else {
+      setFormData({
+        ...formData,
+        [e.target.name]: e.target.value
+      });
+    }
+  };
+
+
 
 
   const handleSubmit = async (e) => {
@@ -142,9 +222,14 @@ const CreateTicket = (data) => {
         heading: "",
         of_phase: "pms",
         site_id: selectedSiteId,
-        assigned_to: null,
+        assigned_to: "",
         priority: "",
         documents: [],
+        building_name: "",
+        unit_id: "",
+        floor_name: "",
+        issue_type_id: "",
+        complaint_type: "",
       });
       toast.dismiss();
       toast.success("Ticket generated by Admin");
@@ -208,62 +293,119 @@ const CreateTicket = (data) => {
             Create Ticket
           </h2>
 
-          {/* Requestor Details or Requestor Deatils (typo?) */}
-          {behalf === "self" ? (
-            <Collapsible
-              readOnly
-              trigger={
-                <CustomTrigger isOpen={isOpen}>Requestor Details</CustomTrigger>
-              }
-              onOpen={() => setIsOpen(true)}
-              onClose={() => setIsOpen(false)}
-              className="bg-gray-300 p-2 rounded-md font-bold "
-            >
-              <div className="grid grid-cols-3 bg-gray-300 p-2 rounded-md gap-5 pb-4">
-                <p>Name:</p>
-                <p>Contact No:</p>
-                <p>Site:</p>
-                <p>Department:</p>
-                <p>Unit:</p>
-              </div>
-            </Collapsible>
-          ) : (
-            <div className="flex items-center gap-4 my-5">
-              <h2 className="font-bold">Requestor Details :</h2>
-              <Selector
-                selectedOption={user}
-                handleOptionChange={(e) => handleOptionChange(e, setUser)}
-                subHeading={"Choose User"}
-                options={options.user}
-              />
-            </div>
-          )}
-
-          {/* Category, Sub Category, Assigned To, Priority */}
-          <div className="grid grid-cols-2 gap-4">
-            <div>
+          {/* Related To :*/}
+          <div className="flex flex-col md:flex-row justify-between items-center">
+            <div className="flex gap-3 items-center">
               <label htmlFor="" className="font-semibold">
-                Category:
+                Related To:
               </label>
               <select
-                id="two"
-                value={formData.catogories}
-                name="categories"
-                onChange={handleChange}
-                className="border p-1 px-4 grid border-gray-500 rounded-md"
+                id="issueType"
+                value={formData.issue_type_id}
+                name="issue_type_id"
+                onChange={e => setFormData({ ...formData, issue_type_id: e.target.value })}
+                className="border p-1 px-4 border-gray-500 rounded-md"
               >
-                <option value="">Select Category</option>
-                {categories?.map((category) => (
-                  <option
-                    onClick={() => console.log("checking-category")}
-                    value={category.id}
-                    key={category.id}
-                  >
-                    {category.name}
-                  </option>
-                ))}
+                <option value="">Select Area</option>
+                <option value="Complaint">Apartment</option>
+                <option value="Suggestion">Shop</option>
+                <option value="Request">Common Area</option>
               </select>
-              <div className="flex-col flex">
+            </div>
+
+            <div className="flex gap-3 items-center">
+              <label htmlFor="" className="font-semibold">
+                Type of:
+              </label>
+              <select
+                id="complaintType"
+                value={formData.complaint_type}
+                name="complaint_type"
+                onChange={e => setFormData({ ...formData, complaint_type: e.target.value })}
+                className="border p-1 px-4 border-gray-500 rounded-md "
+              >
+                <option value="">Select Issue Type</option>
+                <option value="Complaint">Complaint</option>
+                <option value="Suggestion">Suggestion</option>
+                <option value="Request">Request</option>
+              </select>
+            </div>
+          </div>
+          <div >
+            {/* Building details */}
+            <div className="flex justify-between items-center">
+              <div className="flex gap-3 items-center">
+                <label htmlFor="" className="font-semibold">
+                  Tower Name :
+                </label>
+                <select
+                  id="builiding_name"
+                  value={formData.building_name}
+                  name="building_name"
+                  onChange={buildingChange}
+                  className="border p-1 px-4 border-gray-500 rounded-md"
+                >
+                  <option value="">Select Tower</option>
+                  {building?.map(build => (
+                    <option
+                      key={build.id}
+
+                      value={build.id}
+                    >
+                      {build.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              {/* Floor Name */}
+              <div className="flex gap-3 items-center">
+                <label htmlFor="" className="font-semibold">
+                  Floor Name :
+                </label>
+                <select
+                  value={formData.floor_name}
+                  name="floor_name"
+                  onChange={buildingChange}
+                  className="border p-1 px-4 border-gray-500 rounded-md"
+                >
+                  <option value="">Select Floor</option>
+                  {floor?.map(floorId => (
+                    <option
+                      key={floorId.id}
+                      // onClick={() => console.log("checking-category")}
+                      value={floorId.id}
+                    >
+                      {floorId.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </div>
+          </div>
+
+
+          <div className="flex justify-between ">
+                <div className="flex gap-2 items-center">
+                <label htmlFor="" className="font-semibold">
+                  Unit Name :
+                </label>
+
+                <select
+                  id="six"
+                  value={formData.unit_id}
+                  name="unit_id"
+                  onChange={buildingChange}
+                  className="border p-2 px-4 border-gray-500 rounded-md"
+                >
+                  <option value="">Unit Name</option>
+                  {unitName?.map(floor => (
+                    <option key={floor.id} value={floor.id}>
+                      {floor.name}
+                    </option>
+                  ))}
+                </select>
+                </div>
+                <div className="flex gap-2 items-center">
                 <label htmlFor="" className="font-semibold">
                   Priority :
                 </label>
@@ -281,55 +423,93 @@ const CreateTicket = (data) => {
                   <option value="P5">P5</option>
                 </select>
               </div>
+              </div>
+
+
+          <div className="flex justify-between">
+              
+                <div className="flex items-center gap-2">
+                  <label htmlFor="" className="font-semibold">
+                    Category:
+                  </label>
+                  <select
+                    id="two"
+                    value={formData.catogories}
+                    name="categories"
+                    onChange={handleChange}
+                    className="border p-1 px-4 grid border-gray-500 rounded-md"
+                  >
+                    <option value="">Select Category</option>
+                    {categories?.map((category) => (
+                      <option
+                        onClick={() => console.log("checking-category")}
+                        value={category.id}
+                        key={category.id}
+                      >
+                        {category.name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+              
+              <div className="flex items-center gap-2">
+                
+                  <label htmlFor="" className="font-semibold">
+                    Sub Category:
+                  </label>
+                  <select
+                    id="five"
+                    value={formData.subCategories}
+                    name="sub_category_id"
+                    onChange={handleChange}
+                    className="border p-1 px-4 grid border-gray-500 rounded-md"
+                  >
+                    <option value="">Sub Category</option>
+                    {units?.map((floor) => (
+                      <option value={floor.id} key={floor.id}>
+                        {floor.name}
+                      </option>
+                    ))}
+                  </select>
+                
+              </div>
+            </div>
+          <div>
+            
+            {/* Category, Sub Category, Assigned To, Priority */}
+            <div className="flex ">
+              <div className="flex my-3 items-center gap-2">
+                <label htmlFor="" className=" font-semibold">
+                  Assigned To:
+                </label>
+                <select
+                  value={formData.assigned_to || ""}
+                  name="assigned_to"
+                  onChange={(e) => setFormData({ ...formData, assigned_to: e.target.value })}
+                  className="border p-1 px-4 border-gray-500 rounded-md"
+                >
+                  <option value="">Select Assign To</option>
+                  {assignedUser?.map((assign) => (
+                    <option key={assign.id} value={assign.id}>
+                      {assign.firstname} {assign.lastname}
+                    </option>
+                  ))}
+                </select>
+              </div>
             </div>
             <div>
-              <label htmlFor="" className="font-semibold">
-                Sub Category:
-              </label>
-              <select
-                id="five"
-                value={formData.subCategories}
-                name="sub_category_id"
-                onChange={handleChange}
-                className="border p-1 px-4 grid border-gray-500 rounded-md"
-              >
-                <option value="">Sub Category</option>
-                {units?.map((floor) => (
-                  <option value={floor.id} key={floor.id}>
-                    {floor.name}
-                  </option>
-                ))}
-              </select>
-              <label htmlFor="" className="font-semibold">
-                Assigned To:
-              </label>
-              <select
-                id="five"
-                value={formData.assigned_to}
-                name="assigned_to"
-                onChange={handleAssChange}
-                className="border p-1 px-4 grid border-gray-500 rounded-md"
-              >
-                <option value="">Assigned to</option>
-                {assined?.map((floor) => (
-                  <option value={floor.id} key={floor.id}>
-                    {floor.name}
-                  </option>
-                ))}
-              </select>
-            </div>
-            <div>
-              <label htmlFor="" className="font-semibold flex justify-start">
+              <label htmlFor="" className="font-semibold my-2 flex justify-start">
                 Heading:
               </label>
               <textarea
                 name="heading"
                 placeholder="heading"
-                cols="15"
-                rows="1"
+
+                rows="3"
                 value={formData.heading}
                 onChange={handleChange}
-                className="border rounded-md border-black textarea-small"
+                className="border px-2 rounded-md flex flex-auto border-black w-full"
               ></textarea>
             </div>
           </div>

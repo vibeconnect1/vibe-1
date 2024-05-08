@@ -64,6 +64,7 @@ import MyTickets from "./pages/MyTickets.jsx";
 import UserTicket from "./pages/SubPages/UserTicket.jsx";
 import DetailsEdit from "./pages/SubPages/details/DetailsEdit.jsx";
 import User from "./components/Authentication/User.jsx";
+import UserDetails from "./pages/SubPages/details/UserDetails.jsx";
 function App() {
   return (
     <>
@@ -108,6 +109,7 @@ function App() {
           <Route path="/tickets" element={<Ticket />} />
           <Route path="/tickets/details/:id" element={<ProtectedRoute><TicketDetails /></ProtectedRoute>} />
           <Route path="/tickets/create-ticket" element={<CreateTicket /> } />
+          <Route path="/tickets/user-details/:id" element={<ProtectedRoute><UserDetails /></ProtectedRoute>} />
           {/* Edit Details */}
           <Route path="/edit/:id" element={<ProtectedRoute><DetailsEdit /></ProtectedRoute>} />
           {/* tickets- user */}

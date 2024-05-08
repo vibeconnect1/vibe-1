@@ -1,22 +1,23 @@
 import React, { useEffect, useState } from "react";
 import Navbar from "../../components/Navbar";
 import { useNavigate } from "react-router-dom";
-import { fetchSubCategories, getComplaints, getIssueType, getUnits, getfloorsType, postComplaintsDetails } from "../../api";
+import { fetchSubCategories, getComplaints, getIssueType, getLogin, getUnits, getfloorsType, postComplaintsDetails } from "../../api";
 import { getItemInLocalStorage } from "../../utils/localStorage";
 // import axios from "axios";
 import toast from "react-hot-toast";
+import Collapsible from "react-collapsible";
+import CustomTrigger from "../../containers/CustomTrigger";
 
 const UserTicket = () => {
   const navigate = useNavigate();
+  const [isOpen, setIsOpen] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState("");
   const [selectedSubCategory, setSelectedSubCategory] = useState("");
   const [description, setDescription] = useState("");
   const [attachments, setAttachments] = useState([]);
   const [units, setUnits] = useState([]);
-  const [unitName, setUnitName] = useState([]);
   const [selectedSiteId, setSelectedSiteId] = useState();
   const [disSubmit, setDisSubmit] = useState(false);
-  const [floor, setFloor] = useState([])
 
   const siteID = getItemInLocalStorage("SITEID")
   const [formData, setFormData] = useState({
@@ -29,24 +30,28 @@ const UserTicket = () => {
     documents: [],
     issue_type_id: "",
     complaint_type: "",
-    building_name: "",
-    unit_id: "",
-    floor_name: ""
-
   });
 
   console.log(formData);
   // console.log(attachments);
 
+
+  
+  const user = getItemInLocalStorage("user")
+  console.log("User",user.unit_name );
+
   const categories = getItemInLocalStorage("categories");
   // console.log("categories-- ", categories);
 
-  const building = getItemInLocalStorage("Building");
-  // console.log("BB", building);
 
   // const siteID = getItemInLocalStorage("SITEID")
   // setSelectedSiteId(siteID) 
   // console.log("site--", siteID)
+
+  const userName = localStorage.getItem("Name");
+
+  // const siteID = getItemInLocalStorage("SITEID")
+  // setSelectedSiteId(siteID) 
 
   const complaitType = getItemInLocalStorage("complaintType")
   // console.log("complaintType", complaitType)
@@ -58,6 +63,7 @@ const UserTicket = () => {
       // console.log("subCategories:", response);
     };
 
+  
 
     const fechIssueType = async () => {
       const issue = await getIssueType()
@@ -94,43 +100,7 @@ const UserTicket = () => {
     }
   };
 
-  const buildingChange = async (e) => {
-    async function fetchUnits(BuildID) {
-
-      try {
-        const build = await getUnits(BuildID);
-        // console.log("units n", build.data);
-        setUnitName(build.data.map((item) => ({ name: item.name, id: item.id })));
-      } catch (e) {
-        console.log(e);
-      }
-    }
-
-    async function fectFloors(FloorID) {
-      try {
-        const floor = await getfloorsType(FloorID);
-        // console.log("Floors --", floor.data);
-        setFloor(floor.data.map((item) => ({ name: item.name, id: item.id })));
-      } catch (e) {
-        console.log(e);
-      }
-    }
-
-    if (e.target.type === "select-one" && e.target.name === "building_name") {
-      const BuildID = Number(e.target.value);
-      await fetchUnits(BuildID);
-      await fectFloors(BuildID);
-      setFormData({
-        ...formData,
-        building_name: BuildID,
-      });
-    } else {
-      setFormData({
-        ...formData,
-        [e.target.name]: e.target.value,
-      });
-    }
-  }
+ 
 
 
   const handleFileChange = async (event) => {
@@ -163,6 +133,9 @@ const UserTicket = () => {
       reader.onerror = (error) => reject(error);
     });
   };
+
+
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -222,10 +195,25 @@ const UserTicket = () => {
           <h2 className="text-center text-xl font-bold p-2 bg-black rounded-full text-white">
             New Ticket
           </h2>
-          <div className="ml-5 flex flex-col items-start w-full gap-4">
+          {/* Requestor Details or Requestor Deatils (typo?) */}
+            <Collapsible
+              readOnly
+              trigger={
+                <CustomTrigger isOpen={isOpen}>Requestor Details:</CustomTrigger>
+              }
+              onOpen={() => setIsOpen(true)}
+              onClose={() => setIsOpen(false)}
+              className="bg-gray-300 my-4 p-2 rounded-md font-bold "
+            >
+              <div className="grid grid-cols-2 bg-gray-300 p-2 rounded-md gap-5 pb-4">
+                <p>Name: {userName} </p>
+                <p>Unit: {user.unit_name} </p>
+              </div>
+            </Collapsible>
+          <div className="flex flex-col my-5 justify-around w-full gap-4">
 
             {/* Related To :*/}
-            <div className="flex flex-col md:flex-row justify-between items-center gap-5">
+            <div className="flex flex-col md:flex-row justify-around items-center gap-5">
               <div className="flex gap-3 items-center">
                 <label htmlFor="" className="font-semibold">
                   Related To:
@@ -264,82 +252,18 @@ const UserTicket = () => {
             </div>
 
             {/* Type Area */}
+            {/* <div>
+            <label htmlFor="">
+              related to :
+            </label>
+            <select 
+            name="issue_type_id" id=""
+            value={formData.issue_type_id}
+            onChange={e => setFormData({...formData, issue_type_id:e.target.value })}
+            >
 
-
-            <div className="flex justify-around items-start w-full">
-              <div className="flex gap-3 items-center">
-                <label htmlFor="" className="font-semibold">
-                  Tower Name :
-                </label>
-                <select
-                  id="builiding_name"
-                  value={formData.building_name}
-                  name="building_name"
-                  onChange={buildingChange}
-                  className="border p-1 px-4 border-gray-500 rounded-md"
-                >
-                  <option value="">Select Tower</option>
-                  {building?.map(build => (
-                    <option
-                      key={build.id}
-
-                      value={build.id}
-                    >
-                      {build.name}
-                    </option>
-                  ))}
-                </select>
-              </div>
-              {/* Floor Name */}
-              <div className="flex gap-3 items-center">
-                <label htmlFor="" className="font-semibold">
-                  Unit Name :
-                </label>
-                <select
-                  value={formData.unit_id}
-                  name="unit_id"
-                  onChange={buildingChange}
-                  className="border p-1 px-4 border-gray-500 rounded-md"
-                >
-                  <option value="">Select Floor</option>
-                  {unitName?.map(floorno => (
-                    <option
-                      key={floorno.id}
-                      // onClick={() => console.log("checking-category")}
-                      value={floorno.id}
-                    >
-                      {floorno.name}
-                    </option>
-                  ))}
-                </select>
-              </div>
-
-              <div className="flex gap-3 items-center">
-                <label htmlFor="" className="font-semibold">
-                  Floor :
-                </label>
-
-                <select
-                  id="six"
-                  value={formData.floor_name}
-                  name="unit_id"
-                  onChange={buildingChange}
-                  className="border p-2 px-4 border-gray-500 rounded-md"
-                >
-                  <option value=""> Floor </option>
-                  {floor?.map(floor => (
-                    <option key={floor.id} value={floor.id}>
-                      {floor.name}
-                    </option>
-                  ))}
-                </select>
-
-
-              </div>
-
-            </div>
-
-
+            </select>
+</div> */}
             <div className="flex justify-around w-full">
               <div className="flex gap-3 items-center">
                 <label className="font-semibold">Categories:</label>
@@ -383,6 +307,7 @@ const UserTicket = () => {
                 </select>
               </div>
             </div>
+            <div className="flex flex-col justify-around">
             <label htmlFor="" className="font-semibold">
               Heading:
             </label>
@@ -393,10 +318,11 @@ const UserTicket = () => {
               rows="1"
               value={formData.heading}
               onChange={handleChange}
-              className="border border-black"
+              className="border p-2 rounded-md border-black"
             ></textarea>
+            </div>
           </div>
-          <div className="flex flex-col my-5 gap-1 md:ml-5">
+          <div className="flex flex-col my-5 gap-1 ">
             <label htmlFor="" className="font-bold">
               Description:
             </label>

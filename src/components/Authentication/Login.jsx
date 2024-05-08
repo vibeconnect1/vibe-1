@@ -24,7 +24,7 @@ const Login = () => {
   useEffect(() => {
     const token = localStorage.getItem("TOKEN");
     const user = localStorage.getItem("Name");
-    console.log(user)
+    // console.log(user)  
     if (token) {
       navigate("/dashboard");
       toast.success("You are already logged in!");
@@ -46,9 +46,13 @@ const Login = () => {
         },
       });
 
+      const loginD = response.data.user
+      setItemInLocalStorage("user", loginD)
+      // console.log("User details", loginD)
+
       const building = response.data.buildings;
       setItemInLocalStorage("Building", building);
-      console.log("Buildingss-",building)
+      // console.log("Buildingss-",building)
 
       const categories = response.data.categories;
       setItemInLocalStorage("categories", categories);
@@ -58,20 +62,21 @@ const Login = () => {
       const userName = response.data.user.firstname
       setItemInLocalStorage("SITEID", selectedSiteId);
       setItemInLocalStorage("Name", userName)
-      console.log(userName)
+      // console.log(userName)
+
       const userType = response.data.user.user_type
       setItemInLocalStorage("USERTYPE", userType)
-      console.log(userType)
+      // console.log(userType)
       
       const statuses = response.data.statuses
       setItemInLocalStorage("STATUS", statuses)
-      console.log("Status", statuses)
+      // console.log("Status", statuses)
 
       const complaint = response.data.complanits
       setItemInLocalStorage("complaint", complaint)
 
-      console.log(userName)
-      console.log("Sit",selectedSiteId)
+      // console.log(userName)
+      // console.log("Sit",selectedSiteId)
       toast.loading("Processing your data please wait...");
       if(userType === "pms_admin"){
         navigate("/dashboard");

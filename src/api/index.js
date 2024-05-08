@@ -4,6 +4,9 @@ import axiosInstance from "./axiosInstance";
 const token = getItemInLocalStorage("TOKEN");
 
 export const login = async (data) => axiosInstance.post("/login.json", data);
+
+export const getLogin = async () => axiosInstance.get("/login.json")
+
 export const getSiteAsset = async () =>
   axiosInstance.get("/site_assets.json", {
     params: {
@@ -63,13 +66,20 @@ export const getComplaintsDetails = async (id) =>
 
   //
 
-  export const getUnits = async (buildId) =>
+  export const getUnits = async (floor_id) =>
     axiosInstance.get(`/units.json` ,{
       params: {
         token: token,
-        building_id: buildId
+        floor_id_eq : floor_id
       },
     },);
+
+    export const getFloors = async (data) => 
+      axiosInstance.get(`/floors.json`, {
+        params : {
+          token : token,
+        }
+      })
 
   export const updateComplaintsDetails = async (id, data) => 
   axiosInstance.put(`pms/complaints/${id}.json`, data, {
@@ -79,7 +89,7 @@ export const getComplaintsDetails = async (id) =>
   })
 
 
-  export const getAssignedTo = async () => 
+  export const getAssignedTo = async (data) => 
     axiosInstance.get(`/users/pms_admins.json`, {
       params : {
         token : token,
@@ -119,6 +129,14 @@ export const getComplaintsDetails = async (id) =>
       throw error;
     }
   }
+  
+
+  export const resetPassword = async (data) =>
+    axiosInstance.post("/users/change_password.json", data, {
+      params: {
+        token: token,
+      },
+    });  
 
   // export const editComplaintsDetails = async (compData) => {
   //   axiosInstance.post (`/complaint_logs.json?token=${token}`,{

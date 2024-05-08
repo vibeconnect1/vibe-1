@@ -1,14 +1,24 @@
 import React, { useEffect, useState } from "react";
 import Detail from "../../../containers/Detail";
-import { getComplaintsDetails } from "../../../api";
-import { Link, useParams } from "react-router-dom";
+import { editComplaintsDetails, getComplaintsDetails } from "../../../api";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import moment from "moment";
 import { BiEdit } from "react-icons/bi";
+import toast from "react-hot-toast";
 
 
 const TicketDetails = () => {
+  const navigate = useNavigate();
   const { id } = useParams();
   const [ticketinfo, setTicketInfo] = useState([]);
+  const [formData, setFormData] = useState({
+    comment: "",
+    of_phase: "pms",
+    documents: [],
+  });
+
+
+  console.log(formData);
 
 
   useEffect(() => {
@@ -42,52 +52,83 @@ const TicketDetails = () => {
 
 
   const ticketDetails = [
-    { title: "Ticket No:", description: ticketinfo.ticket_number },
-    { title: "Title :", description: ticketinfo.heading },
-    { title: "Building Name:", description: ticketinfo.building_name },
-    { title: "Floor Name:", description: ticketinfo.floor_name },
-    { title: "Site:", description: ticketinfo.site_name },
-    { title: "Unit :", description: ticketinfo.unit },
+    { title: "Ticket No  :", description: ticketinfo.ticket_number },
+    { title: "Title  :", description: ticketinfo.heading },
+    { title: "Status  :", description: ticketinfo.issue_status },
+    { title: "Site  :", description: ticketinfo.site_name },
+    { title: "Issue Type  :", description: ticketinfo.issue_type },
+    { title: "Assigned To  :", description: ticketinfo.assigned_to },
+    { title: "Building Name  :", description: ticketinfo.building_name },
     // { title: "Customer Name:", description: ticketinfo.customer },
-    { title: "Issue Type :", description: ticketinfo.issue_type },
-    { title: "Assigned To :", description: ticketinfo.assigned_to },
-    { title: "Status :", description: ticketinfo.issue_status },
-    { title: "Priority :", description: ticketinfo.priority },
-    { title: "Category :", description: ticketinfo.category_type },
-    { title: "Sub category :", description: ticketinfo.sub_category },
-    { title: "Created On :", description: dateFormat(ticketinfo.created_at) },
-    { title: "Updated On :", description: dateFormat(ticketinfo.updated_at) },
-    { title: "Total time:", description: getTimeAgo(ticketinfo.created_at) },
+    { title: "Category  :", description: ticketinfo.category_type },
+    { title: "Priority  :", description: ticketinfo.priority },
+    { title: "Floor Name  :", description: ticketinfo.floor_name },
+    { title: "Sub category  :", description: ticketinfo.sub_category },
+    { title: "Related To  :", description: ticketinfo.issue_related_to },
+    { title: "Unit  :", description: ticketinfo.unit },
+    { title: "Total time  :", description: getTimeAgo(ticketinfo.created_at) },
 
 
-
-
-    { title: "Created By:", description: ticketinfo.created_by },
-
+    {
+      title: "Response Breached  :",
+      description: ticketinfo.response_breached ? "Yes" : "No",
+    },
+    {
+      title: " Resolution Breached  :",
+      description: ticketinfo.resolution_breached ? "Yes" : "No",
+    },
+    { title: "Created By  :", description: ticketinfo.created_by },
+    { title: "Created On  :", description: dateFormat(ticketinfo.created_at) },
+    { title: "Updated On  :", description: dateFormat(ticketinfo.updated_at) },
   ];
   const domainPrefix = "https://admin.vibecopilot.ai";
   return (
-    <div className="p-4">
+    <div className="">
       <div className="flex flex-col justify-around ">
-      
-          <div className="flex justify-end">
-            <p className="flex py-2 font-medium">Edit Details : </p>
-           <Link  to={`/edit/${id}`} > 
-            <button
-              className="border bg-gray-300">
-              <BiEdit size={35} 
-              />
-            </button>
-            </Link>
-          </div>
-
-          <Detail details={ticketDetails} heading={"Ticket Details"} />
-      
-        <div className="py-4 px-2 flex items-center flex-wrap gap-5">
-          <p className="font-medium">Description:</p>
-          <p className="text-wrap">{ticketinfo.text}</p>
+        <div className="flex justify-end m-1">
+          <Link
+            to={`/edit/${id}`}
+            className="border-2 border-black flex gap-2 p-1 rounded-md items-center px-4 "
+          >
+            <BiEdit size={20} />
+            Edit
+          </Link>
         </div>
-        <div className="border m-10" />
+        <div className="">
+          <Detail details={ticketDetails} heading={"Ticket Details"} />
+        </div>
+        <div className="flex flex-col  flex-wrap gap-2">
+          <h2 className="text-center w-screen bg-black text-white font-semibold mt-5 text-lg p-2 px-4 ">
+            Additional Info
+          </h2>
+          <div className="px-4 flex flex-col gap-1 justify-center">
+            <p className="font-medium">Description :</p>
+            <p className="text-wrap bg-gray-200 p-2 rounded-md">
+              {ticketinfo.text}
+            </p>
+          </div>
+          <div className="px-4 flex flex-col gap-1 justify-center">
+            <p className="font-medium">Impact :</p>
+            <p className="text-wrap">{ticketinfo.impact}</p>
+          </div>
+          <div className="px-4 flex flex-col gap-1 justify-center">
+            <p className="font-medium">Root Cause :</p>
+            <p className="text-wrap">{ticketinfo.root_cause}</p>
+          </div>
+          <div className="px-4 flex flex-col gap-1 justify-center">
+            <p className="font-medium">Corrective Action :</p>
+            <p className="text-wrap">{ticketinfo.corrective_action}</p>
+          </div>
+          <div className="px-4 flex flex-col gap-1 justify-center">
+            <p className="font-medium">Proactive/Reactive :</p>
+            <p className="text-wrap">{ticketinfo.proactive_reactive}</p>
+          </div>
+          <div className="px-4 flex flex-col gap-1 justify-center">
+            <p className="font-medium">Correction :</p>
+            <p className="text-wrap">{ticketinfo.correction}</p>
+          </div>
+        </div>
+        {/* <div className="border " /> */}
         <h2 className="text-center w-screen bg-black text-white font-semibold my-5 text-lg p-2 px-4 ">
           Attachments
         </h2>
