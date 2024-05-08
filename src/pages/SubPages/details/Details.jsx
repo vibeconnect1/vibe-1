@@ -54,20 +54,13 @@ const TicketDetails = () => {
     { title: "Priority :", description: ticketinfo.priority },
     { title: "Category :", description: ticketinfo.category_type },
     { title: "Sub category :", description: ticketinfo.sub_category },
-    { title: "Related To:", description: ticketinfo.issue_related_to },
     { title: "Created On :", description: dateFormat(ticketinfo.created_at) },
     { title: "Updated On :", description: dateFormat(ticketinfo.updated_at) },
     { title: "Total time:", description: getTimeAgo(ticketinfo.created_at) },
 
 
-    {
-      title: "Response Breached:",
-      description: ticketinfo.response_breached ? "Yes" : "No",
-    },
-    {
-      title: "TAT Resolution Breached:",
-      description: ticketinfo.resolution_breached ? "Yes" : "No",
-    },
+    
+    
     { title: "Created By:", description: ticketinfo.created_by },
    
   ];

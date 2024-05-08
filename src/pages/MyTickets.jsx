@@ -54,17 +54,16 @@ function MyTickets() {
           { name: "Customer Name", selector: (row) => row.created_by, sortable: true },
           { name: "Category", selector: (row) => row.category_type, sortable: true },
           { name: "Sub Category", selector: (row) => row.sub_category, sortable: true },
-          { name: "heading", selector: (row) => row.heading, sortable: true },
+          { name: "Heading", selector: (row) => row.heading, sortable: true },
           { name: "Description", selector: (row) => row.text, sortable: true },
           { name: "Status", selector: (row) => row.issue_status, sortable: true },
           { name: "Created By", selector: (row) => row.created_by, sortable: true },
           { name: "Created On", selector: (row) =>dateFormat(row.created_at), sortable: true },
-          { name: "Prioity", selector: (row) => row.priority, sortable: true },
+        //   { name: "Prioity", selector: (row) => row.priority, sortable: true },
           { name: "Assigned To", selector: (row) => row.assigned_to, sortable: true },
           { name: "Ticket Type", selector: (row) => row.issue_type, sortable: true },
-          { name: "Related To", selector: (row) => row.issue_related_to, sortable: true },
           { name: "Total Time", selector: (row) => getTimeAgo(row.created_at), sortable: true },
-          { name: "TAT Resolution Breached", selector: (row) => (row.resolution_breached ? "Yes" : "No"), sortable: true },
+        //   { name: "TAT Resolution Breached", selector: (row) => (row.resolution_breached ? "Yes" : "No"), sortable: true },
     ];
 
     //custom style
