@@ -101,8 +101,6 @@ export const getComplaintsDetails = async (id) =>
           }
         })
       
-      
-
     
   export const postComplaintsDetails = async (data) => {
     try {
@@ -115,9 +113,18 @@ export const getComplaintsDetails = async (id) =>
 
   export const editComplaintsDetails = async (data) => {
     try {
-      const response = await axiosInstance.post(`/complaint_logs.json/complaint?token=${token}`, data)
+      const response = await axiosInstance.post(`/complaint_logs.json?token=${token}`, data)
       return response.data
     } catch (error) {
       throw error;
     }
   }
+
+  // export const editComplaintsDetails = async (compData) => {
+  //   axiosInstance.post (`/complaint_logs.json?token=${token}`,{
+  //     params : {
+  //       token : token,
+  //       complaint : compData
+  //     }
+  //   })
+  // }

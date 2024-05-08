@@ -80,11 +80,6 @@ const Ticket = () => {
     { name: "Assigned To", selector: (row) => row.assigned_to, sortable: true },
     { name: "Ticket Type", selector: (row) => row.issue_type, sortable: true },
     {
-      name: "Related To",
-      selector: (row) => row.issue_related_to,
-      sortable: true,
-    },
-    {
       name: "Total Time",
       selector: (row) => getTimeAgo(row.created_at),
       sortable: true,

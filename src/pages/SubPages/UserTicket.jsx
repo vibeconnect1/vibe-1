@@ -48,7 +48,7 @@ const UserTicket = () => {
   // setSelectedSiteId(siteID) 
   // console.log("site--", siteID)
 
-  // const complaitType = getItemInLocalStorage("complaintType")
+  const complaitType = getItemInLocalStorage("complaintType")
   // console.log("complaintType", complaitType)
 
 
@@ -163,43 +163,6 @@ const UserTicket = () => {
       reader.onerror = (error) => reject(error);
     });
   };
-
-
-  //    const handleFileChange = async (event) => {
-  //     const files = event.target.files;
-  //     const formData = new FormData();
-
-  //     for (const file of files) {
-  //       formData.append('attachments[]', file);
-  //     }
-  // formData.append('complaint_type',  "Complaint" )
-  // formData.append('building_name', 41)
-
-  // formData.append('unit_id', 245)
-  //     formData.append('category_type_id', "21");
-  //     formData.append('sub_category_id', "17");
-  //     formData.append('text', "hhhh");
-  //     formData.append('heading', "ppppp");
-  //     formData.append('of_phase', "pms");
-  //     formData.append('site_id', selectedSiteId);
-
-  //     try {
-  //       const response = await fetch('http://13.215.74.38/pms/complaints.json?token=775d6ae27272741669a65456ea10cc56cd4cce2bb99287b6', {
-  //         method: 'POST',
-  //         body: formData,
-  //       });
-
-  //       if (!response.ok) {
-  //         throw new Error('Failed to upload files');
-  //       }
-
-  //       console.log(response, "resss");
-
-  //     } catch (error) {
-  //       console.error('Error uploading files:', error);
-  //     }
-  //   };
-
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -330,16 +293,16 @@ const UserTicket = () => {
               {/* Floor Name */}
               <div className="flex gap-3 items-center">
                 <label htmlFor="" className="font-semibold">
-                  Floor Name :
+                  Unit Name :
                 </label>
                 <select
-                  value={formData.floor_name}
-                  name="floor_name"
+                  value={formData.unit_id}
+                  name="unit_id"
                   onChange={buildingChange}
                   className="border p-1 px-4 border-gray-500 rounded-md"
                 >
                   <option value="">Select Floor</option>
-                  {floor?.map(floorno => (
+                  {unitName?.map(floorno => (
                     <option
                       key={floorno.id}
                       // onClick={() => console.log("checking-category")}
@@ -353,18 +316,18 @@ const UserTicket = () => {
 
               <div className="flex gap-3 items-center">
                 <label htmlFor="" className="font-semibold">
-                  Unit Name :
+                  Floor :
                 </label>
 
                 <select
                   id="six"
-                  value={formData.unit_id}
+                  value={formData.floor_name}
                   name="unit_id"
                   onChange={buildingChange}
                   className="border p-2 px-4 border-gray-500 rounded-md"
                 >
-                  <option value="">Unit Name</option>
-                  {unitName?.map(floor => (
+                  <option value=""> Floor </option>
+                  {floor?.map(floor => (
                     <option key={floor.id} value={floor.id}>
                       {floor.name}
                     </option>

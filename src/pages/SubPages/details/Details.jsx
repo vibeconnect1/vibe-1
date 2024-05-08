@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
 import Detail from "../../../containers/Detail";
 import { getComplaintsDetails } from "../../../api";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import moment from "moment";
+import { BiEdit } from "react-icons/bi";
 
 
 const TicketDetails = () => {
@@ -59,18 +60,29 @@ const TicketDetails = () => {
     { title: "Total time:", description: getTimeAgo(ticketinfo.created_at) },
 
 
-    
-    
+
+
     { title: "Created By:", description: ticketinfo.created_by },
-   
+
   ];
   const domainPrefix = "https://admin.vibecopilot.ai";
   return (
     <div className="p-4">
       <div className="flex flex-col justify-around ">
-        <div className="">
+      
+          <div className="flex justify-end">
+            <p className="flex py-2 font-medium">Edit Details : </p>
+           <Link  to={`/edit/${id}`} > 
+            <button
+              className="border bg-gray-300">
+              <BiEdit size={35} 
+              />
+            </button>
+            </Link>
+          </div>
+
           <Detail details={ticketDetails} heading={"Ticket Details"} />
-        </div>
+      
         <div className="py-4 px-2 flex items-center flex-wrap gap-5">
           <p className="font-medium">Description:</p>
           <p className="text-wrap">{ticketinfo.text}</p>
@@ -80,19 +92,19 @@ const TicketDetails = () => {
           Attachments
         </h2>
         <div className="flex ">
-        {ticketinfo.documents &&
-          ticketinfo.documents.map((doc, index) => (
-            <div key={index} className="flex justify-start p-4">
-              <a href={domainPrefix + doc.document} target="_blank">
-              <img
-                src={domainPrefix + doc.document}
-                alt={`Attachment ${index}`}
-                width={"25%"}
-                />
+          {ticketinfo.documents &&
+            ticketinfo.documents.map((doc, index) => (
+              <div key={index} className="flex justify-start p-4">
+                <a href={domainPrefix + doc.document} target="_blank">
+                  <img
+                    src={domainPrefix + doc.document}
+                    alt={`Attachment ${index}`}
+                    width={"25%"}
+                  />
                 </a>
-            </div>
-          ))}
-          </div>
+              </div>
+            ))}
+        </div>
         <div className="border m-10" />
       </div>
     </div>

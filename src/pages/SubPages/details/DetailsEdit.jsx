@@ -2,17 +2,17 @@ import React, { useEffect, useState } from "react";
 import Detail from "../../../containers/Detail";
 import {
   editComplaintsDetails,
-  // editComplaintsDetails,
   fetchSubCategories,
   getAssignedTo,
   getComplaintsDetails,
   updateComplaintsDetails,
 } from "../../../api";
-import { useParams } from "react-router-dom";
+import { Navigate, useNavigate, useParams } from "react-router-dom";
 import { getItemInLocalStorage } from "../../../utils/localStorage";
 import toast from "react-hot-toast";
 
 const DetailsEdit = () => {
+  const navigate = useNavigate();
   const { id } = useParams();
   const [ticketinfo, setTicketInfo] = useState({});
   const [editTicketInfo, setEditTicketInfo] = useState({});
@@ -38,6 +38,7 @@ const DetailsEdit = () => {
     correction: "",
     documents: []
 
+
   });
   console.log(formData);
 
@@ -57,15 +58,16 @@ const DetailsEdit = () => {
           issue_status: response.data.issue_status,
           priority: response.data.priority,
           text: response.data.text,
-          status: response.data.status,
-          category_type_id: response.data.category_type_id,
-          sub_category_id: response.data.sub_category_id,
+          // status: response.data.status,
+          // category_type_id: response.data.category_type_id,
+          // sub_category_id: response.data.sub_category_id,
           issue_type: response.data.issue_type,
           root_cause: response.data.root_cause,
           impact: response.data.impact,
           proactive_reactive: response.data.proactive_reactive,
           correction: response.data.correction,
-          corrective_action: response.data.corrective_action
+          corrective_action: response.data.corrective_action,
+          comment : response.data.comment
         });
         setTicketInfo(response.data);
         setEditTicketInfo(response.data);
@@ -87,25 +89,25 @@ const DetailsEdit = () => {
       }
     };
 
-    const fetchSubCategories = async (e) => {
-      try {
-        const cat = await fetchSubCategories(categoryId);
-        // Update state with fetched data
-        setUnits(cat.data.sub_categories.map((item) => ({ name: item.name, id: item.id })));
-        console.log(cat);
-      } catch (error) {
-        console.error("Error fetching sub-categories:", error);
-        // Handle error here, e.g., set a state indicating fetch error
-      }
-      setFormData({
-        ...formData,
-        [e.target.name]: e.target.value,
-      });
-    };
+    // const fetchSubCategories = async (e) => {
+    //   try {
+    //     const cat = await fetchSubCategories(categoryId);
+    //     // Update state with fetched data
+    //     setUnits(cat.data.sub_categories.map((item) => ({ name: item.name, id: item.id })));
+    //     console.log(cat);
+    //   } catch (error) {
+    //     console.error("Error fetching sub-categories:", error);
+    //     // Handle error here, e.g., set a state indicating fetch error
+    //   }
+    //   setFormData({
+    //     ...formData,
+    //     [e.target.name]: e.target.value,
+    //   });
+    // };
 
     fetchDetails();
     fetchAssignedTo();
-    fetchSubCategories();
+    // fetchSubCategories();
   }, [id]);
 
 
@@ -145,6 +147,7 @@ const DetailsEdit = () => {
     });
   };
 
+  /*
   const saveEditDetails = async () => {
     try {
       await editComplaintsDetails(formData);
@@ -154,6 +157,43 @@ const DetailsEdit = () => {
       console.error("Error Saving in details update: ", error);
     }
   };
+
+  */
+
+  const saveEditDetails = async () => {
+    try {
+      const updatedData = {
+        complaint: {
+          issue_status: formData.issue_status,
+          complaint_type: formData.issue_type,
+          priority: formData.priority,
+          assigned_to: formData.assigned_to,
+          root_cause: formData.root_cause,
+          impact: formData.impact,
+          corrective_action: formData.corrective_action,
+          proactive_reactive: formData.proactive_reactive,
+          correction: formData.correction,
+        },
+        complaint_log : {
+          issue_status: formData.issue_status,
+          priority: formData.priority,
+          assigned_to: formData.assigned_to,
+          comment: formData.comment,
+          complaint_id: id,
+
+        }
+      };
+  
+      await editComplaintsDetails(updatedData);
+      console.log("Edited Ticket Details:", formData);
+      toast.success("Updated Successfully");
+      navigate('/tickets');
+      navigate
+    } catch (error) {
+      console.error("Error Saving in details update: ", error);
+    }
+  };
+  
 
   const ticketDetails = [
     { title: "Ticket No.:", description: ticketinfo.ticket_number || "" },
