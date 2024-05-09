@@ -7,7 +7,7 @@ import { getItemInLocalStorage, setItemInLocalStorage } from "../../utils/localS
 import { fetchSubCategories, getAssignedTo, getComplaints, getFloors, getUnits, postComplaintsDetails } from "../../api";
 import toast from "react-hot-toast";
 
-const CreateTicket = (data) => {
+const CreateTicket = () => {
   const navigate = useNavigate();
 
   const [behalf, setBehalf] = useState("self");
@@ -29,7 +29,7 @@ const CreateTicket = (data) => {
   const [formData, setFormData] = useState({
     category_type_id: "",
     sub_category_id: "",
-    assigned_to: "",
+   
     priority: "",
     of_phase: "pms",
     // site_id: selectedSiteId,
@@ -414,7 +414,7 @@ const CreateTicket = (data) => {
                   onChange={handleChange}
                   id="priority"
                   name="priority"
-                  className="w-fit p-2 rounded-md px-4"
+                  className="w-fit p-2 border-gray-500 border rounded-md px-4"
                 >
                   <option value="P1">P1</option>
                   <option value="P2">P2</option>
@@ -526,7 +526,7 @@ const CreateTicket = (data) => {
               id=""
               cols="80"
               rows="5"
-              className="border border-black rounded-md"
+              className="border border-black rounded-md px-2"
               value={formData.text}
               onChange={handleChange}
             />

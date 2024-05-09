@@ -24,7 +24,7 @@ const DetailsEdit = () => {
   const [formData, setFormData] = useState({
     category_type_id: "",
     // sub_category: "",
-    sub_category_id: ""  ,
+    sub_category_id: "",
     heading: "",
     text: "",
     assigned_to: "",
@@ -41,8 +41,7 @@ const DetailsEdit = () => {
     proactive_reactive: "Reactive",
     correction: "",
     documents: [],
-    assigned_to_id: ""
-
+    assigned_to_id: "",
   });
   console.log(formData);
 
@@ -74,34 +73,31 @@ const DetailsEdit = () => {
           proactive_reactive: response.data.proactive_reactive,
           correction: response.data.correction,
           corrective_action: response.data.corrective_action,
-          comment : response.data.comment,
-          docs: response.data.documents
+          comment: response.data.comment,
+          docs: response.data.documents,
         });
         setTicketInfo(response.data);
         setEditTicketInfo(response.data);
-        
-      }  
-
-      
-
-      catch (error) {
-        console.error("Error fetching details:", error)
+        fetchEditSubCategories(response.data.category_type_id);
+      } catch (error) {
+        console.error("Error fetching details:", error);
       }
     };
-
-
-    async function fetchSubCategory(categoryId) {
+    const fetchEditSubCategories = async (categoryId) => {
       try {
         const cat = await fetchSubCategories(categoryId);
-        setUnits(cat.data.sub_categories.map((item) => ({ name: item.name, id: item.id })));
-        console.log("categories",cat);
+        setUnits(
+          cat.data.sub_categories.map((item) => ({
+            name: item.name,
+            id: item.id,
+          }))
+        );
+
+        console.log("categories", cat);
       } catch (e) {
         console.log(e);
       }
-    }
-
-
-    
+    };
 
     const fetchAssignedTo = async () => {
       try {
@@ -115,9 +111,8 @@ const DetailsEdit = () => {
 
     fetchDetails();
     fetchAssignedTo();
-    fetchSubCategory(formData.category_type_id);
+    // fetchEditSubCategories(formData.category_type_id);
   }, []);
-
 
   const handleTicketDetails = (e, name) => {
     setFormData({
@@ -141,8 +136,6 @@ const DetailsEdit = () => {
 
   const saveEditDetails = async () => {
     try {
-
-      
       const updatedData = {
         complaint: {
           category_type_id: formData.category_type_id,
@@ -157,47 +150,54 @@ const DetailsEdit = () => {
           proactive_reactive: formData.proactive_reactive,
           correction: formData.correction,
         },
-        complaint_log : {
+        complaint_log: {
           log_status: formData.issue_status,
           issue_status: formData?.issue_status,
           priority: formData.priority,
           assigned_to: formData.assigned_to,
           comment: formData.comment,
           complaint_id: id,
-          documents: formData.documents
+          documents: formData.documents,
         },
         complaint_comment: {
           docs: formData.documents,
         },
       };
-      
-      toast.loading("Please Wait Submitting Details!")
+
+      toast.loading("Please Wait Submitting Details!");
       await editComplaintsDetails(updatedData);
       console.log("Edited Ticket Details:", formData);
       toast.dismiss();
 
       toast.success("Updated Successfully");
-      navigate('/tickets');
+      navigate("/tickets");
     } catch (error) {
       console.error("Error Saving in details update: ", error);
     }
   };
 
-
   const handleChange = async (e) => {
     async function fetchSubCategory(categoryId) {
       try {
         const cat = await fetchSubCategories(categoryId);
-        setUnits(cat.data.sub_categories.map((item) => ({ name: item.name, id: item.id })));
-        console.log("categories",cat);
+        setUnits(
+          cat.data.sub_categories.map((item) => ({
+            name: item.name,
+            id: item.id,
+          }))
+        );
+        console.log("categories", cat);
       } catch (e) {
         console.log(e);
       }
     }
 
-    if (e.target.type === "select-one" && e.target.name === "category_type_id") {
+    if (
+      e.target.type === "select-one" &&
+      e.target.name === "category_type_id"
+    ) {
       const categoryId = Number(e.target.value);
-      console.log(categoryId)
+      console.log(categoryId);
       await fetchSubCategory(categoryId);
       setFormData({
         ...formData,
@@ -211,18 +211,20 @@ const DetailsEdit = () => {
       });
     }
   };
-  
+
+  console.log(formData.category_type_id);
+  console.log("SubCategory" + formData.sub_category_id);
 
   const ticketDetails = [
     // { title: "Status  :", description: ticketinfo.issue_status },
-    
+
     // { title: "Issue Type  :", description: ticketinfo.issue_type },
     // { title: "Assigned To  :", description: ticketinfo.assigned_to },
-    
+
     // { title: "Customer Name:", description: ticketinfo.customer },
     // { title: "Category  :", description: ticketinfo.category_type },
     // { title: "Priority  :", description: ticketinfo.priority },
-    
+
     // { title: "Sub category  :", description: ticketinfo.sub_category },
     // { title: "Total time  :", description: getTimeAgo(ticketinfo.created_at) },
 
@@ -230,12 +232,7 @@ const DetailsEdit = () => {
 
     {
       title: "Title :",
-      description: (
-
-        <p>
-          {formData.heading}
-        </p>
-      ),
+      description: <p>{formData.heading}</p>,
     },
 
     { title: "Site  :", description: ticketinfo.site_name },
@@ -244,9 +241,6 @@ const DetailsEdit = () => {
     { title: "Unit  :", description: ticketinfo.unit },
     { title: "Related To  :", description: ticketinfo.issue_related_to },
 
-
-
-
     // { title: " Current status  :", description: ticketinfo.issue_status },
     {
       title: "Status :",
@@ -254,7 +248,9 @@ const DetailsEdit = () => {
         <select
           value={formData.issue_status || ""}
           name="issue_status"
-          onChange={e => setFormData({ ...formData, issue_status: e.target.value })}
+          onChange={(e) =>
+            setFormData({ ...formData, issue_status: e.target.value })
+          }
           className="border p-1 px-4 grid border-gray-500 rounded-md"
         >
           <option value="">Select Status</option>
@@ -267,17 +263,17 @@ const DetailsEdit = () => {
       ),
     },
 
-
-
     // { title: "Current Issue Type  :", description: ticketinfo.issue_type },
     {
       title: "Issue Type :",
       description: (
         <select
-        name="issue_type"
-        value={formData.issue_type || ""}
-        onChange={e => setFormData({ ...formData, issue_type: e.target.value })}
-        className="border p-1 px-4 border-gray-400 rounded-md"
+          name="issue_type"
+          value={formData.issue_type || ""}
+          onChange={(e) =>
+            setFormData({ ...formData, issue_type: e.target.value })
+          }
+          className="border p-1 px-4 border-gray-400 rounded-md"
         >
           <option value="Request">Request</option>
           <option value="Complaint">Complaint</option>
@@ -292,7 +288,9 @@ const DetailsEdit = () => {
         <select
           name="priority"
           value={formData.priority || ""}
-          onChange={e => setFormData({ ...formData, priority: e.target.value })}
+          onChange={(e) =>
+            setFormData({ ...formData, priority: e.target.value })
+          }
           className="border p-1 px-4 border-gray-400 rounded-md"
         >
           <option value="">Select Priority</option>
@@ -310,8 +308,10 @@ const DetailsEdit = () => {
       description: (
         <select
           value={formData.assigned_to_id || ""}
-          name="assigned_to"
-          onChange={(e) => setFormData({ ...formData, assigned_to: e.target.value })}
+          name="assigned_to_id"
+          onChange={(e) =>
+            setFormData({ ...formData, assigned_to_id: e.target.value })
+          }
           className="border p-1 px-4 border-gray-500 rounded-md"
         >
           <option value="">Select Assign To</option>
@@ -323,14 +323,16 @@ const DetailsEdit = () => {
         </select>
       ),
     },
-    
+
     {
       title: "Proactive/Reactive :",
       description: (
         <select
           name="proactive_reactive"
           value={formData.proactive_reactive}
-          onChange={e => setFormData({ ...formData, proactive_reactive: e.target.value })}
+          onChange={(e) =>
+            setFormData({ ...formData, proactive_reactive: e.target.value })
+          }
           className="border p-1 px-4 border-gray-400 rounded-md"
         >
           {/* <option value="Proactive">Proactive</option> */}
@@ -338,14 +340,13 @@ const DetailsEdit = () => {
           <option value="">Select Option</option>
           <option value="Reactive">Reactive</option>
           <option value="Proactive">Proactive</option>
-
         </select>
       ),
     },
 
     {
-      title : "Categories:",
-      description : (
+      title: "Categories:",
+      description: (
         <select
           id="two"
           value={formData.category_type_id}
@@ -354,7 +355,7 @@ const DetailsEdit = () => {
           className="border p-1 px-4 border-gray-500 rounded-md"
         >
           <option value="">Select Category</option>
-          {categories?.map(category => (
+          {categories?.map((category) => (
             <option
               key={category.id}
               onClick={() => console.log("checking-category")}
@@ -364,29 +365,27 @@ const DetailsEdit = () => {
             </option>
           ))}
         </select>
-      )
+      ),
     },
     {
-      title : " SubCategories:", 
-      description : (
+      title: " Sub Categories:",
+      description: (
         <select
-                  id="five"
-                  value={formData.sub_category_id}
-                  name="sub_category_id"
-                  onChange={handleChange}
-                  className="border p-2 px-4 border-gray-500 rounded-md"
-                >
-                  <option value="">Sub Category</option>
-                  {units?.map(floor => (
-                    <option key={floor.id} value={floor.id}>
-                      {floor.name}
-                    </option>
-                  ))}
-                </select>
-      )
-    }
-
-    
+          id="five"
+          value={formData.sub_category_id}
+          name="sub_category_id"
+          onChange={handleChange}
+          className="border p-2 px-4 border-gray-500 rounded-md"
+        >
+          <option value="">Sub Category</option>
+          {units?.map((floor) => (
+            <option key={floor.id} value={floor.id}>
+              {floor.name}
+            </option>
+          ))}
+        </select>
+      ),
+    },
   ];
 
   const FileChange = async (event) => {
@@ -399,19 +398,16 @@ const DetailsEdit = () => {
     }
     console.log("Array base64-", base64Array);
     const formattedBase64Array = base64Array.map((base64) => {
-      return base64.split(',')[1];
+      return base64.split(",")[1];
     });
 
     console.log("Fornat", formattedBase64Array);
 
     setFormData({
       ...formData,
-      documents: formattedBase64Array
-    })
+      documents: formattedBase64Array,
+    });
   };
-
-  
-
 
   const convertFileToBase64 = (file) => {
     return new Promise((resolve, reject) => {
@@ -422,14 +418,11 @@ const DetailsEdit = () => {
     });
   };
 
-
   return (
-
     <div className="grid ">
       <div className="flex flex-col justify-around gap-10 my-10 ">
         <div className="">
           <Detail details={ticketDetails} heading={"Edit Ticket Details"} />
-
         </div>
 
         <div className="flex flex-col  flex-wrap gap-2">
@@ -439,65 +432,75 @@ const DetailsEdit = () => {
           <div className="px-4 flex flex-col gap-1 justify-center">
             <p className="font-medium">Root Cause :</p>
             <textarea
-            name="root_cause"
-            // placeholder="heading"
-            cols="15"
-            rows="2"
-            value={formData.root_cause}
-            onChange={e => setFormData({ ...formData, root_cause: e.target.value })}
-            className="border p-1 px-4 border-gray-400 rounded-md"
-          ></textarea>
+              name="root_cause"
+              // placeholder="heading"
+              cols="15"
+              rows="2"
+              value={formData.root_cause}
+              onChange={(e) =>
+                setFormData({ ...formData, root_cause: e.target.value })
+              }
+              className="border p-1 px-4 border-gray-400 rounded-md"
+            ></textarea>
           </div>
           <div className="px-4 flex flex-col gap-1 justify-center">
             <p className="font-medium">Impact :</p>
             <textarea
-            name="impact"
-            // placeholder="heading"
-            cols="15"
-            rows="2"
-            value={formData.impact}
-            onChange={e => setFormData({ ...formData, impact: e.target.value })}
-            className="border p-1 px-4 border-gray-400 rounded-md"
-          ></textarea>
+              name="impact"
+              // placeholder="heading"
+              cols="15"
+              rows="2"
+              value={formData.impact}
+              onChange={(e) =>
+                setFormData({ ...formData, impact: e.target.value })
+              }
+              className="border p-1 px-4 border-gray-400 rounded-md"
+            ></textarea>
           </div>
-         
+
           <div className="px-4 flex flex-col gap-1 justify-center">
             <p className="font-medium">Corrective Action :</p>
             <textarea
-            name="corrective_action"
-            // placeholder="heading"
-            cols="15"
-            rows="2"
-            value={formData.corrective_action}
-            onChange={e => setFormData({ ...formData, corrective_action: e.target.value })}
-            className="border p-1 px-4 border-gray-400 rounded-md"
-          ></textarea>
+              name="corrective_action"
+              // placeholder="heading"
+              cols="15"
+              rows="2"
+              value={formData.corrective_action}
+              onChange={(e) =>
+                setFormData({ ...formData, corrective_action: e.target.value })
+              }
+              className="border p-1 px-4 border-gray-400 rounded-md"
+            ></textarea>
           </div>
-          
+
           <div className="px-4 flex flex-col gap-1 justify-center">
             <p className="font-medium">Correction :</p>
             <textarea
-            name="correction"
-            // placeholder="heading"
-            cols="15"
-            rows="2"
-            value={formData.correction}
-            onChange={e => setFormData({ ...formData, correction: e.target.value })}
-            className="border p-1 px-4 border-gray-400 rounded-md"
-          ></textarea>
+              name="correction"
+              // placeholder="heading"
+              cols="15"
+              rows="2"
+              value={formData.correction}
+              onChange={(e) =>
+                setFormData({ ...formData, correction: e.target.value })
+              }
+              className="border p-1 px-4 border-gray-400 rounded-md"
+            ></textarea>
           </div>
         </div>
-        
+
         <div className="flex gap-2 m-4 flex-col ">
-        
-            <label htmlFor="description" className="font-semibold ">Comment:</label>
-            <textarea
-              name="text"
-              value={formData.comment}
-              className="border p-1 px-4 border-gray-400 rounded-md w-full"
-              onChange={e => setFormData({ ...formData, comment: e.target.value })}
-            />
-          
+          <label htmlFor="description" className="font-semibold ">
+            Comment:
+          </label>
+          <textarea
+            name="text"
+            value={formData.comment}
+            className="border p-1 px-4 border-gray-400 rounded-md w-full"
+            onChange={(e) =>
+              setFormData({ ...formData, comment: e.target.value })
+            }
+          />
         </div>
 
         {/* <div className="p-1">
@@ -513,7 +516,6 @@ const DetailsEdit = () => {
       </div> */}
       </div>
 
-      
       <FileInput
         type="file"
         name="documents"
@@ -532,7 +534,6 @@ const DetailsEdit = () => {
         </button>
       </div>
     </div>
-
   );
 };
 
