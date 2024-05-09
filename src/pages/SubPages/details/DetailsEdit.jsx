@@ -326,6 +326,7 @@ const DetailsEdit = () => {
 
     {
       title: "Proactive/Reactive :",
+      
       description: (
         <select
           name="proactive_reactive"
