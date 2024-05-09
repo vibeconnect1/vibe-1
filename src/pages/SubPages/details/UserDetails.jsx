@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from "react";
 import Detail from "../../../containers/Detail";
 import { editComplaintsDetails, getComplaintsDetails } from "../../../api";
-import { Link, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import moment from "moment";
 import { BiEdit } from "react-icons/bi";
 import toast from "react-hot-toast";
+import { comment } from "postcss";
 
 
 const UserDetails = () => {
+    // const navigate = useNavigate()
     const { id } = useParams();
     const [ticketinfo, setTicketInfo] = useState([]);
     const [formData, setFormData] = useState({
@@ -60,8 +62,11 @@ const UserDetails = () => {
                 comment: "",
                 documents: [],
             });
+
+
             console.log("Edited Ticket Details:", updatedData);
             toast.success("Updated Successfully");
+            // navigate(`/tickets/user-details/${id}`)
         } catch (error) {
             console.error("Error Saving in details update: ", error);
         }
@@ -75,7 +80,7 @@ const UserDetails = () => {
             setTicketInfo(response.data);
         };
         fetchDetails();
-    }, []);
+    }, [formData.comment]);
 
 
     const getTimeAgo = (timestamp) => {
@@ -189,7 +194,80 @@ const UserDetails = () => {
                             </div>
                         ))}
                 </div>
+                
                 <div className="border m-10" />
+        <h2 className="text-center w-screen bg-black text-white font-semibold my-5 text-lg p-2 px-4 ">
+          Logs
+        </h2>
+        {/* <div className="border m-10 " /> */}
+
+        {ticketinfo.complaint_logs &&
+          ticketinfo.complaint_logs.map((log) => (
+            <div
+              className="md:flex  justify-center "
+              key={log.id}
+            >
+              <ol className="relative  border-gray-200 w-full">
+                <li className="mb-6 sm:mb-10 md:ms-6">
+                  <div className="items-center justify-between p-4  border border-gray-200 rounded-lg shadow-sm sm:flex  dark:border-gray-600">
+                    <time className="mb-1 text-xs font-normal text-gray-900 sm:order-last sm:mb-0">
+                      {dateFormat(log.created_at)}
+                    </time>
+                    <div className="text-sm font-normal text-gray-500 dark:text-gray-300">
+                      {" "}
+                      <div className="text-sm font-semibold text-gray-900 dark:text-gray mb-5">
+                        Priority :{" "}
+                        <a
+                          href="#"
+                          className="font-semibold text-gray-900 dark:text-gray hover:underline"
+                        >
+                          {" "}
+                          {log.priority}{" "}
+                        </a>
+                      </div>
+                      <div className="text-sm font-semibold text-gray-900 dark:text-gray mb-5">
+                        Comment :{" "}
+                        <a
+                          href="#"
+                          className="font-semibold text-gray-900 dark:text-gray hover:underline"
+                        >
+                          {log.log_comment}
+                        </a>
+                      </div>
+                      <div className="text-sm font-semibold text-gray-900 dark:text-gray mb-5">
+                        Status:{" "}
+                        <a
+                          href="#"
+                          className="font-semibold text-gray-900 dark:text-gray hover:underline"
+                        >
+                          {log.log_status}
+                        </a>
+                      </div>
+                      <div className="flex gap-4">
+                        <p className="font-medium text-black">Log By:</p>
+                        <p className="font-medium text-black">{log.log_by}</p>
+                      </div>
+                      {log.documents &&
+                        log.documents.map((doc, index) => (
+                          <div key={index} className="flex justify-start p-4">
+                            <a
+                              href={domainPrefix + doc.document}
+                              target="_blank"
+                            >
+                              <img
+                                src={domainPrefix + doc.document}
+                                alt={`Attachment ${index}`}
+                                width={"25%"}
+                              />
+                            </a>
+                          </div>
+                        ))}
+                    </div>
+                  </div>
+                </li>
+              </ol>
+            </div>
+          ))}
             </div>
         </div>
     );

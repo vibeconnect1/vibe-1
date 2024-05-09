@@ -18,7 +18,7 @@ const UserTicket = () => {
   const [units, setUnits] = useState([]);
   const [selectedSiteId, setSelectedSiteId] = useState();
   const [disSubmit, setDisSubmit] = useState(false);
-
+  const unitRR = getItemInLocalStorage("UNITID");
   const siteID = getItemInLocalStorage("SITEID")
   const [formData, setFormData] = useState({
     category_type_id: "",
@@ -30,6 +30,7 @@ const UserTicket = () => {
     documents: [],
     issue_type_id: "",
     complaint_type: "",
+    unit_id : unitRR,
   });
 
   console.log(formData);
@@ -40,20 +41,21 @@ const UserTicket = () => {
   const user = getItemInLocalStorage("user")
   console.log("User",user.unit_name );
 
+
+
   const categories = getItemInLocalStorage("categories");
   // console.log("categories-- ", categories);
 
 
-  // const siteID = getItemInLocalStorage("SITEID")
   // setSelectedSiteId(siteID) 
-  // console.log("site--", siteID)
+  console.log("site--", siteID)
 
   const userName = localStorage.getItem("Name");
 
   // const siteID = getItemInLocalStorage("SITEID")
   // setSelectedSiteId(siteID) 
 
-  const complaitType = getItemInLocalStorage("complaintType")
+  // const complaitType = getItemInLocalStorage("complaintType")
   // console.log("complaintType", complaitType)
 
 
@@ -226,9 +228,9 @@ const UserTicket = () => {
                   className="border p-1 px-4 border-gray-500 rounded-md"
                 >
                   <option value="">Select Area</option>
-                  <option value="Complaint">Apartment</option>
-                  <option value="Suggestion">Shop</option>
-                  <option value="Request">Common Area</option>
+                  <option value="Apartment">Apartment</option>
+                  <option value="Shop">Shop</option>
+                  <option value="Common Area">Common Area</option>
                 </select>
               </div>
 

@@ -18,13 +18,13 @@ const TicketDetails = () => {
   });
 
 
-  console.log(formData);
+  // console.log(formData);
 
 
   useEffect(() => {
     const fetchDetails = async () => {
       const response = await getComplaintsDetails(id);
-      console.log(response.data);
+      // console.log(response.data);
       setTicketInfo(response.data);
     };
     fetchDetails();
@@ -68,20 +68,23 @@ const TicketDetails = () => {
     { title: "Unit  :", description: ticketinfo.unit },
     { title: "Total time  :", description: getTimeAgo(ticketinfo.created_at) },
 
-
-    {
-      title: "Response Breached  :",
-      description: ticketinfo.response_breached ? "Yes" : "No",
-    },
-    {
-      title: " Resolution Breached  :",
-      description: ticketinfo.resolution_breached ? "Yes" : "No",
-    },
+    // {
+    //   title: "Response Breached  :",
+    //   description: ticketinfo.response_breached ? "Yes" : "No",
+    // },
+    // {
+    //   title: " Resolution Breached  :",
+    //   description: ticketinfo.resolution_breached ? "Yes" : "No",
+    // },
     { title: "Created By  :", description: ticketinfo.created_by },
     { title: "Created On  :", description: dateFormat(ticketinfo.created_at) },
     { title: "Updated On  :", description: dateFormat(ticketinfo.updated_at) },
   ];
   const domainPrefix = "https://admin.vibecopilot.ai";
+
+  console.log(ticketinfo);
+
+  const logs = [{ title: "logs", description: " " }];
   return (
     <div className="">
       <div className="flex flex-col justify-around ">
@@ -109,23 +112,23 @@ const TicketDetails = () => {
           </div>
           <div className="px-4 flex flex-col gap-1 justify-center">
             <p className="font-medium">Impact :</p>
-            <p className="text-wrap">{ticketinfo.impact}</p>
+            <p className="text-wrap bg-gray-200 p-2 rounded-md">{ticketinfo.impact}</p>
           </div>
           <div className="px-4 flex flex-col gap-1 justify-center">
             <p className="font-medium">Root Cause :</p>
-            <p className="text-wrap">{ticketinfo.root_cause}</p>
+            <p className="text-wrap bg-gray-200 p-2 rounded-md ">{ticketinfo.root_cause}</p>
           </div>
           <div className="px-4 flex flex-col gap-1 justify-center">
             <p className="font-medium">Corrective Action :</p>
-            <p className="text-wrap">{ticketinfo.corrective_action}</p>
+            <p className="text-wrap bg-gray-200 p-2 rounded-md">{ticketinfo.corrective_action}</p>
           </div>
           <div className="px-4 flex flex-col gap-1 justify-center">
             <p className="font-medium">Proactive/Reactive :</p>
-            <p className="text-wrap">{ticketinfo.proactive_reactive}</p>
+            <p className="text-wrap bg-gray-200 p-2 rounded-md">{ticketinfo.proactive_reactive}</p>
           </div>
           <div className="px-4 flex flex-col gap-1 justify-center">
             <p className="font-medium">Correction :</p>
-            <p className="text-wrap">{ticketinfo.correction}</p>
+            <p className="text-wrap bg-gray-200 p-2 rounded-md">{ticketinfo.correction}</p>
           </div>
         </div>
         {/* <div className="border " /> */}
@@ -147,6 +150,80 @@ const TicketDetails = () => {
             ))}
         </div>
         <div className="border m-10" />
+        <h2 className="text-center w-screen bg-black text-white font-semibold my-5 text-lg p-2 px-4 ">
+          Logs
+        </h2>
+        {/* <div className="border m-10 " /> */}
+
+        {ticketinfo.complaint_logs &&
+          ticketinfo.complaint_logs.map((log) => (
+            <div
+              className="md:flex  justify-center "
+              key={log.id}
+            >
+              <ol className="relative  border-gray-200 w-full">
+                <li className="mb-6 sm:mb-10 md:ms-6">
+                  <div className="items-center justify-between p-4  border border-gray-200 rounded-lg shadow-sm sm:flex  dark:border-gray-600">
+                    <time className="mb-1 text-xs font-normal text-gray-900 sm:order-last sm:mb-0">
+                      {dateFormat(log.created_at)}
+                    </time>
+                    <div className="text-sm font-normal text-gray-500 dark:text-gray-300">
+                      {" "}
+                      {log.priority && <div className="text-sm font-semibold text-gray-900 dark:text-gray mb-5">
+                        Priority :{" "}
+                        <a
+                          href="#"
+                          className="font-semibold text-gray-900 dark:text-gray hover:underline"
+                        >
+                          {" "}
+                          {log.priority}{" "}
+                        </a>
+                      </div>}
+                    {log.log_comment && <div className="text-sm font-semibold text-gray-900 dark:text-gray mb-5">
+                      Comment :{" "}
+                      <a
+                        href="#"
+                        className="font-semibold text-gray-900 dark:text-gray hover:underline"
+                      >
+                        {log.log_comment}
+                      </a>
+                    </div>}
+                      {log.log_status && <div className="text-sm font-semibold text-gray-900 dark:text-gray mb-5">
+                        Status:{" "}
+                        <a
+                          href="#"
+                          className="font-semibold text-gray-900 dark:text-gray hover:underline"
+                        >
+                          {log.log_status}
+                        </a>
+                      </div>}
+                  {log.log_by && <div className="flex gap-4">
+                    <p className="font-medium text-black">Log By:</p>
+                    <p className="font-medium text-black">{log.log_by}</p>
+                  </div>}
+                      {log.documents &&
+                        log.documents.map((doc, index) => (
+                          <div key={index} className="flex justify-start p-4">
+                            <a
+                              href={domainPrefix + doc.document}
+                              target="_blank"
+                            >
+                              <img
+                                src={domainPrefix + doc.document}
+                                alt={`Attachment ${index}`}
+                                width={"25%"}
+                              />
+                            </a>
+                          </div>
+                        ))}
+                    </div>
+                  </div>
+                </li>
+              </ol>
+            </div>
+          ))}
+
+
       </div>
     </div>
   );

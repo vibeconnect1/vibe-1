@@ -48,7 +48,10 @@ const Login = () => {
 
       const loginD = response.data.user
       setItemInLocalStorage("user", loginD)
-      // console.log("User details", loginD)
+      console.log("User details", loginD)
+
+      const unitId = response.data.user.unit_id;
+      setItemInLocalStorage("UNITID", unitId);
 
       const building = response.data.buildings;
       setItemInLocalStorage("Building", building);

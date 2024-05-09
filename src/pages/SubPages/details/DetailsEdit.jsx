@@ -10,6 +10,8 @@ import {
 import { Navigate, useNavigate, useParams } from "react-router-dom";
 import { getItemInLocalStorage } from "../../../utils/localStorage";
 import toast from "react-hot-toast";
+import FileInput from "../../../Buttons/FileInput";
+import { select } from "@material-tailwind/react";
 
 const DetailsEdit = () => {
   const navigate = useNavigate();
@@ -17,10 +19,12 @@ const DetailsEdit = () => {
   const [ticketinfo, setTicketInfo] = useState({});
   const [editTicketInfo, setEditTicketInfo] = useState({});
   const [assignedUser, setAssignedUser] = useState();
-  const [categ, setCateg] = useState([])
+  const [categ, setCateg] = useState([]);
+  const [units, setUnits] = useState([]);
   const [formData, setFormData] = useState({
-    // category_type_id: "",
-    // sub_category_id: "",  
+    category_type_id: "",
+    sub_category: "",
+    sub_category_id: ""  ,
     heading: "",
     text: "",
     assigned_to: "",
@@ -34,13 +38,14 @@ const DetailsEdit = () => {
     root_cause: "",
     impact: "",
     corrective_action: "",
-    proactive_reactive: "",
+    proactive_reactive: "Reactive",
     correction: "",
     documents: []
 
-
   });
   console.log(formData);
+
+
 
   const categories = getItemInLocalStorage("categories");
   // console.log(categories , "Catss")
@@ -53,8 +58,11 @@ const DetailsEdit = () => {
         // Update state with fetched data
         setFormData({
           ...formData,
+          // category_type_id: response.data.category_type_id,
+          // sub_category_id: response.data.sub_category_id,
           heading: response.data.heading,
           assigned_to: response.data.assigned_to,
+          assigned_to_id: response.data.assigned_to_id,
           issue_status: response.data.issue_status,
           priority: response.data.priority,
           text: response.data.text,
@@ -67,7 +75,8 @@ const DetailsEdit = () => {
           proactive_reactive: response.data.proactive_reactive,
           correction: response.data.correction,
           corrective_action: response.data.corrective_action,
-          comment : response.data.comment
+          comment : response.data.comment,
+          docs: response.data.documents
         });
         setTicketInfo(response.data);
         setEditTicketInfo(response.data);
@@ -92,7 +101,6 @@ const DetailsEdit = () => {
 
     fetchDetails();
     fetchAssignedTo();
-    // fetchSubCategories();
   }, [id]);
 
 
@@ -118,9 +126,13 @@ const DetailsEdit = () => {
 
   const saveEditDetails = async () => {
     try {
+
+      
       const updatedData = {
         complaint: {
-          issue_status: formData.issue_status,
+          category_type_id: formData.category_type_id,
+          sub_category_id: formData.sub_category_id,
+          issue_status: formData?.issue_status,
           complaint_type: formData.issue_type,
           priority: formData.priority,
           assigned_to: formData.assigned_to,
@@ -131,27 +143,75 @@ const DetailsEdit = () => {
           correction: formData.correction,
         },
         complaint_log : {
-          issue_status: formData.issue_status,
+          log_status: formData.issue_status,
+          issue_status: formData?.issue_status,
           priority: formData.priority,
           assigned_to: formData.assigned_to,
           comment: formData.comment,
           complaint_id: id,
-
-        }
+          documents: formData.documents
+        },
+        complaint_comment: {
+          docs: formData.documents,
+        },
       };
-  
+      
+      toast.loading("Please Wait Submitting Details!")
       await editComplaintsDetails(updatedData);
-      console.log("Edited Ticket Details:", formData);
+      // console.log("Edited Ticket Details:", formData);
+      toast.dismiss();
+
       toast.success("Updated Successfully");
       navigate('/tickets');
     } catch (error) {
       console.error("Error Saving in details update: ", error);
     }
   };
+
+
+  const handleChange = async (e) => {
+    async function fetchSubCategory(categoryId) {
+      try {
+        const cat = await fetchSubCategories(categoryId);
+        setUnits(cat.data.sub_categories.map((item) => ({ name: item.name, id: item.id })));
+        // console.log(cat);
+      } catch (e) {
+        console.log(e);
+      }
+    }
+
+    if (e.target.type === "select-one" && e.target.name === "categories") {
+      const categoryId = Number(e.target.value);
+      await fetchSubCategory(categoryId);
+      setFormData({
+        ...formData,
+        category_type_id: categoryId,
+        sub_category_id: "",
+      });
+    } else {
+      setFormData({
+        ...formData,
+        [e.target.name]: e.target.value,
+      });
+    }
+  };
   
 
   const ticketDetails = [
+    // { title: "Status  :", description: ticketinfo.issue_status },
+    
+    // { title: "Issue Type  :", description: ticketinfo.issue_type },
+    // { title: "Assigned To  :", description: ticketinfo.assigned_to },
+    
+    // { title: "Customer Name:", description: ticketinfo.customer },
+    // { title: "Category  :", description: ticketinfo.category_type },
+    // { title: "Priority  :", description: ticketinfo.priority },
+    
+    // { title: "Sub category  :", description: ticketinfo.sub_category },
+    // { title: "Total time  :", description: getTimeAgo(ticketinfo.created_at) },
+
     { title: "Ticket No.:", description: ticketinfo.ticket_number || "" },
+
     {
       title: "Title :",
       description: (
@@ -162,8 +222,16 @@ const DetailsEdit = () => {
       ),
     },
 
+    { title: "Site  :", description: ticketinfo.site_name },
+    { title: "Building Name  :", description: ticketinfo.building_name },
+    { title: "Floor Name  :", description: ticketinfo.floor_name },
+    { title: "Unit  :", description: ticketinfo.unit },
+    { title: "Related To  :", description: ticketinfo.issue_related_to },
 
-    { title: "Status  :", description: ticketinfo.issue_status },
+
+
+
+    // { title: " Current status  :", description: ticketinfo.issue_status },
     {
       title: "Status :",
       description: (
@@ -173,7 +241,7 @@ const DetailsEdit = () => {
           onChange={e => setFormData({ ...formData, issue_status: e.target.value })}
           className="border p-1 px-4 grid border-gray-500 rounded-md"
         >
-          <option value="">Select Option</option>
+          <option value="">Select Status</option>
           {statuses?.map((floor) => (
             <option value={floor.id} key={floor.id}>
               {floor.name}
@@ -183,15 +251,17 @@ const DetailsEdit = () => {
       ),
     },
 
-    { title: "Issue Type  :", description: ticketinfo.issue_type },
+
+
+    // { title: "Current Issue Type  :", description: ticketinfo.issue_type },
     {
       title: "Issue Type :",
       description: (
         <select
-          name="issue_type"
-          value={formData.issue_type || ""}
-          onChange={e => setFormData({ ...formData, issue_type: e.target.value })}
-          className="border p-1 px-4 border-gray-400 rounded-md"
+        name="issue_type"
+        value={formData.issue_type || ""}
+        onChange={e => setFormData({ ...formData, issue_type: e.target.value })}
+        className="border p-1 px-4 border-gray-400 rounded-md"
         >
           <option value="Request">Request</option>
           <option value="Complaint">Complaint</option>
@@ -199,7 +269,7 @@ const DetailsEdit = () => {
         </select>
       ),
     },
-    { title: "Priority  :", description: ticketinfo.priority },
+    // { title: " Current Priority :", description: ticketinfo.priority },
     {
       title: "Priority :",
       description: (
@@ -209,6 +279,7 @@ const DetailsEdit = () => {
           onChange={e => setFormData({ ...formData, priority: e.target.value })}
           className="border p-1 px-4 border-gray-400 rounded-md"
         >
+          <option value="">Select Priority</option>
           <option value="P1">P1</option>
           <option value="P2">P2</option>
           <option value="P3">P3</option>
@@ -217,12 +288,12 @@ const DetailsEdit = () => {
         </select>
       ),
     },
-    { title: "Assigned To  :", description: ticketinfo.assigned_to },
+    // { title: "Current Assigned To  :", description: ticketinfo.assigned_to },
     {
       title: "Assigned To:",
       description: (
         <select
-          value={formData.assigned_to || ""}
+          value={formData.assigned_to_id || ""}
           name="assigned_to"
           onChange={(e) => setFormData({ ...formData, assigned_to: e.target.value })}
           className="border p-1 px-4 border-gray-500 rounded-md"
@@ -236,57 +307,7 @@ const DetailsEdit = () => {
         </select>
       ),
     },
-
-
-
-    {
-      title: "Root Cause :",
-      description: (
-        <div className="border rounded-lg">
-          <textarea
-            name="root_cause"
-            // placeholder="heading"
-            cols="15"
-            rows="1"
-            value={formData.root_cause}
-            onChange={e => setFormData({ ...formData, root_cause: e.target.value })}
-            className="border border-black"
-          ></textarea>
-        </div>
-      ),
-    },
-    {
-      title: "Impact :",
-      description: (
-        <div className="border rounded-lg">
-          <textarea
-            name="impact"
-            // placeholder="heading"
-            cols="15"
-            rows="1"
-            value={formData.impact}
-            onChange={e => setFormData({ ...formData, impact: e.target.value })}
-            className="border border-black"
-          ></textarea>
-        </div>
-      ),
-    },
-    {
-      title: "Corrective Action :",
-      description: (
-        <div className="border rounded-lg">
-          <textarea
-            name="corrective_action"
-            // placeholder="heading"
-            cols="15"
-            rows="1"
-            value={formData.corrective_action}
-            onChange={e => setFormData({ ...formData, corrective_action: e.target.value })}
-            className="border border-black"
-          ></textarea>
-        </div>
-      ),
-    },
+    
     {
       title: "Proactive/Reactive :",
       description: (
@@ -296,29 +317,60 @@ const DetailsEdit = () => {
           onChange={e => setFormData({ ...formData, proactive_reactive: e.target.value })}
           className="border p-1 px-4 border-gray-400 rounded-md"
         >
+          {/* <option value="Proactive">Proactive</option> */}
+
           <option value="">Select Option</option>
-          <option value="Proactive">Proactive</option>
           <option value="Reactive">Reactive</option>
+          <option value="Proactive">Proactive</option>
 
         </select>
       ),
     },
+
     {
-      title: "Preventive Action :",
-      description: (
-        <div className="border rounded-lg ">
-          <textarea
-            name="correction"
-            // placeholder="heading"
-            cols="15"
-            rows="1"
-            value={formData.correction}
-            onChange={e => setFormData({ ...formData, correction: e.target.value })}
-            className="border border-black"
-          ></textarea>
-        </div>
-      ),
+      title : "Categories:",
+      description : (
+        <select
+          id="two"
+          value={formData.catogories}
+          name="categories"
+          onChange={handleChange}
+          className="border p-1 px-4 border-gray-500 rounded-md"
+        >
+          <option value="">Select Category</option>
+          {categories?.map(category => (
+            <option
+              key={category.id}
+              onClick={() => console.log("checking-category")}
+              value={category.id}
+            >
+              {category.name}
+            </option>
+          ))}
+        </select>
+      )
     },
+    {
+      title : " SubCategories:", 
+      description : (
+        <select
+                  id="five"
+                  value={formData.sub_category}
+                  name="sub_category_id"
+                  onChange={handleChange}
+                  className="border p-2 px-4 border-gray-500 rounded-md"
+                >
+                  <option value="">Sub Category</option>
+                  {units?.map(floor => (
+                    <option key={floor.id} value={floor.id}>
+                      {floor.name}
+                    </option>
+                  ))}
+                </select>
+      )
+    }
+
+    
   ];
 
   const FileChange = async (event) => {
@@ -342,6 +394,8 @@ const DetailsEdit = () => {
     })
   };
 
+  
+
 
   const convertFileToBase64 = (file) => {
     return new Promise((resolve, reject) => {
@@ -355,23 +409,79 @@ const DetailsEdit = () => {
 
   return (
 
-    <div className="flex flex-col">
+    <div className="grid ">
       <div className="flex flex-col justify-around gap-10 my-10 ">
         <div className="">
           <Detail details={ticketDetails} heading={"Edit Ticket Details"} />
+
         </div>
 
-
-        <div className="flex gap-10 border m-4 ">
-          <div className="">
-            <label htmlFor="description" className="font-semibold ">Additonal Notes:</label>
+        <div className="flex flex-col  flex-wrap gap-2">
+          <h2 className="text-center w-screen bg-black text-white font-semibold mt-5 text-lg p-2 px-4 ">
+            Additional Info
+          </h2>
+          <div className="px-4 flex flex-col gap-1 justify-center">
+            <p className="font-medium">Root Cause :</p>
+            <textarea
+            name="root_cause"
+            // placeholder="heading"
+            cols="15"
+            rows="2"
+            value={formData.root_cause}
+            onChange={e => setFormData({ ...formData, root_cause: e.target.value })}
+            className="border p-1 px-4 border-gray-400 rounded-md"
+          ></textarea>
+          </div>
+          <div className="px-4 flex flex-col gap-1 justify-center">
+            <p className="font-medium">Impact :</p>
+            <textarea
+            name="impact"
+            // placeholder="heading"
+            cols="15"
+            rows="2"
+            value={formData.impact}
+            onChange={e => setFormData({ ...formData, impact: e.target.value })}
+            className="border p-1 px-4 border-gray-400 rounded-md"
+          ></textarea>
+          </div>
+         
+          <div className="px-4 flex flex-col gap-1 justify-center">
+            <p className="font-medium">Corrective Action :</p>
+            <textarea
+            name="corrective_action"
+            // placeholder="heading"
+            cols="15"
+            rows="2"
+            value={formData.corrective_action}
+            onChange={e => setFormData({ ...formData, corrective_action: e.target.value })}
+            className="border p-1 px-4 border-gray-400 rounded-md"
+          ></textarea>
+          </div>
+          
+          <div className="px-4 flex flex-col gap-1 justify-center">
+            <p className="font-medium">Correction :</p>
+            <textarea
+            name="correction"
+            // placeholder="heading"
+            cols="15"
+            rows="2"
+            value={formData.correction}
+            onChange={e => setFormData({ ...formData, correction: e.target.value })}
+            className="border p-1 px-4 border-gray-400 rounded-md"
+          ></textarea>
+          </div>
+        </div>
+        
+        <div className="flex gap-2 m-4 flex-col ">
+        
+            <label htmlFor="description" className="font-semibold ">Comment:</label>
             <textarea
               name="text"
               value={formData.comment}
-              className="border p-1 px-2 border-gray-400 rounded-md w-full"
+              className="border p-1 px-4 border-gray-400 rounded-md w-full"
               onChange={e => setFormData({ ...formData, comment: e.target.value })}
             />
-          </div>
+          
         </div>
 
         {/* <div className="p-1">
@@ -387,13 +497,14 @@ const DetailsEdit = () => {
       </div> */}
       </div>
 
-      <input
+      
+      <FileInput
         type="file"
         name="documents"
         id="documents"
         onChange={FileChange}
         multiple
-        className="ml-5"
+        className="ml-3 px-4 p-3 rounded-md text-white bg-black "
       />
 
       <div className=" m-10 w-full flex justify-center  ">

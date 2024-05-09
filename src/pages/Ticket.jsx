@@ -261,6 +261,8 @@ const Ticket = () => {
                   ? "border-purple-400"
                   : status === "Re Open"
                   ? "border-green-800"
+                  : status === "Received"
+                  ? "border-red-800"
                   : "bg-gray-200 text-gray-700"
               }`}
             >
