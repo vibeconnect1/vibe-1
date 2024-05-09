@@ -23,7 +23,7 @@ const DetailsEdit = () => {
   const [units, setUnits] = useState([]);
   const [formData, setFormData] = useState({
     category_type_id: "",
-    sub_category: "",
+    // sub_category: "",
     sub_category_id: ""  ,
     heading: "",
     text: "",
@@ -40,12 +40,11 @@ const DetailsEdit = () => {
     corrective_action: "",
     proactive_reactive: "Reactive",
     correction: "",
-    documents: []
+    documents: [],
+    assigned_to_id: ""
 
   });
   console.log(formData);
-
-
 
   const categories = getItemInLocalStorage("categories");
   // console.log(categories , "Catss")
@@ -58,8 +57,8 @@ const DetailsEdit = () => {
         // Update state with fetched data
         setFormData({
           ...formData,
-          // category_type_id: response.data.category_type_id,
-          // sub_category_id: response.data.sub_category_id,
+          category_type_id: response.data.category_type_id,
+          sub_category_id: response.data.sub_category_id,
           heading: response.data.heading,
           assigned_to: response.data.assigned_to,
           assigned_to_id: response.data.assigned_to_id,
@@ -80,10 +79,26 @@ const DetailsEdit = () => {
         });
         setTicketInfo(response.data);
         setEditTicketInfo(response.data);
-      } catch (error) {
+        
+      }  
+
+      
+
+      catch (error) {
         console.error("Error fetching details:", error)
       }
     };
+
+
+    async function fetchSubCategory(categoryId) {
+      try {
+        const cat = await fetchSubCategories(categoryId);
+        setUnits(cat.data.sub_categories.map((item) => ({ name: item.name, id: item.id })));
+        console.log("categories",cat);
+      } catch (e) {
+        console.log(e);
+      }
+    }
 
 
     
@@ -98,10 +113,10 @@ const DetailsEdit = () => {
       }
     };
 
-
     fetchDetails();
     fetchAssignedTo();
-  }, [id]);
+    fetchSubCategory(formData.category_type_id);
+  }, []);
 
 
   const handleTicketDetails = (e, name) => {
@@ -135,7 +150,7 @@ const DetailsEdit = () => {
           issue_status: formData?.issue_status,
           complaint_type: formData.issue_type,
           priority: formData.priority,
-          assigned_to: formData.assigned_to,
+          assigned_to: formData.assigned_to_id,
           root_cause: formData.root_cause,
           impact: formData.impact,
           corrective_action: formData.corrective_action,
@@ -158,7 +173,7 @@ const DetailsEdit = () => {
       
       toast.loading("Please Wait Submitting Details!")
       await editComplaintsDetails(updatedData);
-      // console.log("Edited Ticket Details:", formData);
+      console.log("Edited Ticket Details:", formData);
       toast.dismiss();
 
       toast.success("Updated Successfully");
@@ -174,14 +189,15 @@ const DetailsEdit = () => {
       try {
         const cat = await fetchSubCategories(categoryId);
         setUnits(cat.data.sub_categories.map((item) => ({ name: item.name, id: item.id })));
-        // console.log(cat);
+        console.log("categories",cat);
       } catch (e) {
         console.log(e);
       }
     }
 
-    if (e.target.type === "select-one" && e.target.name === "categories") {
+    if (e.target.type === "select-one" && e.target.name === "category_type_id") {
       const categoryId = Number(e.target.value);
+      console.log(categoryId)
       await fetchSubCategory(categoryId);
       setFormData({
         ...formData,
@@ -332,8 +348,8 @@ const DetailsEdit = () => {
       description : (
         <select
           id="two"
-          value={formData.catogories}
-          name="categories"
+          value={formData.category_type_id}
+          name="category_type_id"
           onChange={handleChange}
           className="border p-1 px-4 border-gray-500 rounded-md"
         >
@@ -355,7 +371,7 @@ const DetailsEdit = () => {
       description : (
         <select
                   id="five"
-                  value={formData.sub_category}
+                  value={formData.sub_category_id}
                   name="sub_category_id"
                   onChange={handleChange}
                   className="border p-2 px-4 border-gray-500 rounded-md"
