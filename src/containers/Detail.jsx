@@ -12,12 +12,12 @@ const Detail = ({ heading, details }) => {
       <h2 className="text-center w-screen bg-black text-white font-semibold text-lg p-2 px-4 ">
         {heading}
       </h2>
-      <div className="sm:grid flex flex-col grid-cols-4 gap-5 gap-x-40">
+      <div className="md:grid flex flex-col grid-cols-3 gap-5 gap-x-32">
         {details.map((item, index) => (
-          <dl className="flex gap-4" key={index}>
-            <dt className="font-semibold">{item.title}</dt>
-            <dd>{item.description}</dd>
-          </dl>
+          <dl className="grid grid-cols-2 gap-x-2" key={index}>
+          <dt className="font-semibold text-sm">{item.title}</dt>
+          <dd className="text-sm">{item.description}</dd>
+        </dl>
         ))}
         {/* {detailData.details.map((item, index) => (
           <dl className="flex gap-4" key={index}>
