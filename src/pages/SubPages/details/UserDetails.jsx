@@ -213,7 +213,7 @@ const UserDetails = () => {
                           </a>
                         </div>
                       )}
-                      {log.comment && (
+                      {log.log_comment && (
                         <div className="text-sm font-semibold text-gray-900 dark:text-gray mb-5">
                           Comment :{" "}
                           <a

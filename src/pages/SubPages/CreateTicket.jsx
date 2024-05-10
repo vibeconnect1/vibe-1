@@ -304,8 +304,8 @@ const CreateTicket = () => {
           </h2>
 
           {/* Related To :*/}
-          <div className="flex flex-col sm:gap-0 gap-3 md:flex-row justify-between items-center">
-            <div className="flex gap-3 items-center">
+          <div className="flex flex-col gap-3 md:flex-row justify-between items-center">
+            <div className="grid grid-cols-2 sm:gap-0  gap-3 items-center w-full">
               <label htmlFor="" className="font-semibold">
                 Related To:
               </label>
@@ -320,13 +320,13 @@ const CreateTicket = () => {
               >
                 <option value="">Select Area</option>
                 <option value="Complaint">Apartment</option>
-                <option value="Suggestion">Shop</option>
+                {/* <option value="Suggestion">Shop</option> */}
                 <option value="Request">Common Area</option>
               </select>
             </div>
 
-            <div className="flex gap-3 items-center">
-              <label htmlFor="" className="font-semibold">
+            <div className="grid grid-cols-2  items-center w-full">
+              <label htmlFor="" className="font-semibold sm:text-center">
                 Type of:
               </label>
               <select
@@ -348,8 +348,8 @@ const CreateTicket = () => {
           <div>
             {/* Building details */}
             <div className="flex sm:flex-row flex-col gap-3 sm:gap-0 justify-between items-center">
-              <div className="flex gap-3 items-center">
-                <label htmlFor="" className="font-semibold">
+              <div className="grid grid-cols-2  items-center w-full">
+                <label htmlFor="" className="font-semibold ">
                   Tower Name :
                 </label>
                 <select
@@ -368,8 +368,8 @@ const CreateTicket = () => {
                 </select>
               </div>
               {/* Floor Name */}
-              <div className="flex gap-3 items-center">
-                <label htmlFor="" className="font-semibold">
+              <div className="grid grid-cols-2 items-center w-full">
+                <label htmlFor="" className="font-semibold sm:text-center">
                   Floor Name :
                 </label>
                 <select
@@ -394,8 +394,8 @@ const CreateTicket = () => {
           </div>
 
           <div className="flex flex-col sm:flex-row items-center gap-3 sm:gap-0 justify-between ">
-            <div className="flex gap-2 items-center">
-              <label htmlFor="" className="font-semibold">
+            <div className="grid grid-cols-2 items-center w-full">
+              <label htmlFor="" className="font-semibold ">
                 Unit Name :
               </label>
 
@@ -414,8 +414,8 @@ const CreateTicket = () => {
                 ))}
               </select>
             </div>
-            <div className="flex gap-2 items-center">
-              <label htmlFor="" className="font-semibold">
+            <div className="grid grid-cols-2  items-center w-full">
+              <label htmlFor="" className="font-semibold sm:text-center">
                 Priority :
               </label>
               <select
@@ -435,9 +435,9 @@ const CreateTicket = () => {
             </div>
           </div>
 
-          <div className="flex flex-col sm:flex-row items-center justify-between gap-3 sm:gap-0">
-            <div className="flex items-center gap-2">
-              <label htmlFor="" className="font-semibold">
+          <div className="flex sm:grid sm:grid-cols-2 flex-col sm:flex-row items-center justify-between gap-3 sm:gap-0">
+            <div className="grid grid-cols-2  items-center w-full">
+              <label htmlFor="" className="font-semibold ">
                 Category:
               </label>
               <select
@@ -460,8 +460,8 @@ const CreateTicket = () => {
               </select>
             </div>
 
-            <div className="flex items-center gap-2">
-              <label htmlFor="" className="font-semibold">
+            <div className="grid grid-cols-2  items-center w-full">
+              <label htmlFor="" className="font-semibold sm:text-center">
                 Sub Category:
               </label>
               <select
@@ -483,8 +483,8 @@ const CreateTicket = () => {
           <div>
             {/* Category, Sub Category, Assigned To, Priority */}
             <div className="flex flex-col sm:flex-row items-center justify-between">
-              <div className="flex my-3 items-center gap-2">
-                <label htmlFor="" className=" font-semibold">
+              <div className="grid grid-cols-2 sm:gap-12 items-center">
+                <label htmlFor="" className=" font-semibold ">
                   Assigned To:
                 </label>
                 <select
@@ -504,45 +504,45 @@ const CreateTicket = () => {
                 </select>
               </div>
             </div>
-            <div className="flex sm:block  sm:flex-row items-center justify-center">
-              <div className="flex sm:flex-col gap-2">
-                <label
-                  htmlFor=""
-                  className="font-semibold my-2 flex justify-start"
-                >
-                  Title:
-                </label>
-                <textarea
-                  name="heading"
-                  placeholder="Enter Title"
-                  rows=""
-                  cols={25}
-                  value={formData.heading}
-                  onChange={handleChange}
-                  className="border px-2 rounded-md flex flex-auto border-black w-full"
-                ></textarea>
-              </div>
+            {/* <div className="flex sm:block my-5 sm:flex-row items-center justify-center"> */}
+            <div className="flex flex-col justify-around">
+              <label
+                htmlFor=""
+                className="font-semibold my-2 flex justify-start"
+              >
+                Title:
+              </label>
+              <textarea
+                name="heading"
+                placeholder="Enter Title"
+                rows=""
+                cols={25}
+                value={formData.heading}
+                onChange={handleChange}
+                className="border px-2 rounded-md flex flex-auto border-black w-full"
+              ></textarea>
             </div>
+            {/* </div> */}
           </div>
 
           {/* Description */}
-          <div className="flex sm:block sm:flex-row items-center justify-center">
-            <div className="flex sm:flex-col gap-2 ">
-              <label htmlFor="" className="font-bold">
-                Description:
-              </label>
-              <textarea
-                name="text"
-                placeholder=" Describe your concern!"
-                id=""
-                cols="25"
-                rows=""
-                className="border border-black rounded-md px-2"
-                value={formData.text}
-                onChange={handleChange}
-              />
-            </div>
+          {/* <div className="flex sm:block sm:flex-row items-center justify-center"> */}
+          <div className="flex flex-col justify-around ">
+            <label htmlFor="" className="font-semibold">
+              Description:
+            </label>
+            <textarea
+              name="text"
+              placeholder=" Describe your concern!"
+              id=""
+              cols="25"
+              rows=""
+              className="border border-black rounded-md px-2"
+              value={formData.text}
+              onChange={handleChange}
+            />
           </div>
+          {/* </div> */}
 
           {/* File Input */}
           <FileInput handleFileChange={handleFileChange} multiple />

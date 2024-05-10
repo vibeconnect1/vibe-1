@@ -231,14 +231,14 @@ const Ticket = () => {
 
   // export data
   const exportToExcel = () => {
-    const modifiedData = filteredData.map((item) => ({
-      ...item,
-      "Ticket Number": item.ticket_number,
-    }));
+    // const modifiedData = filteredData.map((item) => ({
+    //   ...item,
+    //   "Ticket Number": item.ticket_number,
+    // }));
     const fileType =
       "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8";
     const fileName = "helpdesk_data.xlsx";
-    const ws = XLSX.utils.json_to_sheet(modifiedData);
+    const ws = XLSX.utils.json_to_sheet(filteredData);
     const wb = { Sheets: { data: ws }, SheetNames: ["data"] };
     const excelBuffer = XLSX.write(wb, { bookType: "xlsx", type: "array" });
     const data = new Blob([excelBuffer], { type: fileType });
@@ -411,7 +411,7 @@ const Ticket = () => {
         {complaints.length === 0 ? (
           <p className="text-center">Loading...</p>
         ) : (
-          <div className="flex flex-col gap-4 justify-center items-center">
+          <div className="flex flex-col gap-4 justify-center items-center mb-5">
             <DataTable
               responsive
               selectableRows
