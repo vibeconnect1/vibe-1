@@ -66,6 +66,8 @@ const Login = () => {
       setItemInLocalStorage("SITEID", selectedSiteId);
       setItemInLocalStorage("Name", userName)
       // console.log(userName)
+      const lastName =  response.data.user.lastname
+      setItemInLocalStorage("LASTNAME", lastName)
 
       const userType = response.data.user.user_type
       setItemInLocalStorage("USERTYPE", userType)
@@ -87,6 +89,7 @@ const Login = () => {
         navigate("/mytickets")
       }
       toast.dismiss();
+      window.location.reload();
     } catch (error) {
       console.error("Login failed:", error);
       toast.error("Login failed. Please check your credentials.");
@@ -139,7 +142,7 @@ const Login = () => {
                 name="password"
                 id="password"
                 className="rounded-sm p-1 px-2 border border-black"
-                placeholder="****"
+                placeholder="**********"
                 type={password ? "text" : "password"}
                 onChange={onChange}
                 value={formData.password}

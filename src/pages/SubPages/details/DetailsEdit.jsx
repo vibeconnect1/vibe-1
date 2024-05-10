@@ -86,6 +86,7 @@ const DetailsEdit = () => {
     const fetchEditSubCategories = async (categoryId) => {
       try {
         const cat = await fetchSubCategories(categoryId);
+
         setUnits(
           cat.data.sub_categories.map((item) => ({
             name: item.name,
@@ -326,7 +327,6 @@ const DetailsEdit = () => {
 
     {
       title: "Proactive/Reactive :",
-      
       description: (
         <select
           name="proactive_reactive"
@@ -420,7 +420,7 @@ const DetailsEdit = () => {
   };
 
   return (
-    <div className="grid ">
+    <div className="">
       <div className="flex flex-col justify-around gap-10 my-10 ">
         <div className="">
           <Detail details={ticketDetails} heading={"Edit Ticket Details"} />
@@ -488,9 +488,8 @@ const DetailsEdit = () => {
               className="border p-1 px-4 border-gray-400 rounded-md"
             ></textarea>
           </div>
-        </div>
 
-        <div className="flex gap-2 m-4 flex-col ">
+        <div className="px-4 flex flex-col gap-1 justify-center">
           <label htmlFor="description" className="font-semibold ">
             Comment:
           </label>
@@ -501,7 +500,8 @@ const DetailsEdit = () => {
             onChange={(e) =>
               setFormData({ ...formData, comment: e.target.value })
             }
-          />
+            />
+            </div>
         </div>
 
         {/* <div className="p-1">

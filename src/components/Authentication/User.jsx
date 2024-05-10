@@ -9,6 +9,7 @@ import toast from "react-hot-toast";
 
 function User() {
   const [user, setUser] = useState("");
+  const [userLastName, setUserLastName] = useState("");
   const [password, setPassword] = useState(false);
   const [showPassword, setShowPassWord] = useState(false);
   const togglePassword = () => {
@@ -21,8 +22,13 @@ function User() {
 
   useEffect(() => {
     const userName = localStorage.getItem("Name");
+    const formattedUserName = userName ? userName.replace(/"/g, '') : '';
+    const lastName = localStorage.getItem("LASTNAME");
+    const formattedLastName = lastName ? lastName.replace(/"/g, '') : '';
+    setUserLastName(formattedLastName)
     console.log(userName);
-    setUser(userName);
+    setUser(formattedUserName);
+    console.log(formattedLastName)
   });
 
 
@@ -51,8 +57,12 @@ function User() {
 
 
   return (
-    <div>
-      <p className="text-2xl md:text-4xl my-5 text-center">{user}</p>
+    <div className="flex gap-10 w-screen">
+      <div>
+        <Navbar/>
+      </div>
+      <div className="flex flex-col items-center w-full">
+      <p className="text-2xl md:text-4xl my-5 text-center">{user} {userLastName}</p>
       <div className="flex justify-center items-center min-h-screen">
         <div className="w-full max-w-md">
           <div className="mt-4">
@@ -107,6 +117,7 @@ function User() {
             )}
           </div>
         </div>
+      </div>
       </div>
     </div>
   );

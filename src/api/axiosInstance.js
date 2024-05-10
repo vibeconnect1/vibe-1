@@ -9,7 +9,7 @@ axiosInstance.interceptors.request.use(
   (authenticate) => {
     const token = getItemInLocalStorage("TOKEN");
     if (token) {
-      authenticate.headers["Authorization"] = ` ${token}`;
+      authenticate.headers["Authorization"] = `${token}`;
     }
     return authenticate;
   },

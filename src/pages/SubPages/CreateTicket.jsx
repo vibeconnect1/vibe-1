@@ -3,8 +3,18 @@ import React, { useEffect, useState } from "react";
 import Navbar from "../../components/Navbar";
 import { useNavigate } from "react-router-dom";
 import FileInput from "../../Buttons/FileInput";
-import { getItemInLocalStorage, setItemInLocalStorage } from "../../utils/localStorage";
-import { fetchSubCategories, getAssignedTo, getComplaints, getFloors, getUnits, postComplaintsDetails } from "../../api";
+import {
+  getItemInLocalStorage,
+  setItemInLocalStorage,
+} from "../../utils/localStorage";
+import {
+  fetchSubCategories,
+  getAssignedTo,
+  getComplaints,
+  getFloors,
+  getUnits,
+  postComplaintsDetails,
+} from "../../api";
 import toast from "react-hot-toast";
 
 const CreateTicket = () => {
@@ -16,20 +26,20 @@ const CreateTicket = () => {
   const [selectedCategory, setSelectedCategory] = useState("");
   const [selectedSubCategory, setSelectedSubCategory] = useState("");
   const [selectedCustomerPriority, setSelectedCustomerPriority] = useState("");
-  const [units, setUnits] = useState([])
+  const [units, setUnits] = useState([]);
   const [user, setUser] = useState("");
   const [attachments, setAttachments] = useState([]);
   const [selectedSiteId, setSelectedSiteId] = useState("");
   const [assignedUser, setAssignedUser] = useState([]);
   const [assined, setAssigned] = useState([]);
   const [reqName, setReqName] = useState("");
-  const [floor, setFloor] = useState([])
+  const [floor, setFloor] = useState([]);
   const [unitName, setUnitName] = useState([]);
 
   const [formData, setFormData] = useState({
     category_type_id: "",
     sub_category_id: "",
-   
+
     priority: "",
     of_phase: "pms",
     // site_id: selectedSiteId,
@@ -41,7 +51,7 @@ const CreateTicket = () => {
     assigned_to: "",
     issue_type_id: "",
     complaint_type: "",
-  })
+  });
 
   console.log(formData);
   // console.log(attachments);
@@ -51,8 +61,8 @@ const CreateTicket = () => {
 
   const userName = localStorage.getItem("Name");
 
-  const siteID = getItemInLocalStorage("SITEID")
-  // setSelectedSiteId(siteID) 
+  const siteID = getItemInLocalStorage("SITEID");
+  // setSelectedSiteId(siteID)
 
   const building = getItemInLocalStorage("Building");
   // console.log("BB", building);
@@ -80,9 +90,9 @@ const CreateTicket = () => {
         const fetchFloor = await getFloors();
         // console.log("Floors", fetchFloor)
       } catch (error) {
-        error
+        error;
       }
-    }
+    };
 
     fetchData();
     fetchAssignedTo();
@@ -104,17 +114,16 @@ const CreateTicket = () => {
     }
     // console.log("Array base64-", base64Array);
     const formattedBase64Array = base64Array.map((base64) => {
-      return base64.split(',')[1];
+      return base64.split(",")[1];
     });
 
     console.log("Fornat", formattedBase64Array);
 
     setFormData({
       ...formData,
-      documents: formattedBase64Array
-    })
+      documents: formattedBase64Array,
+    });
   };
-
 
   const convertFileToBase64 = (file) => {
     return new Promise((resolve, reject) => {
@@ -125,12 +134,16 @@ const CreateTicket = () => {
     });
   };
 
-
   const handleChange = async (e) => {
     async function fetchSubCategory(categoryId) {
       try {
         const cat = await fetchSubCategories(categoryId);
-        setUnits(cat.data.sub_categories.map((item) => ({ name: item.name, id: item.id })));
+        setUnits(
+          cat.data.sub_categories.map((item) => ({
+            name: item.name,
+            id: item.id,
+          }))
+        );
         // console.log(cat);
       } catch (e) {
         console.log(e);
@@ -144,7 +157,7 @@ const CreateTicket = () => {
         ...formData,
         category_type_id: categoryId,
         sub_category_id: "",
-        documents: []
+        documents: [],
       });
     } else {
       setFormData({
@@ -174,8 +187,10 @@ const CreateTicket = () => {
 
     async function getUnit(UnitID) {
       try {
-        const unit = await getUnits(UnitID)
-        setUnitName(unit.data.map((item) => ({ name: item.name, id: item.id })));
+        const unit = await getUnits(UnitID);
+        setUnitName(
+          unit.data.map((item) => ({ name: item.name, id: item.id }))
+        );
       } catch (error) {
         console.log(error);
       }
@@ -189,32 +204,30 @@ const CreateTicket = () => {
         ...formData,
         building_name: BuildID,
       });
-    } else if (e.target.type === "select-one" && e.target.name === "floor_name") {
+    } else if (
+      e.target.type === "select-one" &&
+      e.target.name === "floor_name"
+    ) {
       const UnitID = Number(e.target.value);
       await getUnit(UnitID);
       setFormData({
         ...formData,
         floor_name: UnitID,
       });
-
-    }
-    else {
+    } else {
       setFormData({
         ...formData,
-        [e.target.name]: e.target.value
+        [e.target.name]: e.target.value,
       });
     }
   };
 
-
-
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      toast.loading("Please wait generating ticket!")
+      toast.loading("Please wait generating ticket!");
       const response = await postComplaintsDetails(formData);
-      console.log('Complaint submitted successfully:', response);
+      console.log("Complaint submitted successfully:", response);
       setFormData({
         category_type_id: "",
         sub_category_id: "",
@@ -233,9 +246,9 @@ const CreateTicket = () => {
       });
       toast.dismiss();
       toast.success("Ticket generated by Admin");
-      navigate('/tickets');
+      navigate("/tickets");
     } catch (error) {
-      console.error('Error submitting complaint:', error);
+      console.error("Error submitting complaint:", error);
     }
   };
 
@@ -247,41 +260,38 @@ const CreateTicket = () => {
     setSelectedCategory("");
   };
 
-
-
   useEffect(() => {
     const footer = document.querySelector(".hideIt");
 
     const hideFooter = () => {
       if (window.innerWidth <= 786) {
-        footer.classList.add('hide-on-small-screen');
+        footer.classList.add("hide-on-small-screen");
       }
     };
 
     const handleMouseEnter = () => {
       if (window.innerWidth <= 786) {
-        footer.classList.remove('hide-on-small-screen');
+        footer.classList.remove("hide-on-small-screen");
       }
     };
 
     const handleMouseLeave = () => {
       if (window.innerWidth <= 786) {
-        footer.classList.add('hide-on-small-screen');
+        footer.classList.add("hide-on-small-screen");
       }
     };
     setTimeout(hideFooter, 5000);
-    footer.addEventListener('mouseenter', handleMouseEnter);
-    footer.addEventListener('mouseleave', handleMouseLeave);
+    footer.addEventListener("mouseenter", handleMouseEnter);
+    footer.addEventListener("mouseleave", handleMouseLeave);
     return () => {
-      footer.removeEventListener('mouseenter', handleMouseEnter);
-      footer.removeEventListener('mouseleave', handleMouseLeave);
+      footer.removeEventListener("mouseenter", handleMouseEnter);
+      footer.removeEventListener("mouseleave", handleMouseLeave);
     };
   }, []);
 
-
   return (
-    <section className="min-h-screen flex flex-col md:flex-row">
-      <div className="fixed left-0 top-0 h-full md:static md:h-auto md:flex-shrink-0">
+    <section className="min-h-screen p-4 sm:p-0 flex flex-col md:flex-row">
+      <div className="fixed hidden sm:block left-0 top-0 h-full md:static md:h-auto md:flex-shrink-0">
         <Navbar />
       </div>
       <div className="flex justify-center items-center overflow-x-auto w-full max-w-screen-xl sm:w-full">
@@ -294,7 +304,7 @@ const CreateTicket = () => {
           </h2>
 
           {/* Related To :*/}
-          <div className="flex flex-col md:flex-row justify-between items-center">
+          <div className="flex flex-col sm:gap-0 gap-3 md:flex-row justify-between items-center">
             <div className="flex gap-3 items-center">
               <label htmlFor="" className="font-semibold">
                 Related To:
@@ -303,7 +313,9 @@ const CreateTicket = () => {
                 id="issueType"
                 value={formData.issue_type_id}
                 name="issue_type_id"
-                onChange={e => setFormData({ ...formData, issue_type_id: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, issue_type_id: e.target.value })
+                }
                 className="border p-1 px-4 border-gray-500 rounded-md"
               >
                 <option value="">Select Area</option>
@@ -321,7 +333,9 @@ const CreateTicket = () => {
                 id="complaintType"
                 value={formData.complaint_type}
                 name="complaint_type"
-                onChange={e => setFormData({ ...formData, complaint_type: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, complaint_type: e.target.value })
+                }
                 className="border p-1 px-4 border-gray-500 rounded-md "
               >
                 <option value="">Select Issue Type</option>
@@ -331,9 +345,9 @@ const CreateTicket = () => {
               </select>
             </div>
           </div>
-          <div >
+          <div>
             {/* Building details */}
-            <div className="flex justify-between items-center">
+            <div className="flex sm:flex-row flex-col gap-3 sm:gap-0 justify-between items-center">
               <div className="flex gap-3 items-center">
                 <label htmlFor="" className="font-semibold">
                   Tower Name :
@@ -346,12 +360,8 @@ const CreateTicket = () => {
                   className="border p-1 px-4 border-gray-500 rounded-md"
                 >
                   <option value="">Select Tower</option>
-                  {building?.map(build => (
-                    <option
-                      key={build.id}
-
-                      value={build.id}
-                    >
+                  {building?.map((build) => (
+                    <option key={build.id} value={build.id}>
                       {build.name}
                     </option>
                   ))}
@@ -369,7 +379,7 @@ const CreateTicket = () => {
                   className="border p-1 px-4 border-gray-500 rounded-md"
                 >
                   <option value="">Select Floor</option>
-                  {floor?.map(floorId => (
+                  {floor?.map((floorId) => (
                     <option
                       key={floorId.id}
                       // onClick={() => console.log("checking-category")}
@@ -383,102 +393,96 @@ const CreateTicket = () => {
             </div>
           </div>
 
+          <div className="flex flex-col sm:flex-row items-center gap-3 sm:gap-0 justify-between ">
+            <div className="flex gap-2 items-center">
+              <label htmlFor="" className="font-semibold">
+                Unit Name :
+              </label>
 
-          <div className="flex justify-between ">
-                <div className="flex gap-2 items-center">
-                <label htmlFor="" className="font-semibold">
-                  Unit Name :
-                </label>
-
-                <select
-                  id="six"
-                  value={formData.unit_id}
-                  name="unit_id"
-                  onChange={buildingChange}
-                  className="border p-2 px-4 border-gray-500 rounded-md"
-                >
-                  <option value="">Unit Name</option>
-                  {unitName?.map(floor => (
-                    <option key={floor.id} value={floor.id}>
-                      {floor.name}
-                    </option>
-                  ))}
-                </select>
-                </div>
-                <div className="flex gap-2 items-center">
-                <label htmlFor="" className="font-semibold">
-                  Priority :
-                </label>
-                <select
-                  value={formData.priority}
-                  onChange={handleChange}
-                  id="priority"
-                  name="priority"
-                  className="w-fit p-2 border-gray-500 border rounded-md px-4"
-                >
-                  <option value="P1">P1</option>
-                  <option value="P2">P2</option>
-                  <option value="P3">P3</option>
-                  <option value="P4">P4</option>
-                  <option value="P5">P5</option>
-                </select>
-              </div>
-              </div>
-
-
-          <div className="flex justify-between">
-              
-                <div className="flex items-center gap-2">
-                  <label htmlFor="" className="font-semibold">
-                    Category:
-                  </label>
-                  <select
-                    id="two"
-                    value={formData.catogories}
-                    name="categories"
-                    onChange={handleChange}
-                    className="border p-1 px-4 grid border-gray-500 rounded-md"
-                  >
-                    <option value="">Select Category</option>
-                    {categories?.map((category) => (
-                      <option
-                        onClick={() => console.log("checking-category")}
-                        value={category.id}
-                        key={category.id}
-                      >
-                        {category.name}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-
-              
-              <div className="flex items-center gap-2">
-                
-                  <label htmlFor="" className="font-semibold">
-                    Sub Category:
-                  </label>
-                  <select
-                    id="five"
-                    value={formData.subCategories}
-                    name="sub_category_id"
-                    onChange={handleChange}
-                    className="border p-1 px-4 grid border-gray-500 rounded-md"
-                  >
-                    <option value="">Sub Category</option>
-                    {units?.map((floor) => (
-                      <option value={floor.id} key={floor.id}>
-                        {floor.name}
-                      </option>
-                    ))}
-                  </select>
-                
-              </div>
+              <select
+                id="six"
+                value={formData.unit_id}
+                name="unit_id"
+                onChange={buildingChange}
+                className="border p-2 px-4 border-gray-500 rounded-md"
+              >
+                <option value="">Unit Name</option>
+                {unitName?.map((floor) => (
+                  <option key={floor.id} value={floor.id}>
+                    {floor.name}
+                  </option>
+                ))}
+              </select>
             </div>
+            <div className="flex gap-2 items-center">
+              <label htmlFor="" className="font-semibold">
+                Priority :
+              </label>
+              <select
+                value={formData.priority}
+                onChange={handleChange}
+                id="priority"
+                name="priority"
+                className="w-fit p-2 border-gray-500 border rounded-md px-4"
+              >
+                <option value="">Select Priority</option>
+                <option value="P1">P1</option>
+                <option value="P2">P2</option>
+                <option value="P3">P3</option>
+                <option value="P4">P4</option>
+                <option value="P5">P5</option>
+              </select>
+            </div>
+          </div>
+
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-3 sm:gap-0">
+            <div className="flex items-center gap-2">
+              <label htmlFor="" className="font-semibold">
+                Category:
+              </label>
+              <select
+                id="two"
+                value={formData.catogories}
+                name="categories"
+                onChange={handleChange}
+                className="border p-1 px-4 grid border-gray-500 rounded-md"
+              >
+                <option value="">Select Category</option>
+                {categories?.map((category) => (
+                  <option
+                    onClick={() => console.log("checking-category")}
+                    value={category.id}
+                    key={category.id}
+                  >
+                    {category.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <div className="flex items-center gap-2">
+              <label htmlFor="" className="font-semibold">
+                Sub Category:
+              </label>
+              <select
+                id="five"
+                value={formData.subCategories}
+                name="sub_category_id"
+                onChange={handleChange}
+                className="border p-1 px-4 grid border-gray-500 rounded-md"
+              >
+                <option value="">Sub Category</option>
+                {units?.map((floor) => (
+                  <option value={floor.id} key={floor.id}>
+                    {floor.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
           <div>
-            
             {/* Category, Sub Category, Assigned To, Priority */}
-            <div className="flex ">
+            <div className="flex flex-col sm:flex-row items-center justify-between">
               <div className="flex my-3 items-center gap-2">
                 <label htmlFor="" className=" font-semibold">
                   Assigned To:
@@ -486,7 +490,9 @@ const CreateTicket = () => {
                 <select
                   value={formData.assigned_to || ""}
                   name="assigned_to"
-                  onChange={(e) => setFormData({ ...formData, assigned_to: e.target.value })}
+                  onChange={(e) =>
+                    setFormData({ ...formData, assigned_to: e.target.value })
+                  }
                   className="border p-1 px-4 border-gray-500 rounded-md"
                 >
                   <option value="">Select Assign To</option>
@@ -498,38 +504,44 @@ const CreateTicket = () => {
                 </select>
               </div>
             </div>
-            <div>
-              <label htmlFor="" className="font-semibold my-2 flex justify-start">
-                Heading:
-              </label>
-              <textarea
-                name="heading"
-                placeholder="heading"
-
-                rows="3"
-                value={formData.heading}
-                onChange={handleChange}
-                className="border px-2 rounded-md flex flex-auto border-black w-full"
-              ></textarea>
+            <div className="flex sm:block  sm:flex-row items-center justify-center">
+              <div className="flex sm:flex-col gap-2">
+                <label
+                  htmlFor=""
+                  className="font-semibold my-2 flex justify-start"
+                >
+                  Title:
+                </label>
+                <textarea
+                  name="heading"
+                  placeholder="Enter Title"
+                  rows=""
+                  cols={25}
+                  value={formData.heading}
+                  onChange={handleChange}
+                  className="border px-2 rounded-md flex flex-auto border-black w-full"
+                ></textarea>
+              </div>
             </div>
           </div>
 
-
           {/* Description */}
-          <div className="flex flex-col my-5 gap-1">
-            <label htmlFor="" className="font-bold">
-              Description:
-            </label>
-            <textarea
-              name="text"
-              placeholder=" Describe your concern!"
-              id=""
-              cols="80"
-              rows="5"
-              className="border border-black rounded-md px-2"
-              value={formData.text}
-              onChange={handleChange}
-            />
+          <div className="flex sm:block sm:flex-row items-center justify-center">
+            <div className="flex sm:flex-col gap-2 ">
+              <label htmlFor="" className="font-bold">
+                Description:
+              </label>
+              <textarea
+                name="text"
+                placeholder=" Describe your concern!"
+                id=""
+                cols="25"
+                rows=""
+                className="border border-black rounded-md px-2"
+                value={formData.text}
+                onChange={handleChange}
+              />
+            </div>
           </div>
 
           {/* File Input */}
@@ -561,8 +573,6 @@ const CreateTicket = () => {
         </form>
       </div>
     </section>
-
-
   );
 };
 
