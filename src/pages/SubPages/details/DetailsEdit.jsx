@@ -420,7 +420,7 @@ const DetailsEdit = () => {
   };
 
   return (
-    <div className="">
+    <div className="grid ">
       <div className="flex flex-col justify-around gap-10 my-10 ">
         <div className="">
           <Detail details={ticketDetails} heading={"Edit Ticket Details"} />
