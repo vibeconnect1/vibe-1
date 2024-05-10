@@ -51,6 +51,9 @@ const UserTicket = () => {
   console.log("site--", siteID)
 
   const userName = localStorage.getItem("Name");
+  const formattedUserName = userName ? userName.replace(/"/g, '') : '';
+  const lastName = localStorage.getItem("LASTNAME");
+  const formattedLastName = lastName ? lastName.replace(/"/g, '') : '';
 
   // const siteID = getItemInLocalStorage("SITEID")
   // setSelectedSiteId(siteID) 
@@ -185,13 +188,13 @@ const UserTicket = () => {
   };
 
   return (
-    <section className="min-h-screen flex flex-col md:flex-row">
-      <div className="fixed left-0 top-0 h-full md:static md:h-auto md:flex-shrink-0">
+    <section className="min-h-screen p-4 sm:p-0 flex flex-col md:flex-row">
+      <div className="fixed hidden sm:block  left-0 top-0 h-full md:static md:h-auto md:flex-shrink-0">
         <Navbar />
       </div>
       <div className="flex justify-center items-center overflow-x-auto w-full max-w-screen-xl sm:w-full">
         <form
-          className="border border-gray-300 rounded-lg md:p-8 w-full max-w-[60rem]"
+          className="border p-2 sm:p-0  border-gray-300 rounded-lg md:p-8 w-full max-w-[60rem]"
           onSubmit={handleSubmit}
         >
           <h2 className="text-center text-xl font-bold p-2 bg-black rounded-full text-white">
@@ -208,14 +211,14 @@ const UserTicket = () => {
               className="bg-gray-300 my-4 p-2 rounded-md font-bold "
             >
               <div className="grid grid-cols-2 bg-gray-300 p-2 rounded-md gap-5 pb-4">
-                <p>Name: {userName} </p>
-                <p>Unit: {user.unit_name} </p>
+                <p className="font-medium">Name: {formattedUserName} {formattedLastName} </p>
+                <p className="font-medium">Unit: {user.unit_name} </p>
               </div>
             </Collapsible>
           <div className="flex flex-col my-5 justify-around w-full gap-4">
 
             {/* Related To :*/}
-            <div className="flex flex-col md:flex-row justify-around items-center gap-5">
+            <div className="flex flex-col md:flex-row justify-around sm:items-center gap-5">
               <div className="flex gap-3 items-center">
                 <label htmlFor="" className="font-semibold">
                   Related To:
@@ -266,7 +269,7 @@ const UserTicket = () => {
 
             </select>
 </div> */}
-            <div className="flex justify-around w-full">
+            <div className="flex flex-col sm:flex-row sm:gap-0 gap-3 justify-around w-full">
               <div className="flex gap-3 items-center">
                 <label className="font-semibold">Categories:</label>
                 <select
@@ -311,11 +314,11 @@ const UserTicket = () => {
             </div>
             <div className="flex flex-col justify-around">
             <label htmlFor="" className="font-semibold">
-              Heading:
+              Title:
             </label>
             <textarea
               name="heading"
-              placeholder="heading"
+              placeholder="Enter Title"
               cols="15"
               rows="1"
               value={formData.heading}
@@ -334,7 +337,7 @@ const UserTicket = () => {
               id=""
               cols="80"
               rows="5"
-              className="border border-black rounded-md"
+              className="border p-2 border-black rounded-md"
               value={formData.text}
               onChange={handleChange}
             />

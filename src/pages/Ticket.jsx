@@ -8,8 +8,7 @@ import { BsEye } from "react-icons/bs";
 import { BiEdit } from "react-icons/bi";
 import moment from "moment";
 import { getItemInLocalStorage } from "../utils/localStorage";
-
-
+import * as XLSX from "xlsx";
 const Ticket = () => {
   const [filteredData, setFilteredData] = useState([]);
   const [searchText, setSearchText] = useState("");
@@ -18,7 +17,6 @@ const Ticket = () => {
   const [ticketStatusCounts, setTicketStatusCounts] = useState({});
   const allTicketTypes = ["Complaint", "Request", "Suggestion"];
   const [complaints, setComplaints] = useState([]);
-
 
   const getTimeAgo = (timestamp) => {
     const createdTime = moment(timestamp);
@@ -32,7 +30,6 @@ const Ticket = () => {
       return `${Math.floor(diff / 1440)} days ago`;
     }
   };
-
 
   const columns = [
     {
@@ -71,8 +68,13 @@ const Ticket = () => {
       selector: (row) => row.sub_category,
       sortable: true,
     },
-    { name: "heading", selector: (row) => row.heading, sortable: true },
-    { name: "Description", selector: (row) => row.text, sortable: true, maxWidth:"500px" }, 
+    { name: "Title", selector: (row) => row.heading, sortable: true },
+    {
+      name: "Description",
+      selector: (row) => row.text,
+      sortable: true,
+      maxWidth: "500px",
+    },
     { name: "Status", selector: (row) => row.issue_status, sortable: true },
     { name: "Created By", selector: (row) => row.created_by, sortable: true },
     { name: "Created On", selector: (row) => row.created_at, sortable: true },
@@ -86,14 +88,12 @@ const Ticket = () => {
     },
   ];
 
-
   //custom style
   const customStyle = {
     headRow: {
       style: {
         backgroundColor: "black",
         color: "white",
-
 
         fontSize: "10px",
       },
@@ -105,24 +105,21 @@ const Ticket = () => {
     },
   };
 
-
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await getAdminComplaints();
-        console.log("Resp", response)
-        getItemInLocalStorage("complaints", response)
+        console.log("Resp", response);
+        getItemInLocalStorage("complaints", response);
         const complaints = response?.data?.complaints || []; // Handle undefined or empty complaints array
         setFilteredData(complaints);
         setComplaints(complaints);
-
 
         const statusCounts = complaints.reduce((acc, curr) => {
           acc[curr.issue_status] = (acc[curr.issue_status] || 0) + 1;
           return acc;
         }, {});
         setTicketStatusCounts(statusCounts);
-
 
         const typeCounts = complaints.reduce((acc, curr) => {
           acc[curr.issue_type] = (acc[curr.issue_type] || 0) + 1;
@@ -134,10 +131,8 @@ const Ticket = () => {
       }
     };
 
-
     fetchData();
   }, []);
-
 
   // useEffect(() => {
   //   const fetchData = async () => {
@@ -145,7 +140,6 @@ const Ticket = () => {
   //       const response = await getComplaints();
   //       const complaints = response.data.complaints;
   //       setFilteredData(complaints);
-
 
   //       const statusCounts = complaints.reduce((acc, curr) => {
   //         acc[curr.issue_status] = (acc[curr.issue_status] || 0) + 1;
@@ -164,7 +158,6 @@ const Ticket = () => {
   //   fetchData();
   // }, []);
 
-
   // const handleSearch = (e) => {
   //   const searchValue = e.target.value;
   //   setSearchText(searchValue);
@@ -176,11 +169,9 @@ const Ticket = () => {
   //   setFilteredData(filteredResults);
   // };
 
-
   // const handleStatusChange = (status) => {
   //   setSelectedStatus(status);
   // };
-
 
   // const handleSearch = (e) => {
   //   const searchValue = e.target.value;
@@ -195,11 +186,10 @@ const Ticket = () => {
   //   setFilteredData(filteredResults);
   // };
 
-
   const handleSearch = (e) => {
     const searchValue = e.target.value;
     setSearchText(searchValue);
- 
+
     if (searchValue.trim() === "") {
       // If search input is empty, reset to show all data
       setFilteredData(complaints);
@@ -207,19 +197,26 @@ const Ticket = () => {
       // Filter the data based on search input and selected status
       const filteredResults = complaints.filter(
         (item) =>
-          (selectedStatus === "all" ||
+          ((selectedStatus === "all" ||
             item.issue_status.toLowerCase() === selectedStatus.toLowerCase()) &&
-          (item.ticket_number.toLowerCase().includes(searchValue.toLowerCase()) ||
-            item.category_type.toLowerCase().includes(searchValue.toLowerCase()))
+            (item.ticket_number
+              .toLowerCase()
+              .includes(searchValue.toLowerCase()) ||
+              item.category_type
+                .toLowerCase()
+                .includes(searchValue.toLowerCase()))) ||
+          item.issue_type.toLowerCase().includes(searchValue.toLowerCase()) ||
+          item.heading.toLowerCase().includes(searchValue.toLowerCase()) ||
+          item.priority.toLowerCase().includes(searchValue.toLowerCase())
+        // ||
+        // item.assigned_to.toLowerCase().includes(searchValue.toLowerCase())
       );
       setFilteredData(filteredResults);
     }
   };
 
-
   const handleStatusChange = (status) => {
     setSelectedStatus(status);
-
 
     if (status === "all") {
       setFilteredData(complaints);
@@ -228,18 +225,38 @@ const Ticket = () => {
         (item) => item.issue_status.toLowerCase() === status.toLowerCase()
       );
 
-
       setFilteredData(filteredResults);
     }
   };
 
+  // export data
+  const exportToExcel = () => {
+    const modifiedData = filteredData.map((item) => ({
+      ...item,
+      "Ticket Number": item.ticket_number,
+    }));
+    const fileType =
+      "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8";
+    const fileName = "helpdesk_data.xlsx";
+    const ws = XLSX.utils.json_to_sheet(modifiedData);
+    const wb = { Sheets: { data: ws }, SheetNames: ["data"] };
+    const excelBuffer = XLSX.write(wb, { bookType: "xlsx", type: "array" });
+    const data = new Blob([excelBuffer], { type: fileType });
+    const url = URL.createObjectURL(data);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = fileName;
+    link.click();
+  };
 
   return (
-    <section className="container max-w-min overflow-hidden mr-5 flex md:justify-between md:items-start">
+    // <section className="container max-w-min overflow-hidden mr-5 flex md:justify-between md:items-start">
+    <section className="flex">
       {/* <section className="flex max-w-min overflow-x-auto mr-5 "> */}
+     
       <Navbar />
       <div className="w-full flex mx-3 flex-col overflow-hidden">
-      <div className="flex m-5 justify-start w-fit gap-5 sm:flex-row flex-col flex-shrink flex-wrap ">
+        <div className="flex m-5 justify-start w-fit gap-5 sm:flex-row flex-col flex-shrink flex-wrap ">
           {/* <div className="flex gap-2 mt-2"> */}
           {Object.entries(ticketStatusCounts).map(([status, count]) => (
             <div
@@ -263,6 +280,8 @@ const Ticket = () => {
                   ? "border-green-800"
                   : status === "Received"
                   ? "border-red-800"
+                  : status === "Approval Pending"
+                  ? "border-x-teal-300"
                   : "bg-gray-200 text-gray-700"
               }`}
             >
@@ -271,9 +290,6 @@ const Ticket = () => {
             </div>
           ))}
           {/* </div> */}
-
-
-
 
           {allTicketTypes.map((type) => (
             <div
@@ -297,9 +313,6 @@ const Ticket = () => {
             </div>
           ))}
         </div>
-
-
-
 
         <div className="flex sm:flex-row flex-col gap-10 my-5">
           <div className="sm:flex grid grid-cols-2 items-center justify-center  gap-4 border border-gray-300 rounded-md px-3 p-2 w-auto">
@@ -336,7 +349,7 @@ const Ticket = () => {
                 onChange={() => handleStatusChange("closed")}
               />
               <label htmlFor="closed" className="text-sm">
-                Close
+                Closed
               </label>
             </div>
             <div className="flex items-center gap-2">
@@ -375,8 +388,8 @@ const Ticket = () => {
           <div className="flex gap-2">
             <input
               type="text"
-              placeholder="Search by Ticket number or category "
-              className="border border-gray-400 w-96 placeholder:text-sm rounded-lg p-2"
+              placeholder="Search by Title, Ticket number, Category, Ticket type or Priority "
+              className="border border-gray-400 w-96 placeholder:text-xs rounded-lg p-2"
               value={searchText}
               onChange={handleSearch}
             />
@@ -387,29 +400,37 @@ const Ticket = () => {
                 Search
               </button> */}
           </div>
+          <button
+            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+            onClick={exportToExcel}
+          >
+            Export
+          </button>
         </div>
-        <div className="flex flex-col gap-4 justify-center items-center">
-          <DataTable
-            responsive
-            selectableRows
-            columns={columns}
-            data={filteredData}
-            customStyles={customStyle}
-            pagination
-            fixedHeader
-            fixedHeaderScrollHeight="420px"
-            selectableRowsHighlight
-            highlightOnHover
-          />
-        </div>
+
+        {complaints.length === 0 ? (
+          <p className="text-center">Loading...</p>
+        ) : (
+          <div className="flex flex-col gap-4 justify-center items-center">
+            <DataTable
+              responsive
+              selectableRows
+              columns={columns}
+              data={filteredData}
+              customStyles={customStyle}
+              pagination
+              fixedHeader
+              fixedHeaderScrollHeight="420px"
+              selectableRowsHighlight
+              highlightOnHover
+            />
+          </div>
+        )}
         {/* </div> */}
       </div>
     </section>
   );
 };
 
-
 //
 export default Ticket;
-
-
