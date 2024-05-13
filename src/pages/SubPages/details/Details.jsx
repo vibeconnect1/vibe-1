@@ -61,6 +61,7 @@ const TicketDetails = () => {
     { icon: <BiHappy size={30} />, defaultColor: "green" },
   ];
   const ticketDetails = [
+    { title: "Site Owner  :", description: ticketinfo.responsible_person },
     { title: "Ticket No  :", description: ticketinfo.ticket_number },
     { title: "Title  :", description: ticketinfo.heading },
     { title: "Status  :", description: ticketinfo.current_status },

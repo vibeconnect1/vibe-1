@@ -432,7 +432,7 @@ const Ticket = () => {
               customStyles={customStyle}
               pagination
               fixedHeader
-              fixedHeaderScrollHeight="420px"
+              // fixedHeaderScrollHeight="420px"
               selectableRowsHighlight
               highlightOnHover
             />

@@ -6,7 +6,7 @@ export const columnsData = [
   "Floor",
   "Area",
   "Room",
-  "Asset Name",
+  "Name",
   "Asset Code",
   "Serial Number",
   "Asset Type",

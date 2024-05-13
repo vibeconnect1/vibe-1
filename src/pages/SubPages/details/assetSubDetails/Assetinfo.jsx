@@ -6,10 +6,12 @@ import { FaQrcode } from "react-icons/fa";
 import AssetQrCode from "./AssetQrCode";
 
 const Assetinfo = ({ assetData }) => {
+  const [assetBreakdown, setAssetBreakdown] = useState(false);
   const {
     floor_name,
     building_name,
     name,
+    unit_name,
     serial_number,
     model_number,
     purchased_on,
@@ -31,6 +33,10 @@ const Assetinfo = ({ assetData }) => {
     const date = new Date(dateString);
     return date.toLocaleString(); // Adjust the format as needed
   };
+
+  const handleToggle = () => {
+    setAssetBreakdown(!breakdown);
+  }
   return (
     <section>
       <div className="m-2">
@@ -43,7 +49,7 @@ const Assetinfo = ({ assetData }) => {
             <div className="flex items-center gap-2 ">
               {/* modify switch */}
               <p>Breakdown</p>
-              <Switch checked={!breakdown} />
+              <Switch checked={!breakdown} onChange={handleToggle}  />
               <p>In use</p>
             </div>
             <div className="flex gap-2">
@@ -66,27 +72,27 @@ const Assetinfo = ({ assetData }) => {
             <div className="my-5 px-10 text-sm items-center font-medium grid gap-4 grid-cols-2">
               <div className="grid grid-cols-2">
                 <p>Site :</p>
-                <p>NA</p>
+                <p className="text-xs">NA</p>
               </div>
               <div className="grid grid-cols-2">
-                <p>Room : </p>
-                <p>NA</p>
+                <p>Unit : </p>
+                <p className="text-xs">{unit_name}</p>
               </div>
               <div className="grid grid-cols-2">
                 <p>Floor : </p>
-                <p>{floor_name} Floor : </p>
+                <p className="text-xs">{floor_name}</p>
               </div>
               <div className="grid grid-cols-2">
                 <p>Area : </p>
-                <p>NA</p>
+                <p className="text-xs">NA</p>
               </div>
               <div className="grid grid-cols-2">
                 <p>Wing : </p>
-                <p>NA </p>
+                <p className="text-xs">NA </p>
               </div>
               <div className="grid grid-cols-2">
                 <p>Building : </p>
-                <p>{building_name}</p>
+                <p className="text-xs">{building_name}</p>
               </div>
             </div>
           </div>
@@ -97,15 +103,15 @@ const Assetinfo = ({ assetData }) => {
             <div className="my-5 px-10 items-center font-medium grid gap-4 grid-cols-3 text-sm">
               <div className="grid grid-cols-2">
                 <p>Client Name :</p>
-                <p></p>
+                <p className="text-xs"></p>
               </div>
               <div className="grid grid-cols-2">
                 <p>Asset Name : </p>
-                <p>{name}</p>
+                <p className="text-xs">{name}</p>
               </div>
               <div>
                 <p>Asset Number : </p>
-                <p></p>
+                <p className="text-xs"></p>
               </div>
               <div className="grid grid-cols-2">
                 <p>Asset Code : </p>
@@ -115,70 +121,70 @@ const Assetinfo = ({ assetData }) => {
               </div>
               <div className="grid grid-cols-2">
                 <p>Model Number : </p>
-                <p> {model_number}</p>
+                <p className="text-xs"> {model_number}</p>
               </div>
               <div className="grid grid-cols-2">
                 <p>Serial Number :</p>
-                <p> {serial_number}</p>
+                <p className="text-xs"> {serial_number}</p>
               </div>
               <div className="grid grid-cols-2">
                 <p>Manufacturer: </p>
               </div>
               <div className="grid grid-cols-2">
                 <p>Purchased on : </p>
-                <p>{purchased_on}</p>
+                <p className="text-xs">{purchased_on}</p>
               </div>
               <div className="grid grid-cols-2">
                 <p>Date Of Installation: </p>
-                <p></p>
+                <p className="text-xs"></p>
               </div>
               <div className="grid grid-cols-2">
                 <p>Breakdown Date: </p>
               </div>
               <div className="grid grid-cols-2">
                 <p>Created On : </p>
-                <p>{dateFormat(created_at)}</p>
+                <p className="text-xs">{dateFormat(created_at)}</p>
               </div>
               <div className="grid grid-cols-2">
                 <p>Capacity : </p>
-                <p>{capacity}</p>
+                <p className="text-xs">{capacity}</p>
               </div>
               <div className="grid grid-cols-2">
                 <p>Purchase Cost : </p>
-                <p>{purchase_cost}</p>
+                <p className="text-xs">{purchase_cost}</p>
               </div>
               <div className="grid grid-cols-2">
                 <p>Group : </p>
-                <p></p>
+                <p className="text-xs"></p>
               </div>
               <div className="grid grid-cols-2">
                 <p>Subgroup: </p>
               </div>
               <div className="grid grid-cols-2">
                 <p>Critical : </p>
-                <p>{critical ? "Yes" : "No"}</p>
+                <p className="text-xs">{critical ? "Yes" : "No"}</p>
               </div>
               <div className="grid grid-cols-2">
                 <p>Meter Applicable : </p>
-                <p>{is_meter}</p>
+                <p className="text-xs">{is_meter}</p>
               </div>
               <div className="grid grid-cols-2">
                 <p>Meter Category: </p>
-                <p></p>
+                <p className="text-xs"></p>
               </div>
               <div className="grid grid-cols-2">
                 <p>Meter Type Category: </p>
               </div>
               <div className="grid grid-cols-2">
                 <p>Updated On : </p>
-                <p>{dateFormat(updated_at)}</p>
+                <p className="text-xs">{dateFormat(updated_at)}</p>
               </div>
               <div className="grid grid-cols-2">
                 <p>Comments: </p>
               </div>
               <div className="grid grid-cols-2">
                 <p>Description : </p>
-                <p>{description}</p>
+                <p className="text-xs">{description}</p>
               </div>
             </div>
           </div>
@@ -192,11 +198,11 @@ const Assetinfo = ({ assetData }) => {
               </div>
               <div className="grid grid-cols-2">
                 <p>Expiry Date : </p>
-                <p>{warranty_expiry}</p>
+                <p className="text-xs">{warranty_expiry}</p>
               </div>
               <div className="grid grid-cols-2">
                 <p>Commissioning Date:</p>
-                <p>{warranty_start} </p>
+                <p className="text-xs">{warranty_start} </p>
               </div>
             </div>
           </div>

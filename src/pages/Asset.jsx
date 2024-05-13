@@ -30,38 +30,25 @@ const Asset = () => {
           <Link to={`/assets/asset-details/${row.id}`}>
             <BsEye size={15} />
           </Link>
-          <Link to={`/edit/${row.id}`}>
+          <Link to={`/asset-edit/${row.id}`}>
             <BiEdit size={15} />
           </Link>
         </div>
       ),
     },
-    { name: "Site", selector: (row) => row.site, sortable: true },
+
     {
       name: "Building",
       selector: (row) => row.building_name,
       sortable: true,
     },
-    { name: "Wing", selector: (row) => row.wing, sortable: true },
+
     { name: "Floor", selector: (row) => row.floor_name, sortable: true },
-    {
-      name: "Area",
-      selector: (row) => row.area,
-      sortable: true,
-    },
-    {
-      name: "Room",
-      selector: (row) => row.room,
-      sortable: true,
-    },
+
+    { name: "Unit", selector: (row) => row.unit_name, sortable: true },
     {
       name: "Asset Name",
       selector: (row) => row.name,
-      sortable: true,
-    },
-    {
-      name: "Asset Code",
-      selector: (row) => row.assetCode,
       sortable: true,
     },
 
@@ -70,39 +57,10 @@ const Asset = () => {
       selector: (row) => row.serial_number,
       sortable: true,
     },
-    {
-      name: "Asset Type",
-      selector: (row) => row.serialNumber,
-      sortable: true,
-    },
-    {
-      name: "Client Name",
-      selector: (row) => row.clientName,
-      sortable: true,
-    },
+
     {
       name: "Model Number",
       selector: (row) => row.model_number,
-      sortable: true,
-    },
-    {
-      name: "Group",
-      selector: (row) => row.group,
-      sortable: true,
-    },
-    {
-      name: "Sub Group",
-      selector: (row) => row.subGroup,
-      sortable: true,
-    },
-    {
-      name: "Critical",
-      selector: (row) => (row.critical ? "Yes" : "No"),
-      sortable: true,
-    },
-    {
-      name: "Capacity",
-      selector: (row) => row.capacity,
       sortable: true,
     },
     {
@@ -110,29 +68,10 @@ const Asset = () => {
       selector: (row) => row.purchased_on,
       sortable: true,
     },
+
     {
       name: "Purchase Cost",
       selector: (row) => row.purchase_cost,
-      sortable: true,
-    },
-    {
-      name: "Status",
-      selector: (row) => (row.active ? "In Use" : "Breakdown"),
-      sortable: true,
-    },
-    {
-      name: "Created On",
-      selector: (row) => dateFormat(row.created_at),
-      sortable: true,
-    },
-    {
-      name: "Updated On",
-      selector: (row) => dateFormat(row.updated_at),
-      sortable: true,
-    },
-    {
-      name: "Warranty",
-      selector: (row) => row.warranty_start,
       sortable: true,
     },
     {
@@ -141,40 +80,72 @@ const Asset = () => {
       sortable: true,
     },
     {
-      name: "Commissioning Date",
+      name: "Critical",
+      selector: (row) => (row.critical ? "Yes" : "No"),
+      sortable: true,
+    },
+    {
+      name: "Breakdown",
+      selector: (row) => (row.breakdown ? "Yes" : "No"),
+      sortable: true,
+    },
+    {
+      name: "Capacity",
+      selector: (row) => row.capacity,
+      sortable: true,
+    },
+
+    // {
+    //   name: "Created On",
+    //   selector: (row) => dateFormat(row.created_at),
+    //   sortable: true,
+    // },
+    // {
+    //   name: "Updated On",
+    //   selector: (row) => dateFormat(row.updated_at),
+    //   sortable: true,
+    // },
+    // {
+    //   name: "Warranty",
+    //   selector: (row) => row.warranty_start,
+    //   sortable: true,
+    // },
+
+    {
+      name: "Installation Date",
       selector: (row) => row.installation,
       sortable: true,
     },
-    {
-      name: "AMC",
-      selector: (row) => row.AMC,
-      sortable: true,
-    },
-    {
-      name: "PPM",
-      selector: (row) => row.ppm,
-      sortable: true,
-    },
+    // {
+    //   name: "AMC",
+    //   selector: (row) => row.AMC,
+    //   sortable: true,
+    // },
+    // {
+    //   name: "PPM",
+    //   selector: (row) => row.ppm,
+    //   sortable: true,
+    // },
     {
       name: "Meter Configured",
       selector: (row) => (row.is_meter ? "Yes" : "No"),
       sortable: true,
     },
-    {
-      name: "Meter Type",
-      selector: (row) => row.meterType,
-      sortable: true,
-    },
-    {
-      name: "Submeter",
-      selector: (row) => row.subMeter,
-      sortable: true,
-    },
-    {
-      name: "Supplier",
-      selector: (row) => row.supplier,
-      sortable: true,
-    },
+    // {
+    //   name: "Meter Type",
+    //   selector: (row) => row.meterType,
+    //   sortable: true,
+    // },
+    // {
+    //   name: "Submeter",
+    //   selector: (row) => row.subMeter,
+    //   sortable: true,
+    // },
+    // {
+    //   name: "Supplier",
+    //   selector: (row) => row.supplier,
+    //   sortable: true,
+    // },
   ];
 
   const [filteredData, setFilteredData] = useState([]);
@@ -211,7 +182,7 @@ const Asset = () => {
       try {
         const response = await getSiteAsset();
         setFilteredData(response.data.site_assets);
-        console.log(response)
+        console.log(response);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -237,8 +208,6 @@ const Asset = () => {
   const handleRowSelected = (state) => {
     setSelectedRows(state.selectedRows);
   };
-
-
 
   return (
     <section className="flex">
@@ -271,18 +240,7 @@ const Asset = () => {
               <option value="unit1">Building 1</option>
               <option value="unit2">Building 2</option>
             </select>
-            <select className="border p-1 px-4 border-gray-500 rounded-md">
-              <option value="">Select Wing</option>
-              <option value="unit1">Wing 1</option>
-              <option value="unit2">WIng 2</option>
-            </select>
 
-            <select className="border p-1 px-4 border-gray-500 rounded-md">
-              <option value="">Select Area</option>
-              <option value="unit1">Area 1</option>
-              <option value="unit2">Area 2</option>
-              <option value="unit2">Area 3</option>
-            </select>
             <select className="border p-1 px-4 border-gray-500 rounded-md">
               <option value="">Select Floor</option>
               <option value="unit1">Floor 1</option>
@@ -290,27 +248,27 @@ const Asset = () => {
               <option value="unit2">Floor 3</option>
             </select>
             <select className="border p-1 px-4 border-gray-500 rounded-md">
-              <option value="">Select Room</option>
-              <option value="unit1">Room 1</option>
-              <option value="unit2">Room 2</option>
-              <option value="unit2">Room 3</option>
+              <option value="">Select Unit</option>
+              <option value="unit1">Unit 1</option>
+              <option value="unit2">Unit 2</option>
+              <option value="unit2">Unit 3</option>
             </select>
             <button className="bg-black p-1 px-4 text-white rounded-md">
               Apply
             </button>
           </div>
         )}
-        <div className="flex sm:flex-row flex-col justify-around items-center  ">
+        <div className="flex md:flex-row flex-col justify-around items-center my-2  ">
           <input
             type="text"
             placeholder="Search By Building name or Asset Name"
-            className="border-2 p-2 w-96 border-gray-300 rounded-lg"
+            className="border-2 p-2 md:w-96 border-gray-300 rounded-lg"
             value={searchText}
             onChange={handleSearch}
           />
-          <div className="flex sm:flex-row my-2 flex-col gap-2">
+          <div className="md:flex grid grid-cols-2 sm:flex-row my-2 flex-col gap-2">
             <button
-              className="text-lg font-semibold border-2 border-black px-4 p-1 flex gap-2 items-center rounded-md"
+              className="md:text-lg text-sm font-semibold border-2 border-black px-4 p-1 flex gap-2 items-center rounded-md"
               onClick={() => setOmitColumn(!omitColumn)}
             >
               <IoFilterOutline />
@@ -346,20 +304,20 @@ const Asset = () => {
           </button> */}
           </div>
         </div>
-          <DataTable
-            selectableRows
-            columns={column.filter((col) => visibleColumns.includes(col.name))}
-            data={filteredData}
-            customStyles={customStyle}
-            responsive
-            onSelectedRowsChange={handleRowSelected}
-            fixedHeader
-            fixedHeaderScrollHeight="450px"
-            pagination
-            selectableRowsHighlight
-            highlightOnHover
-            omitColumn={column}
-          />
+        <DataTable
+          selectableRows
+          columns={column.filter((col) => visibleColumns.includes(col.name))}
+          data={filteredData}
+          customStyles={customStyle}
+          responsive
+          onSelectedRowsChange={handleRowSelected}
+          fixedHeader
+          // fixedHeaderScrollHeight="450px"
+          pagination
+          selectableRowsHighlight
+          highlightOnHover
+          omitColumn={column}
+        />
       </div>
     </section>
   );

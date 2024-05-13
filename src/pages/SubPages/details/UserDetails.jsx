@@ -114,6 +114,7 @@ const UserDetails = () => {
   ];
 
   const ticketDetails = [
+    { title: "Site Owner  :", description: ticketinfo.responsible_person },
     { title: "Ticket No  :", description: ticketinfo.ticket_number },
     { title: "Title  :", description: ticketinfo.heading },
     { title: "Status  :", description: ticketinfo.current_status },
@@ -168,9 +169,9 @@ const UserDetails = () => {
           </div>
         )} 
         <div className=" w-screen">
-          <h2 className="text-center mb-2 bg-black text-white font-semibold text-lg p-2 px-4 ">
+          {/* <h2 className="text-center mb-2 bg-black text-white font-semibold text-lg p-2 px-4 ">
             Ticket Details
-          </h2>
+          </h2> */}
           <Detail details={ticketDetails} heading={"Ticket Details"} />
 
         </div>

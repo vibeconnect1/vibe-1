@@ -217,18 +217,8 @@ const DetailsEdit = () => {
   console.log("SubCategory" + formData.sub_category_id);
 
   const ticketDetails = [
-    // { title: "Status  :", description: ticketinfo.issue_status },
-
-    // { title: "Issue Type  :", description: ticketinfo.issue_type },
-    // { title: "Assigned To  :", description: ticketinfo.assigned_to },
-
-    // { title: "Customer Name:", description: ticketinfo.customer },
-    // { title: "Category  :", description: ticketinfo.category_type },
-    // { title: "Priority  :", description: ticketinfo.priority },
-
-    // { title: "Sub category  :", description: ticketinfo.sub_category },
-    // { title: "Total time  :", description: getTimeAgo(ticketinfo.created_at) },
-
+ 
+    { title: "Site Owner  :", description: ticketinfo.responsible_person },
     { title: "Ticket No.:", description: ticketinfo.ticket_number || "" },
 
     {
@@ -325,25 +315,7 @@ const DetailsEdit = () => {
       ),
     },
 
-    {
-      title: "Proactive/Reactive :",
-      description: (
-        <select
-          name="proactive_reactive"
-          value={formData.proactive_reactive}
-          onChange={(e) =>
-            setFormData({ ...formData, proactive_reactive: e.target.value })
-          }
-          className="border p-1 px-4 border-gray-400 rounded-md"
-        >
-          {/* <option value="Proactive">Proactive</option> */}
-
-          <option value="">Select Option</option>
-          <option value="Reactive">Reactive</option>
-          <option value="Proactive">Proactive</option>
-        </select>
-      ),
-    },
+   
 
     {
       title: "Categories:",
@@ -376,7 +348,7 @@ const DetailsEdit = () => {
           value={formData.sub_category_id}
           name="sub_category_id"
           onChange={handleChange}
-          className="border p-2 px-4 border-gray-500 rounded-md"
+          className="border p-2 px-4 border-gray-500 max-w-44 rounded-md"
         >
           <option value="">Sub Category</option>
           {units?.map((floor) => (
@@ -384,6 +356,25 @@ const DetailsEdit = () => {
               {floor.name}
             </option>
           ))}
+        </select>
+      ),
+    },
+     {
+      title: "Proactive/Reactive :",
+      description: (
+        <select
+          name="proactive_reactive"
+          value={formData.proactive_reactive}
+          onChange={(e) =>
+            setFormData({ ...formData, proactive_reactive: e.target.value })
+          }
+          className="border p-1 px-4 border-gray-400 rounded-md"
+        >
+          {/* <option value="Proactive">Proactive</option> */}
+
+          <option value="">Select Option</option>
+          <option value="Reactive">Reactive</option>
+          <option value="Proactive">Proactive</option>
         </select>
       ),
     },

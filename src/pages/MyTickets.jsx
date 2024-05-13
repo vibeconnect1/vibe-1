@@ -353,7 +353,7 @@ function MyTickets() {
           customStyles={customStyle}
           pagination
           fixedHeader
-          fixedHeaderScrollHeight="450px"
+          // fixedHeaderScrollHeight="450px"
           selectableRowsHighlight
           highlightOnHover
         />
