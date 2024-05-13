@@ -26,6 +26,11 @@ const Assetinfo = ({ assetData }) => {
     warranty_start,
   } = assetData;
   const [qrCode, setQrCode] = useState(false);
+
+  const dateFormat = (dateString) => {
+    const date = new Date(dateString);
+    return date.toLocaleString(); // Adjust the format as needed
+  };
   return (
     <section>
       <div className="m-2">
@@ -59,12 +64,30 @@ const Assetinfo = ({ assetData }) => {
               Location Details
             </h2>
             <div className="my-5 px-10 text-sm items-center font-medium grid gap-4 grid-cols-2">
-              <p>Site :</p>
-              <p>Room : </p>
-              <p>Floor : {floor_name} </p>
-              <p>Area : </p>
-              <p>Wing : </p>
-              <p>Building : {building_name} </p>
+              <div className="grid grid-cols-2">
+                <p>Site :</p>
+                <p>NA</p>
+              </div>
+              <div className="grid grid-cols-2">
+                <p>Room : </p>
+                <p>NA</p>
+              </div>
+              <div className="grid grid-cols-2">
+                <p>Floor : </p>
+                <p>{floor_name} Floor : </p>
+              </div>
+              <div className="grid grid-cols-2">
+                <p>Area : </p>
+                <p>NA</p>
+              </div>
+              <div className="grid grid-cols-2">
+                <p>Wing : </p>
+                <p>NA </p>
+              </div>
+              <div className="grid grid-cols-2">
+                <p>Building : </p>
+                <p>{building_name}</p>
+              </div>
             </div>
           </div>
           <div>
@@ -72,41 +95,109 @@ const Assetinfo = ({ assetData }) => {
               Asset Information
             </h2>
             <div className="my-5 px-10 items-center font-medium grid gap-4 grid-cols-3 text-sm">
-              <p>Client Name :</p>
-              <p>Asset Name : {name} </p>
-              <p>Asset Number : </p>
-              <p>Asset Code : </p>
-              <p>Asset Type : </p>
-              <p>Model Number : {model_number} </p>
-              <p>Serial Number : {serial_number}</p>
-              <p>Manufacturer: </p>
-              <p>Purchased on : {purchased_on} </p>
-              <p>Date Of Installation: </p>
-              <p>Breakdown Date: </p>
-              <p>Created On : {created_at}</p>
-              <p>Capacity : {capacity} </p>
-              <p>Purchase Cost : {purchase_cost} </p>
-              <p>Group : </p>
-              <p>Subgroup: </p>
-              <p>Critical : {critical ? "Yes" : "No"} </p>
-              <p>Meter Applicable : {is_meter} </p>
-              <p>Meter Category: </p>
-              <p>Meter Type Category: </p>
-              <p>Updated On : {updated_at} </p>
-              <p>Comments: </p>
-              <p>Description : {description} </p>
+              <div className="grid grid-cols-2">
+                <p>Client Name :</p>
+                <p></p>
+              </div>
+              <div className="grid grid-cols-2">
+                <p>Asset Name : </p>
+                <p>{name}</p>
+              </div>
+              <div>
+                <p>Asset Number : </p>
+                <p></p>
+              </div>
+              <div className="grid grid-cols-2">
+                <p>Asset Code : </p>
+              </div>
+              <div className="grid grid-cols-2">
+                <p>Asset Type : </p>
+              </div>
+              <div className="grid grid-cols-2">
+                <p>Model Number : </p>
+                <p> {model_number}</p>
+              </div>
+              <div className="grid grid-cols-2">
+                <p>Serial Number :</p>
+                <p> {serial_number}</p>
+              </div>
+              <div className="grid grid-cols-2">
+                <p>Manufacturer: </p>
+              </div>
+              <div className="grid grid-cols-2">
+                <p>Purchased on : </p>
+                <p>{purchased_on}</p>
+              </div>
+              <div className="grid grid-cols-2">
+                <p>Date Of Installation: </p>
+                <p></p>
+              </div>
+              <div className="grid grid-cols-2">
+                <p>Breakdown Date: </p>
+              </div>
+              <div className="grid grid-cols-2">
+                <p>Created On : </p>
+                <p>{dateFormat(created_at)}</p>
+              </div>
+              <div className="grid grid-cols-2">
+                <p>Capacity : </p>
+                <p>{capacity}</p>
+              </div>
+              <div className="grid grid-cols-2">
+                <p>Purchase Cost : </p>
+                <p>{purchase_cost}</p>
+              </div>
+              <div className="grid grid-cols-2">
+                <p>Group : </p>
+                <p></p>
+              </div>
+              <div className="grid grid-cols-2">
+                <p>Subgroup: </p>
+              </div>
+              <div className="grid grid-cols-2">
+                <p>Critical : </p>
+                <p>{critical ? "Yes" : "No"}</p>
+              </div>
+              <div className="grid grid-cols-2">
+                <p>Meter Applicable : </p>
+                <p>{is_meter}</p>
+              </div>
+              <div className="grid grid-cols-2">
+                <p>Meter Category: </p>
+                <p></p>
+              </div>
+              <div className="grid grid-cols-2">
+                <p>Meter Type Category: </p>
+              </div>
+              <div className="grid grid-cols-2">
+                <p>Updated On : </p>
+                <p>{dateFormat(updated_at)}</p>
+              </div>
+              <div className="grid grid-cols-2">
+                <p>Comments: </p>
+              </div>
+              <div className="grid grid-cols-2">
+                <p>Description : </p>
+                <p>{description}</p>
+              </div>
             </div>
-
-           
           </div>
           <div>
             <h2 className="border-b  text-xl border-black font-semibold">
               Warranty Details
             </h2>
-            <div className="my-5 px-10 text-sm items-center font-medium grid gap-4 grid-cols-3">
-              <p>Under Warranty: </p>
-              <p>Expiry Date : {warranty_expiry} </p>
-              <p>Commissioning Date:{warranty_start} </p>
+            <div className="my-5 px-10 text-sm items-center font-medium grid gap-4 grid-cols-3 w-full">
+              <div className="grid grid-cols-2">
+                <p>Under Warranty: </p>
+              </div>
+              <div className="grid grid-cols-2">
+                <p>Expiry Date : </p>
+                <p>{warranty_expiry}</p>
+              </div>
+              <div className="grid grid-cols-2">
+                <p>Commissioning Date:</p>
+                <p>{warranty_start} </p>
+              </div>
             </div>
           </div>
           <div>

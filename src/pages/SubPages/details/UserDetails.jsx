@@ -127,7 +127,7 @@ const UserDetails = () => {
     { title: "Floor Name  :", description: ticketinfo.floor_name },
     { title: "Sub category  :", description: ticketinfo.sub_category },
 
-    { title: "Unit  :", description: ticketinfo.unit },
+    { title: "Unit :", description: ticketinfo.unit },
     { title: "Total time  :", description: getTimeAgo(ticketinfo.created_at) },
 
     { title: "Created By  :", description: ticketinfo.created_by },

@@ -17,6 +17,11 @@ const Asset = () => {
   const [omitColumn, setOmitColumn] = useState(false);
   const [visibleColumns, setVisibleColumns] = useState(columnsData);
   const [selectedRows, setSelectedRows] = useState([]);
+
+  const dateFormat = (dateString) => {
+    const date = new Date(dateString);
+    return date.toLocaleString(); // Adjust the format as needed
+  };
   const column = [
     {
       name: "Action",
@@ -117,12 +122,12 @@ const Asset = () => {
     },
     {
       name: "Created On",
-      selector: (row) => row.created_at,
+      selector: (row) => dateFormat(row.created_at),
       sortable: true,
     },
     {
       name: "Updated On",
-      selector: (row) => row.updated_at,
+      selector: (row) => dateFormat(row.updated_at),
       sortable: true,
     },
     {
@@ -137,7 +142,7 @@ const Asset = () => {
     },
     {
       name: "Commissioning Date",
-      selector: (row) => row.commissioningDate,
+      selector: (row) => row.installation,
       sortable: true,
     },
     {
@@ -206,6 +211,7 @@ const Asset = () => {
       try {
         const response = await getSiteAsset();
         setFilteredData(response.data.site_assets);
+        console.log(response)
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -232,8 +238,10 @@ const Asset = () => {
     setSelectedRows(state.selectedRows);
   };
 
+
+
   return (
-    <section className="flex max-w-6xl overflow-hidden xl:max-w-7xl mr-5">
+    <section className="flex">
       <Navbar />
       <div className="p-4 w-full my-2 flex mx-3 overflow-hidden flex-col">
         {omitColumn && (
@@ -292,7 +300,7 @@ const Asset = () => {
             </button>
           </div>
         )}
-        <div className="flex justify-between items-center my-5 ">
+        <div className="flex sm:flex-row flex-col justify-around items-center  ">
           <input
             type="text"
             placeholder="Search By Building name or Asset Name"
@@ -300,7 +308,7 @@ const Asset = () => {
             value={searchText}
             onChange={handleSearch}
           />
-          <div className="flex gap-2">
+          <div className="flex sm:flex-row my-2 flex-col gap-2">
             <button
               className="text-lg font-semibold border-2 border-black px-4 p-1 flex gap-2 items-center rounded-md"
               onClick={() => setOmitColumn(!omitColumn)}
@@ -318,7 +326,7 @@ const Asset = () => {
 
             <Link
               to={"/assets/add-asset"}
-              className="bg-black  rounded-lg flex font-semibold  items-center gap-2 text-white p-2 "
+              className="bg-black  rounded-lg flex justify-center font-semibold  items-center gap-2 text-white p-2 "
             >
               <IoAddCircleOutline size={20} />
               Add
