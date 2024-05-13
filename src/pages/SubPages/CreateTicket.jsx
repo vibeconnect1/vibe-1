@@ -294,7 +294,7 @@ const CreateTicket = () => {
       <div className="fixed hidden sm:block left-0 top-0 h-full md:static md:h-auto md:flex-shrink-0">
         <Navbar />
       </div>
-      <div className="flex justify-center items-center overflow-x-auto w-full max-w-screen-xl sm:w-full">
+      <div className="flex justify-center items-center overflow-x-auto w-full  sm:w-full">
         <form
           className="border border-gray-300 rounded-lg sm:w-[60rem] p-8 flex flex-col gap-5"
           onSubmit={handleSubmit}
@@ -313,15 +313,18 @@ const CreateTicket = () => {
                 id="issueType"
                 value={formData.issue_type_id}
                 name="issue_type_id"
+                // onChange={(e) =>
+                //   setFormData({ ...formData, issue_type_id: e.target.value })
+                // }
                 onChange={(e) =>
                   setFormData({ ...formData, issue_type_id: e.target.value })
                 }
                 className="border p-1 px-4 border-gray-500 rounded-md"
               >
                 <option value="">Select Area</option>
-                <option value="Complaint">Apartment</option>
+                <option value="Apartment">Apartment</option>
                 {/* <option value="Suggestion">Shop</option> */}
-                <option value="Request">Common Area</option>
+                <option value="common Area">Common Area</option>
               </select>
             </div>
 

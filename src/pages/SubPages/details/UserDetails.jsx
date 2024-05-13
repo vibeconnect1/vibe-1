@@ -3,14 +3,20 @@ import Detail from "../../../containers/Detail";
 import { editComplaintsDetails, getComplaintsDetails } from "../../../api";
 import { useParams } from "react-router-dom";
 import moment from "moment";
-import { BiEdit } from "react-icons/bi";
+import { BiAngry, BiEdit, BiHappy, BiSad, BiSmile } from "react-icons/bi";
 import toast from "react-hot-toast";
-import { comment } from "postcss";
+import ReopenModal from "../../../containers/modals/ReopenModal";
+import TicketCloseModal from "../../../containers/modals/CloseModal";
+import { MdOutlineSentimentNeutral } from "react-icons/md";
 
 const UserDetails = () => {
   // const navigate = useNavigate()
   const { id } = useParams();
   const [ticketinfo, setTicketInfo] = useState([]);
+  const [modal, setModal] = useState(false);
+  const [closeModal, setCloseModal] = useState(false);
+  const [reopenStatusId, setReopenStatusId] = useState("");
+  const [closeStatusId, setCloseStatusID] = useState("")
   const [formData, setFormData] = useState({
     comment: "",
     of_phase: "pms",
@@ -44,6 +50,9 @@ const UserDetails = () => {
     });
   };
   const saveEditDetails = async () => {
+    if (!formData.comment) {
+      return toast.error("Please add a comment. Thanks. ");
+    }
     try {
       const updatedData = {
         complaint_log: {
@@ -62,7 +71,6 @@ const UserDetails = () => {
 
       console.log("Edited Ticket Details:", updatedData);
       toast.success("Updated Successfully");
-      // navigate(`/tickets/user-details/${id}`)
     } catch (error) {
       console.error("Error Saving in details update: ", error);
     }
@@ -73,6 +81,8 @@ const UserDetails = () => {
       const response = await getComplaintsDetails(id);
       console.log(response.data);
       setTicketInfo(response.data);
+      setReopenStatusId(response.data.reopen_status_id);
+      setCloseStatusID(response.data.close_status_id)
     };
     fetchDetails();
   }, [formData.comment]);
@@ -95,6 +105,14 @@ const UserDetails = () => {
     return date.toLocaleString(); // Adjust the format as needed
   };
 
+  const smielyRating = [
+    { icon: <BiAngry size={30} />, defaultColor: "red" },
+    { icon: <BiSad size={30} />, defaultColor: "orange" },
+    { icon: <MdOutlineSentimentNeutral size={30} />, defaultColor: "black" },
+    { icon: <BiSmile size={30} />, defaultColor: "grey" },
+    { icon: <BiHappy size={30} />, defaultColor: "green" },
+  ];
+
   const ticketDetails = [
     { title: "Ticket No  :", description: ticketinfo.ticket_number },
     { title: "Title  :", description: ticketinfo.heading },
@@ -115,25 +133,58 @@ const UserDetails = () => {
     { title: "Created By  :", description: ticketinfo.created_by },
     { title: "Created On  :", description: dateFormat(ticketinfo.created_at) },
     { title: "Updated On  :", description: dateFormat(ticketinfo.updated_at) },
+    // {title: "Rating :", description : ticketinfo.rating === 1 ?  <BiAngry size={0}  style={{ color: "red" }} /> :ticketinfo.rating === 2 ? <BiSad size={50} /> : ticketinfo.rating === 3 ?<MdOutlineSentimentNeutral size={50} /> : ticketinfo.rating === 4 ?  <BiSmile size={50} />: ticketinfo.rating === 5 ? <BiHappy size={30} /> : null }
+    {
+      title: "Rating :",
+      description: ticketinfo.rating >= 1 && ticketinfo.rating <= 5 ? 
+        <>{React.cloneElement(smielyRating[ticketinfo.rating - 1].icon, { style: { color: smielyRating[ticketinfo.rating - 1].defaultColor } })}</> : 
+        null
+    }
   ];
   const domainPrefix = "https://admin.vibecopilot.ai";
   return (
-    <div className="">
+    <div className=" w-screen">
       <div className="flex flex-col justify-around ">
-        <div className="">
+        {ticketinfo.current_fixed_state === "complete" && (
+          <div className="flex justify-end">
+         
+          <div className="flex justify-end mx-2">
+            <button
+              className="bg-black w-20 rounded-md mx-4 my-2 hover:bg-white hover:text-black border-2 border-black transition-all duration-300 font-medium text-white p-2 "
+              onClick={() => setModal(true)}
+            >
+              Re open
+            </button>
+          </div>
+        
+          <div className="flex justify-end mx-2">
+            <button
+              className="bg-black w-20 rounded-md mx-4 my-2 hover:bg-white hover:text-black border-2 border-black transition-all duration-300 font-medium text-white p-2 "
+              onClick={() => setCloseModal(true)}
+            >
+              Close
+            </button>
+          </div>
+          </div>
+        )} 
+        <div className=" w-screen">
+          <h2 className="text-center mb-2 bg-black text-white font-semibold text-lg p-2 px-4 ">
+            Ticket Details
+          </h2>
           <Detail details={ticketDetails} heading={"Ticket Details"} />
+
         </div>
-        <div className="flex flex-col items-center sm:items-start flex-wrap gap-2">
-          <h2 className="text-center w-screen bg-black text-white font-semibold mt-5 text-lg p-2 px-4 ">
+        <div className="flex flex-col sm:items-start flex-wrap gap-2">
+          <h2 className="text-center sm:w-screen  bg-black text-white font-semibold mt-5 text-lg p-2 px-4 ">
             Additional Info
           </h2>
-          <div className="px-4 flex flex-col gap-1 justify-center">
+          <div className="px-4 flex flex-col gap-1 mx-2  ">
             <p className="font-medium">Description :</p>
             <p className="text-wrap bg-gray-200 p-2 rounded-md">
               {ticketinfo.text}
             </p>
           </div>
-          <div className="px-4 flex flex-col gap-1 justify-center">
+          <div className="px-4 flex flex-col gap-1 justify-center mx-2 ">
             <label htmlFor="addComment" className="font-medium">
               Add Comment :
             </label>
@@ -154,25 +205,25 @@ const UserDetails = () => {
             id="documents"
             onChange={FileChange}
             multiple
-            className="ml-5 my-4"
+            className="file:bg-black file:text-white m-4 file:rounded-full file:p-2 file:px-4 file:font-semibold bg-gray-300 p-2 rounded-full"
           />
           <div className="flex mx-4">
             <button
               onClick={saveEditDetails}
-              className="border-2 border-black p-2 rounded-md hover:bg-black hover:text-white font-medium transition-all duration-300"
+              className="border-2 border-black p-2 mx-2  rounded-md hover:bg-black hover:text-white font-medium transition-all duration-300"
             >
               Comment
             </button>
           </div>
         </div>
         {/* <div className="border " /> */}
-        <h2 className="text-center w-screen bg-black text-white font-semibold my-5 text-lg p-2 px-4 ">
+        <h2 className="text-center  bg-black text-white font-semibold my-5 text-lg p-2 px-4 ">
           Attachments
         </h2>
         <div className="flex ">
           {ticketinfo.documents &&
             ticketinfo.documents.map((doc, index) => (
-              <div key={index} className="flex justify-start p-4">
+              <div key={index} className="flex justify-start mx-2 p-4">
                 <a href={domainPrefix + doc.document} target="_blank">
                   <img
                     src={domainPrefix + doc.document}
@@ -184,7 +235,7 @@ const UserDetails = () => {
             ))}
         </div>
 
-        <div className="border m-10" />
+        {/* <div className="border m-10" /> */}
         <h2 className="text-center w-screen bg-black text-white font-semibold my-5 text-lg p-2 px-4 ">
           Logs
         </h2>
@@ -192,7 +243,7 @@ const UserDetails = () => {
 
         {ticketinfo.complaint_logs &&
           ticketinfo.complaint_logs.map((log) => (
-            <div className="md:flex  justify-center " key={log.id}>
+            <div className="md:flex mx-4 justify-center " key={log.id}>
               <ol className="relative  border-gray-200 w-full">
                 <li className="mb-6 sm:mb-10 md:ms-6">
                   <div className="items-center justify-between p-4  border border-gray-200 rounded-lg shadow-sm sm:flex  dark:border-gray-600">
@@ -202,37 +253,28 @@ const UserDetails = () => {
                     <div className="text-sm font-normal text-gray-500 dark:text-gray-300">
                       {" "}
                       {log.priority && (
-                        <div className="text-sm font-semibold text-gray-900 dark:text-gray mb-5">
+                        <div className="text-sm font-semibold flex gap-2 text-gray-900 dark:text-gray mb-5">
                           Priority :{" "}
-                          <a
-                            href="#"
-                            className="font-semibold text-gray-900 dark:text-gray hover:underline"
-                          >
+                          <p className="font-semibold text-gray-900 dark:text-gray">
                             {" "}
                             {log.priority}{" "}
-                          </a>
+                          </p>
                         </div>
                       )}
                       {log.log_comment && (
-                        <div className="text-sm font-semibold text-gray-900 dark:text-gray mb-5">
+                        <div className="text-sm font-semibold flex gap-2 text-gray-900 dark:text-gray mb-5">
                           Comment :{" "}
-                          <a
-                            href="#"
-                            className="font-semibold text-gray-900 dark:text-gray hover:underline"
-                          >
+                          <p className="font-semibold text-gray-900 dark:text-gray ">
                             {log.log_comment}
-                          </a>
+                          </p>
                         </div>
                       )}
-                      {log.status && (
-                        <div className="text-sm font-semibold text-gray-900 dark:text-gray mb-5">
+                      {log.log_status && (
+                        <div className="text-sm font-semibold flex gap-2 text-gray-900 dark:text-gray mb-5">
                           Status:{" "}
-                          <a
-                            href="#"
-                            className="font-semibold text-gray-900 dark:text-gray hover:underline"
-                          >
+                          <p className="font-semibold text-gray-900 dark:text-gray">
                             {log.log_status}
-                          </a>
+                          </p>
                         </div>
                       )}
                       <div className="flex gap-4">
@@ -267,6 +309,18 @@ const UserDetails = () => {
             </div>
           ))}
       </div>
+      {modal && (
+        <ReopenModal
+          reopenStatusId={reopenStatusId}
+          onclose={() => setModal(false)}
+        />
+      )}
+      {closeModal && (
+        <TicketCloseModal
+          closeStatusId={closeStatusId}
+          onclose={() => setCloseModal(false)}
+        />
+      )}
     </div>
   );
 };

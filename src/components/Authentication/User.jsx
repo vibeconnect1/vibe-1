@@ -55,7 +55,7 @@ function User() {
     }
   };
 
-
+  document.title = `Profile - Vibe Connect`
   return (
     <div className="flex gap-10 w-screen">
       <div>

@@ -24,14 +24,13 @@ const Login = () => {
   useEffect(() => {
     const token = localStorage.getItem("TOKEN");
     const user = localStorage.getItem("Name");
-    // console.log(user)  
+    // console.log(user)
     if (token) {
       navigate("/dashboard");
       toast.success("You are already logged in!");
     }
   }, []);
 
-  
   const onSubmit = async (e) => {
     e.preventDefault();
     if (!formData.email || !formData.password) {
@@ -46,9 +45,9 @@ const Login = () => {
         },
       });
 
-      const loginD = response.data.user
-      setItemInLocalStorage("user", loginD)
-      console.log("User details", loginD)
+      const loginD = response.data.user;
+      setItemInLocalStorage("user", loginD);
+      console.log("User details", loginD);
 
       const unitId = response.data.user.unit_id;
       setItemInLocalStorage("UNITID", unitId);
@@ -61,32 +60,32 @@ const Login = () => {
       setItemInLocalStorage("categories", categories);
       const token = response.data.user.api_key;
       setItemInLocalStorage("TOKEN", token);
-      const selectedSiteId = response.data.user.selected_site_id
-      const userName = response.data.user.firstname
+      const selectedSiteId = response.data.user.selected_site_id;
+      const userName = response.data.user.firstname;
       setItemInLocalStorage("SITEID", selectedSiteId);
-      setItemInLocalStorage("Name", userName)
+      setItemInLocalStorage("Name", userName);
       // console.log(userName)
-      const lastName =  response.data.user.lastname
-      setItemInLocalStorage("LASTNAME", lastName)
+      const lastName = response.data.user.lastname;
+      setItemInLocalStorage("LASTNAME", lastName);
 
-      const userType = response.data.user.user_type
-      setItemInLocalStorage("USERTYPE", userType)
+      const userType = response.data.user.user_type;
+      setItemInLocalStorage("USERTYPE", userType);
       // console.log(userType)
-      
-      const statuses = response.data.statuses
-      setItemInLocalStorage("STATUS", statuses)
+
+      const statuses = response.data.statuses;
+      setItemInLocalStorage("STATUS", statuses);
       // console.log("Status", statuses)
 
-      const complaint = response.data.complanits
-      setItemInLocalStorage("complaint", complaint)
+      const complaint = response.data.complanits;
+      setItemInLocalStorage("complaint", complaint);
 
       // console.log(userName)
       // console.log("Sit",selectedSiteId)
       toast.loading("Processing your data please wait...");
-      if(userType === "pms_admin"){
+      if (userType === "pms_admin") {
         navigate("/dashboard");
-      }else{
-        navigate("/mytickets")
+      } else {
+        navigate("/mytickets");
       }
       toast.dismiss();
       window.location.reload();

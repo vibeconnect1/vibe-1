@@ -6,6 +6,9 @@ import moment from "moment";
 import { BiEdit } from "react-icons/bi";
 import toast from "react-hot-toast";
 
+import { BiAngry, BiHappy, BiSad, BiSmile } from "react-icons/bi";
+import { MdOutlineSentimentNeutral } from "react-icons/md";
+
 
 const TicketDetails = () => {
   const navigate = useNavigate();
@@ -50,7 +53,13 @@ const TicketDetails = () => {
     return date.toLocaleString(); // Adjust the format as needed
   };
 
-
+  const smielyRating = [
+    { icon: <BiAngry size={30} />, defaultColor: "red" },
+    { icon: <BiSad size={30} />, defaultColor: "orange" },
+    { icon: <MdOutlineSentimentNeutral size={30} />, defaultColor: "black" },
+    { icon: <BiSmile size={30} />, defaultColor: "grey" },
+    { icon: <BiHappy size={30} />, defaultColor: "green" },
+  ];
   const ticketDetails = [
     { title: "Ticket No  :", description: ticketinfo.ticket_number },
     { title: "Title  :", description: ticketinfo.heading },
@@ -79,6 +88,12 @@ const TicketDetails = () => {
     { title: "Created By  :", description: ticketinfo.created_by },
     { title: "Created On  :", description: dateFormat(ticketinfo.created_at) },
     { title: "Updated On  :", description: dateFormat(ticketinfo.updated_at) },
+    {
+      title: "Rating :",
+      description: ticketinfo.rating >= 1 && ticketinfo.rating <= 5 ? 
+        <>{React.cloneElement(smielyRating[ticketinfo.rating - 1].icon, { style: { color: smielyRating[ticketinfo.rating - 1].defaultColor } })}</> : 
+        null
+    }
   ];
   const domainPrefix = "https://admin.vibecopilot.ai";
 
@@ -124,7 +139,7 @@ const TicketDetails = () => {
           </div>
           <div className="px-4 flex flex-col gap-1 justify-center">
             <p className="font-medium">Proactive/Reactive :</p>
-            <p className="text-wrap bg-gray-200 p-2 rounded-md">{ticketinfo.proactive_reactive}</p>
+            <p className="text-wrap bg-gray-200 p-2 rounded-md">{ticketinfo.proactive_reactive ? ticketinfo.proactive_reactive : "Reactive"}</p>
           </div>
           <div className="px-4 flex flex-col gap-1 justify-center">
             <p className="font-medium">Correction :</p>

@@ -207,7 +207,8 @@ const Ticket = () => {
                 .includes(searchValue.toLowerCase()))) ||
           item.issue_type.toLowerCase().includes(searchValue.toLowerCase()) ||
           item.heading.toLowerCase().includes(searchValue.toLowerCase()) ||
-          item.priority.toLowerCase().includes(searchValue.toLowerCase())
+          item.priority.toLowerCase().includes(searchValue.toLowerCase()) ||
+          (item.unit && item.unit.toLowerCase().includes(searchValue.toLowerCase()))
         // ||
         // item.assigned_to.toLowerCase().includes(searchValue.toLowerCase())
       );
@@ -249,6 +250,8 @@ const Ticket = () => {
     link.click();
   };
 
+  document.title = `Admin - Vibe Connect`
+
   return (
     // <section className="container max-w-min overflow-hidden mr-5 flex md:justify-between md:items-start">
     <section className="flex">
@@ -279,6 +282,10 @@ const Ticket = () => {
                   : status === "Re Open"
                   ? "border-green-800"
                   : status === "Received"
+                  ? "border-red-800"
+                  : status === "Work Completed"
+                  ? "border-green-800"
+                  : status === "Reopened"
                   ? "border-red-800"
                   : status === "Approval Pending"
                   ? "border-x-teal-300"
@@ -367,13 +374,13 @@ const Ticket = () => {
             <div className="flex items-center gap-2">
               <input
                 type="radio"
-                id="complete"
+                id="completed"
                 name="status"
-                checked={selectedStatus === "complete"}
-                onChange={() => handleStatusChange("complete")}
+                checked={selectedStatus === "completed"}
+                onChange={() => handleStatusChange("completed")}
               />
-              <label htmlFor="complete" className="text-sm">
-                Complete
+              <label htmlFor="completed" className="text-sm">
+                Completed
               </label>
             </div>
           </div>
@@ -388,7 +395,7 @@ const Ticket = () => {
           <div className="flex gap-2">
             <input
               type="text"
-              placeholder="Search by Title, Ticket number, Category, Ticket type or Priority "
+              placeholder="Search by Title, Ticket number, Category, Ticket type, Priority or Unit "
               className="border border-gray-400 w-96 placeholder:text-xs rounded-lg p-2"
               value={searchText}
               onChange={handleSearch}

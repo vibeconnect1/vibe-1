@@ -164,20 +164,16 @@ function MyTickets() {
       // Filter the data based on search input and selected status
       const filteredResults = complaints.filter(
         (item) =>
-          (selectedStatus === "all" ||
+          ((selectedStatus === "all" ||
             item.issue_status.toLowerCase() === selectedStatus.toLowerCase()) &&
-          (item.ticket_number
-            .toLowerCase()
-            .includes(searchValue.toLowerCase()) ||
-            item.category_type
+            (item.ticket_number
               .toLowerCase()
-              .includes(searchValue.toLowerCase())) ||
-              item.issue_type
+              .includes(searchValue.toLowerCase()) ||
+              item.category_type
                 .toLowerCase()
-                .includes(searchValue.toLowerCase()) ||
-                item.heading
-                  .toLowerCase()
-                  .includes(searchValue.toLowerCase())
+                .includes(searchValue.toLowerCase()))) ||
+          item.issue_type.toLowerCase().includes(searchValue.toLowerCase()) ||
+          item.heading.toLowerCase().includes(searchValue.toLowerCase())
       );
       setFilteredData(filteredResults);
     }
@@ -201,6 +197,8 @@ function MyTickets() {
     const date = new Date(dateString);
     return date.toLocaleString(); // Adjust the format as needed
   };
+
+  document.title = `My Ticktes - Vibe Connect`;
 
   return (
     // <section className="container max-w-min overflow-hidden flex md:justify-between md:items-start">
@@ -229,6 +227,10 @@ function MyTickets() {
                   ? "border-purple-400"
                   : status === "Re Open"
                   ? "border-green-800"
+                  : status === "Work Completed"
+                  ? "border-green-800"
+                  : status === "Reopened"
+                  ? "border-red-800"
                   : "bg-gray-200 text-gray-700"
               }`}
             >
@@ -280,7 +282,8 @@ function MyTickets() {
                 type="radio"
                 id="open"
                 name="status"
-                checked={selectedStatus === "open"}
+                // checked={selectedStatus === "open"}
+                checked={selectedStatus === "open" || selectedStatus === "Re Open"}
                 onChange={() => handleStatusChange("open")}
               />
               <label htmlFor="open" className="text-sm">
@@ -296,7 +299,7 @@ function MyTickets() {
                 onChange={() => handleStatusChange("closed")}
               />
               <label htmlFor="closed" className="text-sm">
-                Close
+              Closed
               </label>
             </div>
             <div className="flex items-center gap-2">
@@ -314,13 +317,13 @@ function MyTickets() {
             <div className="flex items-center gap-2">
               <input
                 type="radio"
-                id="complete"
+                id="completed"
                 name="status"
-                checked={selectedStatus === "complete"}
-                onChange={() => handleStatusChange("complete")}
+                checked={selectedStatus === "completed"}
+                onChange={() => handleStatusChange("completed")}
               />
-              <label htmlFor="complete" className="text-sm">
-                Complete
+              <label htmlFor="completed" className="text-sm">
+              Completed
               </label>
             </div>
           </div>

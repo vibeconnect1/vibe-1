@@ -9,9 +9,9 @@ const Detail = ({ heading, details }) => {
 
   return (
     <div className="flex flex-col sm:items-center gap-8 ">
-      <h2 className="text-center w-screen bg-black text-white font-semibold text-lg p-2 px-4 ">
+      {/* <h2 className="text-center w-screen bg-black text-white font-semibold text-lg p-2 px-4 ">
         {heading}
-      </h2>
+      </h2> */}
       <div className="md:grid sm:px-2 px-4 flex flex-col grid-cols-3 gap-5 gap-x-32">
         {details.map((item, index) => (
           <dl className="grid grid-cols-2 gap-x-2" key={index}>
