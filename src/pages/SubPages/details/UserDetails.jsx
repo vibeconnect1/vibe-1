@@ -123,12 +123,12 @@ const UserDetails = () => {
     { title: "Assigned To  :", description: ticketinfo.assigned_to },
     { title: "Building Name  :", description: ticketinfo.building_name },
     // { title: "Customer Name:", description: ticketinfo.customer },
+    { title: "Floor Name  :", description: ticketinfo.floor_name },
+    { title: "Unit :", description: ticketinfo.unit },
     { title: "Category  :", description: ticketinfo.category_type },
 
-    { title: "Floor Name  :", description: ticketinfo.floor_name },
     { title: "Sub category  :", description: ticketinfo.sub_category },
 
-    { title: "Unit :", description: ticketinfo.unit },
     { title: "Total time  :", description: getTimeAgo(ticketinfo.created_at) },
 
     { title: "Created By  :", description: ticketinfo.created_by },

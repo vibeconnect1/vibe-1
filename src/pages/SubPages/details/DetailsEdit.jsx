@@ -242,7 +242,7 @@ const DetailsEdit = () => {
           onChange={(e) =>
             setFormData({ ...formData, issue_status: e.target.value })
           }
-          className="border p-1 px-4 grid border-gray-500 rounded-md"
+          className="border p-1 px-4 grid max-w-40 w-40 border-gray-500 rounded-md"
         >
           <option value="">Select Status</option>
           {statuses?.map((floor) => (
@@ -264,7 +264,7 @@ const DetailsEdit = () => {
           onChange={(e) =>
             setFormData({ ...formData, issue_type: e.target.value })
           }
-          className="border p-1 px-4 border-gray-400 rounded-md"
+          className="border p-1 px-4 max-w-40 w-40 border-gray-400 rounded-md"
         >
           <option value="Request">Request</option>
           <option value="Complaint">Complaint</option>
@@ -282,7 +282,7 @@ const DetailsEdit = () => {
           onChange={(e) =>
             setFormData({ ...formData, priority: e.target.value })
           }
-          className="border p-1 px-4 border-gray-400 rounded-md"
+          className="border p-1 px-4 max-w-40 w-40 border-gray-400 rounded-md"
         >
           <option value="">Select Priority</option>
           <option value="P1">P1</option>
@@ -303,7 +303,7 @@ const DetailsEdit = () => {
           onChange={(e) =>
             setFormData({ ...formData, assigned_to_id: e.target.value })
           }
-          className="border p-1 px-4 border-gray-500 rounded-md"
+          className="border p-1 px-4 max-w-40 w-40 border-gray-500 rounded-md"
         >
           <option value="">Select Assign To</option>
           {assignedUser?.map((assign) => (
@@ -325,13 +325,13 @@ const DetailsEdit = () => {
           value={formData.category_type_id}
           name="category_type_id"
           onChange={handleChange}
-          className="border p-1 px-4 border-gray-500 rounded-md"
+          className="border p-1 px-4 max-w-40 w-40 border-gray-500 rounded-md"
         >
           <option value="">Select Category</option>
           {categories?.map((category) => (
             <option
               key={category.id}
-              onClick={() => console.log("checking-category")}
+            
               value={category.id}
             >
               {category.name}
@@ -348,7 +348,7 @@ const DetailsEdit = () => {
           value={formData.sub_category_id}
           name="sub_category_id"
           onChange={handleChange}
-          className="border p-2 px-4 border-gray-500 max-w-44 rounded-md"
+          className="border p-1 px-4 max-w-40 w-40 border-gray-500  rounded-md"
         >
           <option value="">Sub Category</option>
           {units?.map((floor) => (
@@ -368,7 +368,7 @@ const DetailsEdit = () => {
           onChange={(e) =>
             setFormData({ ...formData, proactive_reactive: e.target.value })
           }
-          className="border p-1 px-4 border-gray-400 rounded-md"
+          className="border p-1 px-4 max-w-40 w-40 border-gray-400 rounded-md"
         >
           {/* <option value="Proactive">Proactive</option> */}
 

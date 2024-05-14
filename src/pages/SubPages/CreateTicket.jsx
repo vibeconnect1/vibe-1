@@ -305,21 +305,19 @@ const CreateTicket = () => {
 
           {/* Related To :*/}
           <div className="flex flex-col gap-3 md:flex-row justify-between items-center">
-            <div className="grid grid-cols-2 sm:gap-0  gap-3 items-center w-full">
+            <div className="grid grid-cols-2  items-center w-full">
               <label htmlFor="" className="font-semibold">
-                Related To:
+                Related To :
               </label>
               <select
                 id="issueType"
                 value={formData.issue_type_id}
                 name="issue_type_id"
-                // onChange={(e) =>
-                //   setFormData({ ...formData, issue_type_id: e.target.value })
-                // }
+                
                 onChange={(e) =>
                   setFormData({ ...formData, issue_type_id: e.target.value })
                 }
-                className="border p-1 px-4 border-gray-500 rounded-md"
+                className="border p-1 px-4 max-w-44 w-44 border-gray-500 rounded-md"
               >
                 <option value="">Select Area</option>
                 <option value="Apartment">Apartment</option>
@@ -330,7 +328,7 @@ const CreateTicket = () => {
 
             <div className="grid grid-cols-2  items-center w-full">
               <label htmlFor="" className="font-semibold sm:text-center">
-                Type of:
+                Type of :
               </label>
               <select
                 id="complaintType"
@@ -339,7 +337,7 @@ const CreateTicket = () => {
                 onChange={(e) =>
                   setFormData({ ...formData, complaint_type: e.target.value })
                 }
-                className="border p-1 px-4 border-gray-500 rounded-md "
+                className="border p-1 px-4 max-w-44 w-44 border-gray-500 rounded-md "
               >
                 <option value="">Select Issue Type</option>
                 <option value="Complaint">Complaint</option>
@@ -360,7 +358,7 @@ const CreateTicket = () => {
                   value={formData.building_name}
                   name="building_name"
                   onChange={buildingChange}
-                  className="border p-1 px-4 border-gray-500 rounded-md"
+                  className="border p-1 px-4 max-w-44 w-44 border-gray-500 rounded-md"
                 >
                   <option value="">Select Tower</option>
                   {building?.map((build) => (
@@ -379,7 +377,7 @@ const CreateTicket = () => {
                   value={formData.floor_name}
                   name="floor_name"
                   onChange={buildingChange}
-                  className="border p-1 px-4 border-gray-500 rounded-md"
+                  className="border p-1 px-4 max-w-44 w-44 border-gray-500 rounded-md"
                 >
                   <option value="">Select Floor</option>
                   {floor?.map((floorId) => (
@@ -407,7 +405,7 @@ const CreateTicket = () => {
                 value={formData.unit_id}
                 name="unit_id"
                 onChange={buildingChange}
-                className="border p-2 px-4 border-gray-500 rounded-md"
+                className="border p-1 px-4 max-w-44 w-44 border-gray-500 rounded-md"
               >
                 <option value="">Unit Name</option>
                 {unitName?.map((floor) => (
@@ -426,7 +424,7 @@ const CreateTicket = () => {
                 onChange={handleChange}
                 id="priority"
                 name="priority"
-                className="w-fit p-2 border-gray-500 border rounded-md px-4"
+                className=" p-1 max-w-44 w-44  border-gray-500 border rounded-md px-4"
               >
                 <option value="">Select Priority</option>
                 <option value="P1">P1</option>
@@ -441,14 +439,14 @@ const CreateTicket = () => {
           <div className="flex sm:grid sm:grid-cols-2 flex-col sm:flex-row items-center justify-between gap-3 sm:gap-0">
             <div className="grid grid-cols-2  items-center w-full">
               <label htmlFor="" className="font-semibold ">
-                Category:
+                Category :
               </label>
               <select
                 id="two"
                 value={formData.catogories}
                 name="categories"
                 onChange={handleChange}
-                className="border p-1 px-4 grid border-gray-500 rounded-md"
+                className="border p-1 px-4 max-w-44 w-44 grid border-gray-500 rounded-md"
               >
                 <option value="">Select Category</option>
                 {categories?.map((category) => (
@@ -465,14 +463,14 @@ const CreateTicket = () => {
 
             <div className="grid grid-cols-2  items-center w-full">
               <label htmlFor="" className="font-semibold sm:text-center">
-                Sub Category:
+                Sub Category :
               </label>
               <select
                 id="five"
                 value={formData.subCategories}
                 name="sub_category_id"
                 onChange={handleChange}
-                className="border p-1 px-4 grid border-gray-500 rounded-md"
+                className="border p-1 px-4 max-w-44 w-44 grid border-gray-500 rounded-md"
               >
                 <option value="">Sub Category</option>
                 {units?.map((floor) => (
@@ -488,7 +486,7 @@ const CreateTicket = () => {
             <div className="flex flex-col sm:flex-row items-center justify-between">
               <div className="grid grid-cols-2 sm:gap-12 items-center">
                 <label htmlFor="" className=" font-semibold ">
-                  Assigned To:
+                  Assigned To :
                 </label>
                 <select
                   value={formData.assigned_to || ""}
@@ -496,7 +494,7 @@ const CreateTicket = () => {
                   onChange={(e) =>
                     setFormData({ ...formData, assigned_to: e.target.value })
                   }
-                  className="border p-1 px-4 border-gray-500 rounded-md"
+                  className="border p-1 px-4 max-w-44 w-44 border-gray-500 rounded-md"
                 >
                   <option value="">Select Assign To</option>
                   {assignedUser?.map((assign) => (
@@ -513,7 +511,7 @@ const CreateTicket = () => {
                 htmlFor=""
                 className="font-semibold my-2 flex justify-start"
               >
-                Title:
+                Title :
               </label>
               <textarea
                 name="heading"
@@ -532,14 +530,14 @@ const CreateTicket = () => {
           {/* <div className="flex sm:block sm:flex-row items-center justify-center"> */}
           <div className="flex flex-col justify-around ">
             <label htmlFor="" className="font-semibold">
-              Description:
+              Description :
             </label>
             <textarea
               name="text"
               placeholder=" Describe your concern!"
               id=""
               cols="25"
-              rows=""
+              rows="3"
               className="border border-black rounded-md px-2"
               value={formData.text}
               onChange={handleChange}

@@ -36,7 +36,7 @@ const Assetinfo = ({ assetData }) => {
 
   const handleToggle = () => {
     setAssetBreakdown(!breakdown);
-  }
+  };
   return (
     <section>
       <div className="m-2">
@@ -49,7 +49,7 @@ const Assetinfo = ({ assetData }) => {
             <div className="flex items-center gap-2 ">
               {/* modify switch */}
               <p>Breakdown</p>
-              <Switch checked={!breakdown} onChange={handleToggle}  />
+              <Switch checked={!breakdown} onChange={handleToggle} />
               <p>In use</p>
             </div>
             <div className="flex gap-2">
@@ -70,29 +70,21 @@ const Assetinfo = ({ assetData }) => {
               Location Details
             </h2>
             <div className="my-5 px-10 text-sm items-center font-medium grid gap-4 grid-cols-2">
-              <div className="grid grid-cols-2">
+              <div className="grid grid-cols-2 items-center">
                 <p>Site :</p>
-                <p className="text-xs">NA</p>
-              </div>
-              <div className="grid grid-cols-2">
-                <p>Unit : </p>
-                <p className="text-xs">{unit_name}</p>
-              </div>
-              <div className="grid grid-cols-2">
-                <p>Floor : </p>
-                <p className="text-xs">{floor_name}</p>
-              </div>
-              <div className="grid grid-cols-2">
-                <p>Area : </p>
-                <p className="text-xs">NA</p>
-              </div>
-              <div className="grid grid-cols-2">
-                <p>Wing : </p>
-                <p className="text-xs">NA </p>
+                <p className="text-xs"></p>
               </div>
               <div className="grid grid-cols-2">
                 <p>Building : </p>
                 <p className="text-xs">{building_name}</p>
+              </div>
+              <div className="grid grid-cols-2 items-center">
+                <p>Floor : </p>
+                <p className="text-xs">{floor_name}</p>
+              </div>
+              <div className="grid grid-cols-2 items-center">
+                <p>Unit : </p>
+                <p className="text-xs">{unit_name}</p>
               </div>
             </div>
           </div>
@@ -101,24 +93,15 @@ const Assetinfo = ({ assetData }) => {
               Asset Information
             </h2>
             <div className="my-5 px-10 items-center font-medium grid gap-4 grid-cols-3 text-sm">
-              <div className="grid grid-cols-2">
+              <div className="grid grid-cols-2 items-center">
                 <p>Client Name :</p>
                 <p className="text-xs"></p>
               </div>
-              <div className="grid grid-cols-2">
+              <div className="grid grid-cols-2 items-center">
                 <p>Asset Name : </p>
                 <p className="text-xs">{name}</p>
               </div>
-              <div>
-                <p>Asset Number : </p>
-                <p className="text-xs"></p>
-              </div>
-              <div className="grid grid-cols-2">
-                <p>Asset Code : </p>
-              </div>
-              <div className="grid grid-cols-2">
-                <p>Asset Type : </p>
-              </div>
+
               <div className="grid grid-cols-2">
                 <p>Model Number : </p>
                 <p className="text-xs"> {model_number}</p>
@@ -126,9 +109,6 @@ const Assetinfo = ({ assetData }) => {
               <div className="grid grid-cols-2">
                 <p>Serial Number :</p>
                 <p className="text-xs"> {serial_number}</p>
-              </div>
-              <div className="grid grid-cols-2">
-                <p>Manufacturer: </p>
               </div>
               <div className="grid grid-cols-2">
                 <p>Purchased on : </p>
@@ -168,13 +148,7 @@ const Assetinfo = ({ assetData }) => {
                 <p>Meter Applicable : </p>
                 <p className="text-xs">{is_meter}</p>
               </div>
-              <div className="grid grid-cols-2">
-                <p>Meter Category: </p>
-                <p className="text-xs"></p>
-              </div>
-              <div className="grid grid-cols-2">
-                <p>Meter Type Category: </p>
-              </div>
+
               <div className="grid grid-cols-2">
                 <p>Updated On : </p>
                 <p className="text-xs">{dateFormat(updated_at)}</p>
@@ -193,15 +167,12 @@ const Assetinfo = ({ assetData }) => {
               Warranty Details
             </h2>
             <div className="my-5 px-10 text-sm items-center font-medium grid gap-4 grid-cols-3 w-full">
-              <div className="grid grid-cols-2">
-                <p>Under Warranty: </p>
-              </div>
-              <div className="grid grid-cols-2">
+              <div className="grid grid-cols-2 items-center">
                 <p>Expiry Date : </p>
                 <p className="text-xs">{warranty_expiry}</p>
               </div>
-              <div className="grid grid-cols-2">
-                <p>Commissioning Date:</p>
+              <div className="grid grid-cols-2 items-center">
+                <p>Date Of Installation:</p>
                 <p className="text-xs">{warranty_start} </p>
               </div>
             </div>

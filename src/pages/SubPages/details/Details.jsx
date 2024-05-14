@@ -9,7 +9,6 @@ import toast from "react-hot-toast";
 import { BiAngry, BiHappy, BiSad, BiSmile } from "react-icons/bi";
 import { MdOutlineSentimentNeutral } from "react-icons/md";
 
-
 const TicketDetails = () => {
   const navigate = useNavigate();
   const { id } = useParams();
@@ -20,9 +19,7 @@ const TicketDetails = () => {
     documents: [],
   });
 
-
   // console.log(formData);
-
 
   useEffect(() => {
     const fetchDetails = async () => {
@@ -32,7 +29,6 @@ const TicketDetails = () => {
     };
     fetchDetails();
   }, []);
-
 
   const getTimeAgo = (timestamp) => {
     const createdTime = moment(timestamp);
@@ -46,7 +42,6 @@ const TicketDetails = () => {
       return `${Math.floor(diff / 1440)} days ago`;
     }
   };
-
 
   const dateFormat = (dateString) => {
     const date = new Date(dateString);
@@ -91,10 +86,17 @@ const TicketDetails = () => {
     { title: "Updated On  :", description: dateFormat(ticketinfo.updated_at) },
     {
       title: "Rating :",
-      description: ticketinfo.rating >= 1 && ticketinfo.rating <= 5 ? 
-        <>{React.cloneElement(smielyRating[ticketinfo.rating - 1].icon, { style: { color: smielyRating[ticketinfo.rating - 1].defaultColor } })}</> : 
-        null
-    }
+      description:
+        ticketinfo.rating >= 1 && ticketinfo.rating <= 5 ? (
+          <>
+            {React.cloneElement(smielyRating[ticketinfo.rating - 1].icon, {
+              style: {
+                color: smielyRating[ticketinfo.rating - 1].defaultColor,
+              },
+            })}
+          </>
+        ) : null,
+    },
   ];
   const domainPrefix = "https://admin.vibecopilot.ai";
 
@@ -128,23 +130,35 @@ const TicketDetails = () => {
           </div>
           <div className="px-4 flex flex-col gap-1 justify-center">
             <p className="font-medium">Impact :</p>
-            <p className="text-wrap bg-gray-200 p-2 rounded-md">{ticketinfo.impact}</p>
+            <p className="text-wrap bg-gray-200 p-2 rounded-md">
+              {ticketinfo.impact}
+            </p>
           </div>
           <div className="px-4 flex flex-col gap-1 justify-center">
             <p className="font-medium">Root Cause :</p>
-            <p className="text-wrap bg-gray-200 p-2 rounded-md ">{ticketinfo.root_cause}</p>
+            <p className="text-wrap bg-gray-200 p-2 rounded-md ">
+              {ticketinfo.root_cause}
+            </p>
           </div>
           <div className="px-4 flex flex-col gap-1 justify-center">
             <p className="font-medium">Corrective Action :</p>
-            <p className="text-wrap bg-gray-200 p-2 rounded-md">{ticketinfo.corrective_action}</p>
+            <p className="text-wrap bg-gray-200 p-2 rounded-md">
+              {ticketinfo.corrective_action}
+            </p>
           </div>
           <div className="px-4 flex flex-col gap-1 justify-center">
             <p className="font-medium">Proactive/Reactive :</p>
-            <p className="text-wrap bg-gray-200 p-2 rounded-md">{ticketinfo.proactive_reactive ? ticketinfo.proactive_reactive : "Reactive"}</p>
+            <p className="text-wrap bg-gray-200 p-2 rounded-md">
+              {ticketinfo.proactive_reactive
+                ? ticketinfo.proactive_reactive
+                : "Reactive"}
+            </p>
           </div>
           <div className="px-4 flex flex-col gap-1 justify-center">
             <p className="font-medium">Correction :</p>
-            <p className="text-wrap bg-gray-200 p-2 rounded-md">{ticketinfo.correction}</p>
+            <p className="text-wrap bg-gray-200 p-2 rounded-md">
+              {ticketinfo.correction}
+            </p>
           </div>
         </div>
         {/* <div className="border " /> */}
@@ -165,7 +179,7 @@ const TicketDetails = () => {
               </div>
             ))}
         </div>
-        <div className="border m-10" />
+        
         <h2 className="text-center w-screen bg-black text-white font-semibold my-5 text-lg p-2 px-4 ">
           Logs
         </h2>
@@ -173,10 +187,7 @@ const TicketDetails = () => {
 
         {ticketinfo.complaint_logs &&
           ticketinfo.complaint_logs.map((log) => (
-            <div
-              className="md:flex  justify-center "
-              key={log.id}
-            >
+            <div className="md:flex  justify-center " key={log.id}>
               <ol className="relative  border-gray-200 w-full">
                 <li className="mb-6 sm:mb-10 md:ms-6">
                   <div className="items-center justify-between p-4  border border-gray-200 rounded-lg shadow-sm sm:flex  dark:border-gray-600">
@@ -185,38 +196,46 @@ const TicketDetails = () => {
                     </time>
                     <div className="text-sm font-normal text-gray-500 dark:text-gray-300">
                       {" "}
-                      {log.priority && <div className="text-sm font-semibold text-gray-900 dark:text-gray mb-5">
-                        Priority :{" "}
-                        <a
-                          href="#"
-                          className="font-semibold text-gray-900 dark:text-gray hover:underline"
-                        >
-                          {" "}
-                          {log.priority}{" "}
-                        </a>
-                      </div>}
-                    {log.log_comment && <div className="text-sm font-semibold text-gray-900 dark:text-gray mb-5">
-                      Comment :{" "}
-                      <a
-                        href="#"
-                        className="font-semibold text-gray-900 dark:text-gray hover:underline"
-                      >
-                        {log.log_comment}
-                      </a>
-                    </div>}
-                      {log.log_status && <div className="text-sm font-semibold text-gray-900 dark:text-gray mb-5">
-                        Status:{" "}
-                        <a
-                          href="#"
-                          className="font-semibold text-gray-900 dark:text-gray hover:underline"
-                        >
-                          {log.log_status}
-                        </a>
-                      </div>}
-                  {log.log_by && <div className="flex gap-4">
-                    <p className="font-medium text-black">Log By:</p>
-                    <p className="font-medium text-black">{log.log_by}</p>
-                  </div>}
+                      {log.priority && (
+                        <div className="text-sm font-semibold text-gray-900 dark:text-gray mb-5">
+                          Priority :{" "}
+                          <a
+                            href="#"
+                            className="font-semibold text-gray-900 dark:text-gray hover:underline"
+                          >
+                            {" "}
+                            {log.priority}{" "}
+                          </a>
+                        </div>
+                      )}
+                      {log.log_comment && (
+                        <div className="text-sm font-semibold text-gray-900 dark:text-gray mb-5">
+                          Comment :{" "}
+                          <a
+                            href="#"
+                            className="font-semibold text-gray-900 dark:text-gray hover:underline"
+                          >
+                            {log.log_comment}
+                          </a>
+                        </div>
+                      )}
+                      {log.log_status && (
+                        <div className="text-sm font-semibold text-gray-900 dark:text-gray mb-5">
+                          Status:{" "}
+                          <a
+                            href="#"
+                            className="font-semibold text-gray-900 dark:text-gray hover:underline"
+                          >
+                            {log.log_status}
+                          </a>
+                        </div>
+                      )}
+                      {log.log_by && (
+                        <div className="flex gap-4">
+                          <p className="font-medium text-black">Log By:</p>
+                          <p className="font-medium text-black">{log.log_by}</p>
+                        </div>
+                      )}
                       {log.documents &&
                         log.documents.map((doc, index) => (
                           <div key={index} className="flex justify-start p-4">
@@ -238,15 +257,38 @@ const TicketDetails = () => {
               </ol>
             </div>
           ))}
+        <h2 className="text-center w-screen bg-black text-white font-semibold my-5 text-lg p-2 px-4 ">
+        Escalations
+        </h2>
+        {/* <div className="border m-10 " /> */}
+<div className="px-4 mb-10">
 
 
+        {ticketinfo.escalations &&
+          ticketinfo.escalations.map((esclate) => (
+            <div
+              className="md:flex rounded-md justify-between border p-4 border-black mb-5"
+              key={esclate.id}
+            >
+              <div className="flex flex-col gap-2">
+                <div className="grid grid-cols-2 gap-x-5 items-center">
+                  <p className="font-semibold">Esclation Level :</p>
+                  <p>{esclate.level}</p>
+                </div>
+                <div className="grid grid-cols-2 items-center">
+                  <p className="font-semibold">Esclated To :</p>
+                  <p>{esclate.esc_to}</p>
+                </div>
+              </div>
+              <div className="flex justify-end">
+                <p className="text-sm mt-5 sm:mt-0 font-semibold text-gray-500">{dateFormat(esclate.esc_on)}</p>
+              </div>
+            </div>
+          ))}
+          </div>
       </div>
     </div>
   );
 };
 
-
 export default TicketDetails;
-
-
-
