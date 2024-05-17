@@ -74,9 +74,9 @@ const Materials = () => {
     },
   };
   return (
-    <section className="flex gap-20 mr-5">
+    <section className="flex">
        <Navbar />
-      <div className="p-4 w-full overflow-hidden flex mx-5 flex-col">
+      <div className="w-full overflow-hidden flex mx-3 flex-col">
         <div className="flex justify-between items-center">
           <input
             type="text"

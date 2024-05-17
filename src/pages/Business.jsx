@@ -65,48 +65,46 @@ const Business = () => {
   };
 
   return (
-    <section className="flex gap-10 mr-5 max-w-screen ">
+    <section className="flex">
       <Navbar />
-      <div className="flex w-full mx-5 my-10 flex-col overflow-hidden">
-        <div className="w-full flex mx-5 flex-col">
-          <div className="flex justify-between items-center">
-            <input
-              type="text"
-              placeholder="Search By Company Name"
-              className="border-2 p-2 w-96 border-gray-300 rounded-lg"
-            />
-            <div className="flex gap-4 justify-end w-full overflow-hidden">
-              <Link
-                to={"/business/add-business"}
-                className="bg-black w-20 rounded-lg flex items-center gap-2 text-white p-2 my-5"
-              >
-                <IoAddCircleOutline />
-                Add
-              </Link>
-              <Link to={"/business/setup-category"} className="bg-black rounded-lg w-40 flex items-center gap-2 text-white p-2 my-5">
-                <FiSettings />
-                Setup Category
-              </Link>
-            </div>
+      <div className="w-full flex mx-3 flex-col overflow-hidden">
+        <div className="flex justify-between items-center">
+          <input
+            type="text"
+            placeholder="Search By Company Name"
+            className="border-2 p-2 w-96 border-gray-300 rounded-lg"
+          />
+          <div className="flex gap-4 justify-end w-full overflow-hidden">
+            <Link
+              to={"/business/add-business"}
+              className="bg-black w-20 rounded-lg flex items-center gap-2 text-white p-2 my-5"
+            >
+              <IoAddCircleOutline />
+              Add
+            </Link>
+            <Link
+              to={"/business/setup-category"}
+              className="bg-black rounded-lg w-40 flex items-center gap-2 text-white p-2 my-5"
+            >
+              <FiSettings />
+              Setup Category
+            </Link>
           </div>
-          <div>
-            <div className="overflow-hidden ">
-            <DataTable
-              columns={column}
-              data={data}
-              customStyles={customStyle}
-              responsive
-              selectableRows
-              fixedHeader
+        </div>
+
+        <DataTable
+          columns={column}
+          data={data}
+          customStyles={customStyle}
+          responsive
+          selectableRows
+          fixedHeader
           fixedHeaderScrollHeight="500px"
           pagination
           selectableRowsHighlight
           highlightOnHover
           omitColumn={column}
-            />
-            </div>
-          </div>
-        </div>
+        />
       </div>
     </section>
   );

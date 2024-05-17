@@ -5,8 +5,9 @@ const token = getItemInLocalStorage("TOKEN");
 
 export const login = async (data) => axiosInstance.post("/login.json", data);
 
-export const getLogin = async () => axiosInstance.get("/login.json")
+export const getLogin = async () => axiosInstance.get("/login.json");
 
+//Assets
 export const getSiteAsset = async () =>
   axiosInstance.get("/site_assets.json", {
     params: {
@@ -19,14 +20,19 @@ export const getSiteAssetDetails = async (id) =>
       token: token,
     },
   });
-export const postSiteAsset = async (id) =>
-  axiosInstance.get(`/site_assets.json`,  {
+export const postSiteAsset = async (data) =>
+  axiosInstance.post(`/site_assets.json`, data, {
     params: {
       token: token,
     },
   });
-
-  
+export const getVendors = async () =>
+  axiosInstance.get("/vendors.json", {
+    params: {
+      token: token,
+    },
+  });
+//
 export const getComplaints = async () =>
   axiosInstance.get(`/pms/complaints.json`, {
     params: {
@@ -46,103 +52,103 @@ export const getComplaintsDetails = async (id) =>
     },
   });
 
-  
-  export const fetchSubCategories = async (categoryId) =>
+export const fetchSubCategories = async (categoryId) =>
   axiosInstance.get(`/pms/admin/get_sub_categories.json`, {
     params: {
       token: token,
-      category_type_id: categoryId
+      category_type_id: categoryId,
     },
-  },);
+  });
 
-
-
-  export const fetchUserComplaints = async (data) =>
-  axiosInstance.get(`complaints.json`, data ,{
+export const fetchUserComplaints = async (data) =>
+  axiosInstance.get(`complaints.json`, data, {
     params: {
       token: token,
     },
-  })
+  });
 
-  //
+//
 
-  export const getUnits = async (floor_id) =>
-    axiosInstance.get(`/units.json` ,{
-      params: {
-        token: token,
-        floor_id_eq : floor_id
-      },
-    },);
+export const getUnits = async (floor_id) =>
+  axiosInstance.get(`/units.json`, {
+    params: {
+      token: token,
+      floor_id_eq: floor_id,
+    },
+  });
 
-    export const getFloors = async (data) => 
-      axiosInstance.get(`/floors.json`, {
-        params : {
-          token : token,
-        }
-      })
+export const getFloors = async (data) =>
+  axiosInstance.get(`/floors.json`, {
+    params: {
+      token: token,
+    },
+  });
 
-  export const updateComplaintsDetails = async (id, data) => 
+export const updateComplaintsDetails = async (id, data) =>
   axiosInstance.put(`pms/complaints/${id}.json`, data, {
-    params : {
-      token : token,
-    }
-  })
+    params: {
+      token: token,
+    },
+  });
 
+export const getAssignedTo = async (data) =>
+  axiosInstance.get(`/users/pms_admins.json`, {
+    params: {
+      token: token,
+    },
+  });
 
-  export const getAssignedTo = async (data) => 
-    axiosInstance.get(`/users/pms_admins.json`, {
-      params : {
-        token : token,
-      }
-    })
-  
-    export const getIssueType = async () => 
-      axiosInstance.get(`pms/admin/complaint_issue_types.json`, {
-        params : {
-          token : token,
-        }
-      })
+export const getIssueType = async () =>
+  axiosInstance.get(`pms/admin/complaint_issue_types.json`, {
+    params: {
+      token: token,
+    },
+  });
 
-      export const getfloorsType = async (buildId) => 
-        axiosInstance.get(`/floors.json`, {
-          params : {
-            token : token,
-            building_id  : buildId
-          }
-        })
-      
-    
-  export const postComplaintsDetails = async (data) => {
-    try {
-      const response = await axiosInstance.post(`/pms/complaints.json?token=${token}`, data);
-      return response.data;
-    } catch (error) {
-      throw error;
-    }
-  };
+export const getfloorsType = async (buildId) =>
+  axiosInstance.get(`/floors.json`, {
+    params: {
+      token: token,
+      building_id: buildId,
+    },
+  });
 
-  export const editComplaintsDetails = async (data) => {
-    try {
-      const response = await axiosInstance.post(`/complaint_logs.json?token=${token}`, data)
-      return response.data
-    } catch (error) {
-      throw error;
-    }
+export const postComplaintsDetails = async (data) => {
+  try {
+    const response = await axiosInstance.post(
+      `/pms/complaints.json?token=${token}`,
+      data
+    );
+    return response.data;
+  } catch (error) {
+    throw error;
   }
-  
+};
 
-  export const resetPassword = async (data) =>
-    axiosInstance.post("/users/change_password.json", data, {
-      params: {
-        token: token,
-      },
-    });  
+export const editComplaintsDetails = async (data) => {
+  try {
+    const response = await axiosInstance.post(
+      `/complaint_logs.json?token=${token}`,
+      data
+    );
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
 
-  // export const editComplaintsDetails = async (compData) => {
-  //   axiosInstance.post (`/complaint_logs.json?token=${token}`,{
-  //     params : {
-  //       token : token,
-  //       complaint : compData
-  //     }
-  //   })
-  // }
+export const resetPassword = async (data) =>
+  axiosInstance.post("/users/change_password.json", data, {
+    params: {
+      token: token,
+    },
+  });
+
+// export const editComplaintsDetails = async (compData) => {
+//   axiosInstance.post (`/complaint_logs.json?token=${token}`,{
+//     params : {
+//       token : token,
+//       complaint : compData
+//     }
+//   })
+// }

@@ -4,7 +4,7 @@ import ModalWrapper from "./ModalWrapper";
 const DeliveryVendorModal = ({ onclose, title = "Edit" }) => {
   return (
     <ModalWrapper onclose={onclose}>
-      <div className="flex flex-col gap-4">
+      <div className="flex flex-col gap-4 z-10">
         <h1 className="font-semibold text-center text-xl">{title} Vendor</h1>
         <form action="" className="grid grid-cols-2 px-5 gap-x-5 gap-y-4">
           <div className="flex flex-col gap-2">

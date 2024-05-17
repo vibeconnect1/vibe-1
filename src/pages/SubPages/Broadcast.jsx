@@ -1,11 +1,19 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import DataTable from "react-data-table-component";
 import { IoAddCircleOutline } from "react-icons/io5";
 import { ImEye } from "react-icons/im";
 import { Link } from "react-router-dom";
+import { getItemInLocalStorage } from "../../utils/localStorage";
 
 const Broadcast = () => {
   const [searchText, setSearchText] = useState("");
+  const [user, setUser] = useState("");
+
+  useEffect(() => {
+    const userType = getItemInLocalStorage("USERTYPE");
+    setUser(userType);
+  }, []);
+
   const column = [
     {
       name: "Action",
@@ -97,7 +105,7 @@ const Broadcast = () => {
   };
   return (
     <div className="my-10">
-      <div className="flex justify-between items-center">
+      <div className="flex justify-between items-center sm:flex-row flex-col my-2">
         <input
           type="text"
           placeholder="Search By title"
@@ -105,25 +113,25 @@ const Broadcast = () => {
           value={searchText}
           onChange={handleSearch}
         />
-
-        <Link
-          to={"/communication/broadcast/create-broadcast"}
-          className="bg-black  rounded-lg flex font-semibold items-center gap-2 text-white p-2 my-5"
-        >
-          <IoAddCircleOutline size={20} />
-          Add Broadcast/Notice
-        </Link>
+        {user === "pms_admin" && (
+          <Link
+            to={"/communication/broadcast/create-broadcast"}
+            className="bg-black  rounded-lg flex font-semibold items-center gap-2 text-white p-2 my-5"
+          >
+            <IoAddCircleOutline size={20} />
+            Add Broadcast/Notice
+          </Link>
+        )}
       </div>
       <DataTable
         columns={column}
         data={filteredData}
         customStyles={customStyle}
         fixedHeader
-          fixedHeaderScrollHeight="500px"
-          pagination
-          selectableRowsHighlight
-          highlightOnHover
-         
+        fixedHeaderScrollHeight="500px"
+        pagination
+        selectableRowsHighlight
+        highlightOnHover
       />
     </div>
   );

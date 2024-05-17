@@ -201,16 +201,14 @@ function MyTickets() {
   document.title = `My Ticktes - Vibe Connect`;
 
   return (
-    // <section className="container max-w-min overflow-hidden flex md:justify-between md:items-start">
     <section className="flex">
       <Navbar />
       <div className=" w-full flex mx-3 flex-col overflow-hidden">
-        <div className="flex m-5 justify-start w-fit gap-5 sm:flex-row flex-col flex-shrink flex-wrap ">
-          {/* <div className="flex gap-2 mt-2"> */}
+        <div className="sm:flex grid grid-cols-2 m-5 justify-start w-fit gap-5 sm:flex-row flex-col flex-shrink flex-wrap ">
           {Object.entries(ticketStatusCounts).map(([status, count]) => (
             <div
               key={status}
-              className={`shadow-xl rounded-full border-4 w-52 px-6 p-2 flex flex-col items-center flex-shrink ${
+              className={`shadow-xl sm:rounded-full rounded-xl border-4 sm:w-48 sm:px-6 px-4  flex flex-col items-center flex-shrink ${
                 status === "Pending"
                   ? "border-red-400"
                   : status === "Closed"
@@ -234,7 +232,7 @@ function MyTickets() {
                   : "bg-gray-200 text-gray-700"
               }`}
             >
-              <p className="font-medium">{status}</p>
+              <p className="font-medium text-center">{status}</p>
               <p>{count}</p>
             </div>
           ))}
@@ -243,7 +241,7 @@ function MyTickets() {
           {allTicketTypes.map((type) => (
             <div
               key={type}
-              className={`shadow-xl rounded-full border-4 w-52 px-6 p-2 flex flex-col items-center flex-shrink ${
+              className={`shadow-xl sm:rounded-full rounded-xl border-4 sm:w-48 sm:px-6  flex flex-col items-center flex-shrink ${
                 ticketTypeCounts[type] !== undefined
                   ? type === "Complaint"
                     ? "border-blue-400"
@@ -255,7 +253,7 @@ function MyTickets() {
                   : "bg-gray-200 text-gray-700"
               }`}
             >
-              <p className="font-medium">{type} </p>
+              <p className="font-medium text-center">{type} </p>
               {ticketTypeCounts[type] !== undefined
                 ? ticketTypeCounts[type]
                 : 0}
@@ -283,7 +281,9 @@ function MyTickets() {
                 id="open"
                 name="status"
                 // checked={selectedStatus === "open"}
-                checked={selectedStatus === "open" || selectedStatus === "Re Open"}
+                checked={
+                  selectedStatus === "open" || selectedStatus === "Re Open"
+                }
                 onChange={() => handleStatusChange("open")}
               />
               <label htmlFor="open" className="text-sm">
@@ -299,7 +299,7 @@ function MyTickets() {
                 onChange={() => handleStatusChange("closed")}
               />
               <label htmlFor="closed" className="text-sm">
-              Closed
+                Closed
               </label>
             </div>
             <div className="flex items-center gap-2">
@@ -323,7 +323,7 @@ function MyTickets() {
                 onChange={() => handleStatusChange("completed")}
               />
               <label htmlFor="completed" className="text-sm">
-              Completed
+                Completed
               </label>
             </div>
           </div>

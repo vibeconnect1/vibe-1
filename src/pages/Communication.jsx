@@ -7,11 +7,11 @@ import Broadcast from "./SubPages/Broadcast";
 const Communication = () => {
   const [page, setPage] = useState("event");
   return (
-    <section className="flex mr-5">
+    <section className="flex">
       <Navbar />
-      <div className="p-4 w-full my-2 flex mx-5 flex-col">
-        <div className="flex justify-center">
-          <div className="flex flex-row gap-5 text-lg font-semibold p-2 rounded-full bg-gray-400">
+      <div className="w-full flex mx-3 flex-col overflow-hidden">
+        <div className="flex justify-center my-2">
+          <div className="flex flex-row gap-5 text-lg font-semibold p-1 rounded-full bg-gray-400">
             <h2
               className={`p-1 ${
                 page === "event" && "bg-white text-blue-500"

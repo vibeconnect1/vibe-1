@@ -42,19 +42,19 @@ const BusinessSetup = () => {
           Setup Categories
         </h2>
         <div className="flex justify-center">
-          <div className=" gap-5 bg-gray-400 flex p-2 px-4 text-white text-lg rounded-full">
+          <div className=" gap-5 bg-gray-400 flex p-2 items-center text-white text-lg rounded-full">
             <h2
               className={`${
-                selectedFiled === "category" ? "bg-black" : ""
-              } px-3 rounded-full cursor-pointer`}
+                selectedFiled === "category" ? "bg-white text-blue-500" : ""
+              } px-3 rounded-full cursor-pointer font-medium`}
               onClick={() => setSelectedField("category")}
             >
               Category
             </h2>
             <h2
               className={`${
-                selectedFiled === "subCategory" ? "bg-black" : ""
-              } px-3 rounded-full cursor-pointer`}
+                selectedFiled === "subCategory" ? "bg-white text-blue-500" : ""
+              } px-3 rounded-full cursor-pointer font-medium`}
               onClick={() => setSelectedField("subCategory")}
             >
               Sub Category

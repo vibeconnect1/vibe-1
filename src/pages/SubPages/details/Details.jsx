@@ -165,15 +165,17 @@ const TicketDetails = () => {
         <h2 className="text-center w-screen bg-black text-white font-semibold my-5 text-lg p-2 px-4 ">
           Attachments
         </h2>
-        <div className="flex ">
+        <div className="flex sm:flex-row flex-col items-center ">
           {ticketinfo.documents &&
             ticketinfo.documents.map((doc, index) => (
               <div key={index} className="flex justify-start p-4">
-                <a href={domainPrefix + doc.document} target="_blank">
+                <a href={domainPrefix + doc.document} target="_blank" className="inline-block  w-40">
                   <img
                     src={domainPrefix + doc.document}
-                    alt={`Attachment ${index}`}
-                    width={"25%"}
+                    alt={`Attachment`}
+                    // width={"25%"}
+                    className="w-40 h-40 object-cover rounded-md"
+                    // className="w-full"
                   />
                 </a>
               </div>

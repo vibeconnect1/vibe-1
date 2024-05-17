@@ -1,12 +1,21 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import DataTable from "react-data-table-component";
 import { IoAddCircleOutline } from "react-icons/io5";
 import { ImEye } from "react-icons/im";
 import { Link } from "react-router-dom";
+import { getItemInLocalStorage } from "../../utils/localStorage";
 
 const Events = () => {
   const [searchText, setSearchText] = useState("");
   const [filter, setFilter] = useState(false);
+  const [user, setUser] = useState("")
+
+
+  useEffect(() => {
+    const userType = getItemInLocalStorage("USERTYPE");
+    setUser(userType);
+  }, []);
+
   const column = [
     {
       name: "Action",
@@ -141,11 +150,11 @@ const Events = () => {
               </button>
             </div>
           )}
-      <div className="flex justify-between items-center my-5 ">
+      <div className="flex justify-between gap-2 items-center my-5 sm:flex-row flex-col ">
         <input
           type="text"
           placeholder="Search By title"
-          className="border-2 p-2 w-96 border-gray-300 rounded-lg"
+          className="border-2 p-2 sm:w-96 border-gray-300 rounded-lg"
           value={searchText}
           onChange={handleSearch}
         />
@@ -156,14 +165,14 @@ const Events = () => {
           >
             Filter
           </button>
-         
+         {user === "pms_admin" &&
           <Link
             to={"/communication/create-event"}
             className="bg-black  rounded-lg flex font-semibold  items-center gap-2 text-white p-2 "
           >
             <IoAddCircleOutline size={20} />
             Add
-          </Link>
+          </Link>}
         </div>
       </div>
       <DataTable

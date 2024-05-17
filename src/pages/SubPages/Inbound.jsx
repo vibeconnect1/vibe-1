@@ -138,7 +138,7 @@ const Inbound = () => {
     },
   };
   return (
-    <div className="my-10 mr-20">
+    <div className="my-5">
       <div className="flex justify-between items-center">
         <input
           type="text"

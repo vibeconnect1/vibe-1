@@ -15,29 +15,28 @@ const AssetDetails = () => {
   const [asset, setAsset] = useState([]);
   const { id } = useParams();
 
- useEffect(() => {
-  const getDetails = async () => {
-    try {
-      const details = await getSiteAssetDetails(id);
-      setAsset(details.data);
-      
-    } catch (error) {
-      console.error('Error fetching site asset details:', error);
-    }
-  };
+  useEffect(() => {
+    const getDetails = async () => {
+      try {
+        const details = await getSiteAssetDetails(id);
+        setAsset(details.data);
+      } catch (error) {
+        console.error("Error fetching site asset details:", error);
+      }
+    };
 
-  getDetails();
-}, [id]);
+    getDetails();
+  }, [id]);
 
   return (
-    <section className="px-10">
+    <section className="md:px-10 ">
       <div className="p-4 w-full my-2 flex mx-5 flex-col ">
-        <div className="flex justify-center">
-          <div className="flex flex-row gap-10 text-lg font-medium p-2 rounded-full bg-gray-400">
+        <div className="md:flex justify-center ">
+          <div className="sm:flex grid grid-cols-2 flex-row gap-2 md:gap-10  font-medium p-2 rounded-md sm:rounded-full bg-gray-400">
             <h2
               className={`p-1 ${
                 page === "assetInfo" && "bg-white text-blue-500"
-              } rounded-full px-4 cursor-pointer `}
+              } rounded-full px-4 cursor-pointer text-center `}
               onClick={() => setPage("assetInfo")}
             >
               Asset Info
@@ -45,7 +44,7 @@ const AssetDetails = () => {
             <h2
               className={`p-1 ${
                 page === "AMCDetails" && "bg-white text-blue-500"
-              } rounded-full px-4 cursor-pointer`}
+              } rounded-full px-4 cursor-pointer text-center`}
               onClick={() => setPage("AMCDetails")}
             >
               AMC Details
@@ -53,7 +52,7 @@ const AssetDetails = () => {
             <h2
               className={`p-1 ${
                 page === "readings" && "bg-white text-blue-500"
-              } rounded-full px-4 cursor-pointer`}
+              } rounded-full px-4 cursor-pointer text-center`}
               onClick={() => setPage("readings")}
             >
               Readings
@@ -61,7 +60,7 @@ const AssetDetails = () => {
             <h2
               className={`p-1 ${
                 page === "ppm" && "bg-white text-blue-500"
-              } rounded-full px-4 cursor-pointer`}
+              } rounded-full px-4 cursor-pointer text-center`}
               onClick={() => setPage("ppm")}
             >
               PPM
@@ -69,7 +68,7 @@ const AssetDetails = () => {
             <h2
               className={`p-1 ${
                 page === "activityFeed" && "bg-white text-blue-500"
-              } rounded-full px-4 cursor-pointer`}
+              } rounded-full  cursor-pointer text-center`}
               onClick={() => setPage("activityFeed")}
             >
               Activity Feed
@@ -77,7 +76,7 @@ const AssetDetails = () => {
             <h2
               className={`p-1 ${
                 page === "history" && "bg-white text-blue-500"
-              } rounded-full px-4 cursor-pointer`}
+              } rounded-full px-4 cursor-pointer text-center`}
               onClick={() => setPage("history")}
             >
               History

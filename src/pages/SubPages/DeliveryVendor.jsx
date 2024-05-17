@@ -92,12 +92,18 @@ const DeliveryVendor = () => {
       style: {
         backgroundColor: "black",
         color: "white",
-        fontSize: "14px",
+
+        fontSize: "10px",
+      },
+    },
+    headCells: {
+      style: {
+        textTransform: "upperCase",
       },
     },
   };
   return (
-    <div className="my-10">
+    <div className="my-5">
       <div className="flex justify-between items-center">
         <input
           type="text"
@@ -120,11 +126,11 @@ const DeliveryVendor = () => {
         data={filteredData}
         customStyles={customStyle}
         fixedHeader
-          fixedHeaderScrollHeight="500px"
-          pagination
-          selectableRowsHighlight
-          highlightOnHover
-          omitColumn={column}
+        fixedHeaderScrollHeight="500px"
+        pagination
+        selectableRowsHighlight
+        highlightOnHover
+        omitColumn={column}
       />
       {modal && <DeliveryVendorModal onclose={() => showModal(false)} />}
       {add && (

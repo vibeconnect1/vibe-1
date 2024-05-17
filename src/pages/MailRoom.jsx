@@ -8,14 +8,14 @@ import OutBound from "./SubPages/OutBound";
 const MailRoom = () => {
   const [page, setPage] = useState("deliveryVendor");
   return (
-    <section className="flex mr-5">
+    <section className="flex">
       <Navbar />
-      <div className="p-4 w-full my-2 flex mx-5 flex-col">
+      <div className=" w-full flex mx-3 my-2 flex-col overflow-hidden">
         <div className="flex justify-center">
           <div className="flex flex-row gap-10  font-semibold p-2 text-sm rounded-full bg-gray-400">
             <h2
               className={`p-1 ${
-                page === "deliveryVendor" && "bg-white"
+                page === "deliveryVendor" && "bg-white text-blue-500"
               } rounded-full px-4 cursor-pointer`}
               onClick={() => setPage("deliveryVendor")}
             >
@@ -23,7 +23,7 @@ const MailRoom = () => {
             </h2>
             <h2
               className={`p-1 ${
-                page === "inBound" && "bg-white"
+                page === "inBound" && "bg-white text-blue-500"
               } rounded-full px-4 cursor-pointer`}
               onClick={() => setPage("inBound")}
             >
@@ -31,7 +31,7 @@ const MailRoom = () => {
             </h2>
             <h2
               className={`p-1 ${
-                page === "outBound" && "bg-white"
+                page === "outBound" && "bg-white text-blue-500"
               } rounded-full px-4 cursor-pointer`}
               onClick={() => setPage("outBound")}
             >

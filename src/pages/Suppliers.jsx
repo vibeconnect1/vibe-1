@@ -160,9 +160,9 @@ const Suppliers = () => {
   };
 
   return (
-    <section className="flex max-w-6xl xl:max-w-7xl ">
+    <section className="flex  ">
       <Navbar />
-      <div className="p-4 w-full my-2 flex mx-5 flex-col">
+      <div className="w-full mx-3 flex  flex-col overflow-hidden">
         <div className="flex flex-wrap justify-between items-center my-5 ">
           <input
             type="text"

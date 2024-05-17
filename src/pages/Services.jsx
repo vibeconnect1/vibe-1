@@ -245,13 +245,13 @@ const Services = () => {
             onChange={handleSearch}
           />
           <div className="flex flex-wrap gap-2">
-            <button
+            {/* <button
               className="text-lg font-semibold border-2 border-black px-4 p-1 flex gap-2 items-center rounded-md"
               onClick={() => setOmitColumn(!omitColumn)}
             >
               <IoFilterOutline />
               Filter Columns
-            </button>
+            </button> */}
             <button
               className="text-lg font-semibold border-2 border-black px-4 p-1 flex gap-2 items-center rounded-md"
               onClick={() => setFilter(!filter)}

@@ -4,8 +4,11 @@ import { CgAdd } from "react-icons/cg";
 import { Switch } from "../../../../Buttons";
 import { FaQrcode } from "react-icons/fa";
 import AssetQrCode from "./AssetQrCode";
+import DataTable from "react-data-table-component";
+import { Link, useParams } from "react-router-dom";
 
 const Assetinfo = ({ assetData }) => {
+  const {id} = useParams()
   const [assetBreakdown, setAssetBreakdown] = useState(false);
   const {
     floor_name,
@@ -26,6 +29,8 @@ const Assetinfo = ({ assetData }) => {
     description,
     capacity,
     warranty_start,
+    asset_params,
+    installation
   } = assetData;
   const [qrCode, setQrCode] = useState(false);
 
@@ -37,12 +42,51 @@ const Assetinfo = ({ assetData }) => {
   const handleToggle = () => {
     setAssetBreakdown(!breakdown);
   };
+
+
+  // Charactor Limit		Consumption view	Edit	Delete
+
+  const assetParmsColumn = [
+    { name: "Name", selector: (row) => row.name },
+    { name: "Order", selector: (row) => row.order },
+    {
+      name: "Dashboard view",
+      selector: (row) => (row.dashboard_view ? "Yes" : "No"),
+    },
+    {
+      name: "Consumption view",
+      selector: (row) => (row.consumption_view ? "Yes" : "No"),
+    },
+  ];
+
+  const customStyle = {
+    headRow: {
+      style: {
+        backgroundColor: "black",
+        color: "white",
+        fontSize: "10px",
+      },
+    },
+    headCells: {
+      style: {
+        textTransform: "upperCase",
+      },
+    },
+    cells: {
+      style: {
+        fontWeight: "bold",
+        fontSize: "10px",
+        textAlign : "center"
+      },
+    },
+  };
+
   return (
     <section>
       <div className="m-2">
         <div className="border-2 flex flex-col my-5 p-4 gap-4 rounded-md border-gray-400">
-          <div className=" flex justify-between ">
-            <button className="border-2 px-4 p-1 rounded-full text-blue-500 flex gap-2 items-center hover:bg-blue-500 hover:text-white border-blue-500">
+          <div className=" flex sm:flex-row flex-col gap-5 justify-between ">
+            <button className="border-2 px-4 p-1 rounded-full text-blue-500 flex gap-2 items-center hover:bg-blue-500 hover:text-white border-blue-500 justify-center transition-all duration-500">
               <CgAdd />
               Add PPM
             </button>
@@ -54,111 +98,111 @@ const Assetinfo = ({ assetData }) => {
             </div>
             <div className="flex gap-2">
               <button
-                className="flex gap-2 items-center border-2 border-black px-4 p-1 rounded-full hover:bg-black hover:text-white"
+                className="flex gap-2 items-center border-2 border-black px-4 p-1 rounded-full hover:bg-black hover:text-white transition-all duration-500"
                 onClick={() => setQrCode(true)}
               >
                 <FaQrcode /> QR Code
               </button>
-              <button className="flex gap-2 items-center border-2 border-black px-4 p-1 rounded-full hover:bg-black hover:text-white">
+              <Link to={`/assets/edit-asset/${id}`} className="flex gap-2 items-center border-2 border-black px-4 p-1 rounded-full  hover:bg-black hover:text-white transition-all duration-500">
                 <BiEditAlt />
                 Edit Details
-              </button>
+              </Link >
             </div>
           </div>
           <div>
             <h2 className="border-b  text-xl border-black font-semibold">
               Location Details
             </h2>
-            <div className="my-5 px-10 text-sm items-center font-medium grid gap-4 grid-cols-2">
+            <div className="my-5 md:px-10 text-sm items-center font-medium grid gap-4 md:grid-cols-2">
               <div className="grid grid-cols-2 items-center">
                 <p>Site :</p>
-                <p className="text-xs"></p>
+                <p className="text-sm font-normal "></p>
               </div>
               <div className="grid grid-cols-2">
                 <p>Building : </p>
-                <p className="text-xs">{building_name}</p>
+                <p className="text-sm font-normal">{building_name}</p>
               </div>
               <div className="grid grid-cols-2 items-center">
                 <p>Floor : </p>
-                <p className="text-xs">{floor_name}</p>
+                <p className="text-sm font-normal">{floor_name}</p>
               </div>
               <div className="grid grid-cols-2 items-center">
                 <p>Unit : </p>
-                <p className="text-xs">{unit_name}</p>
+                <p className="text-sm font-normal">{unit_name}</p>
               </div>
             </div>
           </div>
           <div>
-            <h2 className="border-b  text-xl border-black font-semibold">
+            <h2 className="border-b text-xl border-black font-semibold">
               Asset Information
             </h2>
-            <div className="my-5 px-10 items-center font-medium grid gap-4 grid-cols-3 text-sm">
+            <div className="my-5 md:px-10 items-center font-medium grid gap-5 md:grid-cols-3 text-sm">
               <div className="grid grid-cols-2 items-center">
                 <p>Client Name :</p>
-                <p className="text-xs"></p>
+                <p className="text-sm font-normal"></p>
               </div>
               <div className="grid grid-cols-2 items-center">
                 <p>Asset Name : </p>
-                <p className="text-xs">{name}</p>
+                <p className="text-sm font-normal">{name}</p>
               </div>
 
               <div className="grid grid-cols-2">
                 <p>Model Number : </p>
-                <p className="text-xs"> {model_number}</p>
+                <p className="text-sm font-normal"> {model_number}</p>
               </div>
               <div className="grid grid-cols-2">
                 <p>Serial Number :</p>
-                <p className="text-xs"> {serial_number}</p>
+                <p className="text-sm font-normal"> {serial_number}</p>
               </div>
               <div className="grid grid-cols-2">
                 <p>Purchased on : </p>
-                <p className="text-xs">{purchased_on}</p>
+                <p className="text-sm font-normal">{purchased_on}</p>
               </div>
               <div className="grid grid-cols-2">
                 <p>Date Of Installation: </p>
-                <p className="text-xs"></p>
+                <p className="text-sm font-normal">{installation}</p>
               </div>
               <div className="grid grid-cols-2">
-                <p>Breakdown Date: </p>
+                <p>Breakdown Date : </p>
               </div>
               <div className="grid grid-cols-2">
                 <p>Created On : </p>
-                <p className="text-xs">{dateFormat(created_at)}</p>
+                <p className="text-sm font-normal">{dateFormat(created_at)}</p>
               </div>
               <div className="grid grid-cols-2">
                 <p>Capacity : </p>
-                <p className="text-xs">{capacity}</p>
+                <p className="text-sm">{capacity}</p>
               </div>
               <div className="grid grid-cols-2">
                 <p>Purchase Cost : </p>
-                <p className="text-xs">{purchase_cost}</p>
+                <p className="text-sm font-normal">{purchase_cost}</p>
               </div>
               <div className="grid grid-cols-2">
                 <p>Group : </p>
-                <p className="text-xs"></p>
+                <p className="text-sm font-normal"></p>
               </div>
               <div className="grid grid-cols-2">
-                <p>Subgroup: </p>
+                <p>Subgroup : </p>
               </div>
               <div className="grid grid-cols-2">
                 <p>Critical : </p>
-                <p className="text-xs">{critical ? "Yes" : "No"}</p>
+                <p className="text-sm font-normal">{critical ? "Yes" : "No"}</p>
               </div>
               <div className="grid grid-cols-2">
                 <p>Meter Applicable : </p>
-                <p className="text-xs">{is_meter}</p>
+                <p className="text-sm font-normal">{is_meter}</p>
               </div>
 
               <div className="grid grid-cols-2">
                 <p>Updated On : </p>
-                <p className="text-xs">{dateFormat(updated_at)}</p>
+                <p className="text-sm font-normal">{dateFormat(updated_at)}</p>
               </div>
               <div className="grid grid-cols-2">
                 <p>Comments: </p>
               </div>
               <div className="grid grid-cols-2">
                 <p>Description : </p>
-                <p className="text-xs">{description}</p>
+                <p className="text-sm">{description}</p>
               </div>
             </div>
           </div>
@@ -166,14 +210,15 @@ const Assetinfo = ({ assetData }) => {
             <h2 className="border-b  text-xl border-black font-semibold">
               Warranty Details
             </h2>
-            <div className="my-5 px-10 text-sm items-center font-medium grid gap-4 grid-cols-3 w-full">
+            <div className="my-5 md:px-10 text-sm items-center font-medium grid gap-4 md:grid-cols-3 w-full">
+              
               <div className="grid grid-cols-2 items-center">
-                <p>Expiry Date : </p>
-                <p className="text-xs">{warranty_expiry}</p>
+                <p>Warranty Start Date:</p>
+                <p className="text-sm">{warranty_start} </p>
               </div>
               <div className="grid grid-cols-2 items-center">
-                <p>Date Of Installation:</p>
-                <p className="text-xs">{warranty_start} </p>
+                <p>Expiry Date : </p>
+                <p className="text-sm">{warranty_expiry}</p>
               </div>
             </div>
           </div>
@@ -185,6 +230,16 @@ const Assetinfo = ({ assetData }) => {
               No attachments
             </div>
           </div>
+          <DataTable
+            columns={assetParmsColumn}
+            data={asset_params}
+            customStyles={customStyle}
+            pagination
+            responsive
+            fixedHeader
+            highlightOnHover
+            
+          />
         </div>
         {qrCode && <AssetQrCode onClose={() => setQrCode(false)} />}
       </div>

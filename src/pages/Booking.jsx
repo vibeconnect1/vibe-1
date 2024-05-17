@@ -94,14 +94,14 @@ const Booking = () => {
     },
   };
   return (
-    <section className="flex mr-5">
+    <section className="flex ">
       <Navbar />
-      <div className="p-4 w-full my-2 flex mx-5 flex-col">
+      <div className="w-full flex m-3 flex-col overflow-hidden">
         <div className="flex justify-center">
           <div className="flex flex-row gap-10 text-lg font-semibold p-2 rounded-full bg-gray-400">
             <h2
               className={`p-1 ${
-                page === "booking" && "bg-white"
+                page === "booking" && "bg-white text-blue-500"
               } rounded-full px-2 cursor-pointer`}
               onClick={() => setPage("booking")}
             >
@@ -109,7 +109,7 @@ const Booking = () => {
             </h2>
             <h2
               className={`p-1 ${
-                page === "setup" && "bg-white"
+                page === "setup" && "bg-white text-blue-500"
               } rounded-full px-2 cursor-pointer`}
               onClick={() => setPage("setup")}
             >

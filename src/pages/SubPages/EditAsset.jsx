@@ -1,35 +1,143 @@
 import React, { useEffect, useState } from "react";
 import Switch from "../../Buttons/Switch";
 import { getItemInLocalStorage } from "../../utils/localStorage";
-import { getFloors, getUnits, getVendors, postSiteAsset } from "../../api";
+import {
+  getFloors,
+  getSiteAssetDetails,
+  getUnits,
+  getVendors,
+  postSiteAsset,
+} from "../../api";
 import { BiCross, BiPlus } from "react-icons/bi";
 import { IoClose } from "react-icons/io5";
 import AddSuppliers from "../../containers/modals/AddSuppliersModal";
 import toast from "react-hot-toast";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import Selector from "../../containers/Selector";
-import { initialAddAssetFormData } from "../../utils/initialFormData";
 
-const AddAsset = () => {
+const EditAsset = () => {
   const buildings = getItemInLocalStorage("Building");
+  // const [meterApplicable, setMeterApplicable] = useState(false);
   const [meterType, setMeterType] = useState("");
-  const [warranty, setWarranty] = useState(false);
   const [floors, setFloors] = useState([]);
   const [units, setUnits] = useState([]);
   const [addConsumptionFields, setAddConsumptionFields] = useState([{}]);
   const [addNonConsumptionFields, setAddNonConsumptionFields] = useState([{}]);
   const [addSupplierModal, showAddSupplierMOdal] = useState(false);
   const [vendors, setVendors] = useState([]);
-  const [formData, setFormData] = useState(initialAddAssetFormData);
+  //
+  const today = new Date();
+  const year = today.getFullYear();
+  const month = String(today.getMonth() + 1).padStart(2, "0");
+  const day = String(today.getDate()).padStart(2, "0");
+  const formattedDate = `${year}-${month}-${day}`;
+  //
+  const { id } = useParams();
+  const [formData, setFormData] = useState({
+    area: "",
+    site_id: "",
+    building_id: "",
+    floor_id: "",
+    unit_id: "",
+    name: "",
+    asset_number: "",
+    serial_number: "",
+    model_number: "",
+    wing_id: "",
+    purchase_cost: "",
+    capacity: "",
+    unit: "",
+    group: "",
+    sub_group: "",
+    asset_type: "",
+    purchased_on: formattedDate,
+    breakdown: false,
+    critical: false,
+    installation: formattedDate,
+    warranty: false,
+    warranty_expiry: formattedDate,
+    is_meter: false,
+    meter_type: "",
+    applicable_meter_category: "",
+    parent_meter: "",
+    meter_category: "",
+    vendor_id: "",
+    description: "",
+    //
+
+    consumptionassetmeasure: "",
+    unittype: "",
+    min: "",
+    max: "",
+    belowvalue: "",
+    abovevalue: "",
+    multiplierfactor: "",
+    checkpreviousreading: "",
+    nonConsumptionAssetMeasure: "",
+    nonunittype: "",
+    nonmin: "",
+    nonmax: "",
+    nonbelowvalue: "",
+    nonabovevalue: "",
+    nonmultiplierfactor: "",
+    noncheckprevreading: "",
+    subname: "",
+    subunittype: "",
+    submin: "",
+    submax: "",
+    subbelowvalue: "",
+    subabovevalue: "",
+    subcheckprevreading: "",
+
+    file1: [],
+    file2: [],
+    file3: [],
+    file4: [],
+  });
   console.log(formData);
 
   useEffect(() => {
-    const fetchVendors = async () => {
-      const vendorResp = await getVendors();
-      setVendors(vendorResp.data);
+    const getDetails = async () => {
+      try {
+        const details = await getSiteAssetDetails(id);
+        setFormData(details.data);
+        fetchFloor(details.data.building_id);
+        getUnit(details.data.floor_id);
+      } catch (error) {
+        console.error("Error fetching site asset details:", error);
+      }
     };
-    fetchVendors();
-  }, []);
+
+    const fetchFloor = async (floorID) => {
+      try {
+        const build = await getFloors(floorID);
+        setFloors(build.data.map((item) => ({ name: item.name, id: item.id })));
+      } catch (e) {
+        console.log(e);
+      }
+    };
+    const getUnit = async (UnitID) => {
+      try {
+        const unit = await getUnits(UnitID);
+        setUnits(unit.data.map((item) => ({ name: item.name, id: item.id })));
+        console.log(unit);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    const fetchVendor = async () => {
+      try {
+        const vendorResp = await getVendors();
+        setVendors(vendorResp.data);
+        console.log(vendorResp.data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    getDetails();
+    fetchVendor();
+  }, [id]);
 
   const handleChange = async (e) => {
     async function fetchFloor(floorID) {
@@ -100,9 +208,7 @@ const AddAsset = () => {
       [fieldName]: files,
     });
   };
-
   const navigate = useNavigate();
-  
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -112,25 +218,9 @@ const AddAsset = () => {
       setFormData({});
       toast.dismiss();
       toast.success("Asset Created successfully");
-      navigate("/assets");
+      // navigate("/assets");
     } catch (error) {
       console.error("Error submitting complaint:", error);
-      toast.error("Error Creating Asset!")
-    }
-  };
-  const handleSaveAndCreate = async (e) => {
-    e.preventDefault();
-    try {
-      toast.loading("Createing Asset Please wait!");
-      const response = await postSiteAsset(formData);
-      console.log("Asset Created successfully:", response);
-      setFormData({});
-      toast.dismiss();
-      toast.success("Asset Created successfully");
-      setFormData(initialAddAssetFormData)
-    } catch (error) {
-      console.error("Error submitting complaint:", error);
-      toast.error("Error Creating Asset!")
     }
   };
 
@@ -168,7 +258,7 @@ const AddAsset = () => {
     <section>
       <div className="m-2">
         <h2 className="text-center text-xl font-bold p-2 bg-black rounded-full text-white">
-          Add Asset
+          Edit Asset
         </h2>
         <div className="md:mx-20 my-5 mb-10 sm:border border-gray-400 p-5 px-10 rounded-lg sm:shadow-xl">
           <h2 className="border-b text-center text-xl border-black mb-6 font-bold">
@@ -420,6 +510,8 @@ const AddAsset = () => {
                   />
                   <p>In Use</p>
                 </div>
+
+
                 <div className="flex items-center gap-4">
                   <p className="font-semibold">Critical:</p>
                   <div className="flex gap-2">
@@ -532,6 +624,43 @@ const AddAsset = () => {
                 )}
               </div>
             </div>
+            
+            <div>
+                  <div className="flex flex-col justify-around">
+                    <label
+                      htmlFor=""
+                      className="font-semibold my-1 flex justify-start"
+                    >
+                      Comment :
+                    </label>
+                    <textarea
+                      name="heading"
+                      placeholder="Enter Comment"
+                      rows=""
+                      cols={25}
+                      // value={formData.comment}
+                      // onChange={handleChange}
+                      className="border px-2 rounded-md flex flex-auto border-black w-full"
+                    ></textarea>
+                  </div>
+                  <div className="flex flex-col justify-around">
+                    <label
+                      htmlFor=""
+                      className="font-semibold my-1 flex justify-start"
+                    >
+                      Description :
+                    </label>
+                    <textarea
+                      name="heading"
+                      placeholder="Enter Description"
+                      rows="3"
+                      cols={25}
+                      value={formData.description}
+                      onChange={handleChange}
+                      className="border px-2 rounded-md text-sm flex flex-auto border-black w-full"
+                    ></textarea>
+                  </div>
+                </div>
             {formData.is_meter && meterType === "parent" && (
               <>
                 <p className="border-b border-black font-semibold my-2">
@@ -767,12 +896,11 @@ const AddAsset = () => {
                 <div className="flex gap-2">
                   <input
                     type="radio"
+                    id="inWarranty"
+                    checked={formData.warranty === true}
                     onChange={() =>
                       setFormData({ ...formData, warranty: true })
                     }
-                    checked={formData.warranty === true}
-                    id="inWarranty"
-                    // onClick={() => setWarranty(true)}
                     className="checked:accent-black"
                   />
                   <label htmlFor="inWarranty">Yes</label>
@@ -780,12 +908,11 @@ const AddAsset = () => {
                 <div className="flex  gap-2">
                   <input
                     type="radio"
-                    id="notInWarranty"
-                    checked={formData.warranty === false}
                     onChange={() =>
                       setFormData({ ...formData, warranty: false })
                     }
-                    // onClick={() => setWarranty(false)}
+                    checked={formData.warranty === false}
+                    id="notInWarranty"
                     className="checked:accent-black"
                   />
                   <label htmlFor="notInWarranty">No</label>
@@ -827,36 +954,34 @@ const AddAsset = () => {
               <p className="border-b border-black font-semibold">
                 Supplier Contact Details
               </p>
-              <div className=" flex md:items-center md:justify-between flex-col md:flex-row">
-
-              
-              <div className="flex flex-col my-2">
-                <label htmlFor="" className="font-semibold">
-                  Select Supplier:
-                </label>
-                <select
-                  className="border p-1 px-4 border-gray-500 rounded-md"
-                  value={formData.vendor_id}
-                  onChange={handleChange}
-                  name="vendor_id"
+              <div className="flex md:items-center md:justify-between flex-col md:flex-row">
+                <div className="flex flex-col my-2">
+                  <label htmlFor="" className="font-semibold">
+                    Select Supplier:
+                  </label>
+                  <select
+                    className="border p-1 px-4 border-gray-500 rounded-md"
+                    value={formData.vendor_id}
+                    onChange={handleChange}
+                    name="vendor_id"
+                  >
+                    <option value="">Select Supplier</option>
+                    {vendors.map((vendor) => (
+                      <option value={vendor.id} key={vendor.id}>
+                        {vendor.vendor_name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                <button
+                  className="p-1 border-2 border-black px-4 rounded-md hover:bg-black hover:text-white transition-all duration-300"
+                  onClick={() => showAddSupplierMOdal(true)}
                 >
-                  <option value="">Select Supplier</option>
-                  {vendors.map((vendor) => (
-                    <option value={vendor.id} key={vendor.id}>
-                      {vendor.vendor_name}
-                    </option>
-                  ))}
-                </select>
-              </div>
-              <button
-                className="p-1 border-2 border-black px-4 rounded-md hover:bg-black hover:text-white transition-all duration-300"
-                onClick={() => showAddSupplierMOdal(true)}
-              >
-                Add Supplier
-              </button>
-              {addSupplierModal && (
-                <AddSuppliers onclose={() => showAddSupplierMOdal(false)} />
-              )}
+                  Add Supplier
+                </button>
+                {addSupplierModal && (
+                  <AddSuppliers onclose={() => showAddSupplierMOdal(false)} />
+                )}
               </div>
             </div>
             <div className="my-5">
@@ -891,7 +1016,7 @@ const AddAsset = () => {
               </p>
               <input
                 type="file"
-                onChange={(event) => handleFileChange(event, "invoice")}
+                onChange={(event) => handleFileChange(event, "file1")}
                 multiple
               />
             </div>
@@ -901,7 +1026,7 @@ const AddAsset = () => {
               </p>
               <input
                 type="file"
-                onChange={(event) => handleFileChange(event, "insurance")}
+                onChange={(event) => handleFileChange(event, "file2")}
                 multiple
               />
             </div>
@@ -911,7 +1036,7 @@ const AddAsset = () => {
               </p>
               <input
                 type="file"
-                onChange={(event) => handleFileChange(event, "manuals")}
+                onChange={(event) => handleFileChange(event, "file3")}
                 multiple
               />
             </div>
@@ -921,26 +1046,17 @@ const AddAsset = () => {
               </p>
               <input
                 type="file"
-                onChange={(event) => handleFileChange(event, "others")}
+                onChange={(event) => handleFileChange(event, "file4")}
                 multiple
               />
             </div>
           </div>
-          <div className="sm:flex grid gap-2 my-5 sm:justify-end">
+          <div className="sm:flex grid gap-2 my-5 justify-center">
             <button
               className="bg-black text-white p-2 px-4 rounded-md font-medium"
               onClick={handleSubmit}
             >
               Save & Show Details
-            </button>
-            <button className=" border-black border-2  p-2 px-4 rounded-md font-medium">
-              Save & Add PPM
-            </button>
-            <button className="border-black border-2 p-2 px-4 rounded-md font-medium">
-              Save & Add AMC
-            </button>
-            <button className=" border-black border-2  p-2 px-4 rounded-md font-medium" onClick={handleSaveAndCreate}>
-              Save & Create New Asset
             </button>
           </div>
         </div>
@@ -949,4 +1065,4 @@ const AddAsset = () => {
   );
 };
 
-export default AddAsset;
+export default EditAsset;

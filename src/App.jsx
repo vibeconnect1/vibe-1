@@ -65,6 +65,11 @@ import UserTicket from "./pages/SubPages/UserTicket.jsx";
 import DetailsEdit from "./pages/SubPages/details/DetailsEdit.jsx";
 import User from "./components/Authentication/User.jsx";
 import UserDetails from "./pages/SubPages/details/UserDetails.jsx";
+import AddAMC from "./pages/SubPages/AddAMC.jsx";
+import EditAsset from "./pages/SubPages/EditAsset.jsx";
+import EmployeeAttendance from "./pages/Employees/EmployeeAttendance.jsx";
+import ProtectedAdminRoutes from "./routes/ProtectedAdminRoutes.jsx";
+import Salary from "./pages/Employees/Salary.jsx";
 function App() {
   return (
     <>
@@ -108,7 +113,8 @@ function App() {
           {/* tickets -Admin*/}
           <Route path="/tickets" element={<Ticket />} />
           <Route path="/tickets/details/:id" element={<ProtectedRoute><TicketDetails /></ProtectedRoute>} />
-          <Route path="/tickets/create-ticket" element={<CreateTicket /> } />
+          <Route path="/tickets/create-ticket" element={<ProtectedAdminRoutes><CreateTicket /></ProtectedAdminRoutes>  } />
+          {/* <Route path="/tickets/create-ticket" element={<CreateTicket /> } /> */}
           <Route path="/tickets/user-details/:id" element={<ProtectedRoute><UserDetails /></ProtectedRoute>} />
           {/* Edit Details */}
           <Route path="/edit/:id" element={<ProtectedRoute><DetailsEdit /></ProtectedRoute>} />
@@ -191,6 +197,22 @@ function App() {
               </ProtectedRoute>
             }
           />
+          <Route
+            path="/assets/edit-asset/:id"
+            element={
+              <ProtectedRoute>
+                <EditAsset />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/assets/add-amc"
+            element={
+              <ProtectedRoute>
+                <AddAMC />
+              </ProtectedRoute>
+            }
+          />
           <Route path="/services" element={<Services />} />
           <Route path="/services/add-service" element={<AddService />} />
           <Route
@@ -214,6 +236,24 @@ function App() {
               </ProtectedRoute>
             }
           />
+          {/* Employee Attendance */}
+          <Route
+            path="/employee-attendance"
+            element={
+              <ProtectedRoute>
+                <EmployeeAttendance />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/employee-salary"
+            element={
+              <ProtectedRoute>
+                <Salary />
+              </ProtectedRoute>
+            }
+          />
+
         </Routes>
         <Footer />
       </Router>

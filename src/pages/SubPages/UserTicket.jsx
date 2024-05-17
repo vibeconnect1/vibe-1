@@ -188,7 +188,7 @@ const UserTicket = () => {
       <div className="fixed hidden sm:block  left-0 top-0 h-full md:static md:h-auto md:flex-shrink-0">
         <Navbar />
       </div>
-      <div className="flex justify-center items-center my-5 overflow-x-auto w-full max-w-screen-xl sm:w-full">
+      <div className="flex justify-center items-center my-5 overflow-x-auto w-full  sm:w-full">
         <form
           className="border p-2 sm:p-0  border-gray-300 rounded-lg md:p-8 w-full max-w-[60rem]"
           onSubmit={handleSubmit}

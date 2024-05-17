@@ -10,12 +10,11 @@ import { BiEdit, BiFilter, BiFilterAlt } from "react-icons/bi";
 import { getFloors, getSiteAsset, getUnits } from "../api";
 import { getItemInLocalStorage } from "../utils/localStorage";
 import AMC from "./SubPages/AMC";
-import Meter from "./Meter";
 
 // import jsPDF from "jspdf";
 // import QRCode from "qrcode.react";
 
-const Asset = () => {
+const Meter = () => {
   const [searchText, setSearchText] = useState("");
   const [filter, setFilter] = useState(false);
   // const [omitColumn, setOmitColumn] = useState(false);
@@ -49,18 +48,8 @@ const Asset = () => {
     },
 
     {
-      name: "Site",
-      selector: (row) => row.Site_name,
-      sortable: true,
-    },
-    {
       name: "Building",
       selector: (row) => row.building_name,
-      sortable: true,
-    },
-    {
-      name: "Area",
-      selector: (row) => row.area_name,
       sortable: true,
     },
 
@@ -70,16 +59,6 @@ const Asset = () => {
     {
       name: "Asset Name",
       selector: (row) => row.name,
-      sortable: true,
-    },
-    {
-      name: "Asset Code",
-      selector: (row) => row.code,
-      sortable: true,
-    },
-    {
-      name: "Asset Number",
-      selector: (row) => row.code,
       sortable: true,
     },
 
@@ -92,26 +71,6 @@ const Asset = () => {
     {
       name: "Model Number",
       selector: (row) => row.model_number,
-      sortable: true,
-    },
-    {
-      name: "Asset Type",
-      selector: (row) => row.asset_type,
-      sortable: true,
-    },
-    {
-      name: "Client Name",
-      selector: (row) => row.client_name,
-      sortable: true,
-    },
-    {
-      name: "Group",
-      selector: (row) => row.group,
-      sortable: true,
-    },
-    {
-      name: "Sub Group",
-      selector: (row) => row.sub_group,
       sortable: true,
     },
     {
@@ -136,8 +95,8 @@ const Asset = () => {
       sortable: true,
     },
     {
-      name: "Status",
-      selector: (row) => (row.breakdown ? "Breakdown" : "In Use"),
+      name: "Breakdown",
+      selector: (row) => (row.breakdown ? "Yes" : "No"),
       sortable: true,
     },
     {
@@ -151,64 +110,57 @@ const Asset = () => {
       selector: (row) => dateFormat(row.created_at),
       sortable: true,
     },
-    {
-      name: "Updated On",
-      selector: (row) => dateFormat(row.updated_at),
-      sortable: true,
-    },
-    {
-      name: "Warranty",
-      selector: (row) => row.warranty,
-      sortable: true,
-    },
-    {
-      name: "Warranty",
-      selector: (row) => row.warranty_start,
-      sortable: true,
-    },
+    // {
+    //   name: "Updated On",
+    //   selector: (row) => dateFormat(row.updated_at),
+    //   sortable: true,
+    // },
+    // {
+    //   name: "Warranty",
+    //   selector: (row) => row.warranty_start,
+    //   sortable: true,
+    // },
 
     {
       name: "Installation Date",
       selector: (row) => row.installation,
       sortable: true,
     },
-    {
-      name: "AMC",
-      selector: (row) => row.amc,
-      sortable: true,
-    },
-    {
-      name: "PPM",
-      selector: (row) => row.ppm,
-      sortable: true,
-    },
+    // {
+    //   name: "AMC",
+    //   selector: (row) => row.AMC,
+    //   sortable: true,
+    // },
+    // {
+    //   name: "PPM",
+    //   selector: (row) => row.ppm,
+    //   sortable: true,
+    // },
     {
       name: "Meter Configured",
       selector: (row) => (row.is_meter ? "Yes" : "No"),
       sortable: true,
     },
-    {
-      name: "Meter Category",
-      selector: (row) => (row.meter_category),
-      sortable: true,
-    },
-     {
-      name: "Meter Type",
-      selector: (row) => row.meter_type,
-      sortable: true,
-    },
-    
-   
-    {
-      name: "Submeter",
-      selector: (row) => row.sub_meter,
-      sortable: true,
-    },
-    {
-      name: "Supplier",
-      selector: (row) => row.supplier,
-      sortable: true,
-    },
+    // {
+    //   name: "QR COde",
+    //   selector: (row) => (),
+    //   sortable: true,
+    // },
+    // {
+    //   name: "Meter Type",
+    //   selector: (row) => row.meterType,
+    //   sortable: true,
+    // },
+    // {
+    //   name: "Submeter",
+    //   selector: (row) => row.subMeter,
+    //   sortable: true,
+    // },
+    // {
+    //   name: "Supplier",
+    //   selector: (row) => row.supplier,
+    //   sortable: true,
+    // },
   ];
 
   const [filteredData, setFilteredData] = useState([]);
@@ -257,7 +209,9 @@ const Asset = () => {
     const fetchData = async () => {
       try {
         const response = await getSiteAsset();
-        setFilteredData(response.data.site_assets);
+        const filteredAssets = response.data.site_assets.filter(asset => asset.is_meter);
+        setFilteredData(filteredAssets)
+        // setFilteredData(response.data.site_assets);
         setAssets(response.data.site_assets);
         console.log(response);
       } catch (error) {
@@ -382,87 +336,9 @@ const Asset = () => {
     setSelectedUnit(unitId);
   };
 
-  const handleFileChange = (event) => {
-    const file = event.target.files[0];
-    const reader = new FileReader();
-    reader.onload = (e) => {
-      const contents = e.target.result;
-      parse(contents, {
-        header: true,
-        complete: (result) => {
-          setAssets(result.data); // Update assets state with parsed data
-          setFilteredData(result.data); // Update filtered data state with parsed data
-        },
-      });
-    };
-
-    reader.readAsText(file);
-  };
-
   return (
     <section className="flex">
-      <Navbar />
-      <div className="p-4 w-full my-2 flex mx-3 overflow-hidden flex-col">
-        <div className="flex justify-center w-full">
-          <div className="sm:flex grid grid-cols-2 sm:flex-row gap-5 font-medium p-2 sm:rounded-full rounded-md bg-gray-400">
-            <h2
-              className={`p-1 ${
-                page === "assets" && "bg-white text-blue-500"
-              } rounded-full px-4 cursor-pointer text-center `}
-              onClick={() => setPage("assets")}
-            >
-              Assets
-            </h2>
-            <h2
-              className={`p-1 ${
-                page === "AMC" && "bg-white text-blue-500"
-              } rounded-full px-4 cursor-pointer`}
-              onClick={() => setPage("AMC")}
-            >
-              AMC
-            </h2>
-            <h2
-              className={`p-1 ${
-                page === "meter" && "bg-white text-blue-500"
-              } rounded-full px-4 cursor-pointer`}
-              onClick={() => setPage("meter")}
-            >
-              Meter
-            </h2>
-            <h2
-              className={`p-1 ${
-                page === "task" && "bg-white text-blue-500"
-              } rounded-full px-4 cursor-pointer`}
-              onClick={() => setPage("task")}
-            >
-              Task
-            </h2>
-            <h2
-              className={`p-1 ${
-                page === "schedule" && "bg-white text-blue-500"
-              } rounded-full px-4 cursor-pointer`}
-              onClick={() => setPage("schedule")}
-            >
-              Schedule
-            </h2>
-            <h2
-              className={`p-1 ${
-                page === "PPM" && "bg-white text-blue-500"
-              } rounded-full px-4 cursor-pointer`}
-              onClick={() => setPage("PPM")}
-            >
-              PPM
-            </h2>
-            <h2
-              className={`p-1 ${
-                page === "inventory" && "bg-white text-blue-500"
-              } rounded-full px-4 cursor-pointer`}
-              onClick={() => setPage("inventory")}
-            >
-              Inventory
-            </h2>
-          </div>
-        </div>
+      <div className=" w-full my-2 flex overflow-hidden flex-col">
         {/* {omitColumn && (
           <div className="grid grid-cols-10  gap-x-12 gap-y-4 border-2 border-black p-2 rounded-md mb-5">
             {column.map((col) => (
@@ -533,16 +409,16 @@ const Asset = () => {
         )}
         {page === "assets" && (
           <>
-        <div className="flex md:flex-row flex-col justify-between items-center my-2 gap-2  ">
-          <input
-            type="text"
-            placeholder="Search By Building name, Asset Name or Unit"
-            className="border-2 p-2 md:w-96 border-gray-300 rounded-lg placeholder:text-sm"
-            value={searchText}
-            onChange={handleSearch}
-          />
-          <div className="md:flex grid grid-cols-2 sm:flex-row my-2 flex-col gap-2">
-            {/* <button
+            <div className="flex md:flex-row flex-col justify-between items-center my-2 gap-2  ">
+              <input
+                type="text"
+                placeholder="Search By Building name, Asset Name or Unit"
+                className="border-2 p-2 md:w-96 border-gray-300 rounded-lg placeholder:text-sm"
+                value={searchText}
+                onChange={handleSearch}
+              />
+              <div className="md:flex grid grid-cols-2 sm:flex-row my-2 flex-col gap-2">
+                {/* <button
               className="md:text-lg text-sm font-semibold border-2 border-black px-4 p-1 flex gap-2 items-center rounded-md"
               onClick={() => setOmitColumn(!omitColumn)}
             >
@@ -550,70 +426,65 @@ const Asset = () => {
               Filter Columns
             </button> */}
 
-            <button
-              className=" font-semibold border-2 border-black px-4 p-1 flex gap-2 items-center rounded-md"
-              onClick={() => setFilter(!filter)}
-            >
-              <BiFilterAlt />
-              Filter
-            </button>
+                <button
+                  className=" font-semibold border-2 border-black px-4 p-1 flex gap-2 items-center rounded-md"
+                  onClick={() => setFilter(!filter)}
+                >
+                  <BiFilterAlt />
+                  Filter
+                </button>
 
-            <Link
-              to={"/assets/add-asset"}
-              className="bg-black  text-sm rounded-lg flex justify-center font-semibold items-center gap-2 text-white py-2 px-4 border-2 border-black hover:bg-white hover:text-black transition-all duration-300 "
-            >
-              <IoAddCircleOutline size={20} />
-              Add
-            </Link>
-            <button
-              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-              
-            >
-              {/* <input type="file"  className="opacity-0 w-fit" onChange={handleFileChange} /> */}
-              Import
-            </button>
-            <button
-              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-              onClick={exportToExcel}
-            >
-              Export
-            </button>
-            {/* <button
+                <Link
+                  to={"/assets/add-asset"}
+                  className="bg-black  text-sm rounded-lg flex justify-center font-semibold items-center gap-2 text-white py-2 px-4 border-2 border-black hover:bg-white hover:text-black transition-all duration-300 "
+                >
+                  <IoAddCircleOutline size={20} />
+                  Add
+                </Link>
+                <button
+                  className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                  // onClick={exportToExcel}
+                >
+                  Import
+                </button>
+                <button
+                  className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                  onClick={exportToExcel}
+                >
+                  Export
+                </button>
+                {/* <button
             className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
             onClick={handleDownloadQRCode}
             disabled={selectedRows.length === 0}
           >
             Download QR Code
           </button> */}
-          </div>
-        </div>
-        
-          <DataTable
-            selectableRows
-            // columns={column.filter((col) => visibleColumns.includes(col.name))}
-            columns={column}
-            data={filteredData}
-            customStyles={customStyle}
-            responsive
-            onSelectedRowsChange={handleRowSelected}
-            fixedHeader
-            // fixedHeaderScrollHeight="450px"
-            pagination
-            selectableRowsHighlight
-            highlightOnHover
-            // omitColumn={column}
-          />
+              </div>
+            </div>
+
+            <DataTable
+              selectableRows
+              // columns={column.filter((col) => visibleColumns.includes(col.name))}
+              columns={column}
+              data={filteredData}
+              customStyles={customStyle}
+              responsive
+              onSelectedRowsChange={handleRowSelected}
+              fixedHeader
+              // fixedHeaderScrollHeight="450px"
+              pagination
+              selectableRowsHighlight
+              highlightOnHover
+              // omitColumn={column}
+            />
           </>
         )}
-        {page === "AMC" && (
-          <AMC/>
-        )}
-        {page === "meter" && (
-          <Meter/>
-        )}
+
+       
       </div>
     </section>
   );
 };
 
-export default Asset;
+export default Meter;
