@@ -105,7 +105,7 @@ const SetupBookingFacility = () => {
     },
   };
   return (
-    <div >
+    <div className="m-5">
       <div className="flex justify-between items-center">
         <input
           type="text"
@@ -116,7 +116,7 @@ const SetupBookingFacility = () => {
         />
         <div className="flex gap-4 justify-end w-full">
           <Link
-            to={"/bookings/setup-facility"}
+            to={"/facility/setup-facility"}
             className="bg-black w-20 rounded-lg flex font-semibold items-center gap-2 text-white p-2 my-5"
           >
             <IoAddCircleOutline size={20} />

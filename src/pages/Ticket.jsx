@@ -298,7 +298,7 @@ const Ticket = () => {
               }`}
             >
               <p className="font-medium text-center">{status}</p>
-              <p>{count}</p>
+              <p className="font-medium">{count}</p>
             </div>
           ))}
           {/* </div> */}

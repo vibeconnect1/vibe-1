@@ -169,7 +169,11 @@ const TicketDetails = () => {
           {ticketinfo.documents &&
             ticketinfo.documents.map((doc, index) => (
               <div key={index} className="flex justify-start p-4">
-                <a href={domainPrefix + doc.document} target="_blank" className="inline-block  w-40">
+                <a
+                  href={domainPrefix + doc.document}
+                  target="_blank"
+                  className="inline-block  w-40"
+                >
                   <img
                     src={domainPrefix + doc.document}
                     alt={`Attachment`}
@@ -181,7 +185,7 @@ const TicketDetails = () => {
               </div>
             ))}
         </div>
-        
+
         <h2 className="text-center w-screen bg-black text-white font-semibold my-5 text-lg p-2 px-4 ">
           Logs
         </h2>
@@ -248,7 +252,8 @@ const TicketDetails = () => {
                               <img
                                 src={domainPrefix + doc.document}
                                 alt={`Attachment ${index}`}
-                                width={"25%"}
+                                // width={"25%"}
+                                className="w-40 h-40 object-cover rounded-md"
                               />
                             </a>
                           </div>
@@ -260,34 +265,34 @@ const TicketDetails = () => {
             </div>
           ))}
         <h2 className="text-center w-screen bg-black text-white font-semibold my-5 text-lg p-2 px-4 ">
-        Escalations
+          Escalations
         </h2>
         {/* <div className="border m-10 " /> */}
-<div className="px-4 mb-10">
-
-
-        {ticketinfo.escalations &&
-          ticketinfo.escalations.map((esclate) => (
-            <div
-              className="md:flex rounded-md justify-between border p-4 border-black mb-5"
-              key={esclate.id}
-            >
-              <div className="flex flex-col gap-2">
-                <div className="grid grid-cols-2 gap-x-5 items-center">
-                  <p className="font-semibold">Esclation Level :</p>
-                  <p>{esclate.level}</p>
+        <div className="px-4 mb-10">
+          {ticketinfo.escalations &&
+            ticketinfo.escalations.map((esclate) => (
+              <div
+                className="md:flex rounded-md justify-between border p-4 border-black mb-5"
+                key={esclate.id}
+              >
+                <div className="flex flex-col gap-2">
+                  <div className="grid grid-cols-2 gap-x-5 items-center">
+                    <p className="font-semibold">Esclation Level :</p>
+                    <p>{esclate.level}</p>
+                  </div>
+                  <div className="grid grid-cols-2 items-center">
+                    <p className="font-semibold">Esclated To :</p>
+                    <p>{esclate.esc_to}</p>
+                  </div>
                 </div>
-                <div className="grid grid-cols-2 items-center">
-                  <p className="font-semibold">Esclated To :</p>
-                  <p>{esclate.esc_to}</p>
+                <div className="flex justify-end">
+                  <p className="text-sm mt-5 sm:mt-0 font-semibold text-gray-500">
+                    {dateFormat(esclate.esc_on)}
+                  </p>
                 </div>
               </div>
-              <div className="flex justify-end">
-                <p className="text-sm mt-5 sm:mt-0 font-semibold text-gray-500">{dateFormat(esclate.esc_on)}</p>
-              </div>
-            </div>
-          ))}
-          </div>
+            ))}
+        </div>
       </div>
     </div>
   );

@@ -4,7 +4,8 @@ const SetupNavbar = () => {
   return (
     <div className="flex mt-1">
     <div>
-      <ul className="p-4 bg-black rounded-xl mx-2 flex max-w-screen items-center text-white text-sm text-center justify-center flex-wrap gap-2 ">
+      {/* <ul className="p-4 bg-black rounded-xl mx-2 md:flex grid grid-cols-2 items-center text-white text-sm text-center justify-center overflow-x-auto  gap-2 "> */}
+      <ul className="p-4 bg-black rounded-xl mx-2 md:flex grid grid-cols-2 max-w-screen items-center text-white text-sm text-center justify-center flex-wrap gap-2 ">
         <Link to={"/setup/account/organisation"} className="hover:bg-white hover:text-black p-2 rounded-lg ">
           Account
         </Link>
@@ -16,6 +17,8 @@ const SetupNavbar = () => {
         <Link className="hover:bg-white hover:text-black  p-2 rounded-lg ">Asset Group</Link>
         <Link className="hover:bg-white hover:text-black  p-2 rounded-lg ">Checklist Group</Link>
         <Link className="hover:bg-white hover:text-black  p-2 rounded-lg ">Ticket</Link>
+        <Link to={"/business/setup-category"} className="hover:bg-white hover:text-black  p-2 rounded-lg ">Business Category</Link>
+        <Link to={"/facility"} className="hover:bg-white hover:text-black  p-2 rounded-lg ">Facility</Link>
         <Link className="hover:bg-white hover:text-black  p-2 rounded-lg ">Invoice Approval</Link>
         <Link className="hover:bg-white hover:text-black  p-2 rounded-lg ">Email Rule</Link>
         <Link className="hover:bg-white hover:text-black  p-2 rounded-lg ">FM Groups</Link>

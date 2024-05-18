@@ -47,12 +47,12 @@ const Attendance = () => {
       },
     },
   };
-
+  document.title = `Attendance - Vibe Connect`;
   return (
-    <section className="flex gap-5 mr-5">
+    <section className="flex ">
       <Navbar />
-      <div className="flex w-full mx-5 my-10 flex-col">
-        <div className="flex  justify-center my-5 gap-20 ">
+      <div className="w-full flex mx-3 flex-col overflow-hidden">
+        <div className="flex  justify-start gap-4 my-5  ">
           <div className="shadow-xl rounded-full border-4 border-gray-400 w-52  px-6 flex flex-col items-center">
             <p className="font-semibold text-lg">Total Employees</p>
             <p className="text-center font-semibold text-lg ">0</p>
@@ -71,7 +71,7 @@ const Attendance = () => {
             <p className="text-center font-semibold text-lg ">0</p>
           </div>
         </div>
-        <div className="w-full flex mx-3 flex-col">
+        <div className=" flex mx-3 flex-col">
           <div className="flex justify-between items-center">
             <input
               type="text"
@@ -85,13 +85,13 @@ const Attendance = () => {
               Export
             </button>
           </div>
-          <div>
+         
             <DataTable
               columns={column}
               data={data}
               customStyles={customStyle}
               responsive
-              selectableRows
+             
               fixedHeader
               fixedHeaderScrollHeight="500px"
               pagination
@@ -100,7 +100,7 @@ const Attendance = () => {
               omitColumn={column}
             />
           </div>
-        </div>
+        
       </div>
       {modal && <Modal onclose={() => setModal(false)} />}
     </section>

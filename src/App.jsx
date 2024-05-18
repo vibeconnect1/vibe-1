@@ -70,6 +70,22 @@ import EditAsset from "./pages/SubPages/EditAsset.jsx";
 import EmployeeAttendance from "./pages/Employees/EmployeeAttendance.jsx";
 import ProtectedAdminRoutes from "./routes/ProtectedAdminRoutes.jsx";
 import Salary from "./pages/Employees/Salary.jsx";
+import SetupBookingFacility from "./pages/SubPages/SetupBookingFacility.jsx";
+import BookSeat from "./pages/SubPages/BookSeat.jsx";
+import EmployeeBooking from "./pages/Employees/EmployeeBooking.jsx";
+import EmployeeFacilityBooking from "./pages/Employees/EmployeeFacilityBooking.jsx";
+import EmployeeSeatBooking from "./pages/Employees/EmployeeSeatBooking.jsx";
+import EmployeeBusinessCard from "./pages/Employees/EmployeeBusinessCard.jsx";
+import EmployeeTransportation from "./pages/Employees/EmployeeTransportation.jsx";
+import BookOutstation from "./pages/Employees/EmployeeSubPages/BookOutstation.jsx";
+import BookPickup from "./pages/Employees/EmployeeSubPages/BookPickup.jsx";
+import Transportation from "./pages/Transportation.jsx";
+import AdminBookDailypickup from "./pages/SubPages/AdminBookDailypickup.jsx";
+import AdminBookOutstation from "./pages/SubPages/AdminBookOutstation.jsx";
+import AdminPickupDetails from "./pages/SubPages/details/AdminPickupDetails.jsx";
+import AdminOutstationDetails from "./pages/SubPages/details/AdminOutstationDetails.jsx";
+import EmployeePickupDetails from "./pages/Employees/EmployeePickupDetails.jsx";
+import EmployeeOutstationDetails from "./pages/Employees/EmployeeOutstationDetails.jsx";
 function App() {
   return (
     <>
@@ -90,7 +106,7 @@ function App() {
           />
 
           <Route path="/profile" element = {<ProtectedRoute> <User /> </ProtectedRoute>} />
-          <Route path="/attendance" element={<Attendance />} />
+          <Route path="/attendance" element={<ProtectedAdminRoutes> <Attendance /></ProtectedAdminRoutes>} />
           <Route path="/setup" element={<Setup />} />
           <Route path="/setup/account" element={<Account />} />
           <Route
@@ -138,7 +154,12 @@ function App() {
             path="/bookings/booking-details/:id"
             element={<BookingDetails />}
           />
-          <Route path="/bookings/setup-facility" element={<SetupFacility />} />
+          <Route path="/facility" element={<ProtectedAdminRoutes><SetupBookingFacility /></ProtectedAdminRoutes>} />
+          <Route path="/facility/setup-facility" element={<ProtectedAdminRoutes><SetupFacility /></ProtectedAdminRoutes>} />
+          <Route path="/admin/seat-booking" element={<BookSeat />} />
+          <Route path="/employees/booking" element={<EmployeeBooking />} />
+          <Route path="/employees/facility-booking" element={<ProtectedRoute><EmployeeFacilityBooking /></ProtectedRoute>} />
+          <Route path="/employees/seat-booking" element={<ProtectedRoute><EmployeeSeatBooking /></ProtectedRoute>} />
           {/* communication */}
           <Route path="/communication" element={<Communication />} />
           <Route path="/communication/create-event" element={<CreateEvent />} />
@@ -253,7 +274,96 @@ function App() {
               </ProtectedRoute>
             }
           />
-
+          <Route
+            path="/employees/businesscard"
+            element={
+              <ProtectedRoute>
+                <EmployeeBusinessCard />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/employees/transportation"
+            element={
+              <ProtectedRoute>
+                <EmployeeTransportation />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/employees/book-outstation"
+            element={
+              <ProtectedRoute>
+                <BookOutstation />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/employees/book-pickup"
+            element={
+              <ProtectedRoute>
+                <BookPickup />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/employees/pickup-details/:id"
+            element={
+              <ProtectedRoute>
+                <EmployeePickupDetails />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/employees/outstation-details/:id"
+            element={
+              <ProtectedRoute>
+                <EmployeeOutstationDetails />
+              </ProtectedRoute>
+            }
+          />
+          {/* Admin transport */}
+          
+          <Route
+            path="/admin/transportation"
+            element={
+              <ProtectedAdminRoutes>
+                <Transportation />
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/book-pickup"
+            element={
+              <ProtectedAdminRoutes>
+                <AdminBookDailypickup />
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/book-outstation"
+            element={
+              <ProtectedAdminRoutes>
+                <AdminBookOutstation />
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/pickup-details/:id"
+            element={
+              <ProtectedAdminRoutes>
+                <AdminPickupDetails />
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/outstation-details/:id"
+            element={
+              <ProtectedAdminRoutes>
+                <AdminOutstationDetails />
+              </ProtectedAdminRoutes>
+            }
+          />
         </Routes>
         <Footer />
       </Router>

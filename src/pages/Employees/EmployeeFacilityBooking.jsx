@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Collapsible from "react-collapsible";
 import CustomTrigger from "../../containers/CustomTrigger";
 
-const FacilityBooking = () => {
+const EmployeeFacilityBooking = () => {
   const [selectedSlot, setSelectedSlot] = useState(null);
   const [isOpen, setIsOpen] = useState(false);
   const [isTermOpen, setIsTermOpen] = useState(false);
@@ -40,27 +40,7 @@ const FacilityBooking = () => {
           </h2>
         </div>
         <div className="border border-gray-400 rounded-md mx-20 p-4">
-          <div className="flex justify-center my-5">
-            <div className="flex gap-10">
-              <div className="flex gap-2">
-                <input type="radio" name="user" id="fm" />
-                <label htmlFor="fm">FM User</label>
-              </div>
-              <div className="flex gap-2">
-                <input type="radio" name="user" id="occupant" />
-                <label htmlFor="occupant">Occupant User</label>
-              </div>
-            </div>
-          </div>
-          <div className="mx-5 flex justify-around">
-            <div className="flex flex-col gap-2">
-              <p className="font-bold">Select User :</p>
-              <select className="border p-1 px-4 border-gray-500 rounded-md">
-                <option value="">Choose User</option>
-                <option value="user1">User 1</option>
-                <option value="User2">User 2</option>
-              </select>
-            </div>
+          <div className="flex justify-between">
             <div className="flex flex-col gap-2">
               <p className="font-bold">Select Facility :</p>
               <select className="border p-1 px-4 border-gray-500 rounded-md">
@@ -127,7 +107,9 @@ const FacilityBooking = () => {
           <Collapsible
             readOnly
             trigger={
-              <CustomTrigger isOpen={isOpen}>Cancellation Policy:</CustomTrigger>
+              <CustomTrigger isOpen={isOpen}>
+                Cancellation Policy:
+              </CustomTrigger>
             }
             onOpen={() => setIsOpen(true)}
             onClose={() => setIsOpen(false)}
@@ -135,13 +117,14 @@ const FacilityBooking = () => {
           >
             <div className="grid grid-cols-2 bg-gray-300 p-2 rounded-md gap-5 pb-4">
               <p className="font-medium"> will get policy from api</p>
-              
             </div>
           </Collapsible>
           <Collapsible
             readOnly
             trigger={
-              <CustomTrigger isOpen={isTermOpen}>Terms & Conditions:</CustomTrigger>
+              <CustomTrigger isOpen={isTermOpen}>
+                Terms & Conditions:
+              </CustomTrigger>
             }
             onOpen={() => setIsTermOpen(true)}
             onClose={() => setIsTermOpen(false)}
@@ -149,7 +132,6 @@ const FacilityBooking = () => {
           >
             <div className="grid grid-cols-2 bg-gray-300 p-2 rounded-md gap-5 pb-4">
               <p className="font-medium"> will get terms from api</p>
-              
             </div>
           </Collapsible>
         </div>
@@ -158,4 +140,4 @@ const FacilityBooking = () => {
   );
 };
 
-export default FacilityBooking;
+export default EmployeeFacilityBooking;

@@ -1,15 +1,13 @@
 import React, { useState } from "react";
 import DataTable from "react-data-table-component";
 import { IoAddCircleOutline } from "react-icons/io5";
-import Navbar from "../components/Navbar";
 import { ImEye } from "react-icons/im";
 import { BiExport } from "react-icons/bi";
-import ExportBookingModal from "../containers/modals/ExportBookingsModal";
 import { Link } from "react-router-dom";
-import SetupBookingFacility from "./SubPages/SetupBookingFacility";
-import SeatBooking from "./SubPages/SeatBooking";
+import Navbar from "../../components/Navbar";
+import EmployeeSeat from "./EmployeeSeat";
 
-const Booking = () => {
+const EmployeeBooking = () => {
   const [searchText, setSearchText] = useState("");
   const [modal, showModal] = useState(false);
   const [page, setPage] = useState("meetingBooking");
@@ -106,7 +104,7 @@ const Booking = () => {
               } rounded-full px-4 cursor-pointer text-sm`}
               onClick={() => setPage("meetingBooking")}
             >
-             Meeting Room Bookings
+              Meeting Room Bookings
             </h2>
             <h2
               className={`p-1 ${
@@ -130,19 +128,12 @@ const Booking = () => {
               />
               <div className="flex gap-4 justify-end w-full">
                 <Link
-                  to={"/bookings/new-facility-booking"}
+                  to={"/employees/facility-booking"}
                   className="bg-black w-20 rounded-lg flex font-semibold items-center gap-2 text-white p-2 my-5"
                 >
                   <IoAddCircleOutline size={20} />
                   Book
                 </Link>
-                <button
-                  onClick={() => showModal(true)}
-                  className="bg-black rounded-lg flex font-semibold items-center gap-2 text-white p-2 my-5"
-                >
-                  <BiExport size={20} />
-                  Export
-                </button>
               </div>
             </div>
             <DataTable
@@ -150,18 +141,17 @@ const Booking = () => {
               data={filteredData}
               customStyles={customStyle}
               fixedHeader
-          fixedHeaderScrollHeight="500px"
-          pagination
-          selectableRowsHighlight
-          highlightOnHover
-          omitColumn={column}
+              fixedHeaderScrollHeight="500px"
+              pagination
+              selectableRowsHighlight
+              highlightOnHover
+              omitColumn={column}
             />
-            {modal && <ExportBookingModal onclose={() => showModal(false)} />}
           </div>
         )}
         {page === "seatBooking" && (
           <div>
-            <SeatBooking />
+            <EmployeeSeat />
           </div>
         )}
       </div>
@@ -169,4 +159,4 @@ const Booking = () => {
   );
 };
 
-export default Booking;
+export default EmployeeBooking;

@@ -82,13 +82,13 @@ const Business = () => {
               <IoAddCircleOutline />
               Add
             </Link>
-            <Link
+            {/* <Link
               to={"/business/setup-category"}
               className="bg-black rounded-lg w-40 flex items-center gap-2 text-white p-2 my-5"
             >
               <FiSettings />
               Setup Category
-            </Link>
+            </Link> */}
           </div>
         </div>
 

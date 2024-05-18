@@ -4,7 +4,13 @@ import { useNavigate, NavLink } from "react-router-dom";
 import { menus } from "../utils/menus";
 import { PiSignOutBold } from "react-icons/pi";
 import { getItemInLocalStorage } from "../utils/localStorage";
-import { BsBroadcast, BsBuilding, BsFileRuled, BsMailboxFlag, BsTicketPerforated } from "react-icons/bs";
+import {
+  BsBroadcast,
+  BsBuilding,
+  BsFileRuled,
+  BsMailboxFlag,
+  BsTicketPerforated,
+} from "react-icons/bs";
 import { MdOutlineDashboard } from "react-icons/md";
 import { HiMiniTicket, HiMiniUser } from "react-icons/hi2";
 import { RiSettings4Line } from "react-icons/ri";
@@ -12,6 +18,8 @@ import { LuSettings2 } from "react-icons/lu";
 import { IoBusinessOutline, IoCashOutline } from "react-icons/io5";
 import { TbReportAnalytics } from "react-icons/tb";
 import { AiOutlineFieldTime, AiOutlineUser } from "react-icons/ai";
+import { TiBusinessCard } from "react-icons/ti";
+import { FaCar } from "react-icons/fa";
 
 const Navbar = () => {
   const [open, setOpen] = useState(false);
@@ -47,7 +55,7 @@ const Navbar = () => {
   };
 
   return (
-    <section className="flex gap-6 sticky top-0 left-0 bottom-0 h-screen">
+    <section className="flex gap-6 sticky top-0 left-0 bottom-0 h-screen z-10">
       <div
         className={`p-[8px] bg-[#0e0e0e] max-h-screen ${
           open ? "w-full md:w-60" : "w-20"
@@ -145,7 +153,7 @@ const Navbar = () => {
                   Service
                 </h2>
               </NavLink> */}
-             
+
               <NavLink
                 to={"/tickets"}
                 className={({ isActive }) =>
@@ -185,9 +193,7 @@ const Navbar = () => {
                   }`
                 }
               >
-                <div>
-                  {React.createElement(BsMailboxFlag, { size: "20" })}
-                </div>
+                <div>{React.createElement(BsMailboxFlag, { size: "20" })}</div>
                 <h2
                   className={`whitespace-pre duration-300 ${
                     !open && "opacity-0 translate-x-28 overflow-hidden"
@@ -202,8 +208,8 @@ const Navbar = () => {
                 >
                   Mail Room
                 </h2>
-              </NavLink> */}
-              {/* <NavLink
+              </NavLink>
+              <NavLink
                 to={"/business"}
                 className={({ isActive }) =>
                   ` ${
@@ -221,7 +227,7 @@ const Navbar = () => {
                     !open && "opacity-0 translate-x-28 overflow-hidden"
                   }`}
                 >
-                 Business
+                  Business
                 </h2>
                 <h2
                   className={`${
@@ -230,8 +236,8 @@ const Navbar = () => {
                 >
                   Business
                 </h2>
-              </NavLink> */}
-              {/* <NavLink
+              </NavLink>
+              <NavLink
                 to={"/materials"}
                 className={({ isActive }) =>
                   ` ${
@@ -249,7 +255,7 @@ const Navbar = () => {
                     !open && "opacity-0 translate-x-28 overflow-hidden"
                   }`}
                 >
-                 Materials
+                  Materials
                 </h2>
                 <h2
                   className={`${
@@ -258,8 +264,8 @@ const Navbar = () => {
                 >
                   Materials
                 </h2>
-              </NavLink> */}
-              {/* <NavLink
+              </NavLink>
+              <NavLink
                 to={"/bookings"}
                 className={({ isActive }) =>
                   ` ${
@@ -269,8 +275,10 @@ const Navbar = () => {
                   }`
                 }
               >
-                <div>{React.createElement(AiOutlineFieldTime, { size: "20" })}</div>
-                
+                <div>
+                  {React.createElement(AiOutlineFieldTime, { size: "20" })}
+                </div>
+
                 <h2
                   className={`whitespace-pre duration-300 ${
                     !open && "opacity-0 translate-x-28 overflow-hidden"
@@ -297,7 +305,7 @@ const Navbar = () => {
                 }
               >
                 <div>{React.createElement(AiOutlineUser, { size: "20" })}</div>
-                
+
                 <h2
                   className={`whitespace-pre duration-300 ${
                     !open && "opacity-0 translate-x-28 overflow-hidden"
@@ -312,9 +320,65 @@ const Navbar = () => {
                 >
                   Suppliers
                 </h2>
+              </NavLink>
+              <NavLink
+                to={"/attendance"}
+                className={({ isActive }) =>
+                  ` ${
+                    isActive
+                      ? "text-black bg-white flex p-2  gap-3.5 rounded-md group items-center text-sm font-medium"
+                      : " group flex items-center text-sm gap-3.5 font-medium p-2 hover:bg-gray-800 rounded-md "
+                  }`
+                }
+              >
+                <div>{React.createElement(BsFileRuled, { size: "20" })}</div>
+
+                <h2
+                  className={`whitespace-pre duration-300 ${
+                    !open && "opacity-0 translate-x-28 overflow-hidden"
+                  }`}
+                >
+                  Attendance
+                </h2>
+                <h2
+                  className={`${
+                    open && "hidden"
+                  } absolute left-48 bg-white font-semibold whitespace-pre text-gray-900 rounded-md drop-shadow-lg px-0 py-0 w-0 overflow-hidden group-hover:px-2 group-hover:py-1 group-hover:left-14 group-hover:duration-300 group-hover:w-fit  `}
+                >
+                  Attendance
+                </h2>
+              </NavLink>
+              <NavLink
+                to={"/admin/transportation"}
+                className={({ isActive }) =>
+                  ` ${
+                    isActive
+                      ? "text-black bg-white flex p-2  gap-3.5 rounded-md group items-center text-sm font-medium"
+                      : " group flex items-center text-sm gap-3.5 font-medium p-2 hover:bg-gray-800 rounded-md "
+                  }`
+                }
+              >
+                <div>{React.createElement(FaCar, { size: "20" })}</div>
+
+                <h2
+                  className={`whitespace-pre duration-300 ${
+                    !open && "opacity-0 translate-x-28 overflow-hidden"
+                  }`}
+                >
+                  Transportation
+                </h2>
+                <h2
+                  className={`${
+                    open && "hidden"
+                  } absolute left-48 bg-white font-semibold whitespace-pre text-gray-900 rounded-md drop-shadow-lg px-0 py-0 w-0 overflow-hidden group-hover:px-2 group-hover:py-1 group-hover:left-14 group-hover:duration-300 group-hover:w-fit  `}
+                >
+                  Transportation
+                </h2>
               </NavLink> */}
             </>
           )}
+
+          {/* user */}
           {user !== "pms_admin" && (
             <>
               <NavLink
@@ -368,8 +432,8 @@ const Navbar = () => {
                 >
                   Attendance
                 </h2>
-              </NavLink> */}
-              {/* <NavLink
+              </NavLink>
+              <NavLink
                 to={"/employee-salary"}
                 className={({ isActive }) =>
                   ` ${
@@ -380,7 +444,7 @@ const Navbar = () => {
                 }
               >
                 <div>{React.createElement(IoCashOutline, { size: "20" })}</div>
-                
+
                 <h2
                   className={`whitespace-pre duration-300 ${
                     !open && "opacity-0 translate-x-28 overflow-hidden"
@@ -395,13 +459,9 @@ const Navbar = () => {
                 >
                   Salary
                 </h2>
-              </NavLink> */}
-              
-             
-            </>
-          )}
-           {/* <NavLink
-                to={"/communication"}
+              </NavLink>
+              <NavLink
+                to={"/employees/transportation"}
                 className={({ isActive }) =>
                   ` ${
                     isActive
@@ -410,22 +470,107 @@ const Navbar = () => {
                   }`
                 }
               >
-                <div>{React.createElement(BsBroadcast, { size: "20" })}</div>
+                <div>{React.createElement(FaCar, { size: "20" })}</div>
+
                 <h2
                   className={`whitespace-pre duration-300 ${
                     !open && "opacity-0 translate-x-28 overflow-hidden"
                   }`}
                 >
-                  Communication
+                  Transportation
                 </h2>
                 <h2
                   className={`${
                     open && "hidden"
                   } absolute left-48 bg-white font-semibold whitespace-pre text-gray-900 rounded-md drop-shadow-lg px-0 py-0 w-0 overflow-hidden group-hover:px-2 group-hover:py-1 group-hover:left-14 group-hover:duration-300 group-hover:w-fit  `}
                 >
-                  Communication
+                  Transportation
+                </h2>
+              </NavLink>
+              <NavLink
+                to={"/employees/booking"}
+                className={({ isActive }) =>
+                  ` ${
+                    isActive
+                      ? "text-black bg-white flex p-2  gap-3.5 rounded-md group items-center text-sm font-medium"
+                      : " group flex items-center text-sm gap-3.5 font-medium p-2 hover:bg-gray-800 rounded-md "
+                  }`
+                }
+              >
+                <div>
+                  {React.createElement(AiOutlineFieldTime, { size: "20" })}
+                </div>
+
+                <h2
+                  className={`whitespace-pre duration-300 ${
+                    !open && "opacity-0 translate-x-28 overflow-hidden"
+                  }`}
+                >
+                  Bookings
+                </h2>
+                <h2
+                  className={`${
+                    open && "hidden"
+                  } absolute left-48 bg-white font-semibold whitespace-pre text-gray-900 rounded-md drop-shadow-lg px-0 py-0 w-0 overflow-hidden group-hover:px-2 group-hover:py-1 group-hover:left-14 group-hover:duration-300 group-hover:w-fit  `}
+                >
+                  Bookings
+                </h2>
+              </NavLink>
+              <NavLink
+                to={"/employees/businesscard"}
+                className={({ isActive }) =>
+                  ` ${
+                    isActive
+                      ? "text-black bg-white flex p-2  gap-3.5 rounded-md group items-center text-sm font-medium"
+                      : " group flex items-center text-sm gap-3.5 font-medium p-2 hover:bg-gray-800 rounded-md "
+                  }`
+                }
+              >
+                <div>{React.createElement(TiBusinessCard, { size: "20" })}</div>
+
+                <h2
+                  className={`whitespace-pre duration-300 ${
+                    !open && "opacity-0 translate-x-28 overflow-hidden"
+                  }`}
+                >
+                  Business Card
+                </h2>
+                <h2
+                  className={`${
+                    open && "hidden"
+                  } absolute left-48 bg-white font-semibold whitespace-pre text-gray-900 rounded-md drop-shadow-lg px-0 py-0 w-0 overflow-hidden group-hover:px-2 group-hover:py-1 group-hover:left-14 group-hover:duration-300 group-hover:w-fit  `}
+                >
+                  Business Card
                 </h2>
               </NavLink> */}
+            </>
+          )}
+          {/* <NavLink
+            to={"/communication"}
+            className={({ isActive }) =>
+              ` ${
+                isActive
+                  ? "text-black bg-white flex p-2  gap-3.5 rounded-md group items-center text-sm font-medium"
+                  : " group flex items-center text-sm gap-3.5 font-medium p-2 hover:bg-gray-800 rounded-md "
+              }`
+            }
+          >
+            <div>{React.createElement(BsBroadcast, { size: "20" })}</div>
+            <h2
+              className={`whitespace-pre duration-300 ${
+                !open && "opacity-0 translate-x-28 overflow-hidden"
+              }`}
+            >
+              Communication
+            </h2>
+            <h2
+              className={`${
+                open && "hidden"
+              } absolute left-48 bg-white font-semibold whitespace-pre text-gray-900 rounded-md drop-shadow-lg px-0 py-0 w-0 overflow-hidden group-hover:px-2 group-hover:py-1 group-hover:left-14 group-hover:duration-300 group-hover:w-fit  `}
+            >
+              Communication
+            </h2>
+          </NavLink> */}
           <NavLink
             to={"/profile"}
             className={({ isActive }) =>
@@ -452,37 +597,35 @@ const Navbar = () => {
               Profile
             </h2>
           </NavLink>
-          {/* {user === "pms_admin" &&
-          
-          <NavLink
-            to={"/setup"}
-            className={({ isActive }) =>
-              ` ${
-                isActive
-                  ? "text-black bg-white flex p-2  gap-3.5 rounded-md group items-center text-sm font-medium"
-                  : " group flex items-center text-sm gap-3.5 font-medium p-2 hover:bg-gray-800 rounded-md "
-              }`
-            }
-          >
-            <div>{React.createElement(RiSettings4Line, { size: "20" })}</div>
-            <h2
-              className={`whitespace-pre duration-300 ${
-                !open && "opacity-0 translate-x-28 overflow-hidden"
-              }`}
+          {/* {user === "pms_admin" && (
+            <NavLink
+              to={"/setup"}
+              className={({ isActive }) =>
+                ` ${
+                  isActive
+                    ? "text-black bg-white flex p-2  gap-3.5 rounded-md group items-center text-sm font-medium"
+                    : " group flex items-center text-sm gap-3.5 font-medium p-2 hover:bg-gray-800 rounded-md "
+                }`
+              }
             >
-              Setup
-            </h2>
-            <h2
-              className={`${
-                open && "hidden"
-              } absolute left-48 bg-white font-semibold whitespace-pre text-gray-900 rounded-md drop-shadow-lg px-0 py-0 w-0 overflow-hidden group-hover:px-2 group-hover:py-1 group-hover:left-14 group-hover:duration-300 group-hover:w-fit  `}
-            >
-              Setup
-            </h2>
-          </NavLink>
-          } */}
+              <div>{React.createElement(RiSettings4Line, { size: "20" })}</div>
+              <h2
+                className={`whitespace-pre duration-300 ${
+                  !open && "opacity-0 translate-x-28 overflow-hidden"
+                }`}
+              >
+                Setup
+              </h2>
+              <h2
+                className={`${
+                  open && "hidden"
+                } absolute left-48 bg-white font-semibold whitespace-pre text-gray-900 rounded-md drop-shadow-lg px-0 py-0 w-0 overflow-hidden group-hover:px-2 group-hover:py-1 group-hover:left-14 group-hover:duration-300 group-hover:w-fit  `}
+              >
+                Setup
+              </h2>
+            </NavLink>
+          )} */}
 
-         
           <div className="border-t mb-2 ">
             <button
               onClick={handleLogout}

@@ -29,6 +29,7 @@ const Asset = () => {
   const [page, setPage] = useState("assets");
   const [assets, setAssets] = useState([]);
 
+
   const dateFormat = (dateString) => {
     const date = new Date(dateString);
     return date.toLocaleString(); // Adjust the format as needed
@@ -340,41 +341,42 @@ const Asset = () => {
 
     if (selectedBuilding) {
       filteredResults = filteredResults.filter(
-        (item) => item.building_name === selectedBuilding
+        (item) => item.building_id === parseInt(selectedBuilding, 10)
       );
     }
 
     if (selectedFloor) {
       filteredResults = filteredResults.filter(
-        (item) => item.floor_name === selectedFloor
+        (item) => item.floor_id === parseInt(selectedFloor, 10)
       );
     }
 
     if (selectedUnit) {
       filteredResults = filteredResults.filter(
-        (item) => item.unit_name === selectedUnit
+        (item) => item.unit_id === parseInt(selectedUnit, 10)
       );
     }
 
     setFilteredData(filteredResults);
-    console.log(filteredResults);
-  };
+    console.log('Filtered Results:', filteredResults);
+  }
 
   const handleBuildingChange = async (e) => {
     const buildingId = e.target.value;
     setSelectedBuilding(buildingId);
     const response = await getFloors(buildingId);
     setFloors(response.data.map((item) => ({ name: item.name, id: item.id })));
+    setSelectedFloor(''); // Reset floor and unit when building changes
+    setUnitName([]);
+    setSelectedUnit('');
   };
 
   const handleFloorChange = async (e) => {
     const floorId = e.target.value;
     setSelectedFloor(floorId);
     const response = await getUnits(floorId);
-    console.log(response);
-    setUnitName(
-      response.data.map((item) => ({ name: item.name, id: item.id }))
-    );
+    setUnitName(response.data.map((item) => ({ name: item.name, id: item.id })));
+    setSelectedUnit(''); // Reset unit when floor changes
   };
 
   const handleUnitChange = (e) => {

@@ -9,6 +9,7 @@ import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import Selector from "../../containers/Selector";
 import { initialAddAssetFormData } from "../../utils/initialFormData";
+import FileInputBox from "../../containers/Inputs/FileInputBox";
 
 const AddAsset = () => {
   const buildings = getItemInLocalStorage("Building");
@@ -889,41 +890,45 @@ const AddAsset = () => {
               <p className="border-b border-black my-1 font-semibold">
                 Purchase Invoice
               </p>
-              <input
+              {/* <input
                 type="file"
                 onChange={(event) => handleFileChange(event, "invoice")}
                 multiple
-              />
+              /> */}
+              <FileInputBox handleChange={(event) => handleFileChange(event, "invoice")}/>
             </div>
             <div>
               <p className="border-b border-black my-1 font-semibold">
                 Insurance Details
               </p>
-              <input
+              {/* <input
                 type="file"
                 onChange={(event) => handleFileChange(event, "insurance")}
                 multiple
-              />
+              /> */}
+               <FileInputBox handleChange={(event) => handleFileChange(event, "insurance")}/>
             </div>
             <div>
               <p className="border-b border-black my-1 font-semibold">
                 Manuals
               </p>
-              <input
+              {/* <input
                 type="file"
                 onChange={(event) => handleFileChange(event, "manuals")}
                 multiple
-              />
+              /> */}
+               <FileInputBox handleChange={(event) => handleFileChange(event, "manuals")}/>
             </div>
             <div>
               <p className="border-b border-black my-1 font-semibold">
                 Other Files
               </p>
-              <input
+              {/* <input
                 type="file"
                 onChange={(event) => handleFileChange(event, "others")}
                 multiple
-              />
+              /> */}
+               <FileInputBox handleChange={(event) => handleFileChange(event, "others")}/>
             </div>
           </div>
           <div className="sm:flex grid gap-2 my-5 sm:justify-end">

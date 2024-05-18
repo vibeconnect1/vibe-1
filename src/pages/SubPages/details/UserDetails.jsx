@@ -221,15 +221,16 @@ const UserDetails = () => {
         <h2 className="text-center  bg-black text-white font-semibold my-5 text-lg p-2 px-4 ">
           Attachments
         </h2>
-        <div className="flex ">
+        <div className="flex  sm:flex-row flex-col items-center ">
           {ticketinfo.documents &&
             ticketinfo.documents.map((doc, index) => (
-              <div key={index} className="flex justify-start mx-2 p-4">
-                <a href={domainPrefix + doc.document} target="_blank">
+              <div key={index} className="flex justify-start p-4">
+                <a href={domainPrefix + doc.document} target="_blank" className="inline-block  w-40">
                   <img
                     src={domainPrefix + doc.document}
                     alt={`Attachment ${index}`}
-                    width={"25%"}
+                    // width={"25%"}
+                    className="w-40 h-40 object-cover rounded-md"
                   />
                 </a>
               </div>
@@ -293,11 +294,12 @@ const UserDetails = () => {
                                 <img
                                   src={domainPrefix + doc.document}
                                   alt={`Attachment ${index}`}
-                                  style={{
-                                    width: "20%",
-                                    height: "auto",
-                                    maxWidth: "100%",
-                                  }}
+                                  // style={{
+                                  //   width: "20%",
+                                  //   height: "auto",
+                                  //   maxWidth: "100%",
+                                  // }}
+                                  className="w-40 h-40 object-cover rounded-md"
                                 />
                               </a>
                             </div>

@@ -36,7 +36,7 @@ const SetupFacility = () => {
           </div>
         </div>
         <div>
-          <h2 className="text-xl bg-gray-400 text-white p-2 rounded-md font-medium my-3">
+          <h2 className=" bg-gray-400 text-white p-2 rounded-md font-medium my-3">
             Facility Details
           </h2>
           <div className="flex gap-5 justify-around mt-5">
@@ -75,8 +75,8 @@ const SetupFacility = () => {
           </h2>
           <div className="grid grid-cols-4 gap-10 max-w-fit">
             <div className="flex gap-1 flex-col ">
-              <label htmlFor="">
-                Fee <span className="text-sm text-gray-400">(per slot)</span>{" "}
+              <label htmlFor="" className="font-medium">
+                Fee <span className="text-sm text-gray-400">(per slot) </span>{" "}
               </label>
               <input
                 type="text"
@@ -87,7 +87,7 @@ const SetupFacility = () => {
               />
             </div>
             <div className="flex flex-col justify-between gap-1">
-              <label htmlFor="">Booking allowed before:</label>
+              <label htmlFor="" className="font-medium">Booking allowed before:</label>
               <div className="flex flex-col gap-2">
                 <input
                   type="text"
@@ -113,7 +113,7 @@ const SetupFacility = () => {
               </div>
             </div>
             <div className="flex flex-col gap-1">
-              <label htmlFor="">Advance Booking</label>
+              <label htmlFor="" className="font-medium">Advance Booking :</label>
               <div className="flex flex-col gap-2">
                 <input
                   type="text"
@@ -139,7 +139,7 @@ const SetupFacility = () => {
               </div>
             </div>
             <div className="flex flex-col">
-              <label htmlFor="">Cancel Before</label>
+              <label htmlFor="" className="font-medium">Cancel Before :</label>
               <div className="flex flex-col gap-2">
                 <input
                   type="text"
@@ -172,23 +172,23 @@ const SetupFacility = () => {
             <div className="flex my-4 justify-between">
               <div className="flex gap-2">
                 <input type="radio" name="payment" id="postpaid" />
-                <label htmlFor="postpaid">Postpaid</label>
+                <label htmlFor="postpaid" className="font-medium">Postpaid</label>
               </div>
               <div className="flex gap-2">
                 <input type="radio" name="payment" id="prepaid" />
-                <label htmlFor="prepaid">Prepaid</label>
+                <label htmlFor="prepaid" className="font-medium">Prepaid</label>
               </div>
               <div className="flex gap-2">
                 <input type="radio" name="payment" id="payOnFacility" />
-                <label htmlFor="payOnFacility">Pay on Facility</label>
+                <label htmlFor="payOnFacility" className="font-medium">Pay on Facility</label>
               </div>
               <div className="flex gap-2">
                 <input type="radio" name="payment" id="complimentary" />
-                <label htmlFor="complimentary">Complimentary</label>
+                <label htmlFor="complimentary" className="font-medium">Complimentary</label>
               </div>
             </div>
             <div className="flex gap-2 my-5">
-              <label htmlFor="">
+              <label htmlFor="" className="font-medium">
                 GST <span className="text-gray-400  text-sm">(%)</span>
               </label>
               <input
@@ -200,12 +200,12 @@ const SetupFacility = () => {
         </div>
 
         <div className="flex gap-4 justify-between items-center ">
-          <div className="flex gap-4 items-center">
-            <p className="font-bold">Allow Multiple Slots :</p>
+          <div className="flex flex-col gap-2 items-center">
+            <p className="font-semibold">Allow Multiple Slots :</p>
             <select
               name="yesNoSelect"
               id="yesNoSelect"
-              className="w-36 border border-gray-400 p-1 focus:outline-none rounded-md"
+              className=" border border-gray-400 p-1 w-44 max-w-44 focus:outline-none rounded-md"
               value={allowMultipleSlots}
               onChange={handleSelectChange}
             >
@@ -220,7 +220,7 @@ const SetupFacility = () => {
               className="border border-gray-400 p-1 placeholder:text-sm rounded-md"
             />
           )}
-          <div className="my-5 items-center flex gap-4">
+          <div className="my-5 items-center flex gap-4 flex-col">
             <label htmlFor="" className="font-bold ">
               No. of Time a User can Book :
             </label>
