@@ -14,7 +14,7 @@ const SetupNavbar = () => {
         <Link className="hover:bg-white hover:text-black  p-2 rounded-lg ">FM User</Link>
         <Link className="hover:bg-white hover:text-black  p-2 rounded-lg ">Occupant User</Link>
         <Link className="hover:bg-white hover:text-black  p-2 rounded-lg ">Meter Types</Link>
-        <Link className="hover:bg-white hover:text-black  p-2 rounded-lg ">Asset Group</Link>
+        <Link to={"/setup/asset-group"}  className="hover:bg-white hover:text-black  p-2 rounded-lg ">Asset Group</Link>
         <Link className="hover:bg-white hover:text-black  p-2 rounded-lg ">Checklist Group</Link>
         <Link className="hover:bg-white hover:text-black  p-2 rounded-lg ">Ticket</Link>
         <Link to={"/business/setup-category"} className="hover:bg-white hover:text-black  p-2 rounded-lg ">Business Category</Link>

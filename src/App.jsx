@@ -106,6 +106,13 @@ import EmployeeFitnessDetails from "./pages/Employees/EmployeeSubPages/EmployeeF
 import Fitness from "./pages/Fitness.jsx";
 import BookFitness from "./pages/SubPages/BookFitness.jsx";
 import FitnessDetails from "./pages/SubPages/details/FitnessDetails.jsx";
+import EmployeeBirthday from "./pages/Employees/EmployeeBirthday.jsx";
+import Birthday from "./pages/Birthday.jsx";
+import AssetGroup from "./pages/Setup/AssetGroup.jsx";
+import EmployeeInsurance from "./pages/Employees/EmployeeInsurance.jsx";
+import EmployeeAddInsurance from "./pages/Employees/EmployeeSubPages/EmployeeAddInsurance.jsx";
+import EmployeePolicyList from "./pages/Employees/EmployeeSubPages/EmployeePolicyList.jsx";
+
 function App() {
   return (
     <>
@@ -143,6 +150,7 @@ function App() {
               </ProtectedAdminRoutes>
             }
           />
+          {/* setup */}
           <Route path="/setup" element={<Setup />} />
           <Route path="/setup/account" element={<Account />} />
           <Route
@@ -162,6 +170,14 @@ function App() {
           <Route path="/setup/account/unit" element={<Unit />} />
           <Route path="/setup/account/room" element={<Room />} />
           <Route path="/setup/User-role" element={<UserRole />} />
+          <Route
+            path="/setup/asset-group"
+            element={
+              <ProtectedAdminRoutes>
+                <AssetGroup />
+              </ProtectedAdminRoutes>
+            }
+          />
           {/* tickets -Admin*/}
           <Route path="/tickets" element={<Ticket />} />
           <Route
@@ -304,9 +320,9 @@ function App() {
           <Route
             path="/assets"
             element={
-              <ProtectedRoute>
+              <ProtectedAdminRoutes>
                 <Asset />
-              </ProtectedRoute>
+              </ProtectedAdminRoutes>
             }
           />
           <Route
@@ -639,6 +655,48 @@ function App() {
               <ProtectedAdminRoutes>
                 <FitnessDetails />
               </ProtectedAdminRoutes>
+            }
+          />
+          {/* employee birthday */}
+          <Route
+            path="/employee/birthday"
+            element={
+              <ProtectedRoute>
+                <EmployeeBirthday />
+              </ProtectedRoute>
+            }
+          />
+          {/* admin birthday */}
+          <Route
+            path="/admin/birthday"
+            element={
+              <ProtectedAdminRoutes>
+                <Birthday />
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/employee/insurance"
+            element={
+              <ProtectedRoute>
+                <EmployeeInsurance />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/employee/add-policy"
+            element={
+              <ProtectedRoute>
+                <EmployeeAddInsurance />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/employee/add-policy/policy-list"
+            element={
+              <ProtectedRoute>
+                <EmployeePolicyList />
+              </ProtectedRoute>
             }
           />
         </Routes>
