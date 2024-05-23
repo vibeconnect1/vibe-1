@@ -1,5 +1,5 @@
-import "react-date-range/dist/styles.css"; 
-import "react-date-range/dist/theme/default.css"; 
+import "react-date-range/dist/styles.css";
+import "react-date-range/dist/theme/default.css";
 import "./App.css";
 import {
   BrowserRouter as Router,
@@ -86,6 +86,26 @@ import AdminPickupDetails from "./pages/SubPages/details/AdminPickupDetails.jsx"
 import AdminOutstationDetails from "./pages/SubPages/details/AdminOutstationDetails.jsx";
 import EmployeePickupDetails from "./pages/Employees/EmployeePickupDetails.jsx";
 import EmployeeOutstationDetails from "./pages/Employees/EmployeeOutstationDetails.jsx";
+import Parkings from "./pages/Parkings.jsx";
+import EmployeeParking from "./pages/Employees/EmployeeParking.jsx";
+import EmployeeBookParking from "./pages/Employees/EmployeeBookParking.jsx";
+import ParkingSetup from "./pages/Setup/ParkingSetup.jsx";
+import AddParking from "./pages/SubPages/AddParking.jsx";
+import EmployeePantry from "./pages/Employees/EmployeePantry.jsx";
+import EmployeePantryDetails from "./pages/Employees/EmployeeSubPages/EmployeePantryDetails.jsx";
+import Pantry from "./pages/Pantry.jsx";
+import EmployeeDoctorAppointment from "./pages/Employees/EmployeeDoctorAppointment.jsx";
+import EmployeeBookAppointment from "./pages/Employees/EmployeeBookAppointment.jsx";
+import EmployeeDocDetails from "./pages/Employees/EmployeeSubPages/EmployeeDocDetails.jsx";
+import DoctorAppointment from "./pages/DoctorAppointment.jsx";
+import BookDocAppointment from "./pages/SubPages/BookDocAppointment.jsx";
+import AddPantry from "./pages/SubPages/AddPantry.jsx";
+import EmployeeFitness from "./pages/Employees/EmployeeFitness.jsx";
+import EmployeeBookFitness from "./pages/Employees/EmployeeBookFitness.jsx";
+import EmployeeFitnessDetails from "./pages/Employees/EmployeeSubPages/EmployeeFitnessDetails.jsx";
+import Fitness from "./pages/Fitness.jsx";
+import BookFitness from "./pages/SubPages/BookFitness.jsx";
+import FitnessDetails from "./pages/SubPages/details/FitnessDetails.jsx";
 function App() {
   return (
     <>
@@ -95,18 +115,34 @@ function App() {
         <Routes>
           <Route path="/login" element={<Login />} />
           <Route path="/" element={<Navigate to="/login" />} />
-          
+
           <Route
             path="/dashboard"
             element={
               <ProtectedRoute>
                 <Dashboard />
-                </ProtectedRoute>
-            } 
+              </ProtectedRoute>
+            }
           />
 
-          <Route path="/profile" element = {<ProtectedRoute> <User /> </ProtectedRoute>} />
-          <Route path="/attendance" element={<ProtectedAdminRoutes> <Attendance /></ProtectedAdminRoutes>} />
+          <Route
+            path="/profile"
+            element={
+              <ProtectedRoute>
+                {" "}
+                <User />{" "}
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/attendance"
+            element={
+              <ProtectedAdminRoutes>
+                {" "}
+                <Attendance />
+              </ProtectedAdminRoutes>
+            }
+          />
           <Route path="/setup" element={<Setup />} />
           <Route path="/setup/account" element={<Account />} />
           <Route
@@ -128,15 +164,58 @@ function App() {
           <Route path="/setup/User-role" element={<UserRole />} />
           {/* tickets -Admin*/}
           <Route path="/tickets" element={<Ticket />} />
-          <Route path="/tickets/details/:id" element={<ProtectedRoute><TicketDetails /></ProtectedRoute>} />
-          <Route path="/tickets/create-ticket" element={<ProtectedAdminRoutes><CreateTicket /></ProtectedAdminRoutes>  } />
+          <Route
+            path="/tickets/details/:id"
+            element={
+              <ProtectedRoute>
+                <TicketDetails />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/tickets/create-ticket"
+            element={
+              <ProtectedAdminRoutes>
+                <CreateTicket />
+              </ProtectedAdminRoutes>
+            }
+          />
           {/* <Route path="/tickets/create-ticket" element={<CreateTicket /> } /> */}
-          <Route path="/tickets/user-details/:id" element={<ProtectedRoute><UserDetails /></ProtectedRoute>} />
+          <Route
+            path="/tickets/user-details/:id"
+            element={
+              <ProtectedRoute>
+                <UserDetails />
+              </ProtectedRoute>
+            }
+          />
           {/* Edit Details */}
-          <Route path="/edit/:id" element={<ProtectedRoute><DetailsEdit /></ProtectedRoute>} />
+          <Route
+            path="/edit/:id"
+            element={
+              <ProtectedRoute>
+                <DetailsEdit />
+              </ProtectedRoute>
+            }
+          />
           {/* tickets- user */}
-          <Route path="/mytickets" element= { <ProtectedRoute><MyTickets /> </ProtectedRoute> } />
-          <Route path="/mytickets/userticket" element= {<ProtectedRoute> <UserTicket /> </ProtectedRoute>} />
+          <Route
+            path="/mytickets"
+            element={
+              <ProtectedRoute>
+                <MyTickets />{" "}
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/mytickets/userticket"
+            element={
+              <ProtectedRoute>
+                {" "}
+                <UserTicket />{" "}
+              </ProtectedRoute>
+            }
+          />
           {/* business */}
           <Route path="/business" element={<Business />} />
           <Route path="/business/details/:id" element={<BusinessDetails />} />
@@ -154,12 +233,40 @@ function App() {
             path="/bookings/booking-details/:id"
             element={<BookingDetails />}
           />
-          <Route path="/facility" element={<ProtectedAdminRoutes><SetupBookingFacility /></ProtectedAdminRoutes>} />
-          <Route path="/facility/setup-facility" element={<ProtectedAdminRoutes><SetupFacility /></ProtectedAdminRoutes>} />
+          <Route
+            path="/facility"
+            element={
+              <ProtectedAdminRoutes>
+                <SetupBookingFacility />
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/facility/setup-facility"
+            element={
+              <ProtectedAdminRoutes>
+                <SetupFacility />
+              </ProtectedAdminRoutes>
+            }
+          />
           <Route path="/admin/seat-booking" element={<BookSeat />} />
           <Route path="/employees/booking" element={<EmployeeBooking />} />
-          <Route path="/employees/facility-booking" element={<ProtectedRoute><EmployeeFacilityBooking /></ProtectedRoute>} />
-          <Route path="/employees/seat-booking" element={<ProtectedRoute><EmployeeSeatBooking /></ProtectedRoute>} />
+          <Route
+            path="/employees/facility-booking"
+            element={
+              <ProtectedRoute>
+                <EmployeeFacilityBooking />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/employees/seat-booking"
+            element={
+              <ProtectedRoute>
+                <EmployeeSeatBooking />
+              </ProtectedRoute>
+            }
+          />
           {/* communication */}
           <Route path="/communication" element={<Communication />} />
           <Route path="/communication/create-event" element={<CreateEvent />} />
@@ -323,7 +430,7 @@ function App() {
             }
           />
           {/* Admin transport */}
-          
+
           <Route
             path="/admin/transportation"
             element={
@@ -364,10 +471,180 @@ function App() {
               </ProtectedAdminRoutes>
             }
           />
+          {/* Admin parking */}
+          <Route
+            path="/admin/parking"
+            element={
+              <ProtectedAdminRoutes>
+                <Parkings />
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/book-parking"
+            element={
+              <ProtectedAdminRoutes>
+                <AddParking />
+              </ProtectedAdminRoutes>
+            }
+          />
+          {/* employee parking */}
+
+          <Route
+            path="/employees/parking"
+            element={
+              <ProtectedRoute>
+                <EmployeeParking />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/employees/book-parking"
+            element={
+              <ProtectedRoute>
+                <EmployeeBookParking />
+              </ProtectedRoute>
+            }
+          />
+
+          {/*parking setup */}
+          <Route
+            path="/admin/parking-setup"
+            element={
+              <ProtectedAdminRoutes>
+                <ParkingSetup />
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/employees/pantry"
+            element={
+              <ProtectedRoute>
+                <EmployeePantry />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/employees/pantry-details/:id"
+            element={
+              <ProtectedRoute>
+                <EmployeePantryDetails />
+              </ProtectedRoute>
+            }
+          />
+
+          {/* admin pantry */}
+          <Route
+            path="/admin/pantry"
+            element={
+              <ProtectedAdminRoutes>
+                <Pantry />
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/add-pantry"
+            element={
+              <ProtectedAdminRoutes>
+                <AddPantry />
+              </ProtectedAdminRoutes>
+            }
+          />
+          {/* employee doc appointment */}
+          <Route
+            path="/employee/doc-appointment"
+            element={
+              <ProtectedRoute>
+                <EmployeeDoctorAppointment />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/employee/book-doc-appointment"
+            element={
+              <ProtectedRoute>
+                <EmployeeBookAppointment />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/employee/doc-appointment-details/:id"
+            element={
+              <ProtectedRoute>
+                <EmployeeDocDetails />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/employee/fitness"
+            element={
+              <ProtectedRoute>
+                <EmployeeFitness />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/employee/book-fitness"
+            element={
+              <ProtectedRoute>
+                <EmployeeBookFitness />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/employee/fitness-details/:id"
+            element={
+              <ProtectedRoute>
+                <EmployeeFitnessDetails />
+              </ProtectedRoute>
+            }
+          />
+          {/* admin doc appointment */}
+          <Route
+            path="/admin/doctor-appointments"
+            element={
+              <ProtectedAdminRoutes>
+                <DoctorAppointment />
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/book-doc-appointment"
+            element={
+              <ProtectedAdminRoutes>
+                <BookDocAppointment />
+              </ProtectedAdminRoutes>
+            }
+          />
+          {/* admin fitness */}
+          <Route
+            path="/admin/fitness"
+            element={
+              <ProtectedAdminRoutes>
+                <Fitness />
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/book-fitness"
+            element={
+              <ProtectedAdminRoutes>
+                <BookFitness />
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/book-fitness/:id"
+            element={
+              <ProtectedAdminRoutes>
+                <FitnessDetails />
+              </ProtectedAdminRoutes>
+            }
+          />
         </Routes>
         <Footer />
       </Router>
-      </>
+    </>
   );
 }
 
