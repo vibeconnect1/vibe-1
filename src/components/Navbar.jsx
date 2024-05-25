@@ -24,6 +24,7 @@ import { TbReportAnalytics } from "react-icons/tb";
 import { AiOutlineFieldTime, AiOutlineUser } from "react-icons/ai";
 import { TiBusinessCard } from "react-icons/ti";
 import { FaBirthdayCake, FaBriefcaseMedical, FaCar } from "react-icons/fa";
+import { IoIosPeople } from "react-icons/io";
 
 const Navbar = () => {
   const [open, setOpen] = useState(false);
@@ -185,7 +186,7 @@ const Navbar = () => {
                   Birthday
                 </h2>
               </NavLink> */}
-
+{/* admin tickets */}
               <NavLink
                 to={"/tickets"}
                 className={({ isActive }) =>
@@ -214,8 +215,8 @@ const Navbar = () => {
                   Admin Tickets
                 </h2>
               </NavLink>
-
-              {/* <NavLink
+{/* 
+              <NavLink
                 to={"/mail-room"}
                 className={({ isActive }) =>
                   ` ${
@@ -407,6 +408,61 @@ const Navbar = () => {
                   } absolute left-48 bg-white font-semibold whitespace-pre text-gray-900 rounded-md drop-shadow-lg px-0 py-0 w-0 overflow-hidden group-hover:px-2 group-hover:py-1 group-hover:left-14 group-hover:duration-300 group-hover:w-fit  `}
                 >
                   Doctor Appointment
+                </h2>
+              </NavLink> */}
+              {/* <NavLink
+                to={"/admin/insurance"}
+                className={({ isActive }) =>
+                  ` ${
+                    isActive
+                      ? "text-black bg-white flex p-2  gap-3.5 rounded-md group items-center text-sm font-medium"
+                      : " group flex items-center text-sm gap-3.5 font-medium p-2 hover:bg-gray-800 rounded-md "
+                  }`
+                }
+              >
+                <div>
+                  {React.createElement(MdOutlinePolicy, { size: "20" })}
+                </div>
+                <h2
+                  className={`whitespace-pre duration-300 ${
+                    !open && "opacity-0 translate-x-28 overflow-hidden"
+                  }`}
+                >
+                  Insurance
+                </h2>
+                <h2
+                  className={`${
+                    open && "hidden"
+                  } absolute left-48 bg-white font-semibold whitespace-pre text-gray-900 rounded-md drop-shadow-lg px-0 py-0 w-0 overflow-hidden group-hover:px-2 group-hover:py-1 group-hover:left-14 group-hover:duration-300 group-hover:w-fit  `}
+                >
+                  Insurance
+                </h2>
+              </NavLink>
+              <NavLink
+                to={"/admin/meetings"}
+                className={({ isActive }) =>
+                  ` ${
+                    isActive
+                      ? "text-black bg-white flex p-2  gap-3.5 rounded-md group items-center text-sm font-medium"
+                      : " group flex items-center text-sm gap-3.5 font-medium p-2 hover:bg-gray-800 rounded-md "
+                  }`
+                }
+              >
+                <div>{React.createElement(IoIosPeople, { size: "20" })}</div>
+
+                <h2
+                  className={`whitespace-pre duration-300 ${
+                    !open && "opacity-0 translate-x-28 overflow-hidden"
+                  }`}
+                >
+                  Meeting
+                </h2>
+                <h2
+                  className={`${
+                    open && "hidden"
+                  } absolute left-48 bg-white font-semibold whitespace-pre text-gray-900 rounded-md drop-shadow-lg px-0 py-0 w-0 overflow-hidden group-hover:px-2 group-hover:py-1 group-hover:left-14 group-hover:duration-300 group-hover:w-fit  `}
+                >
+                  Meeting
                 </h2>
               </NavLink>
               <NavLink
@@ -768,6 +824,33 @@ const Navbar = () => {
                   Birthday
                 </h2>
               </NavLink>
+              <NavLink
+                to={"/employee/meetings"}
+                className={({ isActive }) =>
+                  ` ${
+                    isActive
+                      ? "text-black bg-white flex p-2  gap-3.5 rounded-md group items-center text-sm font-medium"
+                      : " group flex items-center text-sm gap-3.5 font-medium p-2 hover:bg-gray-800 rounded-md "
+                  }`
+                }
+              >
+                <div>{React.createElement(IoIosPeople, { size: "20" })}</div>
+
+                <h2
+                  className={`whitespace-pre duration-300 ${
+                    !open && "opacity-0 translate-x-28 overflow-hidden"
+                  }`}
+                >
+                  Meeting
+                </h2>
+                <h2
+                  className={`${
+                    open && "hidden"
+                  } absolute left-48 bg-white font-semibold whitespace-pre text-gray-900 rounded-md drop-shadow-lg px-0 py-0 w-0 overflow-hidden group-hover:px-2 group-hover:py-1 group-hover:left-14 group-hover:duration-300 group-hover:w-fit  `}
+                >
+                  Meeting
+                </h2>
+              </NavLink>
 
               <NavLink
                 to={"/employees/parking"}
@@ -938,7 +1021,7 @@ const Navbar = () => {
           <div className="border-t mb-2 ">
             <button
               onClick={handleLogout}
-              className="font-semibold flex items-center rounded-md px-4 py-2 hover:bg-white hover:text-black my-2 gap-4"
+              className="font-semibold flex items-center rounded-md px-4 py-2 hover:bg-white hover:text-black transition-all duration-300 ease-in-out my-2 gap-4"
             >
               <PiSignOutBold size={20} />
               {open && "Logout"}

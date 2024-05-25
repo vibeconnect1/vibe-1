@@ -1,10 +1,11 @@
 import React from "react";
-import Navbar from "../../components/Navbar";
+
 import { PiPlusCircle } from "react-icons/pi";
 import { FaFile } from "react-icons/fa";
 import { Link } from "react-router-dom";
+import Navbar from "../components/Navbar";
 
-const EmployeeInsurance = () => {
+const Insurance = () => {
     document.title = "Insurance - vibe connect"
   return (
     <section className="flex">
@@ -13,7 +14,7 @@ const EmployeeInsurance = () => {
         <div className="my-5 flex md:flex-row flex-col justify-between items-center md:mx-5">
           <h2 className="font-semibold text-2xl">My Insurance Policy</h2>
           <Link
-            to={"/employee/insurance/add-policy"}
+            to={"/admin/insurance/add-policy"}
             className="border-2 font-semibold hover:bg-black hover:text-white duration-300 transition-all border-black p-1 px-4 rounded-md text-black cursor-pointer text-center flex items-center gap-2 justify-center"
           >
             <PiPlusCircle size={20} />
@@ -56,4 +57,7 @@ const EmployeeInsurance = () => {
   );
 };
 
-export default EmployeeInsurance;
+
+
+
+export default Insurance

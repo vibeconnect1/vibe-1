@@ -1,9 +1,10 @@
 import React from "react";
-import Navbar from "../../../components/Navbar";
+
 import policy from "/policy.png";
 import { Link } from "react-router-dom";
+import Navbar from "../../components/Navbar";
 
-const EmployeePolicyList = () => {
+const PolicyList = () => {
   return (
     <section className="min-h-screen p-4 sm:p-0 flex flex-col md:flex-row">
       <div className="fixed hidden sm:block left-0 top-0 h-full md:static md:h-auto md:flex-shrink-0">
@@ -29,7 +30,7 @@ const EmployeePolicyList = () => {
               <div className="flex flex-col gap-2 my-2">
                 <p>Cover Amount <span className="font-medium"> ₹5 Lakh</span></p>
                 <p>Cashless Hospital <b>41</b> </p>
-                <Link to={"/employee/add-policy/policy-details"} className="bg-review text-white p-1 text-center rounded-md">₹629/monthly</Link>
+                <Link to={"/admin/insurance/add-policy/policy-details"} className="bg-review text-white p-1 text-center rounded-md">₹629/monthly</Link>
                 <p>₹6755/annually</p>
               </div>
             </div>
@@ -56,7 +57,7 @@ const EmployeePolicyList = () => {
               <div className="flex flex-col gap-2 my-2">
                 <p>Cover Amount <span className="font-medium"> ₹5 Lakh</span></p>
                 <p>Cashless Hospital <b>41</b> </p>
-                <Link to={"/employee/add-policy/policy-details"} className="bg-review text-white p-1 text-center rounded-md">₹629/monthly</Link>
+                <Link to={"/admin/insurance/add-policy/policy-details"} className="bg-review text-white p-1 text-center rounded-md">₹629/monthly</Link>
                 <p>₹6755/annually</p>
               </div>
             </div>
@@ -71,4 +72,7 @@ const EmployeePolicyList = () => {
   );
 };
 
-export default EmployeePolicyList;
+
+
+
+export default PolicyList

@@ -112,6 +112,17 @@ import AssetGroup from "./pages/Setup/AssetGroup.jsx";
 import EmployeeInsurance from "./pages/Employees/EmployeeInsurance.jsx";
 import EmployeeAddInsurance from "./pages/Employees/EmployeeSubPages/EmployeeAddInsurance.jsx";
 import EmployeePolicyList from "./pages/Employees/EmployeeSubPages/EmployeePolicyList.jsx";
+import EmployeePolicyDetails from "./pages/Employees/EmployeeSubPages/EmployeePolicyDetails.jsx";
+import Insurance from "./pages/Insurance.jsx";
+import AddPolicy from "./pages/SubPages/AddPolicy.jsx";
+import PolicyList from "./pages/SubPages/PolicyList.jsx";
+import PolicyDetails from "./pages/SubPages/PolicyDetails.jsx";
+import EmployeeMeeting from "./pages/Employees/EmployeeMeeting.jsx";
+import EmployeeCreateMeeting from "./pages/Employees/EmployeeSubPages/EmployeeCreateMeeting.jsx";
+import EmployeeMeetingDetails from "./pages/Employees/EmployeeSubPages/EmployeeMeetingDetails.jsx";
+import Meetings from "./pages/Meetings.jsx";
+import CreateMeeting from "./pages/SubPages/CreateMeeting.jsx";
+import MeetingDetails from "./pages/SubPages/details/MeetingDetails.jsx";
 
 function App() {
   return (
@@ -684,7 +695,7 @@ function App() {
             }
           />
           <Route
-            path="/employee/add-policy"
+            path="/employee/insurance/add-policy"
             element={
               <ProtectedRoute>
                 <EmployeeAddInsurance />
@@ -697,6 +708,100 @@ function App() {
               <ProtectedRoute>
                 <EmployeePolicyList />
               </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/employee/add-policy/policy-details"
+            element={
+              <ProtectedRoute>
+                <EmployeePolicyDetails />
+              </ProtectedRoute>
+            }
+          />
+          {/* admin Insurance */}
+          <Route
+            path="/admin/insurance"
+            element={
+              <ProtectedAdminRoutes>
+                <Insurance />
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/insurance/add-policy"
+            element={
+              <ProtectedAdminRoutes>
+                <AddPolicy />
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/insurance/add-policy/policy-list"
+            element={
+              <ProtectedAdminRoutes>
+                <PolicyList />
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/insurance/add-policy/policy-details"
+            element={
+              <ProtectedAdminRoutes>
+                <PolicyDetails />
+              </ProtectedAdminRoutes>
+            }
+          />
+
+          {/* employee meeting */}
+          <Route
+            path="/employee/meetings"
+            element={
+              <ProtectedRoute>
+                <EmployeeMeeting />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/employee/meetings/create-meeting"
+            element={
+              <ProtectedRoute>
+                <EmployeeCreateMeeting />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/employee/meeting-details/:id"
+            element={
+              <ProtectedRoute>
+                <EmployeeMeetingDetails />
+              </ProtectedRoute>
+            }
+          />
+
+          {/* admin Meetings */}
+
+          <Route
+            path="/admin/meetings"
+            element={
+              <ProtectedAdminRoutes>
+                <Meetings />
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/meetings/create-meeting"
+            element={
+              <ProtectedAdminRoutes>
+                <CreateMeeting />
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/meetings/meeting-details/:id"
+            element={
+              <ProtectedAdminRoutes>
+                <MeetingDetails />
+              </ProtectedAdminRoutes>
             }
           />
         </Routes>
