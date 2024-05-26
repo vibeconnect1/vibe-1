@@ -75,16 +75,8 @@ const Navbar = () => {
         onClick={toggleSidebar} // Toggle sidebar on click
       />
       <div
-        className={`p-[8px] bg-[${themeColor}]
-         ${
-           themeColor === "red"
-             ? "bg-red-500"
-             : themeColor === "blue"
-             ? "bg-blue-500"
-             : themeColor === "green"
-             ? "bg-green-500"
-             : "bg-black"
-         } max-h-screen ${
+        style={{ background: themeColor }}
+        className={`p-[8px] max-h-screen ${
           open ? "w-full md:w-60" : "w-20"
         } duration-500 text-gray-100 px-4 rounded-r-2xl shadow-2xl overflow-y-auto h-screen custom-scrollbar left-0 ${
           showSidebar ? "block" : "hidden md:block" // Conditionally render sidebar based on showSidebar state and screen size

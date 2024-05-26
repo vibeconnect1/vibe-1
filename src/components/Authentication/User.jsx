@@ -73,19 +73,19 @@ function User() {
             <div className="flex space-x-2">
               <button
                 className="p-2 bg-red-500 text-white"
-                onClick={() => handleColorChange("red")}
+                onClick={() => handleColorChange("#ef4444")}
               >
                 Red
               </button>
               <button
                 className="p-2 bg-blue-500 text-white"
-                onClick={() => handleColorChange("blue")}
+                onClick={() => handleColorChange("#3b82f6")}
               >
                 Blue
               </button>
               <button
                 className="p-2 bg-green-500 text-white"
-                onClick={() => handleColorChange("green")}
+                onClick={() => handleColorChange("#10b981")}
               >
                 Green
               </button>
