@@ -4,6 +4,7 @@ import { useNavigate, NavLink } from "react-router-dom";
 import { menus } from "../utils/menus";
 import { PiSignOutBold } from "react-icons/pi";
 import { getItemInLocalStorage } from "../utils/localStorage";
+import { useSelector } from "react-redux";
 import {
   BsBroadcast,
   BsBuilding,
@@ -31,6 +32,7 @@ const Navbar = () => {
   const [open, setOpen] = useState(false);
   const [user, setUser] = useState("");
   const [showSidebar, setShowSidebar] = useState(false);
+  const themeColor = useSelector((state) => state.theme.color);
   const toggleSidebar = () => {
     setShowSidebar(!showSidebar); // Toggle sidebar visibility on mobile
   };
@@ -73,7 +75,16 @@ const Navbar = () => {
         onClick={toggleSidebar} // Toggle sidebar on click
       />
       <div
-        className={`p-[8px] bg-[#0e0e0e] max-h-screen ${
+        className={`p-[8px] bg-[${themeColor}]
+         ${
+           themeColor === "red"
+             ? "bg-red-500"
+             : themeColor === "blue"
+             ? "bg-blue-500"
+             : themeColor === "green"
+             ? "bg-green-500"
+             : "bg-black"
+         } max-h-screen ${
           open ? "w-full md:w-60" : "w-20"
         } duration-500 text-gray-100 px-4 rounded-r-2xl shadow-2xl overflow-y-auto h-screen custom-scrollbar left-0 ${
           showSidebar ? "block" : "hidden md:block" // Conditionally render sidebar based on showSidebar state and screen size
