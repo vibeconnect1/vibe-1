@@ -4,13 +4,53 @@ import { MdOutlineContentCopy } from "react-icons/md";
 import toast from "react-hot-toast";
 import Select from "react-select";
 import { Switch } from "../../../Buttons";
+import { FaTimes } from "react-icons/fa";
 
 const EmployeeCreateMeeting = () => {
+  const [selectedWeekdays, setSelectedWeekdays] = useState([]);
+  const [emailOtherList, setEmailOtherList] = useState([]);
+  const [otherEmails, setOtherEmails] = useState("");
   const [formData, setFormData] = useState({
     meeting: "",
     Attendees: [],
     repeat: false,
   });
+  const [weekdaysMap, setWeekdaysMap] = useState([
+    { day: "Mon", index: 0, isActive: false },
+    { day: "Tue", index: 1, isActive: false },
+    { day: "Wed", index: 2, isActive: false },
+    { day: "Thu", index: 3, isActive: false },
+    { day: "Fri", index: 4, isActive: false },
+    { day: "Sat", index: 5, isActive: false },
+    { day: "Sun", index: 6, isActive: false },
+  ]);
+  console.log(selectedWeekdays);
+
+  const handleWeekdaySelection = (weekday) => {
+    console.log(`Selected day: ${weekday}`);
+
+    // Find the index of the selected day
+    const index = weekdaysMap.find((dayObj) => dayObj.day === weekday)?.index;
+
+    if (index !== undefined) {
+      // Toggle the isActive status of the selected day
+      const updatedWeekdaysMap = weekdaysMap.map((dayObj) =>
+        dayObj.index === index
+          ? { ...dayObj, isActive: !dayObj.isActive }
+          : dayObj
+      );
+
+      // Update the weekdaysMap with the modified isActive status
+      setWeekdaysMap(updatedWeekdaysMap);
+
+      // Update the selected weekdays list
+      setSelectedWeekdays((prevSelectedWeekdays) =>
+        prevSelectedWeekdays.includes(index)
+          ? prevSelectedWeekdays.filter((day) => day !== index)
+          : [...prevSelectedWeekdays, index]
+      );
+    }
+  };
 
   const handleMeetingLinkCopy = () => {
     navigator.clipboard
@@ -32,6 +72,26 @@ const EmployeeCreateMeeting = () => {
     { value: "Anurag", label: "Anurag", email: "anurag.sharma@vibecopilot.ai" },
   ];
   console.log(formData);
+
+  const handleAddEmail = () => {
+    // Validate the email before adding it to the list
+    if (/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(otherEmails)) {
+      setEmailOtherList([...emailOtherList, otherEmails]);
+      setOtherEmails("");
+    } else {
+      // Show a toast notification if the email is not valid
+      toast.error("Please enter a valid email address");
+    }
+  };
+
+  const handleRemoveEmail = (emailToRemove) => {
+    const updatedEmailList = emailOtherList.filter(
+      (email) => email !== emailToRemove
+    );
+    setEmailOtherList(updatedEmailList);
+    console.log("emailList");
+    console.log(emailOtherList);
+  };
 
   return (
     <section className="min-h-screen p-4 sm:p-0 flex flex-col md:flex-row">
@@ -143,18 +203,51 @@ const EmployeeCreateMeeting = () => {
             </div>
             <div className="flex flex-col gap-2 my-2">
               <p className="font-medium">Invite External Attendees :</p>
-              <div className="flex md:flex-row flex-col md:items-center gap-2">
+              <div className="flex md:flex-row flex-col items-center gap-2">
                 <input
                   type="email"
-                  name=""
+                  value={otherEmails}
+                  onChange={(e) => setOtherEmails(e.target.value)}
+                  name="otherEmails"
                   id=""
                   placeholder="Enter Email id"
                   className="border border-gray-400 p-2 rounded-md placeholder:text-sm w-full"
                 />
-                <button className="border-2 border-black font-medium p-1 px-4 rounded-md">
-                  Invite
+                <button
+                  className="border-2 border-black font-medium p-1 px-4 rounded-md"
+                  onClick={handleAddEmail}
+                >
+                  Add
                 </button>
               </div>
+              {emailOtherList.length > 0 && (
+                <div
+                  className=" flex items-center gap-2 border border-gray-400 rounded-md p-2"
+                  // style={{
+                  //   backgroundColor: "#fff",
+                  //   borderRadius: 4,
+                  //   border: "1px solid #ccc",
+                  //   padding: 6,
+                  // }}
+                >
+                  {emailOtherList.map((email, index) => (
+                    <span
+                      key={index}
+                      className="bg-green-400 px-4 rounded-full flex gap-2 items-center text-white p-1"
+                    >
+                      {email}
+                      <button
+                        className="cl"
+                        // style={{ padding: "0px 4px" }}
+                        type="button"
+                        onClick={() => handleRemoveEmail(email)}
+                      >
+                        <FaTimes />
+                      </button>
+                    </span>
+                  ))}
+                </div>
+              )}
             </div>
             <div className="my-2">
               <div className="flex items-center  gap-4">
@@ -190,7 +283,26 @@ const EmployeeCreateMeeting = () => {
                   </div>
                 </div>
                 <p className="font-medium">Select Working Days :</p>
-                working tabs will come here
+                <div className="flex gap-4 ">
+                  {weekdaysMap.map((weekdayObj) => (
+                    <button
+                      key={weekdayObj.day}
+                      className={` rounded-md p-2 px-4 shadow-custom-all-sides font-medium ${
+                        selectedWeekdays?.includes(weekdayObj.index)
+                          ? // &&
+                            // weekdayObj.isActive
+                            "bg-green-400 text-white "
+                          : ""
+                      }`}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        handleWeekdaySelection(weekdayObj.day);
+                      }}
+                    >
+                      <a>{weekdayObj.day}</a>
+                    </button>
+                  ))}
+                </div>
               </div>
             )}
           </div>

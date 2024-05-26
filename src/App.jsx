@@ -123,6 +123,8 @@ import EmployeeMeetingDetails from "./pages/Employees/EmployeeSubPages/EmployeeM
 import Meetings from "./pages/Meetings.jsx";
 import CreateMeeting from "./pages/SubPages/CreateMeeting.jsx";
 import MeetingDetails from "./pages/SubPages/details/MeetingDetails.jsx";
+import ProjectManagement from "./pages/ProjectManagement.jsx";
+import CreateProject from "./pages/SubPages/CreateProject.jsx";
 
 function App() {
   return (
@@ -801,6 +803,23 @@ function App() {
             element={
               <ProtectedAdminRoutes>
                 <MeetingDetails />
+              </ProtectedAdminRoutes>
+            }
+          />
+          {/* project management */}
+          <Route
+            path="/admin/project-management"
+            element={
+              <ProtectedAdminRoutes>
+                <ProjectManagement />
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/project-management/create-project"
+            element={
+              <ProtectedAdminRoutes>
+                <CreateProject />
               </ProtectedAdminRoutes>
             }
           />

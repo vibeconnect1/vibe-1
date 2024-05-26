@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import { BsEye } from "react-icons/bs";
 import { BiEdit } from "react-icons/bi";
 import DataTable from "react-data-table-component";
-import { IoVideocam } from "react-icons/io5";
+import { IoClose, IoVideocam } from "react-icons/io5";
 import Navbar from "../components/Navbar";
 
 const Meetings = () => {
@@ -66,12 +66,17 @@ const Meetings = () => {
       sortable: true,
     },
     {
-      name: "Join",
+      name: "Join/Cacellation",
       selector: (row) =>
         row.status === "Upcoming" && (
+          <div className="flex gap-2">
           <button className="p-1 px-4 bg-green-400 rounded-full hover:bg-green-600 text-white font-medium flex justify-center items-center gap-2 transition-all ease-in-out duration-300">
             <IoVideocam /> Join
           </button>
+          <button className=" p-2 bg-red-400 rounded-full hover:bg-red-600 text-white font-medium flex justify-center items-center gap-2 transition-all ease-in-out duration-300">
+            <IoClose /> 
+          </button>
+          </div>
         ),
       sortable: true,
     },

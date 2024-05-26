@@ -1,51 +1,79 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { MdOutlineContentCopy } from "react-icons/md";
 import toast from "react-hot-toast";
 import Select from "react-select";
 import Navbar from "../../components/Navbar";
 import { Switch } from "../../Buttons";
+import { FaTimes } from "react-icons/fa";
+import { getAssignedTo } from "../../api";
 
 const CreateMeeting = () => {
   const [formData, setFormData] = useState({
     meeting: "",
     Attendees: [],
     repeat: false,
+    on_behalf: "",
   });
-  // const [weekdaysMap, setWeekdaysMap] = useState([
-  //   { day: "Mon", index: 0, isActive: false },
-  //   { day: "Tues", index: 1, isActive: false },
-  //   { day: "Wed", index: 2, isActive: false },
-  //   { day: "Thurs", index: 3, isActive: false },
-  //   { day: "Fri", index: 4, isActive: false },
-  //   { day: "Sat", index: 5, isActive: false },
-  //   { day: "Sun", index: 6, isActive: false },
-  // ]);
+  const [selectedWeekdays, setSelectedWeekdays] = useState([]);
+  const [emailOtherList, setEmailOtherList] = useState([]);
+  const [behalf, setbehalf] = useState("self");
+  const [otherEmails, setOtherEmails] = useState("");
+  const [users, setUsers] = useState([]);
+  // const screenWidth = window.innerWidth;
+  const [weekdaysMap, setWeekdaysMap] = useState([
+    { day: "Mon", index: 0, isActive: false },
+    { day: "Tue", index: 1, isActive: false },
+    { day: "Wed", index: 2, isActive: false },
+    { day: "Thu", index: 3, isActive: false },
+    { day: "Fri", index: 4, isActive: false },
+    { day: "Sat", index: 5, isActive: false },
+    { day: "Sun", index: 6, isActive: false },
+  ]);
+  console.log(selectedWeekdays);
 
-  // const handleWeekdaySelection = (weekday) => {
-  //   console.log(`Selected day: ${weekday}`);
+  const handleWeekdaySelection = (weekday) => {
+    console.log(`Selected day: ${weekday}`);
 
-  //   // Find the index of the selected day
-  //   const index = weekdaysMap.find((dayObj) => dayObj.day === weekday)?.index;
+    // Find the index of the selected day
+    const index = weekdaysMap.find((dayObj) => dayObj.day === weekday)?.index;
 
-  //   if (index !== undefined) {
-  //     // Toggle the isActive status of the selected day
-  //     const updatedWeekdaysMap = weekdaysMap.map((dayObj) =>
-  //       dayObj.index === index
-  //         ? { ...dayObj, isActive: !dayObj.isActive }
-  //         : dayObj
-  //     );
+    if (index !== undefined) {
+      // Toggle the isActive status of the selected day
+      const updatedWeekdaysMap = weekdaysMap.map((dayObj) =>
+        dayObj.index === index
+          ? { ...dayObj, isActive: !dayObj.isActive }
+          : dayObj
+      );
 
-  //     // Update the weekdaysMap with the modified isActive status
-  //     setWeekdaysMap(updatedWeekdaysMap);
+      // Update the weekdaysMap with the modified isActive status
+      setWeekdaysMap(updatedWeekdaysMap);
 
-  //     // Update the selected weekdays list
-  //     setSelectedWeekdays((prevSelectedWeekdays) =>
-  //       prevSelectedWeekdays.includes(index)
-  //         ? prevSelectedWeekdays.filter((day) => day !== index)
-  //         : [...prevSelectedWeekdays, index]
-  //     );
-  //   }
-  // };
+      // Update the selected weekdays list
+      setSelectedWeekdays((prevSelectedWeekdays) =>
+        prevSelectedWeekdays.includes(index)
+          ? prevSelectedWeekdays.filter((day) => day !== index)
+          : [...prevSelectedWeekdays, index]
+      );
+    }
+  };
+  useEffect(() => {
+    const fetchAssignedTo = async () => {
+      try {
+        const response = await getAssignedTo();
+        const transformedUsers = response.data.map((user) => ({
+          value: user.id,
+          label: `${user.firstname} ${user.lastname}`,
+        }));
+        setUsers(transformedUsers);
+        // setUsers(response.data);
+        console.log(response);
+      } catch (error) {
+        console.error("Error fetching assigned users:", error);
+      }
+    };
+    fetchAssignedTo();
+    console.log(users);
+  }, []);
 
   const handleMeetingLinkCopy = () => {
     navigator.clipboard
@@ -68,6 +96,26 @@ const CreateMeeting = () => {
   ];
   console.log(formData);
 
+  const handleAddEmail = () => {
+    // Validate the email before adding it to the list
+    if (/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(otherEmails)) {
+      setEmailOtherList([...emailOtherList, otherEmails]);
+      setOtherEmails("");
+    } else {
+      // Show a toast notification if the email is not valid
+      toast.error("Please enter a valid email address");
+    }
+  };
+
+  const handleRemoveEmail = (emailToRemove) => {
+    const updatedEmailList = emailOtherList.filter(
+      (email) => email !== emailToRemove
+    );
+    setEmailOtherList(updatedEmailList);
+    console.log("emailList");
+    console.log(emailOtherList);
+  };
+
   return (
     <section className="min-h-screen p-4 sm:p-0 flex flex-col md:flex-row">
       <div className="fixed hidden sm:block left-0 top-0 h-full md:static md:h-auto md:flex-shrink-0">
@@ -78,6 +126,37 @@ const CreateMeeting = () => {
           <h2 className="text-center md:text-xl font-semibold my-2 p-2 bg-black rounded-full text-white">
             Create New Meeting
           </h2>
+          <div className="grid grid-cols-4 items-center">
+            <p className="font-semibold">For :</p>
+            <div className="flex gap-5">
+              <p
+                className={`border-2 p-1 px-6 border-black font-medium rounded-full cursor-pointer ${
+                  behalf === "self" && "bg-black text-white"
+                }`}
+                onClick={() => setbehalf("self")}
+              >
+                Self
+              </p>
+              <p
+                className={`border-2 p-1 px-6 border-black font-medium rounded-full cursor-pointer ${
+                  behalf === "others" && "bg-black text-white"
+                }`}
+                onClick={() => setbehalf("others")}
+              >
+                Others
+              </p>
+            </div>
+            {behalf === "others" && (
+              <Select
+                options={users}
+                placeholder="Select User"
+                value={formData.on_behalf}
+                onChange={(selectedOption) =>
+                  setFormData({ ...formData, on_behalf: selectedOption })
+                }
+              />
+            )}
+          </div>
           <div className="grid md:grid-cols-3 gap-5">
             <div className="grid gap-2 items-center w-full">
               <label htmlFor="patientName" className="font-semibold">
@@ -181,15 +260,48 @@ const CreateMeeting = () => {
               <div className="flex md:flex-row flex-col items-center gap-2">
                 <input
                   type="email"
-                  name=""
+                  value={otherEmails}
+                  onChange={(e) => setOtherEmails(e.target.value)}
+                  name="otherEmails"
                   id=""
                   placeholder="Enter Email id"
                   className="border border-gray-400 p-2 rounded-md placeholder:text-sm w-full"
                 />
-                <button className="border-2 border-black font-medium p-1 px-4 rounded-md">
-                  Invite
+                <button
+                  className="border-2 border-black font-medium p-1 px-4 rounded-md"
+                  onClick={handleAddEmail}
+                >
+                  Add
                 </button>
               </div>
+              {emailOtherList.length > 0 && (
+                <div
+                  className=" flex items-center gap-2 border border-gray-400 rounded-md p-2"
+                  // style={{
+                  //   backgroundColor: "#fff",
+                  //   borderRadius: 4,
+                  //   border: "1px solid #ccc",
+                  //   padding: 6,
+                  // }}
+                >
+                  {emailOtherList.map((email, index) => (
+                    <span
+                      key={index}
+                      className="bg-green-400 px-4 rounded-full flex gap-2 items-center text-white p-1"
+                    >
+                      {email}
+                      <button
+                        className="cl"
+                        // style={{ padding: "0px 4px" }}
+                        type="button"
+                        onClick={() => handleRemoveEmail(email)}
+                      >
+                        <FaTimes />
+                      </button>
+                    </span>
+                  ))}
+                </div>
+              )}
             </div>
             <div className="my-2">
               <div className="flex items-center  gap-4">
@@ -225,7 +337,27 @@ const CreateMeeting = () => {
                   </div>
                 </div>
                 <p className="font-medium">Select Working Days :</p>
-                working tabs will come here
+
+                <div className="flex gap-4 ">
+                  {weekdaysMap.map((weekdayObj) => (
+                    <button
+                      key={weekdayObj.day}
+                      className={` rounded-md p-2 px-4 shadow-custom-all-sides font-medium ${
+                        selectedWeekdays?.includes(weekdayObj.index)
+                          ? // &&
+                            // weekdayObj.isActive
+                            "bg-green-400 text-white "
+                          : ""
+                      }`}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        handleWeekdaySelection(weekdayObj.day);
+                      }}
+                    >
+                      <a>{weekdayObj.day}</a>
+                    </button>
+                  ))}
+                </div>
               </div>
             )}
           </div>

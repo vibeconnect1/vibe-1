@@ -13,6 +13,7 @@ import {
 } from "react-icons/bs";
 import {
   MdFastfood,
+  MdManageAccounts,
   MdOutlineDashboard,
   MdOutlinePolicy,
 } from "react-icons/md";
@@ -107,7 +108,33 @@ const Navbar = () => {
                   Dashboard
                 </h2>
               </NavLink>
-              {/* <NavLink
+              <NavLink
+                to={"/admin/project-management"}
+                className={({ isActive }) =>
+                  ` ${
+                    isActive
+                      ? "text-black bg-white flex p-2  gap-3.5 rounded-md group items-center text-sm font-medium"
+                      : " group flex items-center text-sm gap-3.5 font-medium p-2 hover:bg-gray-800 rounded-md "
+                  }`
+                }
+              >
+                <div>{React.createElement(MdManageAccounts, { size: "20" })}</div>
+                <h2
+                  className={`whitespace-pre duration-300 ${
+                    !open && "opacity-0 translate-x-28 overflow-hidden"
+                  }`}
+                >
+                  Project Management
+                </h2>
+                <h2
+                  className={`${
+                    open && "hidden"
+                  } absolute left-48 bg-white font-semibold whitespace-pre text-gray-900 rounded-md drop-shadow-lg px-0 py-0 w-0 overflow-hidden group-hover:px-2 group-hover:py-1 group-hover:left-14 group-hover:duration-300 group-hover:w-fit  `}
+                >
+                  Project management
+                </h2>
+              </NavLink>
+              <NavLink
                 to={"/assets"}
                 className={({ isActive }) =>
                   ` ${
@@ -132,8 +159,8 @@ const Navbar = () => {
                 >
                   Asset
                 </h2>
-              </NavLink> */}
-              {/* <NavLink
+              </NavLink>
+              <NavLink
                 to={"/services"}
                 className={({ isActive }) =>
                   ` ${
@@ -158,8 +185,8 @@ const Navbar = () => {
                 >
                   Service
                 </h2>
-              </NavLink> */}
-              {/* <NavLink
+              </NavLink>
+              <NavLink
                 to={"/admin/birthday"}
                 className={({ isActive }) =>
                   ` ${
@@ -185,7 +212,7 @@ const Navbar = () => {
                 >
                   Birthday
                 </h2>
-              </NavLink> */}
+              </NavLink>
 {/* admin tickets */}
               <NavLink
                 to={"/tickets"}
@@ -215,7 +242,7 @@ const Navbar = () => {
                   Admin Tickets
                 </h2>
               </NavLink>
-{/* 
+
               <NavLink
                 to={"/mail-room"}
                 className={({ isActive }) =>
@@ -409,8 +436,8 @@ const Navbar = () => {
                 >
                   Doctor Appointment
                 </h2>
-              </NavLink> */}
-              {/* <NavLink
+              </NavLink>
+              <NavLink
                 to={"/admin/insurance"}
                 className={({ isActive }) =>
                   ` ${
@@ -573,7 +600,7 @@ const Navbar = () => {
                 >
                   Pantry
                 </h2>
-              </NavLink> */}
+              </NavLink>
             </>
           )}
 
@@ -606,7 +633,7 @@ const Navbar = () => {
                   My Ticket
                 </h2>
               </NavLink>
-              {/* <NavLink
+              <NavLink
                 to={"/employee-attendance"}
                 className={({ isActive }) =>
                   ` ${
@@ -933,10 +960,10 @@ const Navbar = () => {
                 >
                   Pantry
                 </h2>
-              </NavLink> */}
+              </NavLink>
             </>
           )}
-          {/* <NavLink
+          <NavLink
             to={"/communication"}
             className={({ isActive }) =>
               ` ${
@@ -961,7 +988,7 @@ const Navbar = () => {
             >
               Communication
             </h2>
-          </NavLink> */}
+          </NavLink>
 
           <NavLink
             to={"/profile"}
@@ -989,7 +1016,7 @@ const Navbar = () => {
               Profile
             </h2>
           </NavLink>
-          {/* {user === "pms_admin" && (
+          {user === "pms_admin" && (
             <NavLink
               to={"/setup"}
               className={({ isActive }) =>
@@ -1016,7 +1043,7 @@ const Navbar = () => {
                 Setup
               </h2>
             </NavLink>
-          )} */}
+          )}
 
           <div className="border-t mb-2 ">
             <button
