@@ -30,6 +30,11 @@ import { IoIosPeople } from "react-icons/io";
 const Navbar = () => {
   const [open, setOpen] = useState(false);
   const [user, setUser] = useState("");
+  const [showSidebar, setShowSidebar] = useState(false);
+  const toggleSidebar = () => {
+    setShowSidebar(!showSidebar); // Toggle sidebar visibility on mobile
+  };
+
   const navigate = useNavigate();
 
   const handleMouseEnter = () => {
@@ -62,18 +67,25 @@ const Navbar = () => {
 
   return (
     <section className="flex gap-6 sticky top-0 left-0 bottom-0 h-screen z-10">
+      <HiMenuAlt3
+        size={26}
+        className="cursor-pointer md:hidden fixed top-4 bg-black  rounded-r-full  z-20" // Fixed menu button for mobile
+        onClick={toggleSidebar} // Toggle sidebar on click
+      />
       <div
         className={`p-[8px] bg-[#0e0e0e] max-h-screen ${
           open ? "w-full md:w-60" : "w-20"
-        } duration-500 text-gray-100 px-4 rounded-r-2xl shadow-2xl overflow-y-auto h-screen custom-scrollbar left-0`}
+        } duration-500 text-gray-100 px-4 rounded-r-2xl shadow-2xl overflow-y-auto h-screen custom-scrollbar left-0 ${
+          showSidebar ? "block" : "hidden md:block" // Conditionally render sidebar based on showSidebar state and screen size
+        }`}
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
       >
         <div className={`py-3 flex ${open ? "justify-end" : "justify-center"}`}>
           <HiMenuAlt3
             size={26}
-            className="cursor-pointer "
-            onClick={() => setOpen(!open)}
+            className="cursor-pointer " // Hide menu button on medium and larger screens
+            onClick={toggleSidebar} // Toggle sidebar on click
           />
         </div>
         <div className="flex flex-col h-full gap-4 mb-5 relative">
@@ -118,7 +130,9 @@ const Navbar = () => {
                   }`
                 }
               >
-                <div>{React.createElement(MdManageAccounts, { size: "20" })}</div>
+                <div>
+                  {React.createElement(MdManageAccounts, { size: "20" })}
+                </div>
                 <h2
                   className={`whitespace-pre duration-300 ${
                     !open && "opacity-0 translate-x-28 overflow-hidden"
@@ -213,7 +227,7 @@ const Navbar = () => {
                   Birthday
                 </h2>
               </NavLink>
-{/* admin tickets */}
+              {/* admin tickets */}
               <NavLink
                 to={"/tickets"}
                 className={({ isActive }) =>

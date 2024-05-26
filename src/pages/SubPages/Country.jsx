@@ -5,7 +5,6 @@ import Account from "./Account";
 import { PiPlusCircle } from "react-icons/pi";
 import Switch from "../../Buttons/Switch";
 
-
 const Country = () => {
   const [selectedCountries, setSelectedCountries] = useState([]);
   const [showCountry, setShowCountry] = useState(false);
@@ -68,7 +67,7 @@ const Country = () => {
                       {country.label}
                     </td>
                     <td className="text-center p-2 ">
-                      <Switch/>
+                      <Switch />
                     </td>
                   </tr>
                 ))}

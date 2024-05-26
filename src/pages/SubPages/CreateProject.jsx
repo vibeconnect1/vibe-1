@@ -21,7 +21,7 @@ const CreateProject = () => {
 
   const handleAddField = () => {
     if (fieldTitle === "") {
-        return toast.error("Please Enter field Title !")
+      return toast.error("Please Enter field Title !");
     }
     if (fieldTitle.trim()) {
       setCustomFields([...customFields, { title: fieldTitle, value: "" }]);
@@ -48,15 +48,15 @@ const CreateProject = () => {
       <div className="fixed hidden sm:block left-0 top-0 h-full md:static md:h-auto md:flex-shrink-0">
         <Navbar />
       </div>
-      <div className="flex justify-center  overflow-x-auto w-full  sm:w-full">
+      <div className="flex justify-center overflow-x-auto w-full  sm:w-full">
         <div
-          className="border border-gray-300 my-2 rounded-lg sm:w-[60rem] p-8 flex flex-col gap-5"
+          className="md:border border-gray-300 my-2 rounded-lg md:p-8 flex flex-col gap-5"
           // onSubmit={handleSubmit}
         >
           <h2 className="text-center text-xl font-semibold p-2 bg-black rounded-full text-white">
             Create New Project
           </h2>
-          <div className="flex flex-col gap-3  justify-between items-center">
+          <div className="flex flex-col gap-3 justify-between items-center">
             <div className="grid md:grid-cols-3 w-full gap-5">
               <div className="grid gap-2 items-center w-full">
                 <label htmlFor="ProjectTitle" className="font-semibold">
@@ -106,7 +106,7 @@ const CreateProject = () => {
                   className="border border-gray-400 p-2 rounded-md"
                 />
               </div>
-           
+
               <div className="grid gap-2 items-center w-full">
                 <label htmlFor="budget" className="font-semibold">
                   Budget :
@@ -143,7 +143,7 @@ const CreateProject = () => {
                       onClick={() => handleRemoveField(index)}
                       className="bg-red-400 text-white p-1 px-4 rounded-md flex items-center cursor-pointer"
                     >
-                      <CgClose/>
+                      <CgClose />
                     </span>
                   </div>
                 </div>
@@ -169,18 +169,18 @@ const CreateProject = () => {
               </div>
             </div>
             <div className="grid gap-2  items-center w-full">
-                <label htmlFor="maritalStatus" className="font-semibold">
-                  Select Team :
-                </label>
-                <Select
-                  options={options}
-                  isMulti
-                  //   value={formData.Attendees}
-                  //   onChange={(selectedOption) =>
-                  //     setFormData({ ...formData, Attendees: selectedOption })
-                  //   }
-                />
-              </div>
+              <label htmlFor="maritalStatus" className="font-semibold">
+                Select Team :
+              </label>
+              <Select
+                options={options}
+                isMulti
+                //   value={formData.Attendees}
+                //   onChange={(selectedOption) =>
+                //     setFormData({ ...formData, Attendees: selectedOption })
+                //   }
+              />
+            </div>
             <div className="grid gap-2 items-center w-full">
               <label htmlFor="notes" className="font-semibold">
                 Addtional Notes :
