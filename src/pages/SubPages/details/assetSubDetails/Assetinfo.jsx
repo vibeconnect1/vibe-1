@@ -6,10 +6,30 @@ import { FaQrcode } from "react-icons/fa";
 import AssetQrCode from "./AssetQrCode";
 import DataTable from "react-data-table-component";
 import { Link, useParams } from "react-router-dom";
+import { postAssetparams } from "../../../../api";
+import toast from "react-hot-toast";
+const initialFormData = {
+  name: '',
+  order: '',
+  digit: '',
+  below: '',
+  above: '',
+  dashboard_view: false,
+  consumption_view: false,
+};
 
 const Assetinfo = ({ assetData }) => {
-  const {id} = useParams()
+  const { id } = useParams();
   const [assetBreakdown, setAssetBreakdown] = useState(false);
+  const [formData, setFormData] = useState({
+    name: "",
+    order: "",
+    digit: "",
+    dashboard_view: false,
+    consumption_view: false,
+    asset_id: id,
+  });
+
   const {
     floor_name,
     building_name,
@@ -30,7 +50,7 @@ const Assetinfo = ({ assetData }) => {
     capacity,
     warranty_start,
     asset_params,
-    installation
+    installation,
   } = assetData;
   const [qrCode, setQrCode] = useState(false);
 
@@ -43,12 +63,12 @@ const Assetinfo = ({ assetData }) => {
     setAssetBreakdown(!breakdown);
   };
 
-
   // Charactor Limit		Consumption view	Edit	Delete
 
   const assetParmsColumn = [
     { name: "Name", selector: (row) => row.name },
     { name: "Order", selector: (row) => row.order },
+    { name: "Charactor Limit", selector: (row) => row.digit },
     {
       name: "Dashboard view",
       selector: (row) => (row.dashboard_view ? "Yes" : "No"),
@@ -76,9 +96,30 @@ const Assetinfo = ({ assetData }) => {
       style: {
         fontWeight: "bold",
         fontSize: "10px",
-        textAlign : "center"
+        textAlign: "center",
       },
     },
+  };
+ 
+  const handleAssetParamsChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleAddConsumptionMeasure = async (e) => {
+    e.preventDefault();
+    try {
+      toast.loading("Adding Asset params Please wait!");
+      const response = await postAssetparams(formData);
+      console.log("Asset Created successfully:", response);
+      // setFormData({});
+      toast.dismiss();
+      toast.success("Asset Params added successfully");
+      // setFormData(initialAddAssetFormData);
+      window.location.reload()
+    } catch (error) {
+      console.error("Error submitting complaint:", error);
+      toast.error("Error Creating Asset!");
+    }
   };
 
   return (
@@ -92,9 +133,9 @@ const Assetinfo = ({ assetData }) => {
             </button>
             <div className="flex items-center gap-2 ">
               {/* modify switch */}
-              <p>Breakdown</p>
+              {/* <p>Breakdown</p>
               <Switch checked={!breakdown} onChange={handleToggle} />
-              <p>In use</p>
+              <p>In use</p> */}
             </div>
             <div className="flex gap-2">
               <button
@@ -103,10 +144,13 @@ const Assetinfo = ({ assetData }) => {
               >
                 <FaQrcode /> QR Code
               </button>
-              <Link to={`/assets/edit-asset/${id}`} className="flex gap-2 items-center border-2 border-black px-4 p-1 rounded-full  hover:bg-black hover:text-white transition-all duration-500">
+              <Link
+                to={`/assets/edit-asset/${id}`}
+                className="flex gap-2 items-center border-2 border-black px-4 p-1 rounded-full  hover:bg-black hover:text-white transition-all duration-500"
+              >
                 <BiEditAlt />
                 Edit Details
-              </Link >
+              </Link>
             </div>
           </div>
           <div>
@@ -211,7 +255,6 @@ const Assetinfo = ({ assetData }) => {
               Warranty Details
             </h2>
             <div className="my-5 md:px-10 text-sm items-center font-medium grid gap-4 md:grid-cols-3 w-full">
-              
               <div className="grid grid-cols-2 items-center">
                 <p>Warranty Start Date:</p>
                 <p className="text-sm">{warranty_start} </p>
@@ -229,6 +272,121 @@ const Assetinfo = ({ assetData }) => {
             <div className="my-5 px-10 text-sm items-center font-medium grid gap-4 grid-cols-3">
               No attachments
             </div>
+            <div className="">
+              <h2 className="border-b  text-xl border-black font-semibold">
+                Consumption Asset Measure
+              </h2>
+              <div className="grid md:grid-cols-3 item-start gap-x-4 gap-y-2 w-full py-2">
+                <div className="flex flex-col">
+                  <label htmlFor="name" className="font-medium">
+                    Name :
+                  </label>
+                  <input
+                    type="text"
+                    name="name"
+                    id="name"
+                    value={formData.name || ""}
+                    onChange={handleAssetParamsChange}
+                    placeholder="Name"
+                    className="border p-1 px-4 border-gray-500 rounded-md"
+                  />
+                </div>
+                <div className="flex flex-col">
+                  <label htmlFor="order" className="font-medium">
+                    Order :
+                  </label>
+                  <input
+                    type="text"
+                    name="order"
+                    id="order"
+                    value={formData.order || ""}
+                    onChange={handleAssetParamsChange}
+                    placeholder="Enter Order"
+                    className="border p-1 px-4 border-gray-500 rounded-md"
+                  />
+                </div>
+                <div className="flex flex-col">
+                  <label htmlFor="charactorLimt" className="font-medium">
+                    Charactor Limit :
+                  </label>
+                  <input
+                    type="text"
+                    name="digit"
+                    value={formData.digit || ""}
+                    onChange={handleAssetParamsChange}
+                    id="charactorLimt"
+                    placeholder="charactor Limt"
+                    className="border p-1 px-4 border-gray-500 rounded-md"
+                  />
+                </div>
+                <div className="flex flex-col">
+                  <label htmlFor="bleow" className="font-medium">
+                    Alert Below :
+                  </label>
+                  <input
+                    type="text"
+                    name="below"
+                    id="below"
+                    placeholder="Alert Below Value"
+                    className="border p-1 px-4 border-gray-500 rounded-md"
+                  />
+                </div>
+                <div className="flex flex-col">
+                  <label htmlFor="name" className="font-medium">
+                    Alert Above :
+                  </label>
+                  <input
+                    type="text"
+                    name="above"
+                    id="above"
+                    placeholder="Alert Above Value"
+                    className="border p-1 px-4 border-gray-500 rounded-md"
+                  />
+                </div>
+              </div>
+              <div className="grid grid-cols-3 gap-4 my-4">
+                <div className="flex items-center gap-2">
+                  <input
+                    type="checkbox"
+                    name="dashboard_view"
+                    id="dashboard_view"
+                    checked={formData.dashboard_view || false}
+                    onChange={() =>
+                      setFormData((prevState) => ({
+                        ...prevState,
+                        dashboard_view: !prevState.dashboard_view,
+                      }))
+                    }
+                  />
+                  <label htmlFor="dashboard_view">Dashboard View</label>
+                </div>
+                <div className="flex items-center gap-2">
+                  <input
+                    type="checkbox"
+                    name="consumption_view"
+                    id="consumption_view"
+                    checked={formData.consumption_view || false}
+                    // onClick={() => setMeterApplicable(!meterApplicable)}
+                    onChange={() =>
+                      setFormData((prevState) => ({
+                        ...prevState,
+                        consumption_view: !prevState.consumption_view,
+                      }))
+                    }
+                  />
+                  <label htmlFor="consumption_view">Consumption View</label>
+                </div>
+              </div>
+              <div className="flex justify-center">
+                <button
+                  className="bg-black p-1 px-4 font-medium text-white rounded-md"
+                  onClick={handleAddConsumptionMeasure}
+                >
+                  Add
+                </button>
+              </div>
+              <div className="border-b-2 my-2 border-gray-400" />
+            </div>
           </div>
           <DataTable
             columns={assetParmsColumn}
@@ -238,7 +396,6 @@ const Assetinfo = ({ assetData }) => {
             responsive
             fixedHeader
             highlightOnHover
-            
           />
         </div>
         {qrCode && <AssetQrCode onClose={() => setQrCode(false)} />}

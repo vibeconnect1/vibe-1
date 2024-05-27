@@ -11,6 +11,9 @@ import { getFloors, getSiteAsset, getUnits } from "../api";
 import { getItemInLocalStorage } from "../utils/localStorage";
 import AMC from "./SubPages/AMC";
 import Meter from "./Meter";
+import { useSelector } from "react-redux";
+import Inventory from "./Inventory";
+import Checklist from "./Checklist";
 
 // import jsPDF from "jspdf";
 // import QRCode from "qrcode.react";
@@ -28,7 +31,7 @@ const Asset = () => {
   const [selectedUnit, setSelectedUnit] = useState("");
   const [page, setPage] = useState("assets");
   const [assets, setAssets] = useState([]);
-
+const themeColor = useSelector((state)=> state.theme.color)
 
   const dateFormat = (dateString) => {
     const date = new Date(dateString);
@@ -74,15 +77,20 @@ const Asset = () => {
       sortable: true,
     },
     {
-      name: "Asset Code",
-      selector: (row) => row.code,
+      name: "OEM Name",
+      selector: (row) => row.oem_name,
       sortable: true,
     },
-    {
-      name: "Asset Number",
-      selector: (row) => row.code,
-      sortable: true,
-    },
+    // {
+    //   name: "Asset Code",
+    //   selector: (row) => row.code,
+    //   sortable: true,
+    // },
+    // {
+    //   name: "Asset Number",
+    //   selector: (row) => row.code,
+    //   sortable: true,
+    // },
 
     {
       name: "Serial Number",
@@ -236,7 +244,7 @@ const Asset = () => {
   const customStyle = {
     headRow: {
       style: {
-        backgroundColor: "black",
+        backgroundColor: themeColor,
         color: "white",
         fontSize: "10px",
       },
@@ -433,19 +441,19 @@ const Asset = () => {
             </h2>
             <h2
               className={`p-1 ${
+                page === "checklist" && "bg-white text-blue-500"
+              } rounded-full px-4 cursor-pointer`}
+              onClick={() => setPage("checklist")}
+            >
+              Checklist
+            </h2>
+            <h2
+              className={`p-1 ${
                 page === "task" && "bg-white text-blue-500"
               } rounded-full px-4 cursor-pointer`}
               onClick={() => setPage("task")}
             >
-              Task
-            </h2>
-            <h2
-              className={`p-1 ${
-                page === "schedule" && "bg-white text-blue-500"
-              } rounded-full px-4 cursor-pointer`}
-              onClick={() => setPage("schedule")}
-            >
-              Schedule
+             Routine Task
             </h2>
             <h2
               className={`p-1 ${
@@ -453,7 +461,7 @@ const Asset = () => {
               } rounded-full px-4 cursor-pointer`}
               onClick={() => setPage("PPM")}
             >
-              PPM
+              PPM Activity
             </h2>
             <h2
               className={`p-1 ${
@@ -461,7 +469,7 @@ const Asset = () => {
               } rounded-full px-4 cursor-pointer`}
               onClick={() => setPage("inventory")}
             >
-              Inventory
+              Stock Items
             </h2>
           </div>
         </div>
@@ -612,6 +620,12 @@ const Asset = () => {
         )}
         {page === "meter" && (
           <Meter/>
+        )}
+        {page === "checklist" && (
+          <Checklist/>
+        )}
+        {page === "inventory" && (
+          <Inventory/>
         )}
       </div>
     </section>

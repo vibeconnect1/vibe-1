@@ -25,6 +25,9 @@ export const postSiteAsset = async (data) =>
     params: {
       token: token,
     },
+    //   headers: {
+    //     'Content-Type': 'multipart/form-data'
+    // }
   });
 export const getVendors = async () =>
   axiosInstance.get("/vendors.json", {
@@ -152,3 +155,30 @@ export const resetPassword = async (data) =>
 //     }
 //   })
 // }
+
+export const getAssetGroups = async () =>
+  axiosInstance.get("/asset_groups.json", {
+    params: {
+      token: token,
+    },
+  });
+
+export const postAssetparams = async (data) =>
+  axiosInstance.post("/asset_params.json", data, {
+    params: {
+      token: token,
+    },
+  });
+
+export const getInventory = async () =>
+  axiosInstance.get("/items.json", {
+    params: {
+      token: token,
+    },
+  });
+export const getChecklist = async () =>
+  axiosInstance.get("/checklists.json", {
+    params: {
+      token: token,
+    },
+  });

@@ -1,10 +1,32 @@
-import { configureStore } from "@reduxjs/toolkit";
-import groupReducer from "../features/group/groupSlice"
+import { combineReducers, configureStore } from "@reduxjs/toolkit";
+import groupReducer from "../features/group/groupSlice";
+import themeReducer from "../features/theme/themeSlice";
+import storage from "redux-persist/lib/storage";
+import { persistReducer, persistStore } from "redux-persist";
 
-const store = configureStore({
-    reducer:{
-        group: groupReducer
-    }
-})
+const persistConfig = {
+  key: "root",
+  storage,
+};
 
-export default store
+const rootReducer = combineReducers({
+  group: groupReducer,
+  theme: themeReducer,
+});
+
+const persistedReducer = persistReducer(persistConfig, rootReducer);
+
+export const store = configureStore({
+    reducer: persistedReducer,
+    middleware: (getDefaultMiddleware) =>
+      getDefaultMiddleware({
+        serializableCheck: {
+          // Ignore these action types
+          ignoredActions: ['persist/PERSIST', 'persist/REHYDRATE'],
+          // Optionally, ignore paths in the state
+          ignoredPaths: ['_persist'],
+        },
+      }),
+  });
+
+export const persistor = persistStore(store);

@@ -125,6 +125,8 @@ import CreateMeeting from "./pages/SubPages/CreateMeeting.jsx";
 import MeetingDetails from "./pages/SubPages/details/MeetingDetails.jsx";
 import ProjectManagement from "./pages/ProjectManagement.jsx";
 import CreateProject from "./pages/SubPages/CreateProject.jsx";
+import ProjectDetails from "./pages/SubPages/details/ProjectDetails.jsx";
+import AddInventory from "./pages/SubPages/AddInventory.jsx";
 
 function App() {
   return (
@@ -806,7 +808,7 @@ function App() {
               </ProtectedAdminRoutes>
             }
           />
-          {/* project management */}
+          {/*admin project management */}
           <Route
             path="/admin/project-management"
             element={
@@ -820,6 +822,23 @@ function App() {
             element={
               <ProtectedAdminRoutes>
                 <CreateProject />
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/project-management/project-details/:id"
+            element={
+              <ProtectedAdminRoutes>
+                <ProjectDetails />
+              </ProtectedAdminRoutes>
+            }
+          />
+          {/* INventory */}
+          <Route
+            path="/admin/add-inventory"
+            element={
+              <ProtectedAdminRoutes>
+                <AddInventory />
               </ProtectedAdminRoutes>
             }
           />

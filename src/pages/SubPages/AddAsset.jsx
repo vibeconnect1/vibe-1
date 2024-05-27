@@ -1,7 +1,13 @@
 import React, { useEffect, useState } from "react";
 import Switch from "../../Buttons/Switch";
 import { getItemInLocalStorage } from "../../utils/localStorage";
-import { getFloors, getUnits, getVendors, postSiteAsset } from "../../api";
+import {
+  getAssetGroups,
+  getFloors,
+  getUnits,
+  getVendors,
+  postSiteAsset,
+} from "../../api";
 import { BiCross, BiPlus } from "react-icons/bi";
 import { IoClose } from "react-icons/io5";
 import AddSuppliers from "../../containers/modals/AddSuppliersModal";
@@ -22,6 +28,7 @@ const AddAsset = () => {
   const [addSupplierModal, showAddSupplierMOdal] = useState(false);
   const [vendors, setVendors] = useState([]);
   const [formData, setFormData] = useState(initialAddAssetFormData);
+  const [assetGroups, setAssetGroup] = useState([]);
   console.log(formData);
 
   useEffect(() => {
@@ -29,7 +36,12 @@ const AddAsset = () => {
       const vendorResp = await getVendors();
       setVendors(vendorResp.data);
     };
+    const fetchAssetGroups = async () => {
+      const assetGroupResponse = await getAssetGroups();
+      setAssetGroup(assetGroupResponse.data);
+    };
     fetchVendors();
+    fetchAssetGroups();
   }, []);
 
   const handleChange = async (e) => {
@@ -103,67 +115,68 @@ const AddAsset = () => {
   };
 
   const navigate = useNavigate();
-  
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      toast.loading("Createing Asset Please wait!");
-      const response = await postSiteAsset(formData);
-      console.log("Asset Created successfully:", response);
-      setFormData({});
-      toast.dismiss();
-      toast.success("Asset Created successfully");
-      navigate("/assets");
-    } catch (error) {
-      console.error("Error submitting complaint:", error);
-      toast.error("Error Creating Asset!")
-    }
-  };
+
+  // const handleSubmit = async (e) => {
+  //   e.preventDefault();
+  //   try {
+  //     toast.loading("Createing Asset Please wait!");
+  //     const response = await postSiteAsset(formData);
+  //     console.log("Asset Created successfully:", response);
+  //     setFormData({});
+  //     toast.dismiss();
+  //     toast.success("Asset Created successfully");
+  //     navigate("/assets");
+  //   } catch (error) {
+  //     console.error("Error submitting complaint:", error);
+  //     toast.error("Error Creating Asset!");
+  //   }
+  // };
+
   const handleSaveAndCreate = async (e) => {
     e.preventDefault();
     try {
-      toast.loading("Createing Asset Please wait!");
+      toast.loading("Creating Asset Please wait!");
       const response = await postSiteAsset(formData);
       console.log("Asset Created successfully:", response);
       setFormData({});
       toast.dismiss();
       toast.success("Asset Created successfully");
-      setFormData(initialAddAssetFormData)
+      setFormData(initialAddAssetFormData);
     } catch (error) {
       console.error("Error submitting complaint:", error);
-      toast.error("Error Creating Asset!")
+      toast.error("Error Creating Asset!");
     }
   };
 
-  // const handleSubmit = async (event) => {
-  //   event.preventDefault(); // Prevent default form submission behavior
+  const handleSubmit = async (event) => {
+    event.preventDefault(); // Prevent default form submission behavior
+    console.log("FormData before appending:", formData);
 
-  //   // Create a new FormData object
-  //   const formDataToSend = new FormData();
+    // Create a new FormData object
+    const formDataToSend = new FormData();
 
-  //   // Append all form fields to the FormData object
-  //   Object.entries(formData).forEach(([key, value]) => {
-  //     formDataToSend.append(key, value);
-  //   });
+    // Append all form fields to the FormData object
+    Object.entries(formData).forEach(([key, value]) => {
+      // Check if value is not null before converting to string
+      if (value !== null) {
+        formDataToSend.append(key, value.toString());
+      }
+    });
 
-  //   // Append files to the FormData object
-  //   formData.file1.forEach((file, index) => {
-  //     formDataToSend.append(`file${index + 1}`, file);
-  //   });
+    // Append files to the FormData object
+    // formData.file1.forEach((file, index) => {
+    //   formDataToSend.append(`file${index + 1}`, file);
+    // });
 
-  //   try {
-  //     // Make your API call with formDataToSend
-  //     // For example:
-  //     // await fetch('your-api-url', {
-  //     //   method: 'POST',
-  //     //   body: formDataToSend,
-  //     // });
+    try {
+      console.log(formDataToSend);
+      await postSiteAsset(formDataToSend);
 
-  //     console.log("Form data to send:", formDataToSend);
-  //   } catch (error) {
-  //     console.error("Error:", error);
-  //   }
-  // };
+      console.log("Form data to send:", formDataToSend);
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
 
   return (
     <section>
@@ -177,19 +190,6 @@ const AddAsset = () => {
           </h2>
           <div className="flex sm:flex-row flex-col justify-around items-center">
             <div className="grid md:grid-cols-3 item-start gap-x-4 gap-y-2 w-full">
-              <div className="flex flex-col">
-                <label htmlFor="" className="font-semibold">
-                  Select Site :
-                </label>
-                <select
-                  className="border p-1 px-4 border-gray-500 rounded-md"
-                  onChange={handleChange}
-                  value={formData.site_id}
-                  name="site_id"
-                >
-                  <option value="">Select Site</option>
-                </select>
-              </div>
               <div className="flex flex-col">
                 <label htmlFor="" className="font-semibold">
                   Select Building :
@@ -208,32 +208,7 @@ const AddAsset = () => {
                   ))}
                 </select>
               </div>
-              <div className="flex flex-col">
-                <label htmlFor="" className="font-semibold">
-                  Select Wing :
-                </label>
-                <select
-                  className="border p-1 px-4 border-gray-500 rounded-md"
-                  onChange={handleChange}
-                  value={formData.wing_id}
-                  name="wing"
-                >
-                  <option value="">Select wing</option>
-                </select>
-              </div>
-              <div className="flex flex-col">
-                <label htmlFor="" className="font-semibold">
-                  Select Area :
-                </label>
-                <select
-                  className="border p-1 px-4 border-gray-500 rounded-md"
-                  onChange={handleChange}
-                  value={formData.area}
-                  name="area"
-                >
-                  <option value="">Select Site</option>
-                </select>
-              </div>
+
               <div className="flex flex-col">
                 <label htmlFor="" className="font-semibold">
                   Select Floor :
@@ -241,7 +216,7 @@ const AddAsset = () => {
                 <select
                   className="border p-1 px-4 border-gray-500 rounded-md"
                   onChange={handleChange}
-                  value={formData.floor_id}
+                  value={formData.fl}
                   name="floor_name"
                 >
                   <option value="">Select Floor</option>
@@ -292,11 +267,11 @@ const AddAsset = () => {
                 <div className="flex flex-col">
                   <input
                     type="text"
-                    name="asset_number"
-                    id="asset_number"
+                    name="oem_name"
+                    id="oem_name"
                     onChange={handleChange}
-                    value={formData.asset_number}
-                    placeholder="Asset Number"
+                    value={formData.oem_name}
+                    placeholder="OEM Name"
                     className="border p-1 px-4 border-gray-500 rounded-md"
                   />
                 </div>
@@ -360,14 +335,16 @@ const AddAsset = () => {
                 <div className="flex flex-col">
                   <select
                     className="border p-1 px-4 border-gray-500 rounded-md"
-                    value={formData.group}
+                    value={formData.asset_group_id}
                     onChange={handleChange}
-                    name="group"
+                    name="asset_group_id"
                   >
                     <option value="">Select Group</option>
-                    <option value="Group 1">Group 1</option>
-                    <option value="Group 2">Group 2</option>
-                    <option value="Group 3">Group 3</option>
+                    {assetGroups.map((assetGroup) => (
+                      <option value={assetGroup.id} key={assetGroup.id}>
+                        {assetGroup.name}
+                      </option>
+                    ))}
                   </select>
                 </div>
                 <div className="flex flex-col">
@@ -383,18 +360,7 @@ const AddAsset = () => {
                     <option value="Sub Group 3">Sub Group 3</option>
                   </select>
                 </div>
-                <div className="flex flex-col">
-                  <select
-                    className="border p-1 px-4 border-gray-500 rounded-md"
-                    value={formData.asset_type}
-                    name="asset_type"
-                    onChange={handleChange}
-                  >
-                    <option value="">Select Asset Type</option>
-                    <option value="Comprehensive">Comprehensive</option>
-                    <option value="Non-Comprehensive">Non-Comprehensive</option>
-                  </select>
-                </div>
+
                 <div className="flex items-center justify-between gap-2">
                   <label htmlFor="" className="font-semibold ">
                     Purchased Date:
@@ -511,7 +477,7 @@ const AddAsset = () => {
                       value={formData.applicable_meter_category}
                       onChange={handleChange}
                     >
-                      <option value="">Select Meter Category </option>
+                      <option value="">Select Asset Type </option>
                       <option value="meter 1">Meter 1</option>
                       <option value="meter 2">Meter 2</option>
                       <option value="meter 2">meter 3</option>
@@ -525,7 +491,7 @@ const AddAsset = () => {
                     onChange={handleChange}
                     value={formData.parent_meter}
                   >
-                    <option value="">Select Parent Category </option>
+                    <option value="">Select Parent Asset </option>
                     <option value="unit1">Parent 1</option>
                     <option value="unit2">Parent 2</option>
                     <option value="unit2">Parent 3</option>
@@ -533,7 +499,7 @@ const AddAsset = () => {
                 )}
               </div>
             </div>
-            {formData.is_meter && meterType === "parent" && (
+            {/* {formData.is_meter && meterType === "parent" && (
               <>
                 <p className="border-b border-black font-semibold my-2">
                   Consumption Asset Measure
@@ -756,7 +722,7 @@ const AddAsset = () => {
                   </div>
                 </div>
               </div>
-            )}
+            )} */}
           </div>
           <div className="my-5">
             <p className="border-b border-black font-semibold">
@@ -829,38 +795,36 @@ const AddAsset = () => {
                 Supplier Contact Details
               </p>
               <div className=" flex md:items-center md:justify-between flex-col md:flex-row">
-
-              
-              <div className="flex flex-col my-2">
-                <label htmlFor="" className="font-semibold">
-                  Select Supplier:
-                </label>
-                <select
-                  className="border p-1 px-4 border-gray-500 rounded-md"
-                  value={formData.vendor_id}
-                  onChange={handleChange}
-                  name="vendor_id"
+                <div className="flex flex-col my-2">
+                  <label htmlFor="" className="font-semibold">
+                    Select Supplier:
+                  </label>
+                  <select
+                    className="border p-1 px-4 border-gray-500 rounded-md"
+                    value={formData.vendor_id}
+                    onChange={handleChange}
+                    name="vendor_id"
+                  >
+                    <option value="">Select Supplier</option>
+                    {vendors.map((vendor) => (
+                      <option value={vendor.id} key={vendor.id}>
+                        {vendor.vendor_name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                {/* <button
+                  className="p-1 border-2 border-black px-4 rounded-md hover:bg-black hover:text-white transition-all duration-300"
+                  onClick={() => showAddSupplierMOdal(true)}
                 >
-                  <option value="">Select Supplier</option>
-                  {vendors.map((vendor) => (
-                    <option value={vendor.id} key={vendor.id}>
-                      {vendor.vendor_name}
-                    </option>
-                  ))}
-                </select>
-              </div>
-              <button
-                className="p-1 border-2 border-black px-4 rounded-md hover:bg-black hover:text-white transition-all duration-300"
-                onClick={() => showAddSupplierMOdal(true)}
-              >
-                Add Supplier
-              </button>
-              {addSupplierModal && (
-                <AddSuppliers onclose={() => showAddSupplierMOdal(false)} />
-              )}
+                  Add Supplier
+                </button>
+                {addSupplierModal && (
+                  <AddSuppliers onclose={() => showAddSupplierMOdal(false)} />
+                )} */}
               </div>
             </div>
-            <div className="my-5">
+            {/* <div className="my-5">
               <p className="border-b border-black font-semibold">
                 Meter Category Type
               </p>
@@ -880,7 +844,7 @@ const AddAsset = () => {
                   <option value="unit2">Category 3</option>
                 </select>
               </div>
-            </div>
+            </div> */}
           </div>
           <h2 className="border-b text-center text-xl border-black mb-6 font-bold">
             Attachments
@@ -895,18 +859,22 @@ const AddAsset = () => {
                 onChange={(event) => handleFileChange(event, "invoice")}
                 multiple
               /> */}
-              <FileInputBox handleChange={(event) => handleFileChange(event, "invoice")}/>
+              <FileInputBox
+                handleChange={(event) => handleFileChange(event, "invoice")}
+              />
             </div>
             <div>
               <p className="border-b border-black my-1 font-semibold">
                 Insurance Details
               </p>
-              {/* <input
+              <input
                 type="file"
                 onChange={(event) => handleFileChange(event, "insurance")}
                 multiple
-              /> */}
-               <FileInputBox handleChange={(event) => handleFileChange(event, "insurance")}/>
+              />
+              <FileInputBox
+                handleChange={(event) => handleFileChange(event, "insurance")}
+              />
             </div>
             <div>
               <p className="border-b border-black my-1 font-semibold">
@@ -917,7 +885,9 @@ const AddAsset = () => {
                 onChange={(event) => handleFileChange(event, "manuals")}
                 multiple
               /> */}
-               <FileInputBox handleChange={(event) => handleFileChange(event, "manuals")}/>
+              <FileInputBox
+                handleChange={(event) => handleFileChange(event, "manuals")}
+              />
             </div>
             <div>
               <p className="border-b border-black my-1 font-semibold">
@@ -928,7 +898,9 @@ const AddAsset = () => {
                 onChange={(event) => handleFileChange(event, "others")}
                 multiple
               /> */}
-               <FileInputBox handleChange={(event) => handleFileChange(event, "others")}/>
+              <FileInputBox
+                handleChange={(event) => handleFileChange(event, "others")}
+              />
             </div>
           </div>
           <div className="sm:flex grid gap-2 my-5 sm:justify-end">
@@ -944,7 +916,10 @@ const AddAsset = () => {
             <button className="border-black border-2 p-2 px-4 rounded-md font-medium">
               Save & Add AMC
             </button>
-            <button className=" border-black border-2  p-2 px-4 rounded-md font-medium" onClick={handleSaveAndCreate}>
+            <button
+              className=" border-black border-2  p-2 px-4 rounded-md font-medium"
+              onClick={handleSaveAndCreate}
+            >
               Save & Create New Asset
             </button>
           </div>

@@ -6,20 +6,18 @@ const day = String(today.getDate()).padStart(2, "0");
 const formattedDate = `${year}-${month}-${day}`;
 const siteID = getItemInLocalStorage("SITEID")
 export const initialAddAssetFormData = {
-    area: "",
+    
     site_id: siteID,
     building_id: "",
     floor_id: "",
     unit_id: "",
     name: "",
-    asset_number: "",
     serial_number: "",
     model_number: "",
-    wing_id: "",
     purchase_cost: "",
     capacity: "",
     unit: "",
-    group: "",
+    asset_group_id: "",
     sub_group: "",
     asset_type: "",
     purchased_on: formattedDate,
@@ -34,6 +32,7 @@ export const initialAddAssetFormData = {
     parent_meter: "",
     meter_category: "",
     vendor_id: "",
+    oem_name:"",
   
     consumptionassetmeasure: "",
     unittype: "",

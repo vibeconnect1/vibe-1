@@ -26,11 +26,13 @@ import { AiOutlineFieldTime, AiOutlineUser } from "react-icons/ai";
 import { TiBusinessCard } from "react-icons/ti";
 import { FaBirthdayCake, FaBriefcaseMedical, FaCar } from "react-icons/fa";
 import { IoIosPeople } from "react-icons/io";
+import { useSelector } from "react-redux";
 
 const Navbar = () => {
   const [open, setOpen] = useState(false);
   const [user, setUser] = useState("");
   const navigate = useNavigate();
+  const themeColor = useSelector((state)=> state.theme.color)
 
   const handleMouseEnter = () => {
     setOpen(true);
@@ -56,6 +58,7 @@ const Navbar = () => {
     localStorage.removeItem("SITEID");
     localStorage.removeItem("STATUS");
     localStorage.removeItem("complaint");
+    localStorage.removeItem("USERID");
     navigate("/login");
     window.location.reload();
   };
@@ -63,7 +66,10 @@ const Navbar = () => {
   return (
     <section className="flex gap-6 sticky top-0 left-0 bottom-0 h-screen z-10">
       <div
-        className={`p-[8px] bg-[#0e0e0e] max-h-screen ${
+      style={{
+        background: themeColor
+      }}
+        className={`p-[8px]  max-h-screen ${
           open ? "w-full md:w-60" : "w-20"
         } duration-500 text-gray-100 px-4 rounded-r-2xl shadow-2xl overflow-y-auto h-screen custom-scrollbar left-0`}
         onMouseEnter={handleMouseEnter}

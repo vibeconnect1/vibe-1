@@ -29,7 +29,7 @@ const Readings = () => {
 
   return (
     <div>
-      <div>
+      {/* <div>
         <label htmlFor="start-date">Start Date:</label>
         <input
           type="date"
@@ -50,7 +50,9 @@ const Readings = () => {
 
       {/* <button onClick={handleDateRangeSubmit}>Submit</button> */}
       {/* DataTable component with dynamic columns */}
-      <MyDateTable startDate={startDate} endDate={endDate} />
+      {/* <MyDateTable startDate={startDate} endDate={endDate} /> */} 
+      <iframe src="https://admin.vibecopilot.ai/show_readings?asset_id=4&" width="100%" height="600px"></iframe>
+
     </div>
   );
 };

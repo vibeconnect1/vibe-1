@@ -5,16 +5,19 @@ import { Link } from "react-router-dom";
 import DataTable from "react-data-table-component";
 import { BiEdit } from "react-icons/bi";
 import { BsEye } from "react-icons/bs";
+import { useSelector } from "react-redux";
 
 const ProjectManagement = () => {
   const [selectedStatus, setSelectedStatus] = useState("all");
+  const themeColor = useSelector((state)=> state.theme.color)
 
   const columns = [
     {
       name: "Action",
       cell: (row) => (
         <div className="flex items-center gap-4">
-          <Link to={`/admin/project-details/${row.id}`}>
+          <Link to={`/admin/project-management/project-details/${row.id}`}>
+          
             <BsEye size={15} />
           </Link>
           <Link to={`/admin/edit-project/${row.id}`}>
@@ -76,7 +79,7 @@ const ProjectManagement = () => {
   const customStyle = {
     headRow: {
       style: {
-        backgroundColor: "black",
+        backgroundColor: themeColor,
         color: "white",
 
         fontSize: "10px",
@@ -162,7 +165,7 @@ const ProjectManagement = () => {
             // onClick={() => setShowCountry(!showCountry)}
           >
             <PiPlusCircle size={20} />
-            Create Project
+            Add
           </Link>
           <div className="flex gap-2">
             <input
@@ -189,7 +192,7 @@ const ProjectManagement = () => {
 
         <DataTable
           responsive
-          selectableRows
+          // selectableRows
           columns={columns}
           data={data}
           customStyles={customStyle}
