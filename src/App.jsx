@@ -135,6 +135,16 @@ import EmployeeCreateVisitor from "./pages/Employees/EmployeeSubPages/EmployeeCr
 import EmployeeVisitorDetails from "./pages/Employees/EmployeeSubPages/EmployeeVisitorDetails.jsx";
 import EmployeeDeliveryDetails from "./pages/Employees/EmployeeSubPages/EmployeeDeliveryDetails.jsx";
 import EmployeeCabDetails from "./pages/Employees/EmployeeSubPages/EmployeeCabDetails.jsx";
+import Visitors from "./pages/Visitors.jsx";
+import CreateVisitor from "./pages/SubPages/CreateVisitor.jsx";
+import VisitorDetails from "./pages/SubPages/details/VisitorDetails.jsx";
+import DeliveryStaffDetails from "./pages/SubPages/details/DeliveryStaffDetails.jsx";
+import CabDetails from "./pages/SubPages/details/CabDetails.jsx";
+import CabEdit from "./pages/SubPages/details/CabEdit.jsx";
+import VisitorEdit from "./pages/SubPages/details/VisitorEdit.jsx";
+import DeliveryEdit from "./pages/SubPages/details/DeliveryEdit.jsx";
+import DocumentPro from "./pages/DocumentPro.jsx";
+import AddProjectTask from "./pages/SubPages/AddProjectTask.jsx";
 
 function App() {
   return (
@@ -841,6 +851,14 @@ function App() {
               </ProtectedAdminRoutes>
             }
           />
+          <Route
+            path="/admin/project-management/add-task/:id"
+            element={
+              <ProtectedAdminRoutes>
+                <AddProjectTask />
+              </ProtectedAdminRoutes>
+            }
+          />
           {/* INventory */}
           <Route
             path="/admin/add-stock"
@@ -880,7 +898,7 @@ function App() {
             path="/employees/visitors"
             element={
               <ProtectedRoute>
-                <EmployeeVisitors/>
+                <EmployeeVisitors />
               </ProtectedRoute>
             }
           />
@@ -888,7 +906,7 @@ function App() {
             path="/employee/create-visitor"
             element={
               <ProtectedRoute>
-                <EmployeeCreateVisitor/>
+                <EmployeeCreateVisitor />
               </ProtectedRoute>
             }
           />
@@ -896,7 +914,7 @@ function App() {
             path="/employee/visitor-details/:id"
             element={
               <ProtectedRoute>
-                <EmployeeVisitorDetails/>
+                <EmployeeVisitorDetails />
               </ProtectedRoute>
             }
           />
@@ -904,7 +922,7 @@ function App() {
             path="/employee/delivery-details/:id"
             element={
               <ProtectedRoute>
-                <EmployeeDeliveryDetails/>
+                <EmployeeDeliveryDetails />
               </ProtectedRoute>
             }
           />
@@ -912,8 +930,82 @@ function App() {
             path="/employee/cab-details/:id"
             element={
               <ProtectedRoute>
-                <EmployeeCabDetails/>
+                <EmployeeCabDetails />
               </ProtectedRoute>
+            }
+          />
+
+          {/* admin visitor */}
+          <Route
+            path="/admin/visitor"
+            element={
+              <ProtectedAdminRoutes>
+                <Visitors />
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/create-visitor"
+            element={
+              <ProtectedAdminRoutes>
+                <CreateVisitor />
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/visitor-details/:id"
+            element={
+              <ProtectedAdminRoutes>
+                <VisitorDetails />
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/deliverydetails/:id"
+            element={
+              <ProtectedAdminRoutes>
+                <DeliveryStaffDetails />
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/cab-details/:id"
+            element={
+              <ProtectedAdminRoutes>
+                <CabDetails />
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/edit-visitor/:id"
+            element={
+              <ProtectedAdminRoutes>
+                <VisitorEdit />
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/edit-delivery/:id"
+            element={
+              <ProtectedAdminRoutes>
+                <DeliveryEdit />
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/cab-edit/:id"
+            element={
+              <ProtectedAdminRoutes>
+                <CabEdit />
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/documents"
+            element={
+              <ProtectedAdminRoutes>
+                <DocumentPro />
+              </ProtectedAdminRoutes>
             }
           />
         </Routes>

@@ -76,7 +76,7 @@ const ProjectDetails = () => {
         <div>
           <div className="flex justify-end m-1">
             <Link
-              to={`/admin/add-task/${id}`}
+              to={`/admin/project-management/add-task/${id}`}
               className="border-2 border-black flex gap-2 p-1 rounded-md items-center px-4 "
             >
               <BiPlusCircle size={20} />

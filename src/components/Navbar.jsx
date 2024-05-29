@@ -20,11 +20,11 @@ import {
 import { HiMiniTicket, HiMiniUser } from "react-icons/hi2";
 import { RiSettings4Line } from "react-icons/ri";
 import { LuParkingSquare, LuSettings2 } from "react-icons/lu";
-import { IoBusinessOutline, IoCashOutline, IoFitness } from "react-icons/io5";
+import { IoBusinessOutline, IoCashOutline, IoDocumentTextOutline, IoFitness } from "react-icons/io5";
 import { TbReportAnalytics } from "react-icons/tb";
 import { AiOutlineFieldTime, AiOutlineUser } from "react-icons/ai";
 import { TiBusinessCard } from "react-icons/ti";
-import { FaBirthdayCake, FaBriefcaseMedical, FaCar, FaUserFriends } from "react-icons/fa";
+import { FaBirthdayCake, FaBriefcaseMedical, FaCar, FaUser, FaUserFriends } from "react-icons/fa";
 import { IoIosPeople } from "react-icons/io";
 import { useSelector } from "react-redux";
 
@@ -304,6 +304,35 @@ const Navbar = () => {
                 </h2>
               </NavLink>
               <NavLink
+                to={"/admin/visitor"}
+                className={({ isActive }) =>
+                  ` ${
+                    isActive
+                      ? "text-black bg-white flex p-2  gap-3.5 rounded-md group items-center text-sm font-medium"
+                      : " group flex items-center text-sm gap-3.5 font-medium p-2 hover:bg-gray-800 rounded-md "
+                  }`
+                }
+              >
+                <div>
+                  {React.createElement(FaUser, { size: "20" })}
+                </div>
+                <h2
+                  className={`whitespace-pre duration-300 ${
+                    !open && "opacity-0 translate-x-28 overflow-hidden"
+                  }`}
+                >
+                  Visitor
+                </h2>
+                <h2
+                  className={`${
+                    open && "hidden"
+                  } absolute left-48 bg-white font-semibold whitespace-pre text-gray-900 rounded-md drop-shadow-lg px-0 py-0 w-0 overflow-hidden group-hover:px-2 group-hover:py-1 group-hover:left-14 group-hover:duration-300 group-hover:w-fit  `}
+                >
+                  Visitor
+                </h2>
+              </NavLink>
+
+              <NavLink
                 to={"/materials"}
                 className={({ isActive }) =>
                   ` ${
@@ -331,6 +360,34 @@ const Navbar = () => {
                   Materials
                 </h2>
               </NavLink>
+              {/* <NavLink
+                to={"/admin/documents"}
+                className={({ isActive }) =>
+                  ` ${
+                    isActive
+                      ? "text-black bg-white flex p-2  gap-3.5 rounded-md group items-center text-sm font-medium"
+                      : " group flex items-center text-sm gap-3.5 font-medium p-2 hover:bg-gray-800 rounded-md "
+                  }`
+                }
+              >
+                <div>
+                  {React.createElement(IoDocumentTextOutline, { size: "20" })}
+                </div>
+                <h2
+                  className={`whitespace-pre duration-300 ${
+                    !open && "opacity-0 translate-x-28 overflow-hidden"
+                  }`}
+                >
+                  Document Pro
+                </h2>
+                <h2
+                  className={`${
+                    open && "hidden"
+                  } absolute left-48 bg-white font-semibold whitespace-pre text-gray-900 rounded-md drop-shadow-lg px-0 py-0 w-0 overflow-hidden group-hover:px-2 group-hover:py-1 group-hover:left-14 group-hover:duration-300 group-hover:w-fit  `}
+                >
+                  Document Pro
+                </h2>
+              </NavLink> */}
               <NavLink
                 to={"/bookings"}
                 className={({ isActive }) =>

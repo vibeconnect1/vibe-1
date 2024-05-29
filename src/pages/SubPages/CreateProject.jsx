@@ -4,6 +4,7 @@ import Select from "react-select";
 import FileInput from "../../Buttons/FileInput";
 import { CgClose } from "react-icons/cg";
 import toast from "react-hot-toast";
+import FileInputBox from "../../containers/Inputs/FileInputBox";
 
 const CreateProject = () => {
   const options = [
@@ -196,7 +197,8 @@ const CreateProject = () => {
             <div className="w-full">
               <h2 className="font-medium ">Attachments</h2>
               <div className="border border-black w-full mb-2" />
-              <FileInput multiple={true} />
+              {/* <FileInput multiple={true} /> */}
+              <FileInputBox/>
             </div>
           </div>
           <div className="flex justify-center my-5">
