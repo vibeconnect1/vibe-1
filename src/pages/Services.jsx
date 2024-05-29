@@ -7,6 +7,7 @@ import Navbar from "../components/Navbar";
 import * as XLSX from "xlsx";
 import { serviceColumns } from "../utils/assetColumns";
 import { BiEdit, BiFilter, BiFilterAlt } from "react-icons/bi";
+import Table from "../components/table/Table";
 // import jsPDF from "jspdf";
 // import QRCode from "qrcode.react";
 
@@ -180,7 +181,7 @@ const Services = () => {
   };
 
   return (
-    <section className="flex max-w-6xl xl:max-w-7xl overflow-hidden">
+    <section className="flex ">
       <Navbar />
       <div className="p-4 overflow-hidden w-full my-2 flex mx-3 flex-col">
         {omitColumn && (
@@ -282,7 +283,11 @@ const Services = () => {
           </button> */}
           </div>
         </div>
-        <DataTable
+        <Table
+        columns={column.filter((col) => visibleColumns.includes(col.name))}
+        data={filteredData}
+        />
+        {/* <DataTable
           selectableRows
           columns={column.filter((col) => visibleColumns.includes(col.name))}
           data={filteredData}
@@ -290,12 +295,12 @@ const Services = () => {
           responsive
           onSelectedRowsChange={handleRowSelected}
           fixedHeader
-          fixedHeaderScrollHeight="500px"
+          // fixedHeaderScrollHeight="500px"
           pagination
           selectableRowsHighlight
           highlightOnHover
           omitColumn={column}
-        />
+        /> */}
       </div>
     </section>
   );

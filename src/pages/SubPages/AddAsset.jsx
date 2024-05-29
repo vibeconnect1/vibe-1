@@ -106,12 +106,21 @@ const AddAsset = () => {
     setAddNonConsumptionFields(newFields);
   };
 
-  const handleFileChange = (event, fieldName) => {
-    const files = Array.from(event.target.files);
+  // const handleFileChange = (event, fieldName) => {
+  //   const files = Array.from(event.target.files);
+  //   setFormData({
+  //     ...formData,
+  //     [fieldName]: files,
+  //   });
+  // };
+
+  const handleFileChange = (files, fieldName) => {
+    // Changed to receive 'files' directly
     setFormData({
       ...formData,
       [fieldName]: files,
     });
+    console.log(fieldName);
   };
 
   const navigate = useNavigate();
@@ -854,52 +863,36 @@ const AddAsset = () => {
               <p className="border-b border-black my-1 font-semibold">
                 Purchase Invoice
               </p>
-              {/* <input
-                type="file"
-                onChange={(event) => handleFileChange(event, "invoice")}
-                multiple
-              /> */}
               <FileInputBox
-                handleChange={(event) => handleFileChange(event, "invoice")}
+                handleChange={(files) => handleFileChange(files, "invoice")}
+                fieldName={"invoice"}
               />
             </div>
             <div>
               <p className="border-b border-black my-1 font-semibold">
                 Insurance Details
               </p>
-              <input
-                type="file"
-                onChange={(event) => handleFileChange(event, "insurance")}
-                multiple
-              />
               <FileInputBox
-                handleChange={(event) => handleFileChange(event, "insurance")}
+                handleChange={(files) => handleFileChange(files, "insurance")}
+                fieldName={"insurance"}
               />
             </div>
             <div>
               <p className="border-b border-black my-1 font-semibold">
                 Manuals
               </p>
-              {/* <input
-                type="file"
-                onChange={(event) => handleFileChange(event, "manuals")}
-                multiple
-              /> */}
               <FileInputBox
-                handleChange={(event) => handleFileChange(event, "manuals")}
+                handleChange={(files) => handleFileChange(files, "manuals")}
+                fieldName={"manuals"}
               />
             </div>
             <div>
               <p className="border-b border-black my-1 font-semibold">
                 Other Files
               </p>
-              {/* <input
-                type="file"
-                onChange={(event) => handleFileChange(event, "others")}
-                multiple
-              /> */}
               <FileInputBox
-                handleChange={(event) => handleFileChange(event, "others")}
+                handleChange={(files) => handleFileChange(files, "others")}
+                fieldName={"others"}
               />
             </div>
           </div>

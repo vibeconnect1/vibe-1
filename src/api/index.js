@@ -29,6 +29,15 @@ export const postSiteAsset = async (data) =>
     //     'Content-Type': 'multipart/form-data'
     // }
   });
+export const EditSiteAsset = async (data, id) =>
+  axiosInstance.put(`/site_assets/${id}.json`, data, {
+    params: {
+      token: token,
+    },
+    //   headers: {
+    //     'Content-Type': 'multipart/form-data'
+    // }
+  });
 export const getVendors = async () =>
   axiosInstance.get("/vendors.json", {
     params: {
@@ -163,6 +172,13 @@ export const getAssetGroups = async () =>
     },
   });
 
+export const postAssetGroups = async (data) =>
+  axiosInstance.post("/asset_groups.json", data, {
+    params: {
+      token: token,
+    },
+  });
+
 export const postAssetparams = async (data) =>
   axiosInstance.post("/asset_params.json", data, {
     params: {
@@ -176,8 +192,27 @@ export const getInventory = async () =>
       token: token,
     },
   });
+export const getInventoryDetails = async (id) =>
+  axiosInstance.get(`/items/${id}.json`, {
+    params: {
+      token: token,
+    },
+  });
+
 export const getChecklist = async () =>
   axiosInstance.get("/checklists.json", {
+    params: {
+      token: token,
+    },
+  });
+export const getChecklistDetails = async (id) =>
+  axiosInstance.get(`/checklists/${id}.json`, {
+    params: {
+      token: token,
+    },
+  });
+export const getRoutineTask = async () =>
+  axiosInstance.get("/activities.json", {
     params: {
       token: token,
     },

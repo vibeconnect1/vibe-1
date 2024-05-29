@@ -14,6 +14,7 @@ import Meter from "./Meter";
 import { useSelector } from "react-redux";
 import Inventory from "./Inventory";
 import Checklist from "./Checklist";
+import RoutineTask from "./RoutineTask";
 
 // import jsPDF from "jspdf";
 // import QRCode from "qrcode.react";
@@ -449,9 +450,9 @@ const themeColor = useSelector((state)=> state.theme.color)
             </h2>
             <h2
               className={`p-1 ${
-                page === "task" && "bg-white text-blue-500"
+                page === "routine" && "bg-white text-blue-500"
               } rounded-full px-4 cursor-pointer`}
-              onClick={() => setPage("task")}
+              onClick={() => setPage("routine")}
             >
              Routine Task
             </h2>
@@ -626,6 +627,9 @@ const themeColor = useSelector((state)=> state.theme.color)
         )}
         {page === "inventory" && (
           <Inventory/>
+        )}
+        {page === "routine" && (
+          <RoutineTask/>
         )}
       </div>
     </section>

@@ -1,48 +1,53 @@
 import React, { useEffect, useState } from "react";
 import { IoAddCircleOutline } from "react-icons/io5";
 import { Link } from "react-router-dom";
-import { getChecklist } from "../api";
 import Table from "../components/table/Table";
-import { BiEdit } from "react-icons/bi";
+import { BsEye } from "react-icons/bs";
 import { MdDeleteForever } from "react-icons/md";
+import { BiEdit } from "react-icons/bi";
+import { getRoutineTask } from "../api";
+import toast from "react-hot-toast";
 
-const Checklist = () => {
-  const [checklists, setChecklists] = useState([]);
+const RoutineTask = () => {
+  const [tasks, setTasks] = useState([]);
 
   useEffect(() => {
-    const fetchChecklist = async () => {
-      const checklist = await getChecklist();
-      setChecklists(checklist.data.checklists);
-    };
-    fetchChecklist();
-    console.log(checklists);
+    
+      const fetchRoutineTask = async () => {
+        const taskResponse = await getRoutineTask();
+        setTasks(taskResponse.data.activities);
+      };
+      fetchRoutineTask();
+  console.log(tasks)
   }, []);
+  const RoutineColumns = [
+    {
+      name: "View",
+      cell: (row) => (
+        <div className="flex items-center gap-4">
+          <Link to={`/assets/asset-details/${row.id}`}>
+            <BsEye size={15} />
+          </Link>
+        </div>
+      ),
+    },
+    { name: "Asset Name", selector: (row) => row.asset_name, sortable: true },
+    {
+      name: "Checklist",
+      selector: (row) => row.checklist_name,
+      sortable: true,
+    },
+    { name: "Start Time", selector: (row) => row.start_time, sortable: true },
+    { name: "End Time", selector: (row) => row.end_time, sortable: true },
+    { name: "Type", selector: (row) => row.type, sortable: true },
+    { name: "Status", selector: (row) => row.status, sortable: true },
+    { name: "Assigned To", selector: (row) => row.assigned_to, sortable: true },
 
-  const columns = [
-    { name: "Name", selector: (row) => row.name, sortable: true },
-
-    {
-      name: "frequency",
-      selector: (row) => row.frequency,
-      sortable: true,
-    },
-    { name: "Start Date", selector: (row) => row.start_date, sortable: true },
-    { name: "End Date", selector: (row) => row.end_date, sortable: true },
-    {
-      name: "No. of Questions",
-      selector: (row) => row.questions.length,
-      sortable: true,
-    },
-    {
-      name: "Type",
-      selector: (row) => row.ctype,
-      sortable: true,
-    },
     {
       name: "Action",
       cell: (row) => (
         <div className="flex items-center gap-4">
-          <Link to={`/admin/edit-checklist/${row.id}`}>
+          <Link to={`/assets/edit-asset/${row.id}`}>
             <BiEdit size={15} />
           </Link>
           <button className="text-red-400">
@@ -87,9 +92,9 @@ const Checklist = () => {
   </button> */}
         </div>
       </div>
-      <Table columns={columns} data={checklists} isPagination={true} />
+      <Table columns={RoutineColumns} data={tasks} isPagination={true} />
     </div>
   );
 };
 
-export default Checklist;
+export default RoutineTask;

@@ -33,7 +33,7 @@ const Inventory = () => {
       name: "Action",
       cell: (row) => (
         <div className="flex items-center gap-4">
-          <Link to={`/assets/edit-asset/${row.id}`}>
+          <Link to={`/admin/edit-stock/${row.id}`}>
             <BiEdit size={15} />
           </Link>
           <button className="text-red-400">
@@ -56,7 +56,7 @@ const Inventory = () => {
         />
         <div className="md:flex grid grid-cols-2 sm:flex-row my-2 flex-col gap-2">
           <Link
-            to={"/admin/add-inventory"}
+            to={"/admin/add-stock"}
             className="bg-black  text-sm rounded-lg flex justify-center font-semibold items-center gap-2 text-white py-2 px-4 border-2 border-black hover:bg-white hover:text-black transition-all duration-300 "
           >
             <IoAddCircleOutline size={20} />
