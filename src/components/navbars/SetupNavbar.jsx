@@ -1,16 +1,21 @@
 import React from 'react'
+import { useSelector } from 'react-redux';
 import { Link } from "react-router-dom";
 const SetupNavbar = () => {
+  const themeColor = useSelector((state)=> state.theme.color)
   return (
     <div className="flex mt-1">
     <div>
       {/* <ul className="p-4 bg-black rounded-xl mx-2 md:flex grid grid-cols-2 items-center text-white text-sm text-center justify-center overflow-x-auto  gap-2 "> */}
-      <ul className="p-4 bg-black rounded-xl mx-2 md:flex grid grid-cols-2 max-w-screen items-center text-white text-sm text-center justify-center flex-wrap gap-2 ">
+      <ul
+      style={{background: themeColor}}
+      className="p-4 rounded-xl mx-2 md:flex grid grid-cols-2 max-w-screen items-center text-white text-sm text-center justify-center flex-wrap gap-2 ">
         <Link to={"/setup/account/organisation"} className="hover:bg-white hover:text-black p-2 rounded-lg ">
           Account
         </Link>
     
-        <Link to={"/setup/User-role"} className="hover:bg-white hover:text-black  p-2 rounded-lg ">User Roles</Link>
+        {/* <Link to={"/setup/User-role"} className="hover:bg-white hover:text-black  p-2 rounded-lg ">User Roles</Link> */}
+        <Link to={"/setup/users-setup"} className="hover:bg-white hover:text-black  p-2 rounded-lg ">Users</Link>
         <Link className="hover:bg-white hover:text-black  p-2 rounded-lg ">FM User</Link>
         <Link className="hover:bg-white hover:text-black  p-2 rounded-lg ">Occupant User</Link>
         <Link className="hover:bg-white hover:text-black  p-2 rounded-lg ">Meter Types</Link>

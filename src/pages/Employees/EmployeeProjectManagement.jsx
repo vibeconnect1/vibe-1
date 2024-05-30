@@ -1,15 +1,16 @@
 import React, { useState } from "react";
-import Navbar from "../components/Navbar";
+
 import { PiPlusCircle } from "react-icons/pi";
 import { Link } from "react-router-dom";
-import DataTable from "react-data-table-component";
+import Table from "../../components/table/Table";
 import { BiEdit } from "react-icons/bi";
 import { BsEye } from "react-icons/bs";
 import { useSelector } from "react-redux";
+import Navbar from "../../components/Navbar";
 
-const ProjectManagement = () => {
+const EmployeeProjectManagement = () => {
   const [selectedStatus, setSelectedStatus] = useState("all");
-  const themeColor = useSelector((state)=> state.theme.color)
+  const themeColor = useSelector((state) => state.theme.color);
 
   const columns = [
     {
@@ -17,7 +18,6 @@ const ProjectManagement = () => {
       cell: (row) => (
         <div className="flex items-center gap-4">
           <Link to={`/employee/project-details/${row.id}`}>
-          
             <BsEye size={15} />
           </Link>
           <Link to={`/employee/edit-project/${row.id}`}>
@@ -160,7 +160,7 @@ const ProjectManagement = () => {
             </div>
           </div>
           <Link
-            to={"/admin/project-management/create-project"}
+            to={"/employee/create-project"}
             className="border-2 font-semibold hover:bg-black hover:text-white duration-300 transition-all border-black p-2 rounded-md text-black cursor-pointer text-center flex items-center gap-2 justify-center"
             // onClick={() => setShowCountry(!showCountry)}
           >
@@ -182,29 +182,18 @@ const ProjectManagement = () => {
                 Search
               </button> */}
           </div>
-          <button
+          {/* <button
             className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
             // onClick={exportToExcel}
           >
             Export
-          </button>
+          </button> */}
         </div>
 
-        <DataTable
-          responsive
-          // selectableRows
-          columns={columns}
-          data={data}
-          customStyles={customStyle}
-          pagination
-          fixedHeader
-          // fixedHeaderScrollHeight="420px"
-          selectableRowsHighlight
-          highlightOnHover
-        />
+        <Table columns={columns} data={data} isPagination={true} />
       </div>
     </section>
   );
 };
 
-export default ProjectManagement;
+export default EmployeeProjectManagement;

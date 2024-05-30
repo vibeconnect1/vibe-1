@@ -2,13 +2,17 @@ import React from "react";
 import { NavLink } from "react-router-dom";
 import { BiLock } from "react-icons/bi";
 import { IoMdArrowBack } from "react-icons/io";
+import { useSelector } from "react-redux";
 
 const Account = () => {
+  const themeColor = useSelector((state)=> state.theme.color)
   return (
   
       <div className="flex justify-center w-full my-1 ">
         <div className="w-full mx-2 ">
-        <ul className="p-2 bg-black rounded-xl flex max-w-screen w-full  items-center text-white text-md text-center justify-around flex-wrap gap-2 ">
+        <ul
+        style={{background: themeColor}}
+        className="p-2 bg-black rounded-xl flex max-w-screen w-full  items-center text-white text-md text-center justify-around flex-wrap gap-2 ">
             <NavLink to={"/setup"}
             
             className={({ isActive }) =>

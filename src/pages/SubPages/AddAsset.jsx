@@ -16,6 +16,7 @@ import { useNavigate } from "react-router-dom";
 import Selector from "../../containers/Selector";
 import { initialAddAssetFormData } from "../../utils/initialFormData";
 import FileInputBox from "../../containers/Inputs/FileInputBox";
+import { useSelector } from "react-redux";
 
 const AddAsset = () => {
   const buildings = getItemInLocalStorage("Building");
@@ -30,7 +31,7 @@ const AddAsset = () => {
   const [formData, setFormData] = useState(initialAddAssetFormData);
   const [assetGroups, setAssetGroup] = useState([]);
   console.log(formData);
-
+  const themeColor = useSelector((state) => state.theme.color);
   useEffect(() => {
     const fetchVendors = async () => {
       const vendorResp = await getVendors();
@@ -125,22 +126,6 @@ const AddAsset = () => {
 
   const navigate = useNavigate();
 
-  // const handleSubmit = async (e) => {
-  //   e.preventDefault();
-  //   try {
-  //     toast.loading("Createing Asset Please wait!");
-  //     const response = await postSiteAsset(formData);
-  //     console.log("Asset Created successfully:", response);
-  //     setFormData({});
-  //     toast.dismiss();
-  //     toast.success("Asset Created successfully");
-  //     navigate("/assets");
-  //   } catch (error) {
-  //     console.error("Error submitting complaint:", error);
-  //     toast.error("Error Creating Asset!");
-  //   }
-  // };
-
   const handleSaveAndCreate = async (e) => {
     e.preventDefault();
     try {
@@ -157,32 +142,71 @@ const AddAsset = () => {
     }
   };
 
-  const handleSubmit = async (event) => {
-    event.preventDefault(); // Prevent default form submission behavior
-    console.log("FormData before appending:", formData);
+  // const handleSubmit = async (event) => {
+  //   event.preventDefault(); // Prevent default form submission behavior
+  //   console.log("FormData before appending:", formData);
 
-    // Create a new FormData object
-    const formDataToSend = new FormData();
+  //   // Create a new FormData object
+  //   const formDataToSend = new FormData();
 
-    // Append all form fields to the FormData object
-    Object.entries(formData).forEach(([key, value]) => {
-      // Check if value is not null before converting to string
-      if (value !== null) {
-        formDataToSend.append(key, value.toString());
-      }
-    });
+  //   // Append all form fields to the FormData object
+  // Object.entries(formData).forEach(([key, value]) => {
+  //   // Check if value is not null before converting to string
+  //   if (value !== null) {
+  //     formDataToSend.append(key, value.toString());
+  //   }
+  // });
 
-    // Append files to the FormData object
-    // formData.file1.forEach((file, index) => {
-    //   formDataToSend.append(`file${index + 1}`, file);
-    // });
+  //   // Append files to the FormData object
+  //   // formData.file1.forEach((file, index) => {
+  //   //   formDataToSend.append(`file${index + 1}`, file);
+  //   // });
 
+  //   try {
+  //     console.log(formDataToSend);
+  //     console.log(formData)
+  //     await postSiteAsset(formDataToSend);
+
+  //     console.log("Form data to send:", formDataToSend);
+  //   } catch (error) {
+  //     console.error("Error:", error);
+  //   }
+  // };
+
+  const handleSubmit = async () => {
     try {
-      console.log(formDataToSend);
-      await postSiteAsset(formDataToSend);
+      toast.loading("Creating Asset Please Wait!");
+      const formDataSend = new FormData();
 
-      console.log("Form data to send:", formDataToSend);
+      formDataSend.append("site_asset[site_id]", formData.site_id);
+      formDataSend.append("site_asset[building_id]", formData.building_id);
+      formDataSend.append("site_asset[floor_id]", formData.floor_id);
+      formDataSend.append("site_asset[unit_id]", formData.unit_id);
+      formDataSend.append("site_asset[name]", formData.name);
+      formDataSend.append("site_asset[serial_number]", formData.serial_number);
+      formDataSend.append("site_asset[model_number]", formData.model_number);
+      formDataSend.append("site_asset[purchased_on]", formData.purchased_on);
+      formDataSend.append("site_asset[purchase_cost]", formData.purchase_cost);
+      formDataSend.append(
+        "site_asset[warranty_expiry]",
+        formData.warranty_expiry
+      );
+      // formDataSend.append("site_asset[user_id]", 2);
+      formDataSend.append("site_asset[critical]", formData.critical);
+      formDataSend.append("site_asset[breakdown]", formData.breakdown);
+      formDataSend.append("site_asset[is_meter]", formData.is_meter);
+      formDataSend.append(
+        "site_asset[asset_group_id]",
+        formData.asset_group_id
+      );
+      formDataSend.append("site_asset[vendor_id]", formData.vendor_id);
+
+      const response = await postSiteAsset(formDataSend);
+      toast.success("Asset Created Successfully");
+      console.log("Response:", response.data);
+      toast.dismiss()
     } catch (error) {
+      toast.dismiss();
       console.error("Error:", error);
     }
   };
@@ -190,7 +214,10 @@ const AddAsset = () => {
   return (
     <section>
       <div className="m-2">
-        <h2 className="text-center text-xl font-bold p-2 bg-black rounded-full text-white">
+        <h2
+          style={{ background: themeColor }}
+          className="text-center text-xl font-bold p-2 rounded-full text-white"
+        >
           Add Asset
         </h2>
         <div className="md:mx-20 my-5 mb-10 sm:border border-gray-400 p-5 px-10 rounded-lg sm:shadow-xl">
@@ -261,7 +288,7 @@ const AddAsset = () => {
               Asset Info
             </h2>
             <div className="flex sm:flex-row flex-col justify-around items-center">
-              <div className="grid md:grid-cols-3 item-start gap-x-4 gap-y-2 w-full">
+              <div className="grid md:grid-cols-3 item-start gap-x-4 gap-y-4 w-full">
                 <div className="flex flex-col">
                   <input
                     type="text"
@@ -334,8 +361,8 @@ const AddAsset = () => {
                     type="text"
                     name="unit"
                     id="unit"
-                    value={formData.unit}
-                    onChange={handleChange}
+                    // value={formData.unit}
+                    // onChange={handleChange}
                     placeholder="Unit"
                     className="border p-1 px-4 border-gray-500 rounded-md"
                   />
@@ -360,8 +387,8 @@ const AddAsset = () => {
                   <select
                     className="border p-1 px-4 border-gray-500 rounded-md"
                     name="sub_group"
-                    value={formData.sub_group}
-                    onChange={handleChange}
+                    // value={formData.sub_group}
+                    // onChange={handleChange}
                   >
                     <option value="">Select Sub Group</option>
                     <option value="Sub Group 1">Sub Group 1</option>
@@ -873,7 +900,7 @@ const AddAsset = () => {
                 Insurance Details
               </p>
               <FileInputBox
-                handleChange={(files) => handleFileChange(files, "insurance")}
+                // handleChange={(files) => handleFileChange(files, "insurance")}
                 fieldName={"insurance"}
               />
             </div>
@@ -882,7 +909,7 @@ const AddAsset = () => {
                 Manuals
               </p>
               <FileInputBox
-                handleChange={(files) => handleFileChange(files, "manuals")}
+                // handleChange={(files) => handleFileChange(files, "manuals")}
                 fieldName={"manuals"}
               />
             </div>
@@ -891,7 +918,7 @@ const AddAsset = () => {
                 Other Files
               </p>
               <FileInputBox
-                handleChange={(files) => handleFileChange(files, "others")}
+                // handleChange={(files) => handleFileChange(files, "others")}
                 fieldName={"others"}
               />
             </div>

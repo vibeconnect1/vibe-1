@@ -12,13 +12,13 @@ const RoutineTask = () => {
   const [tasks, setTasks] = useState([]);
 
   useEffect(() => {
-    
-      const fetchRoutineTask = async () => {
-        const taskResponse = await getRoutineTask();
-        setTasks(taskResponse.data.activities);
-      };
-      fetchRoutineTask();
-  console.log(tasks)
+    const fetchRoutineTask = async () => {
+      const taskResponse = await getRoutineTask();
+      console.log(taskResponse)
+      setTasks(taskResponse.data.activities);
+    };
+    fetchRoutineTask();
+    console.log(tasks);
   }, []);
   const RoutineColumns = [
     {

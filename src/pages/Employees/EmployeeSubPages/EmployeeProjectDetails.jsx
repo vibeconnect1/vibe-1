@@ -1,12 +1,13 @@
 import React from "react";
-import Detail from "../../../containers/Detail";
+
 import { BiEdit, BiPlusCircle } from "react-icons/bi";
 import { Link, useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
-import DataTable from "react-data-table-component";
-import Table from "../../../components/table/Table";
 
-const ProjectDetails = () => {
+import Table from "../../../components/table/Table";
+import Detail from "../../../containers/Detail";
+
+const EmployeeProjectDetails = () => {
   const { id } = useParams();
   const ticketDetails = [
     { title: "Title :", description: "" },
@@ -56,7 +57,7 @@ const ProjectDetails = () => {
     <div className="flex flex-col justify-around mb-10 ">
       <div className="flex justify-end m-1">
         <Link
-          to={`/admin/edit-project/${id}`}
+          to={`/employee/edit-project/${id}`}
           className="border-2 border-black flex gap-2 p-1 rounded-md items-center px-4 "
         >
           <BiEdit size={20} />
@@ -98,7 +99,7 @@ const ProjectDetails = () => {
         <div>
           <div className="flex justify-end m-1 mt-2">
             <Link
-              to={`/admin/project-management/add-task/${id}`}
+              to={`/employee/project-add-task/${id}`}
               className="border-2 border-black flex gap-2 p-1 rounded-md items-center px-4 "
             >
               <BiPlusCircle size={20} />
@@ -112,4 +113,7 @@ const ProjectDetails = () => {
   );
 };
 
-export default ProjectDetails;
+
+
+
+export default EmployeeProjectDetails

@@ -1,12 +1,13 @@
 import React, { useState } from "react";
-import Navbar from "../../components/Navbar";
+
 import Select from "react-select";
-import FileInput from "../../Buttons/FileInput";
+
 import { CgClose } from "react-icons/cg";
 import toast from "react-hot-toast";
-import FileInputBox from "../../containers/Inputs/FileInputBox";
+import FileInputBox from "../../../containers/Inputs/FileInputBox";
+import Navbar from "../../../components/Navbar";
 
-const CreateProject = () => {
+const EmployeeCreateProject = () => {
   const options = [
     {
       value: "Akshat",
@@ -171,7 +172,7 @@ const CreateProject = () => {
             </div>
             <div className="grid gap-2  items-center w-full">
                 <label htmlFor="maritalStatus" className="font-semibold">
-                  Assign To :
+                  Select Team :
                 </label>
                 <Select
                   options={options}
@@ -212,4 +213,7 @@ const CreateProject = () => {
   );
 };
 
-export default CreateProject;
+
+
+
+export default EmployeeCreateProject

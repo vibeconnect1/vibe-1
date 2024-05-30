@@ -82,7 +82,11 @@ const Ticket = () => {
     },
     { name: "Status", selector: (row) => row.issue_status, sortable: true },
     { name: "Created By", selector: (row) => row.created_by, sortable: true },
-    { name: "Created On", selector: (row) =>dateFormat( row.created_at), sortable: true },
+    {
+      name: "Created On",
+      selector: (row) => dateFormat(row.created_at),
+      sortable: true,
+    },
     { name: "Prioity", selector: (row) => row.priority, sortable: true },
     { name: "Assigned To", selector: (row) => row.assigned_to, sortable: true },
     { name: "Ticket Type", selector: (row) => row.issue_type, sortable: true },
@@ -213,7 +217,8 @@ const Ticket = () => {
           item.issue_type.toLowerCase().includes(searchValue.toLowerCase()) ||
           item.heading.toLowerCase().includes(searchValue.toLowerCase()) ||
           item.priority.toLowerCase().includes(searchValue.toLowerCase()) ||
-          (item.unit && item.unit.toLowerCase().includes(searchValue.toLowerCase()))
+          (item.unit &&
+            item.unit.toLowerCase().includes(searchValue.toLowerCase()))
         // ||
         // item.assigned_to.toLowerCase().includes(searchValue.toLowerCase())
       );
@@ -255,13 +260,10 @@ const Ticket = () => {
     link.click();
   };
 
-  document.title = `Admin - Vibe Connect`
+  document.title = `Admin - Vibe Connect`;
 
   return (
-   
     <section className="flex">
-     
-     
       <Navbar />
       <div className="w-full flex mx-3 flex-col overflow-hidden">
         <div className="sm:flex grid grid-cols-2 m-5 justify-start w-fit gap-5 sm:flex-row flex-col flex-shrink flex-wrap ">

@@ -32,7 +32,7 @@ const Asset = () => {
   const [selectedUnit, setSelectedUnit] = useState("");
   const [page, setPage] = useState("assets");
   const [assets, setAssets] = useState([]);
-const themeColor = useSelector((state)=> state.theme.color)
+  const themeColor = useSelector((state) => state.theme.color);
 
   const dateFormat = (dateString) => {
     const date = new Date(dateString);
@@ -147,7 +147,16 @@ const themeColor = useSelector((state)=> state.theme.color)
     },
     {
       name: "Status",
-      selector: (row) => (row.breakdown ? "Breakdown" : "In Use"),
+      selector: (row) =>
+        row.breakdown ? (
+          <p className="bg-red-400 p-1 px-2 rounded-full text-white">
+            Breakdown
+          </p>
+        ) : (
+          <p className="bg-green-400 p-1 px-2 rounded-full text-white">
+            In Use
+          </p>
+        ),
       sortable: true,
     },
     {
@@ -172,7 +181,7 @@ const themeColor = useSelector((state)=> state.theme.color)
       sortable: true,
     },
     {
-      name: "Warranty",
+      name: "Warranty Start",
       selector: (row) => row.warranty_start,
       sortable: true,
     },
@@ -199,16 +208,14 @@ const themeColor = useSelector((state)=> state.theme.color)
     },
     {
       name: "Meter Category",
-      selector: (row) => (row.meter_category),
+      selector: (row) => row.meter_category,
       sortable: true,
     },
-     {
+    {
       name: "Meter Type",
       selector: (row) => row.meter_type,
       sortable: true,
     },
-    
-   
     {
       name: "Submeter",
       selector: (row) => row.sub_meter,
@@ -236,7 +243,10 @@ const themeColor = useSelector((state)=> state.theme.color)
             .toLowerCase()
             .includes(searchValue.toLowerCase()) ||
           item.name.toLowerCase().includes(searchValue.toLowerCase()) ||
-          item.unit_name.toLowerCase().includes(searchValue.toLowerCase())
+          (item.oem_name &&
+            item.oem_name.toLowerCase().includes(searchValue.toLowerCase()))||
+            (item.unit_name &&
+              item.unit_name.toLowerCase().includes(searchValue.toLowerCase()))
       );
       setFilteredData(filteredResults);
     }
@@ -367,25 +377,27 @@ const themeColor = useSelector((state)=> state.theme.color)
     }
 
     setFilteredData(filteredResults);
-    console.log('Filtered Results:', filteredResults);
-  }
+    console.log("Filtered Results:", filteredResults);
+  };
 
   const handleBuildingChange = async (e) => {
     const buildingId = e.target.value;
     setSelectedBuilding(buildingId);
     const response = await getFloors(buildingId);
     setFloors(response.data.map((item) => ({ name: item.name, id: item.id })));
-    setSelectedFloor(''); // Reset floor and unit when building changes
+    setSelectedFloor(""); // Reset floor and unit when building changes
     setUnitName([]);
-    setSelectedUnit('');
+    setSelectedUnit("");
   };
 
   const handleFloorChange = async (e) => {
     const floorId = e.target.value;
     setSelectedFloor(floorId);
     const response = await getUnits(floorId);
-    setUnitName(response.data.map((item) => ({ name: item.name, id: item.id })));
-    setSelectedUnit(''); // Reset unit when floor changes
+    setUnitName(
+      response.data.map((item) => ({ name: item.name, id: item.id }))
+    );
+    setSelectedUnit(""); // Reset unit when floor changes
   };
 
   const handleUnitChange = (e) => {
@@ -454,7 +466,7 @@ const themeColor = useSelector((state)=> state.theme.color)
               } rounded-full px-4 cursor-pointer`}
               onClick={() => setPage("routine")}
             >
-             Routine Task
+              Routine Task
             </h2>
             <h2
               className={`p-1 ${
@@ -494,7 +506,7 @@ const themeColor = useSelector((state)=> state.theme.color)
             ))}
           </div>
         )} */}
-        {filter && (
+        {filter && page === "assets" && (
           <div className="flex flex-col md:flex-row mt-1 items-center justify-center gap-2">
             <select
               name="building_name"
@@ -544,16 +556,16 @@ const themeColor = useSelector((state)=> state.theme.color)
         )}
         {page === "assets" && (
           <>
-        <div className="flex md:flex-row flex-col justify-between items-center my-2 gap-2  ">
-          <input
-            type="text"
-            placeholder="Search By Building name, Asset Name or Unit"
-            className="border-2 p-2 md:w-96 border-gray-300 rounded-lg placeholder:text-sm"
-            value={searchText}
-            onChange={handleSearch}
-          />
-          <div className="md:flex grid grid-cols-2 sm:flex-row my-2 flex-col gap-2">
-            {/* <button
+            <div className="flex md:flex-row flex-col justify-between items-center my-2 gap-2  ">
+              <input
+                type="text"
+                placeholder="Search By Building, Asset, Unit or OEM Name"
+                className="border-2 p-2 md:w-96 border-gray-300 rounded-lg placeholder:text-sm"
+                value={searchText}
+                onChange={handleSearch}
+              />
+              <div className="md:flex grid grid-cols-2 sm:flex-row my-2 flex-col gap-2">
+                {/* <button
               className="md:text-lg text-sm font-semibold border-2 border-black px-4 p-1 flex gap-2 items-center rounded-md"
               onClick={() => setOmitColumn(!omitColumn)}
             >
@@ -561,76 +573,63 @@ const themeColor = useSelector((state)=> state.theme.color)
               Filter Columns
             </button> */}
 
-            <button
-              className=" font-semibold border-2 border-black px-4 p-1 flex gap-2 items-center rounded-md"
-              onClick={() => setFilter(!filter)}
-            >
-              <BiFilterAlt />
-              Filter
-            </button>
+                <button
+                  className=" font-semibold border-2 border-black px-4 p-1 flex gap-2 items-center rounded-md"
+                  onClick={() => setFilter(!filter)}
+                >
+                  <BiFilterAlt />
+                  Filter
+                </button>
 
-            <Link
-              to={"/assets/add-asset"}
-              className="bg-black  text-sm rounded-lg flex justify-center font-semibold items-center gap-2 text-white py-2 px-4 border-2 border-black hover:bg-white hover:text-black transition-all duration-300 "
-            >
-              <IoAddCircleOutline size={20} />
-              Add
-            </Link>
-            <button
-              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-              
-            >
-              {/* <input type="file"  className="opacity-0 w-fit" onChange={handleFileChange} /> */}
-              Import
-            </button>
-            <button
-              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-              onClick={exportToExcel}
-            >
-              Export
-            </button>
-            {/* <button
+                <Link
+                  to={"/assets/add-asset"}
+                  className="bg-black  text-sm rounded-lg flex justify-center font-semibold items-center gap-2 text-white py-2 px-4 border-2 border-black hover:bg-white hover:text-black transition-all duration-300 "
+                >
+                  <IoAddCircleOutline size={20} />
+                  Add
+                </Link>
+                <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                  {/* <input type="file"  className="opacity-0 w-fit" onChange={handleFileChange} /> */}
+                  Import
+                </button>
+                <button
+                  className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                  onClick={exportToExcel}
+                >
+                  Export
+                </button>
+                {/* <button
             className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
             onClick={handleDownloadQRCode}
             disabled={selectedRows.length === 0}
           >
             Download QR Code
           </button> */}
-          </div>
-        </div>
-        
-          <DataTable
-            selectableRows
-            // columns={column.filter((col) => visibleColumns.includes(col.name))}
-            columns={column}
-            data={filteredData}
-            customStyles={customStyle}
-            responsive
-            onSelectedRowsChange={handleRowSelected}
-            fixedHeader
-            // fixedHeaderScrollHeight="450px"
-            pagination
-            selectableRowsHighlight
-            highlightOnHover
-            // omitColumn={column}
-          />
+              </div>
+            </div>
+
+            <DataTable
+              selectableRows
+              // columns={column.filter((col) => visibleColumns.includes(col.name))}
+              columns={column}
+              data={filteredData}
+              customStyles={customStyle}
+              responsive
+              onSelectedRowsChange={handleRowSelected}
+              fixedHeader
+              // fixedHeaderScrollHeight="450px"
+              pagination
+              selectableRowsHighlight
+              highlightOnHover
+              // omitColumn={column}
+            />
           </>
         )}
-        {page === "AMC" && (
-          <AMC/>
-        )}
-        {page === "meter" && (
-          <Meter/>
-        )}
-        {page === "checklist" && (
-          <Checklist/>
-        )}
-        {page === "inventory" && (
-          <Inventory/>
-        )}
-        {page === "routine" && (
-          <RoutineTask/>
-        )}
+        {page === "AMC" && <AMC />}
+        {page === "meter" && <Meter />}
+        {page === "checklist" && <Checklist />}
+        {page === "inventory" && <Inventory />}
+        {page === "routine" && <RoutineTask />}
       </div>
     </section>
   );

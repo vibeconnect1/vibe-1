@@ -217,3 +217,11 @@ export const getRoutineTask = async () =>
       token: token,
     },
   });
+export const getSetupUsers = async () =>
+  axiosInstance.get("/users.json", {
+    params: {
+      token: token,
+    },
+  });
+
+  

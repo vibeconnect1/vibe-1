@@ -145,6 +145,15 @@ import VisitorEdit from "./pages/SubPages/details/VisitorEdit.jsx";
 import DeliveryEdit from "./pages/SubPages/details/DeliveryEdit.jsx";
 import DocumentPro from "./pages/DocumentPro.jsx";
 import AddProjectTask from "./pages/SubPages/AddProjectTask.jsx";
+import UserSetup from "./pages/Setup/UserSetup.jsx";
+import UserSetupDetails from "./pages/SubPages/details/UserSetupDetails.jsx";
+import EmployeeProjectManagement from "./pages/Employees/EmployeeProjectManagement.jsx";
+import EmployeeCreateProject from "./pages/Employees/EmployeeSubPages/EmployeeCreateProject.jsx";
+import EditProject from "./pages/SubPages/EditProject.jsx";
+import EmployeeProjectDetails from "./pages/Employees/EmployeeSubPages/EmployeeProjectDetails.jsx";
+import EmployeeProjectAddTask from "./pages/Employees/EmployeeSubPages/EmployeeProjectAddTask.jsx";
+import EmployeeEditProject from "./pages/Employees/EmployeeSubPages/EmployeeEditProject.jsx";
+import BusinessCard from "./pages/BusinessCard.jsx";
 
 function App() {
   return (
@@ -203,6 +212,23 @@ function App() {
           <Route path="/setup/account/unit" element={<Unit />} />
           <Route path="/setup/account/room" element={<Room />} />
           <Route path="/setup/User-role" element={<UserRole />} />
+          <Route
+            path="/setup/users-setup"
+            element={
+              <ProtectedAdminRoutes>
+                <UserSetup />
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/setup/users-details"
+            element={
+              <ProtectedAdminRoutes>
+                <UserSetupDetails />
+              </ProtectedAdminRoutes>
+            }
+          />
+
           <Route
             path="/setup/asset-group"
             element={
@@ -430,6 +456,7 @@ function App() {
               </ProtectedRoute>
             }
           />
+          {/* employee Business card */}
           <Route
             path="/employees/businesscard"
             element={
@@ -438,6 +465,15 @@ function App() {
               </ProtectedRoute>
             }
           />
+          <Route
+            path="/admin/business-card"
+            element={
+              <ProtectedAdminRoutes>
+                <BusinessCard />
+              </ProtectedAdminRoutes>
+            }
+          />
+
           <Route
             path="/employees/transportation"
             element={
@@ -852,6 +888,15 @@ function App() {
             }
           />
           <Route
+            path="/admin/edit-project/:id"
+            element={
+              <ProtectedAdminRoutes>
+                <EditProject />
+              </ProtectedAdminRoutes>
+            }
+          />
+
+          <Route
             path="/admin/project-management/add-task/:id"
             element={
               <ProtectedAdminRoutes>
@@ -1000,12 +1045,54 @@ function App() {
               </ProtectedAdminRoutes>
             }
           />
+          {/* document */}
           <Route
             path="/admin/documents"
             element={
               <ProtectedAdminRoutes>
                 <DocumentPro />
               </ProtectedAdminRoutes>
+            }
+          />
+          {/* Employee project */}
+          <Route
+            path="/employee/project-management"
+            element={
+              <ProtectedRoute>
+                <EmployeeProjectManagement />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/employee/create-project"
+            element={
+              <ProtectedRoute>
+                <EmployeeCreateProject />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/employee/project-details/:id"
+            element={
+              <ProtectedRoute>
+                <EmployeeProjectDetails />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/employee/project-add-task/:id"
+            element={
+              <ProtectedRoute>
+                <EmployeeProjectAddTask />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/employee/edit-project/:id"
+            element={
+              <ProtectedRoute>
+                <EmployeeEditProject />
+              </ProtectedRoute>
             }
           />
         </Routes>

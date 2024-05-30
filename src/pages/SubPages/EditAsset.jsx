@@ -17,6 +17,7 @@ import toast from "react-hot-toast";
 import { useNavigate, useParams } from "react-router-dom";
 import Selector from "../../containers/Selector";
 import FileInputBox from "../../containers/Inputs/FileInputBox";
+import { useSelector } from "react-redux";
 
 const EditAsset = () => {
   const buildings = getItemInLocalStorage("Building");
@@ -75,6 +76,7 @@ const EditAsset = () => {
     others: [],
   });
   console.log(formData);
+  const themeColor = useSelector((state)=> state.theme.color)
 
   useEffect(() => {
     const getDetails = async () => {
@@ -207,50 +209,55 @@ const EditAsset = () => {
     console.log(fieldName);
   };
   const navigate = useNavigate();
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  
+  
+
+
+
+  const handleSubmit = async () => {
     try {
-      toast.loading("Createing Asset Please wait!");
-      const response = await EditSiteAsset(formData, id);
-      console.log("Asset Created successfully:", response);
-      // setFormData({});
-      toast.dismiss();
-      toast.success("Asset Created successfully");
-      navigate("/assets");
+      toast.loading("Creating Asset Please Wait!");
+      const formDataSend = new FormData();
+
+      formDataSend.append("site_asset[site_id]", formData.site_id);
+      formDataSend.append("site_asset[building_id]", formData.building_id);
+      formDataSend.append("site_asset[floor_id]", formData.floor_id);
+      formDataSend.append("site_asset[unit_id]", formData.unit_id);
+      formDataSend.append("site_asset[name]", formData.name);
+      formDataSend.append("site_asset[serial_number]", formData.serial_number);
+      formDataSend.append("site_asset[model_number]", formData.model_number);
+      formDataSend.append("site_asset[purchased_on]", formData.purchased_on);
+      formDataSend.append("site_asset[purchase_cost]", formData.purchase_cost);
+      formDataSend.append(
+        "site_asset[warranty_expiry]",
+        formData.warranty_expiry
+      );
+      // formDataSend.append("site_asset[user_id]", 2);
+      formDataSend.append("site_asset[critical]", formData.critical);
+      formDataSend.append("site_asset[breakdown]", formData.breakdown);
+      formDataSend.append("site_asset[is_meter]", formData.is_meter);
+      formDataSend.append(
+        "site_asset[asset_group_id]",
+        formData.asset_group_id
+      );
+      formDataSend.append("site_asset[vendor_id]", formData.vendor_id);
+
+      const response =  await EditSiteAsset(formDataSend, id);;
+      toast.success("Asset Created Successfully");
+      console.log("Response:", response.data);
+      toast.dismiss()
     } catch (error) {
-      console.error("Error submitting complaint:", error);
+      toast.dismiss();
+      console.error("Error:", error);
     }
   };
-
-  // const handleSubmit = async (event) => {
-  //   event.preventDefault(); // Prevent default form submission behavior
-
-  //   // Create a new FormData object
-  //   const formDataToSend = new FormData();
-
-  //   Object.entries(formData).forEach(([key, value]) => {
-  //     console.log(`Appending ${key}: ${value}`); // Log each key-value pair being appended
-  //     formDataToSend.append(key, value);
-  //   });
-
-  //   // formData.file1.forEach((file, index) => {
-  //   //   formDataToSend.append(`file${index + 1}`, file);
-  //   // });
-
-  //   try {
-  //     console.log("Form data to send:", formDataToSend);
-  //     const resp = await EditSiteAsset(formDataToSend, id);
-  //     console.log("resp:", resp);
-  //     console.log("Form data to send:", formDataToSend);
-  //   } catch (error) {
-  //     console.error("Error:", error);
-  //   }
-  // };
 
   return (
     <section>
       <div className="m-2">
-        <h2 className="text-center text-xl font-bold p-2 bg-black rounded-full text-white">
+        <h2
+        style={{background: themeColor}}
+        className="text-center text-xl font-bold p-2 rounded-full text-white">
           Edit Asset
         </h2>
         <div className="md:mx-20 my-5 mb-10 sm:border border-gray-400 p-5 px-10 rounded-lg sm:shadow-xl">
