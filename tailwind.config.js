@@ -17,7 +17,10 @@ export default {
       },
       backgroundColor:{
         'review': "#4AB85B"
-      }
+      },
+      colors: {
+        'scrollbar-thumb': 'var(--scrollbar-thumb-color)',
+      },
 
     },
   },

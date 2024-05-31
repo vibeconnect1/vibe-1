@@ -125,8 +125,49 @@ import CreateMeeting from "./pages/SubPages/CreateMeeting.jsx";
 import MeetingDetails from "./pages/SubPages/details/MeetingDetails.jsx";
 import ProjectManagement from "./pages/ProjectManagement.jsx";
 import CreateProject from "./pages/SubPages/CreateProject.jsx";
+import ProjectDetails from "./pages/SubPages/details/ProjectDetails.jsx";
+import AddInventory from "./pages/SubPages/AddInventory.jsx";
+import AddChecklist from "./pages/SubPages/AddChecklist.jsx";
+import EditChecklist from "./pages/SubPages/EditChecklist.jsx";
+import EditStocks from "./pages/SubPages/EditStocks.jsx";
+import EmployeeVisitors from "./pages/Employees/EmployeeVisitors.jsx";
+import EmployeeCreateVisitor from "./pages/Employees/EmployeeSubPages/EmployeeCreateVisitor.jsx";
+import EmployeeVisitorDetails from "./pages/Employees/EmployeeSubPages/EmployeeVisitorDetails.jsx";
+import EmployeeDeliveryDetails from "./pages/Employees/EmployeeSubPages/EmployeeDeliveryDetails.jsx";
+import EmployeeCabDetails from "./pages/Employees/EmployeeSubPages/EmployeeCabDetails.jsx";
+import Visitors from "./pages/Visitors.jsx";
+import CreateVisitor from "./pages/SubPages/CreateVisitor.jsx";
+import VisitorDetails from "./pages/SubPages/details/VisitorDetails.jsx";
+import DeliveryStaffDetails from "./pages/SubPages/details/DeliveryStaffDetails.jsx";
+import CabDetails from "./pages/SubPages/details/CabDetails.jsx";
+import CabEdit from "./pages/SubPages/details/CabEdit.jsx";
+import VisitorEdit from "./pages/SubPages/details/VisitorEdit.jsx";
+import DeliveryEdit from "./pages/SubPages/details/DeliveryEdit.jsx";
+import DocumentPro from "./pages/DocumentPro.jsx";
+import AddProjectTask from "./pages/SubPages/AddProjectTask.jsx";
+import UserSetup from "./pages/Setup/UserSetup.jsx";
+import UserSetupDetails from "./pages/SubPages/details/UserSetupDetails.jsx";
+import EmployeeProjectManagement from "./pages/Employees/EmployeeProjectManagement.jsx";
+import EmployeeCreateProject from "./pages/Employees/EmployeeSubPages/EmployeeCreateProject.jsx";
+import EditProject from "./pages/SubPages/EditProject.jsx";
+import EmployeeProjectDetails from "./pages/Employees/EmployeeSubPages/EmployeeProjectDetails.jsx";
+import EmployeeProjectAddTask from "./pages/Employees/EmployeeSubPages/EmployeeProjectAddTask.jsx";
+import EmployeeEditProject from "./pages/Employees/EmployeeSubPages/EmployeeEditProject.jsx";
+import BusinessCard from "./pages/BusinessCard.jsx";
+import { useSelector } from "react-redux";
+import PO from "./pages/PO.jsx";
+import PoDetails from "./pages/SubPages/details/PoDetails.jsx";
+import Wo from "./pages/Wo.jsx";
+import WoDetail from "./pages/SubPages/details/WoDetails.jsx";
+import Audit from "./pages/Audit.jsx";
+import AddScheduleAudit from "./pages/SubPages/AuditSubPages/AddScheduleAudit.jsx";
 
 function App() {
+  const themeColor = useSelector((state) => state.theme.color);
+  document.documentElement.style.setProperty(
+    "--scrollbar-thumb-color",
+    themeColor
+  );
   return (
     <>
       <Router>
@@ -183,6 +224,23 @@ function App() {
           <Route path="/setup/account/unit" element={<Unit />} />
           <Route path="/setup/account/room" element={<Room />} />
           <Route path="/setup/User-role" element={<UserRole />} />
+          <Route
+            path="/setup/users-setup"
+            element={
+              <ProtectedAdminRoutes>
+                <UserSetup />
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/setup/users-details"
+            element={
+              <ProtectedAdminRoutes>
+                <UserSetupDetails />
+              </ProtectedAdminRoutes>
+            }
+          />
+
           <Route
             path="/setup/asset-group"
             element={
@@ -410,6 +468,7 @@ function App() {
               </ProtectedRoute>
             }
           />
+          {/* employee Business card */}
           <Route
             path="/employees/businesscard"
             element={
@@ -418,6 +477,15 @@ function App() {
               </ProtectedRoute>
             }
           />
+          <Route
+            path="/admin/business-card"
+            element={
+              <ProtectedAdminRoutes>
+                <BusinessCard />
+              </ProtectedAdminRoutes>
+            }
+          />
+
           <Route
             path="/employees/transportation"
             element={
@@ -806,7 +874,7 @@ function App() {
               </ProtectedAdminRoutes>
             }
           />
-          {/* project management */}
+          {/*admin project management */}
           <Route
             path="/admin/project-management"
             element={
@@ -820,6 +888,275 @@ function App() {
             element={
               <ProtectedAdminRoutes>
                 <CreateProject />
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/project-management/project-details/:id"
+            element={
+              <ProtectedAdminRoutes>
+                <ProjectDetails />
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/edit-project/:id"
+            element={
+              <ProtectedAdminRoutes>
+                <EditProject />
+              </ProtectedAdminRoutes>
+            }
+          />
+
+          <Route
+            path="/admin/project-management/add-task/:id"
+            element={
+              <ProtectedAdminRoutes>
+                <AddProjectTask />
+              </ProtectedAdminRoutes>
+            }
+          />
+          {/* INventory */}
+          <Route
+            path="/admin/add-stock"
+            element={
+              <ProtectedAdminRoutes>
+                <AddInventory />
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/edit-stock/:id"
+            element={
+              <ProtectedAdminRoutes>
+                <EditStocks />
+              </ProtectedAdminRoutes>
+            }
+          />
+          {/* checklist */}
+          <Route
+            path="/admin/add-checklist"
+            element={
+              <ProtectedAdminRoutes>
+                <AddChecklist />
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/edit-checklist/:id"
+            element={
+              <ProtectedAdminRoutes>
+                <EditChecklist />
+              </ProtectedAdminRoutes>
+            }
+          />
+          {/* Employee Visitor */}
+          <Route
+            path="/employees/visitors"
+            element={
+              <ProtectedRoute>
+                <EmployeeVisitors />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/employee/create-visitor"
+            element={
+              <ProtectedRoute>
+                <EmployeeCreateVisitor />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/employee/visitor-details/:id"
+            element={
+              <ProtectedRoute>
+                <EmployeeVisitorDetails />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/employee/delivery-details/:id"
+            element={
+              <ProtectedRoute>
+                <EmployeeDeliveryDetails />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/employee/cab-details/:id"
+            element={
+              <ProtectedRoute>
+                <EmployeeCabDetails />
+              </ProtectedRoute>
+            }
+          />
+
+          {/* admin visitor */}
+          <Route
+            path="/admin/visitor"
+            element={
+              <ProtectedAdminRoutes>
+                <Visitors />
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/create-visitor"
+            element={
+              <ProtectedAdminRoutes>
+                <CreateVisitor />
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/visitor-details/:id"
+            element={
+              <ProtectedAdminRoutes>
+                <VisitorDetails />
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/deliverydetails/:id"
+            element={
+              <ProtectedAdminRoutes>
+                <DeliveryStaffDetails />
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/cab-details/:id"
+            element={
+              <ProtectedAdminRoutes>
+                <CabDetails />
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/edit-visitor/:id"
+            element={
+              <ProtectedAdminRoutes>
+                <VisitorEdit />
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/edit-delivery/:id"
+            element={
+              <ProtectedAdminRoutes>
+                <DeliveryEdit />
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/cab-edit/:id"
+            element={
+              <ProtectedAdminRoutes>
+                <CabEdit />
+              </ProtectedAdminRoutes>
+            }
+          />
+          {/* document */}
+          <Route
+            path="/admin/documents"
+            element={
+              <ProtectedAdminRoutes>
+                <DocumentPro />
+              </ProtectedAdminRoutes>
+            }
+          />
+          {/* Employee project */}
+          <Route
+            path="/employee/project-management"
+            element={
+              <ProtectedRoute>
+                <EmployeeProjectManagement />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/employee/create-project"
+            element={
+              <ProtectedRoute>
+                <EmployeeCreateProject />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/employee/project-details/:id"
+            element={
+              <ProtectedRoute>
+                <EmployeeProjectDetails />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/employee/project-add-task/:id"
+            element={
+              <ProtectedRoute>
+                <EmployeeProjectAddTask />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/employee/edit-project/:id"
+            element={
+              <ProtectedRoute>
+                <EmployeeEditProject />
+              </ProtectedRoute>
+            }
+          />
+          {/* Admin PO*/}
+          <Route
+            path="/admin/PO"
+            element={
+              <ProtectedAdminRoutes>
+                <PO />
+              </ProtectedAdminRoutes>
+            }
+          />
+          {/* Admin PO*/}
+          <Route
+            path="/admin/po-detail/:id"
+            element={
+              <ProtectedAdminRoutes>
+                <PoDetails />
+              </ProtectedAdminRoutes>
+            }
+          />
+
+{/* Admin WO detail*/}
+           <Route
+            path="/admin/Wo"
+            element={
+              <ProtectedAdminRoutes>
+              <Wo/>
+              </ProtectedAdminRoutes>
+            }
+          />
+        <Route
+            path="/admin/wo-detail/:id"
+            element={
+              <ProtectedAdminRoutes>
+                <WoDetail/>
+              </ProtectedAdminRoutes>
+            }
+          />
+          {/* Audit */}
+        <Route
+            path="/admin/audit"
+            element={
+              <ProtectedAdminRoutes>
+                <Audit/>
+              </ProtectedAdminRoutes>
+            }
+          />
+        <Route
+            path="/admin/audit/schedule-audit"
+            element={
+              <ProtectedAdminRoutes>
+                <AddScheduleAudit/>
               </ProtectedAdminRoutes>
             }
           />

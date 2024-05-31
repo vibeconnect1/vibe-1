@@ -6,27 +6,39 @@ import { Switch } from "../../Buttons";
 import AssetGroupModal from "../../containers/modals/AssetGroupModal";
 import AssetSubGroupModal from "../../containers/modals/AssetSubGroupModal";
 import { useSelector } from "react-redux";
+import { useEffect } from "react";
+import { getAssetGroups } from "../../api";
+import Table from "../../components/table/Table";
 
 const AssetGroup = () => {
   const [groupModal, setGroupModal] = useState(false);
   const [subGroupModal, setsubGroupModal] = useState(false);
+  const [group, setGroup] = useState([]);
   const groups = useSelector((state) => state.group.groups);
-  const subGroups = useSelector((state)=> state.group.subGroups)
-  console.log("sub", subGroups)
+  const subGroups = useSelector((state) => state.group.subGroups);
+  // console.log("sub", subGroups);
+  useEffect(() => {
+    const fetchGroups = async () => {
+      const groupResponse = await getAssetGroups();
+      setGroup(groupResponse.data);
+    
+    };
+    fetchGroups();
+  }, [group]);
   const groupColumns = [
     {
       name: "Sr. No",
-      selector: (row) => row.serial_number,
+      selector: (row, index) => index + 1,
       sortable: true,
     },
     {
       name: "Group Name",
-      selector: (row) => row.group_name,
+      selector: (row) => row.name,
       sortable: true,
     },
     {
-      name: "Status",
-      selector: (row) => <Switch />,
+      name: "Description",
+      selector: (row) => row.description,
       sortable: true,
     },
   ];
@@ -51,21 +63,21 @@ const AssetGroup = () => {
       selector: (row) => row.sub_group_name,
       sortable: true,
     },
-    {
-      name: "Status",
-      selector: (row) => <Switch />,
-      sortable: true,
-    },
   ];
 
-  const subGroupData = Object.keys(subGroups).reduce((acc, groupName, index) => {
-    const subGroupsWithSerial = subGroups[groupName].map((subGroup, subIndex) => ({
-      serial_number: index + 1,
-      group_name: groupName,
-      sub_group_name: subGroup,
-    }));
-    return [...acc, ...subGroupsWithSerial];
-  }, []);
+  const subGroupData = Object.keys(subGroups).reduce(
+    (acc, groupName, index) => {
+      const subGroupsWithSerial = subGroups[groupName].map(
+        (subGroup, subIndex) => ({
+          serial_number: index + 1,
+          group_name: groupName,
+          sub_group_name: subGroup,
+        })
+      );
+      return [...acc, ...subGroupsWithSerial];
+    },
+    []
+  );
 
   const customStyle = {
     headRow: {
@@ -102,20 +114,26 @@ const AssetGroup = () => {
             Add Sub Group
           </button>
         </div>
-        <div className="">
-          <DataTable
+        <div className=" my-2">
+          <Table
+            columns={groupColumns}
+            data={group}
+            isPagination={true}
+            height={"300px"}
+            title={"Groups"}
+          />
+          {/* <DataTable
             responsive
             // selectableRows
-            columns={groupColumns}
-            data={groupData}
+           
             customStyles={customStyle}
             pagination
             fixedHeader
             title="Groups"
-            fixedHeaderScrollHeight="420px"
+            fixedHeaderScrollHeight="300px"
             selectableRowsHighlight
             highlightOnHover
-          />
+          /> */}
           <DataTable
             responsive
             title={"Sub Groups"}

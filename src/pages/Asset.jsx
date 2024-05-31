@@ -11,6 +11,10 @@ import { getFloors, getSiteAsset, getUnits } from "../api";
 import { getItemInLocalStorage } from "../utils/localStorage";
 import AMC from "./SubPages/AMC";
 import Meter from "./Meter";
+import { useSelector } from "react-redux";
+import Inventory from "./Inventory";
+import Checklist from "./Checklist";
+import RoutineTask from "./RoutineTask";
 
 // import jsPDF from "jspdf";
 // import QRCode from "qrcode.react";
@@ -28,7 +32,7 @@ const Asset = () => {
   const [selectedUnit, setSelectedUnit] = useState("");
   const [page, setPage] = useState("assets");
   const [assets, setAssets] = useState([]);
-
+  const themeColor = useSelector((state) => state.theme.color);
 
   const dateFormat = (dateString) => {
     const date = new Date(dateString);
@@ -50,18 +54,8 @@ const Asset = () => {
     },
 
     {
-      name: "Site",
-      selector: (row) => row.Site_name,
-      sortable: true,
-    },
-    {
       name: "Building",
       selector: (row) => row.building_name,
-      sortable: true,
-    },
-    {
-      name: "Area",
-      selector: (row) => row.area_name,
       sortable: true,
     },
 
@@ -74,15 +68,20 @@ const Asset = () => {
       sortable: true,
     },
     {
-      name: "Asset Code",
-      selector: (row) => row.code,
+      name: "OEM Name",
+      selector: (row) => row.oem_name,
       sortable: true,
     },
-    {
-      name: "Asset Number",
-      selector: (row) => row.code,
-      sortable: true,
-    },
+    // {
+    //   name: "Asset Code",
+    //   selector: (row) => row.code,
+    //   sortable: true,
+    // },
+    // {
+    //   name: "Asset Number",
+    //   selector: (row) => row.code,
+    //   sortable: true,
+    // },
 
     {
       name: "Serial Number",
@@ -95,16 +94,16 @@ const Asset = () => {
       selector: (row) => row.model_number,
       sortable: true,
     },
-    {
-      name: "Asset Type",
-      selector: (row) => row.asset_type,
-      sortable: true,
-    },
-    {
-      name: "Client Name",
-      selector: (row) => row.client_name,
-      sortable: true,
-    },
+    // {
+    //   name: "Asset Type",
+    //   selector: (row) => row.asset_type,
+    //   sortable: true,
+    // },
+    // {
+    //   name: "Client Name",
+    //   selector: (row) => row.client_name,
+    //   sortable: true,
+    // },
     {
       name: "Group",
       selector: (row) => row.group,
@@ -126,11 +125,7 @@ const Asset = () => {
       selector: (row) => row.purchase_cost,
       sortable: true,
     },
-    {
-      name: "Warranty Expiry",
-      selector: (row) => row.warranty_expiry,
-      sortable: true,
-    },
+   
     {
       name: "Critical",
       selector: (row) => (row.critical ? "Yes" : "No"),
@@ -138,7 +133,16 @@ const Asset = () => {
     },
     {
       name: "Status",
-      selector: (row) => (row.breakdown ? "Breakdown" : "In Use"),
+      selector: (row) =>
+        row.breakdown ? (
+          <p className="bg-red-400 p-1 px-2 rounded-full text-white">
+            Breakdown
+          </p>
+        ) : (
+          <p className="bg-green-400 p-1 px-2 rounded-full text-white">
+            In Use
+          </p>
+        ),
       sortable: true,
     },
     {
@@ -159,11 +163,11 @@ const Asset = () => {
     },
     {
       name: "Warranty",
-      selector: (row) => row.warranty,
+      selector: (row) => (row.warranty_start === null ? "No": "Yes"),
       sortable: true,
     },
     {
-      name: "Warranty",
+      name: "W Start",
       selector: (row) => row.warranty_start,
       sortable: true,
     },
@@ -174,37 +178,17 @@ const Asset = () => {
       sortable: true,
     },
     {
-      name: "AMC",
-      selector: (row) => row.amc,
+      name: "W Expiry",
+      selector: (row) => row.warranty_expiry,
       sortable: true,
     },
-    {
-      name: "PPM",
-      selector: (row) => row.ppm,
-      sortable: true,
-    },
+
     {
       name: "Meter Configured",
       selector: (row) => (row.is_meter ? "Yes" : "No"),
       sortable: true,
     },
-    {
-      name: "Meter Category",
-      selector: (row) => (row.meter_category),
-      sortable: true,
-    },
-     {
-      name: "Meter Type",
-      selector: (row) => row.meter_type,
-      sortable: true,
-    },
-    
-   
-    {
-      name: "Submeter",
-      selector: (row) => row.sub_meter,
-      sortable: true,
-    },
+
     {
       name: "Supplier",
       selector: (row) => row.supplier,
@@ -227,7 +211,10 @@ const Asset = () => {
             .toLowerCase()
             .includes(searchValue.toLowerCase()) ||
           item.name.toLowerCase().includes(searchValue.toLowerCase()) ||
-          item.unit_name.toLowerCase().includes(searchValue.toLowerCase())
+          (item.oem_name &&
+            item.oem_name.toLowerCase().includes(searchValue.toLowerCase())) ||
+          (item.unit_name &&
+            item.unit_name.toLowerCase().includes(searchValue.toLowerCase()))
       );
       setFilteredData(filteredResults);
     }
@@ -236,7 +223,7 @@ const Asset = () => {
   const customStyle = {
     headRow: {
       style: {
-        backgroundColor: "black",
+        backgroundColor: themeColor,
         color: "white",
         fontSize: "10px",
       },
@@ -250,6 +237,7 @@ const Asset = () => {
       style: {
         fontWeight: "bold",
         fontSize: "10px",
+        with: "auto"
       },
     },
   };
@@ -358,25 +346,27 @@ const Asset = () => {
     }
 
     setFilteredData(filteredResults);
-    console.log('Filtered Results:', filteredResults);
-  }
+    console.log("Filtered Results:", filteredResults);
+  };
 
   const handleBuildingChange = async (e) => {
     const buildingId = e.target.value;
     setSelectedBuilding(buildingId);
     const response = await getFloors(buildingId);
     setFloors(response.data.map((item) => ({ name: item.name, id: item.id })));
-    setSelectedFloor(''); // Reset floor and unit when building changes
+    setSelectedFloor(""); // Reset floor and unit when building changes
     setUnitName([]);
-    setSelectedUnit('');
+    setSelectedUnit("");
   };
 
   const handleFloorChange = async (e) => {
     const floorId = e.target.value;
     setSelectedFloor(floorId);
     const response = await getUnits(floorId);
-    setUnitName(response.data.map((item) => ({ name: item.name, id: item.id })));
-    setSelectedUnit(''); // Reset unit when floor changes
+    setUnitName(
+      response.data.map((item) => ({ name: item.name, id: item.id }))
+    );
+    setSelectedUnit(""); // Reset unit when floor changes
   };
 
   const handleUnitChange = (e) => {
@@ -433,19 +423,19 @@ const Asset = () => {
             </h2>
             <h2
               className={`p-1 ${
-                page === "task" && "bg-white text-blue-500"
+                page === "checklist" && "bg-white text-blue-500"
               } rounded-full px-4 cursor-pointer`}
-              onClick={() => setPage("task")}
+              onClick={() => setPage("checklist")}
             >
-              Task
+              Checklist
             </h2>
             <h2
               className={`p-1 ${
-                page === "schedule" && "bg-white text-blue-500"
+                page === "routine" && "bg-white text-blue-500"
               } rounded-full px-4 cursor-pointer`}
-              onClick={() => setPage("schedule")}
+              onClick={() => setPage("routine")}
             >
-              Schedule
+              Routine Task
             </h2>
             <h2
               className={`p-1 ${
@@ -453,7 +443,7 @@ const Asset = () => {
               } rounded-full px-4 cursor-pointer`}
               onClick={() => setPage("PPM")}
             >
-              PPM
+              PPM Activity
             </h2>
             <h2
               className={`p-1 ${
@@ -461,7 +451,7 @@ const Asset = () => {
               } rounded-full px-4 cursor-pointer`}
               onClick={() => setPage("inventory")}
             >
-              Inventory
+              Stock Items
             </h2>
           </div>
         </div>
@@ -485,7 +475,7 @@ const Asset = () => {
             ))}
           </div>
         )} */}
-        {filter && (
+        {filter && page === "assets" && (
           <div className="flex flex-col md:flex-row mt-1 items-center justify-center gap-2">
             <select
               name="building_name"
@@ -535,16 +525,16 @@ const Asset = () => {
         )}
         {page === "assets" && (
           <>
-        <div className="flex md:flex-row flex-col justify-between items-center my-2 gap-2  ">
-          <input
-            type="text"
-            placeholder="Search By Building name, Asset Name or Unit"
-            className="border-2 p-2 md:w-96 border-gray-300 rounded-lg placeholder:text-sm"
-            value={searchText}
-            onChange={handleSearch}
-          />
-          <div className="md:flex grid grid-cols-2 sm:flex-row my-2 flex-col gap-2">
-            {/* <button
+            <div className="flex md:flex-row flex-col justify-between items-center my-2 gap-2  ">
+              <input
+                type="text"
+                placeholder="Search By Building, Asset, Unit or OEM Name"
+                className="border-2 p-2 md:w-96 border-gray-300 rounded-lg placeholder:text-sm"
+                value={searchText}
+                onChange={handleSearch}
+              />
+              <div className="md:flex grid grid-cols-2 sm:flex-row my-2 flex-col gap-2">
+                {/* <button
               className="md:text-lg text-sm font-semibold border-2 border-black px-4 p-1 flex gap-2 items-center rounded-md"
               onClick={() => setOmitColumn(!omitColumn)}
             >
@@ -552,67 +542,63 @@ const Asset = () => {
               Filter Columns
             </button> */}
 
-            <button
-              className=" font-semibold border-2 border-black px-4 p-1 flex gap-2 items-center rounded-md"
-              onClick={() => setFilter(!filter)}
-            >
-              <BiFilterAlt />
-              Filter
-            </button>
+                <button
+                  className=" font-semibold border-2 border-black px-4 p-1 flex gap-2 items-center rounded-md"
+                  onClick={() => setFilter(!filter)}
+                >
+                  <BiFilterAlt />
+                  Filter
+                </button>
 
-            <Link
-              to={"/assets/add-asset"}
-              className="bg-black  text-sm rounded-lg flex justify-center font-semibold items-center gap-2 text-white py-2 px-4 border-2 border-black hover:bg-white hover:text-black transition-all duration-300 "
-            >
-              <IoAddCircleOutline size={20} />
-              Add
-            </Link>
-            <button
-              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-              
-            >
-              {/* <input type="file"  className="opacity-0 w-fit" onChange={handleFileChange} /> */}
-              Import
-            </button>
-            <button
-              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-              onClick={exportToExcel}
-            >
-              Export
-            </button>
-            {/* <button
+                <Link
+                  to={"/assets/add-asset"}
+                  className="bg-black  text-sm rounded-lg flex justify-center font-semibold items-center gap-2 text-white py-2 px-4 border-2 border-black hover:bg-white hover:text-black transition-all duration-300 "
+                >
+                  <IoAddCircleOutline size={20} />
+                  Add
+                </Link>
+                {/* <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                  <input type="file"  className="opacity-0 w-fit" onChange={handleFileChange} />
+                  Import
+                </button> */}
+                <button
+                  className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                  onClick={exportToExcel}
+                >
+                  Export
+                </button>
+                {/* <button
             className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
             onClick={handleDownloadQRCode}
             disabled={selectedRows.length === 0}
           >
             Download QR Code
           </button> */}
-          </div>
-        </div>
-        
-          <DataTable
-            selectableRows
-            // columns={column.filter((col) => visibleColumns.includes(col.name))}
-            columns={column}
-            data={filteredData}
-            customStyles={customStyle}
-            responsive
-            onSelectedRowsChange={handleRowSelected}
-            fixedHeader
-            // fixedHeaderScrollHeight="450px"
-            pagination
-            selectableRowsHighlight
-            highlightOnHover
-            // omitColumn={column}
-          />
+              </div>
+            </div>
+
+            <DataTable
+              selectableRows
+              // columns={column.filter((col) => visibleColumns.includes(col.name))}
+              columns={column}
+              data={filteredData}
+              customStyles={customStyle}
+              responsive
+              onSelectedRowsChange={handleRowSelected}
+              fixedHeader
+              // fixedHeaderScrollHeight="450px"
+              pagination
+              selectableRowsHighlight
+              highlightOnHover
+              // omitColumn={column}
+            />
           </>
         )}
-        {page === "AMC" && (
-          <AMC/>
-        )}
-        {page === "meter" && (
-          <Meter/>
-        )}
+        {page === "AMC" && <AMC />}
+        {page === "meter" && <Meter />}
+        {page === "checklist" && <Checklist />}
+        {page === "inventory" && <Inventory />}
+        {page === "routine" && <RoutineTask />}
       </div>
     </section>
   );

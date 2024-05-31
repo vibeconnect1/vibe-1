@@ -18,7 +18,6 @@ const Ticket = () => {
   const [ticketStatusCounts, setTicketStatusCounts] = useState({});
   const allTicketTypes = ["Complaint", "Request", "Suggestion"];
   const [complaints, setComplaints] = useState([]);
-  const themeColor = useSelector((state) => state.theme.color);
 
   const getTimeAgo = (timestamp) => {
     const createdTime = moment(timestamp);
@@ -100,10 +99,11 @@ const Ticket = () => {
   ];
 
   //custom style
+  const themeColor = useSelector((state) => state.theme.color);
   const customStyle = {
     headRow: {
       style: {
-        backgroundColor: themeColor,
+        background: themeColor,
         color: "white",
 
         fontSize: "10px",

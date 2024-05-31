@@ -1,6 +1,9 @@
 import React, { useEffect } from "react";
+import { useSelector } from "react-redux";
 
 const Footer = () => {
+const themeColor = useSelector((state)=> state.theme.color)
+
   useEffect(() => {
     const footer = document.querySelector(".hideIt");
 
@@ -32,7 +35,7 @@ const Footer = () => {
 
   return (
     <footer className="hideIt fixed bottom-0 w-screen">
-      <div className="bg-black">
+      <div style={{background: themeColor}}>
         <p className="text-center text-white">
           Copyright © 2023 Digielves Tech Wizards Private Limited. All rights
           reserved

@@ -5,8 +5,9 @@ import Navbar from "../Navbar";
 import { resetPassword } from "../../api";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
-import { setColor } from "../../features/theme/theme";
+import { setColor } from "../../features/theme/themeSlice";
 import { useDispatch } from "react-redux";
+import { colors } from "../../utils/colors";
 
 function User() {
   const [user, setUser] = useState("");
@@ -59,7 +60,7 @@ function User() {
 
   document.title = `Profile - Vibe Connect`;
   return (
-    <div className="flex  ">
+    <div className="flex gap-10 w-screen">
       <div>
         <Navbar />
       </div>
@@ -67,30 +68,7 @@ function User() {
         <p className="text-2xl md:text-4xl my-5 text-center">
           {user} {userLastName}
         </p>
-        <div className="flex flex-col justify-center items-center min-h-screen">
-          <div className="p-4">
-            <h2 className="text-xl mb-4">Choose a theme color:</h2>
-            <div className="flex space-x-2">
-              <button
-                className="p-2 bg-red-500 text-white"
-                onClick={() => handleColorChange("#ef4444")}
-              >
-                Red
-              </button>
-              <button
-                className="p-2 bg-blue-500 text-white"
-                onClick={() => handleColorChange("#3b82f6")}
-              >
-                Blue
-              </button>
-              <button
-                className="p-2 bg-green-500 text-white"
-                onClick={() => handleColorChange("#10b981")}
-              >
-                Green
-              </button>
-            </div>
-          </div>
+        <div className="flex justify-center items-center min-h-screen">
           <div className="w-full max-w-md">
             <div className="mt-4">
               <button

@@ -1,11 +1,11 @@
-import React, { useState } from 'react'
-import { IoAddCircleOutline } from 'react-icons/io5'
-import { Link } from 'react-router-dom';
+import React, { useState } from "react";
+import { IoAddCircleOutline } from "react-icons/io5";
+import { Link } from "react-router-dom";
 
 const AMC = () => {
-    const [searchText, setSearchText] = useState("");
+  const [searchText, setSearchText] = useState("");
 
-    const [filteredData, setFilteredData] = useState([]);
+  const [filteredData, setFilteredData] = useState([]);
 
   const handleSearch = (e) => {
     const searchValue = e.target.value;
@@ -27,39 +27,25 @@ const AMC = () => {
   };
   return (
     <div>
-      
-        <div className="flex md:flex-row flex-col justify-between items-center my-2 gap-2  ">
-          <input
-            type="text"
-            placeholder="Search By Building name, Asset Name or Unit"
-            className="border-2 p-2 md:w-96 border-gray-300 rounded-lg placeholder:text-sm"
-            value={searchText}
-            onChange={handleSearch}
-          />
-          <div className="md:flex grid grid-cols-2 sm:flex-row my-2 flex-col gap-2">
-            
-
-           
-
-            <Link
-              to={"/assets/add-amc"}
-              className="bg-black  text-sm rounded-lg flex justify-center font-semibold items-center gap-2 text-white py-2 px-4 border-2 border-black hover:bg-white hover:text-black transition-all duration-300 "
-            >
-              <IoAddCircleOutline size={20} />
-              Add
-            </Link>
-{/*            
-            <button
-              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-              onClick={exportToExcel}
-            >
-              Export
-            </button> */}
-            
-          </div>
+      <div className="flex md:flex-row flex-col justify-between items-center my-2 gap-2  ">
+        <input
+          type="text"
+          placeholder="Search By Building name, Asset Name or Unit"
+          className="border-2 p-2 md:w-96 border-gray-300 rounded-lg placeholder:text-sm"
+          value={searchText}
+          onChange={handleSearch}
+        />
+        <div className="md:flex grid grid-cols-2 sm:flex-row my-2 flex-col gap-2">
+          <button
+            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+            // onClick={exportToExcel}
+          >
+            Export
+          </button>
         </div>
-        
-          {/* <DataTable
+      </div>
+
+      {/* <DataTable
             selectableRows
             // columns={column.filter((col) => visibleColumns.includes(col.name))}
             columns={column}
@@ -73,9 +59,9 @@ const AMC = () => {
             selectableRowsHighlight
             highlightOnHover
             // omitColumn={column} */}
-          {/* /> */}
+      {/* /> */}
     </div>
-  )
-}
+  );
+};
 
-export default AMC
+export default AMC;
