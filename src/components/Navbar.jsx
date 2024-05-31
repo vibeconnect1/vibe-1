@@ -4,7 +4,6 @@ import { useNavigate, NavLink } from "react-router-dom";
 import { menus } from "../utils/menus";
 import { PiSignOutBold } from "react-icons/pi";
 import { getItemInLocalStorage } from "../utils/localStorage";
-// import { useSelector } from "react-redux";
 import {
   BsBroadcast,
   BsBuilding,
@@ -49,12 +48,6 @@ import { useSelector } from "react-redux";
 const Navbar = () => {
   const [open, setOpen] = useState(false);
   const [user, setUser] = useState("");
-  const [showSidebar, setShowSidebar] = useState(false);
-
-  const toggleSidebar = () => {
-    setShowSidebar(!showSidebar); // Toggle sidebar visibility on mobile
-  };
-
   const navigate = useNavigate();
   const themeColor = useSelector((state) => state.theme.color);
 
@@ -89,23 +82,21 @@ const Navbar = () => {
 
   return (
     <section className="flex gap-6 sticky top-0 left-0 bottom-0 h-screen z-10">
-      <HiMenuAlt3
-        size={26}
-        className="cursor-pointer md:hidden fixed top-4 bg-black  rounded-r-full  z-20" // Fixed menu button for mobile
-        onClick={toggleSidebar} // Toggle sidebar on click
-      />
       <div
-        className={`p-[8px] bg-[#0e0e0e] max-h-screen ${
+        style={{
+          background: themeColor,
+        }}
+        className={`p-[8px]  max-h-screen ${
           open ? "w-full md:w-60" : "w-20"
-        } duration-500 text-gray-100 px-4 rounded-r-2xl shadow-2xl overflow-y-auto h-screen custom-scrollbar left-0`}
+        } duration-500 text-gray-100 px-4 shadow-2xl overflow-y-auto h-screen custom-scrollbar left-0`}
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
       >
         <div className={`py-3 flex ${open ? "justify-end" : "justify-center"}`}>
           <HiMenuAlt3
             size={26}
-            className="cursor-pointer " // Hide menu button on medium and larger screens
-            onClick={toggleSidebar} // Toggle sidebar on click
+            className="cursor-pointer "
+            onClick={() => setOpen(!open)}
           />
         </div>
         <div className="flex flex-col h-full gap-4 mb-5 relative">
@@ -117,7 +108,7 @@ const Navbar = () => {
                 className={({ isActive }) =>
                   ` ${
                     isActive
-                      ? "text-black bg-white flex p-2  gap-3.5 rounded-md group items-center text-sm font-medium"
+                      ? "text-black bg-white shadow-custom-all-sides flex p-2  gap-3.5 rounded-md group items-center text-sm font-medium"
                       : " group flex items-center text-sm gap-3.5 font-medium p-2 hover:bg-gray-800 rounded-md "
                   }`
                 }

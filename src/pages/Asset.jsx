@@ -125,7 +125,7 @@ const Asset = () => {
       selector: (row) => row.purchase_cost,
       sortable: true,
     },
-   
+
     {
       name: "Critical",
       selector: (row) => (row.critical ? "Yes" : "No"),
@@ -163,7 +163,7 @@ const Asset = () => {
     },
     {
       name: "Warranty",
-      selector: (row) => (row.warranty_start === null ? "No": "Yes"),
+      selector: (row) => (row.warranty_start === null ? "No" : "Yes"),
       sortable: true,
     },
     {
@@ -237,7 +237,7 @@ const Asset = () => {
       style: {
         fontWeight: "bold",
         fontSize: "10px",
-        with: "auto"
+        with: "auto",
       },
     },
   };
@@ -396,59 +396,66 @@ const Asset = () => {
       <Navbar />
       <div className="p-4 w-full my-2 flex mx-3 overflow-hidden flex-col">
         <div className="flex justify-center w-full">
-          <div className="sm:flex grid grid-cols-2 sm:flex-row gap-5 font-medium p-2 sm:rounded-full rounded-md bg-gray-400">
+          <div className="sm:flex grid grid-cols-2 sm:flex-row gap-5 font-medium p-2 sm:rounded-full rounded-md bg-gray-200">
             <h2
               className={`p-1 ${
-                page === "assets" && "bg-white text-blue-500"
-              } rounded-full px-4 cursor-pointer text-center `}
+                page === "assets" &&
+                "bg-white text-blue-500 shadow-custom-all-sides"
+              } rounded-full px-4 cursor-pointer text-center  transition-all duration-300 ease-linear`}
               onClick={() => setPage("assets")}
             >
               Assets
             </h2>
             <h2
               className={`p-1 ${
-                page === "AMC" && "bg-white text-blue-500"
-              } rounded-full px-4 cursor-pointer`}
+                page === "AMC" &&
+                "bg-white text-blue-500 shadow-custom-all-sides"
+              } rounded-full px-4 cursor-pointer  transition-all duration-300 ease-linear`}
               onClick={() => setPage("AMC")}
             >
               AMC
             </h2>
             <h2
               className={`p-1 ${
-                page === "meter" && "bg-white text-blue-500"
-              } rounded-full px-4 cursor-pointer`}
+                page === "meter" &&
+                "bg-white text-blue-500 shadow-custom-all-sides"
+              } rounded-full px-4 cursor-pointer transition-all duration-300 ease-linear`}
               onClick={() => setPage("meter")}
             >
               Meter
             </h2>
             <h2
               className={`p-1 ${
-                page === "checklist" && "bg-white text-blue-500"
-              } rounded-full px-4 cursor-pointer`}
+                page === "checklist" &&
+                "bg-white text-blue-500 shadow-custom-all-sides"
+              } rounded-full px-4 cursor-pointer  transition-all duration-300 ease-linear`}
               onClick={() => setPage("checklist")}
             >
               Checklist
             </h2>
             <h2
               className={`p-1 ${
-                page === "routine" && "bg-white text-blue-500"
-              } rounded-full px-4 cursor-pointer`}
+                page === "routine" &&
+                "bg-white text-blue-500 shadow-custom-all-sides"
+              } rounded-full px-4 cursor-pointer  transition-all duration-300 ease-linear`}
               onClick={() => setPage("routine")}
             >
               Routine Task
             </h2>
             <h2
               className={`p-1 ${
-                page === "PPM" && "bg-white text-blue-500"
-              } rounded-full px-4 cursor-pointer`}
+                page === "PPM" &&
+                "bg-white text-blue-500 shadow-custom-all-sides"
+              } rounded-full px-4 cursor-pointer  transition-all duration-300 ease-linear`}
               onClick={() => setPage("PPM")}
             >
               PPM Activity
             </h2>
             <h2
               className={`p-1 ${
-                page === "inventory" && "bg-white text-blue-500"
-              } rounded-full px-4 cursor-pointer`}
+                page === "inventory" &&
+                "bg-white text-blue-500 shadow-custom-all-sides"
+              } rounded-full px-4 cursor-pointer  transition-all duration-300 ease-linear`}
               onClick={() => setPage("inventory")}
             >
               Stock Items

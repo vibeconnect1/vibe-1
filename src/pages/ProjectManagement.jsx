@@ -159,14 +159,14 @@ const ProjectManagement = () => {
               </label>
             </div>
           </div>
-          <Link
+          {/* <Link
             to={"/admin/project-management/create-project"}
             className="border-2 font-semibold hover:bg-black hover:text-white duration-300 transition-all border-black p-2 rounded-md text-black cursor-pointer text-center flex items-center gap-2 justify-center"
             // onClick={() => setShowCountry(!showCountry)}
           >
             <PiPlusCircle size={20} />
             Add
-          </Link>
+          </Link> */}
           <div className="flex gap-2">
             <input
               type="text"
@@ -182,12 +182,12 @@ const ProjectManagement = () => {
                 Search
               </button> */}
           </div>
-          <button
+          {/* <button
             className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
             // onClick={exportToExcel}
           >
             Export
-          </button>
+          </button> */}
         </div>
         <Boards />
         {/* <DataTable

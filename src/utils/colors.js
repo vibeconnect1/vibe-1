@@ -56,7 +56,6 @@ export const colors = [
   { name: "color-2", code: "#ff8845" },
   { name: "color-3", code: "#f5be3d" },
 
-
   // Gradient colors
   { name: "gradient-blue", code: "linear-gradient(90deg, #3b82f6, #1d4ed8)" },
   { name: "gradient-green", code: "linear-gradient(90deg, #22c55e, #15803d)" },
@@ -67,4 +66,12 @@ export const colors = [
   { name: "gradient-gray", code: "linear-gradient(90deg, #6b7280, #374151)" },
   { name: "gradient-indigo", code: "linear-gradient(90deg, #6366f1, #4338ca)" },
   { name: "gradient-yellow", code: "linear-gradient(90deg, #eab308, #ca8a04)" },
+  // {
+  //   name: "gradient-yellowo",
+  //   code: "linear-gradient(90deg, #c7ecee, #a4b0be, #7f8fa6, #5d737e, #3a5a56)",
+  // },
+  {
+    name: "gradient-yellowoo",
+    code: " linear-gradient( 64.3deg,  rgba(254,122,152,0.81) 17.7%, rgba(255,206,134,1) 64.7%, rgba(172,253,163,0.64) 112.1% )",
+  },
 ];

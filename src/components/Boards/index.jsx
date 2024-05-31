@@ -7,11 +7,13 @@ import { useSelector } from "react-redux";
 import Task from "./Task";
 import AddModal from "./AddModals";
 import { onDragEnd } from "./onDragEnd";
+import AddColumnModal from "./AddColumnModal";
 
 const Boards = () => {
   const [columns, setColumns] = useState(Board);
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedColumn, setSelectedColumn] = useState("");
+  const [columnModalOpen, setColumnModalOpen] = useState(false);
   const themeColor = useSelector((state) => state.theme.color);
   const openModal = (columnId) => {
     setSelectedColumn(columnId);
@@ -25,8 +27,41 @@ const Boards = () => {
   const closeModal = () => {
     setModalOpen(false);
   };
+
+  const openColumnModal = () => {
+    setColumnModalOpen(true);
+  };
+
+  const handleAddColumn = (columnName) => {
+    const newColumnId = `column-${Object.keys(columns).length + 1}`;
+    setColumns({
+      ...columns,
+      [newColumnId]: {
+        name: columnName,
+        items: [],
+      },
+    });
+  };
+
+  const handleDeleteTask = async (columnId, taskId) => {
+    const newBoard = { ...columns };
+    newBoard[columnId].items = newBoard[columnId].items.filter(
+      (task) => task.id !== taskId
+    );
+    setColumns(newBoard);
+  };
+
   return (
     <>
+      <div className="flex justify-end">
+        <button
+          onClick={openColumnModal}
+          className="shadow-custom-all-sides flex  items-center justify-center gap-1 py-[10px]  w-full opacity-90  rounded-lg bg-white  text-[#555] font-medium text-[15px]"
+        >
+          <IoAddOutline color={"#555"} />
+          Add Column
+        </button>
+      </div>
       <DragDropContext
         onDragEnd={(result) => onDragEnd(result, columns, setColumns)}
       >
@@ -54,7 +89,12 @@ const Boards = () => {
                       >
                         {(provided) => (
                           <>
-                            <Task provided={provided} task={task} />
+                            <Task
+                              provided={provided}
+                              task={task}
+                              handleDeleteTask={handleDeleteTask}
+                              columnId={columnId}
+                            />
                           </>
                         )}
                       </Draggable>
@@ -80,6 +120,12 @@ const Boards = () => {
         onClose={closeModal}
         setOpen={setModalOpen}
         handleAddTask={handleAddTask}
+      />
+      <AddColumnModal
+        isOpen={columnModalOpen}
+        onClose={() => setColumnModalOpen(false)}
+        setOpen={setColumnModalOpen}
+        handleAddColumn={handleAddColumn}
       />
     </>
   );
