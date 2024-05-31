@@ -1,22 +1,53 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import ModalWrapper from "./ModalWrapper";
 import { useDispatch, useSelector } from "react-redux";
 import { addSubGroup } from "../../features/group/groupSlice";
+import { getAssetGroups, postAssetSubGroups } from "../../api";
 
 const AssetSubGroupModal = ({ onclose }) => {
   const [subGroupName, setSubGroupName] = useState("");
   const [selectedGroup, setSelectedGroup] = useState("");
+  const [assetGroups, setAssetGroups] = useState([]);
+  const [formData, setFormData] = useState({
+    group_id: "",
+    name: "",
+  });
+  // console.log(formData);
   const dispatch = useDispatch();
-  const groups = useSelector((state) => state.group.groups);
-  console.log(groups);
+  // const groups = useSelector((state) => state.group.groups);
+  // console.log(groups);
 
-  const CreateSubGroup = () => {
-    if (selectedGroup && subGroupName.trim()) {
-      dispatch(addSubGroup({ groupName: selectedGroup, subGroupName }));
-      setSubGroupName("");
-      onclose();
-    }
+  const CreateSubGroup = async () => {
+    const addSubGroup = await postAssetSubGroups({
+      group_id: formData.group_id,
+      name: formData.name,
+    });
+    console.log(addSubGroup)
+    onclose()
+
+    // if (selectedGroup && subGroupName.trim()) {
+    //   dispatch(addSubGroup({ groupName: selectedGroup, subGroupName }));
+    //   setSubGroupName("");
+    //   onclose();
+    // }
   };
+
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  useEffect(() => {
+    const fetchGroup = async () => {
+      try {
+        const groupResponse = await getAssetGroups();
+        setAssetGroups(groupResponse.data);
+        console.log(groupResponse.data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchGroup();
+  }, []);
 
   return (
     <ModalWrapper onclose={onclose}>
@@ -28,16 +59,18 @@ const AssetSubGroupModal = ({ onclose }) => {
               Group Name:
             </label>
             <select
-              name=""
+              name="group_id"
               id=""
-              value={selectedGroup}
-              onChange={(e) => setSelectedGroup(e.target.value)}
+              value={formData.group_id}
+              onChange={handleChange}
               className="border rounded-md border-gray-500 p-1 px-2"
             >
-                <option value="">Select Group</option>
-                {groups.map((group, index)=>
-                <option value={group} key={index}>{group}</option>
-                )}
+              <option value="">Select Group</option>
+              {assetGroups.map((group) => (
+                <option value={group.id} key={group.id}>
+                  {group.name}
+                </option>
+              ))}
             </select>
           </div>
           <div className="flex flex-col gap-2">
@@ -46,18 +79,19 @@ const AssetSubGroupModal = ({ onclose }) => {
             </label>
             <input
               type="text"
-              name=""
+              name="name"
               id=""
-              value={subGroupName}
-              onChange={(e)=> setSubGroupName(e.target.value)}
+              value={formData.name}
+              onChange={handleChange}
               placeholder="Enter Sub Group Name"
               className="border placeholder:text-sm rounded-md border-gray-500 p-1 px-2"
             />
           </div>
         </div>
         <div className="flex justify-center">
-          <button className="bg-black p-1 px-4 text-white rounded-md my-5 hover:bg-white hover:text-black border-2 border-black transition-all duration-300"
-          onClick={CreateSubGroup}
+          <button
+            className="bg-black p-1 px-4 text-white rounded-md my-5 hover:bg-white hover:text-black border-2 border-black transition-all duration-300"
+            onClick={CreateSubGroup}
           >
             Create
           </button>

@@ -9,11 +9,11 @@ import { Link, useParams } from "react-router-dom";
 import { postAssetparams } from "../../../../api";
 import toast from "react-hot-toast";
 const initialFormData = {
-  name: '',
-  order: '',
-  digit: '',
-  below: '',
-  above: '',
+  name: "",
+  order: "",
+  digit: "",
+  below: "",
+  above: "",
   dashboard_view: false,
   consumption_view: false,
 };
@@ -28,6 +28,11 @@ const Assetinfo = ({ assetData }) => {
     dashboard_view: false,
     consumption_view: false,
     asset_id: id,
+    alert_below: "",
+    alert_above: "",
+    min_val: "",
+    max_val: "",
+    check_prev: false,
   });
 
   const {
@@ -44,6 +49,7 @@ const Assetinfo = ({ assetData }) => {
     breakdown,
     is_meter,
     active,
+    remarks,
     created_at,
     updated_at,
     description,
@@ -53,7 +59,7 @@ const Assetinfo = ({ assetData }) => {
     installation,
   } = assetData;
   const [qrCode, setQrCode] = useState(false);
-
+console.log(assetData)
   const dateFormat = (dateString) => {
     const date = new Date(dateString);
     return date.toLocaleString(); // Adjust the format as needed
@@ -100,7 +106,7 @@ const Assetinfo = ({ assetData }) => {
       },
     },
   };
- 
+
   const handleAssetParamsChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
@@ -115,7 +121,7 @@ const Assetinfo = ({ assetData }) => {
       toast.dismiss();
       toast.success("Asset Params added successfully");
       // setFormData(initialAddAssetFormData);
-      window.location.reload()
+      // window.location.reload();
     } catch (error) {
       console.error("Error submitting complaint:", error);
       toast.error("Error Creating Asset!");
@@ -127,10 +133,10 @@ const Assetinfo = ({ assetData }) => {
       <div className="m-2">
         <div className="border-2 flex flex-col my-5 p-4 gap-4 rounded-md border-gray-400">
           <div className=" flex sm:flex-row flex-col gap-5 justify-between ">
-            <button className="border-2 px-4 p-1 rounded-full text-blue-500 flex gap-2 items-center hover:bg-blue-500 hover:text-white border-blue-500 justify-center transition-all duration-500">
+            {/* <button className="border-2 px-4 p-1 rounded-full text-blue-500 flex gap-2 items-center hover:bg-blue-500 hover:text-white border-blue-500 justify-center transition-all duration-500">
               <CgAdd />
               Add PPM
-            </button>
+            </button> */}
             <div className="flex items-center gap-2 ">
               {/* modify switch */}
               {/* <p>Breakdown</p>
@@ -158,10 +164,10 @@ const Assetinfo = ({ assetData }) => {
               Location Details
             </h2>
             <div className="my-5 md:px-10 text-sm items-center font-medium grid gap-4 md:grid-cols-2">
-              <div className="grid grid-cols-2 items-center">
+              {/* <div className="grid grid-cols-2 items-center">
                 <p>Site :</p>
                 <p className="text-sm font-normal "></p>
-              </div>
+              </div> */}
               <div className="grid grid-cols-2">
                 <p>Building : </p>
                 <p className="text-sm font-normal">{building_name}</p>
@@ -181,10 +187,10 @@ const Assetinfo = ({ assetData }) => {
               Asset Information
             </h2>
             <div className="my-5 md:px-10 items-center font-medium grid gap-5 md:grid-cols-3 text-sm">
-              <div className="grid grid-cols-2 items-center">
+              {/* <div className="grid grid-cols-2 items-center">
                 <p>Client Name :</p>
                 <p className="text-sm font-normal"></p>
-              </div>
+              </div> */}
               <div className="grid grid-cols-2 items-center">
                 <p>Asset Name : </p>
                 <p className="text-sm font-normal">{name}</p>
@@ -207,8 +213,9 @@ const Assetinfo = ({ assetData }) => {
                 <p className="text-sm font-normal">{installation}</p>
               </div>
               <div className="grid grid-cols-2">
-                <p>Breakdown Date : </p>
-              </div>
+                <p>Breakdown : </p>
+                <p className="text-sm font-normal">{breakdown ? "Yes": "No"}</p>
+              </div >
               <div className="grid grid-cols-2">
                 <p>Created On : </p>
                 <p className="text-sm font-normal">{dateFormat(created_at)}</p>
@@ -241,14 +248,22 @@ const Assetinfo = ({ assetData }) => {
                 <p>Updated On : </p>
                 <p className="text-sm font-normal">{dateFormat(updated_at)}</p>
               </div>
-              <div className="grid grid-cols-2">
-                <p>Comments: </p>
+              
+              
+            </div>
+          </div>
+          <div>
+            <h2 className="border-b  text-xl border-black font-semibold">
+              Additional Info
+            </h2>
+            <div className="flex flex-col gap-2">
+                <p className="font-medium">Comments: </p>
+                <p className="">{remarks}</p>
               </div>
-              <div className="grid grid-cols-2">
+              <div className="flex flex-col gap-2">
                 <p>Description : </p>
                 <p className="text-sm">{description}</p>
               </div>
-            </div>
           </div>
           <div>
             <h2 className="border-b  text-xl border-black font-semibold">
@@ -307,7 +322,7 @@ const Assetinfo = ({ assetData }) => {
                 </div>
                 <div className="flex flex-col">
                   <label htmlFor="charactorLimt" className="font-medium">
-                    Charactor Limit :
+                    Input Charactor Limit :
                   </label>
                   <input
                     type="text"
@@ -325,26 +340,57 @@ const Assetinfo = ({ assetData }) => {
                   </label>
                   <input
                     type="text"
-                    name="below"
+                    name="alert_below"
                     id="below"
+                    value={formData.alert_below}
+                    onChange={handleAssetParamsChange}
                     placeholder="Alert Below Value"
                     className="border p-1 px-4 border-gray-500 rounded-md"
                   />
                 </div>
                 <div className="flex flex-col">
-                  <label htmlFor="name" className="font-medium">
+                  <label htmlFor="above" className="font-medium">
                     Alert Above :
                   </label>
                   <input
                     type="text"
-                    name="above"
+                    name="alert_above"
                     id="above"
+                    value={formData.alert_above}
+                    onChange={handleAssetParamsChange}
                     placeholder="Alert Above Value"
                     className="border p-1 px-4 border-gray-500 rounded-md"
                   />
                 </div>
-              </div>
-              <div className="grid grid-cols-3 gap-4 my-4">
+                <div className="flex flex-col">
+                  <label htmlFor="min" className="font-medium">
+                    Min :
+                  </label>
+                  <input
+                    type="text"
+                    name="min_val"
+                    id="min"
+                    value={formData.min_val}
+                    onChange={handleAssetParamsChange}
+                    placeholder="Min Value"
+                    className="border p-1 px-4 border-gray-500 rounded-md"
+                  />
+                </div>
+                <div className="flex flex-col">
+                  <label htmlFor="name" className="font-medium">
+                    Max :
+                  </label>
+                  <input
+                    type="text"
+                    name="max_val"
+                    id="above"
+                    value={formData.max_val}
+                    onChange={handleAssetParamsChange}
+                    placeholder="Max Value"
+                    className="border p-1 px-4 border-gray-500 rounded-md"
+                  />
+                </div>
+                {/* <div className="grid grid-cols-3 gap-4 my-4"> */}
                 <div className="flex items-center gap-2">
                   <input
                     type="checkbox"
@@ -376,6 +422,23 @@ const Assetinfo = ({ assetData }) => {
                   />
                   <label htmlFor="consumption_view">Consumption View</label>
                 </div>
+                <div className="flex items-center gap-2">
+                  <input
+                    type="checkbox"
+                    name="check_prev"
+                    id="check_prev"
+                    checked={formData.check_prev || false}
+                    // onClick={() => setMeterApplicable(!meterApplicable)}
+                    onChange={() =>
+                      setFormData((prevState) => ({
+                        ...prevState,
+                        check_prev: !prevState.check_prev,
+                      }))
+                    }
+                  />
+                  <label htmlFor="check_prev">Check previous Reading</label>
+                </div>
+                {/* </div> */}
               </div>
               <div className="flex justify-center">
                 <button

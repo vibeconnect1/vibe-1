@@ -172,8 +172,23 @@ export const getAssetGroups = async () =>
     },
   });
 
+export const getAssetSubGroups = async (groupId) => {
+  axiosInstance.get(`/sub_groups.json`, {
+    params: {
+      token: token,
+      group_id: groupId,
+    },
+  });
+};
+
 export const postAssetGroups = async (data) =>
   axiosInstance.post("/asset_groups.json", data, {
+    params: {
+      token: token,
+    },
+  });
+export const postAssetSubGroups = async (data) =>
+  axiosInstance.post("/sub_groups.json", data, {
     params: {
       token: token,
     },
@@ -223,5 +238,3 @@ export const getSetupUsers = async () =>
       token: token,
     },
   });
-
-  

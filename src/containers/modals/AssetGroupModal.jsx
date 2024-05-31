@@ -15,10 +15,10 @@ const AssetGroupModal = ({ onclose }) => {
       description: description,
     });
 
+      onclose();
     // if (groupName.trim()) {
     //   dispatch(addGroup(groupName));
     //   setGroupName("");
-    //   onclose();
     // }
   };
 

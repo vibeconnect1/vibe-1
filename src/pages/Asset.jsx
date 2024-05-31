@@ -54,18 +54,8 @@ const Asset = () => {
     },
 
     {
-      name: "Site",
-      selector: (row) => row.Site_name,
-      sortable: true,
-    },
-    {
       name: "Building",
       selector: (row) => row.building_name,
-      sortable: true,
-    },
-    {
-      name: "Area",
-      selector: (row) => row.area_name,
       sortable: true,
     },
 
@@ -104,16 +94,16 @@ const Asset = () => {
       selector: (row) => row.model_number,
       sortable: true,
     },
-    {
-      name: "Asset Type",
-      selector: (row) => row.asset_type,
-      sortable: true,
-    },
-    {
-      name: "Client Name",
-      selector: (row) => row.client_name,
-      sortable: true,
-    },
+    // {
+    //   name: "Asset Type",
+    //   selector: (row) => row.asset_type,
+    //   sortable: true,
+    // },
+    // {
+    //   name: "Client Name",
+    //   selector: (row) => row.client_name,
+    //   sortable: true,
+    // },
     {
       name: "Group",
       selector: (row) => row.group,
@@ -135,11 +125,7 @@ const Asset = () => {
       selector: (row) => row.purchase_cost,
       sortable: true,
     },
-    {
-      name: "Warranty Expiry",
-      selector: (row) => row.warranty_expiry,
-      sortable: true,
-    },
+   
     {
       name: "Critical",
       selector: (row) => (row.critical ? "Yes" : "No"),
@@ -177,11 +163,11 @@ const Asset = () => {
     },
     {
       name: "Warranty",
-      selector: (row) => row.warranty,
+      selector: (row) => (row.warranty_start === null ? "No": "Yes"),
       sortable: true,
     },
     {
-      name: "Warranty Start",
+      name: "W Start",
       selector: (row) => row.warranty_start,
       sortable: true,
     },
@@ -192,35 +178,17 @@ const Asset = () => {
       sortable: true,
     },
     {
-      name: "AMC",
-      selector: (row) => row.amc,
+      name: "W Expiry",
+      selector: (row) => row.warranty_expiry,
       sortable: true,
     },
-    {
-      name: "PPM",
-      selector: (row) => row.ppm,
-      sortable: true,
-    },
+
     {
       name: "Meter Configured",
       selector: (row) => (row.is_meter ? "Yes" : "No"),
       sortable: true,
     },
-    {
-      name: "Meter Category",
-      selector: (row) => row.meter_category,
-      sortable: true,
-    },
-    {
-      name: "Meter Type",
-      selector: (row) => row.meter_type,
-      sortable: true,
-    },
-    {
-      name: "Submeter",
-      selector: (row) => row.sub_meter,
-      sortable: true,
-    },
+
     {
       name: "Supplier",
       selector: (row) => row.supplier,
@@ -244,9 +212,9 @@ const Asset = () => {
             .includes(searchValue.toLowerCase()) ||
           item.name.toLowerCase().includes(searchValue.toLowerCase()) ||
           (item.oem_name &&
-            item.oem_name.toLowerCase().includes(searchValue.toLowerCase()))||
-            (item.unit_name &&
-              item.unit_name.toLowerCase().includes(searchValue.toLowerCase()))
+            item.oem_name.toLowerCase().includes(searchValue.toLowerCase())) ||
+          (item.unit_name &&
+            item.unit_name.toLowerCase().includes(searchValue.toLowerCase()))
       );
       setFilteredData(filteredResults);
     }
@@ -269,6 +237,7 @@ const Asset = () => {
       style: {
         fontWeight: "bold",
         fontSize: "10px",
+        with: "auto"
       },
     },
   };
@@ -588,10 +557,10 @@ const Asset = () => {
                   <IoAddCircleOutline size={20} />
                   Add
                 </Link>
-                <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-                  {/* <input type="file"  className="opacity-0 w-fit" onChange={handleFileChange} /> */}
+                {/* <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                  <input type="file"  className="opacity-0 w-fit" onChange={handleFileChange} />
                   Import
-                </button>
+                </button> */}
                 <button
                   className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
                   onClick={exportToExcel}

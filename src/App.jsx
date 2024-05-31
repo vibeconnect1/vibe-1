@@ -154,8 +154,20 @@ import EmployeeProjectDetails from "./pages/Employees/EmployeeSubPages/EmployeeP
 import EmployeeProjectAddTask from "./pages/Employees/EmployeeSubPages/EmployeeProjectAddTask.jsx";
 import EmployeeEditProject from "./pages/Employees/EmployeeSubPages/EmployeeEditProject.jsx";
 import BusinessCard from "./pages/BusinessCard.jsx";
+import { useSelector } from "react-redux";
+import PO from "./pages/PO.jsx";
+import PoDetails from "./pages/SubPages/details/PoDetails.jsx";
+import Wo from "./pages/Wo.jsx";
+import WoDetail from "./pages/SubPages/details/WoDetails.jsx";
+import Audit from "./pages/Audit.jsx";
+import AddScheduleAudit from "./pages/SubPages/AuditSubPages/AddScheduleAudit.jsx";
 
 function App() {
+  const themeColor = useSelector((state) => state.theme.color);
+  document.documentElement.style.setProperty(
+    "--scrollbar-thumb-color",
+    themeColor
+  );
   return (
     <>
       <Router>
@@ -1093,6 +1105,59 @@ function App() {
               <ProtectedRoute>
                 <EmployeeEditProject />
               </ProtectedRoute>
+            }
+          />
+          {/* Admin PO*/}
+          <Route
+            path="/admin/PO"
+            element={
+              <ProtectedAdminRoutes>
+                <PO />
+              </ProtectedAdminRoutes>
+            }
+          />
+          {/* Admin PO*/}
+          <Route
+            path="/admin/po-detail/:id"
+            element={
+              <ProtectedAdminRoutes>
+                <PoDetails />
+              </ProtectedAdminRoutes>
+            }
+          />
+
+{/* Admin WO detail*/}
+           <Route
+            path="/admin/Wo"
+            element={
+              <ProtectedAdminRoutes>
+              <Wo/>
+              </ProtectedAdminRoutes>
+            }
+          />
+        <Route
+            path="/admin/wo-detail/:id"
+            element={
+              <ProtectedAdminRoutes>
+                <WoDetail/>
+              </ProtectedAdminRoutes>
+            }
+          />
+          {/* Audit */}
+        <Route
+            path="/admin/audit"
+            element={
+              <ProtectedAdminRoutes>
+                <Audit/>
+              </ProtectedAdminRoutes>
+            }
+          />
+        <Route
+            path="/admin/audit/schedule-audit"
+            element={
+              <ProtectedAdminRoutes>
+                <AddScheduleAudit/>
+              </ProtectedAdminRoutes>
             }
           />
         </Routes>

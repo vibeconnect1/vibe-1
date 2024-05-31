@@ -9,6 +9,7 @@ import { BiEdit } from "react-icons/bi";
 import moment from "moment";
 import { getItemInLocalStorage } from "../utils/localStorage";
 import * as XLSX from "xlsx";
+import { useSelector } from "react-redux";
 const Ticket = () => {
   const [filteredData, setFilteredData] = useState([]);
   const [searchText, setSearchText] = useState("");
@@ -98,10 +99,11 @@ const Ticket = () => {
   ];
 
   //custom style
+  const themeColor = useSelector((state)=> state.theme.color)
   const customStyle = {
     headRow: {
       style: {
-        backgroundColor: "black",
+        background: themeColor,
         color: "white",
 
         fontSize: "10px",

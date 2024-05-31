@@ -20,11 +20,28 @@ import {
 import { HiMiniTicket, HiMiniUser } from "react-icons/hi2";
 import { RiSettings4Line } from "react-icons/ri";
 import { LuParkingSquare, LuSettings2 } from "react-icons/lu";
-import { IoBusinessOutline, IoCashOutline, IoDocumentTextOutline, IoFitness } from "react-icons/io5";
+import {
+  IoBusinessOutline,
+  IoCashOutline,
+  IoDocumentTextOutline,
+  IoFitness,
+} from "react-icons/io5";
 import { TbReportAnalytics } from "react-icons/tb";
-import { AiOutlineFieldTime, AiOutlineUser } from "react-icons/ai";
+import {
+  AiOutlineAudit,
+  AiOutlineFieldTime,
+  AiOutlineUser,
+} from "react-icons/ai";
 import { TiBusinessCard } from "react-icons/ti";
-import { FaBirthdayCake, FaBriefcaseMedical, FaCar, FaUser, FaUserFriends } from "react-icons/fa";
+import {
+  FaBirthdayCake,
+  FaBriefcaseMedical,
+  FaCar,
+  FaFileWord,
+  FaRegFilePowerpoint,
+  FaUser,
+  FaUserFriends,
+} from "react-icons/fa";
 import { IoIosPeople } from "react-icons/io";
 import { useSelector } from "react-redux";
 
@@ -32,7 +49,7 @@ const Navbar = () => {
   const [open, setOpen] = useState(false);
   const [user, setUser] = useState("");
   const navigate = useNavigate();
-  const themeColor = useSelector((state)=> state.theme.color)
+  const themeColor = useSelector((state) => state.theme.color);
 
   const handleMouseEnter = () => {
     setOpen(true);
@@ -66,12 +83,12 @@ const Navbar = () => {
   return (
     <section className="flex gap-6 sticky top-0 left-0 bottom-0 h-screen z-10">
       <div
-      style={{
-        background: themeColor
-      }}
+        style={{
+          background: themeColor,
+        }}
         className={`p-[8px]  max-h-screen ${
           open ? "w-full md:w-60" : "w-20"
-        } duration-500 text-gray-100 px-4 rounded-r-2xl shadow-2xl overflow-y-auto h-screen custom-scrollbar left-0`}
+        } duration-500 text-gray-100 px-4 shadow-2xl overflow-y-auto h-screen custom-scrollbar left-0`}
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
       >
@@ -124,7 +141,9 @@ const Navbar = () => {
                   }`
                 }
               >
-                <div>{React.createElement(MdManageAccounts, { size: "20" })}</div>
+                <div>
+                  {React.createElement(MdManageAccounts, { size: "20" })}
+                </div>
                 <h2
                   className={`whitespace-pre duration-300 ${
                     !open && "opacity-0 translate-x-28 overflow-hidden"
@@ -193,6 +212,90 @@ const Navbar = () => {
                 </h2>
               </NavLink>
               <NavLink
+                to={"/admin/PO"}
+                className={({ isActive }) =>
+                  ` ${
+                    isActive
+                      ? "text-black bg-white flex p-2  gap-3.5 rounded-md group items-center text-sm font-medium"
+                      : " group flex items-center text-sm gap-3.5 font-medium p-2 hover:bg-gray-800 rounded-md "
+                  }`
+                }
+              >
+                <div>
+                  {React.createElement(FaRegFilePowerpoint, { size: "20" })}
+                </div>
+
+                <h2
+                  className={`whitespace-pre duration-300 ${
+                    !open && "opacity-0 translate-x-28 overflow-hidden"
+                  }`}
+                >
+                  PO
+                </h2>
+                <h2
+                  className={`${
+                    open && "hidden"
+                  } absolute left-48 bg-white font-semibold whitespace-pre text-gray-900 rounded-md drop-shadow-lg px-0 py-0 w-0 overflow-hidden group-hover:px-2 group-hover:py-1 group-hover:left-14 group-hover:duration-300 group-hover:w-fit  `}
+                >
+                  PO
+                </h2>
+              </NavLink>
+              <NavLink
+                to={"/admin/WO"}
+                className={({ isActive }) =>
+                  ` ${
+                    isActive
+                      ? "text-black bg-white flex p-2  gap-3.5 rounded-md group items-center text-sm font-medium"
+                      : " group flex items-center text-sm gap-3.5 font-medium p-2 hover:bg-gray-800 rounded-md "
+                  }`
+                }
+              >
+                <div>{React.createElement(FaFileWord, { size: "20" })}</div>
+
+                <h2
+                  className={`whitespace-pre duration-300 ${
+                    !open && "opacity-0 translate-x-28 overflow-hidden"
+                  }`}
+                >
+                  Wo
+                </h2>
+                <h2
+                  className={`${
+                    open && "hidden"
+                  } absolute left-48 bg-white font-semibold whitespace-pre text-gray-900 rounded-md drop-shadow-lg px-0 py-0 w-0 overflow-hidden group-hover:px-2 group-hover:py-1 group-hover:left-14 group-hover:duration-300 group-hover:w-fit  `}
+                >
+                  WO
+                </h2>
+              </NavLink>
+              <NavLink
+                to={"/admin/audit"}
+                className={({ isActive }) =>
+                  ` ${
+                    isActive
+                      ? "text-black bg-white flex p-2  gap-3.5 rounded-md group items-center text-sm font-medium"
+                      : " group flex items-center text-sm gap-3.5 font-medium p-2 hover:bg-gray-800 rounded-md "
+                  }`
+                }
+              >
+                <div>{React.createElement(AiOutlineAudit, { size: "20" })}</div>
+
+                <h2
+                  className={`whitespace-pre duration-300 ${
+                    !open && "opacity-0 translate-x-28 overflow-hidden"
+                  }`}
+                >
+                  Audit
+                </h2>
+                <h2
+                  className={`${
+                    open && "hidden"
+                  } absolute left-48 bg-white font-semibold whitespace-pre text-gray-900 rounded-md drop-shadow-lg px-0 py-0 w-0 overflow-hidden group-hover:px-2 group-hover:py-1 group-hover:left-14 group-hover:duration-300 group-hover:w-fit  `}
+                >
+                  Audit
+                </h2>
+              </NavLink>
+
+              <NavLink
                 to={"/admin/birthday"}
                 className={({ isActive }) =>
                   ` ${
@@ -219,7 +322,7 @@ const Navbar = () => {
                   Birthday
                 </h2>
               </NavLink>
-{/* admin tickets */}
+              {/* admin tickets */}
               <NavLink
                 to={"/tickets"}
                 className={({ isActive }) =>
@@ -313,9 +416,7 @@ const Navbar = () => {
                   }`
                 }
               >
-                <div>
-                  {React.createElement(TiBusinessCard, { size: "20" })}
-                </div>
+                <div>{React.createElement(TiBusinessCard, { size: "20" })}</div>
                 <h2
                   className={`whitespace-pre duration-300 ${
                     !open && "opacity-0 translate-x-28 overflow-hidden"
@@ -341,9 +442,7 @@ const Navbar = () => {
                   }`
                 }
               >
-                <div>
-                  {React.createElement(FaUser, { size: "20" })}
-                </div>
+                <div>{React.createElement(FaUser, { size: "20" })}</div>
                 <h2
                   className={`whitespace-pre duration-300 ${
                     !open && "opacity-0 translate-x-28 overflow-hidden"
@@ -698,7 +797,7 @@ const Navbar = () => {
           {/* user */}
           {user !== "pms_admin" && (
             <>
-             <NavLink
+              <NavLink
                 to={"/employee/project-management"}
                 className={({ isActive }) =>
                   ` ${
@@ -708,7 +807,9 @@ const Navbar = () => {
                   }`
                 }
               >
-                <div>{React.createElement(MdManageAccounts, { size: "20" })}</div>
+                <div>
+                  {React.createElement(MdManageAccounts, { size: "20" })}
+                </div>
                 <h2
                   className={`whitespace-pre duration-300 ${
                     !open && "opacity-0 translate-x-28 overflow-hidden"
@@ -815,7 +916,6 @@ const Navbar = () => {
                 }
               >
                 <div>{React.createElement(FaUserFriends, { size: "20" })}</div>
-
 
                 <h2
                   className={`whitespace-pre duration-300 ${

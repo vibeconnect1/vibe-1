@@ -2,23 +2,43 @@ import React from 'react'
 import DataTable from 'react-data-table-component'
 import { useSelector } from 'react-redux';
 
-const Table = ({columns, data,selectRows,isPagination,title }) => {
+const Table = ({columns, data,selectRows,isPagination,title, height }) => {
     const themeColor = useSelector((state)=> state.theme.color)
-    const customStyle = {
-        headRow: {
-          style: {
-            backgroundColor: themeColor,
-            color: "white",
+    // const customStyle = {
+    //     headRow: {
+    //       style: {
+    //         backgroundColor: themeColor,
+    //         color: "white",
     
-            fontSize: "10px",
-          },
+    //         fontSize: "10px",
+    //       },
+    //     },
+    //     headCells: {
+    //       style: {
+    //         textTransform: "upperCase",
+    //       },
+    //     },
+    //   };
+    const customStyle = {
+      headRow: {
+        style: {
+          background: themeColor,
+          color: "white",
+          fontSize: "10px",
         },
-        headCells: {
-          style: {
-            textTransform: "upperCase",
-          },
+      },
+      headCells: {
+        style: {
+          textTransform: "upperCase",
         },
-      };
+      },
+      cells: {
+        style: {
+          fontWeight: "bold",
+          fontSize: "10px",
+        },
+      },
+    };
   return (
     <DataTable
     title={title}
@@ -29,7 +49,7 @@ const Table = ({columns, data,selectRows,isPagination,title }) => {
           customStyles={customStyle}
           pagination={isPagination}
           fixedHeader
-          // fixedHeaderScrollHeight="420px"
+          fixedHeaderScrollHeight={height}
           selectableRowsHighlight
           highlightOnHover
         />

@@ -32,7 +32,7 @@ function User() {
     const lastName = localStorage.getItem("LASTNAME");
     const formattedLastName = lastName ? lastName.replace(/"/g, "") : "";
     setUserLastName(formattedLastName);
-    console.log(userName);
+   
     setUser(formattedUserName);
     console.log(formattedLastName);
   });
@@ -146,7 +146,7 @@ function User() {
                     <button
                       key={color.name}
                       className="p-2 text-white m-1 border-2 border-black rounded-sm"
-                      style={{ backgroundColor: color.code }}
+                      style={{ background: color.code }}
                       onClick={() => handleColorChange(color.code)}
                     ></button>
                   ))}

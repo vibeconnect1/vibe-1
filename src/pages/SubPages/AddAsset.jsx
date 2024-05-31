@@ -3,6 +3,7 @@ import Switch from "../../Buttons/Switch";
 import { getItemInLocalStorage } from "../../utils/localStorage";
 import {
   getAssetGroups,
+  getAssetSubGroups,
   getFloors,
   getUnits,
   getVendors,
@@ -30,6 +31,7 @@ const AddAsset = () => {
   const [vendors, setVendors] = useState([]);
   const [formData, setFormData] = useState(initialAddAssetFormData);
   const [assetGroups, setAssetGroup] = useState([]);
+  const [assetSubGoups, setAssetSubGroups] = useState([]);
   console.log(formData);
   const themeColor = useSelector((state) => state.theme.color);
   useEffect(() => {
@@ -65,6 +67,21 @@ const AddAsset = () => {
       }
     }
 
+    const fetchSubGroups = async (groupId) => {
+      try {
+        const subGroupResponse = await getAssetSubGroups(groupId);
+        setAssetSubGroups(
+          subGroupResponse.data.map((item) => ({
+            name: item.name,
+            id: item.id,
+          }))
+        );
+        console.log(subGroupResponse);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
     if (e.target.type === "select-one" && e.target.name === "building_id") {
       const BuildID = Number(e.target.value);
       await fetchFloor(BuildID);
@@ -82,6 +99,17 @@ const AddAsset = () => {
       setFormData({
         ...formData,
         floor_id: UnitID,
+      });
+    } else if (
+      e.target.type === "select-one" &&
+      e.target.name === "asset_group_id"
+    ) {
+      const groupId = Number(e.target.value);
+      console.log("groupId:" + groupId);
+      await fetchSubGroups(groupId);
+      setFormData({
+        ...formData,
+        asset_group_id: groupId,
       });
     } else {
       setFormData({
@@ -125,54 +153,7 @@ const AddAsset = () => {
   };
 
   const navigate = useNavigate();
-
-  const handleSaveAndCreate = async (e) => {
-    e.preventDefault();
-    try {
-      toast.loading("Creating Asset Please wait!");
-      const response = await postSiteAsset(formData);
-      console.log("Asset Created successfully:", response);
-      setFormData({});
-      toast.dismiss();
-      toast.success("Asset Created successfully");
-      setFormData(initialAddAssetFormData);
-    } catch (error) {
-      console.error("Error submitting complaint:", error);
-      toast.error("Error Creating Asset!");
-    }
-  };
-
-  // const handleSubmit = async (event) => {
-  //   event.preventDefault(); // Prevent default form submission behavior
-  //   console.log("FormData before appending:", formData);
-
-  //   // Create a new FormData object
-  //   const formDataToSend = new FormData();
-
-  //   // Append all form fields to the FormData object
-  // Object.entries(formData).forEach(([key, value]) => {
-  //   // Check if value is not null before converting to string
-  //   if (value !== null) {
-  //     formDataToSend.append(key, value.toString());
-  //   }
-  // });
-
-  //   // Append files to the FormData object
-  //   // formData.file1.forEach((file, index) => {
-  //   //   formDataToSend.append(`file${index + 1}`, file);
-  //   // });
-
-  //   try {
-  //     console.log(formDataToSend);
-  //     console.log(formData)
-  //     await postSiteAsset(formDataToSend);
-
-  //     console.log("Form data to send:", formDataToSend);
-  //   } catch (error) {
-  //     console.error("Error:", error);
-  //   }
-  // };
-
+ 
   const handleSubmit = async () => {
     try {
       toast.loading("Creating Asset Please Wait!");
@@ -183,6 +164,7 @@ const AddAsset = () => {
       formDataSend.append("site_asset[floor_id]", formData.floor_id);
       formDataSend.append("site_asset[unit_id]", formData.unit_id);
       formDataSend.append("site_asset[name]", formData.name);
+      formDataSend.append("site_asset[oem_name]", formData.oem_name);
       formDataSend.append("site_asset[serial_number]", formData.serial_number);
       formDataSend.append("site_asset[model_number]", formData.model_number);
       formDataSend.append("site_asset[purchased_on]", formData.purchased_on);
@@ -193,6 +175,7 @@ const AddAsset = () => {
       );
       // formDataSend.append("site_asset[user_id]", 2);
       formDataSend.append("site_asset[critical]", formData.critical);
+      formDataSend.append("site_asset[capacity]", formData.capacity);
       formDataSend.append("site_asset[breakdown]", formData.breakdown);
       formDataSend.append("site_asset[is_meter]", formData.is_meter);
       formDataSend.append(
@@ -200,11 +183,19 @@ const AddAsset = () => {
         formData.asset_group_id
       );
       formDataSend.append("site_asset[vendor_id]", formData.vendor_id);
-
+      // formDataSend.append("site_asset[purchase_invoices]", formData.invoice);
+      formDataSend.append("site_asset[uom]", formData.unit);
+      formDataSend.append(
+        "site_asset[warranty_start]",
+        formData.warranty_start
+      );
+      formDataSend.append("site_asset[installation]", formData.installation);
+console.log(formDataSend)
       const response = await postSiteAsset(formDataSend);
       toast.success("Asset Created Successfully");
       console.log("Response:", response.data);
-      toast.dismiss()
+      toast.dismiss();
+      navigate(`/assets/asset-details/${response.data.id}`)
     } catch (error) {
       toast.dismiss();
       console.error("Error:", error);
@@ -361,9 +352,9 @@ const AddAsset = () => {
                     type="text"
                     name="unit"
                     id="unit"
-                    // value={formData.unit}
-                    // onChange={handleChange}
-                    placeholder="Unit"
+                    value={formData.unit}
+                    onChange={handleChange}
+                    placeholder="Unit of measurement"
                     className="border p-1 px-4 border-gray-500 rounded-md"
                   />
                 </div>
@@ -386,14 +377,16 @@ const AddAsset = () => {
                 <div className="flex flex-col">
                   <select
                     className="border p-1 px-4 border-gray-500 rounded-md"
-                    name="sub_group"
-                    // value={formData.sub_group}
-                    // onChange={handleChange}
+                    name="asset_sub_group_id"
+                    value={formData.asset_sub_group_id}
+                    onChange={handleChange}
                   >
                     <option value="">Select Sub Group</option>
-                    <option value="Sub Group 1">Sub Group 1</option>
-                    <option value="Sub Group 2">Sub Group 2</option>
-                    <option value="Sub Group 3">Sub Group 3</option>
+                    {assetSubGoups.map((subGroup) => (
+                      <option value={subGroup.id} key={subGroup.id}>
+                        {subGroup.name}
+                      </option>
+                    ))}
                   </select>
                 </div>
 
@@ -470,7 +463,7 @@ const AddAsset = () => {
                 {formData.is_meter && (
                   <>
                     <div className="flex items-center gap-4">
-                      <p className="font-semibold">Meter Type:</p>
+                      <p className="font-semibold">Asset Type:</p>
                       <div className="flex gap-2">
                         <input
                           type="radio"
@@ -513,7 +506,7 @@ const AddAsset = () => {
                       value={formData.applicable_meter_category}
                       onChange={handleChange}
                     >
-                      <option value="">Select Asset Type </option>
+                      <option value="">Select Asset </option>
                       <option value="meter 1">Meter 1</option>
                       <option value="meter 2">Meter 2</option>
                       <option value="meter 2">meter 3</option>
@@ -764,7 +757,7 @@ const AddAsset = () => {
             <p className="border-b border-black font-semibold">
               Warranty Details
             </p>
-            <div className="flex sm:flex-row flex-col gap-4 my-2 items-center justify-between">
+            <div className="flex  flex-col gap-4 my-2  justify-between">
               <div className="flex gap-4 my-2">
                 <p className="font-semibold">Under Warranty: </p>
                 <div className="flex gap-2">
@@ -799,6 +792,19 @@ const AddAsset = () => {
                 <div className="flex md:flex-row flex-col md:items-center my-2 gap-5">
                   <div className="md:flex grid grid-cols-2 items-center gap-2 ">
                     <label htmlFor="" className="font-semibold">
+                      Warranty Start Date :
+                    </label>
+                    <input
+                      type="date"
+                      name="warranty_start"
+                      value={formData.warranty_start}
+                      onChange={handleChange}
+                      id="warranty_start"
+                      className="border p-1 px-4 border-gray-500 rounded-md"
+                    />
+                  </div>
+                  <div className="md:flex grid grid-cols-2 items-center gap-2 ">
+                    <label htmlFor="" className="font-semibold">
                       Expiry Date :
                     </label>
                     <input
@@ -810,9 +816,9 @@ const AddAsset = () => {
                       className="border p-1 px-4 border-gray-500 rounded-md"
                     />
                   </div>
-                  <div className="flex items-center gap-2">
+                  <div className="md:flex grid grid-cols-2 items-center gap-2 ">
                     <label htmlFor="" className="font-semibold">
-                      Commissioning Date:
+                      Commissioning Date :
                     </label>
                     <input
                       type="date"
@@ -923,14 +929,14 @@ const AddAsset = () => {
               />
             </div>
           </div>
-          <div className="sm:flex grid gap-2 my-5 sm:justify-end">
+          <div className="sm:flex justify-center grid gap-2 my-5 ">
             <button
               className="bg-black text-white p-2 px-4 rounded-md font-medium"
               onClick={handleSubmit}
             >
               Save & Show Details
             </button>
-            <button className=" border-black border-2  p-2 px-4 rounded-md font-medium">
+            {/* <button className=" border-black border-2  p-2 px-4 rounded-md font-medium">
               Save & Add PPM
             </button>
             <button className="border-black border-2 p-2 px-4 rounded-md font-medium">
@@ -941,7 +947,7 @@ const AddAsset = () => {
               onClick={handleSaveAndCreate}
             >
               Save & Create New Asset
-            </button>
+            </button> */}
           </div>
         </div>
       </div>

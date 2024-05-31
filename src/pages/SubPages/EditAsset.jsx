@@ -55,12 +55,13 @@ const EditAsset = () => {
     group: "",
     sub_group: "",
     asset_type: "",
-    purchased_on: formattedDate,
+    purchased_on: "",
     breakdown: false,
     critical: false,
-    installation: formattedDate,
+    installation: "",
     warranty: false,
-    warranty_expiry: formattedDate,
+    warranty_start: "",
+    warranty_expiry: "",
     is_meter: false,
     meter_type: "",
     applicable_meter_category: "",
@@ -68,7 +69,9 @@ const EditAsset = () => {
     meter_category: "",
     vendor_id: "",
     description: "",
+    remarks: "",
     oem_name: "",
+
     //
     invoice: [],
     insurance: [],
@@ -224,6 +227,7 @@ const EditAsset = () => {
       formDataSend.append("site_asset[floor_id]", formData.floor_id);
       formDataSend.append("site_asset[unit_id]", formData.unit_id);
       formDataSend.append("site_asset[name]", formData.name);
+      formDataSend.append("site_asset[oem_name]", formData.oem_name);
       formDataSend.append("site_asset[serial_number]", formData.serial_number);
       formDataSend.append("site_asset[model_number]", formData.model_number);
       formDataSend.append("site_asset[purchased_on]", formData.purchased_on);
@@ -241,6 +245,7 @@ const EditAsset = () => {
         formData.asset_group_id
       );
       formDataSend.append("site_asset[vendor_id]", formData.vendor_id);
+      formDataSend.append("site_asset[remarks]", formData.remarks);
 
       const response =  await EditSiteAsset(formDataSend, id);;
       toast.success("Asset Created Successfully");
@@ -622,12 +627,12 @@ const EditAsset = () => {
                   Comment :
                 </label>
                 <textarea
-                  name="heading"
+                  name="remarks"
                   placeholder="Enter Comment"
                   rows=""
                   cols={25}
-                  // value={formData.comment}
-                  // onChange={handleChange}
+                  value={formData.remarks}
+                  onChange={handleChange}
                   className="border px-2 rounded-md flex flex-auto border-black w-full"
                 ></textarea>
               </div>
@@ -639,7 +644,7 @@ const EditAsset = () => {
                   Description :
                 </label>
                 <textarea
-                  name="heading"
+                  name="description"
                   placeholder="Enter Description"
                   rows="3"
                   cols={25}
@@ -878,7 +883,7 @@ const EditAsset = () => {
             <p className="border-b border-black font-semibold">
               Warranty Details
             </p>
-            <div className="flex sm:flex-row flex-col gap-4 my-2 items-center justify-between">
+            <div className="flex  flex-col gap-4 my-2 justify-between">
               <div className="flex gap-4 my-2">
                 <p className="font-semibold">Under Warranty: </p>
                 <div className="flex gap-2">
@@ -909,6 +914,19 @@ const EditAsset = () => {
 
               {formData.warranty && (
                 <div className="flex md:flex-row flex-col md:items-center my-2 gap-5">
+                   <div className="md:flex grid grid-cols-2 items-center gap-2 ">
+                    <label htmlFor="" className="font-semibold">
+                      Warranty Statr Date :
+                    </label>
+                    <input
+                      type="date"
+                      name="warranty_start"
+                      value={formData.warranty_start}
+                      onChange={handleChange}
+                      id="warranty_start"
+                      className="border p-1 px-4 border-gray-500 rounded-md"
+                    />
+                  </div>
                   <div className="md:flex grid grid-cols-2 items-center gap-2 ">
                     <label htmlFor="" className="font-semibold">
                       Expiry Date :
@@ -922,7 +940,7 @@ const EditAsset = () => {
                       className="border p-1 px-4 border-gray-500 rounded-md"
                     />
                   </div>
-                  <div className="flex items-center gap-2">
+                  <div className="md:flex grid grid-cols-2 items-center gap-2 ">
                     <label htmlFor="" className="font-semibold">
                       Commissioning Date:
                     </label>

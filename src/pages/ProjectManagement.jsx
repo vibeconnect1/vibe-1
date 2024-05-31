@@ -6,10 +6,11 @@ import DataTable from "react-data-table-component";
 import { BiEdit } from "react-icons/bi";
 import { BsEye } from "react-icons/bs";
 import { useSelector } from "react-redux";
+import Boards from "../components/Boards";
 
 const ProjectManagement = () => {
   const [selectedStatus, setSelectedStatus] = useState("all");
-  const themeColor = useSelector((state)=> state.theme.color)
+  const themeColor = useSelector((state) => state.theme.color);
 
   const columns = [
     {
@@ -17,7 +18,6 @@ const ProjectManagement = () => {
       cell: (row) => (
         <div className="flex items-center gap-4">
           <Link to={`/employee/project-details/${row.id}`}>
-          
             <BsEye size={15} />
           </Link>
           <Link to={`/employee/edit-project/${row.id}`}>
@@ -95,7 +95,7 @@ const ProjectManagement = () => {
   return (
     <section className="flex">
       <Navbar />
-      <div className="w-full flex mx-3 flex-col overflow-hidden">
+      <div className="w-full flex mx-3 flex-col  mb-10">
         <div className="flex sm:flex-row flex-col gap-10 my-5">
           <div className="sm:flex grid grid-cols-2 items-center justify-center  gap-4 border border-gray-300 rounded-md px-3 p-2 w-auto">
             <div className="flex items-center gap-2">
@@ -189,8 +189,8 @@ const ProjectManagement = () => {
             Export
           </button>
         </div>
-
-        <DataTable
+        <Boards />
+        {/* <DataTable
           responsive
           // selectableRows
           columns={columns}
@@ -201,7 +201,7 @@ const ProjectManagement = () => {
           // fixedHeaderScrollHeight="420px"
           selectableRowsHighlight
           highlightOnHover
-        />
+        /> */}
       </div>
     </section>
   );
