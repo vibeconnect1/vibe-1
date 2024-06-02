@@ -3,7 +3,7 @@ import toast from "react-hot-toast";
 import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
 import { useNavigate } from "react-router-dom";
 import wave from "/wave.png";
-import { login } from "../../api";
+import { login, vibeLogin } from "../../api";
 import { setItemInLocalStorage } from "../../utils/localStorage";
 
 const Login = () => {
@@ -44,12 +44,24 @@ const Login = () => {
           password: formData.password,
         },
       });
+      // vibe login
+    //   const vibeResponse = await vibeLogin({
+    //     email: formData.email,
+    //     password: formData.password,
+    //   });
+    //   console.log("vibe", vibeResponse);
+    //   const vibeToken= vibeResponse.data.token.access.token
+    //   setItemInLocalStorage("VIBETOKEN",vibeToken)
+      
 
+    //   const vibeUserId = vibeResponse.data.data.user_id
+    //  setItemInLocalStorage("VIBEUSERID", vibeUserId)
+// 
       const loginD = response.data.user;
       setItemInLocalStorage("user", loginD);
       console.log("User details", loginD);
-      const userId = response.data.user.id
-      setItemInLocalStorage("UserId", userId)
+      const userId = response.data.user.id;
+      setItemInLocalStorage("UserId", userId);
       // console.log(userId)
 
       const unitId = response.data.user.unit_id;

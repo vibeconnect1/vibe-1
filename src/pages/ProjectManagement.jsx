@@ -10,7 +10,7 @@ import Boards from "../components/Boards";
 
 const ProjectManagement = () => {
   const [selectedStatus, setSelectedStatus] = useState("all");
-  const themeColor = useSelector((state) => state.theme.color);
+  const themeColor = useSelector((state)=> state.theme.color)
 
   const columns = [
     {
@@ -18,6 +18,7 @@ const ProjectManagement = () => {
       cell: (row) => (
         <div className="flex items-center gap-4">
           <Link to={`/employee/project-details/${row.id}`}>
+          
             <BsEye size={15} />
           </Link>
           <Link to={`/employee/edit-project/${row.id}`}>
@@ -189,7 +190,7 @@ const ProjectManagement = () => {
             Export
           </button>
         </div>
-        <Boards />
+<Boards/>
         {/* <DataTable
           responsive
           // selectableRows

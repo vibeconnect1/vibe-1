@@ -70,8 +70,9 @@ const AddAsset = () => {
     const fetchSubGroups = async (groupId) => {
       try {
         const subGroupResponse = await getAssetSubGroups(groupId);
+        console.log(subGroupResponse);
         setAssetSubGroups(
-          subGroupResponse.data.map((item) => ({
+          subGroupResponse.map((item) => ({
             name: item.name,
             id: item.id,
           }))
@@ -153,7 +154,7 @@ const AddAsset = () => {
   };
 
   const navigate = useNavigate();
- 
+
   const handleSubmit = async () => {
     try {
       toast.loading("Creating Asset Please Wait!");
@@ -184,18 +185,40 @@ const AddAsset = () => {
       );
       formDataSend.append("site_asset[vendor_id]", formData.vendor_id);
       // formDataSend.append("site_asset[purchase_invoices]", formData.invoice);
+      // formDataSend.append("site_asset[insurances]", formData.insurance);
+      // formDataSend.append("site_asset[manuals]", formData.manuals);
+      // formDataSend.append("site_asset[other_files]", formData.others);
+      formData.invoice.forEach((file, index) => {
+        console.log("-----------------");
+        console.log(index);
+        console.log(file);
+        formDataSend.append(`site_asset[purchase_invoices]`, file);
+      });
+      formData.insurance.forEach((file, index) => {
+        console.log("-----------------");
+        console.log(index);
+        console.log(file);
+        formDataSend.append(`site_asset[insurances]`, file);
+      });
+      formData.manuals.forEach((file, index) => {
+        formDataSend.append(`site_asset[manuals]`, file);
+      });
+      formData.others.forEach((file, index) => {
+        formDataSend.append(`site_asset[other_files]`, file);
+      });
+
       formDataSend.append("site_asset[uom]", formData.unit);
       formDataSend.append(
         "site_asset[warranty_start]",
         formData.warranty_start
       );
-      formDataSend.append("site_asset[installation]", formData.installation);
-console.log(formDataSend)
+      // formDataSend.append("site_asset[installation]", formData.installation);
+      // console.log(formDataSend);
       const response = await postSiteAsset(formDataSend);
       toast.success("Asset Created Successfully");
       console.log("Response:", response.data);
       toast.dismiss();
-      navigate(`/assets/asset-details/${response.data.id}`)
+      // navigate(`/assets/asset-details/${response.data.id}`);
     } catch (error) {
       toast.dismiss();
       console.error("Error:", error);

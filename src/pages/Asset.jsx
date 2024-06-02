@@ -15,6 +15,7 @@ import { useSelector } from "react-redux";
 import Inventory from "./Inventory";
 import Checklist from "./Checklist";
 import RoutineTask from "./RoutineTask";
+import Table from "../components/table/Table";
 
 // import jsPDF from "jspdf";
 // import QRCode from "qrcode.react";
@@ -125,7 +126,7 @@ const Asset = () => {
       selector: (row) => row.purchase_cost,
       sortable: true,
     },
-   
+
     {
       name: "Critical",
       selector: (row) => (row.critical ? "Yes" : "No"),
@@ -163,7 +164,7 @@ const Asset = () => {
     },
     {
       name: "Warranty",
-      selector: (row) => (row.warranty_start === null ? "No": "Yes"),
+      selector: (row) => (row.warranty_start === null ? "No" : "Yes"),
       sortable: true,
     },
     {
@@ -237,7 +238,7 @@ const Asset = () => {
       style: {
         fontWeight: "bold",
         fontSize: "10px",
-        with: "auto"
+        width: "auto",
       },
     },
   };
@@ -394,61 +395,68 @@ const Asset = () => {
   return (
     <section className="flex">
       <Navbar />
-      <div className="p-4 w-full my-2 flex mx-3 overflow-hidden flex-col">
+      <div className="p-4 w-full my-2 flex md:mx-2 overflow-hidden flex-col">
         <div className="flex justify-center w-full">
-          <div className="sm:flex grid grid-cols-2 sm:flex-row gap-5 font-medium p-2 sm:rounded-full rounded-md bg-gray-400">
+        <div className="sm:flex grid grid-cols-2 sm:flex-row gap-5 font-medium p-2 sm:rounded-full rounded-md bg-gray-200">
             <h2
               className={`p-1 ${
-                page === "assets" && "bg-white text-blue-500"
-              } rounded-full px-4 cursor-pointer text-center `}
+                page === "assets" &&
+                "bg-white text-blue-500 shadow-custom-all-sides"
+              } rounded-full px-4 cursor-pointer text-center  transition-all duration-300 ease-linear`}
               onClick={() => setPage("assets")}
             >
               Assets
             </h2>
             <h2
               className={`p-1 ${
-                page === "AMC" && "bg-white text-blue-500"
-              } rounded-full px-4 cursor-pointer`}
+                page === "AMC" &&
+                "bg-white text-blue-500 shadow-custom-all-sides"
+              } rounded-full px-4 cursor-pointer  transition-all duration-300 ease-linear`}
               onClick={() => setPage("AMC")}
             >
               AMC
             </h2>
             <h2
               className={`p-1 ${
-                page === "meter" && "bg-white text-blue-500"
-              } rounded-full px-4 cursor-pointer`}
+                page === "meter" &&
+                "bg-white text-blue-500 shadow-custom-all-sides"
+              } rounded-full px-4 cursor-pointer transition-all duration-300 ease-linear`}
               onClick={() => setPage("meter")}
             >
               Meter
             </h2>
             <h2
               className={`p-1 ${
-                page === "checklist" && "bg-white text-blue-500"
-              } rounded-full px-4 cursor-pointer`}
+                page === "checklist" &&
+                "bg-white text-blue-500 shadow-custom-all-sides"
+              } rounded-full px-4 cursor-pointer  transition-all duration-300 ease-linear`}
               onClick={() => setPage("checklist")}
             >
               Checklist
             </h2>
             <h2
               className={`p-1 ${
-                page === "routine" && "bg-white text-blue-500"
-              } rounded-full px-4 cursor-pointer`}
+                page === "routine" &&
+                "bg-white text-blue-500 shadow-custom-all-sides"
+              } rounded-full px-4 cursor-pointer  transition-all duration-300 ease-linear`}
               onClick={() => setPage("routine")}
             >
               Routine Task
             </h2>
             <h2
               className={`p-1 ${
-                page === "PPM" && "bg-white text-blue-500"
-              } rounded-full px-4 cursor-pointer`}
+                page === "PPM" &&
+                "bg-white text-blue-500 shadow-custom-all-sides"
+              } rounded-full px-4 cursor-pointer  transition-all duration-300 ease-linear`}
               onClick={() => setPage("PPM")}
             >
               PPM Activity
             </h2>
             <h2
               className={`p-1 ${
-                page === "inventory" && "bg-white text-blue-500"
-              } rounded-full px-4 cursor-pointer`}
+                page === "inventory" &&
+                "bg-white text-blue-500 shadow-custom-all-sides"
+              } rounded-full px-4 cursor-pointer  transition-all duration-300 ease-linear`}
               onClick={() => setPage("inventory")}
             >
               Stock Items
@@ -525,7 +533,7 @@ const Asset = () => {
         )}
         {page === "assets" && (
           <>
-            <div className="flex md:flex-row flex-col justify-between items-center my-2 gap-2  ">
+            <div className="flex md:flex-row flex-col justify-between md:items-center my-2 gap-2  ">
               <input
                 type="text"
                 placeholder="Search By Building, Asset, Unit or OEM Name"
@@ -577,7 +585,22 @@ const Asset = () => {
               </div>
             </div>
 
-            <DataTable
+            <Table
+              selectableRows
+              // columns={column.filter((col) => visibleColumns.includes(col.name))}
+              columns={column}
+              data={filteredData}
+              // customStyles={customStyle}
+              // responsive
+              // onSelectedRowsChange={handleRowSelected}
+              fixedHeader
+              // fixedHeaderScrollHeight="450px"
+              isPagination={true}
+              // selectableRowsHighlight
+              // highlightOnHover
+              // omitColumn={column}
+            />
+            {/* <DataTable
               selectableRows
               // columns={column.filter((col) => visibleColumns.includes(col.name))}
               columns={column}
@@ -591,7 +614,7 @@ const Asset = () => {
               selectableRowsHighlight
               highlightOnHover
               // omitColumn={column}
-            />
+            /> */}
           </>
         )}
         {page === "AMC" && <AMC />}

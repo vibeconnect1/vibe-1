@@ -1,5 +1,6 @@
 import { getItemInLocalStorage } from "../utils/localStorage";
 import axiosInstance from "./axiosInstance";
+import vibeaxiosInstance from "./vibeaxiosInstance";
 
 const token = getItemInLocalStorage("TOKEN");
 
@@ -173,12 +174,18 @@ export const getAssetGroups = async () =>
   });
 
 export const getAssetSubGroups = async (groupId) => {
-  axiosInstance.get(`/sub_groups.json`, {
-    params: {
-      token: token,
-      group_id: groupId,
-    },
-  });
+  try {
+    const response = await axiosInstance.get("/sub_groups.json", {
+      params: {
+        token: token,
+        group_id: groupId,
+      },
+    });
+    return response.data; // Return the data from the response
+  } catch (error) {
+    console.error("Error fetching asset subgroups:", error);
+    throw error; // Re-throw the error to handle it in the calling function
+  }
 };
 
 export const postAssetGroups = async (data) =>
@@ -196,6 +203,25 @@ export const postAssetSubGroups = async (data) =>
 
 export const postAssetparams = async (data) =>
   axiosInstance.post("/asset_params.json", data, {
+    params: {
+      token: token,
+    },
+  });
+export const postAMC = async (data) =>
+  axiosInstance.post("/asset_amcs.json", data, {
+    params: {
+      token: token,
+    },
+  });
+export const getAMCDetails = async (assetId) =>
+  axiosInstance.get("/asset_amcs.json", {
+    params: {
+      token: token,
+      asset_id_eq: assetId,
+    },
+  });
+export const getSubGroupsList = async () =>
+  axiosInstance.get("/sub_groups.json", {
     params: {
       token: token,
     },
@@ -238,3 +264,26 @@ export const getSetupUsers = async () =>
       token: token,
     },
   });
+
+// vibe
+
+export const vibeLogin = async (data) =>
+  vibeaxiosInstance.post("/api/login/", data);
+
+// VIBE CALENDAR
+export const getVibeCalendar = async (vibeUserId) => {
+  try {
+    const response = await vibeaxiosInstance.get(
+      `/api/employee/calender/get-calender-events/?user_id=${vibeUserId}`,
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching calendar events:", error);
+    throw error;
+  }
+};

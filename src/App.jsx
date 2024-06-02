@@ -161,6 +161,26 @@ import Wo from "./pages/Wo.jsx";
 import WoDetail from "./pages/SubPages/details/WoDetails.jsx";
 import Audit from "./pages/Audit.jsx";
 import AddScheduleAudit from "./pages/SubPages/AuditSubPages/AddScheduleAudit.jsx";
+import GRN from "./pages/GRN.jsx";
+import AddGrn from "./pages/SubPages/AddGrn.jsx";
+import GrnDetails from "./pages/SubPages/details/GRNDetails.jsx";
+import Passes from "./pages/Passes.jsx";
+import AddNewVisitor from "./pages/AddNewVisitor.jsx";
+import AddRVehicles from "./pages/SubPages/AddRVehicle.jsx";
+import EditRVehicle from "./pages/SubPages/EditRVehicle.jsx";
+import RVehiclesDetails from "./pages/SubPages/details/RVehicleDetails.jsx";
+import AddGVehicles from "./pages/SubPages/AddGvehicle.jsx";
+import EditGVehicles from "./pages/SubPages/EditGVehicle.jsx";
+import GVehiclesDetails from "./pages/SubPages/details/GVehicleDetails.jsx";
+import AddStaff from "./pages/SubPages/AddStaff.jsx";
+import StaffDetails from "./pages/SubPages/details/StaffDetails.jsx";
+import EditStaff from "./pages/SubPages/EditStaff.jsx";
+import MaterialDetails from "./pages/SubPages/details/MaterialsDetails.jsx";
+import AddPatrolling from "./pages/SubPages/AddPatrolling.jsx";
+import PatrollingDetails from "./pages/SubPages/details/PatrollingDetails.jsx";
+import EditPatrolling from "./pages/SubPages/AddPatrolling.jsx";
+import InwardPassDetails from "./pages/SubPages/details/InwardPassDetails.jsx";
+import OutwardPassDetails from "./pages/SubPages/OutwardsPassDetails.jsx";
 
 function App() {
   const themeColor = useSelector((state) => state.theme.color);
@@ -1126,40 +1146,200 @@ function App() {
             }
           />
 
-{/* Admin WO detail*/}
-           <Route
+          {/* Admin WO detail*/}
+          <Route
             path="/admin/Wo"
             element={
               <ProtectedAdminRoutes>
-              <Wo/>
+                <Wo />
               </ProtectedAdminRoutes>
             }
           />
-        <Route
+          <Route
             path="/admin/wo-detail/:id"
             element={
               <ProtectedAdminRoutes>
-                <WoDetail/>
+                <WoDetail />
               </ProtectedAdminRoutes>
             }
           />
           {/* Audit */}
-        <Route
+          <Route
             path="/admin/audit"
             element={
               <ProtectedAdminRoutes>
-                <Audit/>
+                <Audit />
               </ProtectedAdminRoutes>
             }
           />
-        <Route
+          <Route
             path="/admin/audit/schedule-audit"
             element={
               <ProtectedAdminRoutes>
-                <AddScheduleAudit/>
+                <AddScheduleAudit />
               </ProtectedAdminRoutes>
             }
           />
+          {/* grn */}
+          <Route
+            path="/admin/Grn"
+            element={
+              <ProtectedAdminRoutes>
+                <GRN />
+              </ProtectedAdminRoutes>
+            }
+          />
+
+          <Route
+            path="/admin/grn-detail/:id"
+            element={
+              <ProtectedAdminRoutes>
+                <GrnDetails />
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/add-grn"
+            element={
+              <ProtectedAdminRoutes>
+                <AddGrn />
+              </ProtectedAdminRoutes>
+            }
+          />
+
+          {/* admin passess */}
+          <Route
+            path="/admin/passes"
+            element={
+              <ProtectedAdminRoutes>
+                <Passes />
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/add-new-visitor"
+            element={
+              <ProtectedAdminRoutes>
+                <AddNewVisitor />
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/add-rvehicles"
+            element={
+              <ProtectedAdminRoutes>
+                <AddRVehicles />
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/edit-rvehicles/:id"
+            element={
+              <ProtectedAdminRoutes>
+                <EditRVehicle />
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/rvehicles-details/:id"
+            element={
+              <ProtectedAdminRoutes>
+                <RVehiclesDetails />
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/add-gvehicles"
+            element={
+              <ProtectedAdminRoutes>
+                <AddGVehicles />
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/edit-gvehicles/:id"
+            element={
+              <ProtectedAdminRoutes>
+                <EditGVehicles />
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/gvehicles-details/:id"
+            element={
+              <ProtectedAdminRoutes>
+                <GVehiclesDetails />
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/add-staff"
+            element={
+              <ProtectedAdminRoutes>
+                <AddStaff />
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/staff-details/:id"
+            element={
+              <ProtectedAdminRoutes>
+                <StaffDetails />
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/edit-staff/:id"
+            element={
+              <ProtectedAdminRoutes>
+                <EditStaff />
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/material-details/:id"
+            element={
+              <ProtectedAdminRoutes>
+                <MaterialDetails />
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/edit-patrolling/:id"
+            element={
+              <ProtectedAdminRoutes>
+                <EditPatrolling />
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/patrolling-details/:id"
+            element={
+              <ProtectedAdminRoutes>
+                <PatrollingDetails />
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/inwards-details/:id"
+            element={
+              <ProtectedAdminRoutes>
+                <InwardPassDetails />
+              </ProtectedAdminRoutes>
+            }
+          />
+
+          <Route
+            path="/admin/outward-details/:id"
+            element={
+              <ProtectedAdminRoutes>
+                <OutwardPassDetails />
+              </ProtectedAdminRoutes>
+            }
+          />
+          
+         
+         
         </Routes>
         <Footer />
       </Router>

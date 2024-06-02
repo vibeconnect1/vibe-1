@@ -32,40 +32,40 @@ const AssetDetails = () => {
     <section className="md:px-10 ">
       <div className="p-4 w-full my-2 flex mx-5 flex-col ">
         <div className="md:flex justify-center ">
-          <div className="sm:flex grid grid-cols-2 flex-row gap-2 md:gap-10  font-medium p-2 rounded-md sm:rounded-full bg-gray-400">
+          <div className="sm:flex grid grid-cols-2 flex-row gap-2 md:gap-10  font-medium p-2 rounded-md sm:rounded-full bg-gray-100">
             <h2
               className={`p-1 ${
-                page === "assetInfo" && "bg-white text-blue-500"
-              } rounded-full px-4 cursor-pointer text-center `}
+                page === "assetInfo" && "bg-white text-blue-500 shadow-custom-all-sides"
+              } rounded-full px-4 cursor-pointer text-center  transition-all duration-300 ease-linear`}
               onClick={() => setPage("assetInfo")}
             >
               Asset Info
             </h2>
             <h2
               className={`p-1 ${
-                page === "AMCDetails" && "bg-white text-blue-500"
-              } rounded-full px-4 cursor-pointer text-center`}
+                page === "AMCDetails" && "bg-white text-blue-500 shadow-custom-all-sides"
+              } rounded-full px-4 cursor-pointer text-center transition-all duration-300 ease-linear`}
               onClick={() => setPage("AMCDetails")}
             >
               AMC Details
             </h2>
             <h2
               className={`p-1 ${
-                page === "readings" && "bg-white text-blue-500"
-              } rounded-full px-4 cursor-pointer text-center`}
+                page === "readings" && "bg-white text-blue-500 shadow-custom-all-sides"
+              } rounded-full px-4 cursor-pointer text-center transition-all duration-300 ease-linear`}
               onClick={() => setPage("readings")}
             >
               Readings
             </h2>
             <h2
               className={`p-1 ${
-                page === "ppm" && "bg-white text-blue-500"
-              } rounded-full px-4 cursor-pointer text-center`}
+                page === "ppm" && "bg-white text-blue-500 shadow-custom-all-sides"
+              } rounded-full px-4 cursor-pointer text-center transition-all duration-300 ease-linear`}
               onClick={() => setPage("ppm")}
             >
               PPM
             </h2>
-            <h2
+            {/* <h2
               className={`p-1 ${
                 page === "activityFeed" && "bg-white text-blue-500"
               } rounded-full  cursor-pointer text-center`}
@@ -80,7 +80,7 @@ const AssetDetails = () => {
               onClick={() => setPage("history")}
             >
               History
-            </h2>
+            </h2> */}
           </div>
         </div>
         {page === "assetInfo" && (

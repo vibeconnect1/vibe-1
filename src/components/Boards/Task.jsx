@@ -1,9 +1,12 @@
-import { TimeOutline } from "react-ionicons";
+import { TimeOutline, TrashOutline } from "react-ionicons";
 import { useSelector } from "react-redux";
 
-const Task = ({ task, provided }) => {
-  const { title, description, priority, deadline, image, alt, tags } = task;
+const Task = ({ task, provided, handleDeleteTask, columnId }) => {
+  const { title, description, priority, deadline, image, alt, tags,id } = task;
 const themeColor = useSelector((state)=> state.theme.color)
+const handleDeleteClick = () => {
+  handleDeleteTask(columnId, id);
+};
   return (
     <div
       ref={provided.innerRef}
@@ -45,6 +48,9 @@ const themeColor = useSelector((state)=> state.theme.color)
               : "bg-blue-500"
           }`}
         ></div>
+         <button onClick={handleDeleteClick}>
+          <TrashOutline color={"#555"} width="20px" height="20px" />
+        </button>
       </div>
     </div>
   );

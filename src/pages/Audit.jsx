@@ -10,7 +10,7 @@ const Audit = () => {
       <Navbar />
       <div className="p-2 w-full flex  overflow-hidden flex-col">
         <div className="flex justify-center w-full">
-          <div className="sm:flex grid grid-cols-2 sm:flex-row gap-5 font-medium p-1 sm:rounded-full rounded-md bg-gray-400">
+        <div className="sm:flex grid grid-cols-2 sm:flex-row gap-5 font-medium p-1 sm:rounded-full rounded-md bg-gray-200">
             <h2
               className={`p-1 ${
                 page === "operational" &&
