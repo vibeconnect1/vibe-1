@@ -139,13 +139,13 @@ function User() {
               Change Theme
             </button>
             {changeTheme && (
-              <div className="md:w-96">
+              <div className="">
                 <h2 className="text-xl mb-4">Choose a theme color:</h2>
                 <div className="flex  flex-wrap">
                   {colors.map((color) => (
                     <button
                       key={color.name}
-                      className="p-2 text-white m-1 border-2 border-black rounded-sm"
+                      className="p-4  text-white m-1 shadow-custom-all-sides rounded-sm"
                       style={{ background: color.code }}
                       onClick={() => handleColorChange(color.code)}
                     ></button>

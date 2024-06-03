@@ -10,6 +10,7 @@ import { BiEdit, BiFilter, BiFilterAlt } from "react-icons/bi";
 import { getFloors, getSiteAsset, getUnits } from "../api";
 import { getItemInLocalStorage } from "../utils/localStorage";
 import AMC from "./SubPages/AMC";
+import Table from "../components/table/Table";
 
 // import jsPDF from "jspdf";
 // import QRCode from "qrcode.react";
@@ -463,19 +464,20 @@ const Meter = () => {
               </div>
             </div>
 
-            <DataTable
-              selectableRows
+            <Table
+              // selectableRows
               // columns={column.filter((col) => visibleColumns.includes(col.name))}
               columns={column}
               data={filteredData}
-              customStyles={customStyle}
-              responsive
-              onSelectedRowsChange={handleRowSelected}
-              fixedHeader
-              // fixedHeaderScrollHeight="450px"
-              pagination
-              selectableRowsHighlight
-              highlightOnHover
+              isPagination={true}
+              // customStyles={customStyle}
+              // responsive
+              // onSelectedRowsChange={handleRowSelected}
+              // fixedHeader
+              // // fixedHeaderScrollHeight="450px"
+              // pagination
+              // selectableRowsHighlight
+              // highlightOnHover
               // omitColumn={column}
             />
           </>

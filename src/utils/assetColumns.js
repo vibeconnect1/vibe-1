@@ -1,16 +1,11 @@
 export const columnsData = [
   "Action",
-  "Site",
   "Building",
-  "Wing",
   "Floor",
-  "Area",
-  "Room",
-  "Name",
-  "Asset Code",
+  "Unit",
+  "Asset Name",
+  "OEM Name",
   "Serial Number",
-  "Asset Type",
-  "Client Name",
   "Model Number",
   "Group",
   "Sub Group",
@@ -21,14 +16,10 @@ export const columnsData = [
   "Status",
   "Created On",
   "Updated On",
-  "Warranty",
-  "Warranty Expiry",
-  "Commissioning Date",
-  "AMC",
-  "PPM",
+  "W Start",
+  "W Expiry",
+  "Installation Date",
   "Meter Configured",
-  "Meter Type",
-  "Submeter",
   "Supplier",
 ];
 
@@ -48,14 +39,4 @@ export const serviceColumns = [
   "Status",
   "Model Number",
   "Created On",
-]
-
-
-
-  
- 
- 
-  
-  
- 
-  
+];

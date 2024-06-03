@@ -13,7 +13,7 @@ const Boards = () => {
   const [columns, setColumns] = useState(Board);
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedColumn, setSelectedColumn] = useState("");
-  const [columnModalOpen, setColumnModalOpen] = useState(false)
+  const [columnModalOpen, setColumnModalOpen] = useState(false);
   const themeColor = useSelector((state) => state.theme.color);
   const openModal = (columnId) => {
     setSelectedColumn(columnId);
@@ -52,7 +52,7 @@ const Boards = () => {
   };
   return (
     <>
-    <div className="flex justify-end">
+      <div className="flex justify-end">
         <button
           onClick={openColumnModal}
           className="shadow-custom-all-sides flex  items-center justify-center gap-1 py-[10px]  w-full opacity-90  rounded-lg bg-white  text-[#555] font-medium text-[15px]"
@@ -88,7 +88,7 @@ const Boards = () => {
                       >
                         {(provided) => (
                           <>
-                             <Task
+                            <Task
                               provided={provided}
                               task={task}
                               handleDeleteTask={handleDeleteTask}
@@ -120,7 +120,7 @@ const Boards = () => {
         setOpen={setModalOpen}
         handleAddTask={handleAddTask}
       />
-       <AddColumnModal
+      <AddColumnModal
         isOpen={columnModalOpen}
         onClose={() => setColumnModalOpen(false)}
         setOpen={setColumnModalOpen}

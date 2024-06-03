@@ -18,6 +18,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import Selector from "../../containers/Selector";
 import FileInputBox from "../../containers/Inputs/FileInputBox";
 import { useSelector } from "react-redux";
+import Navbar from "../../components/Navbar";
 
 const EditAsset = () => {
   const buildings = getItemInLocalStorage("Building");
@@ -39,7 +40,6 @@ const EditAsset = () => {
   //
   const { id } = useParams();
   const [formData, setFormData] = useState({
-    area: "",
     site_id: "",
     building_id: "",
     floor_id: "",
@@ -71,6 +71,7 @@ const EditAsset = () => {
     description: "",
     remarks: "",
     oem_name: "",
+    uom: "",
 
     //
     invoice: [],
@@ -79,7 +80,7 @@ const EditAsset = () => {
     others: [],
   });
   console.log(formData);
-  const themeColor = useSelector((state)=> state.theme.color)
+  const themeColor = useSelector((state) => state.theme.color);
 
   useEffect(() => {
     const getDetails = async () => {
@@ -212,10 +213,6 @@ const EditAsset = () => {
     console.log(fieldName);
   };
   const navigate = useNavigate();
-  
-  
-
-
 
   const handleSubmit = async () => {
     try {
@@ -232,6 +229,7 @@ const EditAsset = () => {
       formDataSend.append("site_asset[model_number]", formData.model_number);
       formDataSend.append("site_asset[purchased_on]", formData.purchased_on);
       formDataSend.append("site_asset[purchase_cost]", formData.purchase_cost);
+      formDataSend.append("site_asset[installation]", formData.installation);
       formDataSend.append(
         "site_asset[warranty_expiry]",
         formData.warranty_expiry
@@ -247,10 +245,11 @@ const EditAsset = () => {
       formDataSend.append("site_asset[vendor_id]", formData.vendor_id);
       formDataSend.append("site_asset[remarks]", formData.remarks);
 
-      const response =  await EditSiteAsset(formDataSend, id);;
-      toast.success("Asset Created Successfully");
+      const response = await EditSiteAsset(formDataSend, id);
+      toast.dismiss();
+      toast.success("Asset Edited Successfully");
       console.log("Response:", response.data);
-      toast.dismiss()
+      navigate(`/assets/asset-details/${response.data.id}`);
     } catch (error) {
       toast.dismiss();
       console.error("Error:", error);
@@ -258,11 +257,18 @@ const EditAsset = () => {
   };
 
   return (
-    <section>
-      <div className="m-2">
+    // <section>
+    //   <div className="m-2">
+    <section className="flex">
+      <div className="hidden md:block">
+
+      <Navbar />
+      </div>
+      <div className="md:p-4 w-full my-2 flex md:mx-2 overflow-hidden flex-col">
         <h2
-        style={{background: themeColor}}
-        className="text-center text-xl font-bold p-2 rounded-full text-white">
+          style={{ background: themeColor }}
+          className="text-center text-xl font-bold p-2 rounded-full text-white"
+        >
           Edit Asset
         </h2>
         <div className="md:mx-20 my-5 mb-10 sm:border border-gray-400 p-5 px-10 rounded-lg sm:shadow-xl">
@@ -442,7 +448,7 @@ const EditAsset = () => {
                     type="text"
                     name="unit"
                     id="unit"
-                    value={formData.unit}
+                    value={formData.uom}
                     onChange={handleChange}
                     placeholder="Unit"
                     className="border p-1 px-4 border-gray-500 rounded-md"
@@ -914,7 +920,7 @@ const EditAsset = () => {
 
               {formData.warranty && (
                 <div className="flex md:flex-row flex-col md:items-center my-2 gap-5">
-                   <div className="md:flex grid grid-cols-2 items-center gap-2 ">
+                  <div className="md:flex grid grid-cols-2 items-center gap-2 ">
                     <label htmlFor="" className="font-semibold">
                       Warranty Statr Date :
                     </label>

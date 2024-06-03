@@ -18,6 +18,7 @@ import Selector from "../../containers/Selector";
 import { initialAddAssetFormData } from "../../utils/initialFormData";
 import FileInputBox from "../../containers/Inputs/FileInputBox";
 import { useSelector } from "react-redux";
+import Navbar from "../../components/Navbar";
 
 const AddAsset = () => {
   const buildings = getItemInLocalStorage("Building");
@@ -170,6 +171,9 @@ const AddAsset = () => {
       formDataSend.append("site_asset[model_number]", formData.model_number);
       formDataSend.append("site_asset[purchased_on]", formData.purchased_on);
       formDataSend.append("site_asset[purchase_cost]", formData.purchase_cost);
+      formDataSend.append("site_asset[asset_group_id]", formData.asset_group_id);
+      formDataSend.append("site_asset[sub_group_name]", formData.sub_group_name);
+      formDataSend.append("site_asset[installation]", formData.installation);
       formDataSend.append(
         "site_asset[warranty_expiry]",
         formData.warranty_expiry
@@ -218,7 +222,7 @@ const AddAsset = () => {
       toast.success("Asset Created Successfully");
       console.log("Response:", response.data);
       toast.dismiss();
-      // navigate(`/assets/asset-details/${response.data.id}`);
+      navigate(`/assets/asset-details/${response.data.id}`);
     } catch (error) {
       toast.dismiss();
       console.error("Error:", error);
@@ -226,8 +230,14 @@ const AddAsset = () => {
   };
 
   return (
-    <section>
-      <div className="m-2">
+    // <section>
+    //   <div className="m-2">
+    <section className="flex">
+      <div className="hidden md:block">
+
+      <Navbar />
+      </div>
+      <div className="md:p-4 w-full my-2 flex md:mx-2 overflow-hidden flex-col">
         <h2
           style={{ background: themeColor }}
           className="text-center text-xl font-bold p-2 rounded-full text-white"
@@ -400,8 +410,8 @@ const AddAsset = () => {
                 <div className="flex flex-col">
                   <select
                     className="border p-1 px-4 border-gray-500 rounded-md"
-                    name="asset_sub_group_id"
-                    value={formData.asset_sub_group_id}
+                    name="sub_group_name"
+                    value={formData.sub_group_name}
                     onChange={handleChange}
                   >
                     <option value="">Select Sub Group</option>

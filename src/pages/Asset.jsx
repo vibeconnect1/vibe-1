@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import DataTable from "react-data-table-component";
 import { IoAddCircleOutline, IoFilterOutline } from "react-icons/io5";
 import { BsEye, BsFilterLeft } from "react-icons/bs";
@@ -16,6 +16,8 @@ import Inventory from "./Inventory";
 import Checklist from "./Checklist";
 import RoutineTask from "./RoutineTask";
 import Table from "../components/table/Table";
+import ThemedButton from "../Buttons/Button";
+import bridge from "/bridge.jpg";
 
 // import jsPDF from "jspdf";
 // import QRCode from "qrcode.react";
@@ -34,6 +36,31 @@ const Asset = () => {
   const [page, setPage] = useState("assets");
   const [assets, setAssets] = useState([]);
   const themeColor = useSelector((state) => state.theme.color);
+  const [selectedOptions, setSelectedOptions] = useState([]);
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const dropdownRef = useRef(null);
+
+  const handleCheckboxChange = (event) => {
+    const value = event.target.value;
+    setSelectedOptions((prevSelectedOptions) =>
+      prevSelectedOptions.includes(value)
+        ? prevSelectedOptions.filter((option) => option !== value)
+        : [...prevSelectedOptions, value]
+    );
+  };
+
+  const handleClickOutside = (event) => {
+    if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+      setDropdownOpen(false);
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   const dateFormat = (dateString) => {
     const date = new Date(dateString);
@@ -107,12 +134,12 @@ const Asset = () => {
     // },
     {
       name: "Group",
-      selector: (row) => row.group,
+      selector: (row) => row.group_name,
       sortable: true,
     },
     {
       name: "Sub Group",
-      selector: (row) => row.sub_group,
+      selector: (row) => row.sub_group_name,
       sortable: true,
     },
     {
@@ -192,7 +219,7 @@ const Asset = () => {
 
     {
       name: "Supplier",
-      selector: (row) => row.supplier,
+      selector: (row) => row.vendor_name,
       sortable: true,
     },
   ];
@@ -393,11 +420,20 @@ const Asset = () => {
   };
 
   return (
-    <section className="flex">
+    <section
+      className="flex"
+      style={{
+        background: `url(${bridge})`,
+        backgroundSize: "100% 100% ",
+        backgroundSize: "cover",
+        backgroundRepeat: "no-repeat",
+        backgroundPosition: "center",
+      }}
+    >
       <Navbar />
       <div className="p-4 w-full my-2 flex md:mx-2 overflow-hidden flex-col">
         <div className="flex justify-center w-full">
-        <div className="sm:flex grid grid-cols-2 sm:flex-row gap-5 font-medium p-2 sm:rounded-full rounded-md bg-gray-200">
+          <div className="sm:flex grid grid-cols-2 sm:flex-row gap-5 font-medium p-2 sm:rounded-full rounded-md opacity-90 bg-gray-200 ">
             <h2
               className={`p-1 ${
                 page === "assets" &&
@@ -537,34 +573,61 @@ const Asset = () => {
               <input
                 type="text"
                 placeholder="Search By Building, Asset, Unit or OEM Name"
-                className="border-2 p-2 md:w-96 border-gray-300 rounded-lg placeholder:text-sm"
+                className=" p-2 md:w-96 border-gray-300 rounded-lg placeholder:text-sm outline-none"
                 value={searchText}
                 onChange={handleSearch}
               />
               <div className="md:flex grid grid-cols-2 sm:flex-row my-2 flex-col gap-2">
-                {/* <button
-              className="md:text-lg text-sm font-semibold border-2 border-black px-4 p-1 flex gap-2 items-center rounded-md"
-              onClick={() => setOmitColumn(!omitColumn)}
-            >
-              <IoFilterOutline />
-              Filter Columns
-            </button> */}
+              <ThemedButton
+                  to={"/assets/add-asset"}
+                  title={"Add Asset"}
+                  icon={<IoAddCircleOutline />}
+                  isLink
+                />
+                <div className="" ref={dropdownRef}>
+                  <button
+                    onClick={() => setDropdownOpen(!dropdownOpen)}
+                    className="px-4 py-2 border-2 font-medium text-white rounded-md"
+                  >
+                    Hide Columns
+                  </button>
+                  {dropdownOpen && (
+                    <div className="absolute mt-2 bg-white border rounded shadow-md w-64 max-h-64 overflow-y-auto z-10">
+                      {columnsData.map((column) => (
+                        <label
+                          key={column}
+                          className="flex items-center p-2 hover:bg-gray-100 cursor-pointer"
+                        >
+                          <input
+                            type="checkbox"
+                            value={column}
+                            checked={selectedOptions.includes(column)}
+                            onChange={handleCheckboxChange}
+                            className="form-checkbox h-4 w-4 text-blue-600"
+                          />
+                          <span className="ml-2">{column}</span>
+                        </label>
+                      ))}
+                    </div>
+                  )}
+                </div>
 
                 <button
-                  className=" font-semibold border-2 border-black px-4 p-1 flex gap-2 items-center rounded-md"
+                  className=" font-semibold border-2 border-black px-4 p-1 flex gap-2 items-center justify-center rounded-md"
                   onClick={() => setFilter(!filter)}
                 >
                   <BiFilterAlt />
                   Filter
                 </button>
 
-                <Link
+                {/* <Link
                   to={"/assets/add-asset"}
                   className="bg-black  text-sm rounded-lg flex justify-center font-semibold items-center gap-2 text-white py-2 px-4 border-2 border-black hover:bg-white hover:text-black transition-all duration-300 "
                 >
                   <IoAddCircleOutline size={20} />
                   Add
-                </Link>
+                </Link> */}
+               
                 {/* <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
                   <input type="file"  className="opacity-0 w-fit" onChange={handleFileChange} />
                   Import
@@ -587,34 +650,14 @@ const Asset = () => {
 
             <Table
               selectableRows
-              // columns={column.filter((col) => visibleColumns.includes(col.name))}
-              columns={column}
+              columns={column.filter(
+                (col) => !selectedOptions.includes(col.name)
+              )}
               data={filteredData}
-              // customStyles={customStyle}
-              // responsive
-              // onSelectedRowsChange={handleRowSelected}
               fixedHeader
               // fixedHeaderScrollHeight="450px"
               isPagination={true}
-              // selectableRowsHighlight
-              // highlightOnHover
-              // omitColumn={column}
             />
-            {/* <DataTable
-              selectableRows
-              // columns={column.filter((col) => visibleColumns.includes(col.name))}
-              columns={column}
-              data={filteredData}
-              customStyles={customStyle}
-              responsive
-              onSelectedRowsChange={handleRowSelected}
-              fixedHeader
-              // fixedHeaderScrollHeight="450px"
-              pagination
-              selectableRowsHighlight
-              highlightOnHover
-              // omitColumn={column}
-            /> */}
           </>
         )}
         {page === "AMC" && <AMC />}

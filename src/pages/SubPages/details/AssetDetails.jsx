@@ -9,6 +9,7 @@ import {
 } from "./assetSubDetails";
 import { getSiteAssetDetails } from "../../../api";
 import { useParams } from "react-router-dom";
+import Navbar from "../../../components/Navbar";
 
 const AssetDetails = () => {
   const [page, setPage] = useState("assetInfo");
@@ -29,8 +30,14 @@ const AssetDetails = () => {
   }, [id]);
 
   return (
-    <section className="md:px-10 ">
-      <div className="p-4 w-full my-2 flex mx-5 flex-col ">
+    // <section className="md:px-10 ">
+    //   <div className="p-4 w-full my-2 flex mx-5 flex-col ">
+    <section className="flex">
+    <div className="hidden md:block">
+
+    <Navbar />
+    </div>
+    <div className="md:p-4 w-full my-2 flex md:mx-2 overflow-hidden flex-col">
         <div className="md:flex justify-center ">
           <div className="sm:flex grid grid-cols-2 flex-row gap-2 md:gap-10  font-medium p-2 rounded-md sm:rounded-full bg-gray-100">
             <h2

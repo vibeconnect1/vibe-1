@@ -8,6 +8,7 @@ import DataTable from "react-data-table-component";
 import { Link, useParams } from "react-router-dom";
 import { postAssetparams } from "../../../../api";
 import toast from "react-hot-toast";
+import Table from "../../../../components/table/Table";
 const initialFormData = {
   name: "",
   order: "",
@@ -57,9 +58,11 @@ const Assetinfo = ({ assetData }) => {
     warranty_start,
     asset_params,
     installation,
+    group_name,
+    sub_group_name,
   } = assetData;
   const [qrCode, setQrCode] = useState(false);
-console.log(assetData)
+  console.log(assetData);
   const dateFormat = (dateString) => {
     const date = new Date(dateString);
     return date.toLocaleString(); // Adjust the format as needed
@@ -121,7 +124,7 @@ console.log(assetData)
       toast.dismiss();
       toast.success("Asset Params added successfully");
       // setFormData(initialAddAssetFormData);
-      // window.location.reload();
+      window.location.reload();
     } catch (error) {
       console.error("Error submitting complaint:", error);
       toast.error("Error Creating Asset!");
@@ -209,17 +212,16 @@ console.log(assetData)
                 <p className="text-sm font-normal">{purchased_on}</p>
               </div>
               <div className="grid grid-cols-2">
-                <p>Date Of Installation: </p>
+                <p>Date Of Installation : </p>
                 <p className="text-sm font-normal">{installation}</p>
               </div>
               <div className="grid grid-cols-2">
                 <p>Breakdown : </p>
-                <p className="text-sm font-normal">{breakdown ? "Yes": "No"}</p>
-              </div >
-              <div className="grid grid-cols-2">
-                <p>Created On : </p>
-                <p className="text-sm font-normal">{dateFormat(created_at)}</p>
+                <p className="text-sm font-normal">
+                  {breakdown ? "Yes" : "No"}
+                </p>
               </div>
+
               <div className="grid grid-cols-2">
                 <p>Capacity : </p>
                 <p className="text-sm">{capacity}</p>
@@ -230,10 +232,11 @@ console.log(assetData)
               </div>
               <div className="grid grid-cols-2">
                 <p>Group : </p>
-                <p className="text-sm font-normal"></p>
+                <p className="text-sm font-normal">{group_name}</p>
               </div>
               <div className="grid grid-cols-2">
                 <p>Subgroup : </p>
+                <p className="text-sm font-normal">{sub_group_name}</p>
               </div>
               <div className="grid grid-cols-2">
                 <p>Critical : </p>
@@ -241,29 +244,42 @@ console.log(assetData)
               </div>
               <div className="grid grid-cols-2">
                 <p>Meter Applicable : </p>
-                <p className="text-sm font-normal">{is_meter}</p>
+                <p className="text-sm font-normal">{is_meter ? "Yes" : "No"}</p>
               </div>
-
+              <div className="grid grid-cols-2">
+                <p>Created On : </p>
+                <p className="text-sm font-normal">{dateFormat(created_at)}</p>
+              </div>
               <div className="grid grid-cols-2">
                 <p>Updated On : </p>
                 <p className="text-sm font-normal">{dateFormat(updated_at)}</p>
               </div>
-              
-              
             </div>
           </div>
           <div>
             <h2 className="border-b  text-xl border-black font-semibold">
               Additional Info
             </h2>
+            <div className="flex  flex-col my-2 gap-2">
+              <p className="font-medium">Comments : </p>
+              <div className="bg-gray-400 p-1 text-white rounded-md">
+                {remarks ? (
+                  remarks
+                ) : (
+                  <div className="text-center w-full">No Comments</div>
+                )}
+              </div>
+            </div>
             <div className="flex flex-col gap-2">
-                <p className="font-medium">Comments: </p>
-                <p className="">{remarks}</p>
+              <p className="font-medium">Description : </p>
+              <div className="bg-gray-400 p-1 text-white rounded-md">
+                {description ? (
+                  description
+                ) : (
+                  <div className="text-center w-full">No Description</div>
+                )}
               </div>
-              <div className="flex flex-col gap-2">
-                <p>Description : </p>
-                <p className="text-sm">{description}</p>
-              </div>
+            </div>
           </div>
           <div>
             <h2 className="border-b  text-xl border-black font-semibold">
@@ -271,7 +287,7 @@ console.log(assetData)
             </h2>
             <div className="my-5 md:px-10 text-sm items-center font-medium grid gap-4 md:grid-cols-3 w-full">
               <div className="grid grid-cols-2 items-center">
-                <p>Warranty Start Date:</p>
+                <p>Warranty Start Date :</p>
                 <p className="text-sm">{warranty_start} </p>
               </div>
               <div className="grid grid-cols-2 items-center">
@@ -329,8 +345,8 @@ console.log(assetData)
                     name="digit"
                     value={formData.digit || ""}
                     onChange={handleAssetParamsChange}
-                    id="charactorLimt"
-                    placeholder="charactor Limt"
+                    id="charactorLimit"
+                    placeholder="Input Charactor Limit"
                     className="border p-1 px-4 border-gray-500 rounded-md"
                   />
                 </div>
@@ -451,14 +467,10 @@ console.log(assetData)
               <div className="border-b-2 my-2 border-gray-400" />
             </div>
           </div>
-          <DataTable
+          <Table
             columns={assetParmsColumn}
             data={asset_params}
-            customStyles={customStyle}
-            pagination
-            responsive
-            fixedHeader
-            highlightOnHover
+            isPagination={true}
           />
         </div>
         {qrCode && <AssetQrCode onClose={() => setQrCode(false)} />}

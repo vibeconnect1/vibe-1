@@ -181,6 +181,9 @@ import PatrollingDetails from "./pages/SubPages/details/PatrollingDetails.jsx";
 import EditPatrolling from "./pages/SubPages/AddPatrolling.jsx";
 import InwardPassDetails from "./pages/SubPages/details/InwardPassDetails.jsx";
 import OutwardPassDetails from "./pages/SubPages/OutwardsPassDetails.jsx";
+import GDN from "./pages/GDN.jsx";
+import AddGdn from "./pages/SubPages/AddGDN.jsx";
+import GdnViewDetails from "./pages/SubPages/details/GDNViewDetails.jsx";
 
 function App() {
   const themeColor = useSelector((state) => state.theme.color);
@@ -1337,9 +1340,34 @@ function App() {
               </ProtectedAdminRoutes>
             }
           />
+          {/* GDN*/}
+          <Route
+            path="/admin/Gdn"
+            element={
+              <ProtectedAdminRoutes>
+                <GDN/>
+              </ProtectedAdminRoutes>
+            }
+          />
+
           
-         
-         
+          <Route
+            path="/admin/add-gdn/"
+            element={
+              <ProtectedAdminRoutes>
+                <AddGdn/>
+              </ProtectedAdminRoutes>
+            }
+          />
+
+          <Route
+            path="/admin/gnd-detail/:id"
+            element={
+              <ProtectedAdminRoutes>
+                <GdnViewDetails/>
+              </ProtectedAdminRoutes>
+            }
+          />
         </Routes>
         <Footer />
       </Router>
