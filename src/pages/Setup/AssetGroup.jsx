@@ -21,13 +21,13 @@ const AssetGroup = () => {
   useEffect(() => {
     const fetchGroups = async () => {
       const groupResponse = await getAssetGroups();
-      console.log(groupResponse)
+      console.log(groupResponse);
       setGroup(groupResponse.data);
     };
     fetchGroups();
     const fetchSubGroups = async () => {
       const subGroupResponse = await getSubGroupsList();
-      setSubGroup(subGroupResponse.data)
+      setSubGroup(subGroupResponse.data);
       console.log(subGroupResponse);
     };
     fetchSubGroups();
@@ -136,8 +136,6 @@ const AssetGroup = () => {
             height={"300px"}
             title={"Sub Groups"}
           />
-          
-          
         </div>
       </div>
       {groupModal && <AssetGroupModal onclose={() => setGroupModal(false)} />}

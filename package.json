@@ -11,6 +11,10 @@
   },
   "dependencies": {
     "@emotion/react": "^11.11.4",
+    "@fullcalendar/daygrid": "^6.1.13",
+    "@fullcalendar/interaction": "^6.1.13",
+    "@fullcalendar/react": "^6.1.13",
+    "@fullcalendar/timegrid": "^6.1.13",
     "@material-tailwind/react": "^2.1.9",
     "@mui/material": "^5.15.15",
     "@mui/x-date-pickers": "^7.2.0",
@@ -27,6 +31,7 @@
     "qrcode.react": "^3.1.0",
     "react": "^18.2.0",
     "react-beautiful-dnd": "^13.1.1",
+    "react-big-calendar": "^1.12.2",
     "react-calendar": "^4.8.0",
     "react-collapsible": "^2.10.0",
     "react-country-state-city": "^1.1.0",

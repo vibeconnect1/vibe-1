@@ -37,6 +37,7 @@ import { TiBusinessCard } from "react-icons/ti";
 import {
   FaBirthdayCake,
   FaBriefcaseMedical,
+  FaCalendarCheck,
   FaCar,
   FaFileWord,
   FaRegFile,
@@ -159,6 +160,34 @@ const Navbar = () => {
                   } absolute left-48 bg-white font-semibold whitespace-pre text-gray-900 rounded-md drop-shadow-lg px-0 py-0 w-0 overflow-hidden group-hover:px-2 group-hover:py-1 group-hover:left-14 group-hover:duration-300 group-hover:w-fit  `}
                 >
                   Project management
+                </h2>
+              </NavLink>
+              <NavLink
+                to={"/admin/calendar"}
+                className={({ isActive }) =>
+                  ` ${
+                    isActive
+                      ? "text-black bg-white flex p-2  gap-3.5 rounded-md group items-center text-sm font-medium"
+                      : " group flex items-center text-sm gap-3.5 font-medium p-2 hover:bg-gray-800 rounded-md "
+                  }`
+                }
+              >
+                <div>
+                  {React.createElement(FaCalendarCheck , { size: "20" })}
+                </div>
+                <h2
+                  className={`whitespace-pre duration-300 ${
+                    !open && "opacity-0 translate-x-28 overflow-hidden"
+                  }`}
+                >
+                  Calendar
+                </h2>
+                <h2
+                  className={`${
+                    open && "hidden"
+                  } absolute left-48 bg-white font-semibold whitespace-pre text-gray-900 rounded-md drop-shadow-lg px-0 py-0 w-0 overflow-hidden group-hover:px-2 group-hover:py-1 group-hover:left-14 group-hover:duration-300 group-hover:w-fit  `}
+                >
+                  Calendar
                 </h2>
               </NavLink>
               <NavLink
@@ -360,23 +389,21 @@ const Navbar = () => {
                   }`
                 }
               >
-                <div>
-                  {React.createElement(BsPass, { size: "20" })}
-                </div>
+                <div>{React.createElement(BsPass, { size: "20" })}</div>
 
                 <h2
                   className={`whitespace-pre duration-300 ${
                     !open && "opacity-0 translate-x-28 overflow-hidden"
                   }`}
                 >
-                 Passes
+                  Passes
                 </h2>
                 <h2
                   className={`${
                     open && "hidden"
                   } absolute left-48 bg-white font-semibold whitespace-pre text-gray-900 rounded-md drop-shadow-lg px-0 py-0 w-0 overflow-hidden group-hover:px-2 group-hover:py-1 group-hover:left-14 group-hover:duration-300 group-hover:w-fit  `}
                 >
-                 Passes
+                  Passes
                 </h2>
               </NavLink>
 
@@ -517,34 +544,7 @@ const Navbar = () => {
                   Business Card
                 </h2>
               </NavLink>
-              <NavLink
-                to={"/admin/visitor"}
-                className={({ isActive }) =>
-                  ` ${
-                    isActive
-                      ? "text-black bg-white flex p-2  gap-3.5 rounded-md group items-center text-sm font-medium"
-                      : " group flex items-center text-sm gap-3.5 font-medium p-2 hover:bg-gray-800 rounded-md "
-                  }`
-                }
-              >
-                <div>{React.createElement(FaUser, { size: "20" })}</div>
-                <h2
-                  className={`whitespace-pre duration-300 ${
-                    !open && "opacity-0 translate-x-28 overflow-hidden"
-                  }`}
-                >
-                  Visitor
-                </h2>
-                <h2
-                  className={`${
-                    open && "hidden"
-                  } absolute left-48 bg-white font-semibold whitespace-pre text-gray-900 rounded-md drop-shadow-lg px-0 py-0 w-0 overflow-hidden group-hover:px-2 group-hover:py-1 group-hover:left-14 group-hover:duration-300 group-hover:w-fit  `}
-                >
-                  Visitor
-                </h2>
-              </NavLink>
 
-             
               {/* <NavLink
                 to={"/admin/documents"}
                 className={({ isActive }) =>
@@ -1293,7 +1293,6 @@ const Navbar = () => {
             </h2>
           </NavLink>
 
-          
           {user === "pms_admin" && (
             <NavLink
               to={"/setup"}
@@ -1322,34 +1321,34 @@ const Navbar = () => {
               </h2>
             </NavLink>
           )}
-<div className="border border-white" />
+          <div className="border border-white" />
           <div className=" ">
-          <NavLink
-            to={"/profile"}
-            className={({ isActive }) =>
-              ` ${
-                isActive
-                  ? "text-black bg-white flex p-2  gap-3.5 rounded-md group items-center text-sm font-medium"
-                  : " group flex items-center text-sm gap-3.5 font-medium p-2 hover:bg-gray-800 rounded-md "
-              }`
-            }
-          >
-            <div>{React.createElement(HiMiniUser, { size: "20" })}</div>
-            <h2
-              className={`whitespace-pre duration-300 ${
-                !open && "opacity-0 translate-x-28 overflow-hidden"
-              }`}
+            <NavLink
+              to={"/profile"}
+              className={({ isActive }) =>
+                ` ${
+                  isActive
+                    ? "text-black bg-white flex p-2  gap-3.5 rounded-md group items-center text-sm font-medium"
+                    : " group flex items-center text-sm gap-3.5 font-medium p-2 hover:bg-gray-800 rounded-md "
+                }`
+              }
             >
-              Profile
-            </h2>
-            <h2
-              className={`${
-                open && "hidden"
-              } absolute left-48 bg-white font-semibold whitespace-pre text-gray-900 rounded-md drop-shadow-lg px-0 py-0 w-0 overflow-hidden group-hover:px-2 group-hover:py-1 group-hover:left-14 group-hover:duration-300 group-hover:w-fit  `}
-            >
-              Profile
-            </h2>
-          </NavLink>
+              <div>{React.createElement(HiMiniUser, { size: "20" })}</div>
+              <h2
+                className={`whitespace-pre duration-300 ${
+                  !open && "opacity-0 translate-x-28 overflow-hidden"
+                }`}
+              >
+                Profile
+              </h2>
+              <h2
+                className={`${
+                  open && "hidden"
+                } absolute left-48 bg-white font-semibold whitespace-pre text-gray-900 rounded-md drop-shadow-lg px-0 py-0 w-0 overflow-hidden group-hover:px-2 group-hover:py-1 group-hover:left-14 group-hover:duration-300 group-hover:w-fit  `}
+              >
+                Profile
+              </h2>
+            </NavLink>
             <button
               onClick={handleLogout}
               className="font-semibold flex items-center rounded-md px-2 py-2 hover:bg-white hover:text-black transition-all duration-300 ease-in-out my-2 gap-4"

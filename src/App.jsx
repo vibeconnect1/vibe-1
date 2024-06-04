@@ -184,11 +184,19 @@ import OutwardPassDetails from "./pages/SubPages/OutwardsPassDetails.jsx";
 import GDN from "./pages/GDN.jsx";
 import AddGdn from "./pages/SubPages/AddGDN.jsx";
 import GdnViewDetails from "./pages/SubPages/details/GDNViewDetails.jsx";
+import SupplierDetails from "./pages/SubPages/details/SupplierDetails.jsx";
+import EditSuppliers from "./pages/SubPages/EditSuppliers.jsx";
+import Calender from "./pages/Calendar.jsx";
+
 
 function App() {
   const themeColor = useSelector((state) => state.theme.color);
   document.documentElement.style.setProperty(
     "--scrollbar-thumb-color",
+    themeColor
+  );
+  document.documentElement.style.setProperty(
+    "--calendarHeader",
     themeColor
   );
   return (
@@ -474,6 +482,23 @@ function App() {
               </ProtectedRoute>
             }
           />
+          <Route
+            path="/suppliers/edit-supplier/:id"
+            element={
+              <ProtectedRoute>
+                <EditSuppliers />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/suppliers/supplier-details/:id"
+            element={
+              <ProtectedRoute>
+                <SupplierDetails />
+              </ProtectedRoute>
+            }
+          />
+
           {/* Employee Attendance */}
           <Route
             path="/employee-attendance"
@@ -1345,17 +1370,16 @@ function App() {
             path="/admin/Gdn"
             element={
               <ProtectedAdminRoutes>
-                <GDN/>
+                <GDN />
               </ProtectedAdminRoutes>
             }
           />
 
-          
           <Route
             path="/admin/add-gdn/"
             element={
               <ProtectedAdminRoutes>
-                <AddGdn/>
+                <AddGdn />
               </ProtectedAdminRoutes>
             }
           />
@@ -1364,7 +1388,16 @@ function App() {
             path="/admin/gnd-detail/:id"
             element={
               <ProtectedAdminRoutes>
-                <GdnViewDetails/>
+                <GdnViewDetails />
+              </ProtectedAdminRoutes>
+            }
+          />
+          {/* calendar */}
+          <Route
+            path="/admin/calendar"
+            element={
+              <ProtectedAdminRoutes>
+                <Calender />
               </ProtectedAdminRoutes>
             }
           />

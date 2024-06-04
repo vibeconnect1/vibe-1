@@ -1,17 +1,15 @@
-import React, { useState } from "react";
-import { postVendors } from "../../api";
-import { getItemInLocalStorage } from "../../utils/localStorage";
+import React, { useEffect, useState } from "react";
+import { EditVendors, getVendorsDetails, postVendors } from "../../api";
+import { useNavigate, useParams } from "react-router-dom";
+import toast from "react-hot-toast";
 
-const AddSupplier = () => {
-  const siteId = getItemInLocalStorage("SITEID")
-  console.log(siteId)
+const EditSuppliers = () => {
   const [formData, setFormData] = useState({
-    site_id: siteId,
     vendor_name: "",
     company_name: "",
     mobile: "",
     email: "",
-    
+    site_id: "",
     vtype: "",
     notes: "",
   });
@@ -20,20 +18,39 @@ const AddSupplier = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
+  const { id } = useParams();
+  const navigate = useNavigate()
   const handleSubmit = async () => {
     try {
-      const response = await postVendors(formData);
-      console.log(response)
-    } catch (error) {
-      console.log(error)
-    }
+        toast.loading("Editing Supplier Please Wait!");
+      const response = await EditVendors(id,formData);
 
+      toast.success("Supplier Edited Successfully");
+      console.log("Response:", response.data);
+      toast.dismiss();
+      navigate(`/suppliers/supplier-details/${response.data.id}`);
+    } catch (error) {
+      toast.dismiss();
+      console.log(error);
+    }
   };
+  useEffect(() => {
+    const fetchVendorDetails = async () => {
+      try {
+        const vendorDetailsResponse = await getVendorsDetails(id);
+        setFormData(vendorDetailsResponse.data);
+        console.log(vendorDetailsResponse)
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchVendorDetails();
+  }, []);
   return (
     <section>
       <div className="m-2">
         <h2 className="text-center text-xl font-bold p-2 bg-black rounded-full text-white">
-          Add Supplier
+          Edit Supplier
         </h2>
         <div className="md:mx-20 my-5 mb-10 border border-gray-400 p-5 px-10 rounded-lg shadow-xl">
           <h2 className="border-b text-center text-xl border-black mb-6 font-semibold">
@@ -302,7 +319,7 @@ const AddSupplier = () => {
           <input type="file" name="" id="" multiple />
           <div className="flex gap-5 justify-center items-center my-4">
             <button
-             onClick={handleSubmit}
+              onClick={handleSubmit}
               className="bg-black text-white hover:bg-gray-700 font-semibold text-xl py-2 px-4 rounded"
             >
               Submit
@@ -314,4 +331,4 @@ const AddSupplier = () => {
   );
 };
 
-export default AddSupplier;
+export default EditSuppliers;

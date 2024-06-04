@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import DataTable from "react-data-table-component";
 import { IoAddCircleOutline, IoFilterOutline } from "react-icons/io5";
 import { BsEye, BsFilterLeft } from "react-icons/bs";
@@ -7,27 +7,70 @@ import Navbar from "../components/Navbar";
 import * as XLSX from "xlsx";
 
 import { BiEdit, BiFilter, BiFilterAlt } from "react-icons/bi";
+import { getVendors } from "../api";
+import Table from "../components/table/Table";
 // import jsPDF from "jspdf";
 // import QRCode from "qrcode.react";
 
 const Suppliers = () => {
   const [searchText, setSearchText] = useState("");
   const [filter, setFilter] = useState(false);
-  const [omitColumn, setOmitColumn] = useState(false);
-
+  const [suppliers, setSuppliers] = useState([]);
+  const [filteredData, setFilteredData] = useState([]);
   const [selectedRows, setSelectedRows] = useState([]);
+
+  useEffect(() => {
+    const fetchVendor = async () => {
+      try {
+        const vendorResponse = await getVendors();
+        setFilteredData(vendorResponse.data);
+        setSuppliers(vendorResponse.data);
+        console.log(vendorResponse);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchVendor();
+  }, []);
+
   const column = [
     {
       name: "Action",
-      // cell: (row) => <Link to={""}>{row.action}</Link>,
-      selector: (row) => row.action,
-
-      sortable: true,
+      cell: (row) => (
+        <div className="flex items-center gap-4">
+          <Link to={`/suppliers/supplier-details/${row.id}`}>
+            <BsEye size={15} />
+          </Link>
+          <Link to={`/suppliers/edit-supplier/${row.id}`}>
+            <BiEdit size={15} />
+          </Link>
+        </div>
+      ),
     },
     { name: "ID", selector: (row) => row.id, sortable: true },
     {
+      name: "Vendor Name",
+      selector: (row) => row.vendor_name,
+      sortable: true,
+    },
+    {
       name: "Company Name",
-      selector: (row) => row.serviceName,
+      selector: (row) => row.company_name,
+      sortable: true,
+    },
+    {
+      name: "Mobile Number",
+      selector: (row) => row.mobile,
+      sortable: true,
+    },
+    {
+      name: "Supplier Type",
+      selector: (row) => row.vtype,
+      sortable: true,
+    },
+    {
+      name: "Email",
+      selector: (row) => row.email,
       sortable: true,
     },
     {
@@ -36,7 +79,7 @@ const Suppliers = () => {
       sortable: true,
     },
     { name: "PAN Number", selector: (row) => row.ref, sortable: true },
-    { name: "Supplier Type", selector: (row) => row.category, sortable: true },
+
     {
       name: "PO Outstandings",
       selector: (row) => row.group,
@@ -63,65 +106,22 @@ const Suppliers = () => {
       sortable: true,
     },
   ];
-  const data = [
-    {
-      id: 1,
-      // action: <BsEye />,
-      action: (
-        <div className="flex items-center gap-7">
-          <Link to={`/services/service-details`}>
-            <BsEye />
-          </Link>
-        </div>
-      ),
-      serviceName: "service 1fsdddddddddddddddd",
-      serviceCode: "code 1",
-      ref: "code 1",
-      category: "Building A",
-      group: "assetCode",
-      UOM: "uom",
-      site: "site 1",
-      floor: "Floor 1",
-      building: "Building A",
-      area: "Area 1",
-      status: "Status 1",
-      modelNumber: "model 1",
-      createdOn: "today",
-    },
-    {
-      id: 2,
-      // action: <BsEye />,
-      action: (
-        <div className="flex items-center gap-7">
-          <Link to={`/services/service-details`}>
-            <BsEye />
-          </Link>
-        </div>
-      ),
-      serviceName: "main",
-      serviceCode: "code 1",
-      ref: "code 1",
-      category: "Building A",
-      group: "assetCode",
-      UOM: "uom",
-      site: "site 1",
-      floor: "Floor 1",
-      building: "Building A",
-      area: "Area 1",
-      status: "Status 1",
-      modelNumber: "model 1",
-      createdOn: "today",
-    },
-  ];
 
-  const [filteredData, setFilteredData] = useState(data);
   const handleSearch = (event) => {
     const searchValue = event.target.value;
     setSearchText(searchValue);
-    const filteredResults = data.filter((item) =>
-      item.serviceName.toLowerCase().includes(searchValue.toLowerCase())
-    );
-    setFilteredData(filteredResults);
+    if (searchValue.trim() === "") {
+      setFilteredData(suppliers);
+    } else {
+      const filteredResults = suppliers.filter(
+        (item) =>
+          item.vendor_name.toLowerCase().includes(searchValue.toLowerCase()) ||
+          item.company_name.toLowerCase().includes(searchValue.toLowerCase()) ||
+          item.email.toLowerCase().includes(searchValue.toLowerCase()) ||
+          item.mobile.toLowerCase().includes(searchValue.toLowerCase())
+      );
+      setFilteredData(filteredResults);
+    }
   };
 
   const customStyle = {
@@ -162,7 +162,7 @@ const Suppliers = () => {
   return (
     <section className="flex  ">
       <Navbar />
-      <div className="w-full mx-3 flex  flex-col overflow-hidden">
+      <div className="w-full mx-3 mb-5 flex  flex-col overflow-hidden">
         <div className="flex flex-wrap justify-between items-center my-5 ">
           <input
             type="text"
@@ -172,7 +172,6 @@ const Suppliers = () => {
             onChange={handleSearch}
           />
           <div className="flex flex-wrap gap-2">
-            
             <Link
               to={"/suppliers/add-supplier"}
               className="bg-black  rounded-lg flex font-semibold  items-center gap-2 text-white p-2 "
@@ -195,20 +194,7 @@ const Suppliers = () => {
           </button> */}
           </div>
         </div>
-        <DataTable
-          
-          columns={column}
-          data={filteredData}
-          customStyles={customStyle}
-          responsive
-          onSelectedRowsChange={handleRowSelected}
-          fixedHeader
-          fixedHeaderScrollHeight="500px"
-          pagination
-          selectableRowsHighlight
-          highlightOnHover
-          
-        />
+        <Table columns={column} data={filteredData} isPagination={true} />
       </div>
     </section>
   );

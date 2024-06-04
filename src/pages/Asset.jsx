@@ -18,6 +18,8 @@ import RoutineTask from "./RoutineTask";
 import Table from "../components/table/Table";
 import ThemedButton from "../Buttons/Button";
 import bridge from "/bridge.jpg";
+import { IoIosArrowDown } from "react-icons/io";
+import { MdKeyboardArrowRight } from "react-icons/md";
 
 // import jsPDF from "jspdf";
 // import QRCode from "qrcode.react";
@@ -424,10 +426,11 @@ const Asset = () => {
       className="flex"
       style={{
         background: `url(${bridge})`,
-        backgroundSize: "100% 100% ",
+        // backgroundSize: "100% 100% ",
         backgroundSize: "cover",
         backgroundRepeat: "no-repeat",
         backgroundPosition: "center",
+        backgroundAttachment: "fixed",
       }}
     >
       <Navbar />
@@ -573,12 +576,12 @@ const Asset = () => {
               <input
                 type="text"
                 placeholder="Search By Building, Asset, Unit or OEM Name"
-                className=" p-2 md:w-96 border-gray-300 rounded-lg placeholder:text-sm outline-none"
+                className=" p-2 md:w-96 border-gray-300 rounded-md placeholder:text-sm outline-none"
                 value={searchText}
                 onChange={handleSearch}
               />
               <div className="md:flex grid grid-cols-2 sm:flex-row my-2 flex-col gap-2">
-              <ThemedButton
+                <ThemedButton
                   to={"/assets/add-asset"}
                   title={"Add Asset"}
                   icon={<IoAddCircleOutline />}
@@ -587,9 +590,14 @@ const Asset = () => {
                 <div className="" ref={dropdownRef}>
                   <button
                     onClick={() => setDropdownOpen(!dropdownOpen)}
-                    className="px-4 py-2 border-2 font-medium text-white rounded-md"
+                    className="px-4 py-2 border-2 font-medium text-white rounded-md flex gap-2 items-center justify-center"
                   >
                     Hide Columns
+                    {dropdownOpen ? (
+                      <IoIosArrowDown />
+                    ) : (
+                      <MdKeyboardArrowRight />
+                    )}
                   </button>
                   {dropdownOpen && (
                     <div className="absolute mt-2 bg-white border rounded shadow-md w-64 max-h-64 overflow-y-auto z-10">
@@ -627,7 +635,7 @@ const Asset = () => {
                   <IoAddCircleOutline size={20} />
                   Add
                 </Link> */}
-               
+
                 {/* <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
                   <input type="file"  className="opacity-0 w-fit" onChange={handleFileChange} />
                   Import

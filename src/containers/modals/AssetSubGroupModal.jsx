@@ -3,6 +3,7 @@ import ModalWrapper from "./ModalWrapper";
 import { useDispatch, useSelector } from "react-redux";
 import { addSubGroup } from "../../features/group/groupSlice";
 import { getAssetGroups, postAssetSubGroups } from "../../api";
+import toast from "react-hot-toast";
 
 const AssetSubGroupModal = ({ onclose }) => {
   const [subGroupName, setSubGroupName] = useState("");
@@ -18,13 +19,16 @@ const AssetSubGroupModal = ({ onclose }) => {
   // console.log(groups);
 
   const CreateSubGroup = async () => {
+    if(formData.group_id === "" || formData.group_id === ""){
+      return toast.error("All fields are required")
+    }
     const addSubGroup = await postAssetSubGroups({
       group_id: formData.group_id,
       name: formData.name,
     });
-    console.log(addSubGroup)
-    onclose()
-
+    console.log(addSubGroup);
+    onclose();
+    window.location.reload();
     // if (selectedGroup && subGroupName.trim()) {
     //   dispatch(addSubGroup({ groupName: selectedGroup, subGroupName }));
     //   setSubGroupName("");

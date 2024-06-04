@@ -39,12 +39,34 @@ export const EditSiteAsset = async (data, id) =>
     //     'Content-Type': 'multipart/form-data'
     // }
   });
+
+// vendor
 export const getVendors = async () =>
   axiosInstance.get("/vendors.json", {
     params: {
       token: token,
     },
   });
+
+export const getVendorsDetails = async (id) =>
+  axiosInstance.get(`/vendors/${id}.json`, {
+    params: {
+      token: token,
+    },
+  });
+export const postVendors = async (data) =>
+  axiosInstance.post("/vendors.json", data, {
+    params: {
+      token: token,
+    },
+  });
+export const EditVendors = async (id, data) =>
+  axiosInstance.put(`/vendors/${id}.json`, data, {
+    params: {
+      token: token,
+    },
+  });
+
 //
 export const getComplaints = async () =>
   axiosInstance.get(`/pms/complaints.json`, {

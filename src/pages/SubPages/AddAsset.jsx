@@ -171,8 +171,14 @@ const AddAsset = () => {
       formDataSend.append("site_asset[model_number]", formData.model_number);
       formDataSend.append("site_asset[purchased_on]", formData.purchased_on);
       formDataSend.append("site_asset[purchase_cost]", formData.purchase_cost);
-      formDataSend.append("site_asset[asset_group_id]", formData.asset_group_id);
-      formDataSend.append("site_asset[sub_group_name]", formData.sub_group_name);
+      formDataSend.append(
+        "site_asset[asset_group_id]",
+        formData.asset_group_id
+      );
+      formDataSend.append(
+        "site_asset[sub_group_name]",
+        formData.sub_group_name
+      );
       formDataSend.append("site_asset[installation]", formData.installation);
       formDataSend.append(
         "site_asset[warranty_expiry]",
@@ -234,8 +240,7 @@ const AddAsset = () => {
     //   <div className="m-2">
     <section className="flex">
       <div className="hidden md:block">
-
-      <Navbar />
+        <Navbar />
       </div>
       <div className="md:p-4 w-full my-2 flex md:mx-2 overflow-hidden flex-col">
         <h2
@@ -424,7 +429,7 @@ const AddAsset = () => {
                 </div>
 
                 <div className="flex items-center justify-between gap-2">
-                  <label htmlFor="" className="font-semibold ">
+                  <label htmlFor="" className="font-medium text-sm ">
                     Purchased Date:
                   </label>
                   <input
@@ -500,9 +505,9 @@ const AddAsset = () => {
                       <div className="flex gap-2">
                         <input
                           type="radio"
-                          checked={formData.meter_type === "parent"}
+                          checked={formData.asset_type === "parent"}
                           onChange={() =>
-                            setFormData({ ...formData, meter_type: "parent" })
+                            setFormData({ ...formData, asset_type: "parent" })
                           }
                           id="parent"
                           className="checked:accent-black"
@@ -513,9 +518,9 @@ const AddAsset = () => {
                       <div className="flex gap-2">
                         <input
                           type="radio"
-                          checked={formData.meter_type === "sub"}
+                          checked={formData.asset_type === "sub"}
                           onChange={() =>
-                            setFormData({ ...formData, meter_type: "sub" })
+                            setFormData({ ...formData, asset_type: "sub" })
                           }
                           id="sub"
                           onClick={() => setMeterType("sub")}
@@ -540,9 +545,9 @@ const AddAsset = () => {
                       onChange={handleChange}
                     >
                       <option value="">Select Asset </option>
-                      <option value="meter 1">Meter 1</option>
-                      <option value="meter 2">Meter 2</option>
-                      <option value="meter 2">meter 3</option>
+                      <option value="meter 1">Asswt 1</option>
+                      <option value="meter 2">Asset 2</option>
+                      <option value="meter 2">Asset 3</option>
                     </select>
                   </div>
                 )}
