@@ -125,7 +125,7 @@ const ScheduledVendorAudit = () => {
 
         <div className="flex gap-2">
           <Link
-            // to={"/tickets/create-ticket"}
+            to={"/admin/audit/add-schedule-audit"}
             className="border-2 font-semibold hover:bg-black hover:text-white duration-300 transition-all border-black p-2 rounded-md text-black cursor-pointer text-center flex items-center gap-2 justify-center"
             // onClick={() => setShowCountry(!showCountry)}
           >

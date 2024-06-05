@@ -11,7 +11,7 @@ const ScheduledAudit = () => {
       name: "Action",
       cell: (row) => (
         <div className="flex items-center gap-4">
-          <Link to={`/admin/schedule-details/${row.id}`}>
+          <Link to={`/admin/scheduled-details/${row.id}`}>
             <BsEye size={15} />
           </Link>
           <Link to={`/admin/audit/edit-schedule-audit/${row.id}`}>

@@ -286,6 +286,15 @@ export const getSetupUsers = async () =>
       token: token,
     },
   });
+export const getAttendance = async () =>
+  axiosInstance.get("/attendances.json", {
+    params: {
+      token: token,
+    },
+  });
+
+
+
 
 // vibe
 

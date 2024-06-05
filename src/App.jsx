@@ -183,6 +183,23 @@ import EmployeeAddGVehicles from "./pages/Employees/EmployeeSubPages/EmployeeAdd
 import EmployeeGVehiclesDetails from "./pages/Employees/EmployeeSubPages/EmployeeGvehicleDetails.jsx";
 import EmployeeAddRVehicles from "./pages/Employees/EmployeeSubPages/EmployeeAddRVehicle.jsx";
 import EmployeeAddStaff from "./pages/Employees/EmployeeSubPages/EmployeeAddStaff.jsx";
+import Bills from "./pages/Bills.jsx";
+import AddBills from "./pages/SubPages/AddBills.jsx";
+import OtherBillsDetails from "./pages/SubPages/details/OtherBillDetails.jsx";
+import OtherFeedsBill from "./pages/SubPages/details/OtherBillFeeds.jsx";
+import Insights from "./pages/Insights.jsx";
+import AddInsights from "./pages/SubPages/AddInsights.jsx";
+import EditInsights from "./pages/SubPages/EditInsight.jsx";
+import InsightsDetails from "./pages/SubPages/details/InsightDetails.jsx";
+import InsightSetup from "./pages/Setup/InsightSetup.jsx";
+import Permit from "./pages/Permit.jsx";
+import AddNewPermit from "./pages/SubPages/AddNewPermit.jsx";
+import PermitListEdit from "./pages/SubPages/PermitListEdit.jsx";
+import PermitListDetails from "./pages/SubPages/details/PermitDetails.jsx";
+import PermitPendingApprovalDetails from "./pages/SubPages/details/PermitPendingApprovalDetails.jsx";
+import ScheduleAuditDetails from "./pages/SubPages/details/ScheduleAuditDetails.jsx";
+import ChecklistDetails from "./pages/SubPages/details/ChecklistDetails.jsx";
+import PermitSetup from "./pages/Setup/PermitSetup.jsx";
 
 function App() {
   const themeColor = useSelector((state) => state.theme.color);
@@ -1111,47 +1128,103 @@ function App() {
               </ProtectedAdminRoutes>
             }
           />
-          {/* 
+          {/*  */}
+          <Route
+            path="/admin/scheduled-details/:id"
+            element={
+              <ProtectedAdminRoutes>
+                <ScheduleAuditDetails />
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/audit/add-schedule-audit"
+            element={
+              <ProtectedAdminRoutes>
+                <AddScheduleAudit />
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="edit-scheduled/:id"
+            element={
+              <ProtectedAdminRoutes>
+                <EditOpsScheduleAudit />
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/checklist-details/:id"
+            element={
+              <ProtectedAdminRoutes>
+                <ChecklistDetails />
+              </ProtectedAdminRoutes>
+            }
+          />
+          
+          
+         
+          {/*  */}
+
+          {/*
            <Route
-            path="/admin/checklist/:id"
+            path="/employee/rvehiclesdetails/:id"
             element={
-              <ProtectedAdminRoutes>
-               <AddAuditChecklist/>
-              </ProtectedAdminRoutes>
+              <ProtectedRoute>
+               <RVehiclesDetails/>
+              </ProtectedRoute>
             }
           />
           <Route
-            path="/admin/scheduledetails/:id"
+            path="/employee/rvehicleshistdetails/:id"
             element={
-              <ProtectedAdminRoutes>
-              <ScheduleAuditDetails/>
-              </ProtectedAdminRoutes>
+              <ProtectedRoute>
+               <RVehiclesHistoryDetails/>
+              </ProtectedRoute>
+            }
+          />
+          
+          <Route
+            path="/employee/staffdetails/:id"
+            element={
+              <ProtectedRoute>
+               <StaffDetails/>
+              </ProtectedRoute>
             }
           />
           <Route
-            path="/admin/conducteddetails/:id"
+            path="/employee/materialdetails/:id"
             element={
-              <ProtectedAdminRoutes>
-              <OperationConductedDetails/>
-              </ProtectedAdminRoutes>
+              <ProtectedRoute>
+               <MaterialDetails/>
+              </ProtectedRoute>
             }
           />
           <Route
-            path="/admin/checklistdetails/:id"
+            path="/employee/patrollingdetails/:id"
             element={
-              <ProtectedAdminRoutes>
-              <ChecklistDetails/>
-              </ProtectedAdminRoutes>
+              <ProtectedRoute>
+               <PatrollingDetails/>
+              </ProtectedRoute>
             }
           />
-           <Route
-            path="/admin/vendorconducteddetails/:id"
+          <Route
+            path="/employee/inwarddetails/:id"
             element={
-              <ProtectedAdminRoutes>
-              <VendorConductedDetails/>
-              </ProtectedAdminRoutes>
+              <ProtectedRoute>
+               <InwardDetails/>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/employee/outwarddetails/:id"
+            element={
+              <ProtectedRoute>
+               <OutwardDetails/>
+              </ProtectedRoute>
             }
           /> */}
+{/*  */}
 
           {/* grn */}
           <Route
@@ -1349,77 +1422,20 @@ function App() {
             path="/employee/addrvehicles"
             element={
               <ProtectedRoute>
-                <EmployeeAddRVehicles/>
+                <EmployeeAddRVehicles />
               </ProtectedRoute>
             }
           />
-           <Route
+          <Route
             path="/employee/addstaff"
             element={
               <ProtectedRoute>
-                <EmployeeAddStaff/>
+                <EmployeeAddStaff />
               </ProtectedRoute>
             }
           />
-          {/*
-           <Route
-            path="/employee/rvehiclesdetails/:id"
-            element={
-              <ProtectedRoute>
-               <RVehiclesDetails/>
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/employee/rvehicleshistdetails/:id"
-            element={
-              <ProtectedRoute>
-               <RVehiclesHistoryDetails/>
-              </ProtectedRoute>
-            }
-          />
-          
-          <Route
-            path="/employee/staffdetails/:id"
-            element={
-              <ProtectedRoute>
-               <StaffDetails/>
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/employee/materialdetails/:id"
-            element={
-              <ProtectedRoute>
-               <MaterialDetails/>
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/employee/patrollingdetails/:id"
-            element={
-              <ProtectedRoute>
-               <PatrollingDetails/>
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/employee/inwarddetails/:id"
-            element={
-              <ProtectedRoute>
-               <InwardDetails/>
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/employee/outwarddetails/:id"
-            element={
-              <ProtectedRoute>
-               <OutwardDetails/>
-              </ProtectedRoute>
-            }
-          /> */}
 
+          
           {/* GDN*/}
           <Route
             path="/admin/Gdn"
@@ -1456,7 +1472,142 @@ function App() {
               </ProtectedAdminRoutes>
             }
           />
-        </Routes>
+
+          {/* other bills */}
+          <Route
+            path="/admin/other-bills"
+            element={
+              <ProtectedAdminRoutes>
+                <Bills />
+              </ProtectedAdminRoutes>
+            }
+          />
+
+          <Route
+            path="/admin/add-other-bills"
+            element={
+              <ProtectedAdminRoutes>
+                <AddBills />
+              </ProtectedAdminRoutes>
+            }
+          />
+
+          <Route
+            path="/admin/-other-bills-details/:id"
+            element={
+              <ProtectedAdminRoutes>
+                <OtherBillsDetails />
+              </ProtectedAdminRoutes>
+            }
+          />
+          {/* add id to it */}
+          <Route
+            path="/admin/-other-bills-feed"
+            element={
+              <ProtectedAdminRoutes>
+                <OtherFeedsBill />
+              </ProtectedAdminRoutes>
+            }
+          />
+
+          {/* Design Insights*/}
+          <Route
+            path="/admin/Insights"
+            element={
+              <ProtectedAdminRoutes>
+                <Insights />
+              </ProtectedAdminRoutes>
+            }
+          />
+
+          <Route
+            path="/admin/Add-insights"
+            element={
+              <ProtectedAdminRoutes>
+                <AddInsights />
+              </ProtectedAdminRoutes>
+            }
+          />
+
+          <Route
+            path="/admin/insights-detail/:id"
+            element={
+              <ProtectedAdminRoutes>
+                <InsightsDetails />
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/edit-insight/:id"
+            element={
+              <ProtectedAdminRoutes>
+                <EditInsights />
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/setup/insights/"
+            element={
+              <ProtectedAdminRoutes>
+                <InsightSetup />
+              </ProtectedAdminRoutes>
+            }
+          />
+
+          {/* permit */}
+          {/* admin permit */}
+          <Route
+            path="/admin/permit"
+            element={
+              <ProtectedAdminRoutes>
+                <Permit />
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/add-new-permit"
+            element={
+              <ProtectedAdminRoutes>
+                <AddNewPermit />
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/edit-permit/:id"
+            element={
+              <ProtectedAdminRoutes>
+                <PermitListEdit />
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/permit-details/:id"
+            element={
+              <ProtectedAdminRoutes>
+                <PermitListDetails />
+              </ProtectedAdminRoutes>
+            }
+          />
+
+
+          <Route
+            path="/admin/pending-details/:id"
+            element={
+              <ProtectedAdminRoutes>
+                <PermitPendingApprovalDetails />
+              </ProtectedAdminRoutes>
+            }
+          />
+
+        <Route
+            path="/setup/permit-setup"
+            element={
+              <ProtectedAdminRoutes>
+                <PermitSetup/>
+              </ProtectedAdminRoutes>
+            }
+            />
+            </Routes>
         <Footer />
       </Router>
     </>

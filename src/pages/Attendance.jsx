@@ -1,11 +1,21 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Navbar from "../components/Navbar";
 import DataTable from "react-data-table-component";
 import { ImEye } from "react-icons/im";
 import { Link } from "react-router-dom";
 import Modal from "../containers/modals/Modal";
+import { getAttendance } from "../api";
 const Attendance = () => {
   const [modal, setModal] = useState(false);
+  const [attendanceData, setAttendanceData] = useState([]);
+
+  useEffect(() => {
+    const fetchAttendance = async () => {
+      const attendanceResponse = await getAttendance();
+      console.log(attendanceResponse);
+    };
+    fetchAttendance();
+  }, []);
   const column = [
     {
       name: "Actions",
@@ -85,22 +95,20 @@ const Attendance = () => {
               Export
             </button>
           </div>
-         
-            <DataTable
-              columns={column}
-              data={data}
-              customStyles={customStyle}
-              responsive
-             
-              fixedHeader
-              fixedHeaderScrollHeight="500px"
-              pagination
-              selectableRowsHighlight
-              highlightOnHover
-              omitColumn={column}
-            />
-          </div>
-        
+
+          <DataTable
+            columns={column}
+            data={data}
+            customStyles={customStyle}
+            responsive
+            fixedHeader
+            fixedHeaderScrollHeight="500px"
+            pagination
+            selectableRowsHighlight
+            highlightOnHover
+            omitColumn={column}
+          />
+        </div>
       </div>
       {modal && <Modal onclose={() => setModal(false)} />}
     </section>

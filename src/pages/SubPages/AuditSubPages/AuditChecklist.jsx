@@ -12,7 +12,7 @@ const AuditChecklist = () => {
       name: "Action",
       cell: (row) => (
         <div className="flex items-center gap-4">
-          <Link to={`/admin/audit-checklist-details/${row.id}`}>
+          <Link to={`/admin/checklist-details/${row.id}`}>
             <BsEye size={15} />
           </Link>
           <Link to={`/admin/edit-checklist/${row.id}`}>
