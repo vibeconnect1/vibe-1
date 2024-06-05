@@ -11,10 +11,10 @@ const ScheduledAudit = () => {
       name: "Action",
       cell: (row) => (
         <div className="flex items-center gap-4">
-          <Link to={`/tickets/details/${row.id}`}>
+          <Link to={`/admin/schedule-details/${row.id}`}>
             <BsEye size={15} />
           </Link>
-          <Link to={`/edit/${row.id}`}>
+          <Link to={`/admin/audit/edit-schedule-audit/${row.id}`}>
             <BiEdit size={15} />
           </Link>
         </div>

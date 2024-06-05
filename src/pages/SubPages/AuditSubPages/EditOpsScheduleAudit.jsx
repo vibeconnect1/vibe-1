@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
 
-const AddScheduleAudit = () => {
+const EditOpsScheduleAudit = () => {
   const [scheduleFor, setScheduleFor] = useState("asset");
   const themeColor = useSelector((state) => state.theme.color);
   const [selection, setSelection] = useState('');
@@ -522,4 +522,4 @@ const AddScheduleAudit = () => {
   );
 };
 
-export default AddScheduleAudit;
+export default EditOpsScheduleAudit;

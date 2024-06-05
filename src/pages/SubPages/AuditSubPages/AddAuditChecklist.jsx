@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
 
-const AddScheduleAudit = () => {
+const AddAuditChecklist = () => {
   const [scheduleFor, setScheduleFor] = useState("asset");
   const themeColor = useSelector((state) => state.theme.color);
   const [selection, setSelection] = useState('');
@@ -334,7 +334,7 @@ const AddScheduleAudit = () => {
           style={{ background: themeColor }}
           className="text-center text-xl font-bold p-2 rounded-full text-white"
         >
-          Schedule Audit
+          Checklist Audit
         </h2>
         <div className="md:mx-20 my-5 mb-10 sm:border border-gray-400 p-5 px-10 rounded-lg sm:shadow-xl">
           <h2 className="border-b text-center text-xl border-black mb-6 font-bold">
@@ -344,41 +344,38 @@ const AddScheduleAudit = () => {
             <div className="grid grid-cols-4 items-center">
               <p className="font-semibold">For :</p>
               <div className="flex gap-5">
-              <div className="flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-2">
-    <p
-        className={`border-2 p-1 px-6 border-black font-medium rounded-full cursor-pointer ${
-            scheduleFor === "asset" && "bg-black text-white"
-        }`}
-        onClick={() => setScheduleFor("asset")}
-    >
-        Asset
-    </p>
-    <p
-        className={`border-2 p-1 px-6 border-black font-medium rounded-full cursor-pointer ${
-            scheduleFor === "Services" && "bg-black text-white"
-        }`}
-        onClick={() => setScheduleFor("Services")}
-    >
-        Services
-    </p>
-    <p
-        className={`border-2 p-1 px-6 border-black font-medium rounded-full cursor-pointer ${
-            scheduleFor === "Vendor" && "bg-black text-white"
-        }`}
-        onClick={() => setScheduleFor("Vendor")}
-    >
-        Vendor
-    </p>
-    <p
-        className={`border-2 p-1 px-6 border-black font-medium rounded-full cursor-pointer ${
-            scheduleFor === "Training" && "bg-black text-white"
-        }`}
-        onClick={() => setScheduleFor("Training")}
-    >
-        Training
-    </p>
-</div>
-
+                <p
+                  className={`border-2 p-1 px-6 border-black font-medium rounded-full cursor-pointer ${
+                    scheduleFor === "asset" && "bg-black text-white"
+                  }`}
+                  onClick={() => setScheduleFor("asset")}
+                >
+                  Asset
+                </p>
+                <p
+                  className={`border-2 p-1 px-6 border-black font-medium rounded-full cursor-pointer ${
+                    scheduleFor === "Services" && "bg-black text-white"
+                  }`}
+                  onClick={() => setScheduleFor("Services")}
+                >
+                  Services
+                </p>
+                <p
+                  className={`border-2 p-1 px-6 border-black font-medium rounded-full cursor-pointer ${
+                    scheduleFor === "Vendor" && "bg-black text-white"
+                  }`}
+                  onClick={() => setScheduleFor("Vendor")}
+                >
+                  Vendor
+                </p>
+                <p
+                  className={`border-2 p-1 px-6 border-black font-medium rounded-full cursor-pointer ${
+                    scheduleFor === "Training" && "bg-black text-white"
+                  }`}
+                  onClick={() => setScheduleFor("Training")}
+                >
+                  Training
+                </p>
               </div>
             </div>
           </div>
@@ -450,34 +447,31 @@ const AddScheduleAudit = () => {
                 <div className="w-full">
                     {renderScheduleFields()}
                 </div>
+                
             )}
              {isOnTask && (
-              
                 <div className="flex flex-col items-center">
-                    <select name="" id=""  className=" border p-1 px-4 border-gray-500 rounded-md w-48 mt-1"><option value="">select assigned to</option></select>
-                    <select name="" id=""  className=" border p-1 px-4 border-gray-500 rounded-md w-48 mt-1"><option value="">select category</option></select>
+                    <select name="" id=""  className=" border p-1 px-4 border-gray-500 rounded-md w-48"><option value="">select assigned to</option></select>
+                    <select name="" id=""  className=" border p-1 px-4 border-gray-500 rounded-md w-48"><option value="">select category</option></select>
                 </div>
-                
             )}
               </div>
             <h2 className="border-b text-center text-xl border-black mb-6 font-bold">
               Activity Name
             </h2>
-            <div className="flex flex-col justify-around items-center">
+            <div className="flex flex-col justify-around items-center mt-1">
               <div className="flex flex-col w-full">
-                <label htmlFor="activityName" className="font-semibold mt-1 mb-2">Activity Name</label>
-                
+                <label htmlFor="activityName" className="font-semibold mb-2">Activity Name</label>
                 <input
                   type="text"
                   name="activityName"
                   id="activityName"
                   placeholder="Enter Activity Name"
-                  className="w-full border p-1 px-4 border-gray-500 rounded-md "
+                  className="w-full border p-1 px-4 border-gray-500 rounded-md"
                 />
               </div>
-              <div className="flex flex-col w-full">
-                <label htmlFor="description" className="font-semibold mt-3 mb-2">Description</label>
-                
+              <div className="flex flex-col w-full mt-3">
+                <label htmlFor="description" className="font-semibold mb-2">Description</label>
                 <textarea
                   name="description"
                   id="description"
@@ -486,6 +480,7 @@ const AddScheduleAudit = () => {
                 />
               </div>
             </div>
+            &nbsp;
             <div>
               Allow Observations&nbsp;&nbsp;&nbsp;<input type="checkbox" />
             </div>
@@ -509,7 +504,7 @@ const AddScheduleAudit = () => {
         </div>
           {/* <h2 className="border-b text-center text-xl border-black mb-6 font-bold">Schedule</h2> */}
           
-          {renderScheduleFields()}
+          
 
           <div className="sm:flex justify-center grid gap-2 my-5">
             <button className="bg-black text-white p-2 px-4 rounded-md font-medium">
@@ -522,4 +517,4 @@ const AddScheduleAudit = () => {
   );
 };
 
-export default AddScheduleAudit;
+export default AddAuditChecklist;

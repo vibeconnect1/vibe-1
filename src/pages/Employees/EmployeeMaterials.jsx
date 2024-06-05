@@ -1,13 +1,20 @@
 import React, { useState } from "react";
 import { PiPlusCircle } from "react-icons/pi";
 import { Link } from "react-router-dom";
-
+//import Navbar from "../../../components/Navbar";
 import DataTable from "react-data-table-component";
 import { BsEye } from "react-icons/bs";
+import { useSelector } from "react-redux";
+import { BiEdit } from "react-icons/bi";
+import { TiTick } from "react-icons/ti";
+import { IoClose } from "react-icons/io5";
+import MaterialsModal from "../../containers/modals/MaterialsModal";
+import { IoAddCircleOutline } from "react-icons/io5";
 
-
-const EmployeeAddVisitor = () => {
+const EmployeeMaterials = () => {
   const [selectedStatus, setSelectedStatus] = useState("all");
+  const themeColor = useSelector((state)=> state.theme.color)
+  const [modal, showModal] = useState(false);
 
 
   const columns = [
@@ -15,74 +22,77 @@ const EmployeeAddVisitor = () => {
       name: "Action",
       cell: (row) => (
         <div className="flex items-center gap-4">
-          <Link to={`/employee/visitordetails/${row.id}`}>
+          <Link to={`/employee/materialdetails/${row.id}`}>
             <BsEye size={15} />
           </Link>
+
         </div>
       ),
     },
     {
-      name: "Mobile Number",
-      selector: (row) => row.mobile_number,
+      name: "Person Name",
+      selector: (row) => row.person_name,
       sortable: true,
     },
     {
-      name: "Visitor Name",
-      selector: (row) => row.visitor_name,
+      name: "Type",
+      selector: (row) => row.type,
+      sortable: true,
+    },
+    {
+      name: "No. of Items",
+      selector: (row) => row.items,
       sortable: true,
     },
 
-
     {
-      name: "Additional Visitor",
-      selector: (row) => row.additional_visitor,
+      name: "Description",
+      selector: (row) => row.description,
       sortable: true,
     },
     {
-      name: "Coming From",
-      selector: (row) => row.coming_from,
-      sortable: true,
-    },
-    {
-      name: "Vehicle Number",
-      selector: (row) => row.vehicle_number,
-      sortable: true,
-    },
-    {
-      name: "Expected Date",
-      selector: (row) => row.expected_date,
-      sortable: true,
-    },
-    {
-      name: "Expected Time",
-      selector: (row) => row.expected_time,
-      sortable: true,
-    },
-    {
-      name: "Purpose",
-      selector: (row) => row.purpose,
-      sortable: true,
-    },
-    {
-      name: "Status",
-      selector: (row) => row.status,
-      sortable: true,
-    },
+        name: "Vehicle Number",
+        selector: (row) => row.v_number,
+        sortable: true,
+      },
+      {
+        name: "Created By",
+        selector: (row) => row.createby,
+        sortable: true,
+      },
+      {
+        name: "Created on",
+        selector: (row) => row.createon,
+        sortable: true,
+      },
+      {
+        name: "Attachments",
+        selector: (row) => row.attachments,
+        sortable: true,
+      },
     {
       name: "Cancellation",
       selector: (row) => (row.status === "Upcoming" && <button className="text-red-400 font-medium">Cancel</button>),
       sortable: true,
     },
+    {
+      name: "Approval",
+      selector: (row) => (row.status === "Upcoming" && 
+      <div className="flex justify-center gap-2">
+          <button className="text-green-400 font-medium hover:bg-green-400 hover:text-white transition-all duration-200 p-1 rounded-full"><TiTick size={20} /></button>
+          <button className="text-red-400 font-medium hover:bg-red-400 hover:text-white transition-all duration-200 p-1 rounded-full"><IoClose size={20}  /></button>
+      </div>
+    ),
+      sortable: true,
+    },
   ];
-
 
   //custom style
   const customStyle = {
     headRow: {
       style: {
-        backgroundColor: "black",
+        backgroundColor: themeColor,
         color: "white",
-
 
         fontSize: "10px",
       },
@@ -96,51 +106,45 @@ const EmployeeAddVisitor = () => {
   const data = [
     {
         id: 1,
-       mobile_number: 1234567890,
-      visitor_name: "doc",
-      additional_visitor: "self",
-      coming_from: 25,
-      vehicle_number: 123,
-      expected_date: "23/05/2024",
-      expected_time: "05:30 PM",
-      preference: "Online",
-      purpose:"meeting",
-      status: "Upcoming",
+        person_name: "Mittu",
+      type: "abc",
+      items: "05",
+      description: "ABG",
+      v_number:"890",
+      createby:"JKL",
+      createon:"IOP",
+      attachments:"YU"
     },
- 
     {
-      id: 2,
-     mobile_number: 1234567890,
-    visitor_name: "ABC",
-    additional_visitor: "self",
-    coming_from: 25,
-    vehicle_number: 123,
-    expected_date: "23/05/2024",
-    expected_time: "05:30 PM",
-    preference: "Online",
-    purpose:"meeting",
-    status: "Completed",
-  },
-  {
-    id: 3,
-   mobile_number: 1234567890,
-  visitor_name: "DEF",
-  additional_visitor: "self",
-  coming_from: 25,
-  vehicle_number: 123,
-  expected_date: "23/05/2024",
-  expected_time: "05:30 PM",
-  preference: "Online",
-  purpose:"meeting",
-  status: "Cancelled",
-},
- 
-  ];
+        id: 2,
+        person_name: "Mittu",
+      type: "abc",
+      items: "05",
+      description: "ABG",
+      v_number:"890",
+      createby:"JKL",
+      createon:"IOP",
+      attachments:"YU"
+    },
+    {
+        id: 3,
+        person_name: "Mittu",
+      type: "abc",
+      items: "05",
+      description: "ABG",
+      v_number:"890",
+      createby:"JKL",
+      createon:"IOP",
+      attachments:"YU"
+    },
 
+
+
+  ];
 
   return (
     <section className="flex">
-     
+
       <div className=" w-full flex mx-3 flex-col overflow-hidden">
         <div className="flex md:flex-row flex-col gap-5 justify-between mt-10 my-2">
           <div className="sm:flex grid grid-cols-2 items-center justify-center  gap-4 border border-gray-300 rounded-md px-3 p-2 w-auto">
@@ -185,7 +189,6 @@ const EmployeeAddVisitor = () => {
               </label>
             </div>
 
-
             <div className="flex items-center gap-2">
               <input
                 type="radio"
@@ -199,13 +202,19 @@ const EmployeeAddVisitor = () => {
               </label>
             </div>
           </div>
-          <Link
-            to={"/employee/create-visitor"}
-            className="border-2 font-semibold hover:bg-black hover:text-white duration-150 transition-all border-black p-2 rounded-md text-black cursor-pointer text-center flex items-center  gap-2 justify-center"
-          >
-            <PiPlusCircle size={20} />
-            Add
-          </Link>
+          <div>
+          <div className="flex gap-4 justify-end w-full">
+            <button
+
+              className="bg-black w-20 rounded-lg flex font-semibold items-center gap-2 text-white p-2 my-5"
+              onClick={()=>showModal(true)}
+            >
+              <IoAddCircleOutline size={20} />
+              Add
+            </button>
+
+          </div>
+        </div>
         </div>
         <DataTable
           responsive
@@ -220,12 +229,9 @@ const EmployeeAddVisitor = () => {
           highlightOnHover
         />
       </div>
+      {modal && <MaterialsModal onclose={()=> showModal(false)} />}
     </section>
   );
 };
 
-
-export default EmployeeAddVisitor
-
-
-
+export default EmployeeMaterials

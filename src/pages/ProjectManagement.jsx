@@ -98,7 +98,7 @@ const ProjectManagement = () => {
       className="flex"
       style={{
         background: `url(${bridge})`,
-        backgroundSize: "100% 100% ",
+        // backgroundSize: "100% 100% ",
         backgroundSize: "cover",
         backgroundRepeat: "no-repeat",
         backgroundPosition: "center",

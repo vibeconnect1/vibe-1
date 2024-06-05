@@ -12,10 +12,10 @@ const AuditChecklist = () => {
       name: "Action",
       cell: (row) => (
         <div className="flex items-center gap-4">
-          <Link to={`/tickets/details/${row.id}`}>
+          <Link to={`/admin/audit-checklist-details/${row.id}`}>
             <BsEye size={15} />
           </Link>
-          <Link to={`/edit/${row.id}`}>
+          <Link to={`/admin/edit-checklist/${row.id}`}>
             <BiEdit size={15} />
           </Link>
         </div>
@@ -109,7 +109,7 @@ const AuditChecklist = () => {
 
         <div className="flex gap-2">
           <Link
-            // to={"/tickets/create-ticket"}
+            to={"/admin/add-audit-checklist"}
             className={`border-2 font-semibold hover:bg-black hover:text-white duration-300 transition-all border-black p-2 rounded-md text-black cursor-pointer text-center flex items-center gap-2 justify-center`}
             // onClick={() => setShowCountry(!showCountry)}
           >

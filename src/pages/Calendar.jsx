@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import Navbar from "../components/Navbar";
 import { Calendar, momentLocalizer } from "react-big-calendar";
 import moment from "moment";
-import "react-big-calendar/lib/css/react-big-calendar.css";
+// import "react-big-calendar/lib/css/react-big-calendar.css";
 import { getVibeCalendar } from "../api";
 import { getItemInLocalStorage } from "../utils/localStorage";
 import "./style/Calendar.css";
@@ -19,7 +19,7 @@ const Calender = () => {
   const [events, setEvents] = useState([]);
   const [selectedItem, setSelectedItem] = useState(null);
   const [isListOpen, setIsListOpen] = useState(false);
-  const [activeButton, setActiveButton] = useState('task');
+  const [activeButton, setActiveButton] = useState("task");
   function incrementDate(dateString) {
     const date = new Date(dateString);
     date.setDate(date.getDate() + 1); // Increment the day by 1
@@ -194,39 +194,39 @@ const Calender = () => {
     <section className="flex">
       <Navbar />
       <div className="p-4 w-full my-2 flex md:mx-2 overflow-hidden flex-col">
-        <FullCalendar
+        {/* <FullCalendar
           ref={calendarRef}
           plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
-          initialView={"dayGridMonth"}
+          // initialView={"dayGridMonth"}
           headerToolbar={{
             start: "customDropdown",
             center: "prev,title,next",
             end: "dayGridMonth,timeGridWeek,timeGridDay",
           }}
-            customButtons={{
-              customDropdown: {
-                text: `My Calendar`,
-                click: function (event) {
-                  console.log("Button clicked!");
-                  console.log("Dropdown state:", isListOpen);
-                  const rect = event.currentTarget.getBoundingClientRect();
-                  setDropdownPosition({
-                    top: rect.bottom - 70,
-                    left: rect.left - 260,
-                  });
-                  // handleTextClick(event);
-                  setIsListOpen((prevState) => !prevState);
-                  // buttonRef.current = event.currentTarget;
-                },
-
-                // click:function(event) {
-                //     console.log("Button clicked!");
-                //     console.log("Dropdown state:", isListOpen);
-
-                //     handleTextClick(event);
-                // }
+          customButtons={{
+            customDropdown: {
+              text: `My Calendar`,
+              click: function (event) {
+                console.log("Button clicked!");
+                console.log("Dropdown state:", isListOpen);
+                const rect = event.currentTarget.getBoundingClientRect();
+                setDropdownPosition({
+                  top: rect.bottom - 70,
+                  left: rect.left - 260,
+                });
+                // handleTextClick(event);
+                setIsListOpen((prevState) => !prevState);
+                // buttonRef.current = event.currentTarget;
               },
-            }}
+
+              // click:function(event) {
+              //     console.log("Button clicked!");
+              //     console.log("Dropdown state:", isListOpen);
+
+              //     handleTextClick(event);
+              // }
+            },
+          }}
           dateClick={handleDateClick}
           initialDate={selectedDate}
           datesSet={handleViewChange}
@@ -235,7 +235,7 @@ const Calender = () => {
             events.extendedProps.category === "Task" ? "blue" : "green"
           }
           eventTextColor="white"
-            eventClick={handleEventClick}
+          eventClick={handleEventClick}
           height={"82vh"}
           //   eventMouseEnter={handleEventMouseEnter}
           //   eventMouseLeave={handleEventMouseLeave}
@@ -251,7 +251,55 @@ const Calender = () => {
             hour12: true,
           }}
           style={{ zIndex: 1 }}
-        />
+        /> */}
+
+<FullCalendar
+  ref={calendarRef}
+  plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
+  headerToolbar={{
+    left: 'prev',
+    center: 'title',
+    right: 'next dayGridMonth,timeGridWeek,timeGridDay customDropdown'
+  }}
+  customButtons={{
+    customDropdown: {
+      text: `My Calendar`,
+      click: function (event) {
+        console.log("Button clicked!");
+        console.log("Dropdown state:", isListOpen);
+        const rect = event.currentTarget.getBoundingClientRect();
+        setDropdownPosition({
+          top: rect.bottom - 70,
+          left: rect.left - 260,
+        });
+        setIsListOpen((prevState) => !prevState);
+      },
+    },
+  }}
+  dateClick={handleDateClick}
+  initialDate={selectedDate}
+  datesSet={handleViewChange}
+  events={areCheckboxesChecked ? filteredEvents : events}
+  eventBackgroundColor={(events) =>
+    events.extendedProps.category === "Task" ? "blue" : "green"
+  }
+  eventTextColor="white"
+  eventClick={handleEventClick}
+  height={"82vh"}
+  allDayText="All Day"
+  eventTimeFormat={{
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: true,
+  }}
+  slotLabelFormat={{
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: true,
+  }}
+  style={{ zIndex: 1 }}
+/>
+
       </div>
     </section>
   );

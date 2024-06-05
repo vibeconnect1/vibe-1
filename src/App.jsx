@@ -130,19 +130,7 @@ import AddInventory from "./pages/SubPages/AddInventory.jsx";
 import AddChecklist from "./pages/SubPages/AddChecklist.jsx";
 import EditChecklist from "./pages/SubPages/EditChecklist.jsx";
 import EditStocks from "./pages/SubPages/EditStocks.jsx";
-import EmployeeVisitors from "./pages/Employees/EmployeeVisitors.jsx";
-import EmployeeCreateVisitor from "./pages/Employees/EmployeeSubPages/EmployeeCreateVisitor.jsx";
-import EmployeeVisitorDetails from "./pages/Employees/EmployeeSubPages/EmployeeVisitorDetails.jsx";
-import EmployeeDeliveryDetails from "./pages/Employees/EmployeeSubPages/EmployeeDeliveryDetails.jsx";
-import EmployeeCabDetails from "./pages/Employees/EmployeeSubPages/EmployeeCabDetails.jsx";
-import Visitors from "./pages/Visitors.jsx";
-import CreateVisitor from "./pages/SubPages/CreateVisitor.jsx";
-import VisitorDetails from "./pages/SubPages/details/VisitorDetails.jsx";
-import DeliveryStaffDetails from "./pages/SubPages/details/DeliveryStaffDetails.jsx";
-import CabDetails from "./pages/SubPages/details/CabDetails.jsx";
-import CabEdit from "./pages/SubPages/details/CabEdit.jsx";
-import VisitorEdit from "./pages/SubPages/details/VisitorEdit.jsx";
-import DeliveryEdit from "./pages/SubPages/details/DeliveryEdit.jsx";
+
 import DocumentPro from "./pages/DocumentPro.jsx";
 import AddProjectTask from "./pages/SubPages/AddProjectTask.jsx";
 import UserSetup from "./pages/Setup/UserSetup.jsx";
@@ -187,7 +175,14 @@ import GdnViewDetails from "./pages/SubPages/details/GDNViewDetails.jsx";
 import SupplierDetails from "./pages/SubPages/details/SupplierDetails.jsx";
 import EditSuppliers from "./pages/SubPages/EditSuppliers.jsx";
 import Calender from "./pages/Calendar.jsx";
-
+import EditOpsScheduleAudit from "./pages/SubPages/AuditSubPages/EditOpsScheduleAudit.jsx";
+import AddAuditChecklist from "./pages/SubPages/AuditSubPages/AddAuditChecklist.jsx";
+import EmployeePasses from "./pages/Employees/EmployeePasses.jsx";
+import EmployeeAddVisitor from "./pages/Employees/EmployeeSubPages/EmployeeAddVisitor.jsx";
+import EmployeeAddGVehicles from "./pages/Employees/EmployeeSubPages/EmployeeAddGvehicle.jsx";
+import EmployeeGVehiclesDetails from "./pages/Employees/EmployeeSubPages/EmployeeGvehicleDetails.jsx";
+import EmployeeAddRVehicles from "./pages/Employees/EmployeeSubPages/EmployeeAddRVehicle.jsx";
+import EmployeeAddStaff from "./pages/Employees/EmployeeSubPages/EmployeeAddStaff.jsx";
 
 function App() {
   const themeColor = useSelector((state) => state.theme.color);
@@ -195,10 +190,7 @@ function App() {
     "--scrollbar-thumb-color",
     themeColor
   );
-  document.documentElement.style.setProperty(
-    "--calendarHeader",
-    themeColor
-  );
+  document.documentElement.style.setProperty("--calendar-Header", themeColor);
   return (
     <>
       <Router>
@@ -998,113 +990,7 @@ function App() {
               </ProtectedAdminRoutes>
             }
           />
-          {/* Employee Visitor */}
-          <Route
-            path="/employees/visitors"
-            element={
-              <ProtectedRoute>
-                <EmployeeVisitors />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/employee/create-visitor"
-            element={
-              <ProtectedRoute>
-                <EmployeeCreateVisitor />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/employee/visitor-details/:id"
-            element={
-              <ProtectedRoute>
-                <EmployeeVisitorDetails />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/employee/delivery-details/:id"
-            element={
-              <ProtectedRoute>
-                <EmployeeDeliveryDetails />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/employee/cab-details/:id"
-            element={
-              <ProtectedRoute>
-                <EmployeeCabDetails />
-              </ProtectedRoute>
-            }
-          />
 
-          {/* admin visitor */}
-          <Route
-            path="/admin/visitor"
-            element={
-              <ProtectedAdminRoutes>
-                <Visitors />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/create-visitor"
-            element={
-              <ProtectedAdminRoutes>
-                <CreateVisitor />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/visitor-details/:id"
-            element={
-              <ProtectedAdminRoutes>
-                <VisitorDetails />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/deliverydetails/:id"
-            element={
-              <ProtectedAdminRoutes>
-                <DeliveryStaffDetails />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/cab-details/:id"
-            element={
-              <ProtectedAdminRoutes>
-                <CabDetails />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/edit-visitor/:id"
-            element={
-              <ProtectedAdminRoutes>
-                <VisitorEdit />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/edit-delivery/:id"
-            element={
-              <ProtectedAdminRoutes>
-                <DeliveryEdit />
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/cab-edit/:id"
-            element={
-              <ProtectedAdminRoutes>
-                <CabEdit />
-              </ProtectedAdminRoutes>
-            }
-          />
           {/* document */}
           <Route
             path="/admin/documents"
@@ -1208,6 +1094,65 @@ function App() {
               </ProtectedAdminRoutes>
             }
           />
+
+          <Route
+            path="/admin/audit/edit-schedule-audit/:id"
+            element={
+              <ProtectedAdminRoutes>
+                <EditOpsScheduleAudit />
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/add-audit-checklist"
+            element={
+              <ProtectedAdminRoutes>
+                <AddAuditChecklist />
+              </ProtectedAdminRoutes>
+            }
+          />
+          {/* 
+           <Route
+            path="/admin/checklist/:id"
+            element={
+              <ProtectedAdminRoutes>
+               <AddAuditChecklist/>
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/scheduledetails/:id"
+            element={
+              <ProtectedAdminRoutes>
+              <ScheduleAuditDetails/>
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/conducteddetails/:id"
+            element={
+              <ProtectedAdminRoutes>
+              <OperationConductedDetails/>
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/checklistdetails/:id"
+            element={
+              <ProtectedAdminRoutes>
+              <ChecklistDetails/>
+              </ProtectedAdminRoutes>
+            }
+          />
+           <Route
+            path="/admin/vendorconducteddetails/:id"
+            element={
+              <ProtectedAdminRoutes>
+              <VendorConductedDetails/>
+              </ProtectedAdminRoutes>
+            }
+          /> */}
+
           {/* grn */}
           <Route
             path="/admin/Grn"
@@ -1365,6 +1310,116 @@ function App() {
               </ProtectedAdminRoutes>
             }
           />
+
+          {/* employee passes */}
+
+          <Route
+            path="/employees/passes"
+            element={
+              <ProtectedRoute>
+                <EmployeePasses />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/employee/addnewvisitor"
+            element={
+              <ProtectedRoute>
+                <EmployeeAddVisitor />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/employee/addgvehicles"
+            element={
+              <ProtectedRoute>
+                <EmployeeAddGVehicles />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/employee/gvehiclesdetails/:id"
+            element={
+              <ProtectedRoute>
+                <EmployeeGVehiclesDetails />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/employee/addrvehicles"
+            element={
+              <ProtectedRoute>
+                <EmployeeAddRVehicles/>
+              </ProtectedRoute>
+            }
+          />
+           <Route
+            path="/employee/addstaff"
+            element={
+              <ProtectedRoute>
+                <EmployeeAddStaff/>
+              </ProtectedRoute>
+            }
+          />
+          {/*
+           <Route
+            path="/employee/rvehiclesdetails/:id"
+            element={
+              <ProtectedRoute>
+               <RVehiclesDetails/>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/employee/rvehicleshistdetails/:id"
+            element={
+              <ProtectedRoute>
+               <RVehiclesHistoryDetails/>
+              </ProtectedRoute>
+            }
+          />
+          
+          <Route
+            path="/employee/staffdetails/:id"
+            element={
+              <ProtectedRoute>
+               <StaffDetails/>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/employee/materialdetails/:id"
+            element={
+              <ProtectedRoute>
+               <MaterialDetails/>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/employee/patrollingdetails/:id"
+            element={
+              <ProtectedRoute>
+               <PatrollingDetails/>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/employee/inwarddetails/:id"
+            element={
+              <ProtectedRoute>
+               <InwardDetails/>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/employee/outwarddetails/:id"
+            element={
+              <ProtectedRoute>
+               <OutwardDetails/>
+              </ProtectedRoute>
+            }
+          /> */}
+
           {/* GDN*/}
           <Route
             path="/admin/Gdn"
