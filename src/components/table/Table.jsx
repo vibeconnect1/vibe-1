@@ -40,6 +40,7 @@ const Table = ({ columns, data, selectRows, isPagination, title, height }) => {
     },
   };
   return (
+    <div className="rounded-md mb-5">
     <DataTable
       title={title}
       responsive
@@ -52,8 +53,10 @@ const Table = ({ columns, data, selectRows, isPagination, title, height }) => {
       fixedHeaderScrollHeight={height}
       selectableRowsHighlight
       highlightOnHover
+     
       
     />
+    </div>
   );
 };
 

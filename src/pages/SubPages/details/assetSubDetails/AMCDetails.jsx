@@ -8,6 +8,7 @@ import { useParams } from "react-router-dom";
 const AMCDetails = () => {
   const {id}= useParams()
   const [vendors, setVendors] = useState([]);
+  const [amcDetails,setAmcDetails ] = useState([])
   const [formData, setFormData] = useState({
     vendor_id: "",
     asset_id: id,
@@ -16,7 +17,7 @@ const AMCDetails = () => {
     frequency: "",
     terms: [],
   });
-console.log(formData)
+// console.log(formData)
 
   // vendor_id, :asset_id, :start_date, :end_date, :frequency},
   // terms: [multipart-files]}
@@ -25,21 +26,24 @@ console.log(formData)
     const fetchVendors = async () => {
       const vendorResp = await getVendors();
       setVendors(vendorResp.data);
+      
      
     };
     const fetchAMCDetails = async () => {
-      const amcResponse = await getAMCDetails(id);
-      
-      console.log("amc", amcResponse);
+      const amcResponse = await getAMCDetails();
+      setAmcDetails(amcResponse.data)
+      console.log(amcResponse)
+     
     };
     fetchVendors();
     fetchAMCDetails()
-    
+    console.log(amcDetails.asset_name)
   }, []);
 
   const handlePostAMC = async () => {
     try {
       const res = await postAMC(formData);
+      console.log(res)
     } catch (error) {
       console.log(error);
     }
@@ -70,20 +74,28 @@ console.log(formData)
           {/* <div className=" flex sm:flex-row flex-col gap-5 justify-between "> */}
           <div className="my-5 md:px-10 text-sm items-center font-medium grid gap-4 md:grid-cols-2">
             <div className="grid grid-cols-2 items-center">
+              <p>Asset :</p>
+              <p className="text-sm font-normal ">{amcDetails.asset_name}</p>
+            </div>
+            <div className="grid grid-cols-2 items-center">
               <p>Vendor :</p>
-              <p className="text-sm font-normal "></p>
+              <p className="text-sm font-normal ">{amcDetails.vendor_name}</p>
             </div>
             <div className="grid grid-cols-2">
               <p>Start Date : </p>
-              <p className="text-sm font-normal"></p>
+              <p className="text-sm font-normal">{amcDetails.start_date}</p>
             </div>
             <div className="grid grid-cols-2 items-center">
-              <p>End Date : </p>
-              <p className="text-sm font-normal"></p>
+              <p>End Date :</p>
+              <p className="text-sm font-normal">{amcDetails.end_date}</p>
             </div>
             <div className="grid grid-cols-2 items-center">
               <p>Frequency : </p>
-              <p className="text-sm font-normal"></p>
+              <p className="text-sm font-normal">{amcDetails.frequency}</p>
+            </div>
+            <div className="grid grid-cols-2 items-center">
+              <p>Created On : </p>
+              <p className="text-sm font-normal">{amcDetails.created_at}</p>
             </div>
           </div>
           <h2 className="border-b  text-xl border-black font-semibold">
@@ -147,14 +159,14 @@ console.log(formData)
                 className="border p-1 px-4 border-gray-500 rounded-md"
               >
                 <option value="">Select Frequency</option>
-                <option value="">One Time</option>
-                <option value="">Hourly</option>
-                <option value="">Daily</option>
-                <option value="">Weekely</option>
-                <option value="">Monthly</option>
-                <option value="">Quarterly</option>
-                <option value="">Half yearly</option>
-                <option value="">Yearly</option>
+                <option value="one Time">One Time</option>
+                <option value="Hourly">Hourly</option>
+                <option value="Daily">Daily</option>
+                <option value="Weekly">Weekly</option>
+                <option value="Monthly">Monthly</option>
+                <option value="Quarterly">Quarterly</option>
+                <option value="Half yearly">Half yearly</option>
+                <option value="Yearly">Yearly</option>
               </select>
             </div>
           </div>

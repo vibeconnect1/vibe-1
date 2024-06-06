@@ -4,39 +4,61 @@ import { IoAddCircleOutline } from "react-icons/io5";
 import { ImEye } from "react-icons/im";
 import { Link } from "react-router-dom";
 import { getItemInLocalStorage } from "../../utils/localStorage";
+import { getEvents } from "../../api";
+import { BsEye } from "react-icons/bs";
+import Table from "../../components/table/Table";
+import { useSelector } from "react-redux";
 
 const Events = () => {
   const [searchText, setSearchText] = useState("");
   const [filter, setFilter] = useState(false);
-  const [user, setUser] = useState("")
-
+  const [user, setUser] = useState("");
+  const [events, setEvents] = useState([]);
+  const [filteredData, setFilteredData] = useState([]);
+  const themeColor = useSelector((state)=> state.theme.color)
 
   useEffect(() => {
     const userType = getItemInLocalStorage("USERTYPE");
     setUser(userType);
+    const fetchEvents = async () => {
+      const eventsResponse = await getEvents();
+      console.log(eventsResponse);
+      setEvents(eventsResponse.data);
+      setFilteredData(eventsResponse.data);
+    };
+    fetchEvents();
   }, []);
+  const dateFormat = (dateString) => {
+    const date = new Date(dateString);
+    return date.toLocaleString();
+  };
 
   const column = [
     {
       name: "Action",
       cell: (row) => (
         <Link to={`/communication/event/event-details/${row.id}`}>
-          {row.action}
+          <BsEye size={15} />
         </Link>
       ),
       sortable: true,
     },
-    { name: "Title", selector: (row) => row.title, sortable: true },
+    { name: "Title", selector: (row) => row.event_name, sortable: true },
+    { name: "Venue", selector: (row) => row.venue, sortable: true },
     {
-      name: "Unit",
-      selector: (row) => row.unit,
+      name: "Description",
+      selector: (row) => row.description,
       sortable: true,
     },
-    { name: "Created By", selector: (row) => row.bookedBy, sortable: true },
-    { name: "Start Date", selector: (row) => row.bookedOn, sortable: true },
+    { name: "Created By", selector: (row) => row.created_by, sortable: true },
+    {
+      name: "Start Date",
+      selector: (row) => dateFormat(row.start_date_time),
+      sortable: true,
+    },
     {
       name: "End Date",
-      selector: (row) => row.facilityType,
+      selector: (row) => dateFormat(row.end_date_time),
       sortable: true,
     },
     {
@@ -56,41 +78,11 @@ const Events = () => {
     },
     {
       name: "Created On",
-      selector: (row) => row.bookingStatus,
+      selector: (row) => dateFormat(row.created_at),
       sortable: true,
-    },
-    {
-      name: "Attachments",
-      selector: (row) => row.bookingStatus,
-      sortable: true,
-    },
-  ];
-  const data = [
-    {
-      id: 1,
-      action: <ImEye />,
-      facility: "fac1",
-      bookedBy: "A",
-      bookedOn: "booked date",
-      facilityType: "bookable",
-      scheduledOn: "date",
-      scheduledTime: "time",
-      bookingStatus: "confirmed",
-    },
-    {
-      id: 2,
-      action: <ImEye />,
-      facility: "Test2",
-      bookedBy: "B",
-      bookedOn: "booked date",
-      facilityType: "bookable",
-      scheduledOn: "date",
-      scheduledTime: "time",
-      bookingStatus: "pending",
     },
   ];
 
-  const [filteredData, setFilteredData] = useState(data);
   const handleSearch = (event) => {
     const searchValue = event.target.value;
     setSearchText(searchValue);
@@ -110,47 +102,45 @@ const Events = () => {
     },
   };
   return (
-    <div className="my-10 ">
-       {filter && (
-            <div className="flex items-center justify-center gap-2">
-              <select className="border p-1 px-4 border-gray-500 rounded-md">
-                <option value="">Select Unit</option>
-                <option value="unit1">Unit 1</option>
-                <option value="unit2">Unit 2</option>
-              </select>
+    <div className=" ">
+      {filter && (
+        <div className="flex items-center justify-center gap-2">
+          <select className="border p-1 px-4 border-gray-500 rounded-md">
+            <option value="">Select Unit</option>
+            <option value="unit1">Unit 1</option>
+            <option value="unit2">Unit 2</option>
+          </select>
 
-              <div className="flex gap-4 items-center  ">
-                <div className="flex gap-2 items-center">
-                  <label htmlFor="">From:</label>
-                  <input
-                    type="date"
-                    name=""
-                    id=""
-                    className="border border-black rounded-md px-4"
-                  />
-                </div>
-                <div className="flex gap-2 items-center">
-                  <label htmlFor="">To:</label>
-                  <input
-                    type="date"
-                    name=""
-                    id=""
-                    className="border border-black rounded-md px-4"
-                  />
-                </div>
-              </div>
-              <select className="border p-1 px-4 border-gray-500 rounded-md">
-                <option value="">Select Status</option>
-                <option value="unit1">Published</option>
-                <option value="unit2">Disabled</option>
-                <option value="unit2">Rejected</option>
-              </select>
-              <button className="bg-black p-2 text-white rounded-md">
-                Apply
-              </button>
+          <div className="flex gap-4 items-center  ">
+            <div className="flex gap-2 items-center">
+              <label htmlFor="">From:</label>
+              <input
+                type="date"
+                name=""
+                id=""
+                className="border border-black rounded-md px-4"
+              />
             </div>
-          )}
-      <div className="flex justify-between gap-2 items-center my-5 sm:flex-row flex-col ">
+            <div className="flex gap-2 items-center">
+              <label htmlFor="">To:</label>
+              <input
+                type="date"
+                name=""
+                id=""
+                className="border border-black rounded-md px-4"
+              />
+            </div>
+          </div>
+          <select className="border p-1 px-4 border-gray-500 rounded-md">
+            <option value="">Select Status</option>
+            <option value="unit1">Published</option>
+            <option value="unit2">Disabled</option>
+            <option value="unit2">Rejected</option>
+          </select>
+          <button className="bg-black p-2 text-white rounded-md">Apply</button>
+        </div>
+      )}
+      <div className="flex justify-between gap-2 items-center my-2 sm:flex-row flex-col ">
         <input
           type="text"
           placeholder="Search By title"
@@ -165,27 +155,19 @@ const Events = () => {
           >
             Filter
           </button>
-         {user === "pms_admin" &&
-          <Link
-            to={"/communication/create-event"}
-            className="bg-black  rounded-lg flex font-semibold  items-center gap-2 text-white p-2 "
-          >
-            <IoAddCircleOutline size={20} />
-            Add
-          </Link>}
+          {user === "pms_admin" && (
+            <Link
+            style={{background: themeColor}}
+              to={"/communication/create-event"}
+              className="  rounded-md flex font-semibold  items-center gap-2 text-white p-2 "
+            >
+              <IoAddCircleOutline size={20} />
+              Add
+            </Link>
+          )}
         </div>
       </div>
-      <DataTable
-        columns={column}
-        data={filteredData}
-        customStyles={customStyle}
-        fixedHeader
-          fixedHeaderScrollHeight="500px"
-          pagination
-          selectableRowsHighlight
-          highlightOnHover
-          
-      />
+      <Table columns={column} data={filteredData} isPagination={true} />
     </div>
   );
 };

@@ -60,6 +60,7 @@ const Assetinfo = ({ assetData }) => {
     installation,
     group_name,
     sub_group_name,
+    uom,
   } = assetData;
   const [qrCode, setQrCode] = useState(false);
   console.log(assetData);
@@ -78,6 +79,10 @@ const Assetinfo = ({ assetData }) => {
     { name: "Name", selector: (row) => row.name },
     { name: "Order", selector: (row) => row.order },
     { name: "Charactor Limit", selector: (row) => row.digit },
+    { name: "Alert Below", selector: (row) => row.alert_below },
+    { name: "Alert Above", selector: (row) => row.alert_above },
+    { name: "Min", selector: (row) => row.min_val },
+    { name: "Max", selector: (row) => row.max_val },
     {
       name: "Dashboard view",
       selector: (row) => (row.dashboard_view ? "Yes" : "No"),
@@ -85,6 +90,10 @@ const Assetinfo = ({ assetData }) => {
     {
       name: "Consumption view",
       selector: (row) => (row.consumption_view ? "Yes" : "No"),
+    },
+    {
+      name: "Check prev Readings",
+      selector: (row) => (row.check_prev ? "Yes" : "No"),
     },
   ];
 
@@ -146,16 +155,16 @@ const Assetinfo = ({ assetData }) => {
               <Switch checked={!breakdown} onChange={handleToggle} />
               <p>In use</p> */}
             </div>
-            <div className="flex gap-2">
+            <div className="flex md:flex-row flex-col gap-2">
               <button
-                className="flex gap-2 items-center border-2 border-black px-4 p-1 rounded-full hover:bg-black hover:text-white transition-all duration-500"
+                className="flex gap-2 items-center justify-center border-2 border-black px-4 p-1 rounded-full hover:bg-black hover:text-white transition-all duration-500"
                 onClick={() => setQrCode(true)}
               >
                 <FaQrcode /> QR Code
               </button>
               <Link
                 to={`/assets/edit-asset/${id}`}
-                className="flex gap-2 items-center border-2 border-black px-4 p-1 rounded-full  hover:bg-black hover:text-white transition-all duration-500"
+                className="flex gap-2 items-center justify-center border-2 border-black px-4 p-1 rounded-full  hover:bg-black hover:text-white transition-all duration-500"
               >
                 <BiEditAlt />
                 Edit Details
@@ -225,6 +234,10 @@ const Assetinfo = ({ assetData }) => {
               <div className="grid grid-cols-2">
                 <p>Capacity : </p>
                 <p className="text-sm">{capacity}</p>
+              </div>
+              <div className="grid grid-cols-2">
+                <p>UOM : </p>
+                <p className="text-sm">{uom}</p>
               </div>
               <div className="grid grid-cols-2">
                 <p>Purchase Cost : </p>

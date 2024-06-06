@@ -229,6 +229,14 @@ export const postAssetparams = async (data) =>
       token: token,
     },
   });
+
+// amc
+export const getAMC = async () =>
+  axiosInstance.get("/asset_amcs.json", {
+    params: {
+      token: token,
+    },
+  });
 export const postAMC = async (data) =>
   axiosInstance.post("/asset_amcs.json", data, {
     params: {
@@ -238,8 +246,9 @@ export const postAMC = async (data) =>
 export const getAMCDetails = async (assetId) =>
   axiosInstance.get("/asset_amcs.json", {
     params: {
+      // 'q[asset_id_eq]': assetId,
       token: token,
-      asset_id_eq: assetId,
+      // asset_id: assetId,
     },
   });
 export const getSubGroupsList = async () =>
@@ -293,8 +302,28 @@ export const getAttendance = async () =>
     },
   });
 
+// Events
 
+export const getEvents = async () =>
+  axiosInstance.get("/events.json", {
+    params: {
+      token: token,
+    },
+  });
+export const postEvents = async (data) =>
+  axiosInstance.post("/events.json", data, {
+    params: {
+      token: token,
+    },
+  });
 
+//broadcast
+export const getBroadCast = async () =>
+  axiosInstance.get("/notices.json", {
+    params: {
+      token: token,
+    },
+  });
 
 // vibe
 

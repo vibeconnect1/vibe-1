@@ -1,175 +1,286 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import FileInput from "../../Buttons/FileInput";
 import Switch from "../../Buttons/Switch";
+import FileInputBox from "../../containers/Inputs/FileInputBox";
+import { useSelector } from "react-redux";
+import Navbar from "../../components/Navbar";
+import { getItemInLocalStorage } from "../../utils/localStorage";
+import { postEvents, getAssignedTo } from "../../api";
+import Select from "react-select";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+import { format } from "date-fns";
+import toast from "react-hot-toast";
 
 const CreateEvent = () => {
+  const siteId = getItemInLocalStorage("SITEID");
   const [share, setShare] = useState("all");
+  const [users, setUsers] = useState([]);
+  const [formData, setFormData] = useState({
+    site_id: siteId,
+    event_name: "",
+    venue: "",
+    description: "",
+    start_date_time: "",
+    end_date_time: "",
+    user_ids: [],
+  });
+  console.log(formData);
+  const themeColor = useSelector((state) => state.theme.color);
+  const datePickerRef = useRef(null);
+  const currentDate = new Date();
+  const handleStartDateChange = (date) => {
+    setFormData({ ...formData, start_date_time: date });
+  };
+
+  const handleEndDateChange = (date) => {
+    setFormData({ ...formData, end_date_time: date });
+  };
+
+  const formatDateTime = (date) => {
+    return format(date, "yyyy-MM-dd HH:mm:ss");
+  };
+
+  useEffect(() => {
+    const fetchUsers = async () => {
+      try {
+        const response = await getAssignedTo();
+        const transformedUsers = response.data.map((user) => ({
+          value: user.id,
+          label: `${user.firstname} ${user.lastname}`,
+        }));
+        setUsers(transformedUsers);
+        console.log(response);
+      } catch (error) {
+        console.error("Error fetching assigned users:", error);
+      }
+    };
+    fetchUsers();
+  }, []);
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleCreateEvent = async()=>{
+    try {
+      toast.loading("Creating Asset Please Wait!");
+      const formDataSend = new FormData();
+
+      formDataSend.append("event[site_id", formData.site_id);
+      formDataSend.append("event[event_name]", formData.event_name);
+      formDataSend.append("event[discription]", formData.description); 
+      formDataSend.append("event[start_date_time]", formData.start_date_time); 
+      formDataSend.append("event[end_date_time]", formData.end_date_time); 
+      formDataSend.append("event[user_ids]", formData.user_ids); 
+      formDataSend.append("event[venue]", formData.venue); 
+      const response = await postEvents(formDataSend);
+      toast.success("Event Created Successfully");
+      console.log("Response:", response.data);
+      toast.dismiss();
+    }catch(error){
+      console.log(error)
+    }
+
+  }
+
+  const handleSelectChange = (selectedOptions) => {
+    const selectedIds = selectedOptions ? selectedOptions.map((option) => option.value) : [];
+    setFormData({ ...formData, user_ids: selectedIds });
+  };
+
   return (
-    <section>
-      <div className="m-2">
-        <h2 className="text-center text-xl font-bold p-2 bg-black rounded-full text-white">
+    <section className="flex">
+      <div className="hidden md:block">
+        <Navbar />
+      </div>
+      <div className="w-full flex mx-3 flex-col overflow-hidden">
+        <h2
+          style={{ background: themeColor }}
+          className="text-center text-xl font-bold p-2 my-2 rounded-full text-white"
+        >
           Create Event
         </h2>
-        <div className="mx-20 my-5 mb-10 border border-gray-400 p-5 px-10 rounded-lg shadow-xl">
-          <h2 className="border-b text-center text-xl border-black mb-6 font-bold">
-            Event Info
-          </h2>
-          <div className="flex sm:flex-row flex-col justify-around items-center">
-            <div className="flex flex-col">
-              <label htmlFor="" className="font-bold">
-                Title :
-              </label>
-              <input
-                type="text"
-                name=""
-                id=""
-                placeholder="Enter Title"
-                className="border-gray-400 border px-2 p-1 rounded-md"
-              />
-            </div>
-            <div className="flex flex-col">
-              <label htmlFor="" className="font-bold">
-                Venue :
-              </label>
-              <input
-                type="text"
-                name=""
-                id=""
-                placeholder="Enter Venue"
-                className="border-gray-400 border px-2 p-1 rounded-md"
-              />
-            </div>
-          </div>
-          <div className="flex flex-col gap-2 sm:mx-48 my-5">
-            <label htmlFor="" className="font-bold">
-              Description:
-            </label>
-            <textarea
-              name=""
-              id=""
-              rows="3"
-              placeholder="Enter Description"
-              className="border-gray-400 border px-2 p-1 rounded-md"
-            />
-          </div>
-          <div className="flex justify-around mx-12">
-            <div>
-              <p className="font-bold mb-2">Start Time:</p>
-              <div className="flex gap-4">
+        <div className="flex justify-center">
+          <div className="w-fit my-5 mb-10 border border-gray-400 p-5 px-10 rounded-lg shadow-xl">
+            <h2 className="border-b  text-xl border-black mb-6 font-semibold">
+              Event Info
+            </h2>
+            <div className="grid grid-cols-2 gap-4">
+              <div className="flex flex-col">
+                <label htmlFor="" className="font-medium">
+                  Title :
+                </label>
                 <input
-                  type="date"
-                  name=""
+                  type="text"
+                  name="event_name"
+                  value={formData.event_name}
+                  onChange={handleChange}
                   id=""
-                  className="border-gray-400 border px-2 p-1 rounded-md"
-                />
-                <input
-                  type="time"
-                  name=""
-                  id=""
+                  placeholder="Enter Title"
                   className="border-gray-400 border px-2 p-1 rounded-md"
                 />
               </div>
-            </div>
-            <div>
-              <p className="font-bold mb-2">End Time :</p>
-              <div className="flex gap-4">
+              <div className="flex flex-col">
+                <label htmlFor="" className="font-medium">
+                  Venue :
+                </label>
                 <input
-                  type="date"
-                  name=""
+                  type="text"
+                  name="venue"
+                  value={formData.venue}
+                  onChange={handleChange}
                   id=""
-                  className="border-gray-400 border px-2 p-1 rounded-md"
-                />
-                <input
-                  type="time"
-                  name=""
-                  id=""
+                  placeholder="Enter Venue"
                   className="border-gray-400 border px-2 p-1 rounded-md"
                 />
               </div>
+              <div className="flex items-center gap-2">
+              <div>
+                <p className="font-medium mb-2">Start Time:</p>
+
+                <DatePicker
+                  selected={formData.start_date_time}
+                  onChange={handleStartDateChange}
+                  showTimeSelect
+                  dateFormat="dd/MM/yyyy h:mm aa"
+                  placeholderText="Select Date & Time"
+                  ref={datePickerRef}
+                  minDate={currentDate}
+                  className="border border-black p-1 rounded-md"
+                />
+              </div>
+              -
+              <div>
+                <p className="font-medium mb-2">End Time:</p>
+                <DatePicker
+                  selected={formData.end_date_time}
+                  onChange={handleEndDateChange}
+                  showTimeSelect
+                  dateFormat="dd/MM/yyyy h:mm aa"
+                  placeholderText="Select Date & Time"
+                  ref={datePickerRef}
+                  minDate={currentDate}
+                  className="border border-black rounded-md p-1"
+                />
+              </div>
             </div>
-          </div>
-          <div className="flex gap-4 justify-center my-5">
-            <div className="flex gap-2 items-center">
-              <input type="checkbox" name="" id="imp" />
-              <label htmlFor="imp" className="font-semibold">
-                Important
+            </div>
+            <div className="flex flex-col gap-2 my-2">
+              <label htmlFor="" className="font-medium">
+                Description:
               </label>
+              <textarea
+                name="description"
+                value={formData.description}
+                onChange={handleChange}
+                id=""
+                rows="3"
+                placeholder="Enter Description"
+                className="border-gray-400 border px-2 p-1 rounded-md"
+              />
             </div>
-            <div className="flex gap-2 items-center">
-              <input type="checkbox" name="" id="email" />
-              <label htmlFor="email" className="font-semibold">
-                Send Email
-              </label>
+            
+            <div className="flex gap-4  my-5">
+              <div className="flex gap-2 items-center">
+                <input type="checkbox" name="" id="imp" />
+                <label htmlFor="imp" className="font-semibold">
+                  Important
+                </label>
+              </div>
+              <div className="flex gap-2 items-center">
+                <input type="checkbox" name="" id="email" />
+                <label htmlFor="email" className="font-semibold">
+                  Send Email
+                </label>
+              </div>
             </div>
-          </div>
-          <div className=" my-10">
-            <h2 className="border-b text-center text-xl border-black m-5 font-bold">
+
+            <h2 className="border-b text-xl border-black my-5 font-semibold">
               Upload Attachments
             </h2>
-            <div className="flex justify-center">
-              <FileInput multiple />
+            <FileInputBox />
+
+            <div className="">
+              <h2 className="border-b t border-black my-5 text-lg font-semibold">
+                Share With
+              </h2>
+              <div className="flex flex-col items-center justify-center">
+                <div className="flex flex-row gap-2 w-full font-semibold p-2 ">
+                  <h2
+                    className={`p-1 ${
+                      share === "all" && "bg-black text-white"
+                    } rounded-full px-6 cursor-pointer border-2 border-black`}
+                    onClick={() => setShare("all")}
+                  >
+                    All
+                  </h2>
+                  <h2
+                    className={`p-1 ${
+                      share === "individual" && "bg-black text-white"
+                    } rounded-full px-4 cursor-pointer border-2 border-black`}
+                    onClick={() => setShare("individual")}
+                  >
+                    Individuals
+                  </h2>
+                  {/* <h2
+                    className={`p-1 ${
+                      share === "groups" && "bg-black text-white"
+                    } rounded-full px-4 cursor-pointer border-2 border-black`}
+                    onClick={() => setShare("groups")}
+                  >
+                    Groups
+                  </h2> */}
+                </div>
+                <div className="my-5 flex w-full">
+                  {share === "individual" && (
+                    // <Select
+                    //   options={users}
+                    //   placeholder="Select User"
+                    //   value={formData.user_ids}
+                     
+                    //   onChange={(selectedOption) =>
+                    //     setFormData({ ...formData, user_ids: selectedOption })
+                    //   }
+                    //   isMulti
+                    //   className="w-full"
+                    // />
+                    <Select
+                    options={users}
+                    placeholder="Select User"
+                    value={users.filter((user) => formData.user_ids.includes(user.value))}
+                    onChange={handleSelectChange}
+                    isMulti
+                    className="w-full"
+                  />
+                  )}
+                  {share === "groups" && <p>list of groups</p>}
+                </div>
+              </div>
             </div>
-          </div>
-          <div className=" my-10">
-            <h2 className="border-b text-center text-xl border-black m-5 font-bold">
-              Share With
-            </h2>
-            <div className="flex flex-col items-center justify-center">
-              <div className="flex flex-row gap-10 text-lg font-semibold p-2 rounded-full bg-gray-400">
-                <h2
-                  className={`p-1 ${
-                    share === "all" && "bg-white"
-                  } rounded-full px-4 cursor-pointer`}
-                  onClick={() => setShare("all")}
-                >
-                  All
-                </h2>
-                <h2
-                  className={`p-1 ${
-                    share === "individual" && "bg-white"
-                  } rounded-full px-4 cursor-pointer`}
-                  onClick={() => setShare("individual")}
-                >
-                  Individuals
-                </h2>
-                <h2
-                  className={`p-1 ${
-                    share === "groups" && "bg-white"
-                  } rounded-full px-4 cursor-pointer`}
-                  onClick={() => setShare("groups")}
-                >
-                  Groups
-                </h2>
-              </div>
-              <div className="my-5">
-                {share === "individual" && <p>list of individual</p>}
-                {share === "groups" && <p>list of groups</p>}
+            <div>
+              <h2 className="border-b  text-xl border-black m-5 font-semibold">
+                RSVP
+              </h2>
+              <div className="flex gap-10 justify-center">
+                <div className="flex gap-2">
+                  <input type="radio" name="RSVP" id="yes" />
+                  <label htmlFor="yes" className="text-lg">
+                    Yes
+                  </label>
+                </div>
+                <div className="flex gap-2">
+                  <input type="radio" name="RSVP" id="no" />
+                  <label htmlFor="no" className="text-lg">
+                    No
+                  </label>
+                </div>
               </div>
             </div>
-          </div>
-          <div>
-            <h2 className="border-b text-center text-xl border-black m-5 font-bold">
-              RSVP
-            </h2>
-            <div className="flex gap-10 justify-center">
-              <div className="flex gap-2">
-                <input type="radio" name="RSVP" id="yes" />
-                <label htmlFor="yes" className="text-lg">
-                  Yes
-                </label>
-              </div>
-              <div className="flex gap-2">
-                <input type="radio" name="RSVP" id="no" />
-                <label htmlFor="no" className="text-lg">
-                  No
-                </label>
-              </div>
+            <div className="flex justify-center mt-10 my-5">
+              <button className="bg-black text-white p-2 rounded-md hover:bg-white hover:text-black hover:border-2 border-black" onClick={handleCreateEvent}>
+                Submit
+              </button>
             </div>
-          </div>
-          <div className="flex justify-center mt-10 my-5">
-            <button className="bg-black text-white p-2 rounded-md hover:bg-white hover:text-black hover:border-2 border-black">
-              Submit
-            </button>
           </div>
         </div>
       </div>

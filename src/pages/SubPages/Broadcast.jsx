@@ -4,36 +4,58 @@ import { IoAddCircleOutline } from "react-icons/io5";
 import { ImEye } from "react-icons/im";
 import { Link } from "react-router-dom";
 import { getItemInLocalStorage } from "../../utils/localStorage";
+import { getBroadCast } from "../../api";
+import Table from "../../components/table/Table";
+import { useSelector } from "react-redux";
+import { BsEye } from "react-icons/bs";
 
 const Broadcast = () => {
   const [searchText, setSearchText] = useState("");
   const [user, setUser] = useState("");
-
+const [filteredData, setFilteredData] = useState([])
+const themeColor = useSelector((state)=> state.theme.color)
   useEffect(() => {
     const userType = getItemInLocalStorage("USERTYPE");
     setUser(userType);
+    const fetchBroadCast = async()=>{
+      const broadcastResp = await getBroadCast()
+      setFilteredData(broadcastResp.data)
+      console.log(broadcastResp)
+
+    }
+    fetchBroadCast()
   }, []);
+  const dateFormat = (dateString) => {
+    const date = new Date(dateString);
+    return date.toLocaleString();
+  };
 
   const column = [
     {
       name: "Action",
       cell: (row) => (
         <Link to={`/communication/broadcast/broadcast-details/${row.id}`}>
-          {row.action}
+           <BsEye size={15} />
         </Link>
       ),
       sortable: true,
     },
-    { name: "Title", selector: (row) => row.title, sortable: true },
+    { name: "Title", selector: (row) => row.notice_title, sortable: true },
     {
       name: "Type",
       selector: (row) => row.type,
       sortable: true,
     },
+    {
+      name: "Notice Description",
+      selector: (row) => row.notice_discription,
+      sortable: true,
+    },
     { name: "Created By", selector: (row) => row.CreatedBy, sortable: true },
+    { name: "Expiry Date", selector: (row) => dateFormat(row.expiry_date), sortable: true },
     {
       name: "Created On",
-      selector: (row) => row.CreatedOn,
+      selector: (row) => dateFormat(row.created_at),
       sortable: true,
     },
     {
@@ -41,50 +63,10 @@ const Broadcast = () => {
       selector: (row) => row.status,
       sortable: true,
     },
-    {
-      name: "Expired",
-      selector: (row) => row.expired,
-      sortable: true,
-    },
-    {
-      name: "Expired On",
-      selector: (row) => row.expiredOn,
-      sortable: true,
-    },
-    {
-      name: "Attachments",
-      selector: (row) => row.attachments,
-      sortable: true,
-    },
   ];
-  const data = [
-    {
-      id: 1,
-      action: <ImEye />,
-      title: "test1",
-      type: "type A",
-      CreatedBy: "user 1",
-      CreatedOn: "date",
-      status: "published",
-      expired: "no",
-      expiredOn: "date",
-      attachments: "file",
-    },
-    {
-      id: 1,
-      action: <ImEye />,
-      title: "test1",
-      type: "type A",
-      CreatedBy: "user 1",
-      CreatedOn: "date",
-      status: "published",
-      expired: "no",
-      expiredOn: "date",
-      attachments: "file",
-    },
-  ];
+ 
 
-  const [filteredData, setFilteredData] = useState(data);
+  
   const handleSearch = (event) => {
     const searchValue = event.target.value;
     setSearchText(searchValue);
@@ -104,7 +86,7 @@ const Broadcast = () => {
     },
   };
   return (
-    <div className="my-10">
+    <div className="">
       <div className="flex justify-between items-center sm:flex-row flex-col my-2">
         <input
           type="text"
@@ -116,22 +98,18 @@ const Broadcast = () => {
         {user === "pms_admin" && (
           <Link
             to={"/communication/broadcast/create-broadcast"}
-            className="bg-black  rounded-lg flex font-semibold items-center gap-2 text-white p-2 my-5"
+            style={{background: themeColor}}
+            className="  rounded-md flex font-semibold items-center gap-2 text-white p-2"
           >
             <IoAddCircleOutline size={20} />
             Add Broadcast/Notice
           </Link>
         )}
       </div>
-      <DataTable
+      <Table
         columns={column}
         data={filteredData}
-        customStyles={customStyle}
-        fixedHeader
-        fixedHeaderScrollHeight="500px"
-        pagination
-        selectableRowsHighlight
-        highlightOnHover
+        
       />
     </div>
   );

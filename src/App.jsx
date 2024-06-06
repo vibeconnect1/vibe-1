@@ -200,6 +200,18 @@ import PermitPendingApprovalDetails from "./pages/SubPages/details/PermitPending
 import ScheduleAuditDetails from "./pages/SubPages/details/ScheduleAuditDetails.jsx";
 import ChecklistDetails from "./pages/SubPages/details/ChecklistDetails.jsx";
 import PermitSetup from "./pages/Setup/PermitSetup.jsx";
+import LetterOfIndent from "./pages/LetterOfIndent.jsx";
+import AddLoi from "./pages/SubPages/AddLoi.jsx";
+import EditLoiPO from "./pages/SubPages/details/EditLoiPo.jsx";
+import LOIPoDetails from "./pages/SubPages/details/LoiPoDetails.jsx";
+import EditLoiWO from "./pages/SubPages/details/EditLoiWo.jsx";
+import LOIWoDetail from "./pages/SubPages/details/LoiWoDetail.jsx";
+import CAR from "./pages/CAR.jsx";
+import EditCAR from "./pages/SubPages/EditCAR.jsx";
+import AddCAR from "./pages/SubPages/AddCAR.jsx";
+import CARDetails from "./pages/SubPages/details/CARDetails.jsx";
+import CARTagVendor from "./pages/SubPages/details/CARTagVendor.jsx";
+import CARFeeds from "./pages/SubPages/details/CARFeeds.jsx";
 
 function App() {
   const themeColor = useSelector((state) => state.theme.color);
@@ -1161,9 +1173,7 @@ function App() {
               </ProtectedAdminRoutes>
             }
           />
-          
-          
-         
+
           {/*  */}
 
           {/*
@@ -1224,7 +1234,7 @@ function App() {
               </ProtectedRoute>
             }
           /> */}
-{/*  */}
+          {/*  */}
 
           {/* grn */}
           <Route
@@ -1435,7 +1445,6 @@ function App() {
             }
           />
 
-          
           {/* GDN*/}
           <Route
             path="/admin/Gdn"
@@ -1589,7 +1598,6 @@ function App() {
             }
           />
 
-
           <Route
             path="/admin/pending-details/:id"
             element={
@@ -1599,15 +1607,118 @@ function App() {
             }
           />
 
-        <Route
+          <Route
             path="/setup/permit-setup"
             element={
               <ProtectedAdminRoutes>
-                <PermitSetup/>
+                <PermitSetup />
               </ProtectedAdminRoutes>
             }
-            />
-            </Routes>
+          />
+
+          {/* LOI */}
+
+          <Route
+            path="/admin/letterofindent"
+            element={
+              <ProtectedAdminRoutes>
+                <LetterOfIndent />
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/add-loi"
+            element={
+              <ProtectedAdminRoutes>
+                <AddLoi />
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/edit-Loi-po/:id"
+            element={
+              <ProtectedAdminRoutes>
+                <EditLoiPO />
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/loi-po-detail/:id"
+            element={
+              <ProtectedAdminRoutes>
+                <LOIPoDetails />
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/edit-Loi-wo/:id"
+            element={
+              <ProtectedAdminRoutes>
+                <EditLoiWO />
+              </ProtectedAdminRoutes>
+            }
+          />
+
+          <Route
+            path="/admin/loi-wo-detail/:id"
+            element={
+              <ProtectedAdminRoutes>
+                <LOIWoDetail />
+              </ProtectedAdminRoutes>
+            }
+          />
+
+          {/* CAR */}
+          <Route
+            path="/admin/car"
+            element={
+              <ProtectedAdminRoutes>
+                <CAR />
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/edit-CAR"
+            element={
+              <ProtectedAdminRoutes>
+                <EditCAR />
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/add-CAR"
+            element={
+              <ProtectedAdminRoutes>
+                <AddCAR />
+              </ProtectedAdminRoutes>
+            }
+          />
+
+          <Route
+            path="/admin/car-details/:id"
+            element={
+              <ProtectedAdminRoutes>
+                <CARDetails />
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/car-tag-vendors"
+            element={
+              <ProtectedAdminRoutes>
+                <CARTagVendor />
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/car-feeds"
+            element={
+              <ProtectedAdminRoutes>
+                <CARFeeds />
+              </ProtectedAdminRoutes>
+            }
+          />
+        </Routes>
         <Footer />
       </Router>
     </>

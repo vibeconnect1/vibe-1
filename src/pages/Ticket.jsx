@@ -10,6 +10,7 @@ import moment from "moment";
 import { getItemInLocalStorage } from "../utils/localStorage";
 import * as XLSX from "xlsx";
 import { useSelector } from "react-redux";
+import Table from "../components/table/Table";
 const Ticket = () => {
   const [filteredData, setFilteredData] = useState([]);
   const [searchText, setSearchText] = useState("");
@@ -99,7 +100,7 @@ const Ticket = () => {
   ];
 
   //custom style
-  const themeColor = useSelector((state)=> state.theme.color)
+  const themeColor = useSelector((state) => state.theme.color);
   const customStyle = {
     headRow: {
       style: {
@@ -427,8 +428,14 @@ const Ticket = () => {
         {complaints.length === 0 ? (
           <p className="text-center">Loading...</p>
         ) : (
-          <div className="flex flex-col gap-4 justify-center items-center mb-5">
-            <DataTable
+          <>
+            <Table
+              columns={columns}
+              data={filteredData}
+              customStyles={customStyle}
+              isPagination={true}
+            />
+            {/* <DataTable
               responsive
               selectableRows
               columns={columns}
@@ -439,8 +446,8 @@ const Ticket = () => {
               // fixedHeaderScrollHeight="420px"
               selectableRowsHighlight
               highlightOnHover
-            />
-          </div>
+            /> */}
+          </>
         )}
         {/* </div> */}
       </div>

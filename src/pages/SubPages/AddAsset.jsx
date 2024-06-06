@@ -189,6 +189,7 @@ const AddAsset = () => {
       formDataSend.append("site_asset[capacity]", formData.capacity);
       formDataSend.append("site_asset[breakdown]", formData.breakdown);
       formDataSend.append("site_asset[is_meter]", formData.is_meter);
+      formDataSend.append("site_asset[asset_type]", formData.asset_type);
       formDataSend.append(
         "site_asset[asset_group_id]",
         formData.asset_group_id
@@ -249,7 +250,7 @@ const AddAsset = () => {
         >
           Add Asset
         </h2>
-        <div className="md:mx-20 my-5 mb-10 sm:border border-gray-400 p-5 px-10 rounded-lg sm:shadow-xl">
+        <div className="md:mx-16 my-5 mb-10 sm:border border-gray-400 p-5 px-10 rounded-lg sm:shadow-xl">
           <h2 className="border-b text-center text-xl border-black mb-6 font-bold">
             Location Details
           </h2>
@@ -829,7 +830,7 @@ const AddAsset = () => {
               {formData.warranty && (
                 <div className="flex md:flex-row flex-col md:items-center my-2 gap-5">
                   <div className="md:flex grid grid-cols-2 items-center gap-2 ">
-                    <label htmlFor="" className="font-semibold">
+                    <label htmlFor="" className="font-medium text-sm">
                       Warranty Start Date :
                     </label>
                     <input
@@ -842,7 +843,7 @@ const AddAsset = () => {
                     />
                   </div>
                   <div className="md:flex grid grid-cols-2 items-center gap-2 ">
-                    <label htmlFor="" className="font-semibold">
+                    <label htmlFor="" className="font-medium text-sm">
                       Expiry Date :
                     </label>
                     <input
@@ -855,7 +856,7 @@ const AddAsset = () => {
                     />
                   </div>
                   <div className="md:flex grid grid-cols-2 items-center gap-2 ">
-                    <label htmlFor="" className="font-semibold">
+                    <label htmlFor="" className="font-medium text-sm">
                       Commissioning Date :
                     </label>
                     <input

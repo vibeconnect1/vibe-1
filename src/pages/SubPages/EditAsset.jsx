@@ -4,6 +4,7 @@ import { getItemInLocalStorage } from "../../utils/localStorage";
 import {
   EditSiteAsset,
   getAssetGroups,
+  getAssetSubGroups,
   getFloors,
   getSiteAssetDetails,
   getUnits,
@@ -38,6 +39,7 @@ const EditAsset = () => {
   const day = String(today.getDate()).padStart(2, "0");
   const formattedDate = `${year}-${month}-${day}`;
   //
+  const [assetSubGoups, setAssetSubGroups] = useState([]);
   const { id } = useParams();
   const [formData, setFormData] = useState({
     site_id: "",
@@ -53,7 +55,7 @@ const EditAsset = () => {
     capacity: "",
     unit: "",
     group: "",
-    sub_group: "",
+    sub_group_name: "",
     asset_type: "",
     purchased_on: "",
     breakdown: false,
@@ -89,6 +91,7 @@ const EditAsset = () => {
         setFormData(details.data);
         fetchFloor(details.data.building_id);
         getUnit(details.data.floor_id);
+        fetchSubGroups(details.data.asset_group_id);
       } catch (error) {
         console.error("Error fetching site asset details:", error);
       }
@@ -128,6 +131,21 @@ const EditAsset = () => {
         console.log(error);
       }
     };
+    const fetchSubGroups = async (groupId) => {
+      try {
+        const subGroupResponse = await getAssetSubGroups(groupId);
+        console.log(subGroupResponse);
+        setAssetSubGroups(
+          subGroupResponse.map((item) => ({
+            name: item.name,
+            id: item.id,
+          }))
+        );
+        console.log(subGroupResponse);
+      } catch (error) {
+        console.log(error);
+      }
+    };
 
     getDetails();
     fetchVendor();
@@ -153,6 +171,21 @@ const EditAsset = () => {
         console.log(error);
       }
     }
+    const fetchSubGroups = async (groupId) => {
+      try {
+        const subGroupResponse = await getAssetSubGroups(groupId);
+        console.log(subGroupResponse);
+        setAssetSubGroups(
+          subGroupResponse.map((item) => ({
+            name: item.name,
+            id: item.id,
+          }))
+        );
+        console.log(subGroupResponse);
+      } catch (error) {
+        console.log(error);
+      }
+    };
 
     if (e.target.type === "select-one" && e.target.name === "building_id") {
       const BuildID = Number(e.target.value);
@@ -172,7 +205,18 @@ const EditAsset = () => {
         ...formData,
         floor_id: UnitID,
       });
-    } else {
+    } else if (
+      e.target.type === "select-one" &&
+      e.target.name === "asset_group_id"
+    ) {
+      const groupId = Number(e.target.value);
+      console.log("groupId:" + groupId);
+      await fetchSubGroups(groupId);
+      setFormData({
+        ...formData,
+        asset_group_id: groupId,
+      });
+    }  else {
       setFormData({
         ...formData,
         [e.target.name]: e.target.value,
@@ -244,6 +288,8 @@ const EditAsset = () => {
       );
       formDataSend.append("site_asset[vendor_id]", formData.vendor_id);
       formDataSend.append("site_asset[remarks]", formData.remarks);
+      formDataSend.append("site_asset[description]", formData.description);
+      formDataSend.append("site_asset[uom]", formData.unit);
 
       const response = await EditSiteAsset(formDataSend, id);
       toast.dismiss();
@@ -271,7 +317,7 @@ const EditAsset = () => {
         >
           Edit Asset
         </h2>
-        <div className="md:mx-20 my-5 mb-10 sm:border border-gray-400 p-5 px-10 rounded-lg sm:shadow-xl">
+        <div className="md:mx-16 my-5 mb-10 sm:border border-gray-400 p-5 px-10 rounded-lg sm:shadow-xl">
           <h2 className="border-b text-center text-xl border-black mb-6 font-bold">
             Location Details
           </h2>
@@ -446,7 +492,7 @@ const EditAsset = () => {
                 <div className="flex flex-col">
                   <input
                     type="text"
-                    name="unit"
+                    name="uom"
                     id="unit"
                     value={formData.uom}
                     onChange={handleChange}
@@ -473,14 +519,16 @@ const EditAsset = () => {
                 <div className="flex flex-col">
                   <select
                     className="border p-1 px-4 border-gray-500 rounded-md"
-                    name="sub_group"
-                    value={formData.sub_group}
+                    name="sub_group_name"
+                    value={formData.sub_group_name}
                     onChange={handleChange}
                   >
                     <option value="">Select Sub Group</option>
-                    <option value="Sub Group 1">Sub Group 1</option>
-                    <option value="Sub Group 2">Sub Group 2</option>
-                    <option value="Sub Group 3">Sub Group 3</option>
+                    {assetSubGoups.map((subGroup) => (
+                      <option value={subGroup.id} key={subGroup.id}>
+                        {subGroup.name}
+                      </option>
+                    ))}
                   </select>
                 </div>
 
@@ -562,9 +610,10 @@ const EditAsset = () => {
                       <div className="flex gap-2">
                         <input
                           type="radio"
-                          checked={formData.meter_type === "parent"}
+                          name="asset_type"
+                          checked={formData.asset_type === "parent"}
                           onChange={() =>
-                            setFormData({ ...formData, meter_type: "parent" })
+                            setFormData({ ...formData, asset_type: "parent" })
                           }
                           id="parent"
                           className="checked:accent-black"
@@ -575,9 +624,10 @@ const EditAsset = () => {
                       <div className="flex gap-2">
                         <input
                           type="radio"
-                          checked={formData.meter_type === "sub"}
+                          name="asset_type"
+                          checked={formData.asset_type === "sub"}
                           onChange={() =>
-                            setFormData({ ...formData, meter_type: "sub" })
+                            setFormData({ ...formData, asset_type: "sub" })
                           }
                           id="sub"
                           onClick={() => setMeterType("sub")}
@@ -896,11 +946,12 @@ const EditAsset = () => {
                   <input
                     type="radio"
                     id="inWarranty"
-                    checked={formData.warranty === true}
+                    checked={formData.warranty_start !== "" && true}
                     onChange={() =>
                       setFormData({ ...formData, warranty: true })
                     }
                     className="checked:accent-black"
+                    name="warranty"
                   />
                   <label htmlFor="inWarranty">Yes</label>
                 </div>
@@ -910,19 +961,20 @@ const EditAsset = () => {
                     onChange={() =>
                       setFormData({ ...formData, warranty: false })
                     }
-                    checked={formData.warranty === false}
+                    checked={formData.warranty_start === "" &&  false}
                     id="notInWarranty"
                     className="checked:accent-black"
+                    name="warranty"
                   />
                   <label htmlFor="notInWarranty">No</label>
                 </div>
               </div>
 
-              {formData.warranty && (
+              {formData.warranty_start !== "" && (
                 <div className="flex md:flex-row flex-col md:items-center my-2 gap-5">
                   <div className="md:flex grid grid-cols-2 items-center gap-2 ">
-                    <label htmlFor="" className="font-semibold">
-                      Warranty Statr Date :
+                    <label htmlFor="" className="font-medium text-sm">
+                      Warranty Start Date :
                     </label>
                     <input
                       type="date"
@@ -934,7 +986,7 @@ const EditAsset = () => {
                     />
                   </div>
                   <div className="md:flex grid grid-cols-2 items-center gap-2 ">
-                    <label htmlFor="" className="font-semibold">
+                    <label htmlFor="" className="font-medium text-sm">
                       Expiry Date :
                     </label>
                     <input
@@ -947,7 +999,7 @@ const EditAsset = () => {
                     />
                   </div>
                   <div className="md:flex grid grid-cols-2 items-center gap-2 ">
-                    <label htmlFor="" className="font-semibold">
+                    <label htmlFor="" className="font-medium text-sm">
                       Commissioning Date:
                     </label>
                     <input
