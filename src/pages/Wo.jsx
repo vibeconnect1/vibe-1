@@ -173,7 +173,6 @@ function Wo() {
     <section className='flex'>
         <Navbar/>
         <div className="w-full flex mx-3 flex-col overflow-hidden">
-       
         <div className="flex  justify-start gap-4 my-5 flex-shrink flex-wrap ">
           <div className="shadow-xl rounded-full border-4 border-gray-400 w-72  px-6 flex flex-col items-center">
             <p className="font-semibold md:text-lg">Total no. of WO</p>
@@ -222,7 +221,7 @@ function Wo() {
             </div>
           </div>)
             }
-        <div className="md:flex grid grid-cols-2 sm:flex-row my-2 flex-col gap-2 justify-between">
+          <div className="md:flex grid grid-cols-2 sm:flex-row my-2 flex-col gap-2 justify-between">
             {/* <button
               className="md:text-lg text-sm font-semibold border-2 border-black px-4 p-1 flex gap-2 items-center rounded-md"
               onClick={() => setOmitColumn(!omitColumn)}

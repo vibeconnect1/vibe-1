@@ -183,6 +183,11 @@ import EmployeeAddGVehicles from "./pages/Employees/EmployeeSubPages/EmployeeAdd
 import EmployeeGVehiclesDetails from "./pages/Employees/EmployeeSubPages/EmployeeGvehicleDetails.jsx";
 import EmployeeAddRVehicles from "./pages/Employees/EmployeeSubPages/EmployeeAddRVehicle.jsx";
 import EmployeeAddStaff from "./pages/Employees/EmployeeSubPages/EmployeeAddStaff.jsx";
+import Car from "./pages/Car.jsx";
+import CarDetails from "./pages/SubPages/details/CarDetails.jsx";
+import TagVendorCar from "./pages/SubPages/TagVendorCar.jsx";
+import FeedsCar from "./pages/SubPages/FeedsCar.jsx";
+import EditCar from "./pages/SubPages/EditCar.jsx";
 
 function App() {
   const themeColor = useSelector((state) => state.theme.color);
@@ -1453,6 +1458,49 @@ function App() {
             element={
               <ProtectedAdminRoutes>
                 <Calender />
+              </ProtectedAdminRoutes>
+            }
+          />
+          {/* CAR */}
+          <Route
+            path="/admin/car"
+            element={
+              <ProtectedAdminRoutes>
+                <Car />
+              </ProtectedAdminRoutes>
+            }
+          />
+          {/* CAR */}
+          <Route
+            path="/admin/car-details/:id"
+            element={
+              <ProtectedAdminRoutes>
+                <CarDetails/>
+              </ProtectedAdminRoutes>
+            }
+          />
+          {/* CAR */}
+          <Route
+            path="/admin/car-tag-vendors"
+            element={
+              <ProtectedAdminRoutes>
+                <TagVendorCar/>
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/car-feeds"
+            element={
+              <ProtectedAdminRoutes>
+                <FeedsCar/>
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/car-edit"
+            element={
+              <ProtectedAdminRoutes>
+                <EditCar/>
               </ProtectedAdminRoutes>
             }
           />
