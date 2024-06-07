@@ -212,6 +212,14 @@ import AddCAR from "./pages/SubPages/AddCAR.jsx";
 import CARDetails from "./pages/SubPages/details/CARDetails.jsx";
 import CARTagVendor from "./pages/SubPages/details/CARTagVendor.jsx";
 import CARFeeds from "./pages/SubPages/details/CARFeeds.jsx";
+import FoodsBeverage from "./pages/FoodsBeverage.jsx";
+import AddFB from "./pages/SubPages/AddFB.jsx";
+import FBDetails from "./pages/SubPages/details/FBDetails.jsx";
+import FBEdit from "./pages/SubPages/FBEdit.jsx";
+import AddResMenu from "./pages/SubPages/details/FBSubDetails/AddResMenu.jsx";
+import EditResMenu from "./pages/SubPages/details/FBSubDetails/EditResMenu.jsx";
+import ResMenuDetails from "./pages/SubPages/details/FBSubDetails/ResMenuDetails.jsx";
+import ResOrderDetails from "./pages/SubPages/details/FBSubDetails/ResOrderDetails.jsx";
 
 function App() {
   const themeColor = useSelector((state) => state.theme.color);
@@ -1715,6 +1723,72 @@ function App() {
             element={
               <ProtectedAdminRoutes>
                 <CARFeeds />
+              </ProtectedAdminRoutes>
+            }
+          />
+          {/* F&B */}
+          <Route
+            path="/admin/fb"
+            element={
+              <ProtectedAdminRoutes>
+                <FoodsBeverage/>
+              </ProtectedAdminRoutes>
+            }
+          />
+            <Route
+            path="/admin/add-fb"
+            element={
+              <ProtectedAdminRoutes>
+                <AddFB/>
+              </ProtectedAdminRoutes>
+            }
+          />
+             <Route
+            path="/admin/fb-details/:id"
+            element={
+              <ProtectedAdminRoutes>
+                <FBDetails/>
+              </ProtectedAdminRoutes>
+            }
+          />
+           <Route
+            path="/admin/fb-edit/:id"
+            element={
+              <ProtectedAdminRoutes>
+                <FBEdit/>
+              </ProtectedAdminRoutes>
+            }
+          />
+           <Route
+            path="/admin/fb-res-menu/"
+            element={
+              <ProtectedAdminRoutes>
+                <AddResMenu/>
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/edit-resmenu/:id"
+            element={
+              <ProtectedAdminRoutes>
+                <EditResMenu/>
+              </ProtectedAdminRoutes>
+            }
+          />
+           <Route
+            path="/admin/fb-resmenudetails/:id"
+            element={
+              <ProtectedAdminRoutes>
+                <ResMenuDetails/>
+              </ProtectedAdminRoutes>
+            }
+          />
+           
+           <Route
+            path="/admin/res-order-details/:id"
+            element={
+              <ProtectedAdminRoutes>
+                <ResOrderDetails/>
               </ProtectedAdminRoutes>
             }
           />

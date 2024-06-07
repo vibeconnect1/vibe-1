@@ -149,6 +149,59 @@ const Calender = () => {
     fetchCalenderData();
   }, []);
 
+
+  useEffect(() => {
+    const getTaskAssign = async () => {
+      const user_id = getItemInLocalStorage("VIBEUSERID")
+      const org_id = getItemInLocalStorage("VIBEORGID");
+      const orgg_id = localStorage.getItem("VIBEORGID");
+      console.log("user : ", user_id  )
+      console.log("ord : ", org_id  )
+      console.log("orgid : ", orgg_id  )
+
+      // try {
+      //   const params = {
+      //     user_id: user_id,
+      //     org_id: org_id,
+      //   };
+
+      //   const jsonData = await getDataFromAPI(GetUsers, params);
+
+      //   if (jsonData.success) {
+      //     const users = jsonData.data;
+      //     const assignEmails = users.map((user) => ({
+      //       value: user.user_id,
+      //       label: user.email,
+      //     }));
+
+      //     setEmails(assignEmails);
+      //     setEditableAssignTo(assignEmails);
+      //     setEditableGuestTo(assignEmails);
+      //     setEditableParticipantTo(assignEmails);
+      //     // Store the emails in local storage
+      //     localStorage.setItem("assignEmails", JSON.stringify(assignEmails));
+      //   } else {
+      //     console.log("Something went wrong");
+      //   }
+      // } catch (error) {
+      //   console.error("Error:", error);
+      // }
+    };
+
+    // const assignEmailsFromStorage = localStorage.getItem("assignEmails");
+
+    // if (assignEmailsFromStorage) {
+    //   setEmails(JSON.parse(assignEmailsFromStorage));
+    // } else {
+      getTaskAssign();
+    // }
+  }, [
+    // setEmails,
+    // setEditableAssignTo,
+    // setEditableGuestTo,
+    // setEditableParticipantTo,
+  ]);
+
   const calendarRef = useRef();
   const handleDateClick = (arg, date) => {
     setPopupDate(arg.dateStr);
@@ -306,7 +359,7 @@ const Calender = () => {
     const selectedFiles = event.target.files;
     const newAttachments = Array.from(selectedFiles);
     setAttachment(newAttachments);
-    setFileUpload(true)
+    setFileUpload(true);
   };
 
   const handleEventFileAttachment = (event) => {
@@ -918,9 +971,17 @@ const Calender = () => {
                         htmlFor="file-upload"
                         className="relative cursor-pointer flex items-center border-2 border-black  bg-transparent rounded-md font-medium  px-4 transition duration-300 ease-in-out hover:bg-black hover:border-white hover:text-white "
                       >
-                       {!fileUpload ? <span className="flex items-center gap-2">
-                          <PiPlusBold /> Attachment
-                        </span>:<span>{attachments.map(file => `${file.name.slice(0, 10)}...`).join(', ')}</span>}
+                        {!fileUpload ? (
+                          <span className="flex items-center gap-2">
+                            <PiPlusBold /> Attachment
+                          </span>
+                        ) : (
+                          <span>
+                            {attachments
+                              .map((file) => `${file.name.slice(0, 10)}...`)
+                              .join(", ")}
+                          </span>
+                        )}
                         <input
                           id="file-upload"
                           type="file"
@@ -928,7 +989,6 @@ const Calender = () => {
                           ref={fileInputRef}
                           onChange={handleFileAttachment}
                         />
-                      
                       </label>
 
                       <div className="w-full">

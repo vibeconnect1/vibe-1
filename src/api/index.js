@@ -1,6 +1,6 @@
 import { getItemInLocalStorage } from "../utils/localStorage";
 import axiosInstance from "./axiosInstance";
-import vibeaxiosInstance from "./vibeaxiosInstance";
+import vibeAxiosInstance from "./vibeAxiosInstance";
 
 const token = getItemInLocalStorage("TOKEN");
 
@@ -328,12 +328,30 @@ export const getBroadCast = async () =>
 // vibe
 
 export const vibeLogin = async (data) =>
-  vibeaxiosInstance.post("/api/login/", data);
+  vibeAxiosInstance.post("/api/login/", data);
 
 // VIBE CALENDAR
 export const getVibeCalendar = async (vibeUserId) => {
   try {
-    const response = await vibeaxiosInstance.get(
+    const response = await vibeAxiosInstance.get(
+      `/api/employee/calender/get-calender-events/?user_id=${vibeUserId}`,
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching calendar events:", error);
+    throw error;
+  }
+};
+
+//VIBE USER 
+export const getVibeUsers = async (vibeUserId) => {
+  try {
+    const response = await vibeAxiosInstance.get(
       `/api/employee/calender/get-calender-events/?user_id=${vibeUserId}`,
       {
         headers: {

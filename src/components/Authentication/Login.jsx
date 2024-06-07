@@ -55,6 +55,9 @@ const Login = () => {
 
       const vibeUserId = vibeResponse.data.data.user_id;
       setItemInLocalStorage("VIBEUSERID", vibeUserId);
+      const vibeOrganizationId = vibeResponse.data.data.organization_id;
+      setItemInLocalStorage("VIBEORGID", vibeOrganizationId);
+
       //
       const loginD = response.data.user;
       setItemInLocalStorage("user", loginD);
@@ -102,7 +105,7 @@ const Login = () => {
         navigate("/mytickets");
       }
       toast.dismiss();
-      window.location.reload();
+      // window.location.reload();
     } catch (error) {
       console.error("Login failed:", error);
       toast.error("Login failed. Please check your credentials.");
