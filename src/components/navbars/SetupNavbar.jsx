@@ -18,9 +18,9 @@ const SetupNavbar = () => {
         <Link to={"/setup/users-setup"} className="hover:bg-white hover:text-black  p-2 rounded-lg ">Users</Link>
         <Link className="hover:bg-white hover:text-black  p-2 rounded-lg ">FM User</Link>
         <Link className="hover:bg-white hover:text-black  p-2 rounded-lg ">Occupant User</Link>
-        <Link className="hover:bg-white hover:text-black  p-2 rounded-lg ">Meter Types</Link>
+        <Link to={"/admin/setup-meter-type"} className="hover:bg-white hover:text-black  p-2 rounded-lg ">Meter Types</Link>
         <Link to={"/setup/asset-group"}  className="hover:bg-white hover:text-black  p-2 rounded-lg ">Asset Group</Link>
-        <Link className="hover:bg-white hover:text-black  p-2 rounded-lg ">Checklist Group</Link>
+        <Link to={"/admin/checklist-group"} className="hover:bg-white hover:text-black  p-2 rounded-lg ">Checklist Group</Link>
         <Link className="hover:bg-white hover:text-black  p-2 rounded-lg ">Ticket</Link>
         <Link to={"/business/setup-category"} className="hover:bg-white hover:text-black  p-2 rounded-lg ">Business Category</Link>
         <Link to={"/facility"} className="hover:bg-white hover:text-black  p-2 rounded-lg ">Facility</Link>

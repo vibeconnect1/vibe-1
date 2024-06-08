@@ -60,7 +60,7 @@ const Incidents = () => {
         <Navbar/>
         <div className="w-full flex mx-3 flex-col overflow-hidden">
             <h2 className="text-lg font-semibold my-5 ">
-                INCIDENTS LIST
+              INCIDENTS LIST
             </h2>
             <div className="flex flex-col sm:flex-row md:justify-between  gap-3 ">
                 <input

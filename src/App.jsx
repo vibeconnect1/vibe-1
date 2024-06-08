@@ -193,6 +193,8 @@ import IncidentsDetails from "./pages/SubPages/details/IncidentsDetails.jsx";
 import EditIncident from "./pages/SubPages/EditIncident.jsx";
 import AddIncident from "./pages/SubPages/AddIncident.jsx";
 import IncidentSetup from "./pages/Setup/IncidentSetupPages/IncidentSetup.jsx";
+import MeterTypeSetup from "./pages/Setup/MeterTypeSetup.jsx";
+import CheckListGroupSetup from "./pages/Setup/CheckListGroupSetup.jsx";
 // import IncidentSetup from "./pages/Setup/IncidentSetupPages/IncidentSetup.jsx";
 
 function App() {
@@ -1510,6 +1512,7 @@ function App() {
               </ProtectedAdminRoutes>
             }
           />
+          {/* Incidents */}
           <Route
             path="/admin/incidents"
             element={
@@ -1547,6 +1550,24 @@ function App() {
             element={
               <ProtectedAdminRoutes>
                 <IncidentSetup/>
+              </ProtectedAdminRoutes>
+            }
+          />
+          {/* Meter Types */}
+          <Route
+            path="/admin/setup-meter-type"
+            element={
+              <ProtectedAdminRoutes>
+                <MeterTypeSetup/>
+              </ProtectedAdminRoutes>
+            }
+          />
+          {/* CheckList Group */}
+          <Route
+            path="/admin/checklist-group"
+            element={
+              <ProtectedAdminRoutes>
+                <CheckListGroupSetup/>
               </ProtectedAdminRoutes>
             }
           />
