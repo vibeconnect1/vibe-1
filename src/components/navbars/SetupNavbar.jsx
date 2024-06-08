@@ -32,6 +32,7 @@ const SetupNavbar = () => {
         <Link className="hover:bg-white hover:text-black  p-2 rounded-lg ">SAC/HSN Setup</Link>
         <Link className="hover:bg-white hover:text-black  p-2 rounded-lg ">Addresses</Link>
         <Link className="hover:bg-white hover:text-black  p-2 rounded-lg ">Export</Link>
+        <Link to={"/admin/setup-incidents"}className="hover:bg-white hover:text-black  p-2 rounded-lg ">Incidents Setup</Link>
       </ul>
     </div>
   </div>

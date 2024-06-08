@@ -188,6 +188,12 @@ import CarDetails from "./pages/SubPages/details/CarDetails.jsx";
 import TagVendorCar from "./pages/SubPages/TagVendorCar.jsx";
 import FeedsCar from "./pages/SubPages/FeedsCar.jsx";
 import EditCar from "./pages/SubPages/EditCar.jsx";
+import Incidents from "./pages/Incidents.jsx";
+import IncidentsDetails from "./pages/SubPages/details/IncidentsDetails.jsx";
+import EditIncident from "./pages/SubPages/EditIncident.jsx";
+import AddIncident from "./pages/SubPages/AddIncident.jsx";
+import IncidentSetup from "./pages/Setup/IncidentSetupPages/IncidentSetup.jsx";
+// import IncidentSetup from "./pages/Setup/IncidentSetupPages/IncidentSetup.jsx";
 
 function App() {
   const themeColor = useSelector((state) => state.theme.color);
@@ -1501,6 +1507,46 @@ function App() {
             element={
               <ProtectedAdminRoutes>
                 <EditCar/>
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/incidents"
+            element={
+              <ProtectedAdminRoutes>
+                <Incidents/>
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/incidents-details/:id"
+            element={
+              <ProtectedAdminRoutes>
+                <IncidentsDetails/>
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/edit-incidents"
+            element={
+              <ProtectedAdminRoutes>
+                <EditIncident/>
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/add-incidents"
+            element={
+              <ProtectedAdminRoutes>
+                <AddIncident/>
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/setup-incidents"
+            element={
+              <ProtectedAdminRoutes>
+                <IncidentSetup/>
               </ProtectedAdminRoutes>
             }
           />

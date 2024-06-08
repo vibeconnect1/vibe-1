@@ -424,7 +424,7 @@ const EditCar = () => {
               <div className="">
                 {visitors.map((visitor, index) => (
                   <div key={index}>
-                    <div className="font-semibold border-2 border-black my-3 py-3 px-3 p-1 flex gap-2 flex-col  rounded-md">
+                    <div className="font-semibold border-2 border-black my-3 py-3 px-3 p-1 flex gap-2  items-center rounded-md">
                       <div className="flex flex-col">
                         <input
                           type="text"
