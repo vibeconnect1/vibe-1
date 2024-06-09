@@ -3,14 +3,22 @@ import Navbar from "../components/Navbar";
 import { Calendar, momentLocalizer } from "react-big-calendar";
 import moment from "moment";
 // import "react-big-calendar/lib/css/react-big-calendar.css";
-import { getVibeCalendar } from "../api";
+import {
+  CreateVibeMeeting,
+  CreateVibeTeamMeeting,
+  CreateVibeZoomMeeting,
+  getVibeCalendar,
+  getVibeUsers,
+  postCalendarTask,
+  postNewCalendarEvent,
+} from "../api";
 import { getItemInLocalStorage } from "../utils/localStorage";
 import "./style/Calendar.css";
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction";
-import { FaArrowRight, FaPlus } from "react-icons/fa";
+import { FaArrowRight, FaPlus, FaTimes } from "react-icons/fa";
 import { useSelector } from "react-redux";
 import Select from "react-select";
 import DatePicker from "react-datepicker";
@@ -22,6 +30,11 @@ import "react-datepicker/dist/react-datepicker.css";
 import ReactSwitch from "react-switch";
 import { AiOutlineClose } from "react-icons/ai";
 import { PiPlusBold } from "react-icons/pi";
+import MeertingDropdownButton from "../containers/MeetingDropdown";
+import MeetingDropdownButton from "../containers/MeetingDropdown";
+import { BiRightArrow, BiRightArrowAlt } from "react-icons/bi";
+import toast from "react-hot-toast";
+import { MdOutlineContentCopy } from "react-icons/md";
 const Calender = () => {
   const vibeUserId = getItemInLocalStorage("VIBEUSERID");
   const [popupDate, setPopupDate] = useState(null);
@@ -66,6 +79,15 @@ const Calender = () => {
   const [loadingMeet, setLoadingMeet] = useState(false);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   const [fileUpload, setFileUpload] = useState(false);
+  const [showGenerateLink, setShowGenerateLink] = useState(false);
+  const [uuid, setuuid] = useState("");
+  const [selectedWeekdays, setSelectedWeekdays] = useState([]);
+  const [selectedToDate, setSelectedToDate] = useState("");
+  const [linkGenerated, setLinkGenerated] = useState(false);
+  const [meet_id, setMeet_id] = useState("");
+  const [isCreatingMeeting, setIsCreatingMeeting] = useState(false);
+  const [subcategory, setSubcategory] = useState("");
+  const [editableTitle, setEditableTitle] = useState("");
   // refs
   const dropdownRef = useRef();
   const fileInputRef = useRef(null);
@@ -87,6 +109,49 @@ const Calender = () => {
     return `${year}-${month}-${day}`;
   }
   console.log(vibeUserId);
+  const currentDates = new Date();
+  const year = currentDates.getFullYear();
+  const month = String(currentDates.getMonth() + 1).padStart(2, "0");
+  const day = String(currentDates.getDate()).padStart(2, "0");
+  const todayDate = `${year}-${month}-${day}`;
+
+  const [weekdaysMap, setWeekdaysMap] = useState([
+    { day: "Mon", index: 0, isActive: false },
+    { day: "Tue", index: 1, isActive: false },
+    { day: "Wed", index: 2, isActive: false },
+    { day: "Thu", index: 3, isActive: false },
+    { day: "Fri", index: 4, isActive: false },
+    { day: "Sat", index: 5, isActive: false },
+    { day: "Sun", index: 6, isActive: false },
+  ]);
+  console.log(selectedWeekdays);
+
+  const handleWeekdaySelection = (weekday) => {
+    console.log(`Selected day: ${weekday}`);
+
+    // Find the index of the selected day
+    const index = weekdaysMap.find((dayObj) => dayObj.day === weekday)?.index;
+
+    if (index !== undefined) {
+      // Toggle the isActive status of the selected day
+      const updatedWeekdaysMap = weekdaysMap.map((dayObj) =>
+        dayObj.index === index
+          ? { ...dayObj, isActive: !dayObj.isActive }
+          : dayObj
+      );
+
+      // Update the weekdaysMap with the modified isActive status
+      setWeekdaysMap(updatedWeekdaysMap);
+
+      // Update the selected weekdays list
+      setSelectedWeekdays((prevSelectedWeekdays) =>
+        prevSelectedWeekdays.includes(index)
+          ? prevSelectedWeekdays.filter((day) => day !== index)
+          : [...prevSelectedWeekdays, index]
+      );
+    }
+  };
+
   useEffect(() => {
     const fetchCalenderData = async () => {
       const calendarDataResponse = await getVibeCalendar(vibeUserId);
@@ -147,60 +212,65 @@ const Calender = () => {
       console.log(formattedEvents);
     };
     fetchCalenderData();
-  }, []);
+  }, [popupDate]);
 
+  useEffect(
+    () => {
+      const getTaskAssign = async () => {
+        const user_id = getItemInLocalStorage("VIBEUSERID");
+        const org_id = getItemInLocalStorage("VIBEORGID");
+        const orgg_id = localStorage.getItem("VIBEORGID");
+        console.log("user : ", user_id);
+        console.log("ord : ", org_id);
+        console.log("orgid : ", orgg_id);
 
-  useEffect(() => {
-    const getTaskAssign = async () => {
-      const user_id = getItemInLocalStorage("VIBEUSERID")
-      const org_id = getItemInLocalStorage("VIBEORGID");
-      const orgg_id = localStorage.getItem("VIBEORGID");
-      console.log("user : ", user_id  )
-      console.log("ord : ", org_id  )
-      console.log("orgid : ", orgg_id  )
+        try {
+          // const params = {
+          //   user_id: user_id,
+          //   org_id: org_id,
+          // };
 
-      // try {
-      //   const params = {
-      //     user_id: user_id,
-      //     org_id: org_id,
-      //   };
+          const VibeUserResponse = await getVibeUsers(user_id);
+          console.log(VibeUserResponse);
 
-      //   const jsonData = await getDataFromAPI(GetUsers, params);
+          //   const jsonData = await getDataFromAPI(GetUsers, params);
 
-      //   if (jsonData.success) {
-      //     const users = jsonData.data;
-      //     const assignEmails = users.map((user) => ({
-      //       value: user.user_id,
-      //       label: user.email,
-      //     }));
+          if (VibeUserResponse.success) {
+            const users = VibeUserResponse.data;
+            const assignEmails = users.map((user) => ({
+              value: user.user_id,
+              label: user.email,
+            }));
 
-      //     setEmails(assignEmails);
-      //     setEditableAssignTo(assignEmails);
-      //     setEditableGuestTo(assignEmails);
-      //     setEditableParticipantTo(assignEmails);
-      //     // Store the emails in local storage
-      //     localStorage.setItem("assignEmails", JSON.stringify(assignEmails));
-      //   } else {
-      //     console.log("Something went wrong");
-      //   }
-      // } catch (error) {
-      //   console.error("Error:", error);
-      // }
-    };
+            setEmails(assignEmails);
+            //     setEditableAssignTo(assignEmails);
+            //     setEditableGuestTo(assignEmails);
+            //     setEditableParticipantTo(assignEmails);
+            //     // Store the emails in local storage
+            //     localStorage.setItem("assignEmails", JSON.stringify(assignEmails));
+          } else {
+            console.log("Something went wrong");
+          }
+        } catch (error) {
+          console.error("Error:", error);
+        }
+      };
 
-    // const assignEmailsFromStorage = localStorage.getItem("assignEmails");
+      // const assignEmailsFromStorage = localStorage.getItem("assignEmails");
 
-    // if (assignEmailsFromStorage) {
-    //   setEmails(JSON.parse(assignEmailsFromStorage));
-    // } else {
+      // if (assignEmailsFromStorage) {
+      //   setEmails(JSON.parse(assignEmailsFromStorage));
+      // } else {
       getTaskAssign();
-    // }
-  }, [
-    // setEmails,
-    // setEditableAssignTo,
-    // setEditableGuestTo,
-    // setEditableParticipantTo,
-  ]);
+      // }
+    },
+    [
+      // setEmails,
+      // setEditableAssignTo,
+      // setEditableGuestTo,
+      // setEditableParticipantTo,
+    ]
+  );
 
   const calendarRef = useRef();
   const handleDateClick = (arg, date) => {
@@ -246,10 +316,23 @@ const Calender = () => {
     setActiveButton(buttonType);
   };
 
+  function formatDateTimedif(inputDate) {
+    const date = new Date(inputDate);
+    console.log(date);
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+    const hours = String(date.getHours()).padStart(2, "0");
+    const minutes = String(date.getMinutes()).padStart(2, "0");
+
+    return `${year}-${month}-${day}T${hours}:${minutes}`;
+  }
+
   const handleEventClick = (eventInfo) => {
     const pattern = /@gmail\.com$/;
     const clickedItem = eventInfo.event.toPlainObject();
     console.log(clickedItem);
+    console.log("item clicked");
     if (clickedItem.extendedProps.category === "Task") {
       setActiveButton("task");
     } else if (clickedItem.extendedProps.category === "Event") {
@@ -366,6 +449,7 @@ const Calender = () => {
     const selectedFiles = event.target.files;
     const newAttachments = Array.from(selectedFiles);
     setEventAttachment(newAttachments);
+    console.log(eventAttachment);
   };
 
   var handleChangeSelect = (selectedOption) => {
@@ -394,16 +478,18 @@ const Calender = () => {
     return `${year}-${month}-${day}T${hours}:${minutes}`;
   }
 
-  const handleSaveTask = () => {
-    console.log(due_date);
-
+  const handleSaveTask = async () => {
     if (!taskTitle) {
       //alert('Please fill in all the fields before creating the task.');
+      toast.error("All fields are required");
       return;
     }
-    const user_id = localStorage.getItem("user_id");
+    const user_id = localStorage.getItem("VIBEUSERID");
     setLoading(true);
-
+    console.log(taskTitle);
+    console.log(due_date);
+    console.log(user_id);
+    console.log(task_description);
     const formData = new FormData();
     formData.append("task_topic", taskTitle);
     formData.append("due_date", formatDate(due_date));
@@ -420,38 +506,28 @@ const Calender = () => {
       formData.append("assign_to", id);
     });
 
-    setIsCreatingTask(true);
-    postDataToAPI(AddBoardChecklistTask, formData)
-      .then((response) => {
-        if (response.success) {
-          //alert("Task Created !")
-
-          //   onClose();
-          // window.location.reload();
-          setPopupDate(null);
-          // window.location.reload();
-          fetchData();
-        } else {
-          console.log("unsuccess");
-        }
-        setLoading(false);
-      })
-      .catch((error) => {
-        setLoading(false);
-        //alert('Please check your internet and try again!');
-      })
-      .finally(() => {
-        setLoading(false);
-        setIsCreatingTask(false);
-      });
+    try {
+      toast.loading("Creating New Event Please Wait! ");
+      const response = await postCalendarTask(formData);
+      console.log(response);
+      toast.dismiss();
+      toast.success("New Task Created Successfully");
+      setPopupDate(null);
+      console.log(formData);
+      // window.location.reload();
+    } catch (error) {
+      console.log(error);
+      toast.dismiss();
+    }
   };
-  const handleSaveEvent = () => {
+
+  const handleSaveEvent = async () => {
     const idList = selectedOption.map((email) => parseInt(email.value));
 
-    // if (!eventTitle) {
-    //     //alert('Please fill in all the fields before creating the task.');
-    //     return;
-    // };
+    if (!eventTitle) {
+      toast.error("Please fill in all the fields before creating the task.");
+      return;
+    }
     if (eventEndDate < eventStartDate) {
       toast.error(
         "Selected event end date should be greater than the start date.",
@@ -473,7 +549,7 @@ const Calender = () => {
       return;
     }
 
-    const user_id = localStorage.getItem("user_id");
+    const user_id = localStorage.getItem("VIBEUSERID");
     setLoadingEvent(true);
     const formData = new FormData();
     formData.append("title", eventTitle);
@@ -483,41 +559,27 @@ const Calender = () => {
     formData.append("to_time", eventEndTime);
     formData.append("user_id", user_id);
     formData.append("description", eventDescription);
-    //formData.append('attachment', eventAttachment);
-    eventAttachment.forEach((file, index) => {
-      formData.append("attachment", file); // Append each file individually with a unique key
+    eventAttachment.forEach((file) => {
+      formData.append("attachment", file); // Append each file
     });
     const id = idList.join(",");
 
     formData.append("guest_ids", id);
-
-    // setIsCreatingEvent(true);
-    postDataToAPI(CreateEvent, formData)
-      .then((response) => {
-        if (response.success) {
-          console.log(user_id);
-          // alert("Event created !")
-
-          // onClose();
-          // window.location.reload();
-          // fetchData();
-          // setPopupDate(null);
-        } else {
-          console.log("unsuccess");
-        }
-        setLoadingEvent(true);
-      })
-      .catch((error) => {
-        //alert('Please check your internet and try again!');
-        setLoadingEvent(true);
-      })
-      .finally(() => {
-        setLoadingEvent(true);
-        setIsCreatingEvent(false);
-      });
-
-    console.log(formData);
+    try {
+      toast.loading("Creating New Event Please Wait! ");
+      const response = await postNewCalendarEvent(formData);
+      console.log(response);
+      toast.dismiss();
+      toast.success("New Event Created Successfully");
+      setPopupDate(null);
+      console.log(formData);
+    } catch (error) {
+      console.log(error);
+      toast.dismiss();
+    }
   };
+
+  const [isSingleDayRange, setIsSingleDayRange] = useState(true);
   const today = new Date().toISOString().split("T")[0];
   const handleStartDateChange = (e) => {
     const selectedStartDate = new Date(e.target.value);
@@ -553,7 +615,9 @@ const Calender = () => {
   };
   const ZoomCreateMeeting = async () => {
     if (!meetingTitle || !meetingDate) {
-      alert("Please fill in Title and Date before creating the Meeting Link.");
+      toast.error(
+        "Please fill in Title and Date before creating the Meeting Link."
+      );
       return;
     }
 
@@ -561,31 +625,22 @@ const Calender = () => {
     formData.append("agenda", meetingTitle);
     formData.append("date", meetingDate);
     setIsLoading(true);
-    // const id = idList.join(',');
-
-    // formData.append('participent_ids', id);
-    postDataToAPI(CreateZoomMeet, formData)
-      .then((response) => {
-        if (response.success) {
-          console.log(response.data[0].meet_link);
-          setMeetingLink(response.data[0].meet_link);
-          setuuid(response.data[0].uuid);
-          setMeet_id(response.data[0].meet_id);
-
-          setIsLoading(false);
-          setLinkGenerated(true);
-        } else {
-          console.log("unsuccess");
-        }
-      })
-      .catch((error) => {
-        console.log("error: " + error);
-        //alert('Please check your internet and try again!');
-      })
-      .finally(() => {
-        // setIsCreatingMeeting(false);
+    try {
+      const response = await CreateVibeZoomMeeting(formData);
+      if (response.success) {
+        console.log(response.data[0].meet_link);
+        setMeetingLink(response.data[0].meet_link);
+        setuuid(response.data[0].uuid);
+        setMeet_id(response.data[0].meet_id);
         setIsLoading(false);
-      });
+        setLinkGenerated(true);
+        setShowGenerateLink(false);
+      } else {
+        console.log("unsuccess");
+      }
+    } catch (error) {
+      console.log("error creating meeting link ");
+    }
   };
 
   const GenerateMeet = () => {
@@ -597,37 +652,29 @@ const Calender = () => {
       alert("Please fill in Title and Date before creating the Meeting Link.");
       return;
     }
-
+    const user_id = getItemInLocalStorage("VIBEUSERID");
     const formData = new FormData();
     formData.append("user_id", user_id);
     formData.append("agenda", meetingTitle);
     formData.append("start_time", meetingStartTime);
     setIsLoading(true);
-    // const id = idList.join(',');
-
-    // formData.append('participent_ids', id);
-    postDataToAPI(CreateTeamMeet, formData)
-      .then((response) => {
-        if (response.success) {
-          console.log(response.data[0].meet_link);
-          setMeetingLink(response.data[0].meet_link);
-          setuuid(response.data[0].uuid);
-          setMeet_id(response.data[0].meet_id);
-
-          setIsLoading(false);
-          setLinkGenerated(true);
-        } else {
-          console.log("unsuccess");
-        }
-      })
-      .catch((error) => {
-        console.log("error: " + error);
-        //alert('Please check your internet and try again!');
-      })
-      .finally(() => {
-        // setIsCreatingMeeting(false);
+    try {
+      const TeamMeetResponse = await CreateVibeTeamMeeting(formData);
+      console.log(TeamMeetResponse);
+      if (TeamMeetResponse.success) {
+        console.log(TeamMeetResponse.data[0].meet_link);
+        setMeetingLink(TeamMeetResponse.data[0].meet_link);
+        setuuid(TeamMeetResponse.data[0].uuid);
+        setMeet_id(TeamMeetResponse.data[0].meet_id);
         setIsLoading(false);
-      });
+        setLinkGenerated(true);
+        setShowGenerateLink(false);
+      } else {
+        console.log("unsuccess");
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const TeamGenerateMeet = () => {
@@ -636,9 +683,13 @@ const Calender = () => {
 
   const handleAddEmail = () => {
     // Validate the email before adding it to the list
+
     if (/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(otherEmails)) {
       setEmailOtherList([...emailOtherList, otherEmails]);
+
       setOtherEmails("");
+    } else {
+      toast.error("Please Enter a valid Email ID");
     }
   };
 
@@ -653,6 +704,7 @@ const Calender = () => {
 
   const [checkedRepeat, setCheckedRepeat] = useState(0);
   const [repeatMeet, setRepeatMeet] = useState(false);
+
   function ToggleRepeatSwitch() {
     const handleChange = (val) => {
       setCheckedRepeat(val ? 1 : 0);
@@ -669,30 +721,27 @@ const Calender = () => {
     }
 
     return (
-      <>
-        <label
-          style={{
-            color: "#000",
-            // fontWeight: "bold",
-            marginBottom: "0rem",
-            marginTop: "20px",
-            fontWeight: 700,
-          }}
-        >
-          Repeat
-        </label>
-        <div
-          className="app"
-          //  style={{ marginTop: '25px', marginLeft: '10px' }}
-        >
-          {/* <p style={{ color: '#000', fontWeight: 'bold', marginBottom: '0rem' }}>Urgent</p> */}
+      <div className="flex flex-col gap-2">
+        <label className="font-medium text-white">Repeat</label>
+        <div className="app">
           <ReactSwitch checked={checkedRepeat === 1} onChange={handleChange} />
         </div>
-      </>
+      </div>
     );
   }
 
-  const handleSaveMeeting = () => {
+  const handleMeetingLinkCopy = () => {
+    navigator.clipboard
+      .writeText(meetingLink)
+      .then(() => {
+        toast.success("Meeting Link Copied");
+      })
+      .catch((err) => {
+        console.error("Failed to copy text: ", err);
+      });
+  };
+
+  const handleSaveMeeting = async () => {
     const idList = selectedOption.map((email) => parseInt(email.value));
 
     if (!meetingTitle) {
@@ -706,7 +755,7 @@ const Calender = () => {
       );
       return;
     }
-    const user_id = localStorage.getItem("user_id");
+    const user_id = localStorage.getItem("VIBEUSERID");
     setLoadingMeet(true);
     const formData = new FormData();
     formData.append("title", meetingTitle);
@@ -718,58 +767,40 @@ const Calender = () => {
     formData.append("meet_link", meetingLink);
     formData.append("uuid", uuid);
     formData.append("meet_id", meet_id);
-
     const otheremails = emailOtherList.join(",");
     formData.append("other_emails", otheremails);
-
+    console.log(otheremails);
     const id = idList.join(",");
-
     formData.append("participent_ids", id);
-
     formData.append("to__date", selectedToDate);
-
     const mainWeek = selectedWeekdays.join(",");
     formData.append("included_weekdays", mainWeek);
     formData.append("repeat_meeting", repeatMeet);
-
     setIsCreatingMeeting(true);
-    postDataToAPI(CreateMeeting, formData)
-      .then((response) => {
-        if (response.success) {
-          // alert("Meeting created !")
-
-          // onClose();
-          // window.location.reload();
-          // fetchData();
-
-          setMeetingTitle("");
-          setMeetingDate("");
-          setMeetingStartTime("");
-          setMeetingEndTime("");
-          setMeetingDescription("");
-          setMeetingLink("");
-          setuuid("");
-          setMeet_id("");
-          setEmailOtherList("");
-          // setSelectedToDate('');
-          setSelectedWeekdays("");
-          // setRepeatMeet('');
-
-          setPopupDate(null);
-          setLoadingMeet(false);
-        } else {
-          console.log("unsuccess");
-        }
+    toast.loading("Creating Meeting Please wait!");
+    try {
+      const meetingResp = await CreateVibeMeeting(formData);
+      if (meetingResp.success) {
+        toast.dismiss();
+        toast.success("Meeting Created Successfully");
+        setMeetingTitle("");
+        setMeetingDate("");
+        setMeetingStartTime("");
+        setMeetingEndTime("");
+        setMeetingDescription("");
+        setMeetingLink("");
+        setuuid("");
+        setMeet_id("");
+        setEmailOtherList("");
+        // setSelectedToDate('');
+        setSelectedWeekdays("");
+        // setRepeatMeet('');
+        setPopupDate(null);
         setLoadingMeet(false);
-      })
-      .catch((error) => {
-        //alert('Please check your internet and try again!');
-        setLoadingMeet(false);
-      })
-      .finally(() => {
-        setLoadingMeet(false);
-        setIsCreatingMeeting(false);
-      });
+      }
+    } catch (error) {
+      toast.dismiss();
+    }
   };
 
   return (
@@ -820,7 +851,7 @@ const Calender = () => {
           }
           eventTextColor="white"
           eventClick={handleEventClick}
-          height={"82vh"}
+          height={"90vh"}
           allDayText="All Day"
           eventTimeFormat={{
             hour: "2-digit",
@@ -832,7 +863,6 @@ const Calender = () => {
             minute: "2-digit",
             hour12: true,
           }}
-          style={{ zIndex: 1 }}
         />
         {isListOpen && (
           <div
@@ -868,12 +898,14 @@ const Calender = () => {
           </div>
         )}
         {/* modal */}
-
         {popupDate && (
-          <div className=" fixed inset-0 flex justify-center items-center bg-black bg-opacity-30 backdrop-blur-sm z-20 p-10 ">
-            <div className="bg-white md:w-auto  p-4 px-5  flex flex-col rounded-md  overflow-auto">
+          <div className="  fixed inset-0 flex justify-center items-center bg-black bg-opacity-30 backdrop-blur-sm z-50 p-10 ">
+            <div
+              style={{ background: themeColor }}
+              className=" md:w-auto w-full  p-4 md:px-10  flex flex-col rounded-md  overflow-auto max-h-[100%]"
+            >
               <button
-                className="place-self-end fixed"
+                className="place-self-end fixed p-1 rounded-full  bg-white"
                 onClick={() => setPopupDate(null)}
               >
                 <AiOutlineClose size={20} />
@@ -915,19 +947,22 @@ const Calender = () => {
                   <div className="flex flex-col gap-4">
                     <div className="grid grid-cols-2 gap-4">
                       <div className=" ">
-                        <label className="font-medium ">Task Topic</label>
+                        <label className="font-medium text-white">
+                          Task Topic
+                        </label>
                         <br />
                         <input
                           value={taskTitle}
                           onChange={(e) => setTaskTitle(e.target.value)}
                           className="rounded-sm p-2 outline-none w-full border border-gray-400 "
                           type="text"
-                          spellcheck="true"
+                          placeholder="Enter Task"
+                          spellCheck="true"
                         />
                       </div>
 
                       <div className="">
-                        <label className="font-medium"> Date</label>
+                        <label className="font-medium text-white">Date</label>
                         <br />
                         <DatePicker
                           selected={due_date}
@@ -947,15 +982,18 @@ const Calender = () => {
                     </div>
 
                     <div className="w-full ">
-                      <label className="font-medium">Task Description</label>
+                      <label className="font-medium text-white">
+                        Task Description
+                      </label>
                       <br />
                       <textarea
-                        className="w-full border border-gray-400 rounded-sm"
+                        className="w-full border border-gray-400 rounded-sm p-2"
                         type="text"
                         rows={3}
-                        spellcheck="true"
+                        spellCheck="true"
                         value={task_description}
                         onChange={(e) => setTaskDescription(e.target.value)}
+                        placeholder="Describe Task"
                       />
                     </div>
                     {/* { subcategory?(<></>):( */}
@@ -969,10 +1007,10 @@ const Calender = () => {
                         /> */}
                       <label
                         htmlFor="file-upload"
-                        className="relative cursor-pointer flex items-center border-2 border-black  bg-transparent rounded-md font-medium  px-4 transition duration-300 ease-in-out hover:bg-black hover:border-white hover:text-white "
+                        className="relative cursor-pointer flex items-center border-2  bg-transparent rounded-md font-medium  px-4 transition duration-300 ease-in-out hover:bg-black border-white hover:text-white "
                       >
                         {!fileUpload ? (
-                          <span className="flex items-center gap-2">
+                          <span className="flex items-center gap-2 text-white">
                             <PiPlusBold /> Attachment
                           </span>
                         ) : (
@@ -1037,13 +1075,13 @@ const Calender = () => {
 
                     <div className=" flex justify-center ">
                       <button
-                        className="text-white font-medium rounded-md w-full p-2 "
+                        className="text-white font-medium rounded-md w-full p-2 shadow-custom-all-sides"
                         style={{
                           background: themeColor,
                         }}
                         onClick={handleSaveTask}
                       >
-                        {loading ? (
+                        {/* {loading ? (
                           <div
                           // style={{
                           //   display: "flex",
@@ -1054,9 +1092,9 @@ const Calender = () => {
                           >
                             <ThreeDots color="#fff" height={25} width={50} />
                           </div>
-                        ) : (
-                          "Create Task"
-                        )}
+                        ) : ( */}
+                        Create Task
+                        {/* )} */}
                         {/* Save */}
                       </button>
                     </div>
@@ -1065,6 +1103,836 @@ const Calender = () => {
               )}
               {activeButton === "event" && (
                 <div
+                  className={`content ${
+                    activeButton === "event" ? "active" : ""
+                  }`}
+                >
+                  <div>
+                    <div className="" style={{ color: "black" }}>
+                      <div class="" style={{ marginBottom: "0rem" }}>
+                        <label className="font-medium text-white">
+                          Event Topic
+                        </label>
+                        <br />
+                        <input
+                          value={eventTitle}
+                          onChange={(e) => setEventTitle(e.target.value)}
+                          // style={{
+                          //   borderRadius: 4,
+                          //   border: "#747272 solid 1px",
+                          //   height: 40,
+                          //   fontSize: 14,
+                          //   paddingLeft: 10,
+                          //   color: "#000",
+                          //   width: "100%",
+                          // }}
+                          className="border-gray-400 border w-full p-1 rounded-md"
+                          type="text"
+                          spellCheck="true"
+                          placeholder="Enter Event Topic "
+                        />
+                      </div>
+
+                      <div className="my-1 ">
+                        <label className="font-medium text-white"> Date</label>
+                        <br />
+                        <div className="flex  gap-2 items-center">
+                          <input
+                            type="date"
+                            // style={{ width: "50%" }}
+                            value={eventStartDate}
+                            //  onChange={(e) => setEventStartDate(e.target.value)}
+                            onChange={handleStartDateChange}
+                            min={today}
+                            className="border-gray-400 border w-full p-1 rounded-md"
+                          ></input>
+                          -
+                          <input
+                            type="date"
+                            // style={{ width: "50%", marginLeft: "10px" }}
+                            value={eventEndDate}
+                            // onChange={(e) => setEventEndDate(e.target.value)}
+                            onChange={handleEndDateChange}
+                            min={today}
+                            className="border-gray-400 border w-full p-1 rounded-md"
+                          ></input>
+                        </div>
+                      </div>
+                      <div className="my-1">
+                        <label className="font-medium text-white"> Time</label>
+                        <br />
+                        <div style={{ display: "flex" }}>
+                          <input
+                            type="time"
+                            style={{ width: "50%" }}
+                            value={eventStartTime}
+                            onChange={(e) => setEventStartTime(e.target.value)}
+                            className="border-gray-400 border w-full p-1 rounded-md"
+                          ></input>
+
+                          <input
+                            type="time"
+                            style={{ width: "50%", marginLeft: "10px" }}
+                            value={eventEndTime}
+                            onChange={(e) => setEventEndTime(e.target.value)}
+                            className="border-gray-400 border w-full p-1 rounded-md"
+                          ></input>
+                        </div>
+                      </div>
+                      <div className="">
+                        <label className="font-medium text-white">
+                          Event Description
+                        </label>
+                        <br />
+                        <textarea
+                          // style={{
+                          //   resize: "none",
+                          //   height: "40px",
+                          //   paddingTop: "8px",
+                          // }}
+                          className="border-gray-400 border w-full p-1 rounded-md"
+                          type="text"
+                          placeholder="Describe Event"
+                          value={eventDescription}
+                          onChange={(e) => setEventDescription(e.target.value)}
+                          spellCheck="true"
+                        />
+                      </div>
+
+                      <div className="flex flex-col w-full gap-2 justify-between ">
+                        <div>
+                          {/* <label>Attachment</label> */}
+                          {/* <br />   */}
+                          <input
+                            //value={eventAttachment}
+                            //onChange={(e) => setEventAttachment(e.target.value)}
+                            onChange={handleEventFileAttachment}
+                            ref={fileInputRef}
+                            type="file"
+                            multiple
+                          />
+
+                          {/* <label
+                            htmlFor="event-file-upload"
+                            className="relative cursor-pointer flex items-center border-2  bg-transparent rounded-md font-medium p-2 px-4 transition duration-300 ease-in-out hover:bg-black border-white hover:text-white "
+                          >
+                            {!fileUpload ? (
+                              <span className="flex items-center gap-2 text-white">
+                                <PiPlusBold /> Attachment
+                              </span>
+                            ) : (
+                              <span>
+                                {attachments
+                                  .map((file) => `${file.name.slice(0, 10)}...`)
+                                  .join(", ")}
+                              </span>
+                            )}
+                            <input
+                              id="event-file-upload"
+                              type="file"
+                              className="sr-only"
+                              ref={fileInputRef}
+                              
+                              onChange={handleEventFileAttachment}
+                              multiple
+                            />
+                          </label> */}
+                        </div>
+
+                        <div className="w-full">
+                          {/* <label
+                            style={{ marginTop: "10px", marginBottom: "0rem" }}
+                          >
+                            Guests
+                          </label> */}
+                          {/* <br /> */}
+                          <Select
+                            isMulti
+                            onChange={handleChangeSelectEvent}
+                            options={emails}
+                            noOptionsMessage={() => "Email not available..."}
+                            maxMenuHeight={90}
+                            styles={{
+                              placeholder: (baseStyles, state) => ({
+                                ...baseStyles,
+                                color: "black",
+                              }),
+                              clearIndicator: (baseStyles) => ({
+                                ...baseStyles,
+                                color: "red",
+                              }),
+                              dropdownIndicator: (baseStyles) => ({
+                                ...baseStyles,
+                                color: "black",
+                              }),
+                              control: (baseStyles) => ({
+                                ...baseStyles,
+                                borderColor: "darkblue",
+                              }),
+                              multiValueRemove: (baseStyles, state) => ({
+                                ...baseStyles,
+                                color: state.isFocused ? "red" : "gray",
+                                backgroundColor: state.isFocused
+                                  ? "black"
+                                  : "lightgreen",
+                              }),
+                            }}
+                            menuPosition={"fixed"}
+                          />
+                        </div>
+                      </div>
+
+                      <div className="flex justify-center my-2 ">
+                        <button
+                          className="text-white font-medium rounded-md w-full p-2 shadow-custom-all-sides"
+                          style={{
+                            background: themeColor,
+                          }}
+                          onClick={handleSaveEvent}
+                        >
+                          {/* {loadingEvent ? (
+                            <div
+                              style={{
+                                display: "flex",
+                                justifyContent: "center",
+                                alignItems: "center",
+                                height: "100%",
+                              }}
+                            >
+                              <ThreeDots color="#fff" height={25} width={50} />
+                            </div>
+                          ) : ( */}
+                          Create Event
+                          {/* )} */}
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+              {activeButton === "meeting" && (
+                <div
+                  className={`content ${
+                    activeButton === "meeting" ? "active" : ""
+                  }`}
+                >
+                  <div className="flex- flex-col">
+                    <div className="grid md:grid-cols-2 gap-2">
+                      <div>
+                        <label className="font-medium text-white">
+                          Meeting Topic
+                        </label>
+                        <br />
+                        <input
+                          value={meetingTitle}
+                          onChange={(e) => setMeetingTitle(e.target.value)}
+                          className="border-gray-400 border w-full p-1 rounded-md"
+                          type="text"
+                        />
+                      </div>
+                      <div className="">
+                        <label className="font-medium text-white"> Date</label>
+                        <br />
+                        <input
+                          type="date"
+                          value={meetingDate}
+                          min={today}
+                          onChange={(e) => setMeetingDate(e.target.value)}
+                          className="border-gray-400 border w-full p-1 rounded-md"
+                        ></input>
+                      </div>
+
+                      <div>
+                        <label className="font-medium text-white">
+                          Meeting Description
+                        </label>
+                        <br />
+                        <textarea
+                          value={meetingDescription}
+                          onChange={(e) =>
+                            setMeetingDescription(e.target.value)
+                          }
+                          className="border-gray-400 border w-full p-1 rounded-md resize-none"
+                          cols={1}
+                          rows={1}
+                          type="text"
+                          spellCheck="true"
+                        />
+                      </div>
+                      <div>
+                        <label className="font-medium text-white">Time</label>
+                        <br />
+                        <div className="flex items-center gap-1">
+                          <input
+                            type="time"
+                            value={meetingStartTime}
+                            onChange={(e) =>
+                              setMeetingStartTime(e.target.value)
+                            }
+                            className="border-gray-400 border w-full p-1 rounded-md"
+                          ></input>
+                          -
+                          <input
+                            type="time"
+                            value={meetingEndTime}
+                            onChange={(e) => setMeetingEndTime(e.target.value)}
+                            className="border-gray-400 border w-full p-1 rounded-md"
+                          ></input>
+                        </div>
+                      </div>
+                    </div>
+                    {/* Meeting Link */}
+
+                    <div className="">
+                      <label className="font-medium text-white">
+                        Meeting Link
+                      </label>
+                      <div className="grid grid-cols-12 gap-2">
+                        {" "}
+                        {/* Parent div with relative positioning */}
+                        <input
+                          readOnly
+                          value={
+                            isLoading
+                              ? "Generating Meeting Link..."
+                              : meetingLink
+                          }
+                          onChange={(e) => setMeetingLink(e.target.value)}
+                          style={{
+                            borderRadius: 4,
+                            border: "#747272 solid 1px",
+                            height: 40,
+                            fontSize: 14,
+
+                            color: "#000",
+                            width: "100%",
+                          }}
+                          className="col-span-11 px-1"
+                          type="text"
+                        />
+                        <button
+                          onClick={handleMeetingLinkCopy}
+                          className="col-span-1 text-white"
+                        >
+                          <MdOutlineContentCopy size={20} />
+                        </button>
+                      </div>
+                      {/*  */}
+                      <div className="my-2 flex justify-between gap-4 items-center w-full">
+                        <button
+                          className="font-medium p-1 hover:text-white hover:bg-black transition-all duration-300 rounded-md shadow-custom-all-sides flex items-center gap-2 text-white"
+                          onClick={() => setShowGenerateLink(!showGenerateLink)}
+                        >
+                          Generate Link
+                          <BiRightArrowAlt size={20} />
+                        </button>
+                        {showGenerateLink && (
+                          <div className="flex gap-2  ">
+                            <button
+                              onClick={GenerateMeet}
+                              className="bg-green-400 p-1 transition-all duration-300 rounded-md font-medium text-white hover:bg-green-500"
+                            >
+                              {" "}
+                              Zoom Meet
+                            </button>
+                            <button
+                              className="bg-blue-400  transition-all duration-300 hover:bg-blue-500  p-1 rounded-md font-medium text-white"
+                              onClick={TeamGenerateMeet}
+                            >
+                              {" "}
+                              Team Meet
+                            </button>
+                          </div>
+                        )}
+                      </div>
+                      {/* <MeetingDropdownButton /> */}
+                    </div>
+
+                    {/* Invites */}
+                    <div className="my-2">
+                      <label className="font-medium text-white">Invites</label>
+                      <br />
+                      <Select
+                        isMulti
+                        onChange={handleChangeSelectMeeting}
+                        options={emails}
+                        noOptionsMessage={() => "Email not available..."}
+                        maxMenuHeight={90}
+                        styles={{
+                          placeholder: (baseStyles, state) => ({
+                            ...baseStyles,
+                            color: "black",
+                          }),
+                          clearIndicator: (baseStyles) => ({
+                            ...baseStyles,
+                            color: "red",
+                          }),
+                          dropdownIndicator: (baseStyles) => ({
+                            ...baseStyles,
+                            color: "black",
+                          }),
+                          control: (baseStyles) => ({
+                            ...baseStyles,
+                            borderColor: "darkblue",
+                          }),
+                          multiValueRemove: (baseStyles, state) => ({
+                            ...baseStyles,
+                            color: state.isFocused ? "red" : "gray",
+                            backgroundColor: state.isFocused
+                              ? "black"
+                              : "lightgreen",
+                          }),
+                        }}
+                        menuPosition={"fixed"}
+                      />
+                    </div>
+                    {/* other email */}
+                    <div className="flex ">
+                      <div className="flex w-full ">
+                        <div className="w-full">
+                          <label className="font-medium text-white">
+                            Add Other Emails
+                          </label>
+                          <div className="flex gap-2 items-center">
+                            <input
+                              className=""
+                              value={otherEmails}
+                              onChange={(e) => setOtherEmails(e.target.value)}
+                              style={{
+                                borderRadius: 4,
+                                border: "#747272 solid 1px",
+                                height: 40,
+                                fontSize: 14,
+                                paddingLeft: 10,
+                                color: "#000",
+                                width: "calc(100% - 50px)", // Adjust the width to leave space for the remove icon
+                              }}
+                              type="text"
+                            />
+                            <div className="col-md-1">
+                              <button
+                                className="btn btn-outline-secondary ml-1 text-white"
+                                type="button"
+                                onClick={handleAddEmail}
+                              >
+                                <FaArrowRight />
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <ToggleRepeatSwitch />
+                    </div>
+                    {emailOtherList.length > 0 && (
+                      <div className=" bg-white  rounded-sm my-2 p-1 grid grid-cols-2 gap-4">
+                        {emailOtherList.map((email, index) => (
+                          <span
+                            key={index}
+                            className="flex items-center justify-between gap-2 text-sm  bg-green-200 p-1 pl-2 rounded-full"
+                          >
+                            {email}
+                            <button
+                              className=" bg-red-400 p-1 text-white rounded-full"
+                              type="button"
+                              onClick={() => handleRemoveEmail(email)}
+                            >
+                              <FaTimes />
+                            </button>
+                          </span>
+                        ))}
+                      </div>
+                    )}
+                    {repeatMeet ? (
+                      <div className="my-2">
+                        <label className="font-medium text-white">Repeat</label>
+                        <hr></hr>
+
+                        <div className="grid grid-cols-2">
+                          <div className="">
+                            <label className="text-white font-medium">
+                              <span>From Date</span>
+                            </label>
+                            <br></br>
+                            <input
+                              type="date"
+                              className="p-1 rounded-md"
+                              min={todayDate}
+                              value={meetingDate}
+                              onChange={(event) =>
+                                setMeetingDate(event.target.value)
+                              }
+                            />
+                          </div>
+                          <div className="">
+                            <label className="text-white font-medium">
+                              <span>To Date</span>
+                            </label>
+                            <br></br>
+                            <input
+                              type="date"
+                              className="p-1 rounded-md"
+                              min={todayDate}
+                              value={selectedToDate}
+                              onChange={(event) =>
+                                setSelectedToDate(event.target.value)
+                              }
+                            />
+                          </div>
+                        </div>
+
+                        <div className=" ml-1 mt-4">
+                          <div class="flex flex-col md:flex-row my-1 font-medium text-white w-full">
+                            <span>SELECT WORKING DAYS</span>
+                            {/* <div class="flex ">
+                              <span
+                                style={{
+                                  display: "flex",
+                                  marginRight: 14,
+                                  fontFamily:
+                                    "SFMono-Regular, Menlo, Monaco, Consolas, Liberation Mono,Courier New, monospace",
+                                }}
+                              >
+                                [{" "}
+                                <i
+                                  className="fas fa-info-circle"
+                                  title="Detail"
+                                  style={{
+                                    fontSize: 14,
+                                    marginTop: 5,
+                                  }}
+                                ></i>
+                                &nbsp;
+                                <p
+                                  className="mr-2 mb-2 rounded-md "
+                                  style={{
+                                    width: 10,
+                                    height: 10,
+                                    paddingBottom: 4,
+                                    marginTop: 7,
+                                    backgroundColor: "#0A9F6A",
+                                  }}
+                                ></p>
+                                Selected
+                              </span>
+                              <span
+                                style={{
+                                  display: "grid grid-cols-2 gap-2",
+
+                                  fontFamily:
+                                    "SFMono-Regular, Menlo, Monaco, Consolas, Liberation Mono,Courier New, monospace",
+                                }}
+                                className="w-full"
+                              >
+                                <p
+                                  className="rounded-md bg-white "
+                                  style={{
+                                    width: 10,
+                                    height: 10,
+                                    paddingBottom: 4,
+                                    marginTop: 7,
+
+                                    border: "1px solid #cdcdcd",
+                                  }}
+                                ></p>
+                                Deselected]
+                              </span>
+                            </div> */}
+                          </div>
+
+                          <div className="flex gap-4 flex-wrap">
+                            {weekdaysMap.map((weekdayObj) => (
+                              <div
+                                key={weekdayObj.day}
+                                className={`rounded-md p-2 px-4 shadow-custom-all-sides font-medium cursor-pointer  ${
+                                  selectedWeekdays?.includes(weekdayObj.index)
+                                    ? // &&
+                                      // weekdayObj.isActive
+                                      "bg-green-400 text-white "
+                                    : "bg-white"
+                                }`}
+                                onClick={(e) => {
+                                  e.preventDefault();
+                                  handleWeekdaySelection(weekdayObj.day);
+                                }}
+                              >
+                                <a>{weekdayObj.day}</a>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+                    ) : (
+                      <></>
+                    )}
+
+                    <div className="flex w-full justify-center my-2">
+                      <button
+                        className="p-1 text-white w-full font-medium rounded-md shadow-custom-all-sides"
+                        style={{
+                          background: themeColor,
+                        }}
+                        onClick={handleSaveMeeting}
+                      >
+                        Create Meeting
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+        )}
+      </div>
+
+      {/* Update Pop Up */}
+      {selectedItem && (
+        <div className="  fixed inset-0 flex justify-center items-center bg-black bg-opacity-30 backdrop-blur-sm z-50 p-10 ">
+          <div
+            style={{ background: themeColor }}
+            className=" md:w-auto w-full  p-4 md:px-10  flex flex-col rounded-md  overflow-auto max-h-[100%]"
+          >
+            <button
+              className="place-self-end fixed p-1 rounded-full  bg-white"
+              onClick={() => setSelectedItem(null)}
+            >
+              <AiOutlineClose size={20} />
+            </button>
+            <div className="flex justify-center">
+              <div className="flex justify-between gap-5 p-1 items-center bg-gray-200 px-2 mx-10 w-fit rounded-full">
+                <button
+                  className={` ${
+                    activeButton === "task" &&
+                    " bg-white text-blue-400 shadow-custom-all-sides"
+                  } font-medium px-4 rounded-full`}
+                  onClick={() => handleButtonToggle("task")}
+                  disabled={activeButton !== "task"}
+                >
+                  Task
+                </button>
+                <button
+                  className={` ${
+                    activeButton === "event" &&
+                    " bg-white text-blue-400 shadow-custom-all-sides"
+                  } font-medium px-4 rounded-full`}
+                  onClick={() => handleButtonToggle("event")}
+                  disabled={activeButton !== "event"}
+                >
+                  Event
+                </button>
+                <button
+                  className={` ${
+                    activeButton === "meeting" &&
+                    " bg-white text-blue-400 shadow-custom-all-sides"
+                  } font-medium px-4 rounded-full`}
+                  onClick={() => handleButtonToggle("meeting")}
+                  disabled={activeButton !== "meeting"}
+                >
+                  Meeting
+                </button>
+
+                <button
+                  className={` ${
+                    activeButton === "outlook" &&
+                    " bg-white text-blue-400 shadow-custom-all-sides"
+                  } font-medium px-4 rounded-full`}
+                  onClick={() => handleButtonToggle("outlook")}
+                  disabled={activeButton !== "outlook"}
+                >
+                  Outlook
+                </button>
+
+                <button
+                  className={` ${
+                    activeButton === "gmail" &&
+                    " bg-white text-blue-400 shadow-custom-all-sides"
+                  } font-medium px-4 rounded-full`}
+                  onClick={() => handleButtonToggle("gmail")}
+                  disabled={activeButton !== "gmail"}
+                >
+                  Gmail
+                </button>
+              </div>
+            </div>
+            &nbsp;&nbsp;
+            {/* {activeButton === "task" && (
+              
+              <div
+                  
+                >
+                  <div  className="flex flex-col gap-4">
+                    <div
+                      className="grid grid-cols-2 gap-4"
+                      
+                    >
+                      <div class="col-md-6 " style={{ marginBottom: "0rem" }}>
+                        <label
+                          style={{ marginTop: "10px", marginBottom: "0rem" }}
+                        >
+                          Task Topic
+                        </label>
+                        <br />
+                        <input
+                          value={editableTitle}
+                          onChange={(e) => setEditableTitle(e.target.value)}
+                          style={{
+                            borderRadius: 4,
+                            border: "#747272 solid 1px",
+                            height: 40,
+                            fontSize: 14,
+                            paddingLeft: 10,
+                            color: "#000",
+                            width: "100%",
+                          }}
+                          type="text"
+                          spellcheck="true"
+                        />
+                      </div>
+
+                      <div className="col-md">
+                        <label
+                          style={{ marginTop: "10px", marginBottom: "0rem" }}
+                        >
+                          {" "}
+                          Date
+                        </label>
+                        <br />
+                        <DatePicker
+                          // selected={editableStart}
+                          // onChange={(start) => setEditableStart(start)}
+
+                          selected={due_date}
+                          onChange={(date) => setDueDate(date)}
+                          showTimeSelect
+                          dateFormat="dd/MM/yyyy h:mm aa"
+                          timeIntervals={5}
+                          minDate={new Date()}
+                          minTime={currentTime}
+                          maxTime={maxTime}
+                          filterTime={filterTime}
+                          customInput={<CustomInput />}
+                        />
+                      </div>
+
+                      <div class="col-md-6 " style={{ marginBottom: "0rem" }}>
+                        <label
+                          style={{ marginTop: "10px", marginBottom: "0rem" }}
+                        >
+                          Task Description
+                        </label>
+                        <br />
+                        <textarea
+                          style={{ resize: "none" }}
+                          type="text"
+                          value={editableDescription}
+                          onChange={(e) =>
+                            setEditableDescription(e.target.value)
+                          }
+                          spellcheck="true"
+                        />
+                      </div>
+                      <div class="col-md-6">
+                        <label
+                          style={{ marginTop: "10px", marginBottom: "0rem" }}
+                        >
+                          Attachment
+                        </label>
+                        <br />
+                        <input
+                          style={{
+                            border: "#929090 dotted 2px",
+                            height: "100px",
+                            color: "white",
+                            padding: "35px 10px",
+                            paddingLeft: 25,
+                          }}
+                          ref={fileInputRef}
+                          value={selectedItem.attachments}
+                          type="file"
+                          onChange={handleFileAttachment}
+                        />
+                      </div>
+                      <div class="col-md-6">
+                        <label
+                          style={{ marginTop: "10px", marginBottom: "0rem" }}
+                        >
+                          Assign
+                        </label>
+                        <br />
+                        <Select
+                          isMulti
+                          onChange={handleChangeUpdate}
+                          value={editableAssignTo}
+                          options={emails}
+                          noOptionsMessage={() => "Email not available..."}
+                          maxMenuHeight={90}
+                          styles={{
+                            placeholder: (baseStyles, state) => ({
+                              ...baseStyles,
+                              color: "black",
+                            }),
+                            clearIndicator: (baseStyles) => ({
+                              ...baseStyles,
+                              color: "red",
+                            }),
+                            dropdownIndicator: (baseStyles) => ({
+                              ...baseStyles,
+                              color: "black",
+                            }),
+                            control: (baseStyles) => ({
+                              ...baseStyles,
+                              borderColor: "darkblue",
+                            }),
+                            multiValueRemove: (baseStyles, state) => ({
+                              ...baseStyles,
+                              color: state.isFocused ? "red" : "gray",
+                              backgroundColor: state.isFocused
+                                ? "black"
+                                : "lightgreen",
+                            }),
+                          }}
+                          menuPosition={"fixed"}
+                        />
+                      </div>
+                      <div
+                        class="row col-md-12"
+                        style={{ display: "flex", justifyContent: "flex-end" }}
+                      >
+                        <div class="col-md-3">
+                          <button
+                            style={{
+                              marginTop: "10px",
+                              marginBottom: "0rem",
+                              padding: "5px 10px",
+                              width: "100%",
+                            }}
+                            onClick={() => handleUpdateTask()}
+                          >
+                            Update
+                          </button>
+                        </div>
+
+                        <div class="col-md-3">
+                          <button
+                            style={{
+                              marginTop: "10px",
+                              marginBottom: "0rem",
+                              padding: "5px 10px",
+                              width: "100%",
+                              backgroundColor: "gray",
+                            }}
+                            onClick={() =>
+                              handleDeleteTask(user_id, category, id)
+                            }
+                          >
+                            Delete
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>)} */}
+            {/* <div
                   className={`content ${
                     activeButton === "event" ? "active" : ""
                   }`}
@@ -1082,8 +1950,8 @@ const Calender = () => {
                         </label>
                         <br />
                         <input
-                          value={eventTitle}
-                          onChange={(e) => setEventTitle(e.target.value)}
+                          value={editableTitle}
+                          onChange={(e) => setEditableTitle(e.target.value)}
                           style={{
                             borderRadius: 4,
                             border: "#747272 solid 1px",
@@ -1097,10 +1965,7 @@ const Calender = () => {
                           spellcheck="true"
                         />
                       </div>
-                      {/* <div class="col-md-6"  >
-                                            <label style={{marginTop:'20px',  marginBottom: '0rem' }}>Due</label><br/>
-                                            <input type="datetime-local" class="datepickers" value={due_date} onChange={(e) => setDueDate(e.target.value)} style={{backgroundColor:'white'}}/>
-                                        </div> */}
+
                       <div className="col-md">
                         <label
                           style={{ marginTop: "10px", marginBottom: "0rem" }}
@@ -1113,26 +1978,21 @@ const Calender = () => {
                           <input
                             type="date"
                             style={{ width: "50%" }}
-                            value={eventStartDate}
-                            //  onChange={(e) => setEventStartDate(e.target.value)}
-                            onChange={handleStartDateChange}
+                            value={editableStart}
+                            onChange={(e) => setEditableStart(e.target.value)}
                             min={today}
                           ></input>
                           <input
                             type="date"
                             style={{ width: "50%", marginLeft: "10px" }}
-                            value={eventEndDate}
-                            // onChange={(e) => setEventEndDate(e.target.value)}
-                            onChange={handleEndDateChange}
+                            value={editableEnd}
+                            onChange={(e) => setEditableEnd(e.target.value)}
                             min={today}
                           ></input>
                         </div>
                       </div>
 
-                      <div
-                        className="col-md-6"
-                        style={{ marginBottom: "0rem" }}
-                      >
+                      <div class="col-md-6 " style={{ marginBottom: "0rem" }}>
                         <label
                           style={{ marginTop: "10px", marginBottom: "0rem" }}
                         >
@@ -1146,12 +2006,13 @@ const Calender = () => {
                             paddingTop: "8px",
                           }}
                           type="text"
-                          value={eventDescription}
-                          onChange={(e) => setEventDescription(e.target.value)}
+                          value={editableDescription}
+                          onChange={(e) =>
+                            setEditableDescription(e.target.value)
+                          }
                           spellcheck="true"
                         />
                       </div>
-
                       <div className="col-md">
                         <label
                           style={{ marginTop: "10px", marginBottom: "0rem" }}
@@ -1164,15 +2025,16 @@ const Calender = () => {
                           <input
                             type="time"
                             style={{ width: "50%" }}
-                            value={eventStartTime}
-                            onChange={(e) => setEventStartTime(e.target.value)}
+                            value={editableStartTime}
+                            onChange={(e) =>
+                              setEditableStartTime(e.target.value)
+                            }
                           ></input>
-
                           <input
                             type="time"
                             style={{ width: "50%", marginLeft: "10px" }}
-                            value={eventEndTime}
-                            onChange={(e) => setEventEndTime(e.target.value)}
+                            value={editableEndTime}
+                            onChange={(e) => setEditableEndTime(e.target.value)}
                           ></input>
                         </div>
                       </div>
@@ -1190,7 +2052,7 @@ const Calender = () => {
                             color: "black",
                             padding: "10px",
                           }}
-                          //value={eventAttachment}
+                          value={eventAttachment}
                           //onChange={(e) => setEventAttachment(e.target.value)}
                           onChange={handleEventFileAttachment}
                           ref={fileInputRef}
@@ -1207,7 +2069,8 @@ const Calender = () => {
                         <br />
                         <Select
                           isMulti
-                          onChange={handleChangeSelectEvent}
+                          onChange={handleChangeUpdateEvent}
+                          value={editableGuestTo}
                           options={emails}
                           noOptionsMessage={() => "Email not available..."}
                           maxMenuHeight={90}
@@ -1240,548 +2103,558 @@ const Calender = () => {
                         />
                       </div>
                       <div
-                        class="col-md-12"
-                        style={{
-                          display: "flex",
-                          alignSelf: "flex-end",
-                          justifyContent: "flex-end",
-                        }}
+                        class="row col-md-12"
+                        style={{ display: "flex", justifyContent: "flex-end" }}
                       >
-                        <button
-                          style={{
-                            marginTop: "10px",
-                            marginBottom: "0rem",
-                            padding: "5px 10px",
-                            width: "30%",
-                          }}
-                          onClick={handleSaveEvent}
-                        >
-                          {loadingEvent ? (
-                            <div
-                              style={{
-                                display: "flex",
-                                justifyContent: "center",
-                                alignItems: "center",
-                                height: "100%",
-                              }}
-                            >
-                              <ThreeDots color="#fff" height={25} width={50} />
-                            </div>
-                          ) : (
-                            "Save"
-                          )}
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              )}
-              {activeButton === "meeting" && (
-                <div
-                  className={`content ${
-                    activeButton === "meeting" ? "active" : ""
-                  }`}
-                >
-                  <div className="meeting-div" style={{ display: "block" }}>
-                    <div class=" col-md-12 row" style={{ color: "black" }}>
-                      <div class="col-md-6 " style={{ marginBottom: "0rem" }}>
-                        <label
-                          style={{ marginTop: "10px", marginBottom: "0rem" }}
-                        >
-                          Meeting Topic
-                        </label>
-                        <br />
-                        <input
-                          value={meetingTitle}
-                          onChange={(e) => setMeetingTitle(e.target.value)}
-                          style={{
-                            borderRadius: 4,
-                            border: "#747272 solid 1px",
-                            height: 40,
-                            fontSize: 14,
-                            paddingLeft: 10,
-                            color: "#000",
-                            width: "100%",
-                          }}
-                          type="text"
-                        />
-                      </div>
-                      <div className="col-md datepickerinput">
-                        <label
-                          style={{ marginTop: "10px", marginBottom: "0rem" }}
-                        >
-                          {" "}
-                          Date
-                        </label>
-                        <br />
-                        <input
-                          type="date"
-                          value={meetingDate}
-                          min={today}
-                          onChange={(e) => setMeetingDate(e.target.value)}
-                          style={{
-                            borderRadius: 4,
-                            border: "#747272 solid 1px",
-                            height: 40,
-                            fontSize: 16,
-                            paddingLeft: 10,
-                            color: "#000",
-                            width: "100%",
-                            resize: "none",
-                          }}
-                        ></input>
-                        {/* <DatePicker 
-                                                    dateFormat="dd/MM/yyyy h:mm aa"
-                                                    // className="datepickers_date"
-                                                    customInput={<CustomInput />}
-                                                /> */}
-                      </div>
+                        <div class="col-md-3">
+                          <button
+                            style={{
+                              marginTop: "10px",
+                              marginBottom: "0rem",
+                              padding: "5px 10px",
+                              width: "100%",
+                            }}
+                            onClick={handleUpdateEvent}
+                          >
+                            Update
+                          </button>
+                        </div>
 
-                      <div class="col-md-6 " style={{ marginBottom: "0rem" }}>
-                        <label
-                          style={{ marginTop: "10px", marginBottom: "0rem" }}
-                        >
-                          Meeting Description
-                        </label>
-                        <br />
-                        <textarea
-                          value={meetingDescription}
-                          onChange={(e) =>
-                            setMeetingDescription(e.target.value)
-                          }
-                          style={{
-                            borderRadius: 4,
-                            border: "#747272 solid 1px",
-                            height: 40,
-                            fontSize: 14,
-                            paddingLeft: 10,
-                            color: "#000",
-                            width: "100%",
-                            resize: "none",
-                            paddingTop: "8px",
-                          }}
-                          type="text"
-                          spellcheck="true"
-                        />
-                      </div>
-                      <div
-                        class="col-md-6  "
-                        style={{ marginBottom: "0rem", maxWidth: "100%" }}
-                      >
-                        <label
-                          style={{ marginTop: "10px", marginBottom: "0rem" }}
-                        >
-                          Time
-                        </label>
-                        <br />
-                        <div style={{ display: "flex" }}>
-                          <input
-                            type="time"
-                            value={meetingStartTime}
-                            onChange={(e) =>
-                              setMeetingStartTime(e.target.value)
+                        <div class="col-md-3">
+                          <button
+                            style={{
+                              marginTop: "10px",
+                              marginBottom: "0rem",
+                              padding: "5px 10px",
+                              width: "100%",
+                              backgroundColor: "gray",
+                            }}
+                            onClick={() =>
+                              handleDeleteTask(user_id, category, id)
                             }
-                            style={{
-                              borderRadius: 4,
-                              border: "#747272 solid 1px",
-                              height: 40,
-                              fontSize: 16,
-                              paddingLeft: 10,
-                              color: "#000",
-                              width: "50%",
-                              resize: "none",
-                            }}
-                          ></input>
-                          <input
-                            type="time"
-                            value={meetingEndTime}
-                            onChange={(e) => setMeetingEndTime(e.target.value)}
-                            style={{
-                              borderRadius: 4,
-                              border: "#747272 solid 1px",
-                              height: 40,
-                              fontSize: 16,
-                              paddingLeft: 10,
-                              color: "#000",
-                              width: "50%",
-                              resize: "none",
-                              marginLeft: "10px",
-                            }}
-                          ></input>
+                          >
+                            Delete
+                          </button>
                         </div>
-                      </div>
-                      {/* Meeting Link */}
-                      <div
-                        className="col-md-12 p-0"
-                        style={{ marginTop: "10px" }}
-                      >
-                        <div className="col-md-12">
-                          <label>Meeting Link</label>
-                          <div style={{ position: "relative" }}>
-                            {" "}
-                            {/* Parent div with relative positioning */}
-                            <input
-                              readOnly
-                              value={
-                                isLoading
-                                  ? "Generating Meeting Link..."
-                                  : meetingLink
-                              }
-                              onChange={(e) => setMeetingLink(e.target.value)}
-                              style={{
-                                borderRadius: 4,
-                                border: "#747272 solid 1px",
-                                height: 40,
-                                fontSize: 14,
-                                paddingLeft: 10,
-                                paddingRight: 110, // Adjust padding to make space for the button
-                                color: "#000",
-                                width: "100%",
-                              }}
-                              type="text"
-                            />
-                            {/* <button className='upload-audio '
-                                                                    onClick={GenerateMeet} 
-                                                                    disabled={isLoading} 
-                                                                    style={{
-                                                                        position: 'absolute',    // Absolute positioning
-                                                                        right: 10,               // Positioned to the right
-                                                                        top: '50%',              // Centered vertically
-                                                                        transform: 'translateY(-50%)', // Centering correction
-                                                                        padding: '5px 10px',
-                                                                    }}>
-                                                                    <b>Generate Link</b>
-                                                                </button> */}
-                            <div class="dropdown">
-                              <button
-                                className="upload-audio dropdown-toggle"
-                                type="button"
-                                id="dropdownMenu2"
-                                data-toggle="dropdown"
-                                aria-haspopup="true"
-                                aria-expanded="false"
-                                disabled={isLoading}
-                                style={{
-                                  position: "absolute", // Absolute positioning
-                                  right: 10, // Positioned to the right
-                                  top: "50%", // Centered vertically
-                                  transform: "translateY(-105%)", // Centering correction
-                                  padding: "5px 10px",
-                                  backgroundColor: isLoading ? "#d3d3d3" : "", // Gray out the button when disabled
-                                  cursor: isLoading ? "not-allowed" : "pointer",
-                                }}
-                              >
-                                <b>Generate Link</b>
-                              </button>
-                              <div
-                                class="dropdown-menu"
-                                aria-labelledby="dropdownMenu2"
-                              >
-                                <button
-                                  class="dropdown-item"
-                                  type="button"
-                                  onClick={GenerateMeet}
-                                >
-                                  Zoom Meet
-                                </button>
-                                <button
-                                  class="dropdown-item"
-                                  type="button"
-                                  onClick={TeamGenerateMeet}
-                                >
-                                  Teams Meet
-                                </button>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      {/* Invites */}
-                      <div class="col-md-12">
-                        <label
-                          style={{ marginTop: "10px", marginBottom: "0rem" }}
-                        >
-                          Invites
-                        </label>
-                        <br />
-                        <Select
-                          isMulti
-                          onChange={handleChangeSelectMeeting}
-                          options={emails}
-                          noOptionsMessage={() => "Email not available..."}
-                          maxMenuHeight={90}
-                          styles={{
-                            placeholder: (baseStyles, state) => ({
-                              ...baseStyles,
-                              color: "black",
-                            }),
-                            clearIndicator: (baseStyles) => ({
-                              ...baseStyles,
-                              color: "red",
-                            }),
-                            dropdownIndicator: (baseStyles) => ({
-                              ...baseStyles,
-                              color: "black",
-                            }),
-                            control: (baseStyles) => ({
-                              ...baseStyles,
-                              borderColor: "darkblue",
-                            }),
-                            multiValueRemove: (baseStyles, state) => ({
-                              ...baseStyles,
-                              color: state.isFocused ? "red" : "gray",
-                              backgroundColor: state.isFocused
-                                ? "black"
-                                : "lightgreen",
-                            }),
-                          }}
-                          menuPosition={"fixed"}
-                        />
-                      </div>
-                      {/* other email */}
-                      <div className="col-md-7">
-                        <label
-                          style={{ marginTop: "20px", marginBottom: "0rem" }}
-                        >
-                          Add Other Emails
-                        </label>
-                        <div className="input-group">
-                          <input
-                            className="col-md-5"
-                            value={otherEmails}
-                            onChange={(e) => setOtherEmails(e.target.value)}
-                            style={{
-                              borderRadius: 4,
-                              border: "#747272 solid 1px",
-                              height: 40,
-                              fontSize: 14,
-                              paddingLeft: 10,
-                              color: "#000",
-                              width: "calc(100% - 50px)", // Adjust the width to leave space for the remove icon
-                            }}
-                            type="text"
-                          />
-                          <div className="col-md-1">
-                            <button
-                              className="btn btn-outline-secondary ml-1 "
-                              type="button"
-                              onClick={handleAddEmail}
-                            >
-                              <FaArrowRight />
-                            </button>
-                          </div>
-
-                          {emailOtherList.length > 0 && (
-                            <div
-                              className="email-list mt-1 col-md-12"
-                              style={{
-                                backgroundColor: "#fff",
-                                borderRadius: 4,
-                                border: "1px solid #ccc",
-                                padding: 6,
-                              }}
-                            >
-                              {emailOtherList.map((email, index) => (
-                                <span key={index} className="email-tag mr-1">
-                                  {email}
-                                  <button
-                                    className="btn btn-outline-secondary ml-1"
-                                    style={{ padding: "0px 4px" }}
-                                    type="button"
-                                    onClick={() => handleRemoveEmail(email)}
-                                  >
-                                    <FaTimes />
-                                  </button>
-                                </span>
-                              ))}
-                            </div>
-                          )}
-                        </div>
-                      </div>
-                      <div className="col-md-5">
-                        <ToggleRepeatSwitch />
-                      </div>
-                      {repeatMeet ? (
-                        <div
-                          className="col-md mt-2"
-                          style={{
-                            backgroundColor: "rgb(76 98 113 / 9%)",
-                            borderRadius: 4,
-                          }}
-                        >
-                          <label className="ml-2">Repeat</label>
-                          <hr className="mb-0 mt-0"></hr>
-
-                          <div className="col-md-12 row">
-                            <div className="col-md-6 mt-3">
-                              <label className="mr-1">
-                                <span>FROM DATE</span>
-                              </label>
-                              <br></br>
-                              <input
-                                type="date"
-                                class="datepickerinput"
-                                min={todayDate}
-                                value={meetingDate}
-                                onChange={(event) =>
-                                  setMeetingDate(event.target.value)
-                                }
-                              />
-                            </div>
-                            <div className="col-md-6 mt-3">
-                              <label className="mr-1">
-                                <span>TO DATE</span>
-                              </label>
-                              <br></br>
-                              <input
-                                type="date"
-                                class="datepickerinput"
-                                min={todayDate}
-                                value={selectedToDate}
-                                onChange={(event) =>
-                                  setSelectedToDate(event.target.value)
-                                }
-                              />
-                            </div>
-                          </div>
-
-                          <div className="col-md-12 ml-1 mt-4">
-                            <div class="row mt-2 mb-1 ml-4">
-                              <span>SELECT WORKING DAYS</span>
-                              <div
-                                class="row mt-0 mb-0 ml-4"
-                                style={{ color: "#000" }}
-                              >
-                                <span
-                                  style={{
-                                    display: "flex",
-                                    color: "#000",
-                                    marginRight: 14,
-                                    fontFamily:
-                                      "SFMono-Regular, Menlo, Monaco, Consolas, Liberation Mono,Courier New, monospace",
-                                  }}
-                                >
-                                  [{" "}
-                                  <i
-                                    className="fas fa-info-circle"
-                                    title="Detail"
-                                    style={{
-                                      fontSize: 14,
-                                      marginTop: 5,
-                                      color: "#000",
-                                    }}
-                                  ></i>
-                                  &nbsp;
-                                  <p
-                                    className="mr-2 mb-2 "
-                                    style={{
-                                      width: 10,
-                                      height: 10,
-                                      paddingBottom: 4,
-                                      marginTop: 7,
-                                      backgroundColor: "#0A9F6A",
-                                    }}
-                                  ></p>
-                                  Selected
-                                </span>
-                                <span
-                                  style={{
-                                    display: "flex",
-                                    color: "#000",
-                                    fontFamily:
-                                      "SFMono-Regular, Menlo, Monaco, Consolas, Liberation Mono,Courier New, monospace",
-                                  }}
-                                >
-                                  <p
-                                    className="mr-2 mb-2 "
-                                    style={{
-                                      width: 10,
-                                      height: 10,
-                                      paddingBottom: 4,
-                                      marginTop: 7,
-                                      backgroundColor: "#fff",
-                                      border: "1px solid #cdcdcd",
-                                    }}
-                                  ></p>
-                                  Deselected]
-                                </span>
-                              </div>
-                            </div>
-
-                            <div className="row ml-4 m-3 mt-2 ">
-                              {weekdaysMap.map((weekdayObj) => (
-                                <div
-                                  style={{
-                                    width:
-                                      screenWidth >= 1200 && screenWidth <= 1440
-                                        ? "10%"
-                                        : "",
-                                    marginBottom: 4,
-                                  }}
-                                  key={weekdayObj.day}
-                                  className={`btn mr-2 ${
-                                    selectedWeekdays?.includes(weekdayObj.index)
-                                      ? // &&
-                                        // weekdayObj.isActive
-                                        "btn btn-selected"
-                                      : "btn btn-unselectedc"
-                                  }`}
-                                  onClick={(e) => {
-                                    e.preventDefault();
-                                    handleWeekdaySelection(weekdayObj.day);
-                                  }}
-                                >
-                                  <a>{weekdayObj.day}</a>
-                                </div>
-                              ))}
-                            </div>
-                          </div>
-                        </div>
-                      ) : (
-                        <></>
-                      )}
-
-                      <div
-                        class="col-md-12"
-                        style={{
-                          display: "flex",
-                          alignSelf: "flex-end",
-                          justifyContent: "flex-end",
-                        }}
-                      >
-                        <button
-                          style={{
-                            marginTop: "10px",
-                            marginBottom: "0rem",
-                            padding: "5px 10px",
-                            width: "30%",
-                          }}
-                          onClick={handleSaveMeeting}
-                        >
-                          {loadingMeet ? (
-                            <div
-                              style={{
-                                display: "flex",
-                                justifyContent: "center",
-                                alignItems: "center",
-                                height: "100%",
-                              }}
-                            >
-                              <ThreeDots color="#fff" height={25} width={50} />
-                            </div>
-                          ) : (
-                            "Save"
-                          )}
-                        </button>
                       </div>
                     </div>
                   </div>
+                </div> */}
+            <div
+              className={`content ${
+                activeButton === "meeting" ? "active" : ""
+              }`}
+            >
+              <div className="meeting-div" style={{ display: "block" }}>
+                <div class=" col-md-12 row" style={{ color: "black" }}>
+                  {/* <div class="col-md-6 " style={{ marginBottom: "0rem" }}>
+                    <label style={{ marginTop: "10px", marginBottom: "0rem" }}>
+                      Meeting Topic
+                    </label>
+                    <br />
+                    <input
+                      value={editableTitle}
+                      onChange={(e) => setEditableTitle(e.target.value)}
+                      style={{
+                        borderRadius: 4,
+                        border: "#747272 solid 1px",
+                        height: 40,
+                        fontSize: 14,
+                        paddingLeft: 10,
+                        color: "#000",
+                        width: "100%",
+                      }}
+                      type="text"
+                      spellcheck="true"
+                    />
+                  </div>
+                  <div className="col-md datepickerinput">
+                    <label style={{ marginTop: "10px", marginBottom: "0rem" }}>
+                      {" "}
+                      Date
+                    </label>
+                    <br />
+                    <input
+                      type="date"
+                      value={editableStart}
+                      min={today}
+                      onChange={(e) => setEditableStart(e.target.value)}
+                      style={{
+                        borderRadius: 4,
+                        border: "#747272 solid 1px",
+                        height: 40,
+                        fontSize: 16,
+                        paddingLeft: 10,
+                        color: "#000",
+                        width: "100%",
+                        resize: "none",
+                      }}
+                    ></input>
+                  </div> */}
+
+                  {/* <div class="col-md-6 " style={{ marginBottom: "0rem" }}>
+                    <label style={{ marginTop: "10px", marginBottom: "0rem" }}>
+                      Meeting Description
+                    </label>
+                    <br />
+                    <textarea
+                      value={editableDescription}
+                      onChange={(e) => setEditableDescription(e.target.value)}
+                      style={{
+                        borderRadius: 4,
+                        border: "#747272 solid 1px",
+                        height: 40,
+                        fontSize: 14,
+                        paddingLeft: 10,
+                        color: "#000",
+                        width: "100%",
+                        resize: "none",
+                        paddingTop: "8px",
+                      }}
+                      type="text"
+                      spellcheck="true"
+                    />
+                  </div> */}
+                  {/* <div
+                    class="col-md-6  "
+                    style={{ marginBottom: "0rem", maxWidth: "100%" }}
+                  >
+                    <label style={{ marginTop: "10px", marginBottom: "0rem" }}>
+                      Time
+                    </label>
+                    <br />
+                    <div style={{ display: "flex" }}>
+                      <input
+                        type="time"
+                        value={editableStartTime}
+                        onChange={(e) => setEditableStartTime(e.target.value)}
+                        style={{
+                          borderRadius: 4,
+                          border: "#747272 solid 1px",
+                          height: 40,
+                          fontSize: 16,
+                          paddingLeft: 10,
+                          color: "#000",
+                          width: "50%",
+                          resize: "none",
+                        }}
+                      ></input>
+                      <input
+                        type="time"
+                        value={editableEndTime}
+                        onChange={(e) => setEditableEndTime(e.target.value)}
+                        style={{
+                          borderRadius: 4,
+                          border: "#747272 solid 1px",
+                          height: 40,
+                          fontSize: 16,
+                          paddingLeft: 10,
+                          color: "#000",
+                          width: "50%",
+                          resize: "none",
+                          marginLeft: "10px",
+                        }}
+                      ></input>
+                    </div>
+                  </div> */}
+                  {/* Meeting Link */}
+                  {/* <div class="col-md-12 p-0">
+                    <label style={{ marginTop: "10px", marginBottom: "0rem" }}>
+                      Meeting Link
+                    </label>
+                    <br />
+                    <input
+                      //value={meetingLink}
+                      value={editableMeetingLink}
+                      // onChange={(e) => setMeetingLink(e.target.value)}
+                      onChange={(e) => setEditableMeetingLink(e.target.value)}
+                      style={{
+                        borderRadius: 4,
+                        border: "#747272 solid 1px",
+                        height: 40,
+                        fontSize: 14,
+                        paddingLeft: 10,
+                        color: "#000",
+                        width: "100%",
+                      }}
+                      type="text"
+                    ></input>
+                  </div> */}
+                  {/* Invites */}
+                  {/* <div class="col-md-12 p-0">
+                    <label style={{ marginTop: "10px", marginBottom: "0rem" }}>
+                      Invites
+                    </label>
+                    <br />
+                    <Select
+                      isMulti
+                      onChange={handleChangeUpdateMeeting}
+                      value={editableParticipantTo}
+                      options={emails}
+                      noOptionsMessage={() => "Email not available..."}
+                      maxMenuHeight={90}
+                      styles={{
+                        placeholder: (baseStyles, state) => ({
+                          ...baseStyles,
+                          color: "black",
+                        }),
+                        clearIndicator: (baseStyles) => ({
+                          ...baseStyles,
+                          color: "red",
+                        }),
+                        dropdownIndicator: (baseStyles) => ({
+                          ...baseStyles,
+                          color: "black",
+                        }),
+                        control: (baseStyles) => ({
+                          ...baseStyles,
+                          borderColor: "darkblue",
+                        }),
+                        multiValueRemove: (baseStyles, state) => ({
+                          ...baseStyles,
+                          color: state.isFocused ? "red" : "gray",
+                          backgroundColor: state.isFocused
+                            ? "black"
+                            : "lightgreen",
+                        }),
+                      }}
+                      menuPosition={"fixed"}
+                    />
+                  </div> */}
+
+                  {/* <div
+                    class="row col-md-12"
+                    style={{ display: "flex", justifyContent: "flex-end" }}
+                  >
+                    <div class="col-md-3">
+                      <button
+                        style={{
+                          marginTop: "10px",
+                          marginBottom: "0rem",
+                          padding: "5px 10px",
+                          width: "100%",
+                        }}
+                        onClick={handleUpdateMeeting}
+                      >
+                        Update
+                      </button>
+                    </div>
+
+                    <div class="col-md-3">
+                      <button
+                        style={{
+                          marginTop: "10px",
+                          marginBottom: "0rem",
+                          padding: "5px 10px",
+                          width: "100%",
+                          backgroundColor: "gray",
+                        }}
+                        onClick={() => handleDeleteTask(user_id, category, id)}
+                      >
+                        Delete
+                      </button>
+                    </div>
+                  </div> */}
                 </div>
-              )}
+              </div>
             </div>
+            <div
+              className={`content ${
+                activeButton === "outlook" ? "active" : ""
+              }`}
+            >
+              <div className="meeting-div" style={{ display: "block" }}>
+                {/* <div class=" col-md-12 row" style={{ color: "black" }}>
+                  <div class="col-md-6 " style={{ marginBottom: "0rem" }}>
+                    <label style={{ marginTop: "10px", marginBottom: "0rem" }}>
+                      Meeting Topic
+                    </label>
+                    <br />
+                    <input
+                      value={microTitle}
+                      readOnly
+                      // onChange={(e) => setEditableTitle(e.target.value)}
+                      style={{
+                        borderRadius: 4,
+                        border: "#747272 solid 1px",
+                        height: 40,
+                        fontSize: 14,
+                        paddingLeft: 10,
+                        color: "#000",
+                        width: "100%",
+                      }}
+                      type="text"
+                    />
+                  </div>
+                  <div className="col-md datepickerinput">
+                    <label style={{ marginTop: "10px", marginBottom: "0rem" }}>
+                      {" "}
+                      Date
+                    </label>
+                    <br />
+                    <input
+                      // type='date'
+                      value={formatToIST(microStartTime)}
+                      readOnly
+                      // onChange={(e) => setEditableStart(e.target.value)}
+                      style={{
+                        borderRadius: 4,
+                        border: "#747272 solid 1px",
+                        height: 40,
+                        fontSize: 16,
+                        paddingLeft: 10,
+                        color: "#000",
+                        width: "100%",
+                        resize: "none",
+                      }}
+                    ></input>
+                  </div>
+
+                  <div class="col-md-6 " style={{ marginBottom: "0rem" }}>
+                    <label style={{ marginTop: "10px", marginBottom: "0rem" }}>
+                      Meeting Description
+                    </label>
+                    <br />
+                    <textarea
+                      value={microDescription}
+                      readOnly
+                      // onChange={(e) => setEditableDescription(e.target.value)}
+                      style={{
+                        borderRadius: 4,
+                        border: "#747272 solid 1px",
+                        height: 40,
+                        fontSize: 14,
+                        paddingLeft: 10,
+                        color: "#000",
+                        width: "100%",
+                        resize: "none",
+                        paddingTop: "8px",
+                      }}
+                      type="text"
+                    />
+                  </div>
+                  <div
+                    class="col-md-6  "
+                    style={{ marginBottom: "0rem", maxWidth: "100%" }}
+                  >
+                    <label style={{ marginTop: "10px", marginBottom: "0rem" }}>
+                      Time
+                    </label>
+                    <br />
+                    <div style={{ display: "flex" }}>
+                      <input
+                        // type='time'
+                        value={convertUTCtoIST(microStartTime)}
+                        readOnly
+                        // onChange={(e) => setEditableStartTime(e.target.value)}
+                        style={{
+                          borderRadius: 4,
+                          border: "#747272 solid 1px",
+                          height: 40,
+                          fontSize: 16,
+                          paddingLeft: 10,
+                          color: "#000",
+                          width: "50%",
+                          resize: "none",
+                        }}
+                      ></input>
+                      <input
+                        // type='time'
+                        value={convertUTCtoIST(microEndTime)}
+                        readOnly
+                        // onChange={(e) => setEditableEndTime(e.target.value)}
+                        style={{
+                          borderRadius: 4,
+                          border: "#747272 solid 1px",
+                          height: 40,
+                          fontSize: 16,
+                          paddingLeft: 10,
+                          color: "#000",
+                          width: "50%",
+                          resize: "none",
+                          marginLeft: "10px",
+                        }}
+                      ></input>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <label style={{ marginTop: "10px", marginBottom: "0rem" }}>
+                      Invites
+                    </label>
+                    <br />
+                    <input
+                      value={microInvites}
+                      readOnly
+                      // onChange={(e) => setEditableStart(e.target.value)}
+                      style={{
+                        borderRadius: 4,
+                        border: "#747272 solid 1px",
+                        height: 40,
+                        fontSize: 16,
+                        paddingLeft: 10,
+                        color: "#000",
+                        width: "100%",
+                        resize: "none",
+                      }}
+                    ></input>
+                  </div>
+
+                  <div
+                    class="row col-md-12"
+                    style={{ display: "flex", justifyContent: "flex-end" }}
+                  ></div>
+                </div> */}
+              </div>
+            </div>
+            {/* <div
+              className={`content ${activeButton === "gmail" ? "active" : ""}`}
+            >
+              <div className="meeting-div" style={{ display: "block" }}>
+                <div class=" col-md-12 row" style={{ color: "black" }}>
+                  <div class="col-md-6 " style={{ marginBottom: "0rem" }}>
+                    <label style={{ marginTop: "10px", marginBottom: "0rem" }}>
+                      Meeting Topic
+                    </label>
+                    <br />
+                    <input
+                      value={gmailTitle}
+                      readOnly
+                      // onChange={(e) => setEditableTitle(e.target.value)}
+                      style={{
+                        borderRadius: 4,
+                        border: "#747272 solid 1px",
+                        height: 40,
+                        fontSize: 14,
+                        paddingLeft: 10,
+                        color: "#000",
+                        width: "100%",
+                      }}
+                      type="text"
+                    />
+                  </div>
+                  <div className="col-md datepickerinput">
+                    <label style={{ marginTop: "10px", marginBottom: "0rem" }}>
+                      {" "}
+                      Date
+                    </label>
+                    <br />
+                    <input
+                      // type='date'
+                      value={formatToIST(gmailStartTime)}
+                      readOnly
+                      // onChange={(e) => setEditableStart(e.target.value)}
+                      style={{
+                        borderRadius: 4,
+                        border: "#747272 solid 1px",
+                        height: 40,
+                        fontSize: 16,
+                        paddingLeft: 10,
+                        color: "#000",
+                        width: "100%",
+                        resize: "none",
+                      }}
+                    ></input>
+                  </div>
+
+                  <div class="col-md-6 " style={{ marginBottom: "0rem" }}>
+                    <label style={{ marginTop: "10px", marginBottom: "0rem" }}>
+                      Meeting Description
+                    </label>
+                    <br />
+                    <textarea
+                      value={gmailDescription}
+                      readOnly
+                      // onChange={(e) => setEditableDescription(e.target.value)}
+                      style={{
+                        borderRadius: 4,
+                        border: "#747272 solid 1px",
+                        height: 40,
+                        fontSize: 14,
+                        paddingLeft: 10,
+                        color: "#000",
+                        width: "100%",
+                        resize: "none",
+                        paddingTop: "8px",
+                      }}
+                      type="text"
+                    />
+                  </div>
+                  <div
+                    class="col-md-6  "
+                    style={{ marginBottom: "0rem", maxWidth: "100%" }}
+                  >
+                    <label style={{ marginTop: "10px", marginBottom: "0rem" }}>
+                      Time
+                    </label>
+                    <br />
+                    <div style={{ display: "flex" }}>
+                      <input
+                        // type='time'
+                        value={formatTimeFromDate(gmailStartTime)}
+                        readOnly
+                        // onChange={(e) => setEditableStartTime(e.target.value)}
+                        style={{
+                          borderRadius: 4,
+                          border: "#747272 solid 1px",
+                          height: 40,
+                          fontSize: 16,
+                          paddingLeft: 10,
+                          color: "#000",
+                          width: "50%",
+                          resize: "none",
+                        }}
+                      ></input>
+                      <input
+                        // type='time'
+                        value={formatTimeFromDate(gmailEndTime)}
+                        readOnly
+                        // onChange={(e) => setEditableEndTime(e.target.value)}
+                        style={{
+                          borderRadius: 4,
+                          border: "#747272 solid 1px",
+                          height: 40,
+                          fontSize: 16,
+                          paddingLeft: 10,
+                          color: "#000",
+                          width: "50%",
+                          resize: "none",
+                          marginLeft: "10px",
+                        }}
+                      ></input>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <label style={{ marginTop: "10px", marginBottom: "0rem" }}>
+                      Invites
+                    </label>
+                    <br />
+                    <input
+                      value={gmailInvites}
+                      readOnly
+                      // onChange={(e) => setEditableStart(e.target.value)}
+                      style={{
+                        borderRadius: 4,
+                        border: "#747272 solid 1px",
+                        height: 40,
+                        fontSize: 16,
+                        paddingLeft: 10,
+                        color: "#000",
+                        width: "100%",
+                        resize: "none",
+                      }}
+                    ></input>
+                  </div>
+
+                  <div
+                    class="row col-md-12"
+                    style={{ display: "flex", justifyContent: "flex-end" }}
+                  ></div>
+                </div>
+              </div>
+            </div> */}
           </div>
-        )}
-      </div>
+        </div>
+      )}
     </section>
   );
 };

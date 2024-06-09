@@ -1,6 +1,6 @@
 import { getItemInLocalStorage } from "../utils/localStorage";
 import axiosInstance from "./axiosInstance";
-import vibeAxiosInstance from "./vibeAxiosInstance";
+import vibeAuth from "./vibeAuth";
 
 const token = getItemInLocalStorage("TOKEN");
 
@@ -310,6 +310,12 @@ export const getEvents = async () =>
       token: token,
     },
   });
+export const getEventsDetails = async (id) =>
+  axiosInstance.get(`/events/${id}.json`, {
+    params: {
+      token: token,
+    },
+  });
 export const postEvents = async (data) =>
   axiosInstance.post("/events.json", data, {
     params: {
@@ -324,16 +330,28 @@ export const getBroadCast = async () =>
       token: token,
     },
   });
+export const postBroadCast = async (data) =>
+  axiosInstance.post("/notices.json", data, {
+    params: {
+      token: token,
+    },
+  });
+
+export const getBroadcastDetails = async (id) =>
+  axiosInstance.get(`/notices/${id}.json`, {
+    params: {
+      token: token,
+    },
+  });
 
 // vibe
 
-export const vibeLogin = async (data) =>
-  vibeAxiosInstance.post("/api/login/", data);
+export const vibeLogin = async (data) => vibeAuth.post("/api/login/", data);
 
 // VIBE CALENDAR
 export const getVibeCalendar = async (vibeUserId) => {
   try {
-    const response = await vibeAxiosInstance.get(
+    const response = await vibeAuth.get(
       `/api/employee/calender/get-calender-events/?user_id=${vibeUserId}`,
       {
         headers: {
@@ -348,11 +366,11 @@ export const getVibeCalendar = async (vibeUserId) => {
   }
 };
 
-//VIBE USER 
+//VIBE USER
 export const getVibeUsers = async (vibeUserId) => {
   try {
-    const response = await vibeAxiosInstance.get(
-      `/api/employee/calender/get-calender-events/?user_id=${vibeUserId}`,
+    const response = await vibeAuth.get(
+      `/api/employee/get-users/?user_id=${vibeUserId}`,
       {
         headers: {
           "Content-Type": "application/json",
@@ -365,3 +383,95 @@ export const getVibeUsers = async (vibeUserId) => {
     throw error;
   }
 };
+
+// vibe Create calendar event
+export const postNewCalendarEvent = async (data) => {
+  try {
+    const response = await vibeAuth.post(
+      `/api/employee/calender/create-event/`,
+      data,
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error creating calendar events:", error);
+    throw error;
+  }
+};
+// vibe Create calendar Task
+export const postCalendarTask = async (data) => {
+  try {
+    const response = await vibeAuth.post(
+      `/api/employee/board/add-task/`,
+      data,
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error creating calendar events:", error);
+    throw error;
+  }
+};
+
+// vibe meetings
+// /api/employee/calender/meet/create-zoom-meeting/
+export const CreateVibeZoomMeeting = async (data) => {
+  try {
+    const response = await vibeAuth.post(
+      `/api/employee/calender/meet/create-zoom-meeting/`,
+      data,
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error creating calendar events:", error);
+    throw error;
+  }
+};
+export const CreateVibeTeamMeeting = async (data) => {
+  try {
+    const response = await vibeAuth.post(
+      `/api/employee/calender/create-teams-meeting/`,
+      data,
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error creating calendar events:", error);
+    throw error;
+  }
+};
+export const CreateVibeMeeting = async (data) => {
+  try {
+    const response = await vibeAuth.post(
+      `/api/employee/calender/create-meeting/`,
+      data,
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error creating calendar events:", error);
+    throw error;
+  }
+};
+

@@ -105,7 +105,7 @@ const Login = () => {
         navigate("/mytickets");
       }
       toast.dismiss();
-      // window.location.reload();
+      window.location.reload();
     } catch (error) {
       console.error("Login failed:", error);
       toast.error("Login failed. Please check your credentials.");

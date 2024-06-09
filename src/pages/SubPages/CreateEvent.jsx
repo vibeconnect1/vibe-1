@@ -63,7 +63,7 @@ const CreateEvent = () => {
 
   const handleCreateEvent = async()=>{
     try {
-      toast.loading("Creating Asset Please Wait!");
+      toast.loading("Creating Event Please Wait!");
       const formDataSend = new FormData();
 
       formDataSend.append("event[site_id", formData.site_id);
@@ -79,6 +79,7 @@ const CreateEvent = () => {
       toast.dismiss();
     }catch(error){
       console.log(error)
+      toast.dismiss();
     }
 
   }

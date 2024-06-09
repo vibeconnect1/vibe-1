@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { PiPlusCircle } from "react-icons/pi";
 
 import { Link } from "react-router-dom";
@@ -7,9 +7,13 @@ import { BiEdit } from "react-icons/bi";
 import DataTable from "react-data-table-component";
 import { IoClose, IoVideocam } from "react-icons/io5";
 import Navbar from "../components/Navbar";
+import Table from "../components/table/Table"
+import { getVibeCalendar } from "../api";
+import { getItemInLocalStorage } from "../utils/localStorage";
 
 const Meetings = () => {
   const [selectedStatus, setSelectedStatus] = useState("all");
+  const [filteredData, setFilteredData] = useState([])
 
   const handleStatusChange = (status) => {
     setSelectedStatus(status);
@@ -118,6 +122,18 @@ const Meetings = () => {
       },
     },
   };
+  const vibeUserId = getItemInLocalStorage("VIBEUSERID")
+  useEffect(() => {
+    const fetchCalendar = async () => {
+      try {
+        const calendarResponse = await getVibeCalendar(vibeUserId);
+        console.log(calendarResponse.data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchCalendar();
+  }, []);
 
   return (
     <section className="flex">
@@ -186,16 +202,12 @@ const Meetings = () => {
           </div>
         </div>
         <div className="flex flex-col gap-4  mb-5">
-          <DataTable
-            responsive
+          <Table
+           
             columns={columns}
             data={data}
-            customStyles={customStyle}
-            pagination
-            fixedHeader
-            // fixedHeaderScrollHeight="420px"
-            //   selectableRowsHighlight
-            //   highlightOnHover
+          isPagination={true}
+           
           />
         </div>
       </div>

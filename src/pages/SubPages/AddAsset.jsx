@@ -176,8 +176,8 @@ const AddAsset = () => {
         formData.asset_group_id
       );
       formDataSend.append(
-        "site_asset[sub_group_name]",
-        formData.sub_group_name
+        "site_asset[sub_group_id]",
+        formData.sub_group_id
       );
       formDataSend.append("site_asset[installation]", formData.installation);
       formDataSend.append(
@@ -417,7 +417,7 @@ const AddAsset = () => {
                   <select
                     className="border p-1 px-4 border-gray-500 rounded-md"
                     name="sub_group_name"
-                    value={formData.sub_group_name}
+                    value={formData.sub_group_id}
                     onChange={handleChange}
                   >
                     <option value="">Select Sub Group</option>

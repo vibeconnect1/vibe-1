@@ -44,7 +44,7 @@ import SetupFacility from "./pages/SubPages/SetupFacility.jsx";
 import Communication from "./pages/Communication.jsx";
 import CreateEvent from "./pages/SubPages/CreateEvent.jsx";
 import EventDetails from "./pages/SubPages/details/EventDetails.jsx";
-import CreateBroadcst from "./pages/SubPages/CreateBroadcst.jsx";
+import CreateBroadcast from "./pages/SubPages/CreateBroadcast.jsx";
 import BroadcastDetails from "./pages/SubPages/details/BroadcastDetails.jsx";
 import MailRoom from "./pages/MailRoom.jsx";
 import CreateInbound from "./pages/SubPages/CreateInbound.jsx";
@@ -220,6 +220,11 @@ import AddResMenu from "./pages/SubPages/details/FBSubDetails/AddResMenu.jsx";
 import EditResMenu from "./pages/SubPages/details/FBSubDetails/EditResMenu.jsx";
 import ResMenuDetails from "./pages/SubPages/details/FBSubDetails/ResMenuDetails.jsx";
 import ResOrderDetails from "./pages/SubPages/details/FBSubDetails/ResOrderDetails.jsx";
+import Incidents from "./pages/Incident.jsx";
+import AddIncident from "./pages/SubPages/AddIncident.jsx";
+import EditIncident from "./pages/SubPages/EditIncident.jsx";
+import IncidentsDetails from "./pages/SubPages/details/IncidentsDetails.jsx";
+import IncidentSetup from "./pages/Setup/IncidentSetupPages.jsx/IncidentSetup.jsx";
 
 function App() {
   const themeColor = useSelector((state) => state.theme.color);
@@ -423,7 +428,7 @@ function App() {
           />
           <Route
             path="/communication/broadcast/create-broadcast"
-            element={<CreateBroadcst />}
+            element={<CreateBroadcast />}
           />
           <Route
             path="/communication/broadcast/broadcast-details/:id"
@@ -1731,39 +1736,39 @@ function App() {
             path="/admin/fb"
             element={
               <ProtectedAdminRoutes>
-                <FoodsBeverage/>
+                <FoodsBeverage />
               </ProtectedAdminRoutes>
             }
           />
-            <Route
+          <Route
             path="/admin/add-fb"
             element={
               <ProtectedAdminRoutes>
-                <AddFB/>
+                <AddFB />
               </ProtectedAdminRoutes>
             }
           />
-             <Route
+          <Route
             path="/admin/fb-details/:id"
             element={
               <ProtectedAdminRoutes>
-                <FBDetails/>
+                <FBDetails />
               </ProtectedAdminRoutes>
             }
           />
-           <Route
+          <Route
             path="/admin/fb-edit/:id"
             element={
               <ProtectedAdminRoutes>
-                <FBEdit/>
+                <FBEdit />
               </ProtectedAdminRoutes>
             }
           />
-           <Route
+          <Route
             path="/admin/fb-res-menu/"
             element={
               <ProtectedAdminRoutes>
-                <AddResMenu/>
+                <AddResMenu />
               </ProtectedAdminRoutes>
             }
           />
@@ -1771,24 +1776,68 @@ function App() {
             path="/admin/edit-resmenu/:id"
             element={
               <ProtectedAdminRoutes>
-                <EditResMenu/>
+                <EditResMenu />
               </ProtectedAdminRoutes>
             }
           />
-           <Route
+          <Route
             path="/admin/fb-resmenudetails/:id"
             element={
               <ProtectedAdminRoutes>
-                <ResMenuDetails/>
+                <ResMenuDetails />
               </ProtectedAdminRoutes>
             }
           />
-           
-           <Route
+
+          <Route
             path="/admin/res-order-details/:id"
             element={
               <ProtectedAdminRoutes>
-                <ResOrderDetails/>
+                <ResOrderDetails />
+              </ProtectedAdminRoutes>
+            }
+          />
+          {/* incident */}
+          <Route
+            path="/admin/incidents"
+            element={
+              <ProtectedAdminRoutes>
+                <Incidents/>
+              </ProtectedAdminRoutes>
+            }
+          />
+            <Route
+            path="/admin/add-incidents"
+            element={
+              <ProtectedAdminRoutes>
+                <AddIncident/>
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/edit-incidents"
+            element={
+              <ProtectedAdminRoutes>
+                <EditIncident/>
+              </ProtectedAdminRoutes>
+            }
+          />
+           <Route
+            path="/admin/incidents-details/:id"
+            element={
+              <ProtectedAdminRoutes>
+                <IncidentsDetails/>
+              </ProtectedAdminRoutes>
+            }
+          />
+          
+          
+        
+          <Route
+            path="/admin/setup-incidents"
+            element={
+              <ProtectedAdminRoutes>
+                <IncidentSetup/>
               </ProtectedAdminRoutes>
             }
           />
