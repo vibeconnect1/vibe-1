@@ -198,6 +198,12 @@ import CheckListGroupSetup from "./pages/Setup/CheckListGroupSetup.jsx";
 import FmUserSetup from "./pages/Setup/FmUserSetup.jsx";
 import AddFmUserSetup from "./pages/Setup/AddFmUserSetup.jsx";
 import FmUserSetupDetails from "./pages/Setup/FmUserSetupDetails.jsx";
+import OccupantUserSetup from "./pages/Setup/OccupantUserSetup.jsx";
+import AddOccupantUserSetup from "./pages/Setup/AddOccupantUserSetup.jsx";
+import OccupantUserSetupDetails from "./pages/Setup/OccupantUserSetupDetails.jsx";
+import InvoiceApprovalSetup from "./pages/Setup/InvoiceApprovalSetup.jsx";
+import AddInvoiceApprovalsSetup from "./pages/Setup/AddInvoiceApprovalsSetup.jsx";
+import EditInvoiceApprovalsSetup from "./pages/Setup/EditInvoiceApprovalsSetup.jsx";
 // import IncidentSetup from "./pages/Setup/IncidentSetupPages/IncidentSetup.jsx";
 
 function App() {
@@ -1574,7 +1580,7 @@ function App() {
               </ProtectedAdminRoutes>
             }
           />
-          {/* FmUSer */}
+          {/* FmUser */}
           <Route
             path="/admin/fm-user"
             element={
@@ -1596,6 +1602,56 @@ function App() {
             element={
               <ProtectedAdminRoutes>
                 <FmUserSetupDetails/>
+              </ProtectedAdminRoutes>
+            }
+          />
+          {/* Occupant User */}
+          <Route
+            path="/admin/occupant-user-setup"
+            element={
+              <ProtectedAdminRoutes>
+                <OccupantUserSetup/>
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/add-occupant-user-setup"
+            element={
+              <ProtectedAdminRoutes>
+                <AddOccupantUserSetup/>
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/occupant-user-setup-details/:id"
+            element={
+              <ProtectedAdminRoutes>
+                <OccupantUserSetupDetails/>
+              </ProtectedAdminRoutes>
+            }
+          />
+          {/* Invoice Approvals */}
+          <Route
+            path="/admin/invoice-approval-setup"
+            element={
+              <ProtectedAdminRoutes>
+                <InvoiceApprovalSetup/>
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/add-invoice-approval-setup"
+            element={
+              <ProtectedAdminRoutes>
+                <AddInvoiceApprovalsSetup/>
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/edit-invoice-approval-setup/:id"
+            element={
+              <ProtectedAdminRoutes>
+                <EditInvoiceApprovalsSetup/>
               </ProtectedAdminRoutes>
             }
           />
