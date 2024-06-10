@@ -195,6 +195,9 @@ import AddIncident from "./pages/SubPages/AddIncident.jsx";
 import IncidentSetup from "./pages/Setup/IncidentSetupPages/IncidentSetup.jsx";
 import MeterTypeSetup from "./pages/Setup/MeterTypeSetup.jsx";
 import CheckListGroupSetup from "./pages/Setup/CheckListGroupSetup.jsx";
+import FmUserSetup from "./pages/Setup/FmUserSetup.jsx";
+import AddFmUserSetup from "./pages/Setup/AddFmUserSetup.jsx";
+import FmUserSetupDetails from "./pages/Setup/FmUserSetupDetails.jsx";
 // import IncidentSetup from "./pages/Setup/IncidentSetupPages/IncidentSetup.jsx";
 
 function App() {
@@ -1568,6 +1571,31 @@ function App() {
             element={
               <ProtectedAdminRoutes>
                 <CheckListGroupSetup/>
+              </ProtectedAdminRoutes>
+            }
+          />
+          {/* FmUSer */}
+          <Route
+            path="/admin/fm-user"
+            element={
+              <ProtectedAdminRoutes>
+                <FmUserSetup/>
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/add-fm-user"
+            element={
+              <ProtectedAdminRoutes>
+                <AddFmUserSetup/>
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/fm-user-details/:id"
+            element={
+              <ProtectedAdminRoutes>
+                <FmUserSetupDetails/>
               </ProtectedAdminRoutes>
             }
           />

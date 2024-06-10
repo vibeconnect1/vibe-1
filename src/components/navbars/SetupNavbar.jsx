@@ -33,6 +33,7 @@ const SetupNavbar = () => {
         <Link className="hover:bg-white hover:text-black  p-2 rounded-lg ">Addresses</Link>
         <Link className="hover:bg-white hover:text-black  p-2 rounded-lg ">Export</Link>
         <Link to={"/admin/setup-incidents"}className="hover:bg-white hover:text-black  p-2 rounded-lg ">Incidents Setup</Link>
+        <Link to={"/admin/fm-user"}className="hover:bg-white hover:text-black  p-2 rounded-lg ">Fm User</Link>
       </ul>
     </div>
   </div>

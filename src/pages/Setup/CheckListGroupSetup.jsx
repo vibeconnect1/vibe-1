@@ -9,7 +9,6 @@ import AddSubGroupCheckListSetupModal from '../../containers/modals/AddSubGroupC
 function CheckListGroupSetup() {
   const [addGroup, showAddGroup] = useState(false);
   const [addSubGroup, showSubAddGroup] = useState(false);
-  const [addMeter, showAddMeter] = useState(false);
   const columnGroup = [
     { name: "Sr.No", selector: (row) => row.srNo, sortable: true },
     { name: "Group Name", selector: (row) => row.groupName, sortable: true },
@@ -88,7 +87,7 @@ function CheckListGroupSetup() {
             <Link to="" className=" font-semibold border-2 border-black px-4 p-1 flex gap-2 items-center rounded-md" onClick={() => showSubAddGroup(true)}>
               <IoMdAdd /> Add Sub Group
             </Link>
-            <Link to="" className=" font-semibold border-2 border-black px-4 p-1 flex gap-2 items-center rounded-md" onClick={() => showAddMeter(true)}>
+            <Link to="" className=" font-semibold border-2 border-black px-4 p-1 flex gap-2 items-center rounded-md" >
               <IoMdAdd /> Bulk Update
             </Link>
           </div>
