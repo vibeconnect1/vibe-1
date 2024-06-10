@@ -40,7 +40,7 @@ const Table = ({ columns, data, selectRows, isPagination, title, height }) => {
     },
   };
   return (
-    <div className="rounded-md mb-5">
+    <div className="rounded-md mb-5 shadow-custom-all-sides">
     <DataTable
       title={title}
       responsive

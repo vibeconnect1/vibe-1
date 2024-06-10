@@ -780,9 +780,10 @@ const Calender = () => {
     toast.loading("Creating Meeting Please wait!");
     try {
       const meetingResp = await CreateVibeMeeting(formData);
+      toast.dismiss();
+      toast.success("Meeting Created Successfully");
+      setPopupDate(null)
       if (meetingResp.success) {
-        toast.dismiss();
-        toast.success("Meeting Created Successfully");
         setMeetingTitle("");
         setMeetingDate("");
         setMeetingStartTime("");
@@ -821,6 +822,9 @@ const Calender = () => {
         >
           <FaPlus size={20} />
         </button>
+        <div className=" rounded-xl shadow-custom-all-sides">
+
+        
         <FullCalendar
           ref={calendarRef}
           plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
@@ -864,6 +868,7 @@ const Calender = () => {
             hour12: true,
           }}
         />
+        </div>
         {isListOpen && (
           <div
             ref={dropdownRef}

@@ -224,7 +224,12 @@ import Incidents from "./pages/Incident.jsx";
 import AddIncident from "./pages/SubPages/AddIncident.jsx";
 import EditIncident from "./pages/SubPages/EditIncident.jsx";
 import IncidentsDetails from "./pages/SubPages/details/IncidentsDetails.jsx";
-import IncidentSetup from "./pages/Setup/IncidentSetupPages.jsx/IncidentSetup.jsx";
+import IncidentSetup from "./pages/Setup/IncidentSetupPages/IncidentSetup.jsx";
+import MeterTypeSetup from "./pages/Setup/MeterTypesSetup.jsx";
+import CheckListGroupSetup from "./pages/Setup/ChecklistGroupSetup.jsx";
+import ParkingDetails from "./pages/SubPages/details/ParkingDetails.jsx";
+import AddParkingConfig from "./pages/Setup/ParkingSetupPages/AddParkingConfig.jsx";
+import EditParkingConfiguration from "./pages/Setup/ParkingSetupPages/EditParkingConfig.jsx";
 
 function App() {
   const themeColor = useSelector((state) => state.theme.color);
@@ -667,6 +672,41 @@ function App() {
               </ProtectedAdminRoutes>
             }
           />
+
+          <Route
+            path="/admin/parking-details/:id"
+            element={
+              <ProtectedAdminRoutes>
+                <ParkingDetails />
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/setup/parking-setup"
+            element={
+              <ProtectedAdminRoutes>
+               <ParkingSetup/>
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/add-parking-config"
+            element={
+              <ProtectedAdminRoutes>
+               <AddParkingConfig/>
+              </ProtectedAdminRoutes>
+            }
+          />
+          
+           <Route
+            path="/admin/edit-park-config/:id"
+            element={
+              <ProtectedAdminRoutes>
+              <EditParkingConfiguration/>
+              </ProtectedAdminRoutes>
+            }
+          />
+
           {/* employee parking */}
 
           <Route
@@ -1802,15 +1842,15 @@ function App() {
             path="/admin/incidents"
             element={
               <ProtectedAdminRoutes>
-                <Incidents/>
+                <Incidents />
               </ProtectedAdminRoutes>
             }
           />
-            <Route
+          <Route
             path="/admin/add-incidents"
             element={
               <ProtectedAdminRoutes>
-                <AddIncident/>
+                <AddIncident />
               </ProtectedAdminRoutes>
             }
           />
@@ -1818,26 +1858,42 @@ function App() {
             path="/admin/edit-incidents"
             element={
               <ProtectedAdminRoutes>
-                <EditIncident/>
+                <EditIncident />
               </ProtectedAdminRoutes>
             }
           />
-           <Route
+          <Route
             path="/admin/incidents-details/:id"
             element={
               <ProtectedAdminRoutes>
-                <IncidentsDetails/>
+                <IncidentsDetails />
               </ProtectedAdminRoutes>
             }
           />
-          
-          
-        
+
           <Route
             path="/admin/setup-incidents"
             element={
               <ProtectedAdminRoutes>
-                <IncidentSetup/>
+                <IncidentSetup />
+              </ProtectedAdminRoutes>
+            }
+          />
+          {/* Meter Types */}
+          <Route
+            path="/admin/setup-meter-type"
+            element={
+              <ProtectedAdminRoutes>
+                <MeterTypeSetup />
+              </ProtectedAdminRoutes>
+            }
+          />
+          {/* CheckList Group */}
+          <Route
+            path="/admin/checklist-group"
+            element={
+              <ProtectedAdminRoutes>
+                <CheckListGroupSetup />
               </ProtectedAdminRoutes>
             }
           />

@@ -6,19 +6,33 @@ import Navbar from "../../components/Navbar";
 import { Switch } from "../../Buttons";
 import { FaTimes } from "react-icons/fa";
 import { getAssignedTo } from "../../api";
+import { useSelector } from "react-redux";
+import { BiRightArrowAlt } from "react-icons/bi";
+import ReactSwitch from "react-switch";
 
 const CreateMeeting = () => {
-  const [formData, setFormData] = useState({
-    meeting: "",
-    Attendees: [],
-    repeat: false,
-    on_behalf: "",
-  });
+  const [meetingTitle, setMeetingTitle] = useState("");
   const [selectedWeekdays, setSelectedWeekdays] = useState([]);
-  const [emailOtherList, setEmailOtherList] = useState([]);
-  const [behalf, setbehalf] = useState("self");
+  const [meetingDate, setMeetingDate] = useState("");
+  const [meetingDescription, setMeetingDescription] = useState("");
+  const [meetingStartTime, setMeetingStartTime] = useState("");
+  const [meetingEndTime, setMeetingEndTime] = useState("");
+  const [meetingLink, setMeetingLink] = useState("");
   const [otherEmails, setOtherEmails] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [emailOtherList, setEmailOtherList] = useState([]);
   const [users, setUsers] = useState([]);
+  const [showGenerateLink, setShowGenerateLink] = useState(false);
+  const [uuid, setuuid] = useState("");
+  const [emails, setEmails] = useState([]);
+  const [selectedToDate, setSelectedToDate] = useState("");
+  const [linkGenerated, setLinkGenerated] = useState(false);
+  const [meet_id, setMeet_id] = useState("");
+  const [isCreatingMeeting, setIsCreatingMeeting] = useState(false);
+  const [subcategory, setSubcategory] = useState("");
+  const [repeatMeet, setRepeatMeet] = useState(false);
+  const [checkedRepeat, setCheckedRepeat] = useState(0);
+  // const [behalf, setbehalf] = useState("self");
   // const screenWidth = window.innerWidth;
   const [weekdaysMap, setWeekdaysMap] = useState([
     { day: "Mon", index: 0, isActive: false },
@@ -77,7 +91,7 @@ const CreateMeeting = () => {
 
   const handleMeetingLinkCopy = () => {
     navigator.clipboard
-      .writeText(formData.meeting)
+      .writeText(meetingLink)
       .then(() => {
         toast.success("Meeting Link Copied");
       })
@@ -85,16 +99,12 @@ const CreateMeeting = () => {
         console.error("Failed to copy text: ", err);
       });
   };
-  const options = [
-    {
-      value: "Akshat",
-      label: "Akshat",
-      email: "akshat.shrawat@vibecopilot.ai",
-    },
-    { value: "Kunal", label: "Kunal", email: "kunal.sah@vibecopilot.ai" },
-    { value: "Anurag", label: "Anurag", email: "anurag.sharma@vibecopilot.ai" },
-  ];
-  console.log(formData);
+  var handleChangeSelectMeeting = (selectedOption) => {
+    console.log(selectedOption);
+    setSelectedOption(selectedOption);
+  };
+
+ 
 
   const handleAddEmail = () => {
     // Validate the email before adding it to the list
@@ -115,7 +125,32 @@ const CreateMeeting = () => {
     console.log("emailList");
     console.log(emailOtherList);
   };
+  const themeColor = useSelector((state) => state.theme.color);
+  const today = new Date().toISOString().split("T")[0];
+  function ToggleRepeatSwitch() {
+    const handleChange = (val) => {
+      setCheckedRepeat(val ? 1 : 0);
+    };
 
+    console.log(checkedRepeat);
+    if (checkedRepeat === 1) {
+      console.log("asdfghjk");
+      setRepeatMeet(true);
+    }
+    if (checkedRepeat === 0) {
+      console.log("cancel");
+      setRepeatMeet(false);
+    }
+
+    return (
+      <div className="flex flex-col gap-2">
+        <label className="font-medium text-white">Repeat</label>
+        <div className="app">
+          <ReactSwitch checked={checkedRepeat === 1} onChange={handleChange} />
+        </div>
+      </div>
+    );
+  }
   return (
     <section className="min-h-screen p-4 sm:p-0 flex flex-col md:flex-row">
       <div className="fixed hidden sm:block left-0 top-0 h-full md:static md:h-auto md:flex-shrink-0">
@@ -123,10 +158,13 @@ const CreateMeeting = () => {
       </div>
       <div className="flex justify-center overflow-x-auto w-full sm:w-full">
         <div className="border border-gray-300 rounded-lg w-full m-5 px-8 flex h-fit md:mb-10 flex-col gap-5">
-          <h2 className="text-center md:text-xl font-semibold my-2 p-2 bg-black rounded-full text-white">
+          <h2
+            style={{ background: themeColor }}
+            className="text-center md:text-xl font-semibold my-2 p-2 bg-black rounded-full text-white"
+          >
             Create New Meeting
           </h2>
-          <div className="grid grid-cols-4 items-center">
+          {/* <div className="grid grid-cols-4 items-center">
             <p className="font-semibold">For :</p>
             <div className="flex gap-5">
               <p
@@ -156,7 +194,7 @@ const CreateMeeting = () => {
                 }
               />
             )}
-          </div>
+          </div> */}
           <div className="grid md:grid-cols-3 gap-5">
             <div className="grid gap-2 items-center w-full">
               <label htmlFor="patientName" className="font-semibold">
@@ -164,9 +202,8 @@ const CreateMeeting = () => {
               </label>
               <input
                 type="text"
-                name="meetingTopic"
-                // value={formData.patientName}
-                // onChange={handleInputChange}
+                value={meetingTitle}
+                onChange={(e) => setMeetingTitle(e.target.value)}
                 className="border border-gray-400 p-2 rounded-md placeholder:text-sm"
                 placeholder="Enter Meeting Topic"
               />
@@ -177,9 +214,9 @@ const CreateMeeting = () => {
               </label>
               <input
                 type="date"
-                name="date"
-                // value={formData.patientName}
-                // onChange={handleInputChange}
+                value={meetingDate}
+                          min={today}
+                          onChange={(e) => setMeetingDate(e.target.value)}
                 className="border border-gray-400 p-2 rounded-md placeholder:text-sm"
               />
             </div>
@@ -190,17 +227,17 @@ const CreateMeeting = () => {
               <div className="flex gap-2 items-center">
                 <input
                   type="time"
-                  name="time"
-                  // value={formData.patientName}
-                  // onChange={handleInputChange}
+                  value={meetingStartTime}
+                            onChange={(e) =>
+                              setMeetingStartTime(e.target.value)
+                            }
                   className="border border-gray-400 p-2 rounded-md placeholder:text-sm w-full"
                 />
                 -
                 <input
                   type="time"
-                  name="time"
-                  // value={formData.patientName}
-                  // onChange={handleInputChange}
+                  value={meetingEndTime}
+                            onChange={(e) => setMeetingEndTime(e.target.value)}
                   className="border border-gray-400 p-2 rounded-md placeholder:text-sm w-full"
                 />
               </div>
@@ -209,36 +246,54 @@ const CreateMeeting = () => {
           <div className="flex flex-col gap-2">
             <p className="font-medium">Description :</p>
             <textarea
-              name=""
-              id=""
+              value={meetingDescription}
+              onChange={(e) =>
+                setMeetingDescription(e.target.value)
+              }
               cols="30"
               rows="2"
               className="border border-gray-400 p-2 rounded-md placeholder:text-sm w-full"
             ></textarea>
           </div>
           <div className="flex flex-col gap-2">
-            <div className="flex md:flex-row flex-col justify-between md:items-center">
-              <p className="font-medium">Meeting Link :</p>
-              <select
-                name="meeting"
-                value={formData.meeting}
-                onChange={(e) =>
-                  setFormData({ ...formData, meeting: e.target.value })
-                }
-                id=""
-                className="border-2 p-1 px-4 font-medium rounded-md border-black"
-              >
-                <option value="">Generate Link</option>
-                <option value="zoom Link">Zoom Meeting</option>
-                <option value="Team Link">Team Meeting</option>
-              </select>
-            </div>
+          <div className="my-2 flex justify-between gap-4 items-center w-full">
+                        <button
+                          className="font-medium p-1 hover:text-white hover:bg-black transition-all duration-300 rounded-md shadow-custom-all-sides flex items-center gap-2 text-white"
+                          onClick={() => setShowGenerateLink(!showGenerateLink)}
+                        >
+                          Generate Link
+                          <BiRightArrowAlt size={20} />
+                        </button>
+                        {showGenerateLink && (
+                          <div className="flex gap-2  ">
+                            <button
+                              onClick={GenerateMeet}
+                              className="bg-green-400 p-1 transition-all duration-300 rounded-md font-medium text-white hover:bg-green-500"
+                            >
+                              {" "}
+                              Zoom Meet
+                            </button>
+                            <button
+                              className="bg-blue-400  transition-all duration-300 hover:bg-blue-500  p-1 rounded-md font-medium text-white"
+                              onClick={TeamGenerateMeet}
+                            >
+                              {" "}
+                              Team Meet
+                            </button>
+                          </div>
+                        )}
+                      </div>
             <div className="w-full flex gap-2 items-center">
               <input
                 type="text"
                 readOnly
                 className="border border-gray-400 p-2 rounded-md placeholder:text-sm w-full"
-                value={formData.meeting}
+                value={
+                  isLoading
+                    ? "Generating Meeting Link..."
+                    : meetingLink
+                }
+                onChange={(e) => setMeetingLink(e.target.value)}
               />
               <button onClick={handleMeetingLinkCopy}>
                 <MdOutlineContentCopy size={20} />
@@ -247,13 +302,38 @@ const CreateMeeting = () => {
             <div className="flex flex-col gap-2">
               <p className="font-medium">Invite internal Attendees :</p>
               <Select
-                options={options}
-                isMulti
-                value={formData.Attendees}
-                onChange={(selectedOption) =>
-                  setFormData({ ...formData, Attendees: selectedOption })
-                }
-              />
+                        isMulti
+                        onChange={handleChangeSelectMeeting}
+                        options={emails}
+                        noOptionsMessage={() => "Email not available..."}
+                        maxMenuHeight={90}
+                        styles={{
+                          placeholder: (baseStyles, state) => ({
+                            ...baseStyles,
+                            color: "black",
+                          }),
+                          clearIndicator: (baseStyles) => ({
+                            ...baseStyles,
+                            color: "red",
+                          }),
+                          dropdownIndicator: (baseStyles) => ({
+                            ...baseStyles,
+                            color: "black",
+                          }),
+                          control: (baseStyles) => ({
+                            ...baseStyles,
+                            borderColor: "darkblue",
+                          }),
+                          multiValueRemove: (baseStyles, state) => ({
+                            ...baseStyles,
+                            color: state.isFocused ? "red" : "gray",
+                            backgroundColor: state.isFocused
+                              ? "black"
+                              : "lightgreen",
+                          }),
+                        }}
+                        menuPosition={"fixed"}
+                      />
             </div>
             <div className="flex flex-col gap-2 my-2">
               <p className="font-medium">Invite External Attendees :</p>
@@ -262,7 +342,7 @@ const CreateMeeting = () => {
                   type="email"
                   value={otherEmails}
                   onChange={(e) => setOtherEmails(e.target.value)}
-                  name="otherEmails"
+                  
                   id=""
                   placeholder="Enter Email id"
                   className="border border-gray-400 p-2 rounded-md placeholder:text-sm w-full"
@@ -306,23 +386,21 @@ const CreateMeeting = () => {
             <div className="my-2">
               <div className="flex items-center  gap-4">
                 <p className="font-medium text-lg">Repeat</p>
-                <Switch
-                  checked={formData.repeat}
-                  onChange={() =>
-                    setFormData({ ...formData, repeat: !formData.repeat })
-                  }
-                />
+                <ToggleRepeatSwitch />
               </div>
             </div>
-            {formData.repeat && (
+            {repeatMeet && (
               <div className="flex flex-col gap-2">
                 <div className="grid md:grid-cols-3 gap-4 ">
                   <div className="flex flex-col">
                     <p className="font-medium">From :</p>
                     <input
                       type="date"
-                      name=""
-                      id=""
+                      min={todayDate}
+                              value={meetingDate}
+                              onChange={(event) =>
+                                setMeetingDate(event.target.value)
+                              }
                       className="border border-gray-400 p-2 rounded-md placeholder:text-sm w-full"
                     />
                   </div>
@@ -330,8 +408,11 @@ const CreateMeeting = () => {
                     <p className="font-medium">To :</p>
                     <input
                       type="date"
-                      name=""
-                      id=""
+                      min={todayDate}
+                      value={selectedToDate}
+                      onChange={(event) =>
+                        setSelectedToDate(event.target.value)
+                      }
                       className="border border-gray-400 p-2 rounded-md placeholder:text-sm w-full"
                     />
                   </div>
