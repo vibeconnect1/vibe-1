@@ -207,6 +207,9 @@ import EditInvoiceApprovalsSetup from "./pages/Setup/EditInvoiceApprovalsSetup.j
 import EmailRuleSetup from "./pages/Setup/EmailRuleSetup.jsx";
 import FmGroupsSetup from "./pages/Setup/FmGroupsSetup.jsx";
 import FmGroupSetupDetails from "./pages/Setup/FmGroupSetupDetails.jsx";
+import SACHSNSetup from "./pages/Setup/SACHSNSetup.jsx";
+import AddSACHSNSetup from "./pages/Setup/AddSACHSNSetup.jsx";
+import SACHSNSetupDetails from "./pages/Setup/SACHSNSetupDetails.jsx";
 // import IncidentSetup from "./pages/Setup/IncidentSetupPages/IncidentSetup.jsx";
 
 function App() {
@@ -1681,6 +1684,31 @@ function App() {
             element={
               <ProtectedAdminRoutes>
                 <FmGroupSetupDetails/>
+              </ProtectedAdminRoutes>
+            }
+          />
+          {/* SAC/HSN Setup */}
+          <Route
+            path="/admin/sac-hsn-setup"
+            element={
+              <ProtectedAdminRoutes>
+                <SACHSNSetup/>
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/add-sac-hsn-setup"
+            element={
+              <ProtectedAdminRoutes>
+                <AddSACHSNSetup/>
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/sac-hsn-setup-details/:id"
+            element={
+              <ProtectedAdminRoutes>
+                <SACHSNSetupDetails/>
               </ProtectedAdminRoutes>
             }
           />
