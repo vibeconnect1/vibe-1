@@ -21,7 +21,9 @@ const IncidentSetup = () => {
   const [page, setPage] = useState("category");
   return (
     <section className="flex">
+      <div className="hidden md:block">
       <Navbar />
+      </div>
       <div className="w-full flex mx-3 flex-col overflow-hidden">
         <div className="grid grid-cols-12">
           <div className=" flex col-span-2 w-full gap-1 flex-col my-5 mx-1 ">

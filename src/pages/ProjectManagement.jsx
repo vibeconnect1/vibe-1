@@ -194,7 +194,10 @@ const ProjectManagement = () => {
             Export
           </button>
         </div> */}
+        <div className=" overflow-x-auto">
         <Boards />
+
+        </div>
         
       </div>
     </section>

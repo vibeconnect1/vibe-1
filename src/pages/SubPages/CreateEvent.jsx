@@ -16,6 +16,7 @@ const CreateEvent = () => {
   const siteId = getItemInLocalStorage("SITEID");
   const [share, setShare] = useState("all");
   const [users, setUsers] = useState([]);
+  const [selectedOption, setSelectedOption] = useState([]);
   const [formData, setFormData] = useState({
     site_id: siteId,
     event_name: "",
@@ -24,11 +25,14 @@ const CreateEvent = () => {
     start_date_time: "",
     end_date_time: "",
     user_ids: [],
+    event_image: [],
   });
   console.log(formData);
+  const fileInputRef = useRef(null);
   const themeColor = useSelector((state) => state.theme.color);
   const datePickerRef = useRef(null);
   const currentDate = new Date();
+
   const handleStartDateChange = (date) => {
     setFormData({ ...formData, start_date_time: date });
   };
@@ -57,36 +61,77 @@ const CreateEvent = () => {
     };
     fetchUsers();
   }, []);
+
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleCreateEvent = async()=>{
+  const handleCreateEvent = async () => {
     try {
       toast.loading("Creating Event Please Wait!");
       const formDataSend = new FormData();
 
-      formDataSend.append("event[site_id", formData.site_id);
+      formDataSend.append("event[site_id]", formData.site_id);
       formDataSend.append("event[event_name]", formData.event_name);
-      formDataSend.append("event[discription]", formData.description); 
-      formDataSend.append("event[start_date_time]", formData.start_date_time); 
-      formDataSend.append("event[end_date_time]", formData.end_date_time); 
-      formDataSend.append("event[user_ids]", formData.user_ids); 
-      formDataSend.append("event[venue]", formData.venue); 
+      formDataSend.append("event[discription]", formData.description);
+      formDataSend.append(
+        "event[start_date_time]",
+        formatDateTime(formData.start_date_time)
+      );
+      formDataSend.append(
+        "event[end_date_time]",
+        formatDateTime(formData.end_date_time)
+      );
+      formDataSend.append("event[venue]", formData.venue);
+
+      formData.user_ids.forEach((user_id) => {
+        formDataSend.append("event[user_ids][]", user_id);
+      });
+
+      formData.event_image.forEach((file) => {
+        formDataSend.append("event[event_image][]", file);
+      });
+
       const response = await postEvents(formDataSend);
       toast.success("Event Created Successfully");
       console.log("Response:", response.data);
       toast.dismiss();
-    }catch(error){
-      console.log(error)
+    } catch (error) {
+      console.log(error);
       toast.dismiss();
     }
-
-  }
+  };
 
   const handleSelectChange = (selectedOptions) => {
-    const selectedIds = selectedOptions ? selectedOptions.map((option) => option.value) : [];
+    const selectedIds = selectedOptions
+      ? selectedOptions.map((option) => option.value)
+      : [];
     setFormData({ ...formData, user_ids: selectedIds });
+  };
+
+  const handleFileAttachment = (event) => {
+    const selectedFiles = event.target.files;
+    const newAttachments = Array.from(selectedFiles);
+    setFormData({ ...formData, event_image: newAttachments });
+  };
+
+  const filterTime = (time) => {
+    const selectedDate = new Date(time);
+    const currentDate = new Date();
+
+    // Compare selected date with current date
+    if (selectedDate.getTime() > currentDate.getTime()) {
+      return true; // Future date
+    } else if (selectedDate.getTime() === currentDate.getTime()) {
+      // If selected date is today, compare times
+      const selectedTime =
+        selectedDate.getHours() * 60 + selectedDate.getMinutes();
+      const currentTime =
+        currentDate.getHours() * 60 + currentDate.getMinutes();
+      return selectedTime >= currentTime; // Future time
+    } else {
+      return false; // Past date
+    }
   };
 
   return (
@@ -103,7 +148,7 @@ const CreateEvent = () => {
         </h2>
         <div className="flex justify-center">
           <div className="w-fit my-5 mb-10 border border-gray-400 p-5 px-10 rounded-lg shadow-xl">
-            <h2 className="border-b  text-xl border-black mb-6 font-semibold">
+            <h2 className="border-b text-xl border-black mb-6 font-semibold">
               Event Info
             </h2>
             <div className="grid grid-cols-2 gap-4">
@@ -136,35 +181,34 @@ const CreateEvent = () => {
                 />
               </div>
               <div className="flex items-center gap-2">
-              <div>
-                <p className="font-medium mb-2">Start Time:</p>
-
-                <DatePicker
-                  selected={formData.start_date_time}
-                  onChange={handleStartDateChange}
-                  showTimeSelect
-                  dateFormat="dd/MM/yyyy h:mm aa"
-                  placeholderText="Select Date & Time"
-                  ref={datePickerRef}
-                  minDate={currentDate}
-                  className="border border-black p-1 rounded-md"
-                />
+                <div>
+                  <p className="font-medium mb-2">Start Time:</p>
+                  <DatePicker
+                    selected={formData.start_date_time}
+                    onChange={handleStartDateChange}
+                    showTimeSelect
+                    dateFormat="dd/MM/yyyy h:mm aa"
+                    placeholderText="Select Date & Time"
+                    ref={datePickerRef}
+                    minDate={currentDate}
+                    className="border border-black p-1 rounded-md"
+                  />
+                </div>
+                -
+                <div>
+                  <p className="font-medium mb-2">End Time:</p>
+                  <DatePicker
+                    selected={formData.end_date_time}
+                    onChange={handleEndDateChange}
+                    showTimeSelect
+                    dateFormat="dd/MM/yyyy h:mm aa"
+                    placeholderText="Select Date & Time"
+                    ref={datePickerRef}
+                    minDate={currentDate}
+                    className="border border-black rounded-md p-1"
+                  />
+                </div>
               </div>
-              -
-              <div>
-                <p className="font-medium mb-2">End Time:</p>
-                <DatePicker
-                  selected={formData.end_date_time}
-                  onChange={handleEndDateChange}
-                  showTimeSelect
-                  dateFormat="dd/MM/yyyy h:mm aa"
-                  placeholderText="Select Date & Time"
-                  ref={datePickerRef}
-                  minDate={currentDate}
-                  className="border border-black rounded-md p-1"
-                />
-              </div>
-            </div>
             </div>
             <div className="flex flex-col gap-2 my-2">
               <label htmlFor="" className="font-medium">
@@ -180,8 +224,7 @@ const CreateEvent = () => {
                 className="border-gray-400 border px-2 p-1 rounded-md"
               />
             </div>
-            
-            <div className="flex gap-4  my-5">
+            <div className="flex gap-4 my-5">
               <div className="flex gap-2 items-center">
                 <input type="checkbox" name="" id="imp" />
                 <label htmlFor="imp" className="font-semibold">
@@ -195,12 +238,15 @@ const CreateEvent = () => {
                 </label>
               </div>
             </div>
-
             <h2 className="border-b text-xl border-black my-5 font-semibold">
               Upload Attachments
             </h2>
-            <FileInputBox />
-
+            <input
+              ref={fileInputRef}
+              type="file"
+              multiple
+              onChange={handleFileAttachment}
+            />
             <div className="">
               <h2 className="border-b t border-black my-5 text-lg font-semibold">
                 Share With
@@ -223,43 +269,26 @@ const CreateEvent = () => {
                   >
                     Individuals
                   </h2>
-                  {/* <h2
-                    className={`p-1 ${
-                      share === "groups" && "bg-black text-white"
-                    } rounded-full px-4 cursor-pointer border-2 border-black`}
-                    onClick={() => setShare("groups")}
-                  >
-                    Groups
-                  </h2> */}
                 </div>
                 <div className="my-5 flex w-full">
                   {share === "individual" && (
-                    // <Select
-                    //   options={users}
-                    //   placeholder="Select User"
-                    //   value={formData.user_ids}
-                     
-                    //   onChange={(selectedOption) =>
-                    //     setFormData({ ...formData, user_ids: selectedOption })
-                    //   }
-                    //   isMulti
-                    //   className="w-full"
-                    // />
                     <Select
-                    options={users}
-                    placeholder="Select User"
-                    value={users.filter((user) => formData.user_ids.includes(user.value))}
-                    onChange={handleSelectChange}
-                    isMulti
-                    className="w-full"
-                  />
+                      options={users}
+                      placeholder="Select User"
+                      value={users.filter((user) =>
+                        formData.user_ids.includes(user.value)
+                      )}
+                      onChange={handleSelectChange}
+                      isMulti
+                      className="w-full"
+                    />
                   )}
                   {share === "groups" && <p>list of groups</p>}
                 </div>
               </div>
             </div>
             <div>
-              <h2 className="border-b  text-xl border-black m-5 font-semibold">
+              <h2 className="border-b text-xl border-black m-5 font-semibold">
                 RSVP
               </h2>
               <div className="flex gap-10 justify-center">
@@ -278,7 +307,10 @@ const CreateEvent = () => {
               </div>
             </div>
             <div className="flex justify-center mt-10 my-5">
-              <button className="bg-black text-white p-2 rounded-md hover:bg-white hover:text-black hover:border-2 border-black" onClick={handleCreateEvent}>
+              <button
+                className="bg-black text-white p-2 rounded-md hover:bg-white hover:text-black hover:border-2 border-black"
+                onClick={handleCreateEvent}
+              >
                 Submit
               </button>
             </div>

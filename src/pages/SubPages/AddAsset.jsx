@@ -416,7 +416,7 @@ const AddAsset = () => {
                 <div className="flex flex-col">
                   <select
                     className="border p-1 px-4 border-gray-500 rounded-md"
-                    name="sub_group_name"
+                    name="sub_group_id"
                     value={formData.sub_group_id}
                     onChange={handleChange}
                   >
@@ -945,7 +945,7 @@ const AddAsset = () => {
                 Insurance Details
               </p>
               <FileInputBox
-                // handleChange={(files) => handleFileChange(files, "insurance")}
+                handleChange={(files) => handleFileChange(files, "insurance")}
                 fieldName={"insurance"}
               />
             </div>
@@ -954,7 +954,7 @@ const AddAsset = () => {
                 Manuals
               </p>
               <FileInputBox
-                // handleChange={(files) => handleFileChange(files, "manuals")}
+                handleChange={(files) => handleFileChange(files, "manuals")}
                 fieldName={"manuals"}
               />
             </div>
@@ -963,7 +963,7 @@ const AddAsset = () => {
                 Other Files
               </p>
               <FileInputBox
-                // handleChange={(files) => handleFileChange(files, "others")}
+                handleChange={(files) => handleFileChange(files, "others")}
                 fieldName={"others"}
               />
             </div>

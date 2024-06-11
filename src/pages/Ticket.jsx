@@ -3,7 +3,11 @@ import DataTable from "react-data-table-component";
 import Navbar from "../components/Navbar";
 import { PiPlusCircle } from "react-icons/pi";
 import { Link } from "react-router-dom";
-import { getAdminComplaints, getComplaints } from "../api";
+import {
+  getAdminComplaints,
+  getAdminPerPageComplaints,
+  getComplaints,
+} from "../api";
 import { BsEye } from "react-icons/bs";
 import { BiEdit } from "react-icons/bi";
 import moment from "moment";
@@ -11,6 +15,7 @@ import { getItemInLocalStorage } from "../utils/localStorage";
 import * as XLSX from "xlsx";
 import { useSelector } from "react-redux";
 import Table from "../components/table/Table";
+import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from "react-icons/md";
 const Ticket = () => {
   const [filteredData, setFilteredData] = useState([]);
   const [searchText, setSearchText] = useState("");
@@ -19,6 +24,14 @@ const Ticket = () => {
   const [ticketStatusCounts, setTicketStatusCounts] = useState({});
   const allTicketTypes = ["Complaint", "Request", "Suggestion"];
   const [complaints, setComplaints] = useState([]);
+  const perPage = 10;
+  const [totalRows, setTotalRows] = useState(0);
+  const [currentPage, setCurrentPage] = useState(1);
+  // const [totalRows, setTotalRows] = useState(0);
+  // const [totalPages, setTotalPages] = useState(1);
+  // const handlePageChange = (page) => {
+  //   setCurrentPage(page);
+  // };
 
   const getTimeAgo = (timestamp) => {
     const createdTime = moment(timestamp);
@@ -89,7 +102,7 @@ const Ticket = () => {
       selector: (row) => dateFormat(row.created_at),
       sortable: true,
     },
-    { name: "Prioity", selector: (row) => row.priority, sortable: true },
+    { name: "Priority", selector: (row) => row.priority, sortable: true },
     { name: "Assigned To", selector: (row) => row.assigned_to, sortable: true },
     { name: "Ticket Type", selector: (row) => row.issue_type, sortable: true },
     {
@@ -106,26 +119,35 @@ const Ticket = () => {
       style: {
         background: themeColor,
         color: "white",
-
         fontSize: "10px",
       },
     },
     headCells: {
       style: {
-        textTransform: "upperCase",
+        textTransform: "uppercase",
+      },
+    },
+    cells: {
+      style: {
+        fontWeight: "bold",
+        fontSize: "10px",
       },
     },
   };
 
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchData = async (page, perPage) => {
       try {
-        const response = await getAdminComplaints();
+        const response = await getAdminPerPageComplaints(page, perPage);
         console.log("Resp", response);
-        getItemInLocalStorage("complaints", response);
+        // getItemInLocalStorage("complaints", response);
         const complaints = response?.data?.complaints || []; // Handle undefined or empty complaints array
         setFilteredData(complaints);
         setComplaints(complaints);
+        setTotalRows(complaints.length);
+        // setCurrentPage(Math.ceil(complaints.length / perPage));
+        // setTotalPages(complaints.length);
+        setTotalRows(complaints.length);
 
         const statusCounts = complaints.reduce((acc, curr) => {
           acc[curr.issue_status] = (acc[curr.issue_status] || 0) + 1;
@@ -143,8 +165,24 @@ const Ticket = () => {
       }
     };
 
-    fetchData();
-  }, []);
+    fetchData(currentPage, perPage);
+  }, [currentPage]);
+
+  const handleNext = () => {
+    setCurrentPage((prevPage) => prevPage + 1);
+    console.log(currentPage);
+  };
+
+  const handlePrevious = () => {
+    setCurrentPage((prevPage) => Math.max(prevPage - 1, 1)); // Ensure currentPage does not go below 1
+  };
+  // const handlePageChange = (page) => {
+  //   setCurrentPage(page);
+  // };
+
+  const handlePerRowsChange = async (newPerPage, page) => {
+    setCurrentPage(page);
+  };
 
   // useEffect(() => {
   //   const fetchData = async () => {
@@ -263,12 +301,12 @@ const Ticket = () => {
     link.click();
   };
 
-  document.title = `Admin - Vibe Connect`;
+  document.title = `Tickets - Vibe Connect`;
 
   return (
     <section className="flex">
       <Navbar />
-      <div className="w-full flex mx-3 flex-col overflow-hidden">
+      <div className="w-full flex mx-3 mb-10 flex-col overflow-hidden">
         <div className="sm:flex grid grid-cols-2 m-5 justify-start w-fit gap-5 sm:flex-row flex-col flex-shrink flex-wrap ">
           {/* <div className="flex gap-2 mt-2"> */}
           {Object.entries(ticketStatusCounts).map(([status, count]) => (
@@ -429,27 +467,69 @@ const Ticket = () => {
           <p className="text-center">Loading...</p>
         ) : (
           <>
-            <Table
+            {/* <Table
               columns={columns}
               data={filteredData}
               customStyles={customStyle}
-              isPagination={true}
-            />
-            {/* <DataTable
+              apiEndpoint={"http://13.215.74.38/pms/admin/complaints.json?per_page=15&token=775d6ae27272741669a65456ea10cc56cd4cce2bb99287b6"}
+
+            /> */}
+            <DataTable
               responsive
               selectableRows
               columns={columns}
               data={filteredData}
               customStyles={customStyle}
-              pagination
               fixedHeader
-              // fixedHeaderScrollHeight="420px"
+              fixedHeaderScrollHeight="500px"
               selectableRowsHighlight
               highlightOnHover
+              // pagination
+              // paginationServer
+              // paginationTotalRows={totalPages * 10} // Assuming 10 items per page
+              // paginationPerPage={10}
+              // paginationRowsPerPageOptions={[10, 20, 30]} // Optional: specify different page sizes
+              // onChangePage={handlePageChange}
+              // paginationServer
+              // paginationPerPage={perPage}
+              // paginationRowsPerPageOptions={[perPage]} // Only one option since we're assuming fixed perPage value
+              // onChangePage={handlePageChange}
+              // paginationTotalRows={totalRows}
+            />
+
+            {/* <Table
+              columns={columns}
+              apiEndpoint="http://13.215.74.38/pms/admin/complaints.json?token=775d6ae27272741669a65456ea10cc56cd4cce2bb99287b6"
+             
             /> */}
           </>
         )}
         {/* </div> */}
+
+        <div className="flex justify-end m-2 gap-2 items-center">
+          <button
+            onClick={handlePrevious}
+            className=" px-2   disabled:opacity-50 disabled:shadow-none shadow-custom-all-sides rounded-full"
+            disabled={currentPage <= 1}
+          >
+            <MdKeyboardArrowLeft size={30} />
+          </button>
+
+          {/* <button
+            onClick={handleNext}
+            className=" px-2 rounded-full shadow-custom-all-sides "
+          >
+            <MdKeyboardArrowRight size={30} />
+          </button> */}
+
+          <button
+            onClick={handleNext}
+            className="px-2 rounded-full shadow-custom-all-sides  disabled:opacity-50 disabled:shadow-none"
+            disabled={perPage > totalRows}
+          >
+            <MdKeyboardArrowRight size={30} />
+          </button>
+        </div>
       </div>
     </section>
   );

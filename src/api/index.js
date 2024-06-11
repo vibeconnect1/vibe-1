@@ -80,6 +80,18 @@ export const getAdminComplaints = async () =>
       token: token,
     },
   });
+
+  // perPage
+
+  export const getAdminPerPageComplaints = async (page, perPage) =>
+    axiosInstance.get(`/pms/admin/complaints.json`, {
+      params: {
+        token: token,
+        per_page: perPage,
+        page: page
+      },
+    });
+
 export const getComplaintsDetails = async (id) =>
   axiosInstance.get(`pms/complaints/${id}.json`, {
     params: {
@@ -264,6 +276,13 @@ export const getInventory = async () =>
       token: token,
     },
   });
+export const postInventory = async (data) =>
+  axiosInstance.post("/items.json",data, {
+    params: {
+      token: token,
+    },
+  });
+
 export const getInventoryDetails = async (id) =>
   axiosInstance.get(`/items/${id}.json`, {
     params: {
@@ -461,6 +480,23 @@ export const CreateVibeMeeting = async (data) => {
   try {
     const response = await vibeAuth.post(
       `/api/employee/calender/create-meeting/`,
+      data,
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error creating calendar events:", error);
+    throw error;
+  }
+};
+export const UpdateVibeTask = async (data) => {
+  try {
+    const response = await vibeAuth.put(
+      `/api/employee/calender/update-calender-event/`,
       data,
       {
         headers: {

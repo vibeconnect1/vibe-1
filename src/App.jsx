@@ -230,6 +230,16 @@ import CheckListGroupSetup from "./pages/Setup/ChecklistGroupSetup.jsx";
 import ParkingDetails from "./pages/SubPages/details/ParkingDetails.jsx";
 import AddParkingConfig from "./pages/Setup/ParkingSetupPages/AddParkingConfig.jsx";
 import EditParkingConfiguration from "./pages/Setup/ParkingSetupPages/EditParkingConfig.jsx";
+import FmUserSetup from "./pages/Setup/FMUserSetup.jsx";
+import AddFmUserSetup from "./pages/Setup/AddFMUserSetup.jsx";
+import EditFmUserSetup from "./pages/Setup/EditFMUserSetup.jsx";
+import OccupantUserSetup from "./pages/Setup/OccupantUser/OccupantUserSetup.jsx";
+import AddOccupantUserSetup from "./pages/Setup/OccupantUser/AddOccupantUserSetup.jsx";
+import EditOccupantUserSetup from "./pages/Setup/OccupantUser/EditOccupantUserSetup.jsx";
+import InvoiceApprovalSetup from "./pages/Setup/InvoiceApprovalSetupPages/InvoiceApprovalSetup.jsx";
+import AddInvoiceApprovalsSetup from "./pages/Setup/InvoiceApprovalSetupPages/AddInvoiceApprovalSetup.jsx";
+import EditInvoiceApprovalsSetup from "./pages/Setup/InvoiceApprovalSetupPages/EditInvoiceApprovalSet.jsx";
+import TicketSetup from "./pages/Setup/TicketSetup/TicketSetup.jsx";
 
 function App() {
   const themeColor = useSelector((state) => state.theme.color);
@@ -685,7 +695,7 @@ function App() {
             path="/setup/parking-setup"
             element={
               <ProtectedAdminRoutes>
-               <ParkingSetup/>
+                <ParkingSetup />
               </ProtectedAdminRoutes>
             }
           />
@@ -693,16 +703,16 @@ function App() {
             path="/admin/add-parking-config"
             element={
               <ProtectedAdminRoutes>
-               <AddParkingConfig/>
+                <AddParkingConfig />
               </ProtectedAdminRoutes>
             }
           />
-          
-           <Route
+
+          <Route
             path="/admin/edit-park-config/:id"
             element={
               <ProtectedAdminRoutes>
-              <EditParkingConfiguration/>
+                <EditParkingConfiguration />
               </ProtectedAdminRoutes>
             }
           />
@@ -1894,6 +1904,93 @@ function App() {
             element={
               <ProtectedAdminRoutes>
                 <CheckListGroupSetup />
+              </ProtectedAdminRoutes>
+            }
+          />
+
+          {/* FmUSer */}
+          <Route
+            path="/admin/fm-user"
+            element={
+              <ProtectedAdminRoutes>
+                <FmUserSetup />
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/add-fm-user"
+            element={
+              <ProtectedAdminRoutes>
+                <AddFmUserSetup />
+              </ProtectedAdminRoutes>
+            }
+          />
+
+          <Route
+            path="/admin/fm-user-details/:id"
+            element={
+              <ProtectedAdminRoutes>
+                <EditFmUserSetup />
+              </ProtectedAdminRoutes>
+            }
+          />
+          {/* Occupant User */}
+          <Route
+            path="/admin/occupant-user-setup"
+            element={
+              <ProtectedAdminRoutes>
+                <OccupantUserSetup />
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/add-occupant-user-setup"
+            element={
+              <ProtectedAdminRoutes>
+                <AddOccupantUserSetup />
+              </ProtectedAdminRoutes>
+            }
+          />
+
+          <Route
+            path="/admin/occupant-user-setup-details/:id"
+            element={
+              <ProtectedAdminRoutes>
+                <EditOccupantUserSetup />
+              </ProtectedAdminRoutes>
+            }
+          />
+          {/* Invoice Approvals */}
+          <Route
+            path="/admin/invoice-approval-setup"
+            element={
+              <ProtectedAdminRoutes>
+                <InvoiceApprovalSetup />
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/add-invoice-approval-setup"
+            element={
+              <ProtectedAdminRoutes>
+                <AddInvoiceApprovalsSetup />
+              </ProtectedAdminRoutes>
+            }
+          />
+
+          <Route
+            path="/admin/edit-invoice-approval-setup/:id"
+            element={
+              <ProtectedAdminRoutes>
+                <EditInvoiceApprovalsSetup />
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/setup/ticket-setup"
+            element={
+              <ProtectedAdminRoutes>
+               <TicketSetup/>
               </ProtectedAdminRoutes>
             }
           />

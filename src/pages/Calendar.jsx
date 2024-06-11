@@ -7,6 +7,7 @@ import {
   CreateVibeMeeting,
   CreateVibeTeamMeeting,
   CreateVibeZoomMeeting,
+  UpdateVibeTask,
   getVibeCalendar,
   getVibeUsers,
   postCalendarTask,
@@ -87,7 +88,20 @@ const Calender = () => {
   const [meet_id, setMeet_id] = useState("");
   const [isCreatingMeeting, setIsCreatingMeeting] = useState(false);
   const [subcategory, setSubcategory] = useState("");
+  // edit
   const [editableTitle, setEditableTitle] = useState("");
+  const [editableDescription, setEditableDescription] = useState("");
+  const [editableAssignTo, setEditableAssignTo] = useState([]);
+  const [editableGuestTo, setEditableGuestTo] = useState([]);
+  const [editableParticipantTo, setEditableParticipantTo] = useState([]);
+  const [category, setCategory] = useState("");
+  const [id, setId] = useState("");
+  const [editableStart, setEditableStart] = useState("");
+  const [editableEnd, setEditableEnd] = useState("");
+  const [editableStartTime, setEditableStartTime] = useState("");
+  const [editableEndTime, setEditableEndTime] = useState("");
+  const [editableMeetingLink, setEditableMeetingLink] = useState("");
+
   // refs
   const dropdownRef = useRef();
   const fileInputRef = useRef(null);
@@ -108,7 +122,7 @@ const Calender = () => {
     const day = String(date.getDate()).padStart(2, "0");
     return `${year}-${month}-${day}`;
   }
-  console.log(vibeUserId);
+
   const currentDates = new Date();
   const year = currentDates.getFullYear();
   const month = String(currentDates.getMonth() + 1).padStart(2, "0");
@@ -124,7 +138,7 @@ const Calender = () => {
     { day: "Sat", index: 5, isActive: false },
     { day: "Sun", index: 6, isActive: false },
   ]);
-  console.log(selectedWeekdays);
+  
 
   const handleWeekdaySelection = (weekday) => {
     console.log(`Selected day: ${weekday}`);
@@ -214,63 +228,97 @@ const Calender = () => {
     fetchCalenderData();
   }, [popupDate]);
 
-  useEffect(
-    () => {
-      const getTaskAssign = async () => {
-        const user_id = getItemInLocalStorage("VIBEUSERID");
-        const org_id = getItemInLocalStorage("VIBEORGID");
-        const orgg_id = localStorage.getItem("VIBEORGID");
-        console.log("user : ", user_id);
-        console.log("ord : ", org_id);
-        console.log("orgid : ", orgg_id);
+  useEffect(() => {
+    const getTaskAssign = async () => {
+      const user_id = getItemInLocalStorage("VIBEUSERID");
+      const org_id = getItemInLocalStorage("VIBEORGID");
+      const orgg_id = localStorage.getItem("VIBEORGID");
+      console.log("user : ", user_id);
+      console.log("ord : ", org_id);
+      console.log("orgid : ", orgg_id);
 
-        try {
-          // const params = {
-          //   user_id: user_id,
-          //   org_id: org_id,
-          // };
+      try {
+        // const params = {
+        //   user_id: user_id,
+        //   org_id: org_id,
+        // };
 
-          const VibeUserResponse = await getVibeUsers(user_id);
-          console.log(VibeUserResponse);
+        const VibeUserResponse = await getVibeUsers(user_id);
+        console.log(VibeUserResponse);
 
-          //   const jsonData = await getDataFromAPI(GetUsers, params);
+        //   const jsonData = await getDataFromAPI(GetUsers, params);
 
-          if (VibeUserResponse.success) {
-            const users = VibeUserResponse.data;
-            const assignEmails = users.map((user) => ({
-              value: user.user_id,
-              label: user.email,
-            }));
+        if (VibeUserResponse.success) {
+          const users = VibeUserResponse.data;
+          const assignEmails = users.map((user) => ({
+            value: user.user_id,
+            label: user.email,
+          }));
 
-            setEmails(assignEmails);
-            //     setEditableAssignTo(assignEmails);
-            //     setEditableGuestTo(assignEmails);
-            //     setEditableParticipantTo(assignEmails);
-            //     // Store the emails in local storage
-            //     localStorage.setItem("assignEmails", JSON.stringify(assignEmails));
-          } else {
-            console.log("Something went wrong");
-          }
-        } catch (error) {
-          console.error("Error:", error);
+          setEmails(assignEmails);
+          setEditableAssignTo(assignEmails);
+          //     setEditableGuestTo(assignEmails);
+          setEditableParticipantTo(assignEmails);
+          //     // Store the emails in local storage
+          //     localStorage.setItem("assignEmails", JSON.stringify(assignEmails));
+        } else {
+          console.log("Something went wrong");
         }
-      };
+      } catch (error) {
+        console.error("Error:", error);
+      }
+    };
 
-      // const assignEmailsFromStorage = localStorage.getItem("assignEmails");
+    // const assignEmailsFromStorage = localStorage.getItem("assignEmails");
 
-      // if (assignEmailsFromStorage) {
-      //   setEmails(JSON.parse(assignEmailsFromStorage));
-      // } else {
-      getTaskAssign();
-      // }
-    },
-    [
-      // setEmails,
-      // setEditableAssignTo,
-      // setEditableGuestTo,
-      // setEditableParticipantTo,
-    ]
-  );
+    // if (assignEmailsFromStorage) {
+    //   setEmails(JSON.parse(assignEmailsFromStorage));
+    // } else {
+    getTaskAssign();
+    // }
+  }, [
+    // setEmails,
+    setEditableAssignTo,
+    // setEditableGuestTo,
+    setEditableParticipantTo,
+  ]);
+
+  useEffect(() => {
+    if (selectedItem) {
+      console.log("------------------watch this-");
+      console.log(selectedItem);
+      console.log(selectedItem.sub_category);
+      setEditableTitle(selectedItem.title);
+      setEditableStart(selectedItem.start);
+      setEditableEnd(decrementDate(selectedItem.end));
+      // setEditableCategory(selectedItem.category);
+      setEditableStartTime(selectedItem.start_time);
+      setEditableEndTime(selectedItem.end_time);
+      setEditableDescription(selectedItem.description);
+      setEditableMeetingLink(selectedItem.meeting_link);
+      // console.log(setEditableMeetingLink(selectedItem.meeting_link));
+      setEditableAssignTo(selectedItem.assign_to_emails);
+      setEditableGuestTo(selectedItem.guest_to_emails);
+      setEditableParticipantTo(selectedItem.participant_to_emails);
+      setId(selectedItem.id);
+      setCategory(selectedItem.category);
+      setSubcategory(selectedItem.extendedProps.sub_category);
+      console.log(selectedItem.extendedProps.sub_category);
+      console.log(subcategory);
+      // console.log(microevents);
+    //   setMicroTitle(selectedItem.title);
+    //   setMicroDescription(selectedItem.description);
+    //   setMicroStartTime(selectedItem.start);
+    //   setMicroEndTime(selectedItem.end);
+    //   setMicroInvites(selectedItem.participant_to_emails);
+
+    //   setGmailTitle(selectedItem.title);
+    //   setGmailDescription(selectedItem.description);
+    //   setGmailStartTime(selectedItem.start);
+    //   setGmailEndTime(selectedItem.end);
+    //   setGmailInvites(selectedItem.participant_to_emails);
+    }
+  }, [selectedItem]);
 
   const calendarRef = useRef();
   const handleDateClick = (arg, date) => {
@@ -381,6 +429,7 @@ const Calender = () => {
   };
 
   const handleCheckboxChange = (event) => {
+    console.log("checkbox")
     const updatedSelectedCategories = {
       ...selectedCategories,
       [event.target.name]: event.target.checked,
@@ -393,6 +442,12 @@ const Calender = () => {
 
     setAreCheckboxesChecked(anyCheckboxChecked);
     setSelectedCategories(updatedSelectedCategories);
+    console.log("event",selectedCategories.Event)
+    console.log("task",selectedCategories.Task)
+    console.log("outlook",selectedCategories.Outlook)
+    console.log("meeting",selectedCategories.Meeting)
+    console.log("gmail",selectedCategories.Gmail)
+    console.log("checkbox end")
   };
   const themeColor = useSelector((state) => state.theme.color);
 
@@ -782,7 +837,7 @@ const Calender = () => {
       const meetingResp = await CreateVibeMeeting(formData);
       toast.dismiss();
       toast.success("Meeting Created Successfully");
-      setPopupDate(null)
+      setPopupDate(null);
       if (meetingResp.success) {
         setMeetingTitle("");
         setMeetingDate("");
@@ -804,6 +859,234 @@ const Calender = () => {
     }
   };
 
+  const handleChangeUpdate = (selectedOptions) => {
+    setEditableAssignTo(selectedOptions);
+    console.log(selectedOptions);
+  };
+
+  const handleUpdateTask = async () => {
+    console.log(subcategory);
+
+    const assignToIds = editableAssignTo.map(
+      (assignEmails) => assignEmails.value
+    );
+    const user_id = localStorage.getItem("user_id");
+    const formData = new FormData();
+    // formData.append('task_topic', editableTitle);
+    // formData.append('due_date', formatDate(due_date));
+    // formData.append('user_id', user_id);
+    // formData.append('task_description', editableDescription);
+    // formData.append('assign_to', assignToIds);
+    // formData.append('id', id);
+    // formData.append('category', category);
+    // attachments.forEach((file, index) => {
+    //     formData.append('attachments', file);
+    // });
+    // console.log(id)
+
+    if (category === "Task" && subcategory && subcategory === "subtask") {
+      console.log("subtask-------------------------");
+      formData.append("user_id", user_id);
+      formData.append("task_id", id);
+      formData.append("task_topic", editableTitle);
+      formData.append("due_date", SendDueDateFormat(due_date));
+      formData.append("assign_to", assignToIds);
+
+      putDataToAPI(Update_User_SubTask, formData)
+        .then((response) => {
+          if (response.success) {
+            window.location.reload();
+          } else {
+            console.log("unsuccess");
+          }
+        })
+        .catch((error) => {
+          console.error("Please check your internet and try again!", error);
+        })
+        .finally(() => {
+          setSelectedItem(false);
+        });
+    } else if (
+      category === "Task" &&
+      subcategory &&
+      subcategory === "subtaskchild"
+    ) {
+      console.log("subtaskchild-----------------------");
+      formData.append("user_id", user_id);
+      formData.append("child_task_id", id);
+      formData.append("due_date", SendDueDateFormat(due_date));
+      formData.append("assign_to", assignToIds);
+
+      // putDataToAPI(UpdateSubTask_Child, formData)
+      //   .then((response) => {
+      //     if (response.success) {
+      //       window.location.reload();
+      //     } else {
+      //       console.log("unsuccess");
+      //     }
+      //   })
+      //   .catch((error) => {
+      //     console.error("Please check your internet and try again!", error);
+      //   })
+      //   .finally(() => {
+      //     setSelectedItem(false);
+      //   });
+    } else {
+      console.log("task -----------------------");
+
+      formData.append("task_topic", editableTitle);
+      formData.append("due_date", formatDate(due_date));
+      formData.append("user_id", user_id);
+      formData.append("task_description", editableDescription);
+      formData.append("assign_to", assignToIds);
+      formData.append("id", id);
+      formData.append("category", category);
+      attachments.forEach((file, index) => {
+        formData.append("attachments", file);
+      });
+      console.log(id);
+
+      // putDataToAPI(UpdateCalendarEvent, formData)
+      //   .then((response) => {
+      //     if (response.success) {
+      //       window.location.reload();
+      //     } else {
+      //       console.log("unsuccess");
+      //     }
+      //   })
+      //   .catch((error) => {
+      //     console.error("Please check your internet and try again!", error);
+      //   })
+      //   .finally(() => {
+      //     setSelectedItem(false);
+      //   });
+      const UpdateTaskResponse = await UpdateVibeTask(formData);
+
+      console.log(UpdateTaskResponse);
+    }
+  };
+  const handleChangeUpdateEvent = (selectedOptions) => {
+    setEditableGuestTo(selectedOptions);
+    console.log(selectedOptions);
+  };
+  const handleUpdateEvent = () => {
+    const guestToIds = editableGuestTo.map(
+      (assignEmails) => assignEmails.value
+    );
+    if (editableEnd < editableStart) {
+      toast.error(
+        "Selected event end date should be greater than the start date.",
+        {
+          position: "top-center",
+          autoClose: 2000,
+        }
+      );
+      return;
+    }
+    if (editableEndTime <= editableStartTime) {
+      toast.error(
+        "Selected event end time should be greater than the start time.",
+        {
+          position: "top-center",
+          autoClose: 2000,
+        }
+      );
+      return;
+    }
+    const user_id = localStorage.getItem("user_id");
+    const formData = new FormData();
+    formData.append("title", editableTitle);
+    formData.append("from_date", editableStart);
+    formData.append("to_date", editableEnd);
+    formData.append("from_time", editableStartTime);
+    formData.append("to_time", editableEndTime);
+    formData.append("user_id", user_id);
+    formData.append("description", editableDescription);
+    formData.append("attachment", eventAttachment);
+    formData.append("guest_ids", guestToIds);
+    // const id = idList.join(',');
+
+    // formData.append('participent_ids', id);
+    formData.append("id", id);
+    formData.append("category", category);
+    attachments.forEach((file, index) => {
+      // formData.append(attachments${index}, file); // Append each file individually with a unique key
+      formData.append("attachments", file);
+    });
+
+    putDataToAPI(UpdateCalendarEvent, formData)
+      .then((response) => {
+        if (response.success) {
+          //  alert("Event Updated !")
+
+          //   onClose();
+          window.location.reload();
+        } else {
+          console.log("unsuccess");
+        }
+      })
+      .catch((error) => {
+        //alert('Please check your internet and try again!');
+      })
+      .finally(() => {
+        setSelectedItem(false);
+      });
+  };
+
+  const handleChangeUpdateMeeting = (selectedOptions) => {
+    setEditableParticipantTo(selectedOptions);
+    console.log(selectedOptions);
+  };
+
+  const handleUpdateMeeting = () => {
+    const participantToIds = editableParticipantTo.map(
+      (assignEmails) => assignEmails.value
+    );
+    if (editableEndTime < editableStartTime) {
+      toast.error(
+        "Selected meeting end time should be greater than start time.",
+        { position: "top-center", autoClose: 2000 }
+      );
+      return;
+    }
+    const user_id = localStorage.getItem("user_id");
+    const formData = new FormData();
+    formData.append("title", editableTitle);
+    formData.append("from_date", editableStart);
+    formData.append("from_time ", editableStartTime);
+    formData.append("to_time", editableEndTime);
+    formData.append("user_id", user_id);
+    formData.append("purpose", editableDescription);
+    formData.append("meet_link", editableMeetingLink);
+    formData.append("participent_ids", participantToIds);
+    formData.append("id", id);
+    formData.append("category", category);
+    attachments.forEach((file, index) => {
+      //formData.append(attachments${index}, file); // Append each file individually with a unique key
+      formData.append("attachments", file);
+    });
+    // const otheremails = emailOtherList.join(',');
+    // formData.append('other_emails', otheremails);
+
+    putDataToAPI(UpdateCalendarEvent, formData)
+      .then((response) => {
+        if (response.success) {
+          //  alert("Meeting Updated !")
+
+          //   onClose();
+          window.location.reload();
+        } else {
+          console.log("unsuccess");
+        }
+      })
+      .catch((error) => {
+        //alert('Please check your internet and try again!');
+      })
+      .finally(() => {
+        setSelectedItem(false);
+      });
+  };
+
   return (
     <section className="flex">
       <Navbar />
@@ -823,51 +1106,50 @@ const Calender = () => {
           <FaPlus size={20} />
         </button>
         <div className=" rounded-xl shadow-custom-all-sides">
-
-        
-        <FullCalendar
-          ref={calendarRef}
-          plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
-          headerToolbar={{
-            left: "prev",
-            center: "title",
-            right: "next dayGridMonth,timeGridWeek,timeGridDay customDropdown",
-          }}
-          customButtons={{
-            customDropdown: {
-              text: `My Calendar`,
-              click: function (event) {
-                const rect = event.currentTarget.getBoundingClientRect();
-                setDropdownPosition({
-                  top: rect.bottom - 0,
-                  left: rect.left - 0,
-                });
-                setIsListOpen((prevState) => !prevState);
+          <FullCalendar
+            ref={calendarRef}
+            plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
+            headerToolbar={{
+              left: "prev",
+              center: "title",
+              right:
+                "next dayGridMonth,timeGridWeek,timeGridDay customDropdown",
+            }}
+            customButtons={{
+              customDropdown: {
+                text: `My Calendar`,
+                click: function (event) {
+                  const rect = event.currentTarget.getBoundingClientRect();
+                  setDropdownPosition({
+                    top: rect.bottom - 0,
+                    left: rect.left - 0,
+                  });
+                  setIsListOpen((prevState) => !prevState);
+                },
               },
-            },
-          }}
-          dateClick={handleDateClick}
-          initialDate={selectedDate}
-          datesSet={handleViewChange}
-          events={areCheckboxesChecked ? filteredEvents : events}
-          eventBackgroundColor={(events) =>
-            events.extendedProps.category === "Task" ? "blue" : "green"
-          }
-          eventTextColor="white"
-          eventClick={handleEventClick}
-          height={"90vh"}
-          allDayText="All Day"
-          eventTimeFormat={{
-            hour: "2-digit",
-            minute: "2-digit",
-            hour12: true,
-          }}
-          slotLabelFormat={{
-            hour: "2-digit",
-            minute: "2-digit",
-            hour12: true,
-          }}
-        />
+            }}
+            dateClick={handleDateClick}
+            initialDate={selectedDate}
+            datesSet={handleViewChange}
+            events={areCheckboxesChecked ? filteredEvents : events}
+            eventBackgroundColor={(events) =>
+              events.extendedProps.category === "Task" ? "red" : "green"
+            }
+            eventTextColor="white"
+            eventClick={handleEventClick}
+            height={"90vh"}
+            allDayText="All Day"
+            eventTimeFormat={{
+              hour: "2-digit",
+              minute: "2-digit",
+              hour12: true,
+            }}
+            slotLabelFormat={{
+              hour: "2-digit",
+              minute: "2-digit",
+              hour12: true,
+            }}
+          />
         </div>
         {isListOpen && (
           <div
@@ -1141,7 +1423,7 @@ const Calender = () => {
                       <div className="my-1 ">
                         <label className="font-medium text-white"> Date</label>
                         <br />
-                        <div className="flex  gap-2 items-center">
+                        <div className="flex gap-2 items-center">
                           <input
                             type="date"
                             // style={{ width: "50%" }}
@@ -1760,421 +2042,320 @@ const Calender = () => {
               </div>
             </div>
             &nbsp;&nbsp;
-            {/* {activeButton === "task" && (
-              
-              <div
-                  
-                >
-                  <div  className="flex flex-col gap-4">
-                    <div
-                      className="grid grid-cols-2 gap-4"
-                      
-                    >
-                      <div class="col-md-6 " style={{ marginBottom: "0rem" }}>
-                        <label
-                          style={{ marginTop: "10px", marginBottom: "0rem" }}
-                        >
-                          Task Topic
-                        </label>
-                        <br />
-                        <input
-                          value={editableTitle}
-                          onChange={(e) => setEditableTitle(e.target.value)}
-                          style={{
-                            borderRadius: 4,
-                            border: "#747272 solid 1px",
-                            height: 40,
-                            fontSize: 14,
-                            paddingLeft: 10,
-                            color: "#000",
-                            width: "100%",
-                          }}
-                          type="text"
-                          spellcheck="true"
-                        />
-                      </div>
+            {activeButton === "task" && (
+              <div>
+                <div className="flex flex-col gap-4">
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <label className="font-medium text-white">
+                        Task Topic
+                      </label>
+                      <br />
+                      <input
+                        value={editableTitle}
+                        onChange={(e) => setEditableTitle(e.target.value)}
+                        className="rounded-sm p-2 outline-none w-full border border-gray-400 "
+                        type="text"
+                        placeholder="Enter Task"
+                        spellCheck="true"
+                      />
+                    </div>
 
-                      <div className="col-md">
-                        <label
-                          style={{ marginTop: "10px", marginBottom: "0rem" }}
-                        >
-                          {" "}
-                          Date
-                        </label>
-                        <br />
-                        <DatePicker
-                          // selected={editableStart}
-                          // onChange={(start) => setEditableStart(start)}
+                    <div className="w-full flex flex-col">
+                      <label className="font-medium text-white"> Date</label>
 
-                          selected={due_date}
-                          onChange={(date) => setDueDate(date)}
-                          showTimeSelect
-                          dateFormat="dd/MM/yyyy h:mm aa"
-                          timeIntervals={5}
-                          minDate={new Date()}
-                          minTime={currentTime}
-                          maxTime={maxTime}
-                          filterTime={filterTime}
-                          customInput={<CustomInput />}
-                        />
-                      </div>
+                      <DatePicker
+                        // selected={editableStart}
+                        // onChange={(start) => setEditableStart(start)}
 
-                      <div class="col-md-6 " style={{ marginBottom: "0rem" }}>
-                        <label
-                          style={{ marginTop: "10px", marginBottom: "0rem" }}
-                        >
-                          Task Description
-                        </label>
-                        <br />
-                        <textarea
-                          style={{ resize: "none" }}
-                          type="text"
-                          value={editableDescription}
-                          onChange={(e) =>
-                            setEditableDescription(e.target.value)
-                          }
-                          spellcheck="true"
-                        />
-                      </div>
-                      <div class="col-md-6">
-                        <label
-                          style={{ marginTop: "10px", marginBottom: "0rem" }}
-                        >
-                          Attachment
-                        </label>
-                        <br />
-                        <input
-                          style={{
-                            border: "#929090 dotted 2px",
-                            height: "100px",
-                            color: "white",
-                            padding: "35px 10px",
-                            paddingLeft: 25,
-                          }}
-                          ref={fileInputRef}
-                          value={selectedItem.attachments}
-                          type="file"
-                          onChange={handleFileAttachment}
-                        />
-                      </div>
-                      <div class="col-md-6">
-                        <label
-                          style={{ marginTop: "10px", marginBottom: "0rem" }}
-                        >
-                          Assign
-                        </label>
-                        <br />
-                        <Select
-                          isMulti
-                          onChange={handleChangeUpdate}
-                          value={editableAssignTo}
-                          options={emails}
-                          noOptionsMessage={() => "Email not available..."}
-                          maxMenuHeight={90}
-                          styles={{
-                            placeholder: (baseStyles, state) => ({
-                              ...baseStyles,
-                              color: "black",
-                            }),
-                            clearIndicator: (baseStyles) => ({
-                              ...baseStyles,
-                              color: "red",
-                            }),
-                            dropdownIndicator: (baseStyles) => ({
-                              ...baseStyles,
-                              color: "black",
-                            }),
-                            control: (baseStyles) => ({
-                              ...baseStyles,
-                              borderColor: "darkblue",
-                            }),
-                            multiValueRemove: (baseStyles, state) => ({
-                              ...baseStyles,
-                              color: state.isFocused ? "red" : "gray",
-                              backgroundColor: state.isFocused
-                                ? "black"
-                                : "lightgreen",
-                            }),
-                          }}
-                          menuPosition={"fixed"}
-                        />
-                      </div>
-                      <div
-                        class="row col-md-12"
-                        style={{ display: "flex", justifyContent: "flex-end" }}
-                      >
-                        <div class="col-md-3">
-                          <button
-                            style={{
-                              marginTop: "10px",
-                              marginBottom: "0rem",
-                              padding: "5px 10px",
-                              width: "100%",
-                            }}
-                            onClick={() => handleUpdateTask()}
-                          >
-                            Update
-                          </button>
-                        </div>
-
-                        <div class="col-md-3">
-                          <button
-                            style={{
-                              marginTop: "10px",
-                              marginBottom: "0rem",
-                              padding: "5px 10px",
-                              width: "100%",
-                              backgroundColor: "gray",
-                            }}
-                            onClick={() =>
-                              handleDeleteTask(user_id, category, id)
-                            }
-                          >
-                            Delete
-                          </button>
-                        </div>
-                      </div>
+                        selected={due_date}
+                        onChange={(date) => setDueDate(date)}
+                        showTimeSelect
+                        dateFormat="dd/MM/yyyy h:mm aa"
+                        timeIntervals={5}
+                        minDate={new Date()}
+                        // minTime={currentTime}
+                        // maxTime={maxTime}
+                        filterTime={filterTime}
+                        className="rounded-sm p-2 outline-none w-full border border-gray-400"
+                        // customInput={<CustomInput />}
+                      />
                     </div>
                   </div>
-                </div>)} */}
-            {/* <div
-                  className={`content ${
-                    activeButton === "event" ? "active" : ""
-                  }`}
-                >
-                  <div id="eventDiv">
-                    <div
-                      class="pdEmplyself-main col-md-12 row"
-                      style={{ color: "black" }}
-                    >
-                      <div class="col-md-6 " style={{ marginBottom: "0rem" }}>
-                        <label
-                          style={{ marginTop: "10px", marginBottom: "0rem" }}
-                        >
-                          Event Topic
-                        </label>
-                        <br />
-                        <input
-                          value={editableTitle}
-                          onChange={(e) => setEditableTitle(e.target.value)}
-                          style={{
-                            borderRadius: 4,
-                            border: "#747272 solid 1px",
-                            height: 40,
-                            fontSize: 14,
-                            paddingLeft: 10,
-                            color: "#000",
-                            width: "100%",
-                          }}
-                          type="text"
-                          spellcheck="true"
-                        />
-                      </div>
-
-                      <div className="col-md">
-                        <label
-                          style={{ marginTop: "10px", marginBottom: "0rem" }}
-                        >
-                          {" "}
-                          Date
-                        </label>
-                        <br />
-                        <div style={{ display: "flex" }}>
-                          <input
-                            type="date"
-                            style={{ width: "50%" }}
-                            value={editableStart}
-                            onChange={(e) => setEditableStart(e.target.value)}
-                            min={today}
-                          ></input>
-                          <input
-                            type="date"
-                            style={{ width: "50%", marginLeft: "10px" }}
-                            value={editableEnd}
-                            onChange={(e) => setEditableEnd(e.target.value)}
-                            min={today}
-                          ></input>
-                        </div>
-                      </div>
-
-                      <div class="col-md-6 " style={{ marginBottom: "0rem" }}>
-                        <label
-                          style={{ marginTop: "10px", marginBottom: "0rem" }}
-                        >
-                          Event Description
-                        </label>
-                        <br />
-                        <textarea
-                          style={{
-                            resize: "none",
-                            height: "40px",
-                            paddingTop: "8px",
-                          }}
-                          type="text"
-                          value={editableDescription}
-                          onChange={(e) =>
-                            setEditableDescription(e.target.value)
-                          }
-                          spellcheck="true"
-                        />
-                      </div>
-                      <div className="col-md">
-                        <label
-                          style={{ marginTop: "10px", marginBottom: "0rem" }}
-                        >
-                          {" "}
-                          Time
-                        </label>
-                        <br />
-                        <div style={{ display: "flex" }}>
-                          <input
-                            type="time"
-                            style={{ width: "50%" }}
-                            value={editableStartTime}
-                            onChange={(e) =>
-                              setEditableStartTime(e.target.value)
-                            }
-                          ></input>
-                          <input
-                            type="time"
-                            style={{ width: "50%", marginLeft: "10px" }}
-                            value={editableEndTime}
-                            onChange={(e) => setEditableEndTime(e.target.value)}
-                          ></input>
-                        </div>
-                      </div>
-                      <div class="col-md-6">
-                        <label
-                          style={{ marginTop: "10px", marginBottom: "0rem" }}
-                        >
-                          Attachment
-                        </label>
-                        <br />
-                        <input
-                          style={{
-                            border: "#929090 dotted 2px",
-                            height: "55px",
-                            color: "black",
-                            padding: "10px",
-                          }}
-                          value={eventAttachment}
-                          //onChange={(e) => setEventAttachment(e.target.value)}
-                          onChange={handleEventFileAttachment}
-                          ref={fileInputRef}
-                          type="file"
-                          multiple
-                        />
-                      </div>
-                      <div class="col-md-6">
-                        <label
-                          style={{ marginTop: "10px", marginBottom: "0rem" }}
-                        >
-                          Guests
-                        </label>
-                        <br />
-                        <Select
-                          isMulti
-                          onChange={handleChangeUpdateEvent}
-                          value={editableGuestTo}
-                          options={emails}
-                          noOptionsMessage={() => "Email not available..."}
-                          maxMenuHeight={90}
-                          styles={{
-                            placeholder: (baseStyles, state) => ({
-                              ...baseStyles,
-                              color: "black",
-                            }),
-                            clearIndicator: (baseStyles) => ({
-                              ...baseStyles,
-                              color: "red",
-                            }),
-                            dropdownIndicator: (baseStyles) => ({
-                              ...baseStyles,
-                              color: "black",
-                            }),
-                            control: (baseStyles) => ({
-                              ...baseStyles,
-                              borderColor: "darkblue",
-                            }),
-                            multiValueRemove: (baseStyles, state) => ({
-                              ...baseStyles,
-                              color: state.isFocused ? "red" : "gray",
-                              backgroundColor: state.isFocused
-                                ? "black"
-                                : "lightgreen",
-                            }),
-                          }}
-                          menuPosition={"fixed"}
-                        />
-                      </div>
-                      <div
-                        class="row col-md-12"
-                        style={{ display: "flex", justifyContent: "flex-end" }}
-                      >
-                        <div class="col-md-3">
-                          <button
-                            style={{
-                              marginTop: "10px",
-                              marginBottom: "0rem",
-                              padding: "5px 10px",
-                              width: "100%",
-                            }}
-                            onClick={handleUpdateEvent}
-                          >
-                            Update
-                          </button>
-                        </div>
-
-                        <div class="col-md-3">
-                          <button
-                            style={{
-                              marginTop: "10px",
-                              marginBottom: "0rem",
-                              padding: "5px 10px",
-                              width: "100%",
-                              backgroundColor: "gray",
-                            }}
-                            onClick={() =>
-                              handleDeleteTask(user_id, category, id)
-                            }
-                          >
-                            Delete
-                          </button>
-                        </div>
-                      </div>
-                    </div>
+                  <div className="w-full ">
+                    <label className="font-medium text-white">
+                      Task Description
+                    </label>
+                    <br />
+                    <textarea
+                      className="w-full border border-gray-400 rounded-sm p-2"
+                      type="text"
+                      rows={3}
+                      spellCheck="true"
+                      value={editableDescription}
+                      onChange={(e) => setEditableDescription(e.target.value)}
+                      placeholder="Describe Task"
+                    />
                   </div>
-                </div> */}
-            <div
-              className={`content ${
-                activeButton === "meeting" ? "active" : ""
-              }`}
+                  <div class="col-md-6">
+                    <label className="font-medium text-white">Attachment</label>
+                    <br />
+                    <input
+                      ref={fileInputRef}
+                      value={selectedItem.attachments}
+                      type="file"
+                      onChange={handleFileAttachment}
+                      className="text-white"
+                    />
+                  </div>
+                  <div class="col-md-6">
+                    <label className="text-white font-medium">Assign</label>
+                    {/* <br /> */}
+                    <Select
+                      isMulti
+                      onChange={handleChangeUpdate}
+                      value={editableAssignTo}
+                      options={emails}
+                      noOptionsMessage={() => "Email not available..."}
+                      maxMenuHeight={90}
+                      placeholder="Assign To"
+                      styles={{
+                        //   placeholder: (baseStyles, state) => ({
+                        //     ...baseStyles,
+                        //     color: "black",
+                        //   }),
+                        clearIndicator: (baseStyles) => ({
+                          ...baseStyles,
+                          color: "red",
+                        }),
+                        //   dropdownIndicator: (baseStyles) => ({
+                        //     ...baseStyles,
+                        //     color: "black",
+                        //   }),
+                        //   control: (baseStyles) => ({
+                        //     ...baseStyles,
+                        //     borderColor: "darkblue",
+                        //   }),
+                        //   multiValueRemove: (baseStyles, state) => ({
+                        //     ...baseStyles,
+                        //     color: state.isFocused ? "red" : "gray",
+                        //     backgroundColor: state.isFocused
+                        //       ? "black"
+                        //       : "lightgreen",
+                        //   }),
+                      }}
+                      menuPosition={"fixed"}
+                    />
+                  </div>
+
+                  <div className=" flex justify-end gap-4 ">
+                    <button
+                      className="bg-white font-medium rounded-full p-1 px-4 "
+                      onClick={() => handleUpdateTask()}
+                    >
+                      Update
+                    </button>
+
+                    <button
+                      className="bg-red-400 text-white font-medium rounded-full p-1 px-4 "
+                      onClick={() => handleDeleteTask(user_id, category, id)}
+                    >
+                      Delete
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )}
+            
+          {activeButton === "event" && ( <div
+             
             >
-              <div className="meeting-div" style={{ display: "block" }}>
-                <div class=" col-md-12 row" style={{ color: "black" }}>
-                  {/* <div class="col-md-6 " style={{ marginBottom: "0rem" }}>
-                    <label style={{ marginTop: "10px", marginBottom: "0rem" }}>
-                      Meeting Topic
+              <div>
+                <div className="">
+                  <div>
+                    <label className="text-white font-medium">
+                      Event Topic
                     </label>
                     <br />
                     <input
                       value={editableTitle}
                       onChange={(e) => setEditableTitle(e.target.value)}
-                      style={{
-                        borderRadius: 4,
-                        border: "#747272 solid 1px",
-                        height: 40,
-                        fontSize: 14,
-                        paddingLeft: 10,
-                        color: "#000",
-                        width: "100%",
-                      }}
+                      className="border-gray-400 border w-full p-1 rounded-md"
                       type="text"
-                      spellcheck="true"
+                      spellCheck="true"
+                      placeholder="Enter Event Topic "
                     />
                   </div>
-                  <div className="col-md datepickerinput">
-                    <label style={{ marginTop: "10px", marginBottom: "0rem" }}>
+
+                  <div className="my-1">
+                    <label className="text-white"> Date</label>
+                    <br />
+                    <div className="flex gap-2 items-center">
+                      <input
+                        type="date"
+                        value={editableStart}
+                        onChange={(e) => setEditableStart(e.target.value)}
+                        min={today}
+                        className="border-gray-400 border w-full p-1 rounded-md"
+                      ></input>
+                      <input
+                        type="date"
+                        // style={{ width: "50%", marginLeft: "10px" }}
+                        value={editableEnd}
+                        onChange={(e) => setEditableEnd(e.target.value)}
+                        min={today}
+                        className="border-gray-400 border w-full p-1 rounded-md"
+                      ></input>
+                    </div>
+                  </div>
+                  <div className="my-1">
+                    <label className="font-medium text-white"> Time</label>
+                    <br />
+                    <div style={{ display: "flex" }}>
+                      <input
+                        type="time"
+                        style={{ width: "50%" }}
+                        value={editableStartTime}
+                        onChange={(e) => setEditableStartTime(e.target.value)}
+                        className="border-gray-400 border w-full p-1 rounded-md"
+                      ></input>
+                      <input
+                        type="time"
+                        style={{ width: "50%", marginLeft: "10px" }}
+                        value={editableEndTime}
+                        onChange={(e) => setEditableEndTime(e.target.value)}
+                        className="border-gray-400 border w-full p-1 rounded-md"
+                      ></input>
+                    </div>
+                  </div>
+                  <div className="">
+                    <label className="font-medium text-white">
+                      Event Description
+                    </label>
+                    <br />
+                    <textarea
+                      // style={{
+                      //   resize: "none",
+                      //   height: "40px",
+                      //   paddingTop: "8px",
+                      // }}
+                      className="border-gray-400 border w-full p-1 rounded-md"
+                      type="text"
+                      value={editableDescription}
+                      onChange={(e) => setEditableDescription(e.target.value)}
+                      spellCheck="true"
+                    />
+                  </div>
+
+                  <div className="flex flex-col w-full gap-2 justify-between ">
+                    {/* <label style={{ marginTop: "10px", marginBottom: "0rem" }}>
+                      Attachment
+                    </label>
+                    <br /> */}
+                    <input
+                      // style={{
+                      //   border: "#929090 dotted 2px",
+                      //   height: "55px",
+                      //   color: "black",
+                      //   padding: "10px",
+                      // }}
+                      value={eventAttachment}
+                      //onChange={(e) => setEventAttachment(e.target.value)}
+                      onChange={handleEventFileAttachment}
+                      ref={fileInputRef}
+                      type="file"
+                      multiple
+                    />
+                  </div>
+                  {/* <div class="col-md-6"> */}
+                    {/* <label style={{ marginTop: "10px", marginBottom: "0rem" }}>
+                      Guests
+                    </label>
+                    <br /> */}
+                    <Select
+                      isMulti
+                      onChange={handleChangeUpdateEvent}
+                      value={editableGuestTo}
+                      options={emails}
+                      noOptionsMessage={() => "Email not available..."}
+                      maxMenuHeight={90}
+                      styles={{
+                        placeholder: (baseStyles, state) => ({
+                          ...baseStyles,
+                          color: "black",
+                        }),
+                        clearIndicator: (baseStyles) => ({
+                          ...baseStyles,
+                          color: "red",
+                        }),
+                        dropdownIndicator: (baseStyles) => ({
+                          ...baseStyles,
+                          color: "black",
+                        }),
+                        control: (baseStyles) => ({
+                          ...baseStyles,
+                          borderColor: "darkblue",
+                        }),
+                        multiValueRemove: (baseStyles, state) => ({
+                          ...baseStyles,
+                          color: state.isFocused ? "red" : "gray",
+                          backgroundColor: state.isFocused
+                            ? "black"
+                            : "lightgreen",
+                        }),
+                      }}
+                      menuPosition={"fixed"}
+                    />
+                  {/* </div> */}
+                  <div className="flex justify-end gap-4 my-2 ">
+                    <button
+                      className="bg-white font-medium rounded-full p-1 px-4 "
+                      onClick={handleUpdateEvent}
+                    >
+                      Update
+                    </button>
+
+                    <button
+                      className="bg-red-400 text-white font-medium rounded-full p-1 px-4 "
+                      onClick={() => handleDeleteTask(user_id, category, id)}
+                    >
+                      Delete
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>)}
+           {activeButton === "meeting" &&( <div
+              className={`content ${
+                activeButton === "meeting" ? "active" : ""
+              }`}
+            >
+              <div className="" >
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="" >
+                   <label className="text-white font-medium ">
+                     Meeting Topic
+                   </label>
+                   <br />
+                   <input
+                     value={editableTitle}
+                     onChange={(e) => setEditableTitle(e.target.value)}
+                     style={{
+                       borderRadius: 4,
+                       border: "#747272 solid 1px",
+                       height: 40,
+                       fontSize: 14,
+                       paddingLeft: 10,
+                       color: "#000",
+                       width: "100%",
+                     }}
+                     type="text"
+                     spellcheck="true"
+                   />
+                 </div>
+                  
+                  <div >
+                    <label className="text-white font-medium">
                       {" "}
                       Date
                     </label>
@@ -2195,10 +2376,10 @@ const Calender = () => {
                         resize: "none",
                       }}
                     ></input>
-                  </div> */}
+                  </div> 
 
-                  {/* <div class="col-md-6 " style={{ marginBottom: "0rem" }}>
-                    <label style={{ marginTop: "10px", marginBottom: "0rem" }}>
+                  <div class="col-md-6 " style={{ marginBottom: "0rem" }}>
+                    <label className="font-medium text-white">
                       Meeting Description
                     </label>
                     <br />
@@ -2219,12 +2400,12 @@ const Calender = () => {
                       type="text"
                       spellcheck="true"
                     />
-                  </div> */}
-                  {/* <div
+                  </div>
+                  <div
                     class="col-md-6  "
                     style={{ marginBottom: "0rem", maxWidth: "100%" }}
                   >
-                    <label style={{ marginTop: "10px", marginBottom: "0rem" }}>
+                    <label className="font-medium text-white">
                       Time
                     </label>
                     <br />
@@ -2261,10 +2442,11 @@ const Calender = () => {
                         }}
                       ></input>
                     </div>
-                  </div> */}
+                    </div>
+                  </div>
                   {/* Meeting Link */}
-                  {/* <div class="col-md-12 p-0">
-                    <label style={{ marginTop: "10px", marginBottom: "0rem" }}>
+                  <div >
+                    <label className="text-white font-medium">
                       Meeting Link
                     </label>
                     <br />
@@ -2284,10 +2466,10 @@ const Calender = () => {
                       }}
                       type="text"
                     ></input>
-                  </div> */}
+                  </div>
                   {/* Invites */}
-                  {/* <div class="col-md-12 p-0">
-                    <label style={{ marginTop: "10px", marginBottom: "0rem" }}>
+                  <div class="col-md-12 p-0">
+                    <label className="font-medium text-white">
                       Invites
                     </label>
                     <br />
@@ -2325,44 +2507,33 @@ const Calender = () => {
                       }}
                       menuPosition={"fixed"}
                     />
-                  </div> */}
+                  </div>
 
-                  {/* <div
-                    class="row col-md-12"
-                    style={{ display: "flex", justifyContent: "flex-end" }}
+                  <div
+                    className="flex justify-end gap-4 my-2"
+                   
                   >
-                    <div class="col-md-3">
+                    
                       <button
-                        style={{
-                          marginTop: "10px",
-                          marginBottom: "0rem",
-                          padding: "5px 10px",
-                          width: "100%",
-                        }}
+                       className="bg-white font-medium rounded-full p-1 px-4 "
                         onClick={handleUpdateMeeting}
                       >
                         Update
                       </button>
-                    </div>
+                   
 
-                    <div class="col-md-3">
+                   
                       <button
-                        style={{
-                          marginTop: "10px",
-                          marginBottom: "0rem",
-                          padding: "5px 10px",
-                          width: "100%",
-                          backgroundColor: "gray",
-                        }}
+                        className="bg-red-400 text-white font-medium rounded-full p-1 px-4 "
                         onClick={() => handleDeleteTask(user_id, category, id)}
                       >
                         Delete
                       </button>
-                    </div>
-                  </div> */}
-                </div>
+                    
+                  </div>
+                
               </div>
-            </div>
+            </div>)}
             <div
               className={`content ${
                 activeButton === "outlook" ? "active" : ""

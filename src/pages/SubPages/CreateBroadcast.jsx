@@ -17,8 +17,10 @@ const CreateBroadcast = () => {
     notice_title: "",
     notice_discription: "",
     expiry_date: "",
-    user_ids: [1],
+    user_ids: [],
+    notice_image: [],
   });
+  console.log(formData);
   const datePickerRef = useRef(null);
   const currentDate = new Date();
   const handleChange = (e) => {
@@ -51,7 +53,6 @@ const CreateBroadcast = () => {
       ? selectedOptions.map((option) => option.value)
       : [];
     setFormData({ ...formData, user_ids: selectedIds });
-    console.log(selectedIds);
   };
 
   const handleCreateBroadCast = async () => {
@@ -66,7 +67,13 @@ const CreateBroadcast = () => {
         formData.notice_discription
       );
       formDataSend.append("notice[expiry_date]", formData.expiry_date);
-      formDataSend.append("notice[user_ids]", formData.user_ids);
+
+      formData.user_ids.forEach((user_id) => {
+        formDataSend.append("notice[user_ids][]", user_id);
+      });
+      formData.notice_image.forEach((file) => {
+        formDataSend.append("notice[notice_image][]", file);
+      });
 
       const response = await postBroadCast(formDataSend);
       toast.success("Broadcast Created Successfully");
@@ -74,9 +81,13 @@ const CreateBroadcast = () => {
       toast.dismiss();
     } catch (error) {
       console.log(error);
-      
+
       toast.dismiss();
     }
+  };
+
+  const handleFileChange = (e) => {
+    setFormData({ ...formData, notice_image: Array.from(e.target.files) });
   };
 
   return (
@@ -145,7 +156,14 @@ const CreateBroadcast = () => {
               <h2 className="border-b text-center text-xl border-black mb-6 font-bold">
                 Attachments
               </h2>
-              <FileInputBox />
+              {/* <FileInputBox handleChange={handleFileChange}  /> */}
+              <input
+                  id={`file-upload-${formData.notice_title}`}
+                  type="file"
+                  // className="hidden"
+                  multiple
+                  onChange={handleFileChange}
+                />
             </div>
             <div className="">
               <h2 className="border-b t border-black my-5 text-lg font-semibold">
@@ -207,7 +225,10 @@ const CreateBroadcast = () => {
               </div>
             </div>
             <div className="flex justify-center mt-10 my-5">
-              <button onClick={handleCreateBroadCast} className="bg-black text-white p-2 rounded-md hover:bg-white hover:text-black hover:border-2 border-black">
+              <button
+                onClick={handleCreateBroadCast}
+                className="bg-black text-white p-2 rounded-md hover:bg-white hover:text-black hover:border-2 border-black"
+              >
                 Submit
               </button>
             </div>

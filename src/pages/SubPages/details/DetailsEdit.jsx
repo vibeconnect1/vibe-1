@@ -43,7 +43,7 @@ const DetailsEdit = () => {
     documents: [],
     assigned_to_id: "",
   });
-  console.log(formData);
+  // console.log(formData);
 
   const categories = getItemInLocalStorage("categories");
   // console.log(categories , "Catss")
@@ -105,6 +105,7 @@ const DetailsEdit = () => {
         const response = await getAssignedTo();
         setAssignedUser(response.data);
         setEditTicketInfo(response.data);
+        
       } catch (error) {
         console.error("Error fetching assigned users:", error);
       }

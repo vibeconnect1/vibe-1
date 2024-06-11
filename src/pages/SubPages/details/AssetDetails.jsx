@@ -28,6 +28,7 @@ const AssetDetails = () => {
 
     getDetails();
   }, [id]);
+  console.log("asset", asset)
 
   return (
     // <section className="md:px-10 ">
