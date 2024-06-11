@@ -26,8 +26,8 @@ const SetupNavbar = () => {
         <Link to={"/facility"} className="hover:bg-white hover:text-black  p-2 rounded-lg ">Facility</Link>
         <Link to={"/admin/invoice-approval-setup"} className="hover:bg-white hover:text-black  p-2 rounded-lg ">Invoice Approval</Link>
         <Link to={"/admin/parking-setup"} className="hover:bg-white hover:text-black  p-2 rounded-lg ">Parking</Link>
-        <Link className="hover:bg-white hover:text-black  p-2 rounded-lg ">Email Rule</Link>
-        <Link className="hover:bg-white hover:text-black  p-2 rounded-lg ">FM Groups</Link>
+        <Link to={"/admin/email-rule"} className="hover:bg-white hover:text-black  p-2 rounded-lg ">Email Rule</Link>
+        <Link to={"/admin/fm-groups-setup"} className="hover:bg-white hover:text-black  p-2 rounded-lg ">FM Groups</Link>
         <Link className="hover:bg-white hover:text-black  p-2 rounded-lg ">Master Checklist</Link>
         <Link className="hover:bg-white hover:text-black  p-2 rounded-lg ">SAC/HSN Setup</Link>
         <Link className="hover:bg-white hover:text-black  p-2 rounded-lg ">Addresses</Link>

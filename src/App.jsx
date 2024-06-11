@@ -204,6 +204,9 @@ import OccupantUserSetupDetails from "./pages/Setup/OccupantUserSetupDetails.jsx
 import InvoiceApprovalSetup from "./pages/Setup/InvoiceApprovalSetup.jsx";
 import AddInvoiceApprovalsSetup from "./pages/Setup/AddInvoiceApprovalsSetup.jsx";
 import EditInvoiceApprovalsSetup from "./pages/Setup/EditInvoiceApprovalsSetup.jsx";
+import EmailRuleSetup from "./pages/Setup/EmailRuleSetup.jsx";
+import FmGroupsSetup from "./pages/Setup/FmGroupsSetup.jsx";
+import FmGroupSetupDetails from "./pages/Setup/FmGroupSetupDetails.jsx";
 // import IncidentSetup from "./pages/Setup/IncidentSetupPages/IncidentSetup.jsx";
 
 function App() {
@@ -1652,6 +1655,32 @@ function App() {
             element={
               <ProtectedAdminRoutes>
                 <EditInvoiceApprovalsSetup/>
+              </ProtectedAdminRoutes>
+            }
+          />
+          {/* Email Rule */}
+          <Route
+            path="/admin/email-rule"
+            element={
+              <ProtectedAdminRoutes>
+                <EmailRuleSetup/>
+              </ProtectedAdminRoutes>
+            }
+          />
+          {/* Fm Groups */}
+          <Route
+            path="/admin/fm-groups-setup"
+            element={
+              <ProtectedAdminRoutes>
+                <FmGroupsSetup/>
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/fm-groups-setup-details/:id"
+            element={
+              <ProtectedAdminRoutes>
+                <FmGroupSetupDetails/>
               </ProtectedAdminRoutes>
             }
           />
