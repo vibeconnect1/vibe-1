@@ -14,7 +14,7 @@ const SetupNavbar = () => {
           Account
         </Link>
     
-        {/* <Link to={"/setup/User-role"} className="hover:bg-white hover:text-black  p-2 rounded-lg ">User Roles</Link> */}
+        <Link to={"/setup/User-role"} className="hover:bg-white hover:text-black  p-2 rounded-lg ">User Roles</Link>
         <Link to={"/setup/users-setup"} className="hover:bg-white hover:text-black  p-2 rounded-lg ">Users</Link>
         <Link className="hover:bg-white hover:text-black  p-2 rounded-lg ">FM User</Link>
         <Link className="hover:bg-white hover:text-black  p-2 rounded-lg ">Occupant User</Link>

@@ -230,6 +230,14 @@ import CheckListGroupSetup from "./pages/Setup/ChecklistGroupSetup.jsx";
 import ParkingDetails from "./pages/SubPages/details/ParkingDetails.jsx";
 import AddParkingConfig from "./pages/Setup/ParkingSetupPages/AddParkingConfig.jsx";
 import EditParkingConfiguration from "./pages/Setup/ParkingSetupPages/EditParkingConfig.jsx";
+import MaterialPR from "./pages/SubPages/MaterialPR.jsx";
+import AddMatertialPR from "./pages/SubPages/AddMaterialPR.jsx";
+import MaterialPRDetails from "./pages/SubPages/details/MaterialPRDetails.jsx";
+import ServicePR from "./pages/SubPages/ServicePR.jsx";
+import AddServicePR from "./pages/SubPages/AddServicePR.jsx";
+import ServicePRDetails from "./pages/SubPages/ServicePRDetails.jsx";
+import EditServicePR from "./pages/SubPages/details/EditServicePR.jsx";
+import EditMatertialPR from "./pages/SubPages/details/EditMaterialPR.jsx";
 
 function App() {
   const themeColor = useSelector((state) => state.theme.color);
@@ -611,6 +619,71 @@ function App() {
               <ProtectedRoute>
                 <EmployeeOutstationDetails />
               </ProtectedRoute>
+            }
+          />
+           {/* Admin MaterialPR */}
+           <Route
+            path="/admin/material-pr"
+            element={
+              <ProtectedAdminRoutes>
+                <MaterialPR/>
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/service-pr"
+            element={
+              <ProtectedAdminRoutes>
+                <ServicePR/>
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/add-material-pr"
+            element={
+              <ProtectedAdminRoutes>
+               <AddMatertialPR/>
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/add-service-pr"
+            element={
+              <ProtectedAdminRoutes>
+               <AddServicePR/>
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/materialpr-details/:id"
+            element={
+              <ProtectedAdminRoutes>
+               <MaterialPRDetails/>
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/servicepr-details/:id"
+            element={
+              <ProtectedAdminRoutes>
+               <ServicePRDetails/>
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/edit-servicepr/:id"
+            element={
+              <ProtectedAdminRoutes>
+               <EditServicePR/>
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/edit-materialpr/:id"
+            element={
+              <ProtectedAdminRoutes>
+               <EditMatertialPR/>
+              </ProtectedAdminRoutes>
             }
           />
           {/* Admin transport */}
