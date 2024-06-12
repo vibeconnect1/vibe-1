@@ -4,11 +4,18 @@ import toast from "react-hot-toast";
 import Select from "react-select";
 import Navbar from "../../components/Navbar";
 import { Switch } from "../../Buttons";
-import { FaTimes } from "react-icons/fa";
-import { getAssignedTo } from "../../api";
+import { FaLink, FaTimes } from "react-icons/fa";
+import {
+  CreateVibeMeeting,
+  CreateVibeTeamMeeting,
+  CreateVibeZoomMeeting,
+  getAssignedTo,
+  getVibeUsers,
+} from "../../api";
 import { useSelector } from "react-redux";
 import { BiRightArrowAlt } from "react-icons/bi";
 import ReactSwitch from "react-switch";
+import { getItemInLocalStorage } from "../../utils/localStorage";
 
 const CreateMeeting = () => {
   const [meetingTitle, setMeetingTitle] = useState("");
@@ -32,8 +39,15 @@ const CreateMeeting = () => {
   const [subcategory, setSubcategory] = useState("");
   const [repeatMeet, setRepeatMeet] = useState(false);
   const [checkedRepeat, setCheckedRepeat] = useState(0);
+  const [selectedOption, setSelectedOption] = useState([]);
   // const [behalf, setbehalf] = useState("self");
   // const screenWidth = window.innerWidth;
+  const currentDates = new Date();
+  const year = currentDates.getFullYear();
+  const month = String(currentDates.getMonth() + 1).padStart(2, "0");
+  const day = String(currentDates.getDate()).padStart(2, "0");
+  const todayDate = `${year}-${month}-${day}`;
+
   const [weekdaysMap, setWeekdaysMap] = useState([
     { day: "Mon", index: 0, isActive: false },
     { day: "Tue", index: 1, isActive: false },
@@ -89,6 +103,64 @@ const CreateMeeting = () => {
     console.log(users);
   }, []);
 
+  useEffect(
+    () => {
+      const getTaskAssign = async () => {
+        const user_id = getItemInLocalStorage("VIBEUSERID");
+        const org_id = getItemInLocalStorage("VIBEORGID");
+        const orgg_id = localStorage.getItem("VIBEORGID");
+        console.log("user : ", user_id);
+        console.log("ord : ", org_id);
+        console.log("orgid : ", orgg_id);
+
+        try {
+          // const params = {
+          //   user_id: user_id,
+          //   org_id: org_id,
+          // };
+
+          const VibeUserResponse = await getVibeUsers(user_id);
+          console.log(VibeUserResponse);
+
+          //   const jsonData = await getDataFromAPI(GetUsers, params);
+
+          if (VibeUserResponse.success) {
+            const users = VibeUserResponse.data;
+            const assignEmails = users.map((user) => ({
+              value: user.user_id,
+              label: user.email,
+            }));
+
+            setEmails(assignEmails);
+            // setEditableAssignTo(assignEmails);
+            //     setEditableGuestTo(assignEmails);
+            // setEditableParticipantTo(assignEmails);
+            //     // Store the emails in local storage
+            //     localStorage.setItem("assignEmails", JSON.stringify(assignEmails));
+          } else {
+            console.log("Something went wrong");
+          }
+        } catch (error) {
+          console.error("Error:", error);
+        }
+      };
+
+      // const assignEmailsFromStorage = localStorage.getItem("assignEmails");
+
+      // if (assignEmailsFromStorage) {
+      //   setEmails(JSON.parse(assignEmailsFromStorage));
+      // } else {
+      getTaskAssign();
+      // }
+    },
+    [
+      // setEmails,
+      // setEditableAssignTo,
+      // setEditableGuestTo,
+      // setEditableParticipantTo,
+    ]
+  );
+
   const handleMeetingLinkCopy = () => {
     navigator.clipboard
       .writeText(meetingLink)
@@ -103,8 +175,6 @@ const CreateMeeting = () => {
     console.log(selectedOption);
     setSelectedOption(selectedOption);
   };
-
- 
 
   const handleAddEmail = () => {
     // Validate the email before adding it to the list
@@ -144,13 +214,150 @@ const CreateMeeting = () => {
 
     return (
       <div className="flex flex-col gap-2">
-        <label className="font-medium text-white">Repeat</label>
+        {/* <label className="font-medium text-white">Repeat</label> */}
         <div className="app">
-          <ReactSwitch checked={checkedRepeat === 1} onChange={handleChange} />
+          {/* <ReactSwitch checked={checkedRepeat === 1} onChange={handleChange} /> */}
+          <Switch checked={checkedRepeat === 1} onChange={handleChange} />
         </div>
       </div>
     );
   }
+
+  const ZoomCreateMeeting = async () => {
+    if (!meetingTitle || !meetingDate) {
+      toast.error(
+        "Please fill in Title and Date before creating the Meeting Link."
+      );
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append("agenda", meetingTitle);
+    formData.append("date", meetingDate);
+    setIsLoading(true);
+    try {
+      const response = await CreateVibeZoomMeeting(formData);
+      if (response.success) {
+        console.log(response.data[0].meet_link);
+        setMeetingLink(response.data[0].meet_link);
+        setuuid(response.data[0].uuid);
+        setMeet_id(response.data[0].meet_id);
+        setIsLoading(false);
+        setLinkGenerated(true);
+        setShowGenerateLink(false);
+      } else {
+        console.log("unsuccess");
+      }
+    } catch (error) {
+      console.log("error creating meeting link ");
+    }
+  };
+
+  const GenerateMeet = () => {
+    ZoomCreateMeeting();
+  };
+
+  const TeamCreateMeeting = async () => {
+    if (!meetingTitle || !meetingDate) {
+      alert("Please fill in Title and Date before creating the Meeting Link.");
+      return;
+    }
+    const user_id = getItemInLocalStorage("VIBEUSERID");
+    const formData = new FormData();
+    formData.append("user_id", user_id);
+    formData.append("agenda", meetingTitle);
+    formData.append("start_time", meetingStartTime);
+    setIsLoading(true);
+    try {
+      const TeamMeetResponse = await CreateVibeTeamMeeting(formData);
+      console.log(TeamMeetResponse);
+      if (TeamMeetResponse.success) {
+        console.log(TeamMeetResponse.data[0].meet_link);
+        setMeetingLink(TeamMeetResponse.data[0].meet_link);
+        setuuid(TeamMeetResponse.data[0].uuid);
+        setMeet_id(TeamMeetResponse.data[0].meet_id);
+        setIsLoading(false);
+        setLinkGenerated(true);
+        setShowGenerateLink(false);
+      } else {
+        console.log("unsuccess");
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const TeamGenerateMeet = () => {
+    TeamCreateMeeting();
+  };
+
+
+  const handleSaveMeeting = async () => {
+    const idList = selectedOption.map((email) => parseInt(email.value));
+
+    if (!meetingTitle) {
+      //alert('Please fill in all the fields before creating the task.');
+      toast.error("Please fill the data to Create a Meeting.")
+      return;
+    }
+    if (meetingEndTime < meetingStartTime) {
+      toast.error(
+        "Selected meeting end time should be greater than start time.",
+        { position: "top-center", autoClose: 2000 }
+      );
+      return;
+    }
+    const user_id = localStorage.getItem("VIBEUSERID");
+    // setLoadingMeet(true);
+    toast.loading("Creating Meeting Please wait!")
+    const formData = new FormData();
+    formData.append("title", meetingTitle);
+    formData.append("from_date", meetingDate);
+    formData.append("from_time ", meetingStartTime);
+    formData.append("to_time", meetingEndTime);
+    formData.append("user_id", user_id);
+    formData.append("purpose", meetingDescription);
+    formData.append("meet_link", meetingLink);
+    formData.append("uuid", uuid);
+    formData.append("meet_id", meet_id);
+    const otheremails = emailOtherList.join(",");
+    formData.append("other_emails", otheremails);
+    console.log(otheremails);
+    const id = idList.join(",");
+    formData.append("participent_ids", id);
+    formData.append("to__date", selectedToDate);
+    const mainWeek = selectedWeekdays.join(",");
+    formData.append("included_weekdays", mainWeek);
+    formData.append("repeat_meeting", repeatMeet);
+    setIsCreatingMeeting(true);
+    toast.loading("Creating Meeting Please wait!");
+    try {
+      const meetingResp = await CreateVibeMeeting(formData);
+      toast.dismiss();
+      toast.success("Meeting Created Successfully");
+      setPopupDate(null);
+      if (meetingResp.success) {
+        setMeetingTitle("");
+        setMeetingDate("");
+        setMeetingStartTime("");
+        setMeetingEndTime("");
+        setMeetingDescription("");
+        setMeetingLink("");
+        setuuid("");
+        setMeet_id("");
+        setEmailOtherList("");
+        // setSelectedToDate('');
+        setSelectedWeekdays("");
+        // setRepeatMeet('');
+        setPopupDate(null);
+        // setLoadingMeet(false);
+      }
+
+    } catch (error) {
+      toast.dismiss();
+    }
+  };
+
   return (
     <section className="min-h-screen p-4 sm:p-0 flex flex-col md:flex-row">
       <div className="fixed hidden sm:block left-0 top-0 h-full md:static md:h-auto md:flex-shrink-0">
@@ -215,8 +422,8 @@ const CreateMeeting = () => {
               <input
                 type="date"
                 value={meetingDate}
-                          min={today}
-                          onChange={(e) => setMeetingDate(e.target.value)}
+                min={today}
+                onChange={(e) => setMeetingDate(e.target.value)}
                 className="border border-gray-400 p-2 rounded-md placeholder:text-sm"
               />
             </div>
@@ -228,16 +435,14 @@ const CreateMeeting = () => {
                 <input
                   type="time"
                   value={meetingStartTime}
-                            onChange={(e) =>
-                              setMeetingStartTime(e.target.value)
-                            }
+                  onChange={(e) => setMeetingStartTime(e.target.value)}
                   className="border border-gray-400 p-2 rounded-md placeholder:text-sm w-full"
                 />
                 -
                 <input
                   type="time"
                   value={meetingEndTime}
-                            onChange={(e) => setMeetingEndTime(e.target.value)}
+                  onChange={(e) => setMeetingEndTime(e.target.value)}
                   className="border border-gray-400 p-2 rounded-md placeholder:text-sm w-full"
                 />
               </div>
@@ -247,93 +452,90 @@ const CreateMeeting = () => {
             <p className="font-medium">Description :</p>
             <textarea
               value={meetingDescription}
-              onChange={(e) =>
-                setMeetingDescription(e.target.value)
-              }
+              onChange={(e) => setMeetingDescription(e.target.value)}
               cols="30"
               rows="2"
               className="border border-gray-400 p-2 rounded-md placeholder:text-sm w-full"
             ></textarea>
           </div>
           <div className="flex flex-col gap-2">
-          <div className="my-2 flex justify-between gap-4 items-center w-full">
-                        <button
-                          className="font-medium p-1 hover:text-white hover:bg-black transition-all duration-300 rounded-md shadow-custom-all-sides flex items-center gap-2 text-white"
-                          onClick={() => setShowGenerateLink(!showGenerateLink)}
-                        >
-                          Generate Link
-                          <BiRightArrowAlt size={20} />
-                        </button>
-                        {showGenerateLink && (
-                          <div className="flex gap-2  ">
-                            <button
-                              onClick={GenerateMeet}
-                              className="bg-green-400 p-1 transition-all duration-300 rounded-md font-medium text-white hover:bg-green-500"
-                            >
-                              {" "}
-                              Zoom Meet
-                            </button>
-                            <button
-                              className="bg-blue-400  transition-all duration-300 hover:bg-blue-500  p-1 rounded-md font-medium text-white"
-                              onClick={TeamGenerateMeet}
-                            >
-                              {" "}
-                              Team Meet
-                            </button>
-                          </div>
-                        )}
-                      </div>
+            <div className="my-2 flex justify-between gap-4 items-center w-full">
+              <button
+                style={{ background: themeColor }}
+                className="font-medium p-1 hover:text-white hover:bg-black transition-all duration-300 rounded-md shadow-custom-all-sides flex items-center gap-2 text-white"
+                onClick={() => setShowGenerateLink(!showGenerateLink)}
+              >
+                Generate Link
+                <BiRightArrowAlt size={20} />
+              </button>
+              {showGenerateLink && (
+                <div className="flex gap-2  ">
+                  <button
+                    onClick={GenerateMeet}
+                    className="bg-green-400 p-1 transition-all duration-300 rounded-md font-medium text-white hover:bg-green-500"
+                  >
+                    {" "}
+                    Zoom Meet
+                  </button>
+                  <button
+                    className="bg-blue-400  transition-all duration-300 hover:bg-blue-500  p-1 rounded-md font-medium text-white"
+                    onClick={TeamGenerateMeet}
+                  >
+                    {" "}
+                    Team Meet
+                  </button>
+                </div>
+              )}
+            </div>
             <div className="w-full flex gap-2 items-center">
               <input
                 type="text"
                 readOnly
                 className="border border-gray-400 p-2 rounded-md placeholder:text-sm w-full"
-                value={
-                  isLoading
-                    ? "Generating Meeting Link..."
-                    : meetingLink
-                }
+                value={isLoading ? "Generating Meeting Link..." : meetingLink}
                 onChange={(e) => setMeetingLink(e.target.value)}
               />
-              <button onClick={handleMeetingLinkCopy}>
-                <MdOutlineContentCopy size={20} />
+              <button
+                onClick={handleMeetingLinkCopy}
+                className="border-2 border-blue-400 px-4 p-2 flex items-center gap-2 w-40 hover:bg-blue-500 hover:bg-opacity-10 transition duration-300 rounded-md text-blue-400 font-md"
+              >
+                <FaLink size={20} />
+                Copy Link
               </button>
             </div>
             <div className="flex flex-col gap-2">
               <p className="font-medium">Invite internal Attendees :</p>
               <Select
-                        isMulti
-                        onChange={handleChangeSelectMeeting}
-                        options={emails}
-                        noOptionsMessage={() => "Email not available..."}
-                        maxMenuHeight={90}
-                        styles={{
-                          placeholder: (baseStyles, state) => ({
-                            ...baseStyles,
-                            color: "black",
-                          }),
-                          clearIndicator: (baseStyles) => ({
-                            ...baseStyles,
-                            color: "red",
-                          }),
-                          dropdownIndicator: (baseStyles) => ({
-                            ...baseStyles,
-                            color: "black",
-                          }),
-                          control: (baseStyles) => ({
-                            ...baseStyles,
-                            borderColor: "darkblue",
-                          }),
-                          multiValueRemove: (baseStyles, state) => ({
-                            ...baseStyles,
-                            color: state.isFocused ? "red" : "gray",
-                            backgroundColor: state.isFocused
-                              ? "black"
-                              : "lightgreen",
-                          }),
-                        }}
-                        menuPosition={"fixed"}
-                      />
+                isMulti
+                onChange={handleChangeSelectMeeting}
+                options={emails}
+                noOptionsMessage={() => "Email not available..."}
+                // maxMenuHeight={90}
+                styles={{
+                  placeholder: (baseStyles, state) => ({
+                    ...baseStyles,
+                    color: "black",
+                  }),
+                  clearIndicator: (baseStyles) => ({
+                    ...baseStyles,
+                    color: "red",
+                  }),
+                  dropdownIndicator: (baseStyles) => ({
+                    ...baseStyles,
+                    color: "black",
+                  }),
+                  control: (baseStyles) => ({
+                    ...baseStyles,
+                    borderColor: "darkblue",
+                  }),
+                  multiValueRemove: (baseStyles, state) => ({
+                    ...baseStyles,
+                    color: state.isFocused ? "red" : "gray",
+                    backgroundColor: state.isFocused ? "black" : "lightgreen",
+                  }),
+                }}
+                menuPosition={"fixed"}
+              />
             </div>
             <div className="flex flex-col gap-2 my-2">
               <p className="font-medium">Invite External Attendees :</p>
@@ -342,13 +544,12 @@ const CreateMeeting = () => {
                   type="email"
                   value={otherEmails}
                   onChange={(e) => setOtherEmails(e.target.value)}
-                  
                   id=""
                   placeholder="Enter Email id"
                   className="border border-gray-400 p-2 rounded-md placeholder:text-sm w-full"
                 />
                 <button
-                  className="border-2 border-black font-medium p-1 px-4 rounded-md"
+                  className="border-2 border-black hover:bg-black hover:bg-opacity-10 transition duration-300 font-medium p-1 px-4 rounded-md"
                   onClick={handleAddEmail}
                 >
                   Add
@@ -397,10 +598,8 @@ const CreateMeeting = () => {
                     <input
                       type="date"
                       min={todayDate}
-                              value={meetingDate}
-                              onChange={(event) =>
-                                setMeetingDate(event.target.value)
-                              }
+                      value={meetingDate}
+                      onChange={(event) => setMeetingDate(event.target.value)}
                       className="border border-gray-400 p-2 rounded-md placeholder:text-sm w-full"
                     />
                   </div>
@@ -443,7 +642,9 @@ const CreateMeeting = () => {
             )}
           </div>
           <div className="flex justify-center my-5">
-            <button className="bg-black p-1 px-4 text-white rounded-md">
+            <button onClick={handleSaveMeeting}
+            style={{background: themeColor}}
+            className="bg-black p-1 px-4 text-white rounded-md font-medium">
               Submit
             </button>
           </div>

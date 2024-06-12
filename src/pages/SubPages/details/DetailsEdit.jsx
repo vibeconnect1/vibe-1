@@ -42,12 +42,14 @@ const DetailsEdit = () => {
     correction: "",
     documents: [],
     assigned_to_id: "",
+    issue_status_id:""
   });
-  // console.log(formData);
+  console.log(formData);
 
   const categories = getItemInLocalStorage("categories");
   // console.log(categories , "Catss")
   const statuses = getItemInLocalStorage("STATUS");
+  console.log(statuses)
 
   useEffect(() => {
     const fetchDetails = async () => {
@@ -64,6 +66,7 @@ const DetailsEdit = () => {
           issue_status: response.data.issue_status,
           priority: response.data.priority,
           text: response.data.text,
+          issue_status_id: response.data.issue_status_id,
           // status: response.data.status,
           // category_type_id: response.data.category_type_id,
           // sub_category_id: response.data.sub_category_id,
@@ -76,6 +79,7 @@ const DetailsEdit = () => {
           comment: response.data.comment,
           docs: response.data.documents,
         });
+        console.log("check",response.data)
         setTicketInfo(response.data);
         setEditTicketInfo(response.data);
         fetchEditSubCategories(response.data.category_type_id);
@@ -143,6 +147,7 @@ const DetailsEdit = () => {
           category_type_id: formData.category_type_id,
           sub_category_id: formData.sub_category_id,
           issue_status: formData?.issue_status,
+          issue_status_id : formData.issue_status_id,
           complaint_type: formData.issue_type,
           priority: formData.priority,
           assigned_to: formData.assigned_to_id,
@@ -167,8 +172,8 @@ const DetailsEdit = () => {
       };
 
       toast.loading("Please Wait Submitting Details!");
-      await editComplaintsDetails(updatedData);
-      console.log("Edited Ticket Details:", formData);
+     const resp = await editComplaintsDetails(updatedData);
+      console.log("Edited Ticket Details:", resp);
       toast.dismiss();
 
       toast.success("Updated Successfully");
@@ -238,11 +243,12 @@ const DetailsEdit = () => {
       title: "Status :",
       description: (
         <select
-          value={formData.issue_status || ""}
-          name="issue_status"
-          onChange={(e) =>
-            setFormData({ ...formData, issue_status: e.target.value })
-          }
+          value={formData.issue_status_id || ""}
+          name="issue_status_id"
+          // onChange={(e) =>
+          //   setFormData({ ...formData, issue_status_id: e.target.value })
+          // }
+          onChange={handleChange}
           className="border p-1 px-4 grid max-w-40 w-40 border-gray-500 rounded-md"
         >
           <option value="">Select Status</option>

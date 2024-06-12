@@ -510,4 +510,22 @@ export const UpdateVibeTask = async (data) => {
     throw error;
   }
 };
+// vibeMyBoardTask
+export const getVibeMyBoardTask = async (userId) => {
+  try {
+    const response = await vibeAuth.get(
+      `/api/employee/my_board/get-task/?user_id=${userId}`,
+      
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error creating calendar events:", error);
+    throw error;
+  }
+};
 

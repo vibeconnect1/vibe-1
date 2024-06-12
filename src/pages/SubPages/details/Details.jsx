@@ -59,7 +59,7 @@ const TicketDetails = () => {
     { title: "Site Owner  :", description: ticketinfo.responsible_person },
     { title: "Ticket No  :", description: ticketinfo.ticket_number },
     { title: "Title  :", description: ticketinfo.heading },
-    { title: "Status  :", description: ticketinfo.current_status },
+    { title: "Status  :", description: ticketinfo.issue_status },
     { title: "Site  :", description: ticketinfo.site_name },
     { title: "Issue Type  :", description: ticketinfo.issue_type },
     { title: "Assigned To  :", description: ticketinfo.assigned_to },

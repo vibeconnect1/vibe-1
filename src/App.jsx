@@ -240,6 +240,21 @@ import InvoiceApprovalSetup from "./pages/Setup/InvoiceApprovalSetupPages/Invoic
 import AddInvoiceApprovalsSetup from "./pages/Setup/InvoiceApprovalSetupPages/AddInvoiceApprovalSetup.jsx";
 import EditInvoiceApprovalsSetup from "./pages/Setup/InvoiceApprovalSetupPages/EditInvoiceApprovalSet.jsx";
 import TicketSetup from "./pages/Setup/TicketSetup/TicketSetup.jsx";
+import TaskManagement from "./pages/TaskManagement.jsx";
+import EmailRuleSetup from "./pages/Setup/EmailRuleSetup.jsx";
+import FmGroupsSetup from "./pages/Setup/FMGroupSetup.jsx";
+import FmGroupSetupDetails from "./pages/Setup/FMGroupSetupDetails.jsx";
+import SACHSNSetup from "./pages/Setup/SACHSNSetup.jsx";
+import AddSACHSNSetup from "./pages/Setup/AddSACHSNSetup.jsx";
+import SACHSNSetupDetails from "./pages/Setup/SACHSNSetupDetails.jsx";
+import MaterialPR from "./pages/MaterialPR.jsx";
+import AddMatertialPR from "./pages/SubPages/AddMaterialPR.jsx";
+import EditMatertialPR from "./pages/SubPages/EditMaterialPR.jsx";
+import MaterialPRDetails from "./pages/SubPages/details/MaterialPRDetails.jsx";
+import ServicePR from "./pages/ServicePR.jsx";
+import AddServicePR from "./pages/SubPages/AddServicePR.jsx";
+import EditServicePR from "./pages/SubPages/EditServicePR.jsx";
+import ServicePRDetails from "./pages/SubPages/details/ServicePRDetails.jsx";
 
 function App() {
   const themeColor = useSelector((state) => state.theme.color);
@@ -1990,10 +2005,146 @@ function App() {
             path="/setup/ticket-setup"
             element={
               <ProtectedAdminRoutes>
-               <TicketSetup/>
+                <TicketSetup />
               </ProtectedAdminRoutes>
             }
           />
+          {/* task-management */}
+          <Route
+            path="/admin/Task-management"
+            element={
+              <ProtectedAdminRoutes>
+                <TaskManagement />
+              </ProtectedAdminRoutes>
+            }
+          />
+          {/* Email Rule */}
+          <Route
+            path="/admin/email-rule"
+            element={
+              <ProtectedAdminRoutes>
+                <EmailRuleSetup />
+              </ProtectedAdminRoutes>
+            }
+          />
+          {/* Fm Groups */}
+          <Route
+            path="/admin/fm-groups-setup"
+            element={
+              <ProtectedAdminRoutes>
+                <FmGroupsSetup />
+              </ProtectedAdminRoutes>
+            }
+          />
+
+          <Route
+            path="/admin/fm-groups-setup-details/:id"
+            element={
+              <ProtectedAdminRoutes>
+                <FmGroupSetupDetails />
+              </ProtectedAdminRoutes>
+            }
+          />
+          {/* SAC/HSN Setup */}
+          <Route
+            path="/admin/sac-hsn-setup"
+            element={
+              <ProtectedAdminRoutes>
+                <SACHSNSetup />
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/add-sac-hsn-setup"
+            element={
+              <ProtectedAdminRoutes>
+                <AddSACHSNSetup />
+              </ProtectedAdminRoutes>
+            }
+          />
+
+          <Route
+            path="/admin/sac-hsn-setup-details/:id"
+            element={
+              <ProtectedAdminRoutes>
+                <SACHSNSetupDetails />
+              </ProtectedAdminRoutes>
+            }
+          />
+          {/* Admin MaterialPR */}
+          <Route
+            path="/admin/material-pr"
+            element={
+              <ProtectedAdminRoutes>
+                <MaterialPR />
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/add-material-pr"
+            element={
+              <ProtectedAdminRoutes>
+                <AddMatertialPR />
+              </ProtectedAdminRoutes>
+            }
+          />
+
+          <Route
+            path="/admin/edit-materialpr/:id"
+            element={
+              <ProtectedAdminRoutes>
+                <EditMatertialPR />
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/materialpr-details/:id"
+            element={
+              <ProtectedAdminRoutes>
+                <MaterialPRDetails />
+              </ProtectedAdminRoutes>
+            }
+          />
+          {/* service PR */}
+
+          <Route
+            path="/admin/service-pr"
+            element={
+              <ProtectedAdminRoutes>
+                <ServicePR />
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/add-service-pr"
+            element={
+              <ProtectedAdminRoutes>
+                <AddServicePR />
+              </ProtectedAdminRoutes>
+            }
+          />
+           <Route
+            path="/admin/edit-servicepr/:id"
+            element={
+              <ProtectedAdminRoutes>
+               <EditServicePR/>
+              </ProtectedAdminRoutes>
+            }
+          />
+          
+        
+        
+          <Route
+            path="/admin/servicepr-details/:id"
+            element={
+              <ProtectedAdminRoutes>
+               <ServicePRDetails/>
+              </ProtectedAdminRoutes>
+            }
+          />
+         
+         
+           
         </Routes>
         <Footer />
       </Router>
