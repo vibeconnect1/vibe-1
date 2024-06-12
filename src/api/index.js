@@ -81,16 +81,16 @@ export const getAdminComplaints = async () =>
     },
   });
 
-  // perPage
+// perPage
 
-  export const getAdminPerPageComplaints = async (page, perPage) =>
-    axiosInstance.get(`/pms/admin/complaints.json`, {
-      params: {
-        token: token,
-        per_page: perPage,
-        page: page
-      },
-    });
+export const getAdminPerPageComplaints = async (page, perPage) =>
+  axiosInstance.get(`/pms/admin/complaints.json`, {
+    params: {
+      token: token,
+      per_page: perPage,
+      page: page,
+    },
+  });
 
 export const getComplaintsDetails = async (id) =>
   axiosInstance.get(`pms/complaints/${id}.json`, {
@@ -277,7 +277,7 @@ export const getInventory = async () =>
     },
   });
 export const postInventory = async (data) =>
-  axiosInstance.post("/items.json",data, {
+  axiosInstance.post("/items.json", data, {
     params: {
       token: token,
     },
@@ -362,6 +362,49 @@ export const getBroadcastDetails = async (id) =>
       token: token,
     },
   });
+
+//
+
+export const postSoftServices = async (data) =>
+  axiosInstance.post("/soft_services.json", data, {
+    params: {
+      token: token,
+    },
+  });
+
+export const getSoftServices = async () =>
+  axiosInstance.get("/soft_services.json", {
+    params: {
+      token: token,
+    },
+  });
+export const getServicesChecklist = async () =>
+  axiosInstance.get("/checklists.json", {
+    params: {
+      token: token,
+    },
+  });
+export const postServicesChecklist = async (data) =>
+  axiosInstance.post("/checklists.json", data, {
+    params: {
+      token: token,
+    },
+  });
+export const getServicesChecklistDetails = async (checklistId) =>
+  axiosInstance.post(`/checklists.json/${checklistId}`, {
+    params: {
+      token: token,
+    },
+  });
+export const getServicesPPMList = async () =>
+  axiosInstance.get(`/checklists.json?q[ctype_eq]=ppm`, {
+    params: {
+      token: token,
+    },
+  });
+
+
+
 
 // vibe
 
@@ -515,7 +558,7 @@ export const getVibeMyBoardTask = async (userId) => {
   try {
     const response = await vibeAuth.get(
       `/api/employee/my_board/get-task/?user_id=${userId}`,
-      
+
       {
         headers: {
           "Content-Type": "application/json",
@@ -528,4 +571,3 @@ export const getVibeMyBoardTask = async (userId) => {
     throw error;
   }
 };
-

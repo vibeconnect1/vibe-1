@@ -59,18 +59,18 @@ const Dashboard = () => {
     >
       <Navbar />
       {/* <div className="flex flex-col w-full"> */}
-        {/* <header
+        <header
           style={{ background: themeColor }}
           className="w-full h-10 rounded-md mx-5 my-1 flex justify-center items-center "
         >
           <nav>
             <h1 className="text-white text-center text-xl">Vibe Connect</h1>
-          </nav> */}
+          </nav>
           {/* <div  className="flex-grow bg-red-200">
        
         <button onClick={toggleFullScreen}>Toggle Full Screen</button>
       </div> */}
-        {/* </header> */}
+        </header>
           {/* <DatePicker
             selected={dueDate}
             onChange={handleDateChange1}
@@ -82,10 +82,10 @@ const Dashboard = () => {
             className="border-2 bordeer-black"
 
           /> */}
-          <div className="w-full flex mx-3 flex-col p-2 mb-10 ">
+          {/* <div className="w-full flex mx-3 flex-col p-2 mb-10 ">
 
-          <HighchartsComponent/>
-          </div>
+          <HighchartsComponent/> */}
+          {/* </div> */}
       {/* </div> */}
     </section>
   );

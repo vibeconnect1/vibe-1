@@ -255,6 +255,9 @@ import ServicePR from "./pages/ServicePR.jsx";
 import AddServicePR from "./pages/SubPages/AddServicePR.jsx";
 import EditServicePR from "./pages/SubPages/EditServicePR.jsx";
 import ServicePRDetails from "./pages/SubPages/details/ServicePRDetails.jsx";
+import AddServicesChecklist from "./pages/SubPages/AddServicesChecklist.jsx";
+
+import EditServiceChecklist from "./pages/SubPages/EditServiceChecklist.jsx";
 
 function App() {
   const themeColor = useSelector((state) => state.theme.color);
@@ -523,12 +526,44 @@ function App() {
               </ProtectedRoute>
             }
           />
-          <Route path="/services" element={<Services />} />
-          <Route path="/services/add-service" element={<AddService />} />
+          {/**/}
+          <Route
+            path="/services"
+            element={
+              <ProtectedAdminRoutes>
+                <Services />
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/services/add-service"
+            element={
+              <ProtectedAdminRoutes>
+                <AddService />
+              </ProtectedAdminRoutes>
+            }
+          />
           <Route
             path="/services/service-details"
             element={<ServiceDetails />}
           />
+          <Route
+            path="/services/add-service-checklist"
+            element={
+              <ProtectedAdminRoutes>
+                <AddServicesChecklist />
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/services/edit-service-checklist/:id"
+            element={
+              <ProtectedAdminRoutes>
+                <EditServiceChecklist />
+              </ProtectedAdminRoutes>
+            }
+          />
+
           {/* Supplier */}
           <Route
             path="/suppliers"
@@ -2123,28 +2158,23 @@ function App() {
               </ProtectedAdminRoutes>
             }
           />
-           <Route
+          <Route
             path="/admin/edit-servicepr/:id"
             element={
               <ProtectedAdminRoutes>
-               <EditServicePR/>
+                <EditServicePR />
               </ProtectedAdminRoutes>
             }
           />
-          
-        
-        
+
           <Route
             path="/admin/servicepr-details/:id"
             element={
               <ProtectedAdminRoutes>
-               <ServicePRDetails/>
+                <ServicePRDetails />
               </ProtectedAdminRoutes>
             }
           />
-         
-         
-           
         </Routes>
         <Footer />
       </Router>

@@ -8,6 +8,7 @@ import toast from "react-hot-toast";
 
 import { BiAngry, BiHappy, BiSad, BiSmile } from "react-icons/bi";
 import { MdOutlineSentimentNeutral } from "react-icons/md";
+import { useSelector } from "react-redux";
 
 const TicketDetails = () => {
   const navigate = useNavigate();
@@ -101,7 +102,7 @@ const TicketDetails = () => {
   const domainPrefix = "https://admin.vibecopilot.ai";
 
   console.log(ticketinfo);
-
+const themeColor = useSelector((state)=> state.theme.color)
   const logs = [{ title: "logs", description: " " }];
   return (
     <div className="">
@@ -119,7 +120,9 @@ const TicketDetails = () => {
           <Detail details={ticketDetails} heading={"Ticket Details"} />
         </div>
         <div className="flex flex-col  flex-wrap gap-2">
-          <h2 className="text-center w-screen bg-black text-white font-semibold mt-5 text-lg p-2 px-4 ">
+          <h2
+          style={{background: themeColor}}
+          className="text-center w-screen  text-white font-semibold mt-5 text-lg p-2 px-4 ">
             Additional Info
           </h2>
           <div className="px-4 flex flex-col gap-1 justify-center">
@@ -162,7 +165,9 @@ const TicketDetails = () => {
           </div>
         </div>
         {/* <div className="border " /> */}
-        <h2 className="text-center w-screen bg-black text-white font-semibold my-5 text-lg p-2 px-4 ">
+        <h2
+        style={{background: themeColor}}
+        className="text-center   text-white font-semibold my-5 text-lg p-2 px-4 ">
           Attachments
         </h2>
         <div className="flex sm:flex-row flex-col items-center ">
@@ -186,7 +191,9 @@ const TicketDetails = () => {
             ))}
         </div>
 
-        <h2 className="text-center w-screen bg-black text-white font-semibold my-5 text-lg p-2 px-4 ">
+        <h2
+        style={{background: themeColor}}
+        className="text-center  text-white font-semibold my-5 text-lg p-2 px-4 ">
           Logs
         </h2>
         {/* <div className="border m-10 " /> */}
@@ -264,7 +271,9 @@ const TicketDetails = () => {
               </ol>
             </div>
           ))}
-        <h2 className="text-center w-screen bg-black text-white font-semibold my-5 text-lg p-2 px-4 ">
+        <h2 
+        style={{background: themeColor}}
+        className="text-center  text-white font-semibold my-5 text-lg p-2 px-4 ">
           Escalations
         </h2>
         {/* <div className="border m-10 " /> */}

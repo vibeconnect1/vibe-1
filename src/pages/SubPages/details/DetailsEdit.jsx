@@ -12,6 +12,7 @@ import { getItemInLocalStorage } from "../../../utils/localStorage";
 import toast from "react-hot-toast";
 import FileInput from "../../../Buttons/FileInput";
 import { select } from "@material-tailwind/react";
+import { useSelector } from "react-redux";
 
 const DetailsEdit = () => {
   const navigate = useNavigate();
@@ -245,10 +246,10 @@ const DetailsEdit = () => {
         <select
           value={formData.issue_status_id || ""}
           name="issue_status_id"
-          // onChange={(e) =>
-          //   setFormData({ ...formData, issue_status_id: e.target.value })
-          // }
-          onChange={handleChange}
+          onChange={(e) =>
+            setFormData({ ...formData, issue_status_id: e.target.value })
+          }
+          // onChange={handleChange}
           className="border p-1 px-4 grid max-w-40 w-40 border-gray-500 rounded-md"
         >
           <option value="">Select Status</option>
@@ -416,16 +417,18 @@ const DetailsEdit = () => {
       reader.onerror = (error) => reject(error);
     });
   };
-
+const themeColor = useSelector((state)=> state.theme.color)
   return (
     <div className="grid ">
-      <div className="flex flex-col justify-around gap-10 my-10 ">
+      <div className="flex flex-col justify-around gap-10 mb-10 my-2 ">
         <div className="">
           <Detail details={ticketDetails} heading={"Edit Ticket Details"} />
         </div>
 
         <div className="flex flex-col  flex-wrap gap-2">
-          <h2 className="text-center w-screen bg-black text-white font-semibold mt-5 text-lg p-2 px-4 ">
+          <h2
+          style={{background:themeColor}}
+          className="text-center w-screen  text-white font-semibold mt-5 text-lg p-2 px-4 ">
             Additional Info
           </h2>
           <div className="px-4 flex flex-col gap-1 justify-center">

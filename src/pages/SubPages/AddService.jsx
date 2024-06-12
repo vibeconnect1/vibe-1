@@ -1,20 +1,23 @@
 import React, { useState } from "react";
 import { getItemInLocalStorage } from "../../utils/localStorage";
-import { getFloors, getUnits } from "../../api";
+import { getFloors, getUnits, postSoftServices } from "../../api";
+import toast from "react-hot-toast";
 
 const AddService = () => {
   const [floors, setFloors] = useState([]);
   const [units, setUnits] = useState([]);
+  const siteId = getItemInLocalStorage("SITEID");
+  const userId = getItemInLocalStorage("UserId");
   const [formData, setFormData] = useState({
-   
-    site_id: "",
+    site_id: siteId,
     building_id: "",
     floor_id: "",
     unit_id: "",
-    service_name: "",
-    wing_id: "",
-    area_id: "",
-    file:[]
+    user_id: userId,
+    name: "",
+    // wing_id: "",
+    // area_id: "",
+    file: [],
   });
   console.log(formData);
   const buildings = getItemInLocalStorage("Building");
@@ -71,6 +74,37 @@ const AddService = () => {
       [fieldName]: files,
     });
   };
+
+  const handleAddService = async () => {
+    if (
+      !formData.name ||
+      !formData.building_id ||
+      !formData.floor_id ||
+      !formData.unit_id
+    ) {
+      return toast.error("All fields are required.");
+    }
+
+    try {
+      toast.loading("Creating Service Please Wait!");
+      const dataToSend = new FormData();
+
+      dataToSend.append("soft_service[site_id]", formData.site_id);
+      dataToSend.append("soft_service[name]", formData.name);
+      dataToSend.append("soft_service[building_id]", formData.building_id);
+      dataToSend.append("soft_service[floor_id]", formData.floor_id);
+      dataToSend.append("soft_service[unit_id]", formData.unit_id);
+      dataToSend.append("soft_service[user_id]", formData.user_id);
+      const serviceResponse = await postSoftServices(dataToSend);
+      console.log(serviceResponse);
+      toast.dismiss();
+      toast.success("Service Created Successfully");
+    } catch (error) {
+      toast.error("Error Creating Service");
+      console.log(error);
+    }
+  };
+
   return (
     <section>
       <div className="m-2">
@@ -85,14 +119,14 @@ const AddService = () => {
               </label>
               <input
                 type="text"
-                name="service_name"
-                value={formData.service_name}
+                name="name"
+                value={formData.name}
                 onChange={handleChange}
                 placeholder="Enter Service Name"
                 className="border p-1 px-4 border-gray-500 rounded-md placeholder:text-sm"
               />
             </div>
-            <div className="flex flex-col">
+            {/* <div className="flex flex-col">
               <label htmlFor="" className="font-semibold">
                 Select Site:
               </label>
@@ -107,7 +141,7 @@ const AddService = () => {
                 <option value="unit2">Site 2</option>
                 <option value="unit2">Site 3</option>
               </select>
-            </div>
+            </div> */}
             <div className="flex flex-col ">
               <label htmlFor="" className="font-semibold">
                 Select Building:
@@ -126,7 +160,7 @@ const AddService = () => {
                 ))}
               </select>
             </div>
-            <div className="flex flex-col ">
+            {/* <div className="flex flex-col ">
               <label htmlFor="" className="font-semibold">
                 Select Wing:
               </label>
@@ -141,7 +175,7 @@ const AddService = () => {
                 <option value="unit2">Wing 2</option>
                 <option value="unit2">Wing 3</option>
               </select>
-            </div>
+            </div> */}
             <div className="flex flex-col">
               <label htmlFor="" className="font-semibold">
                 Select Floor:
@@ -179,7 +213,7 @@ const AddService = () => {
               </select>
             </div>
 
-            <div className="flex flex-col ">
+            {/* <div className="flex flex-col ">
               <label
                 htmlFor=""
                 className="font-semibold"
@@ -195,7 +229,7 @@ const AddService = () => {
                 <option value="unit2">Area 2</option>
                 <option value="unit2">Area 3</option>
               </select>
-            </div>
+            </div> */}
           </div>
           <h2 className="border-b text-center text-xl border-black mb-6 font-bold">
             Attachments
@@ -206,7 +240,10 @@ const AddService = () => {
             multiple
           />
           <div className="md:flex grid grid-cols-2 gap-2 my-5 justify-end">
-            <button className="bg-black text-white p-1 px-4 rounded-md font-medium">
+            <button
+              className="bg-black text-white p-1 px-4 rounded-md font-medium"
+              onClick={handleAddService}
+            >
               Save & Show Details
             </button>
             <button className=" border-black border-2 p-1 px-4 rounded-md font-medium">

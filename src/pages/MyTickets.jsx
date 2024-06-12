@@ -7,6 +7,7 @@ import { getComplaints } from "../api";
 import { BsEye } from "react-icons/bs";
 import { BiEdit } from "react-icons/bi";
 import moment from "moment";
+import { useSelector } from "react-redux";
 
 function MyTickets() {
   const [filteredData, setFilteredData] = useState([]);
@@ -16,7 +17,7 @@ function MyTickets() {
   const [ticketStatusCounts, setTicketStatusCounts] = useState({});
   const allTicketTypes = ["Complaint", "Request", "Suggestion"];
   const [complaints, setComplaints] = useState([]);
-
+const themeColor = useSelector((state)=> state.theme.color)
   const getTimeAgo = (timestamp) => {
     const createdTime = moment(timestamp);
     const now = moment();
@@ -89,7 +90,7 @@ function MyTickets() {
   const customStyle = {
     headRow: {
       style: {
-        backgroundColor: "black",
+        background: themeColor,
         color: "white",
 
         fontSize: "10px",

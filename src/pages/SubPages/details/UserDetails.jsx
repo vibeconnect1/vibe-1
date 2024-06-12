@@ -8,6 +8,7 @@ import toast from "react-hot-toast";
 import ReopenModal from "../../../containers/modals/ReopenModal";
 import TicketCloseModal from "../../../containers/modals/CloseModal";
 import { MdOutlineSentimentNeutral } from "react-icons/md";
+import { useSelector } from "react-redux";
 
 const UserDetails = () => {
   // const navigate = useNavigate()
@@ -17,6 +18,7 @@ const UserDetails = () => {
   const [closeModal, setCloseModal] = useState(false);
   const [reopenStatusId, setReopenStatusId] = useState("");
   const [closeStatusId, setCloseStatusID] = useState("")
+  const themeColor = useSelector((state)=> state.theme.color)
   const [formData, setFormData] = useState({
     comment: "",
     of_phase: "pms",
@@ -176,7 +178,9 @@ const UserDetails = () => {
 
         </div>
         <div className="flex flex-col sm:items-start flex-wrap gap-2">
-          <h2 className="text-center sm:w-screen  bg-black text-white font-semibold mt-5 text-lg p-2 px-4 ">
+          <h2
+          style={{background: themeColor}}
+          className="text-center sm:w-screen text-white font-semibold mt-5 text-lg p-2 px-4 ">
             Additional Info
           </h2>
           <div className="px-4 flex flex-col gap-1 mx-2  ">
@@ -218,7 +222,9 @@ const UserDetails = () => {
           </div>
         </div>
         {/* <div className="border " /> */}
-        <h2 className="text-center  bg-black text-white font-semibold my-5 text-lg p-2 px-4 ">
+        <h2 
+        style={{background: themeColor}}
+        className="text-center   text-white font-semibold my-5 text-lg p-2 px-4 ">
           Attachments
         </h2>
         <div className="flex  sm:flex-row flex-col items-center ">
@@ -238,7 +244,9 @@ const UserDetails = () => {
         </div>
 
         {/* <div className="border m-10" /> */}
-        <h2 className="text-center w-screen bg-black text-white font-semibold my-5 text-lg p-2 px-4 ">
+        <h2
+        style={{background: themeColor}}
+        className="text-center w-screen text-white font-semibold my-5 text-lg p-2 px-4 ">
           Logs
         </h2>
         {/* <div className="border m-10 " /> */}
