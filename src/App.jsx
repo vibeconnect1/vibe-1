@@ -210,6 +210,9 @@ import FmGroupSetupDetails from "./pages/Setup/FmGroupSetupDetails.jsx";
 import SACHSNSetup from "./pages/Setup/SACHSNSetup.jsx";
 import AddSACHSNSetup from "./pages/Setup/AddSACHSNSetup.jsx";
 import SACHSNSetupDetails from "./pages/Setup/SACHSNSetupDetails.jsx";
+import AddressesSetup from "./pages/Setup/AddressesSetup.jsx";
+import AddAddressesSetup from "./pages/Setup/AddAddressesSetup.jsx";
+import EditAddressesSetup from "./pages/Setup/EditAddressesSetup.jsx";
 // import IncidentSetup from "./pages/Setup/IncidentSetupPages/IncidentSetup.jsx";
 
 function App() {
@@ -1709,6 +1712,31 @@ function App() {
             element={
               <ProtectedAdminRoutes>
                 <SACHSNSetupDetails/>
+              </ProtectedAdminRoutes>
+            }
+          />
+          {/* Addresses */}
+          <Route
+            path="/admin/addresses-setup"
+            element={
+              <ProtectedAdminRoutes>
+                <AddressesSetup/>
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/add-addresses-setup"
+            element={
+              <ProtectedAdminRoutes>
+                <AddAddressesSetup/>
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/edit-addresses-setup/:id"
+            element={
+              <ProtectedAdminRoutes>
+                <EditAddressesSetup/>
               </ProtectedAdminRoutes>
             }
           />

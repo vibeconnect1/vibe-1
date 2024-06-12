@@ -30,7 +30,7 @@ const SetupNavbar = () => {
         <Link to={"/admin/fm-groups-setup"} className="hover:bg-white hover:text-black  p-2 rounded-lg ">FM Groups</Link>
         <Link className="hover:bg-white hover:text-black  p-2 rounded-lg ">Master Checklist</Link>
         <Link to={"/admin/sac-hsn-setup"} className="hover:bg-white hover:text-black  p-2 rounded-lg ">SAC/HSN Setup</Link>
-        <Link className="hover:bg-white hover:text-black  p-2 rounded-lg ">Addresses</Link>
+        <Link to={"/admin/addresses-setup"} className="hover:bg-white hover:text-black  p-2 rounded-lg ">Addresses</Link>
         <Link className="hover:bg-white hover:text-black  p-2 rounded-lg ">Export</Link>
         <Link to={"/admin/setup-incidents"}className="hover:bg-white hover:text-black  p-2 rounded-lg ">Incidents Setup</Link>
         <Link to={"/admin/fm-user"}className="hover:bg-white hover:text-black  p-2 rounded-lg ">Fm User</Link>

@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import Navbar from '../../components/Navbar'
+
 import { IoMdAdd } from 'react-icons/io'
 import Table from '../../components/table/Table'
 import { BiEdit } from 'react-icons/bi'
