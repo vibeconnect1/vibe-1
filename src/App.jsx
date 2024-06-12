@@ -238,6 +238,7 @@ import AddServicePR from "./pages/SubPages/AddServicePR.jsx";
 import ServicePRDetails from "./pages/SubPages/ServicePRDetails.jsx";
 import EditServicePR from "./pages/SubPages/details/EditServicePR.jsx";
 import EditMatertialPR from "./pages/SubPages/details/EditMaterialPR.jsx";
+import AddRole from "./pages/SubPages/AddRole.jsx";
 
 function App() {
   const themeColor = useSelector((state) => state.theme.color);
@@ -315,6 +316,14 @@ function App() {
             element={
               <ProtectedAdminRoutes>
                 <UserSetupDetails />
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/setup/add-role/"
+            element={
+              <ProtectedAdminRoutes>
+                <AddRole/>
               </ProtectedAdminRoutes>
             }
           />
