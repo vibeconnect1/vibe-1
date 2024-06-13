@@ -125,7 +125,7 @@ const PermitHazardCategoryTable = () => {
           <Table
               columns={column}
               data={data}
-              customStyles={customStyle}
+              // customStyles={customStyle}
               responsive
              
               fixedHeader

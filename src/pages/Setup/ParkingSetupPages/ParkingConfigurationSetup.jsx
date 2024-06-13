@@ -76,7 +76,7 @@ const ParkingConfigurationSetup = () => {
           <Table
             columns={column}
             data={data}
-            customStyles={customStyle}
+            // customStyles={customStyle}
             responsive
             fixedHeader
             fixedHeaderScrollHeight="500px"

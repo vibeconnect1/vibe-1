@@ -2,9 +2,12 @@ import React, { useEffect, useState } from "react";
 import { getItemInLocalStorage } from "../utils/localStorage";
 import Navbar from "../components/Navbar";
 import { useSelector } from "react-redux";
-import { FaFilter, FaLaptop, FaTrashAlt } from "react-icons/fa";
+import { FaFilter, FaLaptop, FaPlus, FaTrashAlt } from "react-icons/fa";
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 import { getVibeMyBoardTask } from "../api";
+import RemainingTime from "../components/RemainingTime";
+import { BiPlus } from "react-icons/bi";
+import LinearProgressBar from "../components/LinearProgessBar";
 // import LinearProgress from "@material-ui/core/LinearProgress";
 
 const TaskManagement = () => {
@@ -81,7 +84,6 @@ const TaskManagement = () => {
   const toggleDropdown = () => {
     setFilterIsOpen(!filterIsOpen);
   };
-
 
   const handleViewChange = async (view) => {
     setActiveView(view);
@@ -280,12 +282,12 @@ const TaskManagement = () => {
   const GetBoardData = async (id) => {
     setIsLoading(true);
     try {
-    //   const params = {
-    //     user_id: localStorage.getItem("VIBEUSERID"),
-    //   };
+      //   const params = {
+      //     user_id: localStorage.getItem("VIBEUSERID"),
+      //   };
 
       const response = await getVibeMyBoardTask(user_id);
-      console.log(response)
+      console.log(response);
 
       if (response.success) {
         console.log("success");
@@ -312,9 +314,9 @@ const TaskManagement = () => {
       setIsLoading(false);
     }
   };
-  useEffect(()=>{
-    GetBoardData()
-  },[])
+  useEffect(() => {
+    GetBoardData();
+  }, []);
   const [modalTaskSelfIsOpen, setTaskSelfModalIsOpen] = useState(false);
 
   const openTaskSelf = () => {
@@ -459,37 +461,28 @@ const TaskManagement = () => {
           </div>
           {activeView === "Kanban" && (
             <section
-              // style={{
-              //   overflowX: 'auto', // Enable horizontal scrolling
-              //   // overflowY: 'hidden',
-              //   // scrollbarWidth: 'thin', scrollbarColor: '#888 #ddd',
-              //   overflowY:'scroll',
-              //   // minHeight: 530
-              //   // minHeight: 630
-              //   // minHeight: 730
-              //   // height:'auto'
-              //   // minHeight: '100%',
-
-              //   }}
+              style={
+                {
+                  //   overflowX: 'auto', // Enable horizontal scrolling
+                  //   // overflowY: 'hidden',
+                  // scrollbarWidth: 'thin',
+                  // scrollbarColor: '#888 #ddd',
+                  //   overflowY:'scroll',
+                  //   // minHeight: 530
+                  //   // minHeight: 630
+                  //   // minHeight: 730
+                  //   // height:'auto'
+                  //   // minHeight: '100%',
+                }
+              }
               // scrollable-content section-table-height
-              className="scrollable-content  section-table-height "
+              className="h-full overflow-x-auto scroll "
             >
               <div className="">
                 <DragDropContext onDragEnd={onDragEndTask}>
-                  <div
-                    className="row "
-                    style={{
-                      display: "flex",
-                      marginTop: "40px",
-                      alignItems: " flex-start",
-                      flexWrap: "nowrap",
-                    }}
-                  >
+                  <div className="flex gap-4 my-5 justify-between">
                     {isLoading ? (
-                      <div
-                        className="col-md-12 m-4"
-                        style={{ textAlign: "center" }}
-                      >
+                      <div className="" style={{ textAlign: "center" }}>
                         <center className="m-4">
                           <div
                             className="spinner-border"
@@ -510,22 +503,21 @@ const TaskManagement = () => {
                         >
                           {(provided) => (
                             <div
-                              className="col-xs-12 col-sm-6   col-md-3 mr-3 ml-2 primary-color-shade1"
+                              className=""
                               {...provided.droppableProps}
                               ref={provided.innerRef}
-                              style={{
-                                borderRadius: 15,
-                                color: "#fff",
-                                padding: "15px",
-                                // height:'auto',maxHeight: 500
-                              }}
                             >
-                              <div className="md-2 mb-2 ml-2 title text-black">
+                              <div
+                                className="p-2 text-white rounded-md text-center my-2 w-72"
+                                style={{
+                                  background: themeColor,
+                                }}
+                              >
                                 <b>{section.title}</b>
                               </div>
 
                               <div
-                                className=" section-height "
+                                className=""
                                 style={{ maxHeight: 400, overflow: "auto" }}
                               >
                                 {section.tasks.map((task, index) => (
@@ -560,21 +552,21 @@ const TaskManagement = () => {
                                         >
                                           <div
                                             // ref={cardRef}
-                                            className="card  row"
+                                            className="rounded-xl shadow-custom-all-sides text-black p-2 m-2"
                                             style={{
-                                              backgroundColor: "#30678edc",
+                                              backgroundColor: "",
                                               animation: isHighlighted
                                                 ? " color 15s"
                                                 : null,
-                                              borderRadius: 6,
-                                              color: "#fff",
-                                              fontSize: "16",
-                                              minHeight: 30,
-                                              marginBottom: 8,
-                                              padding: 6,
-                                              marginTop: 2,
-                                              marginLeft: 3,
-                                              marginRight: 3,
+
+                                              // color: "#fff",
+                                              // fontSize: "16",
+                                              // minHeight: 30,
+                                              // marginBottom: 8,
+                                              // padding: 6,
+                                              // marginTop: 2,
+                                              // marginLeft: 3,
+                                              // marginRight: 3,
                                             }}
                                             onClick={() =>
                                               openChatModal(
@@ -600,17 +592,19 @@ const TaskManagement = () => {
                                                     backgroundColor: "#00b272",
                                                     color: "#fff",
                                                     borderRadius:
-                                                      "0px 6px 0px 10px",
-                                                    fontSize: 12,
+                                                      "0px 10px 0px 5px",
+                                                    // fontSize: 12,
                                                     margin: "-6px",
                                                   }}
-                                                  className="pr-2 pl-2"
+                                                  className="px-2 my-1"
                                                 >
                                                   <b>Urgent</b>
                                                 </span>
                                               )}
                                             </div>
-                                            {task.title}
+                                            <div className="font-medium my-2">
+                                              {task.title}
+                                            </div>
 
                                             {showStatus ? (
                                               <div style={{ display: "flex" }}>
@@ -620,15 +614,15 @@ const TaskManagement = () => {
                                                     e.stopPropagation();
                                                     setshowStatus(false);
                                                   }}
-                                                  className="pl-3 pr-3 mr-1"
+                                                  className="mx-2 px-4"
                                                   style={{
                                                     textAlign: "center",
                                                     cursor: "pointer",
-                                                    fontSize: 10,
+                                                    fontSize: 12,
                                                     borderRadius: 20,
                                                     color: "white",
-                                                    padding: "1px",
-                                                    marginTop: "4px",
+                                                    // padding: "1px",
+                                                    // marginTop: "4px",
                                                     width: "auto",
                                                     backgroundColor: `${task.status.color}`,
                                                   }}
@@ -637,12 +631,12 @@ const TaskManagement = () => {
                                                 </div>
                                                 {task.reopened_count > 0 ? (
                                                   <div
-                                                    className="pt-1"
+                                                    className=""
                                                     style={{
                                                       width: 90,
                                                       textAlign: "center",
                                                       marginLeft: 0,
-                                                      fontSize: 10,
+                                                      fontSize: 12,
                                                       cursor: "default",
                                                       backgroundColor:
                                                         "#d33115",
@@ -682,7 +676,7 @@ const TaskManagement = () => {
                                                 ></div>
                                                 {task.reopened_count > 0 ? (
                                                   <div
-                                                    className=" mt-1"
+                                                    className="mt-1"
                                                     style={{
                                                       width: 90,
                                                       textAlign: "center",
@@ -706,7 +700,7 @@ const TaskManagement = () => {
                                             )}
 
                                             <div
-                                              className=" row col-md-12 mt-1"
+                                              className="font-medium"
                                               style={{
                                                 fontSize: 13,
                                                 cursor: "default",
@@ -738,9 +732,9 @@ const TaskManagement = () => {
                                                     }}
                                                   >
                                                     {/* {calculateRemainingTime(task.due_date)} */}
-                                                    {/* <RemainingTime
+                                                    <RemainingTime
                                                       dueDate={task.due_date}
-                                                    /> */}
+                                                    />
                                                   </div>
                                                 )}
                                             </div>
@@ -754,10 +748,11 @@ const TaskManagement = () => {
                                               variant="determinate"
                                               value={task.progress_percentage}
                                             /> */}
+                                            <LinearProgressBar progress={task.progress_percentage}/>
                                             </div>
-                                            <div className="row col-md-12 ">
+                                            <div className="">
                                               <div
-                                                className="col-md-4"
+                                                className=""
                                                 style={{ fontSize: 13 }}
                                               >
                                                 {task.division}
@@ -802,11 +797,11 @@ const TaskManagement = () => {
                                             {task.progress_percentage}%
                                           </div> */}
 
-                                              {task.created_by.id.toString() ===
+                                              {task.created_by.id ===
                                               user_id ? (
                                                 <>
                                                   <div
-                                                    className="col-md-2"
+                                                    className="flex justify-end"
                                                     onClick={(event) =>
                                                       openModalDeleteTask(
                                                         task.id,
@@ -816,8 +811,8 @@ const TaskManagement = () => {
                                                   >
                                                     <FaTrashAlt
                                                       style={{
-                                                        fontSize: 14,
-                                                        color: "whitesmoke",
+                                                        
+                                                        color: "red",
                                                         marginBottom: 4,
                                                         cursor: "pointer",
                                                       }}
@@ -886,11 +881,14 @@ const TaskManagement = () => {
                                       if (showAddTaskButton) {
                                         return (
                                           <div
-                                            className="col-12 col-md-12 mb-0 mt-1 add-task-btn"
-                                            style={{ cursor: "pointer" }}
+                                            className=" text-center text-white p-2 rounded-md font-medium flex items-center gap-2 justify-center"
+                                            style={{
+                                              cursor: "pointer",
+                                              background: themeColor,
+                                            }}
                                             onClick={openTaskSelf}
                                           >
-                                            <i className="fa fa-plus ml-2 mr-2"></i>{" "}
+                                            <FaPlus />
                                             Add Task
                                           </div>
                                         );

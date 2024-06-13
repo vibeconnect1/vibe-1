@@ -109,7 +109,7 @@ const PermitActivityTable = () => {
           <Table
               columns={column}
               data={data}
-              customStyles={customStyle}
+              // customStyles={customStyle}
               responsive
              
               fixedHeader

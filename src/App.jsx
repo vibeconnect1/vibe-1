@@ -258,6 +258,10 @@ import ServicePRDetails from "./pages/SubPages/details/ServicePRDetails.jsx";
 import AddServicesChecklist from "./pages/SubPages/AddServicesChecklist.jsx";
 
 import EditServiceChecklist from "./pages/SubPages/EditServiceChecklist.jsx";
+import AddressesSetup from "./pages/Setup/AddressSetup/AddressSetup.jsx";
+import AddAddressesSetup from "./pages/Setup/AddressSetup/AddAddressSetup.jsx";
+import EditAddressesSetup from "./pages/Setup/AddressSetup/EditAddressSetup.jsx";
+import AddRole from "./pages/SubPages/AddUserRole.jsx";
 
 function App() {
   const themeColor = useSelector((state) => state.theme.color);
@@ -321,7 +325,22 @@ function App() {
           <Route path="/setup/account/floor" element={<Floor />} />
           <Route path="/setup/account/unit" element={<Unit />} />
           <Route path="/setup/account/room" element={<Room />} />
-          <Route path="/setup/User-role" element={<UserRole />} />
+          <Route
+            path="/setup/User-role"
+            element={
+              <ProtectedRoute>
+                <UserRole />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/setup/add-role/"
+            element={
+              <ProtectedAdminRoutes>
+                <AddRole/>
+              </ProtectedAdminRoutes>
+            }
+          />
           <Route
             path="/setup/users-setup"
             element={
@@ -2172,6 +2191,33 @@ function App() {
             element={
               <ProtectedAdminRoutes>
                 <ServicePRDetails />
+              </ProtectedAdminRoutes>
+            }
+          />
+
+          {/* Addresses */}
+          <Route
+            path="/admin/addresses-setup"
+            element={
+              <ProtectedAdminRoutes>
+                <AddressesSetup />
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/add-addresses-setup"
+            element={
+              <ProtectedAdminRoutes>
+                <AddAddressesSetup />
+              </ProtectedAdminRoutes>
+            }
+          />
+
+          <Route
+            path="/admin/edit-addresses-setup/:id"
+            element={
+              <ProtectedAdminRoutes>
+                <EditAddressesSetup />
               </ProtectedAdminRoutes>
             }
           />

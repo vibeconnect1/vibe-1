@@ -98,7 +98,7 @@ const themeColor = useSelector((state)=> state.theme.color)
         <h2
         style={{background: themeColor}}
         className="text-center text-xl font-bold p-2  rounded-full text-white">
-          Add Checklist
+          Edit Checklist
         </h2>
         <div className="md:mx-20 my-5 mb-10 sm:border border-gray-400 p-5 px-10 rounded-lg sm:shadow-xl">
           {/* <form onSubmit={handleSubmit}> */}

@@ -131,7 +131,7 @@ const PermitRiskTable = () => {
             <Table
               columns={column}
               data={data}
-              customStyles={customStyle}
+              // customStyles={customStyle}
               responsive
              
               fixedHeader
