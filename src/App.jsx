@@ -255,6 +255,26 @@ import EmployeeHotelRequest from "./pages/Employees/BookingAndRequest/EmployeeHo
 import EmployeeCabRequest from "./pages/Employees/BookingAndRequest/EmployeeCabRequest.jsx";
 import EmployeeTransportationRequest from "./pages/Employees/BookingAndRequest/EmployeeTransportationRequest.jsx";
 import EmployeeTravellingAllowanceRequest from "./pages/Employees/BookingAndRequest/EmployeeTravellingAllowanceRequest.jsx";
+import HotelRequest from "./pages/SubPages/HotelRequest.jsx";
+import FlightRequest from "./pages/SubPages/FlightRequest.jsx";
+import CabRequest from "./pages/SubPages/CabRequest.jsx";
+import TransportationRequest from "./pages/SubPages/TransportationRequest.jsx";
+import TravellingAllowanceRequest from "./pages/SubPages/TravellingAllowanceRequest.jsx";
+import AddHotelRequest from "./pages/SubPages/AddHotelRequest.jsx";
+import EditHotelRequest from "./pages/SubPages/EditHotelRequest.jsx";
+import HotelRequestDetails from "./pages/SubPages/HotelRequestDetails.jsx";
+import AddFlightRequest from "./pages/SubPages/AddFlightRequest.jsx";
+import EditFlightRequest from "./pages/SubPages/EditFlightRequest.jsx";
+import FlightRequestDetails from "./pages/SubPages/FlightRequestDetails.jsx";
+import AddCabRequest from "./pages/SubPages/AddCabRequest.jsx";
+import EditCabRequest from "./pages/SubPages/EditCabRequest.jsx";
+import CabRequestDetails from "./pages/SubPages/CabRequestDetails.jsx";
+import AddTransportRequest from "./pages/SubPages/AddTransportationRequest.jsx";
+import EditTransportRequest from "./pages/SubPages/EditTransportRequest.jsx";
+import TransportRequestDetails from "./pages/SubPages/TransportationRequestDetails.jsx";
+import AddTravellingAllowanceRequest from "./pages/SubPages/AddTravellingAllowance.jsx";
+import EditTravellingAllowanceRequest from "./pages/SubPages/EditTravellingAllowance.jsx";
+import TravelingAllowanceDetails from "./pages/SubPages/TravellingAllowanceDetails.jsx";
 
 function App() {
   const themeColor = useSelector((state) => state.theme.color);
@@ -909,11 +929,15 @@ function App() {
             }
           />
            <Route path="/employee/booking-request/hotel-request" 
-           element={<EmployeeHotelRequest/>} />
-            <Route path="/employee/booking-request/flight-ticket-request" element={<EmployeeFlightRequest />} />
-            <Route path="/employee/booking-request/cab-bus-request" element={<EmployeeCabRequest/>} />
-            <Route path="/employee/booking-request/transportation-request" element={<EmployeeTransportationRequest/>} />
-            <Route path="/employee/booking-request/traveling-allowance-request" element={<EmployeeTravellingAllowanceRequest/>} />
+           element=    
+           {
+            <ProtectedRoute>
+           <EmployeeHotelRequest/>
+           </ProtectedRoute>} />
+            <Route path="/employee/booking-request/flight-ticket-request" element={<ProtectedRoute><EmployeeFlightRequest /></ProtectedRoute>} />
+            <Route path="/employee/booking-request/cab-bus-request" element={<ProtectedRoute><EmployeeCabRequest/></ProtectedRoute>} />
+            <Route path="/employee/booking-request/transportation-request" element={<ProtectedRoute><EmployeeTransportationRequest/></ProtectedRoute>} />
+            <Route path="/employee/booking-request/traveling-allowance-request" element={<ProtectedRoute><EmployeeTravellingAllowanceRequest/></ProtectedRoute>} />
            <Route
             path="/employee/booking-request"
             element={
@@ -1016,6 +1040,166 @@ function App() {
               <ProtectedRoute>
                 <EmployeeFitnessDetails />
               </ProtectedRoute>
+            }
+          />
+           <Route
+            path="/admin/booking-request/hotel-request"
+            element={
+              <ProtectedAdminRoutes>
+               <HotelRequest/>
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/booking-request/flight-ticket-request"
+            element={
+              <ProtectedAdminRoutes>
+               <FlightRequest/>
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/booking-request/cab-bus-request"
+            element={
+              <ProtectedAdminRoutes>
+               <CabRequest/>
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/booking-request/transportation-request"
+            element={
+              <ProtectedAdminRoutes>
+               <TransportationRequest/>
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/booking-request/traveling-allowance-request"
+            element={
+              <ProtectedAdminRoutes>
+               <TravellingAllowanceRequest/>
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/add-hotel-request"
+            element={
+              <ProtectedAdminRoutes>
+               <AddHotelRequest/>
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/hotel-edit/:id"
+            element={
+              <ProtectedAdminRoutes>
+               <EditHotelRequest/>
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/hotel-details/:id"
+            element={
+              <ProtectedAdminRoutes>
+               <HotelRequestDetails/>
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/add-flight-request"
+            element={
+              <ProtectedAdminRoutes>
+               <AddFlightRequest/>
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/flight-edit/:id"
+            element={
+              <ProtectedAdminRoutes>
+               <EditFlightRequest/>
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/flight-details/:id"
+            element={
+              <ProtectedAdminRoutes>
+               <FlightRequestDetails/>
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/add-cab-request"
+            element={
+              <ProtectedAdminRoutes>
+               <AddCabRequest/>
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/cab-edit/:id"
+            element={
+              <ProtectedAdminRoutes>
+              <EditCabRequest/>
+              </ProtectedAdminRoutes>
+            }
+          />
+           <Route
+            path="/admin/cab-details/:id"
+            element={
+              <ProtectedAdminRoutes>
+              <CabRequestDetails/>
+              </ProtectedAdminRoutes>
+            }
+          />
+           <Route
+            path="/admin/add-transport-request"
+            element={
+              <ProtectedAdminRoutes>
+               <AddTransportRequest/>
+              </ProtectedAdminRoutes>
+            }
+          />
+           <Route
+            path="/admin/transport-edit/:id"
+            element={
+              <ProtectedAdminRoutes>
+              <EditTransportRequest/>
+              </ProtectedAdminRoutes>
+            }
+          />
+           <Route
+            path="/admin/transport-details/:id"
+            element={
+              <ProtectedAdminRoutes>
+              <TransportRequestDetails/>
+              </ProtectedAdminRoutes>
+            }
+          />
+           <Route
+            path="/admin/add-travelallowance-request"
+            element={
+              <ProtectedAdminRoutes>
+               <AddTravellingAllowanceRequest/>
+              </ProtectedAdminRoutes>
+            }
+          />
+           <Route
+            path="/admin/travelling-edit/:id"
+            element={
+              <ProtectedAdminRoutes>
+              <EditTravellingAllowanceRequest/>
+              </ProtectedAdminRoutes>
+            }
+          />
+           <Route
+            path="/admin/travelling-details/:id"
+            element={
+              <ProtectedAdminRoutes>
+              <TravelingAllowanceDetails/>
+              </ProtectedAdminRoutes>
             }
           />
           {/* admin doc appointment */}
