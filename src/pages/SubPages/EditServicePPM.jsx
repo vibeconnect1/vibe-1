@@ -5,14 +5,12 @@ import { getItemInLocalStorage } from "../../utils/localStorage";
 
 import { useSelector } from "react-redux";
 import {
-  editServicesChecklist,
-  getChecklistDetails,
-  postServicesChecklist,
+getServicesPPMDetails
 } from "../../api";
 import { useParams } from "react-router-dom";
 import toast from "react-hot-toast";
 
-const EditServiceChecklist = () => {
+const EditServicePPM = () => {
   const [name, setName] = useState("");
   const [frequency, setFrequency] = useState("");
   const [startDate, setStartDate] = useState("");
@@ -49,7 +47,7 @@ const EditServiceChecklist = () => {
   const { id } = useParams();
   useEffect(() => {
     const fetchServicesChecklistDetails = async () => {
-      const checklistDetailsResponse = await getChecklistDetails(id);
+      const checklistDetailsResponse = await getServicesPPMDetails(id);
       const data = checklistDetailsResponse.data;
       console.log(data);
       setName(data.name);
@@ -305,4 +303,4 @@ const EditServiceChecklist = () => {
   );
 };
 
-export default EditServiceChecklist;
+export default EditServicePPM;

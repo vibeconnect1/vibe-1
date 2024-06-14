@@ -5,7 +5,7 @@ import { BsEye, BsFilterLeft } from "react-icons/bs";
 import { Link } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import * as XLSX from "xlsx";
-import { serviceColumns } from "../utils/assetColumns";
+// import { serviceColumns } from "../utils/assetColumns";
 import { BiEdit, BiFilter, BiFilterAlt } from "react-icons/bi";
 import Table from "../components/table/Table";
 import { getServicesChecklist, getServicesPPMList, getSoftServices } from "../api";
@@ -16,7 +16,7 @@ const Services = () => {
   const [searchText, setSearchText] = useState("");
   const [filter, setFilter] = useState(false);
   const [omitColumn, setOmitColumn] = useState(false);
-  const [visibleColumns, setVisibleColumns] = useState(serviceColumns);
+  // const [visibleColumns, setVisibleColumns] = useState(serviceColumns);
   const [selectedRows, setSelectedRows] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
   const [filteredChecklistData, setFilteredChecklistData] = useState([]);
@@ -61,23 +61,23 @@ const Services = () => {
       selector: (row) => row.unit_name,
       sortable: true,
     },
-    {
-      name: "Service Code",
-      selector: (row) => row.serviceCode,
-      sortable: true,
-    },
-    { name: "Reference Number", selector: (row) => row.ref, sortable: true },
-    { name: "Category", selector: (row) => row.category, sortable: true },
-    {
-      name: "Group",
-      selector: (row) => row.group,
-      sortable: true,
-    },
-    {
-      name: "UOM",
-      selector: (row) => row.UOM,
-      sortable: true,
-    },
+    // {
+    //   name: "Service Code",
+    //   selector: (row) => row.serviceCode,
+    //   sortable: true,
+    // },
+    // { name: "Reference Number", selector: (row) => row.ref, sortable: true },
+    // { name: "Category", selector: (row) => row.category, sortable: true },
+    // {
+    //   name: "Group",
+    //   selector: (row) => row.group,
+    //   sortable: true,
+    // },
+    // {
+    //   name: "UOM",
+    //   selector: (row) => row.UOM,
+    //   sortable: true,
+    // },
     // {
     //   name: "Site",
     //   selector: (row) => row.site,
@@ -150,7 +150,7 @@ const Services = () => {
       name: "Associations",
       selector: (row) => (
         <div>
-          <Link to={`/services/associate-checklist/${row.id}`} className="font-normal text-base px-4 bg-green-400 text-white rounded-full">Associate</Link>
+          <Link to={`/services/associate-checklist/${row.id}`} className="px-4 bg-green-400 text-white rounded-full">Associate</Link>
         </div>
       ),
       sortable: true,
@@ -164,7 +164,7 @@ const Services = () => {
           {/* <Link to={`/services/checklist-details/${row.id}`}>
             <BsEye size={15} />
           </Link> */}
-          <Link to={`/services/edit-service-checklist/${row.id}`}>
+          <Link to={`/services/edit-ppm/${row.id}`}>
             <BiEdit size={15} />
           </Link>
         </div>
@@ -400,9 +400,7 @@ const Services = () => {
               </div>
             </div>
             <Table
-              columns={column.filter((col) =>
-                visibleColumns.includes(col.name)
-              )}
+              columns={column}
               data={filteredData}
             />
             {/* <DataTable

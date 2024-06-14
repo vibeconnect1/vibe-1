@@ -23,20 +23,20 @@ export const columnsData = [
   "Supplier",
 ];
 
-export const serviceColumns = [
-  "Action",
-  "ID",
-  "Service Name",
-  "Service Code",
-  "Reference Number",
-  "Category",
-  "Group",
-  "UOM",
-  "Site",
-  "Floor",
-  "Building",
-  "Area",
-  "Status",
-  "Model Number",
-  "Created On",
-];
+// export const serviceColumns = [
+//   "Action",
+//   "ID",
+//   "Service Name",
+//   "Service Code",
+//   "Reference Number",
+//   "Category",
+//   "Group",
+//   "UOM",
+//   "Site",
+//   "Floor",
+//   "Building",
+//   "Area",
+//   "Status",
+//   "Model Number",
+//   "Created On",
+// ];

@@ -4,6 +4,7 @@ import { getAssignedTo, getSiteAsset, getSoftServices, postAssetAssociation } fr
 import Select from "react-select";
 import Table from "../../components/table/Table";
 import { useParams } from "react-router-dom";
+import toast from "react-hot-toast";
 const AssociateAssetChecklist = () => {
   const [assets, setAssets] = useState([]);
   const [selectedOption, setSelectedOption] = useState([]);
@@ -25,7 +26,7 @@ const AssociateAssetChecklist = () => {
       sortable: true,
     },
   ];
-  console.log(selectedOption);
+  
   useEffect(() => {
     const fetchAssetsList = async () => {
       // getting all the services
@@ -40,7 +41,7 @@ const AssociateAssetChecklist = () => {
     };
     const fetchAssignedTo = async () => {
       const assignedToList = await getAssignedTo();
-      console.log(assignedToList.data);
+   
       setAssignedTo(assignedToList.data);
     };
 
@@ -49,7 +50,7 @@ const AssociateAssetChecklist = () => {
   }, []);
 
   var handleChangeSelect = (selectedOption) => {
-    console.log(selectedOption);
+
     setSelectedOption(selectedOption);
   };
 
@@ -66,8 +67,12 @@ const {id}= useParams()
         assigned_to: formData.assigned_to
       };
       try {
+        toast.loading("Associating Checklist")
         const resp = await postAssetAssociation(payload)
         console.log(resp)
+        toast.dismiss()
+ window.location.reload()
+        toast.success("Checklist Associated")
       } catch (error) {
         console.log(error)
       }
@@ -81,7 +86,7 @@ const {id}= useParams()
         <h2 className="text-lg font-medium border-b-2 border-gray-400 mb-2">
           Associate Checklist
         </h2>
-        <div className="grid grid-cols-3 items-center gap-4">
+        <div className="grid md:grid-cols-3 items-center gap-4">
           <div className="w-full">
             {/* <label htmlFor="" className="font-medium my-2">
               Services

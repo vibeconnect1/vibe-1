@@ -264,6 +264,24 @@ import EditAddressesSetup from "./pages/Setup/AddressSetup/EditAddressSetup.jsx"
 import AddRole from "./pages/SubPages/AddUserRole.jsx";
 import AssociateServiceChecklist from "./pages/SubPages/AssociateServiceChecklist.jsx";
 import AssociateAssetChecklist from "./pages/SubPages/AssociateAssetChecklist.jsx";
+import EmployeeHotelRequest from "./pages/Employees/Booking&Request/EmployeeHotelRequest.jsx";
+import EmployeeBookingRequest from "./pages/Employees/Booking&Request/EmployeeBookingRequest.jsx";
+import EmployeeAddHotelRequest from "./pages/Employees/Booking&Request/EmployeeAddHotelRequest.jsx";
+import EmployeeHotelRequestDetails from "./pages/Employees/Booking&Request/EmployeeHotelRequestDetails.jsx";
+import EmployeeFlightRequest from "./pages/Employees/Booking&Request/EmployeeFlightTicketRequest.jsx";
+import EmployeeAddFlightRequest from "./pages/Employees/Booking&Request/EmployeeAddFlightTicketRequest.jsx";
+import EmployeeFlightRequestDetails from "./pages/Employees/Booking&Request/EmployeeFlightDetails.jsx";
+import EmployeeCabRequest from "./pages/Employees/Booking&Request/EmployeeCabRequest.jsx";
+import EmployeeAddCabRequest from "./pages/Employees/Booking&Request/EmployeeAddCabRequest.jsx";
+import EmployeeCabRequestDetails from "./pages/Employees/Booking&Request/EmployeeCabDetails.jsx";
+import EmployeeTransportationRequest from "./pages/Employees/Booking&Request/EmployeeTransportationRequest.jsx";
+import EmployeeAddTransportRequest from "./pages/Employees/Booking&Request/EmployeeAddTransportationRequest.jsx";
+import EmployeeTransportRequestDetails from "./pages/Employees/Booking&Request/EmployeeTransportationRequestDetails.jsx";
+import EmployeeTravellingAllowanceRequest from "./pages/Employees/Booking&Request/EmployeeTravellingAllowanceRequest.jsx";
+import EmployeeAddTravellingAllowanceRequest from "./pages/Employees/Booking&Request/EmployeeAddTravellingRequest.jsx";
+import EmployeeTravelingAllowanceDetails from "./pages/Employees/Booking&Request/EmployeeTravellingAllowanceDetails.jsx";
+import EditService from "./pages/SubPages/EditServices.jsx";
+import EditServicePPM from "./pages/SubPages/EditServicePPM.jsx";
 
 function App() {
   const themeColor = useSelector((state) => state.theme.color);
@@ -339,7 +357,7 @@ function App() {
             path="/setup/add-role/"
             element={
               <ProtectedAdminRoutes>
-                <AddRole/>
+                <AddRole />
               </ProtectedAdminRoutes>
             }
           />
@@ -573,8 +591,22 @@ function App() {
             }
           />
           <Route
-            path="/services/service-details"
-            element={<ServiceDetails />}
+            path="/services/service-details/:id"
+            element={
+              <ProtectedAdminRoutes>
+                {" "}
+                <ServiceDetails />
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/services/edit-service/:id"
+            element={
+              <ProtectedAdminRoutes>
+                {" "}
+                <EditService />
+              </ProtectedAdminRoutes>
+            }
           />
           <Route
             path="/services/add-service-checklist"
@@ -600,6 +632,15 @@ function App() {
               </ProtectedAdminRoutes>
             }
           />
+          <Route
+            path="/services/edit-ppm/:id"
+            element={
+              <ProtectedAdminRoutes>
+                <EditServicePPM />
+              </ProtectedAdminRoutes>
+            }
+          />
+
 
           {/* Supplier */}
           <Route
@@ -2237,6 +2278,154 @@ function App() {
               <ProtectedAdminRoutes>
                 <EditAddressesSetup />
               </ProtectedAdminRoutes>
+            }
+          />
+
+          {/* booking & Req */}
+
+          <Route
+            path="/employee/booking-request/hotel-request"
+            element={
+              <ProtectedRoute>
+                {" "}
+                <EmployeeHotelRequest />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/employee/booking-request"
+            element={
+              <ProtectedRoute>
+                <EmployeeBookingRequest />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/employee/add-hotel-request"
+            element={
+              <ProtectedRoute>
+                <EmployeeAddHotelRequest />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/employee/hotel-details/:id"
+            element={
+              <ProtectedRoute>
+                <EmployeeHotelRequestDetails />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/employee/booking-request/flight-ticket-request"
+            element={
+              <ProtectedRoute>
+                {" "}
+                <EmployeeFlightRequest />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/employee/flight-request"
+            element={
+              <ProtectedRoute>
+                <EmployeeFlightRequest />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/employee/add-flight-request"
+            element={
+              <ProtectedRoute>
+                <EmployeeAddFlightRequest />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/employee/flight-details/:id"
+            element={
+              <ProtectedRoute>
+                <EmployeeFlightRequestDetails />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/employee/booking-request/cab-bus-request"
+            element={
+              <ProtectedRoute>
+                {" "}
+                <EmployeeCabRequest />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/employee/add-cab-request"
+            element={
+              <ProtectedRoute>
+                <EmployeeAddCabRequest />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/employee/cab-details/:id"
+            element={
+              <ProtectedRoute>
+                <EmployeeCabRequestDetails />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/employee/booking-request/transportation-request"
+            element={
+              <ProtectedRoute>
+                {" "}
+                <EmployeeTransportationRequest />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/employee/add-transport-request"
+            element={
+              <ProtectedRoute>
+                <EmployeeAddTransportRequest />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/employee/transport-details/:id"
+            element={
+              <ProtectedRoute>
+                <EmployeeTransportRequestDetails />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/employee/booking-request/traveling-allowance-request"
+            element={
+              <ProtectedRoute>
+                <EmployeeTravellingAllowanceRequest />{" "}
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/employee/add-travelallowance-request"
+            element={
+              <ProtectedRoute>
+                <EmployeeAddTravellingAllowanceRequest />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/employee/travelling-details/:id"
+            element={
+              <ProtectedRoute>
+                <EmployeeTravelingAllowanceDetails />
+              </ProtectedRoute>
             }
           />
         </Routes>

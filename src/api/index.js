@@ -256,9 +256,9 @@ export const postAMC = async (data) =>
     },
   });
 export const getAMCDetails = async (assetId) =>
-  axiosInstance.get("/asset_amcs.json", {
+  axiosInstance.get(`/asset_amcs.json?q[asset_id_eq]=${assetId}`, {
     params: {
-      // 'q[asset_id_eq]': assetId,
+      
       token: token,
       // asset_id: assetId,
     },
@@ -383,6 +383,24 @@ export const postSoftServices = async (data) =>
       token: token,
     },
   });
+export const EditSoftServices = async (data, id) =>
+  axiosInstance.put(`/soft_services/${id}.json`, data, {
+    params: {
+      token: token,
+    },
+  });
+export const getSoftServicesDetails = async (id) =>
+  axiosInstance.get(`/soft_services/${id}.json`, {
+    params: {
+      token: token,
+    },
+  });
+export const postServiceAssociation = async (data) =>
+  axiosInstance.post(`/activities.json`, data, {
+    params: {
+      token: token,
+    },
+  });
 
 export const getSoftServices = async () =>
   axiosInstance.get("/soft_services.json", {
@@ -402,14 +420,27 @@ export const postServicesChecklist = async (data) =>
       token: token,
     },
   });
-export const getServicesChecklistDetails = async (checklistId) =>
-  axiosInstance.post(`/checklists.json/${checklistId}`, {
+export const editServicesChecklist = async (data, id) =>
+  axiosInstance.put(`/checklists//${id}.json`, data, {
     params: {
       token: token,
     },
   });
+export const getServicesChecklistDetails = async (checklistId) =>
+  axiosInstance.get(`/checklists.json/${checklistId}`, {
+    params: {
+      token: token,
+    },
+  });
+
 export const getServicesPPMList = async () =>
   axiosInstance.get(`/checklists.json?q[ctype_eq]=ppm`, {
+    params: {
+      token: token,
+    },
+  });
+export const getServicesPPMDetails = async (id) =>
+  axiosInstance.get(`/checklists/${id}.json?q[ctype_eq]=ppm`, {
     params: {
       token: token,
     },
@@ -601,7 +632,7 @@ export const getVibeTaskUserAssign = async (userId, taskId) => {
   try {
     const response = await vibeAuth.get(
       `/api/employee/task/get-task-assigned-users/?user_id=${userId}&task_id=${taskId}`,
-     
+
       {
         headers: {
           "Content-Type": "application/json",

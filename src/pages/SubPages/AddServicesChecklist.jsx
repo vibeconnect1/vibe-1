@@ -10,11 +10,14 @@ const AddServicesChecklist = () => {
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [addNewQuestion, setAddNewQuestion] = useState([
-    { name: "", type: "", options: ["", "", "", ""] }
+    { name: "", type: "", options: ["", "", "", ""] },
   ]);
 
   const handleAddQuestionFields = () => {
-    setAddNewQuestion([...addNewQuestion, { name: "", type: "", options: ["", "", "", ""] }]);
+    setAddNewQuestion([
+      ...addNewQuestion,
+      { name: "", type: "", options: ["", "", "", ""] },
+    ]);
   };
 
   const handleRemoveQuestionFields = (index) => {
@@ -32,8 +35,8 @@ const AddServicesChecklist = () => {
     }
     setAddNewQuestion(newQuestions);
   };
-const siteId = getItemInLocalStorage("SITEID")
-const userId = getItemInLocalStorage("UserId")
+  const siteId = getItemInLocalStorage("SITEID");
+  const userId = getItemInLocalStorage("UserId");
   const handleSubmit = async (event) => {
     event.preventDefault();
     const data = {
@@ -43,29 +46,29 @@ const userId = getItemInLocalStorage("UserId")
         name: name,
         start_date: startDate,
         end_date: endDate,
-        user_id: userId
+        user_id: userId,
       },
       frequency: frequency,
       ctype: "soft_service",
-      question: addNewQuestion.map(q => ({
+      question: addNewQuestion.map((q) => ({
         name: q.name,
         type: q.type,
         option1: q.options[0],
         option2: q.options[1],
         option3: q.options[2],
-        option4: q.options[3]
-      }))
+        option4: q.options[3],
+      })),
     };
-    console.log(data)
+    console.log(data);
 
     try {
-      const response = await postServicesChecklist(data)
-      console.log(response)
-    //   if (response.ok) {
-    //     console.log("Checklist saved successfully!");
-    //   } else {
-    //     console.error("Error saving checklist");
-    //   }
+      const response = await postServicesChecklist(data);
+      console.log(response);
+      //   if (response.ok) {
+      //     console.log("Checklist saved successfully!");
+      //   } else {
+      //     console.error("Error saving checklist");
+      //   }
     } catch (error) {
       console.error("Error:", error);
     }
@@ -159,7 +162,9 @@ const userId = getItemInLocalStorage("UserId")
                           className="border p-1 px-4 border-gray-500 rounded-md"
                           placeholder="Add New Question"
                           value={data.name}
-                          onChange={(e) => handleQuestionChange(i, "name", e.target.value)}
+                          onChange={(e) =>
+                            handleQuestionChange(i, "name", e.target.value)
+                          }
                         />
                       </div>
                       <div className="my-2">
@@ -167,11 +172,15 @@ const userId = getItemInLocalStorage("UserId")
                           name={`type_${i}`}
                           id={`type_${i}`}
                           value={data.type}
-                          onChange={(e) => handleQuestionChange(i, "type", e.target.value)}
+                          onChange={(e) =>
+                            handleQuestionChange(i, "type", e.target.value)
+                          }
                           className="border p-1 px-4 border-gray-500 rounded-md"
                         >
                           <option value="">Select Answer Type</option>
-                          <option value="multiple">Multiple Choice Question</option>
+                          <option value="multiple">
+                            Multiple Choice Question
+                          </option>
                           <option value="inbox">Input box</option>
                           <option value="description">Description box</option>
                         </select>
@@ -184,7 +193,9 @@ const userId = getItemInLocalStorage("UserId")
                               className="border p-1 px-4 border-gray-500 rounded-md"
                               placeholder="option 1"
                               value={data.options[0]}
-                              onChange={(e) => handleQuestionChange(i, 0, e.target.value)}
+                              onChange={(e) =>
+                                handleQuestionChange(i, 0, e.target.value)
+                              }
                             />
                             <input
                               type="text"
@@ -193,7 +204,9 @@ const userId = getItemInLocalStorage("UserId")
                               className="border p-1 px-4 border-gray-500 rounded-md"
                               placeholder="option 2"
                               value={data.options[1]}
-                              onChange={(e) => handleQuestionChange(i, 1, e.target.value)}
+                              onChange={(e) =>
+                                handleQuestionChange(i, 1, e.target.value)
+                              }
                             />
                             <input
                               type="text"
@@ -202,7 +215,9 @@ const userId = getItemInLocalStorage("UserId")
                               className="border p-1 px-4 border-gray-500 rounded-md"
                               placeholder="option 3"
                               value={data.options[2]}
-                              onChange={(e) => handleQuestionChange(i, 2, e.target.value)}
+                              onChange={(e) =>
+                                handleQuestionChange(i, 2, e.target.value)
+                              }
                             />
                             <input
                               type="text"
@@ -211,7 +226,9 @@ const userId = getItemInLocalStorage("UserId")
                               className="border p-1 px-4 border-gray-500 rounded-md"
                               placeholder="option 4"
                               value={data.options[3]}
-                              onChange={(e) => handleQuestionChange(i, 3, e.target.value)}
+                              onChange={(e) =>
+                                handleQuestionChange(i, 3, e.target.value)
+                              }
                             />
                           </div>
                         )}
@@ -237,7 +254,10 @@ const userId = getItemInLocalStorage("UserId")
                 </button>
               </div>
               <div className="flex justify-center">
-                <button type="submit" className="bg-black text-white p-2 px-4 rounded-md font-medium">
+                <button
+                  type="submit"
+                  className="bg-black text-white p-2 px-4 rounded-md font-medium"
+                >
                   Save
                 </button>
               </div>

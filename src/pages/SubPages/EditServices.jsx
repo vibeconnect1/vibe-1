@@ -1,19 +1,30 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { getItemInLocalStorage } from "../../utils/localStorage";
-import { getFloors, getUnits, postSoftServices } from "../../api";
+import {
+  EditSoftServices,
+  getFloors,
+  getSoftServicesDetails,
+  getUnits,
+  postSoftServices,
+} from "../../api";
 import toast from "react-hot-toast";
+import { useSelector } from "react-redux";
+import { useNavigate, useParams } from "react-router-dom";
 
-const AddService = () => {
+const EditService = () => {
   const [floors, setFloors] = useState([]);
   const [units, setUnits] = useState([]);
   const siteId = getItemInLocalStorage("SITEID");
   const userId = getItemInLocalStorage("UserId");
+  const themeColor = useSelector((state) => state.theme.color);
+  const { id } = useParams();
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
-    site_id: siteId,
+    site_id: "",
     building_id: "",
     floor_id: "",
     unit_id: "",
-    user_id: userId,
+    user_id: "",
     name: "",
     // wing_id: "",
     // area_id: "",
@@ -21,6 +32,35 @@ const AddService = () => {
   });
   console.log(formData);
   const buildings = getItemInLocalStorage("Building");
+
+  useEffect(() => {
+    const fetchServiceDetails = async () => {
+      const ServiceDetailsResponse = await getSoftServicesDetails(id);
+      setFormData(ServiceDetailsResponse.data);
+      fetchFloor(ServiceDetailsResponse.data.building_id);
+      getUnit(ServiceDetailsResponse.data.floor_id);
+      console.log(ServiceDetailsResponse);
+    };
+
+    const fetchFloor = async (floorID) => {
+      try {
+        const build = await getFloors(floorID);
+        setFloors(build.data.map((item) => ({ name: item.name, id: item.id })));
+      } catch (e) {
+        console.log(e);
+      }
+    };
+    const getUnit = async (UnitID) => {
+      try {
+        const unit = await getUnits(UnitID);
+        setUnits(unit.data.map((item) => ({ name: item.name, id: item.id })));
+        console.log(unit);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchServiceDetails();
+  }, []);
 
   const handleChange = async (e) => {
     async function fetchFloor(floorID) {
@@ -75,7 +115,7 @@ const AddService = () => {
     });
   };
 
-  const handleAddService = async () => {
+  const handleEditService = async () => {
     if (
       !formData.name ||
       !formData.building_id ||
@@ -86,30 +126,34 @@ const AddService = () => {
     }
 
     try {
-      toast.loading("Creating Service Please Wait!");
+      toast.loading("Editing Service Please Wait!");
       const dataToSend = new FormData();
-
       dataToSend.append("soft_service[site_id]", formData.site_id);
       dataToSend.append("soft_service[name]", formData.name);
       dataToSend.append("soft_service[building_id]", formData.building_id);
       dataToSend.append("soft_service[floor_id]", formData.floor_id);
       dataToSend.append("soft_service[unit_id]", formData.unit_id);
       dataToSend.append("soft_service[user_id]", formData.user_id);
-      const serviceResponse = await postSoftServices(dataToSend);
+      const serviceResponse = await EditSoftServices(dataToSend, id);
       console.log(serviceResponse);
       toast.dismiss();
-      toast.success("Service Created Successfully");
+      toast.success("Service Edited Successfully");
+      navigate(`/services/service-details/${id}`)
     } catch (error) {
       toast.error("Error Creating Service");
       console.log(error);
+      toast.dismiss()
     }
   };
 
   return (
     <section>
       <div className="m-2">
-        <h2 className="text-center text-xl font-bold p-2 bg-black rounded-full text-white">
-          Create Service
+        <h2
+          style={{ background: themeColor }}
+          className="text-center text-xl font-bold p-2 bg-black rounded-full text-white"
+        >
+          Edit Service
         </h2>
         <div className="md:mx-20 my-5 md:mb-10 sm:border border-gray-400 p-5 px-10 rounded-lg ">
           <div className="grid md:grid-cols-3 gap-4">
@@ -239,10 +283,11 @@ const AddService = () => {
             onChange={(event) => handleFileChange(event, "file")}
             multiple
           /> */}
-          <div className="md:flex grid grid-cols-2 gap-2 my-5 justify-center">
+          <div className="flex my-5 justify-center">
             <button
+              style={{ background: themeColor }}
               className="bg-black text-white p-1 px-4 rounded-md font-medium"
-              onClick={handleAddService}
+              onClick={handleEditService}
             >
               Save & Show Details
             </button>
@@ -262,4 +307,4 @@ const AddService = () => {
   );
 };
 
-export default AddService;
+export default EditService;

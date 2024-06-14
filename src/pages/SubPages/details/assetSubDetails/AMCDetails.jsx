@@ -4,11 +4,14 @@ import { useSelector } from "react-redux";
 import { getAMCDetails, getVendors, postAMC } from "../../../../api";
 import FileInputBox from "../../../../containers/Inputs/FileInputBox";
 import { useParams } from "react-router-dom";
+import Table from "../../../../components/table/Table";
+import toast from "react-hot-toast";
 
 const AMCDetails = () => {
-  const {id}= useParams()
+  const { id } = useParams();
   const [vendors, setVendors] = useState([]);
-  const [amcDetails,setAmcDetails ] = useState([])
+  const [amcDetails, setAmcDetails] = useState([]);
+  const [update, setUpdate] = useState(false);
   const [formData, setFormData] = useState({
     vendor_id: "",
     asset_id: id,
@@ -17,7 +20,7 @@ const AMCDetails = () => {
     frequency: "",
     terms: [],
   });
-// console.log(formData)
+  // console.log(formData)
 
   // vendor_id, :asset_id, :start_date, :end_date, :frequency},
   // terms: [multipart-files]}
@@ -26,34 +29,36 @@ const AMCDetails = () => {
     const fetchVendors = async () => {
       const vendorResp = await getVendors();
       setVendors(vendorResp.data);
-      
-     
     };
     const fetchAMCDetails = async () => {
-      const amcResponse = await getAMCDetails();
-      setAmcDetails(amcResponse.data)
-      console.log(amcResponse)
-     
+      const amcResponse = await getAMCDetails(id);
+      setAmcDetails(amcResponse.data);
+      console.log(amcResponse);
     };
     fetchVendors();
-    fetchAMCDetails()
-    console.log(amcDetails.asset_name)
-  }, []);
+    fetchAMCDetails();
+    console.log(amcDetails.asset_name);
+  }, [update]);
 
   const handlePostAMC = async () => {
+    if(formData.vendor_id==="" || formData.start_date==="" || formData.end_date==="" || formData.frequency=== "" ){
+      return toast.error("All fields are Required")
+    }
     try {
       const res = await postAMC(formData);
-      console.log(res)
+      console.log(res);
+      setUpdate(true);
+      toast.success("New AMC Added")
     } catch (error) {
       console.log(error);
     }
   };
-  const handleChange = (e)=>{
+  const handleChange = (e) => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value,
-    })
-  }
+    });
+  };
 
   const handleFileChange = (files, fieldName) => {
     // Changed to receive 'files' directly
@@ -63,6 +68,33 @@ const AMCDetails = () => {
     });
     console.log(fieldName);
   };
+  const columns = [
+    {
+      name: "Name",
+      selector: (row) => row.asset_name,
+      sortable: true,
+    },
+    {
+      name: "Vendor ",
+      selector: (row) => row.vendor_name,
+      sortable: true,
+    },
+    {
+      name: "Start Date",
+      selector: (row) => row.start_date,
+      sortable: true,
+    },
+    {
+      name: "End Date",
+      selector: (row) => row.end_date,
+      sortable: true,
+    },
+    {
+      name: "Frequency",
+      selector: (row) => row.frequency,
+      sortable: true,
+    },
+  ];
 
   return (
     <section>
@@ -72,7 +104,7 @@ const AMCDetails = () => {
             AMC Details
           </h2>
           {/* <div className=" flex sm:flex-row flex-col gap-5 justify-between "> */}
-          <div className="my-5 md:px-10 text-sm items-center font-medium grid gap-4 md:grid-cols-2">
+          {/* <div className="my-5 md:px-10 text-sm items-center font-medium grid gap-4 md:grid-cols-2">
             <div className="grid grid-cols-2 items-center">
               <p>Asset :</p>
               <p className="text-sm font-normal ">{amcDetails.asset_name}</p>
@@ -97,11 +129,12 @@ const AMCDetails = () => {
               <p>Created On : </p>
               <p className="text-sm font-normal">{amcDetails.created_at}</p>
             </div>
-          </div>
-          <h2 className="border-b  text-xl border-black font-semibold">
+          </div> */}
+          <Table columns={columns} data={amcDetails} />
+          {/* <h2 className="border-b  text-xl border-black font-semibold">
             AMC Terms Attachments
           </h2>
-          <p>No Attachments</p>
+          <p>No Attachments</p> */}
         </div>
         <div className="flex flex-col">
           <h2 className="border-b  text-xl border-black font-semibold">
@@ -119,10 +152,10 @@ const AMCDetails = () => {
               >
                 <option value="">Select Vendor</option>
                 {vendors.map((vendor) => (
-                      <option value={vendor.id} key={vendor.id}>
-                        {vendor.company_name}
-                      </option>
-                    ))}
+                  <option value={vendor.id} key={vendor.id}>
+                    {vendor.company_name}
+                  </option>
+                ))}
               </select>
             </div>
             <div className="flex flex-col">
@@ -175,11 +208,14 @@ const AMCDetails = () => {
               Upload AMC Terms
             </h2>
             <FileInputBox
-            handleChange={(event) => handleFileChange(event, "terms")}
+              handleChange={(event) => handleFileChange(event, "terms")}
             />
           </div>
           <div className="flex justify-center my-5">
-            <button className="bg-black p-1 px-4 text-white rounded-md" onClick={handlePostAMC}>
+            <button
+              className="bg-black p-1 px-4 text-white rounded-md"
+              onClick={handlePostAMC}
+            >
               Submit
             </button>
           </div>

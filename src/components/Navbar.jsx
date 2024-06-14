@@ -38,6 +38,7 @@ import { TiBusinessCard } from "react-icons/ti";
 import {
   FaBirthdayCake,
   FaBriefcaseMedical,
+  FaCalendarAlt,
   FaCalendarCheck,
   FaCar,
   FaFileInvoice,
@@ -495,6 +496,7 @@ const Navbar = () => {
                   Permit
                 </h2>
               </NavLink>
+             
               <NavLink
                 to={"/admin/letterofindent"}
                 className={({ isActive }) =>
@@ -606,7 +608,7 @@ const Navbar = () => {
                   Admin Tickets
                 </h2>
               </NavLink>
-              <NavLink
+              {/* <NavLink
                 to={"/admin/CAR"}
                 className={({ isActive }) =>
                   ` ${
@@ -632,7 +634,7 @@ const Navbar = () => {
                 >
                   CAR
                 </h2>
-              </NavLink>
+              </NavLink> */}
               <NavLink
                 to={"/admin/fb"}
                 className={({ isActive }) =>
@@ -1461,6 +1463,32 @@ const Navbar = () => {
                   } absolute left-48 bg-white font-semibold whitespace-pre text-gray-900 rounded-md drop-shadow-lg px-0 py-0 w-0 overflow-hidden group-hover:px-2 group-hover:py-1 group-hover:left-14 group-hover:duration-300 group-hover:w-fit  `}
                 >
                   Meeting
+                </h2>
+              </NavLink>
+              <NavLink
+                to={"/employee/booking-request/hotel-request"}
+                className={({ isActive }) =>
+                  ` ${
+                    isActive
+                      ? "text-black bg-white flex p-2  gap-3.5 rounded-md group items-center text-sm font-medium"
+                      : " group flex items-center text-sm gap-3.5 font-medium p-2 hover:bg-gray-800 rounded-md "
+                  }`
+                }
+              >
+                <div>{React.createElement(FaCalendarAlt, { size: "20" })}</div>
+                <h2
+                  className={`whitespace-pre duration-300 ${
+                    !open && "opacity-0 translate-x-28 overflow-hidden"
+                  }`}
+                >
+                  Booking & Request
+                </h2>
+                <h2
+                  className={`${
+                    open && "hidden"
+                  } absolute left-48 bg-white font-semibold whitespace-pre text-gray-900 rounded-md drop-shadow-lg px-0 py-0 w-0 overflow-hidden group-hover:px-2 group-hover:py-1 group-hover:left-14 group-hover:duration-300 group-hover:w-fit  `}
+                >
+                  Booking & Request
                 </h2>
               </NavLink>
 
