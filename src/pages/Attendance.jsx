@@ -5,47 +5,39 @@ import { ImEye } from "react-icons/im";
 import { Link } from "react-router-dom";
 import Modal from "../containers/modals/Modal";
 import { getAttendance } from "../api";
+import Table from "../components/table/Table";
 const Attendance = () => {
   const [modal, setModal] = useState(false);
   const [attendanceData, setAttendanceData] = useState([]);
 
   useEffect(() => {
     const fetchAttendance = async () => {
-      const attendanceResponse = await getAttendance();
-      console.log(attendanceResponse);
+      try {
+        const attendanceResponse = await getAttendance();
+        console.log(attendanceResponse.data);
+        setAttendanceData(attendanceResponse.data)
+      } catch (error) {
+        console.log(error)
+      }
     };
     fetchAttendance();
   }, []);
+
+  const dateFormat = (dateString)=>{
+    const date = new Date(dateString)
+    return date.toLocaleString()
+  }
   const column = [
-    {
-      name: "Actions",
+    // {
+    //   name: "Actions",
 
-      selector: (row) => row.action,
-    },
+    //   selector: (row) => row.action,
+    // },
 
-    { name: "Name", selector: (row) => row.title, sortable: true },
-    { name: "Department", selector: (row) => row.department, sortable: true },
+    { name: "Punch In", selector: (row) => dateFormat(row.punched_in_at), sortable: true },
+    { name: "Punch Out", selector: (row) => dateFormat(row.punched_out_at), sortable: true },
   ];
-  const data = [
-    {
-      id: 1,
-      title: "Test1",
-      department: "Finance",
-      action: <ImEye />,
-    },
-    {
-      id: 2,
-      title: "Test2",
-      department: "IT",
-      action: <ImEye />,
-    },
-    {
-      id: 3,
-      title: "Test3",
-      department: "Sales",
-      action: <ImEye />,
-    },
-  ];
+ 
 
   const customStyle = {
     headRow: {
@@ -62,10 +54,10 @@ const Attendance = () => {
     <section className="flex ">
       <Navbar />
       <div className="w-full flex mx-3 flex-col overflow-hidden">
-        <div className="flex  justify-start gap-4 my-5  ">
+        {/* <div className="flex  justify-start gap-4 my-5  ">
           <div className="shadow-xl rounded-full border-4 border-gray-400 w-52  px-6 flex flex-col items-center">
             <p className="font-semibold text-lg">Total Employees</p>
-            <p className="text-center font-semibold text-lg ">0</p>
+            <p className="text-center font-semibold text-lg ">{attendanceData.length}</p>
           </div>
           <div className="shadow-xl rounded-full border-4 border-green-400 w-52  px-6 flex flex-col items-center">
             <p className="font-semibold text-lg">Present</p>
@@ -80,9 +72,9 @@ const Attendance = () => {
             <p className="font-semibold text-lg">On Leave</p>
             <p className="text-center font-semibold text-lg ">0</p>
           </div>
-        </div>
-        <div className=" flex mx-3 flex-col">
-          <div className="flex justify-between items-center">
+        </div> */}
+        <div className=" flex mx-3 flex-col my-5 ">
+          <div className="flex md:flex-row flex-col justify-between items-center">
             <input
               type="text"
               placeholder="Search By Name"
@@ -96,18 +88,7 @@ const Attendance = () => {
             </button>
           </div>
 
-          <DataTable
-            columns={column}
-            data={data}
-            customStyles={customStyle}
-            responsive
-            fixedHeader
-            fixedHeaderScrollHeight="500px"
-            pagination
-            selectableRowsHighlight
-            highlightOnHover
-            omitColumn={column}
-          />
+         <Table  columns={column} data={attendanceData}/>
         </div>
       </div>
       {modal && <Modal onclose={() => setModal(false)} />}

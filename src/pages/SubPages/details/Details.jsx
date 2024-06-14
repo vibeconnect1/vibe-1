@@ -7,13 +7,15 @@ import { BiEdit } from "react-icons/bi";
 import toast from "react-hot-toast";
 
 import { BiAngry, BiHappy, BiSad, BiSmile } from "react-icons/bi";
-import { MdOutlineSentimentNeutral } from "react-icons/md";
+import { MdAddCircleOutline, MdOutlineSentimentNeutral } from "react-icons/md";
 import { useSelector } from "react-redux";
+import CARAddItemsModal from "../../../containers/modals/CARAddItemsModal";
 
 const TicketDetails = () => {
   const navigate = useNavigate();
   const { id } = useParams();
   const [ticketinfo, setTicketInfo] = useState([]);
+  const [showModal, setShowModal] = useState(false);
   const [formData, setFormData] = useState({
     comment: "",
     of_phase: "pms",
@@ -29,7 +31,7 @@ const TicketDetails = () => {
       setTicketInfo(response.data);
     };
     fetchDetails();
-  }, []);
+  }, [showModal]);
 
   const getTimeAgo = (timestamp) => {
     const createdTime = moment(timestamp);
@@ -102,12 +104,20 @@ const TicketDetails = () => {
   const domainPrefix = "https://admin.vibecopilot.ai";
 
   console.log(ticketinfo);
-const themeColor = useSelector((state)=> state.theme.color)
+  const themeColor = useSelector((state) => state.theme.color);
   const logs = [{ title: "logs", description: " " }];
   return (
     <div className="">
-      <div className="flex flex-col justify-around ">
-        <div className="flex justify-end m-1">
+      {showModal && <CARAddItemsModal onclose={()=>setShowModal(false)}/> }
+      <div className="flex flex-col justify-around">
+        <div className="flex justify-end m-1 gap-2">
+          <button
+            onClick={() => setShowModal(true)}
+            className="border-2 border-black  flex gap-2 p-1 rounded-md items-center px-4"
+          >
+            <MdAddCircleOutline />
+            Add Items
+          </button>
           <Link
             to={`/edit/${id}`}
             className="border-2 border-black flex gap-2 p-1 rounded-md items-center px-4 "
@@ -121,8 +131,9 @@ const themeColor = useSelector((state)=> state.theme.color)
         </div>
         <div className="flex flex-col  flex-wrap gap-2">
           <h2
-          style={{background: themeColor}}
-          className="text-center w-screen  text-white font-semibold mt-5 text-lg p-2 px-4 ">
+            style={{ background: themeColor }}
+            className="text-center  text-white font-semibold mt-5 text-lg p-2 px-4 "
+          >
             Additional Info
           </h2>
           <div className="px-4 flex flex-col gap-1 justify-center">
@@ -166,8 +177,9 @@ const themeColor = useSelector((state)=> state.theme.color)
         </div>
         {/* <div className="border " /> */}
         <h2
-        style={{background: themeColor}}
-        className="text-center   text-white font-semibold my-5 text-lg p-2 px-4 ">
+          style={{ background: themeColor }}
+          className="text-center   text-white font-semibold my-5 text-lg p-2 px-4 "
+        >
           Attachments
         </h2>
         <div className="flex sm:flex-row flex-col items-center ">
@@ -192,8 +204,9 @@ const themeColor = useSelector((state)=> state.theme.color)
         </div>
 
         <h2
-        style={{background: themeColor}}
-        className="text-center  text-white font-semibold my-5 text-lg p-2 px-4 ">
+          style={{ background: themeColor }}
+          className="text-center  text-white font-semibold my-5 text-lg p-2 px-4 "
+        >
           Logs
         </h2>
         {/* <div className="border m-10 " /> */}
@@ -271,9 +284,10 @@ const themeColor = useSelector((state)=> state.theme.color)
               </ol>
             </div>
           ))}
-        <h2 
-        style={{background: themeColor}}
-        className="text-center  text-white font-semibold my-5 text-lg p-2 px-4 ">
+        <h2
+          style={{ background: themeColor }}
+          className="text-center  text-white font-semibold my-5 text-lg p-2 px-4 "
+        >
           Escalations
         </h2>
         {/* <div className="border m-10 " /> */}

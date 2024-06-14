@@ -401,7 +401,7 @@ const DetailsEdit = () => {
       return base64.split(",")[1];
     });
 
-    console.log("Fornat", formattedBase64Array);
+    // console.log("Fornat", formattedBase64Array);
 
     setFormData({
       ...formData,

@@ -58,7 +58,7 @@ const Dashboard = () => {
     // }}
     >
       <Navbar />
-      {/* <div className="flex flex-col w-full"> */}
+      <div className="flex flex-col w-full">
         <header
           style={{ background: themeColor }}
           className="w-full h-10 rounded-md mx-5 my-1 flex justify-center items-center "
@@ -84,9 +84,10 @@ const Dashboard = () => {
           /> */}
           {/* <div className="w-full flex mx-3 flex-col p-2 mb-10 ">
 
-          <HighchartsComponent/> */}
+*/}
+          <HighchartsComponent/> 
           {/* </div> */}
-      {/* </div> */}
+      </div>
     </section>
   );
 };

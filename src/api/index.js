@@ -269,7 +269,12 @@ export const getSubGroupsList = async () =>
       token: token,
     },
   });
-
+export const postTicketAddItems = async (data) =>
+  axiosInstance.post("/pms/admin/complaint_items.json", data, {
+    params: {
+      token: token,
+    },
+  });
 export const getInventory = async () =>
   axiosInstance.get("/items.json", {
     params: {
@@ -302,6 +307,13 @@ export const getChecklistDetails = async (id) =>
       token: token,
     },
   });
+export const postAssetAssociation = async (data) =>
+  axiosInstance.post(`/activities.json`, data, {
+    params: {
+      token: token,
+    },
+  });
+
 export const getRoutineTask = async () =>
   axiosInstance.get("/activities.json", {
     params: {
@@ -363,7 +375,7 @@ export const getBroadcastDetails = async (id) =>
     },
   });
 
-//
+//services
 
 export const postSoftServices = async (data) =>
   axiosInstance.post("/soft_services.json", data, {
@@ -402,9 +414,6 @@ export const getServicesPPMList = async () =>
       token: token,
     },
   });
-
-
-
 
 // vibe
 
@@ -559,6 +568,40 @@ export const getVibeMyBoardTask = async (userId) => {
     const response = await vibeAuth.get(
       `/api/employee/my_board/get-task/?user_id=${userId}`,
 
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error creating calendar events:", error);
+    throw error;
+  }
+};
+export const updateTaskStatus = async (data) => {
+  try {
+    const response = await vibeAuth.put(
+      `/api/employee/update-status-task/`,
+      data,
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error creating calendar events:", error);
+    throw error;
+  }
+};
+export const getVibeTaskUserAssign = async (userId, taskId) => {
+  try {
+    const response = await vibeAuth.get(
+      `/api/employee/task/get-task-assigned-users/?user_id=${userId}&task_id=${taskId}`,
+     
       {
         headers: {
           "Content-Type": "application/json",

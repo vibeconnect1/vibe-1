@@ -1,13 +1,18 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { getItemInLocalStorage } from "../utils/localStorage";
 import Navbar from "../components/Navbar";
 import { useSelector } from "react-redux";
 import { FaFilter, FaLaptop, FaPlus, FaTrashAlt } from "react-icons/fa";
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
-import { getVibeMyBoardTask } from "../api";
+import { getVibeMyBoardTask, getVibeTaskUserAssign, updateTaskStatus } from "../api";
 import RemainingTime from "../components/RemainingTime";
 import { BiPlus } from "react-icons/bi";
 import LinearProgressBar from "../components/LinearProgessBar";
+import toast from "react-hot-toast";
+
+
+// import TaskSelf from "./SubPages/TaskSelf";
+
 // import LinearProgress from "@material-ui/core/LinearProgress";
 
 const TaskManagement = () => {
@@ -28,6 +33,21 @@ const TaskManagement = () => {
   const [progressPercentage, setProgressPercentage] = useState(0);
   const [idFromURL, setIdFromURL] = useState(null);
   const [showStatus, setshowStatus] = useState(true);
+  const [taskStatus, setTaskStatus] = useState("");
+  const [isModalOpenDeleteTask, setIsModalOpenDeleteTask] = useState(false);
+  const [newStatus, setNewStatus] = useState({
+    value: taskStatus,
+    label: taskStatus,
+  });
+  const [isModalChatOpen, setIsModalChatOpen] = useState(false);
+  const [createdFirstName, setCreatedFirstName] = useState("");
+  const [createdSecondName, setCreatedSecondName] = useState("");
+  const [createdDate, setCreatedDate] = useState("");
+  const [createdBy_id, setcreatedBy_id] = useState("");
+  const [usersAssignAlready, setUsersAssignAlready] = useState([]);
+  const [showStatusChecklist1, setShowStatusChecklist1] = useState([]);
+  const [selectedEmail, setSelectedEmail] = useState("");
+  const [isTaskAssignedTo, setIsTaskAssignedTo] = useState(false);
 
   const filteredTasks = (taskList) => {
     if (taskFilter.length === 0) {
@@ -79,8 +99,9 @@ const TaskManagement = () => {
     }));
     // Set filtered data
     setFilteredItems(filtered);
-  }, [searchQuery, filteredTaskData]);
-
+    }, [searchQuery, filteredTaskData,  ]);
+    const ttask = filteredItems.tasks
+    console.log(ttask)
   const toggleDropdown = () => {
     setFilterIsOpen(!filterIsOpen);
   };
@@ -239,7 +260,7 @@ const TaskManagement = () => {
     console.log(newStatus.value);
 
     try {
-      const response = await putDataToAPI(Update_task_stetus, formData);
+      const response = await updateTaskStatus(formData);
       console.log(response);
       if (response.success) {
         console.log("Success");
@@ -323,15 +344,212 @@ const TaskManagement = () => {
     // localStorage.setItem('board', board_id);
     closeTaskSelf();
     setTaskSelfModalIsOpen(true);
+    console.log(modalTaskSelfIsOpen);
   };
 
   const closeTaskSelf = () => {
     setTaskSelfModalIsOpen(false);
   };
 
+  const ShowFormatedDueDateOnDateField = (dateString) => {
+    const date = new Date(dateString);
+    return date.toLocaleString();
+  };
+
+  
+  const handleDeleteTask = () => {
+    settaskList((prevTaskList) => {
+      console.log(prevTaskList);
+
+      const updatedTaskList = JSON.parse(JSON.stringify(prevTaskList));
+
+      const boardIndex = updatedTaskList.findIndex((board) =>
+        board.tasks.some((task) => task.id === taskDeleteID)
+      );
+
+      if (boardIndex !== -1) {
+        const taskIndex = updatedTaskList[boardIndex].tasks.findIndex(
+          (task) => task.id === taskDeleteID
+        );
+
+        if (taskIndex !== -1) {
+          updatedTaskList[boardIndex].tasks.splice(taskIndex, 1);
+        }
+      }
+
+      return updatedTaskList;
+    });
+    deleteDataFromAPI(
+      `${DeleteTask}?task_id=${taskDeleteID.split("_")[1]}&user_id=${user_id}`
+    )
+      .then((res) => {
+        if (res.success) {
+          // window.location.reload();
+          toast.info("Task has been moved to Trash", {
+            position: "top-center",
+            autoClose: 2000,
+          });
+          console.log("Task deleted successfully");
+          closeModalDeleteTask();
+        } else {
+          if (res.success === false)
+            toast.info("Task has been Failed to delete task", {
+              position: "top-center",
+              autoClose: 2000,
+            });
+          window.location.reload();
+          console.error("Failed to delete task.");
+        }
+      })
+      .catch((error) => {
+        console.error("An error occurred:", error);
+      });
+  };
+
+  const [taskDeleteID, setTaskDeleteID] = useState("");
+  function openModalDeleteTask(taskId, event) {
+    event.stopPropagation();
+    console.log(taskId);
+    setTaskDeleteID(taskId);
+    setIsModalOpenDeleteTask(true);
+    setIsModalChatOpen(false);
+    console.log(isModalOpenDeleteTask)
+  }
+
+  const fetchOrg_assignAlready = async (id, taskid) => {
+    const user_id = localStorage.getItem("VIBEUSERID");
+
+    const params = {
+      user_id: user_id,
+      task_id: taskid,
+    };
+    try {
+      const jsonData = await getVibeTaskUserAssign(user_id, taskid)
+      if (jsonData.success) {
+        console.log("GetTaskUsersAssign");
+        console.log(jsonData.data);
+        const usersData = jsonData.data;
+
+        setUsersAssignAlready(usersData);
+        setShowStatusChecklist1(jsonData.data.email);
+        console.log("api assigned");
+        console.log(setShowStatusChecklist1);
+
+        const selectedEmails = usersData.map((user) => ({
+          value: user.id,
+          label: user.email,
+        }));
+
+        console.log(selectedEmails);
+        setSelectedEmail(selectedEmails);
+
+        const selectedEmailsisTaskAssignedTo = usersData.map((user) => ({
+          email: user.id,
+        }));
+        const isTaskAssignedTo = selectedEmailsisTaskAssignedTo.some(
+          (user) => user.email === parseInt(user_id, 10)
+        );
+
+        console.log(selectedEmailsisTaskAssignedTo);
+        console.log(isTaskAssignedTo);
+        setIsTaskAssignedTo(isTaskAssignedTo);
+      } else {
+        console.log("Failed to fetch users");
+      }
+    } catch (error) {
+      console.error("Error fetching users:", error);
+    }
+  };
+  const Get_Task_Attachment = async (task_id) => {
+    //alert(user_id);
+    try {
+      const params = {
+        task_id: task_id,
+        user_id: localStorage.getItem("user_id"),
+      };
+
+      const data = await getDataFromAPI(GetTaskAttachment, params);
+
+      if (data.success) {
+        // alert("attachments success")
+        console.log("attachments sucess");
+
+        console.log(data.data);
+        setFiles(data.data);
+      } else {
+        console.log("Something went wrong");
+      }
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
+
+  const openChatModal = (
+    taskId,
+    createdFirst,
+    createdSecond,
+    createdDate,
+    due_dte,
+    created_by_id
+  ) => {
+    const dateTimeString = due_dte ? due_dte.split("+")[0] : "";
+    // Parse the date and time string into a Date object
+    const targetDate = new Date(dateTimeString);
+
+    // const formattedDate = targetDate.toLocaleString(); // Adjust the formatting as needed
+
+    setCreatedFirstName(createdFirst);
+    setCreatedSecondName(createdSecond);
+    setCreatedDate(createdDate);
+    // setdueDate(due_dte)
+    // setdueDate(targetDate)
+    // setDueDate(targetDate)
+    setDueDate(due_dte ? targetDate : "");
+    setcreatedBy_id(created_by_id);
+    // setChatsData([])
+    // fetchData(taskId.split('_')[1])
+    fetchOrg_assignAlready(id, taskId.split("_")[1]);
+    console.log("oko ok koo ");
+    Get_Task_Attachment(taskId.split("_")[1]);
+    Get_Checklist_Task(taskId.split("_")[1]);
+    Get_SubChecklist_Task(taskId.split("_")[1]);
+    Get_Chat_nd_Activities(taskId.split("_")[1]);
+    setTaskIdForTaskCheckList(taskId.split("_")[1]);
+    const task = taskList
+      .flatMap((section) => section.tasks)
+      .find((task) => task.id.toString() === taskId);
+    if (task) {
+      const section = taskList.find((section) =>
+        section.tasks.some((t) => t.id.toString() === taskId)
+      );
+      if (section) {
+        setSectionName(section.title);
+      }
+      setTaskTopicText(task.title);
+      setTaskDescription(task.description);
+      setTaskStatus(task.status);
+      to_show_status_on_details(task.status);
+      setAttachments(task.attachments || []);
+      setAssignedDate(task.due_date || "");
+
+      //   console.log(setAssignedDate)
+      // Add your code to open the chat modal here
+      console.log(taskId);
+      // GetChats(taskId.split('_')[1])
+
+      setTaskID(taskId.split("_")[1]);
+      settaskidForSocket(taskId.split("_")[1]);
+      GetComment(taskId.split("_")[1]);
+      setIsModalChatOpen(true);
+    }
+  };
+
   return (
     <section className="flex">
       <Navbar />
+      {/* {modalTaskSelfIsOpen && (
+        <TaskSelf onClose={closeTaskSelf} open={openEmployeeTaskOthers} />
+      )} */}
       <div className="p-4 w-full my-2 flex md:mx-2 overflow-hidden flex-col">
         <div
 
@@ -349,14 +567,14 @@ const TaskManagement = () => {
                 //   }}
               >
                 <div
-                  className=" p-1 px-4 rounded-md"
+                  className={`${activeView !== "Kanban" ? "border-2 text-black border-black font-medium": "text-white"} p-1 px-4 rounded-md`}
                   title="Kanban View"
                   style={{
-                    color: activeView === "Kanban" ? "skyblue" : "#fff",
-                    background: themeColor,
+                    // color: activeView === "Kanban" ? "skyblue" : "#fff",
+                    background: activeView === "Kanban" ? themeColor : "",
                     textAlign: "center",
-                    textDecoration:
-                      activeView === "Kanban" ? "underline" : "none",
+                    // textDecoration:
+                    //   activeView === "Kanban" ? "" : "none",
                     cursor: "pointer",
                   }}
                   onClick={() => handleViewChange("Kanban")}
@@ -365,14 +583,14 @@ const TaskManagement = () => {
                 </div>
                 {/*  */}
                 <div
-                  className=" p-1 px-4 rounded-md"
+                  className={`${activeView !== "List" ? "border-2 text-vlack border-black font-medium": "text-white"} p-1 px-4 rounded-md`}
                   title="List View"
                   style={{
-                    color: activeView === "List" ? "skyblue" : "#fff",
-                    background: themeColor,
-                    textAlign: "center",
-                    textDecoration:
-                      activeView === "List" ? "underline" : "none",
+                    // color: activeView === "List" ? "skyblue" : "#fff",
+                    // background: themeColor,
+                    background: activeView === "List" ? themeColor : "",
+                    // textDecoration:
+                    //   activeView === "List" ? "underline" : "none",
                     cursor: "pointer",
                   }}
                   onClick={() => handleViewChange("List")}
@@ -441,7 +659,7 @@ const TaskManagement = () => {
               }}
             >
               <input
-                className="border border-gray-400 outline-none w-full"
+                className="border border-gray-400 outline-none w-[20rem]"
                 spellCheck="true"
                 type="search"
                 value={searchQuery}
@@ -607,7 +825,7 @@ const TaskManagement = () => {
                                             </div>
 
                                             {showStatus ? (
-                                              <div style={{ display: "flex" }}>
+                                              <div style={{ display: "flex" }} className="justify-end">
                                                 {" "}
                                                 <div
                                                   onClick={(e) => {
@@ -748,9 +966,13 @@ const TaskManagement = () => {
                                               variant="determinate"
                                               value={task.progress_percentage}
                                             /> */}
-                                            <LinearProgressBar progress={task.progress_percentage}/>
+                                              <LinearProgressBar
+                                                progress={
+                                                  task.progress_percentage
+                                                }
+                                              />
                                             </div>
-                                            <div className="">
+                                            <div className="flex justify-between">
                                               <div
                                                 className=""
                                                 style={{ fontSize: 13 }}
@@ -776,22 +998,22 @@ const TaskManagement = () => {
                                                 {`${task.progress_percentage}%`}{" "}
                                               </div>
                                             </div>
-
+                                            <div className="w-full border border-dashed"></div>
                                             <div
-                                              className="row "
-                                              style={{ marginTop: "4px" }}
+                                              className="flex justify-between my-2 "
+                                              // style={{ marginTop: "4px" }}
                                             >
                                               <div
-                                                className="col-md-10 "
+                                                // className="col-md-10 "
                                                 style={{
-                                                  fontSize: 10,
-                                                  paddingTop: "6px",
+                                                  fontSize: 11,
+                                                  // paddingTop: "6px",
                                                   color: "darkgray",
                                                 }}
                                               >
-                                                {/* {ShowFormatedDueDateOnDateField(
+                                                {ShowFormatedDueDateOnDateField(
                                                   task.due_date
-                                                )} */}
+                                                )}
                                               </div>
                                               {/* <div className='col-md-4' style={{ fontSize: 10, paddingTop: '6px', color: 'darkgray' }}>
                                             {task.progress_percentage}%
@@ -801,7 +1023,7 @@ const TaskManagement = () => {
                                               user_id ? (
                                                 <>
                                                   <div
-                                                    className="flex justify-end"
+                                                    className="flex justify-end text-red-400"
                                                     onClick={(event) =>
                                                       openModalDeleteTask(
                                                         task.id,
@@ -811,8 +1033,7 @@ const TaskManagement = () => {
                                                   >
                                                     <FaTrashAlt
                                                       style={{
-                                                        
-                                                        color: "red",
+                                                        // color: "red",
                                                         marginBottom: 4,
                                                         cursor: "pointer",
                                                       }}
@@ -881,11 +1102,12 @@ const TaskManagement = () => {
                                       if (showAddTaskButton) {
                                         return (
                                           <div
-                                            className=" text-center text-white p-2 rounded-md font-medium flex items-center gap-2 justify-center"
-                                            style={{
-                                              cursor: "pointer",
-                                              background: themeColor,
-                                            }}
+                                            // className=" text-center text-white p-2 rounded-md font-medium flex items-center gap-2 justify-center"
+                                            // style={{
+                                            //   cursor: "pointer",
+                                            //   background: themeColor,
+                                            // }}
+                                            className="shadow-custom-all-sides flex cursor-pointer items-center justify-center gap-1 py-[10px]  opacity-90   rounded-lg bg-white  text-[#555] font-medium text-[15px]"
                                             onClick={openTaskSelf}
                                           >
                                             <FaPlus />
@@ -903,10 +1125,7 @@ const TaskManagement = () => {
                         </Droppable>
                       ))
                     ) : (
-                      <div
-                        className="col-md-12"
-                        style={{ textAlign: "center" }}
-                      >
+                      <div className="" style={{ textAlign: "center" }}>
                         <div class="m-4">
                           <center>
                             No Tasks
@@ -920,7 +1139,417 @@ const TaskManagement = () => {
               </div>
             </section>
           )}
+
+          {activeView === "List" && (
+            <section
+              style={
+                {
+                  // overflowX: 'auto',
+                  // overflowY:'scroll',
+                  // minHeight: 530
+                }
+              }
+              className=" "
+            >
+              <div
+                // className="bg-red-400"
+                style={{
+                  borderRadius: 8,
+                  marginTop: 40,
+                  maxHeight: 380,
+                  overflow: "auto",
+                }}
+              >
+                {/* <div
+                  className="flex justify-between p-2 font-medium text-white  "
+                  style={{ position: "sticky", top: 0, zIndex: 1, background:themeColor  }}
+                >
+                  <div
+                    
+                    // style={{ color: "#fff", fontSize: 14, paddingLeft: 20 }}
+                  >
+                    Title
+                  </div>
+                  <div
+                  
+                    style={{ color: "#fff", }}
+                  >
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Status
+                  </div>
+                  <div
+                    
+                    style={{ color: "#fff"}}
+                  ></div>
+                  <div
+                    
+                    style={{ color: "#fff"}}
+                  >
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Created by{" "}
+                  </div>
+                  <div
+                   
+                    style={{ color: "#fff" }}
+                  >
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Due Date
+                  </div>
+                  <div
+                    
+                    style={{ color: "#fff" }}
+                  ></div>
+                </div> */}
+
+                <hr className="m-0" />
+                <DragDropContext onDragEnd={onDragEndTask}>
+                  <div
+                    className=" col-md-12 m-0 p-0 "
+                    style={{
+                      display: "block",
+                      alignItems: " flex-start",
+                      flexWrap: "nowrap",
+                    }}
+                  >
+                    {filteredItems.map((section, index) => (
+                      <Droppable
+                        key={section.id.toString()}
+                        droppableId={section.id.toString()}
+                      >
+                        {(provided) => (
+                          <div
+                            className=""
+                            {...provided.droppableProps}
+                            ref={provided.innerRef}
+                            style={{
+                              borderRadius: 15,
+                              color: "#fff",
+                              padding: "15px",
+                              paddingTop: 0,
+                              // ,height:'auto',maxHeight: 200
+                            }}
+                          >
+                            <div
+                              className="rounded-md"
+                              style={{
+                                background: themeColor,
+                                // borderRadius: 1,
+                                color: "#fff",
+                                fontSize: "16",
+                                minHeight: 30,
+                                marginBottom: 2,
+                                padding: 6,
+                                marginTop: 2,
+                                // marginLeft: 3,
+                                // marginRight: 3,
+                              }}
+                            >
+                              <b>{section.title}</b>
+                            </div>
+
+                            <div
+                            // className=" section-height " style={{maxHeight: 400, overflow:'auto'}}
+                            >
+                              {section.tasks.map((task, index) => (
+                                <Draggable
+                                  key={task.id.toString()}
+                                  draggableId={task.id.toString()}
+                                  index={index}
+                                >
+                                  {(provided, snapshot) => {
+                                    const isHighlighted =
+                                      task.id.split("_")[1] == idFromURL;
+                                    // const cardRef = useRef(null); // Create a ref for the card div
+
+                                    // useEffect(() => {
+                                    //   if (isHighlighted && cardRef.current) {
+                                    //     cardRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                                    //   }
+                                    // }, [isHighlighted]);
+
+                                    return (
+                                      <div
+                                        // ref={
+                                        //   isHighlighted
+                                        //     ? highlightedTaskRef
+                                        //     : null
+                                        // }
+                                        ref={provided.innerRef}
+                                        // {...provided.innerRef}
+                                        {...provided.draggableProps}
+                                        {...provided.dragHandleProps}
+                                        style={{
+                                          ...provided.draggableProps.style,
+                                          opacity: snapshot.isDragging
+                                            ? "0.7"
+                                            : "1",
+                                          color: "#000",
+                                          // backgroundColor: "",
+                                          display: "block",
+                                        }}
+                                        // className="shadow-custom-all-sides"
+                                      >
+                                        <div
+                                          // ref={cardRef}
+                                          className="shadow-custom-all-sides bg-white grid grid-cols-10 text-black  rounded-md"
+                                          style={{
+                                            // display: "flex",
+                                            // flexDirection: "row",
+                                            // backgroundColor: "#30678edc",
+                                            animation: isHighlighted
+                                              ? " color 15s"
+                                              : null,
+                                            // borderRadius: 1,
+                                            // color: "#fff",
+                                            fontSize: "16",
+                                            minHeight: 30,
+                                            marginBottom: 2,
+                                            padding: 6,
+                                            marginTop: 2,
+                                            marginLeft: 3,
+                                            marginRight: 3,
+                                          }}
+                                          onClick={() =>
+                                            openChatModal(
+                                              task.id,
+                                              task.created_by.firstname,
+                                              task.created_by.lastname,
+                                              task.created_at,
+                                              task.due_date,
+                                              task.created_by.id
+                                            )
+                                          }
+                                        >
+                                          <div className="col-span-3">
+                                            {/* <div className="" style={{display:"flex" , justifyContent:"flex-start"}}>
+                                            {task.urgent_status === true &&<span style={{ backgroundColor: '#00b272',color:'#fff', borderRadius: '6px 0px 10px 0px', fontSize: 12, margin:'6px' }} className="pr-2 pl-2">
+                                              <b>Urgent</b>
+                                            </span>}
+
+                                        </div> */}
+                                            {task.title}
+                                          </div>
+                                          <div className="col-span-1">
+                                            {showStatus ? (
+                                              <div
+                                                onClick={(e) => {
+                                                  e.stopPropagation();
+                                                  setshowStatus(false);
+                                                }}
+                                                style={{
+                                                  textAlign: "center",
+                                                  cursor: "pointer",
+                                                  fontSize: 10,
+                                                  borderRadius: 20,
+                                                  color: "white",
+                                                  padding: "1px",
+                                                  marginTop: "4px",
+                                                  width: "64px",
+                                                  backgroundColor: `${task.status.color}`,
+                                                }}
+                                              >
+                                                {task.status.status_name}
+                                              </div>
+                                            ) : (
+                                              <div
+                                                onClick={(e) => {
+                                                  e.stopPropagation();
+                                                  setshowStatus(true);
+                                                }}
+                                                style={{
+                                                  textAlign: "center",
+                                                  cursor: "pointer",
+                                                  fontSize: 5,
+                                                  borderRadius: 10,
+                                                  color: "white",
+                                                  padding: "1px",
+                                                  marginTop: "4px",
+                                                  width: "36px",
+                                                  height: "8px",
+                                                  backgroundColor: `${task.status.color}`,
+                                                }}
+                                              ></div>
+                                            )}
+                                          </div>
+
+                                          <div
+                                            className="col-span-1"
+                                            style={{ fontSize: 13 }}
+                                          >
+                                            {task.division}
+                                          </div>
+                                          <div
+                                            className=" col-span-2"
+                                            style={{
+                                              fontSize: 13,
+                                              cursor: "default",
+                                            }}
+                                          >
+                                            {task.created_by.firstname}{" "}
+                                            {task.created_by.lastname}
+                                          </div>
+
+                                          {/* <div className=' row col-md-12' style={{fontSize:13}}>Assign By : {task.created_by.firstname} {task.created_by.lastname}</div> */}
+
+                                          {/* <div className='row col-md-12'id="progress-bar">              
+                                        
+                                          <div id="progress" style={{ width: `${progressPercentage}%` }}>
+                                          </div>
+                                    
+                                        </div> */}
+
+                                          {/* <div className='row col-md-12 '>
+                                          <div className='col-md-6'style={{fontSize:13}}>{task.division}</div>
+                                          {section.title !== 'Done' && section.title !== 'In Review' && (
+                                            <div className='col-md-6' style={{ fontSize: 13, display: 'flex', justifyContent: 'flex-end' }}>
+                                              {calculateRemainingTime(task.due_date)}
+                                            </div>
+                                          )}
+                                        </div> */}
+
+                                          <div
+                                            className="col-span-2 "
+                                            style={{ fontSize: 13 }}
+                                          >
+                                            {ShowFormatedDueDateOnDateField(
+                                              task.due_date
+                                            )}
+                                          </div>
+                                          {task.created_by.id ===
+                                          user_id ? (
+                                            // <div className='col-md-1' onClick={(event) => handleDeleteTask(task.id, event)}>
+                                            //   <FaTrashAlt style={{ fontSize: 14, color: 'whitesmoke', marginBottom: 4, cursor: 'pointer' }} ></FaTrashAlt>
+                                            // </div>
+                                            <div
+                                              className="flex justify-end text-red-400"
+                                              onClick={(event) =>
+                                                openModalDeleteTask(
+                                                  task.id,
+                                                  event
+                                                )
+                                              }
+                                            >
+                                              <FaTrashAlt
+                                                style={{
+                                                  // fontSize: 14,
+                                                  // color: "whitesmoke",
+                                                  marginBottom: 4,
+                                                  cursor: "pointer",
+                                                }}
+                                              ></FaTrashAlt>
+                                            </div>
+                                          ) : null}
+
+                                          {/* <div className='row 'style={{marginTop:'4px'}}>
+                                          <div className='col-md-10 ' style={{ fontSize: 10, paddingTop: '6px', color: 'darkgray' }}>
+                                            {formatDate(task.due_date)}
+                                          </div>
+                                          
+                                          {task.created_by.id.toString() === user_id ? (
+                                            
+                                              <div className='col-md-2' onClick={(event) => handleDeleteTask(task.id, event)}>
+                                                <FaTrashAlt style={{ fontSize: 14, color: 'whitesmoke', marginBottom: 4, cursor: 'pointer' }} ></FaTrashAlt>
+                                              </div>
+
+                                            ) : null}
+                                        </div> */}
+
+                                          {/* <div className='' >
+                                          <LinearProgress style={{borderRadius:4, height:6}} variant="determinate" value={task.progress_percentage} />
+                                        </div> */}
+                                        </div>
+                                        <div className="">
+                                          {/* <LinearProgress
+                                          style={{ borderRadius: 4, height: 4 }}
+                                          variant="determinate"
+                                          value={task.progress_percentage}
+                                        /> */}
+                                          <LinearProgressBar
+                                            progress={task.progress_percentage}
+                                          />
+                                        </div>
+                                      </div>
+                                    );
+                                  }}
+                                </Draggable>
+                              ))}
+                              {provided.placeholder}
+                            </div>
+                            {/* {section.title == "Pending" ?  (
+                            // <div className='col-md-12 mb-0 ' style={{ fontSize: '16', border: '2px solid #30678edc', padding: '4px 6px', borderRadius: 6, height: 40, color: '#dcdcdc' }} onClick={openTaskSelf}><i class="fa fa-plus ml-2 mr-2" style={{}}></i> Add Task</div>
+                            <div className='col-12 col-md-12 mb-0 mt-1 add-task-btn' style={{ cursor:'pointer', borderRadius:1}} onClick={openTaskSelf} >
+                            <i class="fa fa-plus ml-2 mr-2"></i> Add Task
+                          </div>
+
+
+                          ) : (
+                            null
+                          )} */}
+                            {section.fixed_state === "Pending" && (
+                              <>
+                                {(() => {
+                                  const pendingSections =
+                                    filteredTaskData.filter(
+                                      (sec) => sec.fixed_state === "Pending"
+                                    );
+                                  if (pendingSections.length > 0) {
+                                    const leastOrderSection =
+                                      pendingSections.reduce(
+                                        (prev, current) => {
+                                          if (prev.order === current.order) {
+                                            // If order is the same, compare section indexes
+                                            const prevIndex =
+                                              filteredTaskData.findIndex(
+                                                (sec) => sec.id === prev.id
+                                              );
+                                            const currentIndex =
+                                              filteredTaskData.findIndex(
+                                                (sec) => sec.id === current.id
+                                              );
+                                            return prevIndex < currentIndex
+                                              ? prev
+                                              : current;
+                                          }
+                                          return prev.order < current.order
+                                            ? prev
+                                            : current;
+                                        }
+                                      );
+
+                                    // Check if the least order section matches the current section in iteration
+                                    const showAddTaskButton =
+                                      leastOrderSection.order ===
+                                        section.order &&
+                                      leastOrderSection.id === section.id;
+
+                                    // Render the "Add Task" button only for the section with the least order or the minimum index
+                                    if (showAddTaskButton) {
+                                      return (
+                                        <div
+                                           className="shadow-custom-all-sides flex cursor-pointer items-center justify-center gap-1 py-[10px]  opacity-90   rounded-lg bg-white  text-[#555] font-medium text-[15px]"
+                                          style={{ cursor: "pointer" }}
+                                          onClick={openTaskSelf}
+                                        >
+                                          <FaPlus />
+                                          Add Task
+                                        </div>
+                                      );
+                                    }
+                                  }
+                                  return null;
+                                })()}
+                              </>
+                            )}
+                          </div>
+                        )}
+                      </Droppable>
+                    ))}
+                  </div>
+                </DragDropContext>
+              </div>
+            </section>
+          )}
         </div>
+        {
+
+        }
       </div>
     </section>
   );

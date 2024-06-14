@@ -13,6 +13,7 @@ const Checklist = () => {
     const fetchChecklist = async () => {
       const checklist = await getChecklist();
       setChecklists(checklist.data.checklists);
+      console.log(checklist.data.checklists)
     };
     fetchChecklist();
     console.log(checklists);
@@ -36,6 +37,15 @@ const Checklist = () => {
     {
       name: "Type",
       selector: (row) => row.ctype,
+      sortable: true,
+    },
+    {
+      name: "Associations",
+      selector: (row) => (
+        <div>
+          <Link to={`/assets/associate-checklist/${row.id}`} className=" px-4 bg-green-400 text-white rounded-full">Associate</Link>
+        </div>
+      ),
       sortable: true,
     },
     {

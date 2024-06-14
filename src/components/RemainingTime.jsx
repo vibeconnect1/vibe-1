@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { TimeOutline, TrashOutline } from "react-ionicons";
 
 const RemainingTime = ({ dueDate }) => {
   const targetDate = new Date(dueDate).getTime();
@@ -78,15 +79,16 @@ const RemainingTime = ({ dueDate }) => {
   }
 
   return (
-    <div>
+    <div className="flex items-center gap-2">
+       <TimeOutline color={"#666"} width="16px" height="16px" />
      {!isPastDue && <p style={{ color:  "green"  }}>
-        {timeLeft.days > 0 ? timeLeft.days: ""}{timeLeft.days>0?"d":""} {timeLeft.hours}h {timeLeft.minutes}m{" "}
-        {timeLeft.seconds}s left
+        {timeLeft.days > 0 ? timeLeft.days: ""}{timeLeft.days>0?"d,":""} {timeLeft.hours> 0 ? timeLeft.hours: ""} {timeLeft.hours>0?"h,":""} {timeLeft.minutes> 0 ? timeLeft.minutes: ""} {timeLeft.minutes>0?"m,":""} 
+       {" "} {timeLeft.seconds}s left
       </p>}
       {isPastDue && (
         <div>
           <p style={{color: "red"}}>
-            {timeElapsed.days} d, {timeElapsed.hours} h ago
+           {timeElapsed.days>0 ? timeElapsed.days: ""}{timeElapsed.days? "d,": ""} {timeElapsed.hours? timeElapsed.hours:""} {timeElapsed.hours? "h,": ""} {timeElapsed.minutes? timeElapsed.minutes:""} {timeElapsed.minutes?"m":""} ago
            
           </p>
         </div>

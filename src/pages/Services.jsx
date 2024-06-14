@@ -146,6 +146,15 @@ const Services = () => {
       selector: (row) => row.questions.length,
       sortable: true,
     },
+    {
+      name: "Associations",
+      selector: (row) => (
+        <div>
+          <Link to={`/services/associate-checklist/${row.id}`} className="font-normal text-base px-4 bg-green-400 text-white rounded-full">Associate</Link>
+        </div>
+      ),
+      sortable: true,
+    },
   ];
   const PPMColumn = [
     {
@@ -191,6 +200,7 @@ const Services = () => {
       selector: (row) => row.questions.length,
       sortable: true,
     },
+   
   ];
 
   useEffect(() => {
@@ -573,7 +583,7 @@ const Services = () => {
                   </button>
 
                   <Link
-                    to={"/services/add-service-checklist"}
+                    to={"/services/add-service-ppm"}
                     className="bg-black  rounded-lg flex font-semibold  items-center gap-2 text-white p-2 "
                   >
                     <IoAddCircleOutline size={20} />

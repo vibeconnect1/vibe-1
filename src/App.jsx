@@ -262,6 +262,8 @@ import AddressesSetup from "./pages/Setup/AddressSetup/AddressSetup.jsx";
 import AddAddressesSetup from "./pages/Setup/AddressSetup/AddAddressSetup.jsx";
 import EditAddressesSetup from "./pages/Setup/AddressSetup/EditAddressSetup.jsx";
 import AddRole from "./pages/SubPages/AddUserRole.jsx";
+import AssociateServiceChecklist from "./pages/SubPages/AssociateServiceChecklist.jsx";
+import AssociateAssetChecklist from "./pages/SubPages/AssociateAssetChecklist.jsx";
 
 function App() {
   const themeColor = useSelector((state) => state.theme.color);
@@ -545,7 +547,15 @@ function App() {
               </ProtectedRoute>
             }
           />
-          {/**/}
+          <Route
+            path="/assets/associate-checklist/:id"
+            element={
+              <ProtectedRoute>
+                <AssociateAssetChecklist />
+              </ProtectedRoute>
+            }
+          />
+          {/*services*/}
           <Route
             path="/services"
             element={
@@ -579,6 +589,14 @@ function App() {
             element={
               <ProtectedAdminRoutes>
                 <EditServiceChecklist />
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/services/associate-checklist/:id"
+            element={
+              <ProtectedAdminRoutes>
+                <AssociateServiceChecklist />
               </ProtectedAdminRoutes>
             }
           />
