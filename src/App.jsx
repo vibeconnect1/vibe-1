@@ -213,6 +213,8 @@ import SACHSNSetupDetails from "./pages/Setup/SACHSNSetupDetails.jsx";
 import AddressesSetup from "./pages/Setup/AddressesSetup.jsx";
 import AddAddressesSetup from "./pages/Setup/AddAddressesSetup.jsx";
 import EditAddressesSetup from "./pages/Setup/EditAddressesSetup.jsx";
+import MasterCheckListSetup from "./pages/Setup/MasterCheckListSetup.jsx";
+import AddMasterCheckListSetup from "./pages/Setup/AddMasterCheckListSetup.jsx";
 // import IncidentSetup from "./pages/Setup/IncidentSetupPages/IncidentSetup.jsx";
 
 function App() {
@@ -1737,6 +1739,23 @@ function App() {
             element={
               <ProtectedAdminRoutes>
                 <EditAddressesSetup/>
+              </ProtectedAdminRoutes>
+            }
+          />
+          {/* Master CheckList */}
+          <Route
+            path="/admin/master-checklist-setup"
+            element={
+              <ProtectedAdminRoutes>
+                <MasterCheckListSetup/>
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/add-master-checklist-setup"
+            element={
+              <ProtectedAdminRoutes>
+                <AddMasterCheckListSetup/>
               </ProtectedAdminRoutes>
             }
           />
