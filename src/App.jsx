@@ -282,6 +282,29 @@ import EmployeeAddTravellingAllowanceRequest from "./pages/Employees/Booking&Req
 import EmployeeTravelingAllowanceDetails from "./pages/Employees/Booking&Request/EmployeeTravellingAllowanceDetails.jsx";
 import EditService from "./pages/SubPages/EditServices.jsx";
 import EditServicePPM from "./pages/SubPages/EditServicePPM.jsx";
+import EditAssetAMC from "./pages/SubPages/details/EditAMC.jsx";
+import HotelRequest from "./pages/SubPages/Booking&Req/HotelRequest.jsx";
+import AddHotelRequest from "./pages/SubPages/Booking&Req/AddHotelRequest.jsx";
+import EditHotelRequest from "./pages/SubPages/Booking&Req/EditHotelRequest.jsx";
+import HotelRequestDetails from "./pages/SubPages/Booking&Req/HotelRequestDetails.jsx";
+import FlightRequest from "./pages/SubPages/Booking&Req/FlightRequest.jsx";
+import AddFlightRequest from "./pages/SubPages/Booking&Req/AddFlightRequest.jsx";
+import EditFlightRequest from "./pages/SubPages/Booking&Req/EditFlightRequest.jsx";
+import FlightRequestDetails from "./pages/SubPages/Booking&Req/FlightRequestDetails.jsx";
+import CabRequest from "./pages/SubPages/Booking&Req/CabRequest.jsx";
+import AddCabRequest from "./pages/SubPages/Booking&Req/AddCabRequest.jsx";
+import EditCabRequest from "./pages/SubPages/Booking&Req/EditCabRequest.jsx";
+import CabRequestDetails from "./pages/SubPages/Booking&Req/CabRequestDetails.jsx";
+import TransportationRequest from "./pages/SubPages/Booking&Req/TransportationRequest.jsx";
+import AddTransportRequest from "./pages/SubPages/Booking&Req/AddTransportationRequest.jsx";
+import EditTransportRequest from "./pages/SubPages/Booking&Req/EditTransporttaionRequest.jsx";
+import TransportRequestDetails from "./pages/SubPages/Booking&Req/TransportationRequestDetails.jsx";
+import TravellingAllowanceRequest from "./pages/SubPages/Booking&Req/TravellingAllowanceRequest.jsx";
+import AddTravellingAllowanceRequest from "./pages/SubPages/Booking&Req/AddTravellingAllowanceRequest.jsx";
+import EditTravellingAllowanceRequest from "./pages/SubPages/Booking&Req/EditTravellingAllowance.jsx";
+import TravelingAllowanceDetails from "./pages/SubPages/Booking&Req/TravellingAllowanceDetails.jsx";
+import MasterCheckListSetup from "./pages/Setup/MasterChecklistSetup.jsx";
+import AddMasterCheckListSetup from "./pages/Setup/AddMaterChecklistSetup.jsx";
 
 function App() {
   const themeColor = useSelector((state) => state.theme.color);
@@ -566,6 +589,14 @@ function App() {
             }
           />
           <Route
+            path="/assets/edit-amc/:id"
+            element={
+              <ProtectedRoute>
+                <EditAssetAMC />
+              </ProtectedRoute>
+            }
+          />
+          <Route
             path="/assets/associate-checklist/:id"
             element={
               <ProtectedRoute>
@@ -640,7 +671,6 @@ function App() {
               </ProtectedAdminRoutes>
             }
           />
-
 
           {/* Supplier */}
           <Route
@@ -2426,6 +2456,191 @@ function App() {
               <ProtectedRoute>
                 <EmployeeTravelingAllowanceDetails />
               </ProtectedRoute>
+            }
+          />
+
+          {/* admin booking & req */}
+
+          <Route
+            path="/admin/booking-request/hotel-request"
+            element={
+              <ProtectedAdminRoutes>
+                <HotelRequest />
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/add-hotel-request"
+            element={
+              <ProtectedAdminRoutes>
+                <AddHotelRequest />
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/hotel-edit/:id"
+            element={
+              <ProtectedAdminRoutes>
+                <EditHotelRequest />
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/hotel-details/:id"
+            element={
+              <ProtectedAdminRoutes>
+                <HotelRequestDetails />
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/booking-request/flight-ticket-request"
+            element={
+              <ProtectedAdminRoutes>
+                <FlightRequest />
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/add-flight-request"
+            element={
+              <ProtectedAdminRoutes>
+                <AddFlightRequest />
+              </ProtectedAdminRoutes>
+            }
+          />
+
+          <Route
+            path="/admin/flight-edit/:id"
+            element={
+              <ProtectedAdminRoutes>
+                <EditFlightRequest />
+              </ProtectedAdminRoutes>
+            }
+          />
+
+          <Route
+            path="/admin/flight-details/:id"
+            element={
+              <ProtectedAdminRoutes>
+                <FlightRequestDetails />
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/booking-request/cab-bus-request"
+            element={
+              <ProtectedAdminRoutes>
+                <CabRequest />
+              </ProtectedAdminRoutes>
+            }
+          />
+
+          <Route
+            path="/admin/add-cab-request"
+            element={
+              <ProtectedAdminRoutes>
+                <AddCabRequest />
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/cab-edit/:id"
+            element={
+              <ProtectedAdminRoutes>
+                <EditCabRequest />
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/cab-details/:id"
+            element={
+              <ProtectedAdminRoutes>
+                <CabRequestDetails />
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/booking-request/transportation-request"
+            element={
+              <ProtectedAdminRoutes>
+                <TransportationRequest />
+              </ProtectedAdminRoutes>
+            }
+          />
+
+          <Route
+            path="/admin/add-transport-request"
+            element={
+              <ProtectedAdminRoutes>
+                <AddTransportRequest />
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/transport-edit/:id"
+            element={
+              <ProtectedAdminRoutes>
+                <EditTransportRequest />
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/transport-details/:id"
+            element={
+              <ProtectedAdminRoutes>
+                <TransportRequestDetails />
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/booking-request/traveling-allowance-request"
+            element={
+              <ProtectedAdminRoutes>
+                <TravellingAllowanceRequest />
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/add-travelallowance-request"
+            element={
+              <ProtectedAdminRoutes>
+                <AddTravellingAllowanceRequest />
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/travelling-edit/:id"
+            element={
+              <ProtectedAdminRoutes>
+                <EditTravellingAllowanceRequest />
+              </ProtectedAdminRoutes>
+            }
+          />
+
+          <Route
+            path="/admin/travelling-details/:id"
+            element={
+              <ProtectedAdminRoutes>
+                <TravelingAllowanceDetails />
+              </ProtectedAdminRoutes>
+            }
+          />
+          {/* Master CheckList */}
+          <Route
+            path="/admin/master-checklist-setup"
+            element={
+              <ProtectedAdminRoutes>
+                <MasterCheckListSetup />
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/add-master-checklist-setup"
+            element={
+              <ProtectedAdminRoutes>
+                <AddMasterCheckListSetup />
+              </ProtectedAdminRoutes>
             }
           />
         </Routes>

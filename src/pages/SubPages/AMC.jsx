@@ -41,17 +41,17 @@ const AMC = () => {
   };
 
   const AMCColumn = [
-    // {
-    //   name: "Action",
-    //   cell: (row) => (
-    //     <div className="flex items-center gap-4">
-    //       <Link to={`/assets/amc-details/${row.asset_id}`}>
-    //         <BsEye size={15} />
-    //       </Link>
+    {
+      name: "Action",
+      cell: (row) => (
+        <div className="flex items-center gap-4">
+          <Link to={`/assets/edit-amc/${row.id}`}>
+            <BiEdit size={15} />
+          </Link>
 
-    //     </div>
-    //   ),
-    // },
+        </div>
+      ),
+    },
     { name: "Asset Name", selector: (row) => row.asset_name },
    
     { name: "Vendor", selector: (row) => row.vendor_name },

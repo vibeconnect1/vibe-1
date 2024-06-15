@@ -206,6 +206,12 @@ export const getAssetGroups = async () =>
       token: token,
     },
   });
+export const getParentAsset = async () =>
+  axiosInstance.get("/site_assets.json?q[asset_type_eq]=parent", {
+    params: {
+      token: token,
+    },
+  });
 
 export const getAssetSubGroups = async (groupId) => {
   try {
@@ -263,6 +269,24 @@ export const getAMCDetails = async (assetId) =>
       // asset_id: assetId,
     },
   });
+export const getEditAMCDetails = async (id) =>
+  axiosInstance.get(`/asset_amcs/${id}.json`, {
+    params: {
+      
+      token: token,
+      // asset_id: assetId,
+    },
+  });
+
+
+export const EditAMCDetails = async (data, id) =>
+  axiosInstance.put(`/asset_amcs/${id}.json`, data,{
+    params: {
+      
+      token: token,
+      // asset_id: assetId,
+    },
+  });
 export const getSubGroupsList = async () =>
   axiosInstance.get("/sub_groups.json", {
     params: {
@@ -283,6 +307,12 @@ export const getInventory = async () =>
   });
 export const postInventory = async (data) =>
   axiosInstance.post("/items.json", data, {
+    params: {
+      token: token,
+    },
+  });
+export const editInventory = async (data, id) =>
+  axiosInstance.put(`/items/${id}.json`, data, {
     params: {
       token: token,
     },

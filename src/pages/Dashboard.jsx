@@ -5,7 +5,7 @@ import { getVibeCalendar } from "../api";
 import { getItemInLocalStorage } from "../utils/localStorage";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import wave from "/wave.png"
+import wave from "/wave.png";
 import HighchartsComponent from "../components/HighCharts";
 const Dashboard = () => {
   const themeColor = useSelector((state) => state.theme.color);
@@ -45,23 +45,23 @@ const Dashboard = () => {
   //   Update_Task_Duedate(user_id, taskid, date);
   // };
 
-  
-
   return (
-    <section className="flex" ref={contentRef}
-    //   style={{
-    //   background: `url(${wave})`,
-    //   // backgroundSize: "100% 100% ",
-    //   backgroundSize: "cover",
-    //   backgroundRepeat: "no-repeat",
-    //   backgroundPosition: "center",
-    // }}
+    <section
+      className="flex"
+      ref={contentRef}
+      //   style={{
+      //   background: `url(${wave})`,
+      //   // backgroundSize: "100% 100% ",
+      //   backgroundSize: "cover",
+      //   backgroundRepeat: "no-repeat",
+      //   backgroundPosition: "center",
+      // }}
     >
       <Navbar />
-      <div className="flex flex-col w-full">
+      <div className=" w-full flex mx-3 flex-col overflow-hidden">
         <header
           style={{ background: themeColor }}
-          className="w-full h-10 rounded-md mx-5 my-1 flex justify-center items-center "
+          className="w-full h-10 rounded-md  my-1 flex justify-center items-center "
         >
           <nav>
             <h1 className="text-white text-center text-xl">Vibe Connect</h1>
@@ -71,7 +71,7 @@ const Dashboard = () => {
         <button onClick={toggleFullScreen}>Toggle Full Screen</button>
       </div> */}
         </header>
-          {/* <DatePicker
+        {/* <DatePicker
             selected={dueDate}
             onChange={handleDateChange1}
             showTimeSelect
@@ -82,11 +82,9 @@ const Dashboard = () => {
             className="border-2 bordeer-black"
 
           /> */}
-          {/* <div className="w-full flex mx-3 flex-col p-2 mb-10 ">
-
-*/}
-          <HighchartsComponent/> 
-          {/* </div> */}
+        <div className="w-full flex mx-3 flex-col p-2 mb-10 ">
+          <HighchartsComponent />
+        </div>
       </div>
     </section>
   );

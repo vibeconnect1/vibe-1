@@ -36,9 +36,9 @@ const Inventory = () => {
           <Link to={`/admin/edit-stock/${row.id}`}>
             <BiEdit size={15} />
           </Link>
-          <button className="text-red-400">
+          {/* <button className="text-red-400">
             <MdDeleteForever size={25} />
-          </button>
+          </button> */}
         </div>
       ),
     },

@@ -31,7 +31,7 @@ const AddChecklist = () => {
                   name=""
                   id=""
                   className="border p-1 px-4 border-gray-500 rounded-md"
-                  placeholder="Enter Stock Name"
+                  placeholder="Enter Checklist Name"
                 />
               </div>
               <div className="flex flex-col">

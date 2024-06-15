@@ -5,6 +5,7 @@ import {
   getAssetGroups,
   getAssetSubGroups,
   getFloors,
+  getParentAsset,
   getUnits,
   getVendors,
   postSiteAsset,
@@ -33,6 +34,7 @@ const AddAsset = () => {
   const [formData, setFormData] = useState(initialAddAssetFormData);
   const [assetGroups, setAssetGroup] = useState([]);
   const [assetSubGoups, setAssetSubGroups] = useState([]);
+  const [parentAsset, setParentAsset] = useState([]);
   console.log(formData);
   const themeColor = useSelector((state) => state.theme.color);
   useEffect(() => {
@@ -44,8 +46,15 @@ const AddAsset = () => {
       const assetGroupResponse = await getAssetGroups();
       setAssetGroup(assetGroupResponse.data);
     };
+    const fetchParentAsset = async () => {
+      const parentAssetResp = await getParentAsset();
+      console.log(parentAssetResp);
+      setParentAsset(parentAssetResp.data.site_assets);
+    };
+
     fetchVendors();
     fetchAssetGroups();
+    fetchParentAsset();
   }, []);
 
   const handleChange = async (e) => {
@@ -175,10 +184,7 @@ const AddAsset = () => {
         "site_asset[asset_group_id]",
         formData.asset_group_id
       );
-      formDataSend.append(
-        "site_asset[sub_group_id]",
-        formData.sub_group_id
-      );
+      formDataSend.append("site_asset[sub_group_id]", formData.sub_group_id);
       formDataSend.append("site_asset[installation]", formData.installation);
       formDataSend.append(
         "site_asset[warranty_expiry]",
@@ -560,9 +566,9 @@ const AddAsset = () => {
                     value={formData.parent_meter}
                   >
                     <option value="">Select Parent Asset </option>
-                    <option value="unit1">Parent 1</option>
-                    <option value="unit2">Parent 2</option>
-                    <option value="unit2">Parent 3</option>
+                    {parentAsset.map((parent)=>(
+                      <option value={parent.id} key={parent.id}>{parent.name}</option>
+                    ))}
                   </select>
                 )}
               </div>

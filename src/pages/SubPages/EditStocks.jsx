@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { getInventoryDetails } from "../../api";
+import { editInventory, getInventoryDetails, postInventory } from "../../api";
 import { useParams } from "react-router-dom";
+import { getItemInLocalStorage } from "../../utils/localStorage";
+import toast from "react-hot-toast";
 
 const EditStocks = () => {
   const { id } = useParams();
@@ -19,7 +21,29 @@ const EditStocks = () => {
     fetchStockDetails();
   }, []);
   const handleChange = (e) => {
-    setFormData({...formData, [e.target.name]: e.target.value})
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const siteId = getItemInLocalStorage("SITEID");
+  const userId = getItemInLocalStorage("UserId");
+  const handleAddInventory = async () => {
+    const dataToSend = new FormData();
+    dataToSend.append("item[site_id]", siteId);
+    dataToSend.append("item[name]", formData.name);
+    dataToSend.append("item[description]", formData.description);
+    dataToSend.append("item[rate]", formData.rate);
+    dataToSend.append("item[available_quantity]", formData.availableQuantity);
+    dataToSend.append("item[group_name]", formData.groupName);
+    dataToSend.append("item[sub_group_name]", formData.subGroupName);
+    dataToSend.append("item[created_by_id]", userId);
+
+    try {
+      const editInvResp = await editInventory(dataToSend, id);
+      console.log(editInvResp);
+      toast.success("Inventory Edited Successfully");
+    } catch (error) {
+      console.log(error)
+    }
   };
 
   return (
@@ -114,7 +138,10 @@ const EditStocks = () => {
               ></textarea>
             </div>
             <div className="flex justify-center">
-              <button className="bg-black text-white p-2 px-4 rounded-md font-medium">
+              <button
+                className="bg-black text-white p-2 px-4 rounded-md font-medium"
+                onClick={handleAddInventory}
+              >
                 Save
               </button>
             </div>
