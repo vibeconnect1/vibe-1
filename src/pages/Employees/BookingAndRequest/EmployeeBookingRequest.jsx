@@ -1,11 +1,7 @@
 import React from 'react';
 import { NavLink, Route, Routes, Outlet } from 'react-router-dom';
 import Navbar from '../../../components/Navbar';
-import EmployeeHotelRequest from './EmployeeHotelRequest';
-import EmployeeFlightRequest from './EmployeeFlightTicketRequest';
-import EmployeeCabRequest from './EmployeeCabRequest';
-import EmployeeTransportationRequest from './EmployeeTransportationRequest';
-import EmployeeTravellingAllowanceRequest from './EmployeeTravellingAllowanceRequest';
+
 
 const EmployeeBookingRequest = () => {
   return (
@@ -23,13 +19,7 @@ const EmployeeBookingRequest = () => {
             </div>
           </div>
 
-          {/* <Routes>
-            <Route path="/employee/booking-request/hotel-request" element={<EmployeeHotelRequest />} />
-            <Route path="/employee/booking-request/flight-ticket-request" element={<EmployeeFlightRequest />} />
-            <Route path="/employee/booking-request/cab-bus-request" element={<EmployeeCabRequest />} />
-            <Route path="/employee/booking-request/transportation-request" element={<EmployeeTransportationRequest />} />
-            <Route path="/employee/booking-request/add-traveling-allowance-request" element={<EmployeeTravellingAllowanceRequest />} />
-          </Routes> */}
+        
         </div>
       </section>
     </div>

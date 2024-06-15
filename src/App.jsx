@@ -275,6 +275,14 @@ import TransportRequestDetails from "./pages/SubPages/TransportationRequestDetai
 import AddTravellingAllowanceRequest from "./pages/SubPages/AddTravellingAllowance.jsx";
 import EditTravellingAllowanceRequest from "./pages/SubPages/EditTravellingAllowance.jsx";
 import TravelingAllowanceDetails from "./pages/SubPages/TravellingAllowanceDetails.jsx";
+import HRMS from "./pages/SubPages/HRMS.jsx";
+import EmployeeOnboarding from "./pages/EmployeeOnboarding.jsx";
+import AddEmployeeOnBoarding from "./pages/SubPages/AddEmployeeOnboarding.jsx";
+import EmployeeOnBoardingDetails from "./pages/SubPages/EmployeeOnBoardingDetails.jsx";
+import EditEmployeeOnBoarding from "./pages/SubPages/EditEmployeeOnboarding.jsx";
+import Onboarding from "./pages/Employees/HRMS/Onboarding.jsx";
+import AddOnBoarding from "./pages/Employees/HRMS/AddOnboarding.jsx";
+import OnboardingDetails from "./pages/Employees/HRMS/OnboardingDetails.jsx";
 
 function App() {
   const themeColor = useSelector((state) => state.theme.color);
@@ -1881,6 +1889,42 @@ function App() {
               </ProtectedRoute>
             }
           />
+          <Route
+            path="/employee/add-onboarding"
+            element={
+              <ProtectedRoute>
+                <AddOnBoarding/>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/employee/employee-onboarding-details/:id"
+            element={
+              <ProtectedRoute>
+                <OnboardingDetails/>
+              </ProtectedRoute>
+            }
+          />
+           <Route path="/hrms-onboarding" element={ <ProtectedRoute><Onboarding/></ProtectedRoute>} />
+            {/* <Route path="/hrms-attendance" element={<div>Attendance Content</div>} />
+            <Route path="/hrms-salary-slip" element={<div>Salary Slip Content</div>} />
+            <Route path="/auto-salary-breakup" element={<div>Auto Salary Breakup Creation Content</div>} />
+            <Route path="/leaves" element={<div>Leaves Content</div>} />
+            <Route path="/roaster-planning" element={<div>Roaster Planning Content</div>} />
+            <Route path="/employee-advance-claim" element={<div>Employee Advance Claim Content</div>} />
+            <Route path="/employee-performance" element={<div>Employee Performance Content</div>} />
+            <Route path="/employee-expenses" element={<div>Employee Expenses Content</div>} />
+            <Route path="/time-sheet-tracker" element={<div>Time Sheet Tracker Content</div>} />
+            <Route path="/ijp-recruitment" element={<div>IJP/Recruitment Content</div>} />
+            <Route path="/employee-induction" element={<div>Employee Induction Content</div>} />
+            <Route path="/employee-it-declaration" element={<div>Employee IT Declaration Content</div>} />
+            <Route path="/offer-letter" element={<div>Offer Letter / Acceptance Content</div>} />
+            <Route path="/employee-talent-programs" element={<div>Employee Talent Programs Content</div>} />
+            <Route path="/memos" element={<div>Memos Content</div>} />
+            <Route path="/employee-loans-advance" element={<div>Employee Loans & Advance Content</div>} />
+            <Route path="/recruitment" element={<div>Recruitment Content</div>} />
+            <Route path="/roaster" element={<div>Roaster Content</div>} />
+            <Route path="/provident-fund" element={<div>Provident Fund, ESIC, Legal Compliance Content</div>} /> */}
 
           {/* GDN*/}
           <Route
@@ -2281,7 +2325,61 @@ function App() {
               </ProtectedAdminRoutes>
             }
           />
+          <Route
+            path="/admin/hrms"
+            element={
+              <ProtectedAdminRoutes>
+                <HRMS/>
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/add-employee-onboarding"
+            element={
+              <ProtectedAdminRoutes>
+                <AddEmployeeOnBoarding/>
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/employee-onboarding-details/:id"
+            element={
+              <ProtectedAdminRoutes>
+                <EmployeeOnBoardingDetails/>
+              </ProtectedAdminRoutes>
+            }
+          />
+           <Route
+            path="/admin/employee-onboarding-edit/:id"
+            element={
+              <ProtectedAdminRoutes>
+                <EditEmployeeOnBoarding/>
+              </ProtectedAdminRoutes>
+            }
+          />
+           <Route path="/employee-onboarding" element={<ProtectedAdminRoutes><EmployeeOnboarding/></ProtectedAdminRoutes>} />
+            {/* <Route path="/hrms-attendance" element={<div>Attendance Content</div>} />
+            <Route path="/hrms-salary-slip" element={<div>Salary Slip Content</div>} />
+            <Route path="/auto-salary-breakup" element={<div>Auto Salary Breakup Creation Content</div>} />
+            <Route path="/leaves" element={<div>Leaves Content</div>} />
+            <Route path="/roaster-planning" element={<div>Roaster Planning Content</div>} />
+            <Route path="/employee-advance-claim" element={<div>Employee Advance Claim Content</div>} />
+            <Route path="/employee-performance" element={<div>Employee Performance Content</div>} />
+            <Route path="/employee-expenses" element={<div>Employee Expenses Content</div>} />
+            <Route path="/time-sheet-tracker" element={<div>Time Sheet Tracker Content</div>} />
+            <Route path="/ijp-recruitment" element={<div>IJP/Recruitment Content</div>} />
+            <Route path="/employee-induction" element={<div>Employee Induction Content</div>} />
+            <Route path="/employee-it-declaration" element={<div>Employee IT Declaration Content</div>} />
+            <Route path="/offer-letter" element={<div>Offer Letter / Acceptance Content</div>} />
+            <Route path="/employee-talent-programs" element={<div>Employee Talent Programs Content</div>} />
+            <Route path="/memos" element={<div>Memos Content</div>} />
+            <Route path="/employee-loans-advance" element={<div>Employee Loans & Advance Content</div>} />
+            <Route path="/recruitment" element={<div>Recruitment Content</div>} />
+            <Route path="/roaster" element={<div>Roaster Content</div>} />
+            <Route path="/provident-fund" element={<div>Provident Fund, ESIC, Legal Compliance Content</div>} /> */}
         </Routes>
+        
+        
         <Footer />
       </Router>
     </>
