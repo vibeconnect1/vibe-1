@@ -59,6 +59,7 @@ const Navbar = () => {
   const [user, setUser] = useState("");
   const navigate = useNavigate();
   const themeColor = useSelector((state) => state.theme.color);
+  const fontSize = useSelector((state) => state.fontSize);
 
   const handleMouseEnter = () => {
     setOpen(true);
@@ -119,8 +120,8 @@ const Navbar = () => {
                 className={({ isActive }) =>
                   ` ${
                     isActive
-                      ? "text-black bg-white flex p-2  gap-3.5 rounded-md group items-center text-sm font-medium"
-                      : " group flex items-center text-sm gap-3.5 font-medium p-2 hover:bg-gray-800 rounded-md "
+                      ? `text-black bg-white flex p-2  gap-3.5 rounded-md group items-center  font-medium ${fontSize}`
+                      : ` group flex items-center  gap-3.5 font-medium p-2 hover:bg-gray-800 rounded-md ${fontSize}`
                   }`
                 }
               >
@@ -147,8 +148,8 @@ const Navbar = () => {
                 className={({ isActive }) =>
                   ` ${
                     isActive
-                      ? "text-black bg-white flex p-2  gap-3.5 rounded-md group items-center text-sm font-medium"
-                      : " group flex items-center text-sm gap-3.5 font-medium p-2 hover:bg-gray-800 rounded-md "
+                      ? `text-black bg-white flex p-2  gap-3.5 rounded-md group items-center ${fontSize} font-medium`
+                      : `group flex items-center  ${fontSize} gap-3.5 font-medium p-2 hover:bg-gray-800 rounded-md`
                   }`
                 }
               >
@@ -180,9 +181,7 @@ const Navbar = () => {
                   }`
                 }
               >
-                <div>
-                  {React.createElement(FaTasks , { size: "20" })}
-                </div>
+                <div>{React.createElement(FaTasks, { size: "20" })}</div>
                 <h2
                   className={`whitespace-pre duration-300 ${
                     !open && "opacity-0 translate-x-28 overflow-hidden"
@@ -268,14 +267,14 @@ const Navbar = () => {
                     !open && "opacity-0 translate-x-28 overflow-hidden"
                   }`}
                 >
-                 Soft Services
+                  Soft Services
                 </h2>
                 <h2
                   className={`${
                     open && "hidden"
                   } absolute left-48 bg-white font-semibold whitespace-pre text-gray-900 rounded-md drop-shadow-lg px-0 py-0 w-0 overflow-hidden group-hover:px-2 group-hover:py-1 group-hover:left-14 group-hover:duration-300 group-hover:w-fit  `}
                 >
-                 Soft Services
+                  Soft Services
                 </h2>
               </NavLink>
               <NavLink
@@ -522,7 +521,7 @@ const Navbar = () => {
                   Booking & Request
                 </h2>
               </NavLink>
-             
+
               <NavLink
                 to={"/admin/letterofindent"}
                 className={({ isActive }) =>
@@ -671,7 +670,9 @@ const Navbar = () => {
                   }`
                 }
               >
-                <div>{React.createElement(IoFastFoodOutline , { size: "20" })}</div>
+                <div>
+                  {React.createElement(IoFastFoodOutline, { size: "20" })}
+                </div>
 
                 <h2
                   className={`whitespace-pre duration-300 ${

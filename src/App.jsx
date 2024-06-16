@@ -308,11 +308,14 @@ import AddMasterCheckListSetup from "./pages/Setup/AddMaterChecklistSetup.jsx";
 
 function App() {
   const themeColor = useSelector((state) => state.theme.color);
+  const fontSize = useSelector((state) => state.fontSize);
   document.documentElement.style.setProperty(
     "--scrollbar-thumb-color",
     themeColor
   );
   document.documentElement.style.setProperty("--calendar-Header", themeColor);
+  document.documentElement.style.setProperty("--site-font-size", fontSize);
+  console.log(fontSize);
   return (
     <>
       <Router>

@@ -8,6 +8,8 @@ import toast from "react-hot-toast";
 import { setColor } from "../../features/theme/themeSlice";
 import { useDispatch } from "react-redux";
 import { colors } from "../../utils/colors";
+import FontSizeSelector from "../FontSizeSelector";
+import { BsFillBrushFill } from "react-icons/bs";
 
 function User() {
   const [user, setUser] = useState("");
@@ -32,7 +34,7 @@ function User() {
     const lastName = localStorage.getItem("LASTNAME");
     const formattedLastName = lastName ? lastName.replace(/"/g, "") : "";
     setUserLastName(formattedLastName);
-   
+
     setUser(formattedUserName);
     console.log(formattedLastName);
   });
@@ -133,10 +135,11 @@ function User() {
 
           <div className="my-2">
             <button
-              className="bg-red-400 px-3 rounded-md p-1 text-white"
+              className="bg-red-400 px-3 rounded-md p-1 text-white flex gap-2 items-center"
               onClick={() => setChangeTheme(!changeTheme)}
             >
-              Change Theme
+              <BsFillBrushFill size={20} />
+              Personalization
             </button>
             {changeTheme && (
               <div className="">
@@ -151,6 +154,7 @@ function User() {
                     ></button>
                   ))}
                 </div>
+                <FontSizeSelector />
               </div>
             )}
           </div>
