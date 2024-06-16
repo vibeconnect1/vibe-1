@@ -7,6 +7,7 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import wave from "/wave.png";
 import HighchartsComponent from "../components/HighCharts";
+import GanttChart from "../components/GanttChart";
 const Dashboard = () => {
   const themeColor = useSelector((state) => state.theme.color);
   const vibeUserId = getItemInLocalStorage("VIBEUSERID");
@@ -84,6 +85,7 @@ const Dashboard = () => {
           /> */}
         <div className="w-full flex mx-3 flex-col p-2 mb-10 ">
           <HighchartsComponent />
+          <GanttChart />
         </div>
       </div>
     </section>

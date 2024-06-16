@@ -4,12 +4,15 @@ import Navbar from "../components/Navbar";
 import { useSelector } from "react-redux";
 import { FaFilter, FaLaptop, FaPlus, FaTrashAlt } from "react-icons/fa";
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
-import { getVibeMyBoardTask, getVibeTaskUserAssign, updateTaskStatus } from "../api";
+import {
+  getVibeMyBoardTask,
+  getVibeTaskUserAssign,
+  updateTaskStatus,
+} from "../api";
 import RemainingTime from "../components/RemainingTime";
 import { BiPlus } from "react-icons/bi";
 import LinearProgressBar from "../components/LinearProgessBar";
 import toast from "react-hot-toast";
-
 
 // import TaskSelf from "./SubPages/TaskSelf";
 
@@ -99,9 +102,9 @@ const TaskManagement = () => {
     }));
     // Set filtered data
     setFilteredItems(filtered);
-    }, [searchQuery, filteredTaskData,  ]);
-    const ttask = filteredItems.tasks
-    console.log(ttask)
+  }, [searchQuery, filteredTaskData]);
+  // const ttask = filteredItems.tasks
+  // console.log(ttask)
   const toggleDropdown = () => {
     setFilterIsOpen(!filterIsOpen);
   };
@@ -356,7 +359,6 @@ const TaskManagement = () => {
     return date.toLocaleString();
   };
 
-  
   const handleDeleteTask = () => {
     settaskList((prevTaskList) => {
       console.log(prevTaskList);
@@ -413,7 +415,7 @@ const TaskManagement = () => {
     setTaskDeleteID(taskId);
     setIsModalOpenDeleteTask(true);
     setIsModalChatOpen(false);
-    console.log(isModalOpenDeleteTask)
+    console.log(isModalOpenDeleteTask);
   }
 
   const fetchOrg_assignAlready = async (id, taskid) => {
@@ -424,7 +426,7 @@ const TaskManagement = () => {
       task_id: taskid,
     };
     try {
-      const jsonData = await getVibeTaskUserAssign(user_id, taskid)
+      const jsonData = await getVibeTaskUserAssign(user_id, taskid);
       if (jsonData.success) {
         console.log("GetTaskUsersAssign");
         console.log(jsonData.data);
@@ -567,7 +569,11 @@ const TaskManagement = () => {
                 //   }}
               >
                 <div
-                  className={`${activeView !== "Kanban" ? "border-2 text-black border-black font-medium": "text-white"} p-1 px-4 rounded-md`}
+                  className={`${
+                    activeView !== "Kanban"
+                      ? "border-2 text-black border-black font-medium"
+                      : "text-white"
+                  } p-1 px-4 rounded-md`}
                   title="Kanban View"
                   style={{
                     // color: activeView === "Kanban" ? "skyblue" : "#fff",
@@ -583,7 +589,11 @@ const TaskManagement = () => {
                 </div>
                 {/*  */}
                 <div
-                  className={`${activeView !== "List" ? "border-2 text-vlack border-black font-medium": "text-white"} p-1 px-4 rounded-md`}
+                  className={`${
+                    activeView !== "List"
+                      ? "border-2 text-vlack border-black font-medium"
+                      : "text-white"
+                  } p-1 px-4 rounded-md`}
                   title="List View"
                   style={{
                     // color: activeView === "List" ? "skyblue" : "#fff",
@@ -825,7 +835,10 @@ const TaskManagement = () => {
                                             </div>
 
                                             {showStatus ? (
-                                              <div style={{ display: "flex" }} className="justify-end">
+                                              <div
+                                                style={{ display: "flex" }}
+                                                className="justify-end"
+                                              >
                                                 {" "}
                                                 <div
                                                   onClick={(e) => {
@@ -1412,8 +1425,7 @@ const TaskManagement = () => {
                                               task.due_date
                                             )}
                                           </div>
-                                          {task.created_by.id ===
-                                          user_id ? (
+                                          {task.created_by.id === user_id ? (
                                             // <div className='col-md-1' onClick={(event) => handleDeleteTask(task.id, event)}>
                                             //   <FaTrashAlt style={{ fontSize: 14, color: 'whitesmoke', marginBottom: 4, cursor: 'pointer' }} ></FaTrashAlt>
                                             // </div>
@@ -1523,7 +1535,7 @@ const TaskManagement = () => {
                                     if (showAddTaskButton) {
                                       return (
                                         <div
-                                           className="shadow-custom-all-sides flex cursor-pointer items-center justify-center gap-1 py-[10px]  opacity-90   rounded-lg bg-white  text-[#555] font-medium text-[15px]"
+                                          className="shadow-custom-all-sides flex cursor-pointer items-center justify-center gap-1 py-[10px]  opacity-90   rounded-lg bg-white  text-[#555] font-medium text-[15px]"
                                           style={{ cursor: "pointer" }}
                                           onClick={openTaskSelf}
                                         >
@@ -1547,9 +1559,7 @@ const TaskManagement = () => {
             </section>
           )}
         </div>
-        {
-
-        }
+        {}
       </div>
     </section>
   );
