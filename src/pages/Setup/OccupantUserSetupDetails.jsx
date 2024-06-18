@@ -8,7 +8,7 @@ function OccupantUserSetupDetails() {
     };
     const handleImageChange = (event) => {
         setImageFile(event.target.files[0]);
-      };
+    };
   return (
     <section>
         <div className="w-full flex  flex-col overflow-hidden">

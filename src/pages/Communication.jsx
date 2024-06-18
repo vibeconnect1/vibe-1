@@ -2,35 +2,72 @@ import React, { useState } from "react";
 import Navbar from "../components/Navbar";
 import Events from "./SubPages/Events";
 import Broadcast from "./SubPages/Broadcast";
+import Polls from "./SubPages/Polls";
+import Forum from "./SubPages/Forum";
+import ChatBot from "./SubPages/ChatBot";
+import Groups from "./SubPages/Groups";
+import { BsFillChatRightTextFill } from "react-icons/bs";
+import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 
 const Communication = () => {
+  const themeColor = useSelector((state) => state.theme.color);
+  
   const [page, setPage] = useState("event");
   return (
     <section className="flex">
       <Navbar />
       <div className="w-full flex mx-3 flex-col overflow-hidden">
         <div className="flex justify-center my-2">
-          <div className="flex flex-row gap-5 text-lg font-semibold p-1 rounded-full bg-gray-400">
+          <div className="sm:flex grid grid-cols-2 sm:flex-row gap-5 font-medium p-2 sm:rounded-full rounded-md opacity-90 bg-gray-200 ">
             <h2
               className={`p-1 ${
-                page === "event" && "bg-white text-blue-500"
-              } rounded-full px-4 cursor-pointer`}
+                page === "event" && "bg-white text-blue-500 shadow-custom-all-sides"
+              } rounded-full px-4 cursor-pointer text-center  transition-all duration-300 ease-linear`}
               onClick={() => setPage("event")}
             >
               Events
             </h2>
             <h2
               className={`p-1 ${
-                page === "broadcast" && "bg-white text-blue-500"
-              } rounded-full px-4 cursor-pointer`}
+                page === "broadcast" && "bg-white text-blue-500 shadow-custom-all-sides"
+              } rounded-full px-4 cursor-pointer text-center  transition-all duration-300 ease-linear`}
               onClick={() => setPage("broadcast")}
             >
               Broadcast
             </h2>
-           
+            <h2
+              className={`p-1 ${
+                page === "polls" && "bg-white text-blue-500 shadow-custom-all-sides"
+              } rounded-full px-4 cursor-pointer text-center  transition-all duration-300 ease-linear`}
+              onClick={() => setPage("polls")}
+            >
+              Polls
+            </h2>
+            <h2
+              className={`p-1 ${
+                page === "forum" && "bg-white text-blue-500 shadow-custom-all-sides"
+              } rounded-full px-4 cursor-pointer text-center  transition-all duration-300 ease-linear`}
+              onClick={() => setPage("forum")}
+            >
+              Forum
+            </h2>
+            <h2
+              className={`p-1 ${
+                page ==="groups" && "bg-white text-blue-500 shadow-custom-all-sides"
+              } rounded-full px-4 cursor-pointer text-center  transition-all duration-300 ease-linear`}
+              onClick={() => setPage("groups")}
+            >
+              Groups
+            </h2>
           </div>
         </div>
+        <Link to={`/admin/communication-charbot`}>
+          <div  className="fixed bottom-10 right-5 ">
+            <BsFillChatRightTextFill size={36} color={themeColor}/>
+          </div>
+        </Link>
         {page === "event" && (
           <div>
            <Events/>
@@ -41,7 +78,21 @@ const Communication = () => {
            <Broadcast/>
           </div>
         )}
-       
+        {page === "polls" && (
+          <div>
+           <Polls/>
+          </div>
+        )}
+        {page === "forum" && (
+          <div>
+           <Forum/>
+          </div>
+        )}
+       {page === "groups" && (
+          <div>
+           <Groups/>
+          </div>
+        )}
       </div>
     </section>
   );

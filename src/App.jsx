@@ -215,6 +215,10 @@ import AddAddressesSetup from "./pages/Setup/AddAddressesSetup.jsx";
 import EditAddressesSetup from "./pages/Setup/EditAddressesSetup.jsx";
 import MasterCheckListSetup from "./pages/Setup/MasterCheckListSetup.jsx";
 import AddMasterCheckListSetup from "./pages/Setup/AddMasterCheckListSetup.jsx";
+import CreatePolls from "./pages/SubPages/CreatePolls.jsx";
+import CreateForum from "./pages/SubPages/CreateForum.jsx";
+import ChatBot from "./pages/SubPages/ChatBot.jsx";
+import CreateGroup from "./pages/SubPages/CreateGroup.jsx";
 // import IncidentSetup from "./pages/Setup/IncidentSetupPages/IncidentSetup.jsx";
 
 function App() {
@@ -1756,6 +1760,38 @@ function App() {
             element={
               <ProtectedAdminRoutes>
                 <AddMasterCheckListSetup/>
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/create-polls"
+            element={
+              <ProtectedAdminRoutes>
+                <CreatePolls/>
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/create-forum"
+            element={
+              <ProtectedAdminRoutes>
+                <CreateForum/>
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/communication-charbot"
+            element={
+              <ProtectedAdminRoutes>
+                <ChatBot/>
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/communication-create-group"
+            element={
+              <ProtectedAdminRoutes>
+                <CreateGroup/>
               </ProtectedAdminRoutes>
             }
           />

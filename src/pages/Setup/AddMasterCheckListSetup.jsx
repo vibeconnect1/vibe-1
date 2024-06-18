@@ -475,7 +475,7 @@ function AddMasterCheckListSetup() {
               </div>
             </div>
           )}
-            {selectedValue === 'radioButton' && (
+            {section.type === 'radioButton' && (
                 <div className="section">
                      <div className='flex flex-col'>
                             <label className="font-semibold my-2">Selected Enter Value</label>
@@ -535,7 +535,7 @@ function AddMasterCheckListSetup() {
                         </div>
                 </div>
             )}
-            {selectedValue === 'checkBox' && (
+            {section.type === 'checkBox' && (
                 <div className="section">
                     <div>
                        <div className='flex flex-col'>
@@ -592,7 +592,7 @@ function AddMasterCheckListSetup() {
                     </div>
                 </div>
             )}
-            {selectedValue === 'numeric' && (
+            {section.type === 'numeric' && (
                 <div className="section">
                     <div>
                        <div className='flex flex-col'>
@@ -632,7 +632,7 @@ function AddMasterCheckListSetup() {
                     </div>
                 </div>
             )}
-            {selectedValue === 'optionInput' && (
+            {section.type === 'optionInput' && (
                 <div className="section">
                     <div>
                        <div className='flex flex-col'>
