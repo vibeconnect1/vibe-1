@@ -18,7 +18,7 @@ export const initialAddAssetFormData = {
     capacity: "",
     unit: "",
     asset_group_id: "",
-    sub_group_id: "",
+    asset_sub_group_id: "",
     asset_type: "",
     purchased_on: "",
     breakdown: false,

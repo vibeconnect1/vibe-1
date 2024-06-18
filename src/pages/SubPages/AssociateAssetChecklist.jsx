@@ -68,6 +68,7 @@ const {id}= useParams()
       };
       try {
         toast.loading("Associating Checklist")
+        console.log(payload)
         const resp = await postAssetAssociation(payload)
         console.log(resp)
         toast.dismiss()
@@ -75,6 +76,7 @@ const {id}= useParams()
         toast.success("Checklist Associated")
       } catch (error) {
         console.log(error)
+        toast.dismiss()
       }
   }
   return (

@@ -2,15 +2,43 @@ import React, { useEffect, useRef, useState } from "react";
 import { getItemInLocalStorage } from "../utils/localStorage";
 import Navbar from "../components/Navbar";
 import { useSelector } from "react-redux";
-import { FaFilter, FaLaptop, FaPlus, FaTrashAlt } from "react-icons/fa";
+import {
+  FaCheck,
+  FaFilter,
+  FaLaptop,
+  FaPencilAlt,
+  FaPlus,
+  FaRegCalendarAlt,
+  FaTrashAlt,
+  FaUserCog,
+} from "react-icons/fa";
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
-import { getVibeMyBoardTask, getVibeTaskUserAssign, updateTaskStatus } from "../api";
+import {
+  deleteVibeTask,
+  getVibeActionAndChat,
+  getVibeComments,
+  getVibeMyBoardTask,
+  getVibeSubTaskChecklist,
+  getVibeTaskAttachment,
+  getVibeTaskChecklist,
+  getVibeTaskUserAssign,
+  getVibeUsers,
+  updateTaskStatus,
+  updateVibeAssignedUser,
+  updateVibeUserTask,
+} from "../api";
 import RemainingTime from "../components/RemainingTime";
 import { BiPlus } from "react-icons/bi";
 import LinearProgressBar from "../components/LinearProgessBar";
 import toast from "react-hot-toast";
-
-
+import DeleteTaskModal from "../containers/modals/DeleteTaskModal";
+import bridge from "/bridge.jpg";
+import TaskSelf from "../containers/modals/SelfTask";
+import Modal from "react-modal";
+import { AiOutlineClose } from "react-icons/ai";
+import Select from "react-select";
+import ReactDatePicker from "react-datepicker";
+import { SendDueDateFormat } from "../utils/dateUtils";
 // import TaskSelf from "./SubPages/TaskSelf";
 
 // import LinearProgress from "@material-ui/core/LinearProgress";
@@ -35,10 +63,12 @@ const TaskManagement = () => {
   const [showStatus, setshowStatus] = useState(true);
   const [taskStatus, setTaskStatus] = useState("");
   const [isModalOpenDeleteTask, setIsModalOpenDeleteTask] = useState(false);
+  const [dueDate, setDueDate] = useState(null);
   const [newStatus, setNewStatus] = useState({
     value: taskStatus,
     label: taskStatus,
   });
+  const [updateEffect, setUpdateEffect] = useState(false);
   const [isModalChatOpen, setIsModalChatOpen] = useState(false);
   const [createdFirstName, setCreatedFirstName] = useState("");
   const [createdSecondName, setCreatedSecondName] = useState("");
@@ -48,6 +78,49 @@ const TaskManagement = () => {
   const [showStatusChecklist1, setShowStatusChecklist1] = useState([]);
   const [selectedEmail, setSelectedEmail] = useState("");
   const [isTaskAssignedTo, setIsTaskAssignedTo] = useState(false);
+  const [id, setID] = useState("");
+  const [items, setItems] = useState([]);
+  const [itemtaskTopicText, setItemTaskTopicText] = useState([]);
+  const [isCompleted, setIsCompleted] = useState(false);
+  const [modalTaskSelfIsOpen, setTaskSelfModalIsOpen] = useState(false);
+  const [subTaskItems, setSubTaskItems] = useState([]);
+  const [shouldDisplayIcon, setshouldDisplayIcon] = useState(false);
+  const [subItemTaskTopicText, setSubItemTaskTopicText] = useState([]);
+  const [TaskIdForTaskCheckList, setTaskIdForTaskCheckList] = useState("");
+  const [chatsData, setChatsData] = useState([]);
+  const [sectionName, setSectionName] = useState("");
+  const [files, setFiles] = useState([]);
+  const [taskTopicText, setTaskTopicText] = useState("");
+  const [taskDescription, setTaskDescription] = useState("");
+  const [assignedDate, setAssignedDate] = useState("");
+  const [attachments, setAttachments] = useState([]);
+  const [taskMoreStatus, settaskMoreStatus] = useState([]);
+  const [taskMoreStatusId, settaskMoreStatusId] = useState([]);
+  const [taskMoreStatusList, settaskMoreStatusList] = useState([]);
+  const [taskMoreStatusIdList, settaskMoreStatusIdList] = useState([]);
+  const [taskid, setTaskID] = useState("");
+  const [taskidForSocket, settaskidForSocket] = useState("");
+  const [commentsData, setCommentsData] = useState([]);
+  const [isEditing, setIsEditing] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isModalOpennn, setIsModalOpennn] = useState(false);
+  const inputRef = useRef();
+  const inputRefItem = useRef();
+  const [usersAssignBoard, setUsersAssignBoard] = useState([]);
+  useEffect(() => {
+    const searchParams = new URLSearchParams(location.search);
+    setID(searchParams.get("id"));
+    const task_id = searchParams.get("t_id");
+
+    if (searchParams.get("id")) {
+      setIdFromURL(searchParams.get("id"));
+      // GetBoardData(searchParams.get('id'));
+
+      if (task_id) {
+        setTaskIdFromURL(task_id);
+      }
+    }
+  }, [location.search]);
 
   const filteredTasks = (taskList) => {
     if (taskFilter.length === 0) {
@@ -99,9 +172,9 @@ const TaskManagement = () => {
     }));
     // Set filtered data
     setFilteredItems(filtered);
-    }, [searchQuery, filteredTaskData,  ]);
-    const ttask = filteredItems.tasks
-    console.log(ttask)
+  }, [searchQuery, filteredTaskData, updateEffect]);
+  // const ttask = filteredItems.tasks
+  // console.log(ttask)
   const toggleDropdown = () => {
     setFilterIsOpen(!filterIsOpen);
   };
@@ -165,6 +238,7 @@ const TaskManagement = () => {
     console.log(draggableId.split("_")[1]);
     console.log(source.droppableId);
     console.log(destination.droppableId);
+    setUpdateEffect(true);
 
     // Check if the dragged item is a column
     if (type === "COLUMN") {
@@ -232,7 +306,7 @@ const TaskManagement = () => {
           ...destinationSection,
           tasks: destinationTasks,
         };
-
+        setUpdateEffect(true);
         // Create a new data array and update source and destination sections
         const newData = [...taskList];
         newData.splice(sourceSectionIndex, 1, updatedSourceSection);
@@ -262,6 +336,7 @@ const TaskManagement = () => {
     try {
       const response = await updateTaskStatus(formData);
       console.log(response);
+      setUpdateEffect(true);
       if (response.success) {
         console.log("Success");
         console.log(taskStatus);
@@ -337,8 +412,7 @@ const TaskManagement = () => {
   };
   useEffect(() => {
     GetBoardData();
-  }, []);
-  const [modalTaskSelfIsOpen, setTaskSelfModalIsOpen] = useState(false);
+  }, [updateEffect, modalTaskSelfIsOpen]);
 
   const openTaskSelf = () => {
     // localStorage.setItem('board', board_id);
@@ -351,13 +425,28 @@ const TaskManagement = () => {
     setTaskSelfModalIsOpen(false);
   };
 
+  const openEmployeeTaskOthers = () => {
+    closeTaskOthers();
+    setTaskSelfModalIsOpen(true);
+  };
+
   const ShowFormatedDueDateOnDateField = (dateString) => {
     const date = new Date(dateString);
     return date.toLocaleString();
   };
 
-  
-  const handleDeleteTask = () => {
+  const [taskDeleteID, setTaskDeleteID] = useState("");
+
+  function openModalDeleteTask(taskId, event) {
+    event.stopPropagation();
+    console.log(taskId);
+    setTaskDeleteID(taskId);
+    setIsModalOpenDeleteTask(true);
+    setIsModalChatOpen(false);
+    console.log(isModalOpenDeleteTask);
+  }
+
+  const handleDeleteTask = async () => {
     settaskList((prevTaskList) => {
       console.log(prevTaskList);
 
@@ -379,42 +468,36 @@ const TaskManagement = () => {
 
       return updatedTaskList;
     });
-    deleteDataFromAPI(
-      `${DeleteTask}?task_id=${taskDeleteID.split("_")[1]}&user_id=${user_id}`
-    )
-      .then((res) => {
-        if (res.success) {
-          // window.location.reload();
-          toast.info("Task has been moved to Trash", {
-            position: "top-center",
-            autoClose: 2000,
-          });
-          console.log("Task deleted successfully");
-          closeModalDeleteTask();
-        } else {
-          if (res.success === false)
-            toast.info("Task has been Failed to delete task", {
-              position: "top-center",
-              autoClose: 2000,
-            });
-          window.location.reload();
-          console.error("Failed to delete task.");
-        }
-      })
-      .catch((error) => {
-        console.error("An error occurred:", error);
-      });
-  };
 
-  const [taskDeleteID, setTaskDeleteID] = useState("");
-  function openModalDeleteTask(taskId, event) {
-    event.stopPropagation();
-    console.log(taskId);
-    setTaskDeleteID(taskId);
-    setIsModalOpenDeleteTask(true);
-    setIsModalChatOpen(false);
-    console.log(isModalOpenDeleteTask)
-  }
+    const taskIdToDelete = taskDeleteID.split("_")[1];
+    const deleteTaskResp = await deleteVibeTask(user_id, taskIdToDelete);
+    console.log(deleteTaskResp);
+    toast.success("Task Deleted Successfully");
+    setIsModalOpenDeleteTask(false);
+
+    // .then((res) => {
+    //   if (res.success) {
+    //     // window.location.reload();
+    //     toast.info("Task has been moved to Trash", {
+    //       position: "top-center",
+    //       autoClose: 2000,
+    //     });
+    //     console.log("Task deleted successfully");
+    //     closeModalDeleteTask();
+    //   } else {
+    //     if (res.success === false)
+    //       toast.info("Task has been Failed to delete task", {
+    //         position: "top-center",
+    //         autoClose: 2000,
+    //       });
+    //     window.location.reload();
+    //     console.error("Failed to delete task.");
+    //   }
+    // })
+    // .catch((error) => {
+    //   console.error("An error occurred:", error);
+    // });
+  };
 
   const fetchOrg_assignAlready = async (id, taskid) => {
     const user_id = localStorage.getItem("VIBEUSERID");
@@ -424,7 +507,7 @@ const TaskManagement = () => {
       task_id: taskid,
     };
     try {
-      const jsonData = await getVibeTaskUserAssign(user_id, taskid)
+      const jsonData = await getVibeTaskUserAssign(user_id, taskid);
       if (jsonData.success) {
         console.log("GetTaskUsersAssign");
         console.log(jsonData.data);
@@ -463,12 +546,12 @@ const TaskManagement = () => {
   const Get_Task_Attachment = async (task_id) => {
     //alert(user_id);
     try {
-      const params = {
-        task_id: task_id,
-        user_id: localStorage.getItem("user_id"),
-      };
+      // const params = {
+      //   task_id: task_id,
+      //   user_id: localStorage.getItem("user_id"),
+      // };
 
-      const data = await getDataFromAPI(GetTaskAttachment, params);
+      const data = await getVibeTaskAttachment(user_id, task_id);
 
       if (data.success) {
         // alert("attachments success")
@@ -476,6 +559,149 @@ const TaskManagement = () => {
 
         console.log(data.data);
         setFiles(data.data);
+      } else {
+        console.log("Something went wrong");
+      }
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
+
+  const Get_Checklist_Task = async (task_id) => {
+    try {
+      // const params = {
+      //   task_id: task_id,
+      //   user_id: user_id,
+      // };
+
+      const data = await getVibeTaskChecklist(user_id, task_id);
+
+      if (data.success) {
+        console.log("checklist task success");
+        console.log(data.data);
+        // const taskTopics = data.data.tasks;
+        const taskTopics = data.data;
+        setItems(taskTopics);
+
+        const extractedNames = data.data.map((item) => item.name);
+
+        setItemTaskTopicText(extractedNames);
+        console.log(extractedNames);
+
+        const extractedChecklist = data.data.map((item) => item.completed);
+
+        setIsCompleted(extractedChecklist);
+        console.log(extractedChecklist);
+      } else {
+        console.log("Something went wrong");
+      }
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
+
+  const Get_SubChecklist_Task = async (task_id) => {
+    try {
+      // const params = {
+      //   task_id: task_id,
+      //   user_id: user_id,
+      // };
+
+      const data = await getVibeSubTaskChecklist(user_id, task_id);
+
+      if (data.success) {
+        console.log("checklist task success");
+        console.log(data.data);
+        console.log(data.data.subtasks);
+        // const taskTopics = data.data.tasks;
+        const subTaskTopics = data.data.subtasks;
+        setSubTaskItems(subTaskTopics);
+        console.log(subTaskTopics);
+
+        // Check for due_date in subtasks and subtaskchild_set
+        const hasNullDueDate = subTaskTopics.some((task) => {
+          if (!task.due_date) return true;
+          return task.subtaskchild_set.some((subtask) => !subtask.due_date);
+        });
+        setshouldDisplayIcon(hasNullDueDate);
+
+        // setShouldDisplaySpan(hasNullDueDate);
+
+        // const extractedNamesTask = data.data.checklist.map(checklistItem => (
+        //   checklistItem.checklist_tasks.map(task => ({
+        //     id: task.id,
+        //     taskTopic: task.task_topic,
+        //   }))
+        // ));
+
+        // console.log(extractedNamesTask);
+
+        //   // Create an object to map subtask topics to their respective IDs
+        // const subtaskTopicMapping = {};
+        // extractedNamesTask.forEach(checklistItem => {
+        //   checklistItem.forEach(task => {
+        //     subtaskTopicMapping[task.id] = task.taskTopic;
+        //   });
+        // });
+
+        // console.log(subtaskTopicMapping);
+
+        // Now set the subtask topics based on their respective IDs
+        const subItemTaskTopics = data.data.subtasks.map(
+          (checklistItem) => checklistItem.task_topic
+        );
+        console.log(subItemTaskTopics);
+        // const extractedNames = data.data.map(item => item.name);
+        setSubItemTaskTopicText(subItemTaskTopics);
+      } else {
+        console.log("Something went wrong");
+      }
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
+
+  const Get_Chat_nd_Activities = async (Task_id) => {
+    try {
+      // const params = {
+      //   task_id: Task_id,
+      //   user_id: user_id,
+      // };
+
+      const data = await getVibeActionAndChat(user_id, Task_id);
+
+      if (data.success) {
+        console.log(data);
+        setChatsData(data.data);
+      } else {
+        console.log("Something went wrong");
+      }
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
+
+  const to_show_status_on_details = async (status) => {
+    console.log("-----------------------------");
+    console.log(status);
+    settaskMoreStatus(status.status_name);
+    settaskMoreStatusId(status.id);
+  };
+
+  const GetComment = async (id) => {
+    console.log(user_id);
+    try {
+      // const params = {
+      //   task_id: id,
+      //   user_id: localStorage.getItem("user_id"),
+      // };
+
+      const data = await getVibeComments(user_id, id);
+
+      if (data.success) {
+        console.log("success");
+        console.log(data);
+        setCommentsData(data.data);
       } else {
         console.log("Something went wrong");
       }
@@ -544,18 +770,213 @@ const TaskManagement = () => {
     }
   };
 
+  const modalStyleChatName = {
+    content: {
+      // width: isMobile ? '270px' : '950px',
+      // width: (isChatVisible ? '950px' : '600px'),
+
+      height: "500px",
+      margin: "auto",
+      backgroundColor: "#133953",
+      borderRadius: 10,
+      padding: "20px", // Add padding to the content for spacing
+    },
+    overlay: {
+      zIndex: 1000, // Adjust the overlay z-index to avoid conflicts with other elements
+    },
+  };
+
+  const closeChatModal = () => {
+    setIsModalChatOpen(false);
+    GetBoardData();
+    // window.location.reload();
+  };
+  const handleIconClickText = () => {
+    setIsEditing(true);
+    setTimeout(() => inputRef.current.focus(), 0);
+  };
+
+  const fetchOrg_assignData = async (taskid) => {
+    // const user_id = localStorage.getItem("user_id");
+    // const org_id = localStorage.getItem("organization_id");
+
+    // const params = {
+    //   user_id: user_id,
+    //   // task_id: taskid,
+    //   // org_id: org_id
+    // };
+    try {
+      // GetUsers
+      const jsonData = await getVibeUsers(user_id);
+      if (jsonData.success) {
+        console.log(jsonData.data);
+        const usersData = jsonData.data;
+
+        setUsersAssignBoard(usersData);
+        // setShouldFetchUsers(true); // Reset the state to prevent repeated API calls
+      } else {
+        console.log("Failed to fetch users");
+      }
+    } catch (error) {
+      console.error("Error fetching users:", error);
+    }
+  };
+
+  const handleIconClick = () => {
+    fetchOrg_assignAlready(id, taskid);
+    fetchOrg_assignData(taskid); //list
+    // setShouldFetchUsers(true);
+    setIsModalOpen(true);
+  };
+
+  const modalAssign = usersAssignBoard.map((user) => ({
+    value: user.user_id,
+    label: user.email,
+  }));
+
+  const handleDropdownItemClick = (selectedOption) => {
+    setSelectedEmail(selectedOption);
+    const canceled = selectedEmail.filter(
+      (email) => !selectedOption.includes(email)
+    );
+    if (canceled.length > 0) {
+      const canceledEmailsData = canceled.map((email) => ({
+        id: email.value,
+        email: email.label,
+      }));
+      setUsersAssignBoard((prevUsersAssignBoard) => [
+        ...prevUsersAssignBoard,
+        ...canceledEmailsData,
+      ]);
+    }
+  };
+
+  const handleConfirmClick = () => {
+    const idList = selectedEmail.map((email) => parseInt(email.value));
+    console.log(idList);
+    Update_Assigned_Task(idList);
+    console.log(selectedEmail);
+    const labelList = selectedEmail.map((email) => email.label).join(", ");
+
+    // Logging the result
+    console.log(labelList);
+
+    // Setting the state or performing further actions if needed
+    setShowStatusChecklist1(labelList);
+    // setIsDropdownOpen(false);
+    setIsModalOpen(false);
+  };
+
+  const Update_Assigned_Task = async (idList) => {
+    console.log(idList);
+    const formData = new FormData();
+    formData.append("task_id", taskid);
+    // idList.forEach((ids) => {
+    //   formData.append('assign_to', ids);
+    // });
+    const assignToValues = idList.join(",");
+    formData.append("assign_to", assignToValues);
+
+    formData.append("user_id", user_id);
+    try {
+      const response = await updateVibeAssignedUser(formData);
+      console.log(response);
+      if (response.success) {
+        console.log("Success");
+        // Get_Checklist_Task(taskid)
+        // GetBoardData();
+        // setShowStatusChecklist1(assignToValues)
+      } else {
+        console.log("unable to update");
+      }
+    } catch (error) {
+      // toast.error('Please Check Your Internet , Try again! ',{position: "top-center",autoClose: 2000})
+    }
+  };
+
+  const closeModal = () => {
+    setSelectedEmail(null);
+    setIsModalOpen(false);
+    // window.location.reload();
+  };
+  const datePickerRef = useRef(null);
+  const [TempdueDate, setTempdueDate] = useState(null);
+  const handleDueDateClick = () => {
+    setIsModalOpennn(true);
+  };
+  const handleModalClose = () => {
+    setTempdueDate(null);
+    // GetBoardData();
+    setIsModalOpennn(false);
+    // window.location.reload();
+  };
+  const filterTime = (time) => {
+    const selectedDate = new Date(time);
+    const currentDate = new Date();
+
+    // Compare selected date with current date
+    if (selectedDate.getTime() > currentDate.getTime()) {
+      return true; // Future date
+    } else if (selectedDate.getTime() === currentDate.getTime()) {
+      // If selected date is today, compare times
+      const selectedTime =
+        selectedDate.getHours() * 60 + selectedDate.getMinutes();
+      const currentTime =
+        currentDate.getHours() * 60 + currentDate.getMinutes();
+      return selectedTime >= currentTime; // Future time
+    } else {
+      return false; // Past date
+    }
+  };
+  const handleDateChange1 = (date) => {
+    console.log("==================================");
+    console.log(date);
+    setTempdueDate(date);
+    // Update the selected date in the state
+    // Update_Task_Duedate(user_id, taskid, date);
+  };
+  const Update_Task_Duedate = async (user_id, taskid, gdueDate) => {
+    if (!dueDate) {
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append("user_id", user_id);
+    formData.append("task_id", taskid);
+    formData.append("due_date", SendDueDateFormat(gdueDate));
+
+    try {
+      const res = await updateVibeUserTask(formData);
+
+      if (res.success) {
+        console.log("Success");
+        setDueDate(dueDate);
+        //window.location.reload();
+      }
+    } catch (error) {
+    } finally {
+    }
+  };
+
   return (
-    <section className="flex">
+    <section
+      className="flex"
+      style={{
+        background: `url(${bridge})`,
+        // backgroundSize: "100% 100% ",
+        backgroundSize: "cover",
+        backgroundRepeat: "no-repeat",
+        backgroundPosition: "center",
+      }}
+    >
       <Navbar />
-      {/* {modalTaskSelfIsOpen && (
-        <TaskSelf onClose={closeTaskSelf} open={openEmployeeTaskOthers} />
-      )} */}
+
       <div className="p-4 w-full my-2 flex md:mx-2 overflow-hidden flex-col">
         <div
 
         // style={{ background: `url(${selectedImage})no-repeat center center / cover` }}
         >
-          <div className="flex justify-between">
+          <div className="flex justify-between md:flex-row flex-col">
             <div className="flex gap-4 items-center">
               <div
                 className=" flex gap-2 items-center"
@@ -567,7 +988,11 @@ const TaskManagement = () => {
                 //   }}
               >
                 <div
-                  className={`${activeView !== "Kanban" ? "border-2 text-black border-black font-medium": "text-white"} p-1 px-4 rounded-md`}
+                  className={`${
+                    activeView !== "Kanban"
+                      ? "border-2 text-black border-black font-medium"
+                      : "text-white"
+                  } p-1 px-4 rounded-md`}
                   title="Kanban View"
                   style={{
                     // color: activeView === "Kanban" ? "skyblue" : "#fff",
@@ -583,7 +1008,11 @@ const TaskManagement = () => {
                 </div>
                 {/*  */}
                 <div
-                  className={`${activeView !== "List" ? "border-2 text-vlack border-black font-medium": "text-white"} p-1 px-4 rounded-md`}
+                  className={`${
+                    activeView !== "List"
+                      ? "border-2 text-vlack border-black font-medium"
+                      : "text-white"
+                  } p-1 px-4 rounded-md`}
                   title="List View"
                   style={{
                     // color: activeView === "List" ? "skyblue" : "#fff",
@@ -602,7 +1031,7 @@ const TaskManagement = () => {
               <div className="relative inline-block text-left">
                 <button
                   style={{ background: themeColor }}
-                  className="p-1 mt-1  text-white rounded-md flex gap-2 items-center"
+                  className="p-1   text-white rounded-md flex gap-2 items-center"
                   title="Filter Task"
                   type="button"
                   onClick={toggleDropdown}
@@ -694,13 +1123,16 @@ const TaskManagement = () => {
                 }
               }
               // scrollable-content section-table-height
-              className="h-full overflow-x-auto scroll "
+              className="h-full overflow-x-auto scroll  rounded-md "
             >
               <div className="">
                 <DragDropContext onDragEnd={onDragEndTask}>
-                  <div className="flex gap-4 my-5 justify-between">
+                  <div className="flex gap-4  justify-between">
                     {isLoading ? (
-                      <div className="" style={{ textAlign: "center" }}>
+                      <div
+                        className="flex justify-center w-full"
+                        style={{ textAlign: "center" }}
+                      >
                         <center className="m-4">
                           <div
                             className="spinner-border"
@@ -770,7 +1202,7 @@ const TaskManagement = () => {
                                         >
                                           <div
                                             // ref={cardRef}
-                                            className="rounded-xl shadow-custom-all-sides text-black p-2 m-2"
+                                            className="rounded-xl bg-white shadow-custom-all-sides text-black p-2 m-2"
                                             style={{
                                               backgroundColor: "",
                                               animation: isHighlighted
@@ -825,7 +1257,10 @@ const TaskManagement = () => {
                                             </div>
 
                                             {showStatus ? (
-                                              <div style={{ display: "flex" }} className="justify-end">
+                                              <div
+                                                style={{ display: "flex" }}
+                                                className="justify-end"
+                                              >
                                                 {" "}
                                                 <div
                                                   onClick={(e) => {
@@ -1125,8 +1560,8 @@ const TaskManagement = () => {
                         </Droppable>
                       ))
                     ) : (
-                      <div className="" style={{ textAlign: "center" }}>
-                        <div class="m-4">
+                      <div className="w-full" style={{ textAlign: "center" }}>
+                        <div class="m-4 ">
                           <center>
                             No Tasks
                             <br />
@@ -1412,8 +1847,7 @@ const TaskManagement = () => {
                                               task.due_date
                                             )}
                                           </div>
-                                          {task.created_by.id ===
-                                          user_id ? (
+                                          {task.created_by.id === user_id ? (
                                             // <div className='col-md-1' onClick={(event) => handleDeleteTask(task.id, event)}>
                                             //   <FaTrashAlt style={{ fontSize: 14, color: 'whitesmoke', marginBottom: 4, cursor: 'pointer' }} ></FaTrashAlt>
                                             // </div>
@@ -1523,7 +1957,7 @@ const TaskManagement = () => {
                                     if (showAddTaskButton) {
                                       return (
                                         <div
-                                           className="shadow-custom-all-sides flex cursor-pointer items-center justify-center gap-1 py-[10px]  opacity-90   rounded-lg bg-white  text-[#555] font-medium text-[15px]"
+                                          className="shadow-custom-all-sides flex cursor-pointer items-center justify-center gap-1 py-[10px]  opacity-90   rounded-lg bg-white  text-[#555] font-medium text-[15px]"
                                           style={{ cursor: "pointer" }}
                                           onClick={openTaskSelf}
                                         >
@@ -1547,10 +1981,419 @@ const TaskManagement = () => {
             </section>
           )}
         </div>
-        {
-
-        }
+        {}
       </div>
+      {modalTaskSelfIsOpen && (
+        <TaskSelf onClose={closeTaskSelf} open={openEmployeeTaskOthers} />
+      )}
+      {isModalOpenDeleteTask && (
+        <DeleteTaskModal
+          onclose={() => setIsModalOpenDeleteTask(false)}
+          handleDeleteTask={() => handleDeleteTask()}
+        />
+      )}
+
+      {/* <Modal
+        isOpen={isModalChatOpen}
+        onRequestClose={closeChatModal}
+        contentLabel="Add Project Name Popup Modal"
+        style={modalStyleChatName}
+
+      >
+        <button
+          type="button"
+          className=" btn_clo close"
+          onClick={closeChatModal}
+          style={{ position: "sticky" }}
+        >
+          <span>&times;</span>
+        </button> */}
+      {isModalChatOpen && (
+        <div className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-30 backdrop-blur-sm z-50 p-10 ">
+          <div
+            style={{ background: themeColor }}
+            className=" md:w-auto w-full  p-4 md:px-10  flex flex-col rounded-md  overflow-auto max-h-[100%]"
+          >
+            <button
+              className="place-self-end fixed p-1 rounded-full  bg-white"
+              onClick={closeChatModal}
+            >
+              <AiOutlineClose size={20} />
+            </button>
+            <div
+              className=""
+              style={{ display: "flex", justifyContent: "space-between" }}
+            >
+              <div
+                className="mt-4"
+                style={{
+                  color: "#fff",
+                  height: "80%",
+                  width: 600,
+                  marginRight: "1%",
+                }}
+              >
+                {/* <button className="close" onClick={closeChatModal}>
+                      &times;
+                    </button>
+
+                    <div style={{ display: 'flex', marginBottom: '6%' }}>&nbsp;</div> */}
+
+                {/* <div className='col md-12 ' style={{ textAlign: 'start', fontSize: '25px', borderRadius: 8, transition: 'background-color 0.3s ease', padding: '2px' }} onMouseEnter={(e) => e.target.style.background = '#132A3A'} onMouseLeave={(e) => e.target.style.background = 'transparent'}
+                    >
+                      {isEditing ? (
+                        <input
+                          ref={inputRef}
+                          value={taskTopicText}
+                          onChange={(e) => setTaskTopicText(e.target.value)}
+                          onKeyDown={(e) => {
+                            if (e.key === 'Enter') {
+                              e.preventDefault();
+                              setIsEditing(false);
+                              UpdateUserTask(taskid);
+                            }
+                          }}
+                          onBlur={() => setIsEditing(false)}
+                          style={{ background: '#132A3A', border: 'none', width: '100%', color: 'white' }}
+                        />
+                      ) : (
+                        <div onClick={() => setIsEditing(true)}>
+                          {taskTopicText}
+                          <span onClick={handleIconClickText} >
+                            <FaPencilAlt style={{ marginLeft: 10, fontSize: 14, backgroundColor: 'none' }} />
+                          </span>
+                        </div>
+                      )}
+
+                    </div> */}
+
+                <div
+                  className=" "
+                  style={{
+                    // textAlign: "start",
+                    fontSize: "25px",
+                    borderRadius: 8,
+                    transition: "background-color 0.3s ease",
+                    padding: "2px",
+                  }}
+                  // onMouseEnter={(e) => e.target.style.background = '#132A3A'} onMouseLeave={(e) => e.target.style.background = 'transparent'}
+                >
+                  {isEditing ? (
+                    <div
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        // width: "100%",
+                      }}
+                      className="mr-2"
+                    >
+                      <input
+                        ref={inputRef}
+                        spellcheck="true"
+                        value={taskTopicText}
+                        onChange={(e) => setTaskTopicText(e.target.value)}
+                        onKeyDown={(e) => {
+                          if (e.key === "Enter") {
+                            e.preventDefault();
+                            setIsEditing(false);
+                            UpdateUserTask(taskid, taskTopicText);
+                          }
+                        }}
+                        onBlur={() => {
+                          setIsEditing(false);
+                          UpdateUserTask(taskid, taskTopicText);
+                        }}
+                        style={{
+                          // background: themeColor,
+                          border: "none",
+                          width: "100%",
+                          // color: "white",
+                          paddingLeft: 4,
+                          paddingRight: 4,
+                          borderRadius: 4,
+                        }}
+                        className="border border-white text-black outline-none"
+                      />
+                      <span
+                        onClick={() => {
+                          setIsEditing(false);
+                          UpdateUserTask(taskid, taskTopicText);
+                        }}
+                      >
+                        <FaCheck
+                          style={{
+                            marginLeft: 10,
+                            marginRight: 10,
+                            fontSize: 14,
+                            color: "white",
+                          }}
+                          className="cursor-pointer"
+                        />
+                      </span>
+                    </div>
+                  ) : (
+                    <div
+                      onClick={() => setIsEditing(true)}
+                      className="flex items-center gap-2"
+                    >
+                      {taskTopicText}
+                      <span
+                        onClick={(e) => {
+                          e.stopPropagation(); // Prevent click event from bubbling up to the parent div
+                          handleIconClickText();
+                        }}
+                        // onClick={handleIconClickText}
+                      >
+                        <FaPencilAlt
+                          style={{ marginLeft: 10, fontSize: 14 }}
+                          title="Edit"
+                          className="cursor-pointer"
+                        />
+                      </span>
+                    </div>
+                  )}
+                </div>
+
+                <div className=" gap-4" style={{ display: "flex" }}>
+                  <div className=" ">
+                    {createdBy_id === user_id ? (
+                      <div
+                        className=" flex items-center gap-2 cursor-pointer"
+                        style={{
+                          height: "20",
+                          width: "20",
+                          color: "white",
+                          borderRadius: 10,
+                          // boxShadow: "0 2px 4px #0a283c",
+                          // backgroundColor: "#132A3A",
+                          padding: "5px",
+                        }}
+                        onClick={handleIconClick}
+                      >
+                        <FaUserCog />
+                        Assign
+                      </div>
+                    ) : (
+                      <div
+                        className=" flex items-center gap-2 cursor-pointer"
+                        style={{
+                          height: "20",
+                          width: "20",
+
+                          borderRadius: 10,
+
+                          padding: "5px",
+                        }}
+                      >
+                        <FaUserCog />
+                        Assign
+                      </div>
+                    )}
+
+                    {/* Assign to Pop up on Details page */}
+                    {isModalOpen && (
+                      <div className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-30 backdrop-blur-sm z-50 p-10 ">
+                        <div
+                          style={{ background: themeColor }}
+                          className=" md:w-auto w-full  p-4 md:px-10  flex flex-col rounded-md  overflow-auto max-h-[100%]"
+                        >
+                          <button
+                            className="place-self-end fixed p-1 rounded-full  bg-white text-black"
+                            onClick={closeModal}
+                          >
+                            <AiOutlineClose size={20} />
+                          </button>
+
+                          <div className="mt-5">
+                            <div className="">
+                              <h5 className="font-medium">Select Email </h5>
+                            </div>
+                            <div className="">
+                              {/* Use react-select to display the user emails */}
+                              <Select
+                                isMulti
+                                options={modalAssign}
+                                value={selectedEmail}
+                                onChange={handleDropdownItemClick}
+                                isSearchable={true}
+                                menuPortalTarget={document.body}
+                                menuPosition="fixed"
+                                styles={{
+                                  menuPortal: (base) => ({
+                                    ...base,
+                                    zIndex: 9999,
+                                  }),
+                                  menu: (provided) => ({
+                                    ...provided,
+                                    zIndex: 9999,
+                                  }),
+
+                                  placeholder: (baseStyles, state) => ({
+                                    ...baseStyles,
+                                    color: "black",
+                                  }),
+                                  clearIndicator: (baseStyles) => ({
+                                    ...baseStyles,
+                                    color: "red",
+                                  }),
+                                  dropdownIndicator: (baseStyles) => ({
+                                    ...baseStyles,
+                                    color: "black",
+                                  }),
+                                  control: (baseStyles) => ({
+                                    ...baseStyles,
+                                    borderColor: "darkblue",
+                                  }),
+                                  option: (baseStyles) => ({
+                                    ...baseStyles,
+                                    color: "black",
+                                  }),
+                                  multiValueRemove: (baseStyles, state) => ({
+                                    ...baseStyles,
+                                    color: state.isFocused ? "red" : "gray",
+                                    backgroundColor: state.isFocused
+                                      ? "black"
+                                      : "lightgreen",
+                                  }),
+                                }}
+                              />
+                            </div>
+                            <div className="p-2 flex justify-end gap-3 items-center my-2">
+                              <button
+                                type="button"
+                                className="bg-white p-1 px-4 text-black font-medium rounded-full shadow-custom-all-sides hover:bg-green-300 transition-all duration-300"
+                                onClick={handleConfirmClick}
+                                disabled={!selectedEmail}
+                              >
+                                Confirm
+                              </button>
+                              <button
+                                type="button"
+                                className="bg-red-400 p-1 px-4 rounded-full font-medium shadow-custom-all-sides hover:bg-red-500 transition-all duration-300"
+                                onClick={closeModal}
+                              >
+                                Cancel
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+
+                  <div className="">
+                    {createdBy_id === user_id ? (
+                      <div
+                        style={{
+                          // display: "flow-root",
+                          alignItems: "center",
+                          cursor: "pointer",
+                          // boxShadow: "0 2px 4px #0a283c",
+                          // backgroundColor: "#132A3A",
+                          borderRadius: 10,
+                          padding: "5px",
+                        }}
+                        onClick={handleDueDateClick} // Attach onClick to the div
+                        className="flex items-center gap-2"
+                      >
+                        <FaRegCalendarAlt />
+                        {"Due Date"}{" "}
+                        {/* Display the selected date or 'Due Date' */}
+                      </div>
+                    ) : (
+                      <div
+                        style={{
+                          // display: "flow-root",
+                          alignItems: "center",
+                          // boxShadow: "0 2px 4px #0a283c",
+                          // backgroundColor: "#132A3A",
+                          // borderRadius: 10,
+                          padding: "5px",
+                          // color: "#767676", // Set the color for non-clickable version
+                          // pointerEvents: "none", // Make it non-clickable
+                        }}
+                        className="flex items-center gap-2"
+                      >
+                        <FaRegCalendarAlt />
+                        {"Due Date"}{" "}
+                      </div>
+                    )}
+
+                    <br />
+                    {/* Render the modal conditionally based on isModalOpen state */}
+                    {isModalOpennn && (
+                      <div className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-30 backdrop-blur-sm z-50 p-10 ">
+                        <div
+                          style={{ background: themeColor }}
+                          className=" md:w-auto w-full  p-4 md:px-10  flex flex-col rounded-md  overflow-auto max-h-[100%]"
+                        >
+                          <button
+                            className="place-self-end fixed p-1 rounded-full  bg-white text-black"
+                            onClick={handleModalClose}
+                          >
+                            <AiOutlineClose size={20} />
+                          </button>
+
+                          <div>
+                            <div className="mt-5">
+                              <div>
+                                <h5 className="font-medium">
+                                  Select Due Date{" "}
+                                </h5>
+                              </div>
+                              <div>
+                                <ReactDatePicker
+                                  selected={TempdueDate ? TempdueDate : dueDate}
+                                  onChange={handleDateChange1}
+                                  showTimeSelect
+                                  dateFormat="dd/MM/yyyy h:mm aa"
+                                  timeIntervals={5}
+                                  ref={datePickerRef}
+                                  minDate={new Date()}
+                                  // minTime={currentTime}
+                                  // maxTime={maxTime}
+                                  filterTime={filterTime}
+                                  placeholderText="Select Date and Time"
+                                  className="text-black my-2 p-2 rounded-md w-96"
+                                />
+                              </div>
+                              <div className="flex justify-end gap-4">
+                                <button
+                                  type="button"
+                                  className="bg-white p-1 px-4 rounded-full text-black font-medium hover:bg-green-400 transition-all duration-300"
+                                  onClick={() => {
+                                    Update_Task_Duedate(
+                                      user_id,
+                                      taskid,
+                                      TempdueDate
+                                    );
+                                    handleModalClose();
+                                    datePickerRef.current.setOpen(false);
+                                  }}
+                                >
+                                  Save
+                                </button>
+                                <button
+                                  type="button"
+                                  className="bg-red-400 p-1 px-4 rounded-full text-white font-medium hover:bg-red-500 transition-all duration-300"
+                                  onClick={handleModalClose}
+                                >
+                                  Close
+                                </button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
+            </div>
+            {/* </Modal> */}
+          </div>
+        </div>
+      )}
     </section>
   );
 };

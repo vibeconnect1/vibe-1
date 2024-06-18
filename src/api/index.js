@@ -26,9 +26,9 @@ export const postSiteAsset = async (data) =>
     params: {
       token: token,
     },
-    //   headers: {
-    //     'Content-Type': 'multipart/form-data'
-    // }
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
   });
 export const EditSiteAsset = async (data, id) =>
   axiosInstance.put(`/site_assets/${id}.json`, data, {
@@ -206,8 +206,8 @@ export const getAssetGroups = async () =>
       token: token,
     },
   });
-export const getParentAsset = async () =>
-  axiosInstance.get("/site_assets.json?q[asset_type_eq]=parent", {
+export const getParentAsset = async (id) =>
+  axiosInstance.get(`/site_assets.json?q[asset_type_eq]=parent&q[asset_group_id_eq]=${id}`, {
     params: {
       token: token,
     },
@@ -264,7 +264,6 @@ export const postAMC = async (data) =>
 export const getAMCDetails = async (assetId) =>
   axiosInstance.get(`/asset_amcs.json?q[asset_id_eq]=${assetId}`, {
     params: {
-      
       token: token,
       // asset_id: assetId,
     },
@@ -272,17 +271,14 @@ export const getAMCDetails = async (assetId) =>
 export const getEditAMCDetails = async (id) =>
   axiosInstance.get(`/asset_amcs/${id}.json`, {
     params: {
-      
       token: token,
       // asset_id: assetId,
     },
   });
 
-
 export const EditAMCDetails = async (data, id) =>
-  axiosInstance.put(`/asset_amcs/${id}.json`, data,{
+  axiosInstance.put(`/asset_amcs/${id}.json`, data, {
     params: {
-      
       token: token,
       // asset_id: assetId,
     },
@@ -476,6 +472,20 @@ export const getServicesPPMDetails = async (id) =>
     },
   });
 
+//
+export const getServicesRoutineList = async () =>
+  axiosInstance.get(`/checklists.json?q[ctype_eq]=routine`, {
+    params: {
+      token: token,
+    },
+  });
+export const getServicesRoutineDetails = async (id) =>
+  axiosInstance.get(`/checklists/${id}.json?q[ctype_eq]=routine`, {
+    params: {
+      token: token,
+    },
+  });
+
 // vibe
 
 export const vibeLogin = async (data) => vibeAuth.post("/api/login/", data);
@@ -524,7 +534,7 @@ export const postNewCalendarEvent = async (data) => {
       data,
       {
         headers: {
-          "Content-Type": "application/json",
+          "Content-Type": "multipart/form-data",
         },
       }
     );
@@ -542,7 +552,7 @@ export const postCalendarTask = async (data) => {
       data,
       {
         headers: {
-          "Content-Type": "application/json",
+          "Content-Type": "multipart/form-data",
         },
       }
     );
@@ -613,7 +623,7 @@ export const UpdateVibeTask = async (data) => {
       data,
       {
         headers: {
-          "Content-Type": "application/json",
+          "Content-Type": "multipart/form-data",
         },
       }
     );
@@ -663,6 +673,142 @@ export const getVibeTaskUserAssign = async (userId, taskId) => {
     const response = await vibeAuth.get(
       `/api/employee/task/get-task-assigned-users/?user_id=${userId}&task_id=${taskId}`,
 
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error creating calendar events:", error);
+    throw error;
+  }
+};
+export const deleteVibeTask = async (userId, taskId) => {
+  try {
+    const response = await vibeAuth.delete(
+      `/api/employee/board/task/trash/?task_id=${taskId}&user_id=${userId}`,
+
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error creating calendar events:", error);
+    throw error;
+  }
+};
+export const getVibeTaskChecklist = async (userId, taskId) => {
+  try {
+    const response = await vibeAuth.get(
+      `/api/employee/task/get-task_checklists/?task_id=${taskId}&user_id=${userId}`,
+
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error creating calendar events:", error);
+    throw error;
+  }
+};
+export const getVibeSubTaskChecklist = async (userId, taskId) => {
+  try {
+    const response = await vibeAuth.get(
+      `/api/employee/task/get-subtask/?task_id=${taskId}&user_id=${userId}`,
+
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error creating calendar events:", error);
+    throw error;
+  }
+};
+export const getVibeActionAndChat = async (userId, taskId) => {
+  try {
+    const response = await vibeAuth.get(
+      `/api/employee/task/get-action-and-chats/?task_id=${taskId}&user_id=${userId}`,
+
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error creating calendar events:", error);
+    throw error;
+  }
+};
+export const getVibeTaskAttachment = async (userId, taskId) => {
+  try {
+    const response = await vibeAuth.get(
+      `/api/employee/task/get-attachment/?task_id=${taskId}&user_id=${userId}`,
+
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error creating calendar events:", error);
+    throw error;
+  }
+};
+export const getVibeComments = async (userId, taskId) => {
+  try {
+    const response = await vibeAuth.get(
+      `/api/employee/task/get-comments/?task_id=${taskId}&user_id=${userId}`,
+
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error creating calendar events:", error);
+    throw error;
+  }
+};
+export const updateVibeAssignedUser = async (data) => {
+  try {
+    const response = await vibeAuth.put(
+      `/api/employee/task/update-assign-task/`,
+      data,
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error creating calendar events:", error);
+    throw error;
+  }
+};
+export const updateVibeUserTask = async (data) => {
+  try {
+    const response = await vibeAuth.put(
+      `/api/employee/update-user-task/`,
+      data,
       {
         headers: {
           "Content-Type": "application/json",

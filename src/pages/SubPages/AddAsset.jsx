@@ -35,7 +35,7 @@ const AddAsset = () => {
   const [assetGroups, setAssetGroup] = useState([]);
   const [assetSubGoups, setAssetSubGroups] = useState([]);
   const [parentAsset, setParentAsset] = useState([]);
-  console.log(formData);
+  console.log(formData.asset_sub_group_id);
   const themeColor = useSelector((state) => state.theme.color);
   useEffect(() => {
     const fetchVendors = async () => {
@@ -45,16 +45,18 @@ const AddAsset = () => {
     const fetchAssetGroups = async () => {
       const assetGroupResponse = await getAssetGroups();
       setAssetGroup(assetGroupResponse.data);
+      // pass grp id in fn
+      fetchParentAsset();
     };
-    const fetchParentAsset = async () => {
-      const parentAssetResp = await getParentAsset();
+    const fetchParentAsset = async (grpID) => {
+      const parentAssetResp = await getParentAsset(grpID);
       console.log(parentAssetResp);
       setParentAsset(parentAssetResp.data.site_assets);
     };
 
     fetchVendors();
     fetchAssetGroups();
-    fetchParentAsset();
+   
   }, []);
 
   const handleChange = async (e) => {
@@ -184,7 +186,7 @@ const AddAsset = () => {
         "site_asset[asset_group_id]",
         formData.asset_group_id
       );
-      formDataSend.append("site_asset[sub_group_id]", formData.sub_group_id);
+      formDataSend.append("site_asset[asset_sub_group_id]", formData.asset_sub_group_id);
       formDataSend.append("site_asset[installation]", formData.installation);
       formDataSend.append(
         "site_asset[warranty_expiry]",
@@ -209,7 +211,7 @@ const AddAsset = () => {
         console.log("-----------------");
         console.log(index);
         console.log(file);
-        formDataSend.append(`site_asset[purchase_invoices]`, file);
+        formDataSend.append(`purchase_invoices[]`, file);
       });
       formData.insurance.forEach((file, index) => {
         console.log("-----------------");
@@ -235,7 +237,7 @@ const AddAsset = () => {
       toast.success("Asset Created Successfully");
       console.log("Response:", response.data);
       toast.dismiss();
-      navigate(`/assets/asset-details/${response.data.id}`);
+      // navigate(`/assets/asset-details/${response.data.id}`);
     } catch (error) {
       toast.dismiss();
       console.error("Error:", error);
@@ -422,8 +424,8 @@ const AddAsset = () => {
                 <div className="flex flex-col">
                   <select
                     className="border p-1 px-4 border-gray-500 rounded-md"
-                    name="sub_group_id"
-                    value={formData.sub_group_id}
+                    name="asset_sub_group_id"
+                    value={formData.asset_sub_group_id}
                     onChange={handleChange}
                   >
                     <option value="">Select Sub Group</option>

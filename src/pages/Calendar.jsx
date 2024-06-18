@@ -497,6 +497,10 @@ const Calender = () => {
     const selectedFiles = event.target.files;
     const newAttachments = Array.from(selectedFiles);
     setAttachment(newAttachments);
+    console.log("testing attachment")
+    console.log(newAttachments)
+    console.log(selectedFiles)
+    console.log(event)
     setFileUpload(true);
   };
 
@@ -541,9 +545,6 @@ const Calender = () => {
     }
     const user_id = localStorage.getItem("VIBEUSERID");
     setLoading(true);
-    console.log(taskTitle);
-    console.log(due_date);
-    console.log(user_id);
     console.log(task_description);
     const formData = new FormData();
     formData.append("task_topic", taskTitle);
@@ -551,15 +552,19 @@ const Calender = () => {
     formData.append("created_by", user_id);
     formData.append("user_id", user_id);
     formData.append("task_description", task_description);
-
+console.log(attachments)
     attachments.forEach((file, index) => {
-      //formData.append(attachments${index}, file); // Append each file individually with a unique key
+      console.log(file)
       formData.append("attachments", file);
     });
     const idList = selectedOption.map((email) => parseInt(email.value));
     idList.forEach((id) => {
       formData.append("assign_to", id);
     });
+
+    for (let pair of formData.entries()) {
+      console.log(`${pair[0]}: ${pair[1] instanceof File ? pair[1].name : pair[1]}`);
+    }
 
     try {
       toast.loading("Creating New Event Please Wait! ");
@@ -1294,7 +1299,7 @@ const Calender = () => {
                         /> */}
                       <label
                         htmlFor="file-upload"
-                        className="relative cursor-pointer flex items-center border-2  bg-transparent rounded-md font-medium  px-4 transition duration-300 ease-in-out hover:bg-black border-white hover:text-white "
+                        className="relative cursor-pointer flex items-center border-2  bg-transparent rounded-md text-white font-medium  px-4 transition duration-300 ease-in-out hover:bg-black border-white  "
                       >
                         {!fileUpload ? (
                           <span className="flex items-center gap-2 text-white">
@@ -1313,6 +1318,7 @@ const Calender = () => {
                           className="sr-only"
                           ref={fileInputRef}
                           onChange={handleFileAttachment}
+                          multiple
                         />
                       </label>
 
@@ -1362,7 +1368,7 @@ const Calender = () => {
 
                     <div className=" flex justify-center ">
                       <button
-                        className="text-white font-medium rounded-md w-full p-2 shadow-custom-all-sides"
+                        className="text-white border-2 border-white font-medium rounded-md w-full p-2 shadow-custom-all-sides"
                         style={{
                           background: themeColor,
                         }}

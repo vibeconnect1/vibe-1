@@ -74,6 +74,7 @@ const AssociateServiceChecklist = () => {
       toast.success("Checklist Associated");
     } catch (error) {
       console.log(error);
+      toast.dismiss()
     }
   };
 

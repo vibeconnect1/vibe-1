@@ -59,6 +59,7 @@ const Navbar = () => {
   const [user, setUser] = useState("");
   const navigate = useNavigate();
   const themeColor = useSelector((state) => state.theme.color);
+  const fontSize = useSelector((state) => state.fontSize);
 
   const handleMouseEnter = () => {
     setOpen(true);
@@ -119,8 +120,8 @@ const Navbar = () => {
                 className={({ isActive }) =>
                   ` ${
                     isActive
-                      ? "text-black bg-white flex p-2  gap-3.5 rounded-md group items-center text-sm font-medium"
-                      : " group flex items-center text-sm gap-3.5 font-medium p-2 hover:bg-gray-800 rounded-md "
+                      ? `text-black bg-white flex p-2  gap-3.5 rounded-md group items-center  font-medium ${fontSize}`
+                      : ` group flex items-center  gap-3.5 font-medium p-2 hover:bg-gray-800 rounded-md ${fontSize}`
                   }`
                 }
               >
@@ -147,8 +148,8 @@ const Navbar = () => {
                 className={({ isActive }) =>
                   ` ${
                     isActive
-                      ? "text-black bg-white flex p-2  gap-3.5 rounded-md group items-center text-sm font-medium"
-                      : " group flex items-center text-sm gap-3.5 font-medium p-2 hover:bg-gray-800 rounded-md "
+                      ? `text-black bg-white flex p-2  gap-3.5 rounded-md group items-center  font-medium ${fontSize}`
+                      : ` group flex items-center  gap-3.5 font-medium p-2 hover:bg-gray-800 rounded-md ${fontSize}`
                   }`
                 }
               >

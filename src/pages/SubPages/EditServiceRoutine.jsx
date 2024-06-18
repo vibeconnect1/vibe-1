@@ -6,7 +6,9 @@ import { getItemInLocalStorage } from "../../utils/localStorage";
 import { useSelector } from "react-redux";
 import {
   editServicesChecklist,
+  getAssignedTo,
   getChecklistDetails,
+  getServicesRoutineDetails,
   postServicesChecklist,
 } from "../../api";
 import { useParams } from "react-router-dom";
@@ -18,6 +20,8 @@ const EditServiceRoutine = () => {
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [update, setUpdate] = useState(false);
+  const [assignedTo, setAssignedTo] = useState([]);
+  const [assign, setAssign] = useState("");
   const [addNewQuestion, setAddNewQuestion] = useState([
     { name: "", type: "", options: ["", "", "", ""] },
   ]);
@@ -48,14 +52,15 @@ const EditServiceRoutine = () => {
   const userId = getItemInLocalStorage("UserId");
   const { id } = useParams();
   useEffect(() => {
-    const fetchServicesChecklistDetails = async () => {
-      const checklistDetailsResponse = await getChecklistDetails(id);
+    const fetchServicesRoutineDetails = async () => {
+      const checklistDetailsResponse = await getServicesRoutineDetails(id);
       const data = checklistDetailsResponse.data;
       console.log(data);
       setName(data.name);
       setFrequency(data.frequency);
       setStartDate(data.start_date);
       setEndDate(data.end_date);
+      setAssign(data.user_id)
       setAddNewQuestion(
         data.questions.map((q) => ({
           name: q.name,
@@ -64,8 +69,16 @@ const EditServiceRoutine = () => {
         }))
       );
     };
-    fetchServicesChecklistDetails();
+    const fetchAssignedTo = async () => {
+      const assignedToResp = await getAssignedTo();
+      console.log(assignedToResp.data);
+      setAssignedTo(assignedToResp.data);
+    };
+
+    fetchServicesRoutineDetails();
+    fetchAssignedTo();
   }, [id, update]);
+
   const handleSubmit = async (event) => {
     event.preventDefault();
     const data = {
@@ -118,7 +131,7 @@ const EditServiceRoutine = () => {
               <div className="grid md:grid-cols-3 item-start gap-x-4 gap-y-2 w-full">
                 <div className="flex flex-col">
                   <label htmlFor="name" className="font-semibold">
-                    Name:
+                    Name :
                   </label>
                   <input
                     type="text"
@@ -132,7 +145,7 @@ const EditServiceRoutine = () => {
                 </div>
                 <div className="flex flex-col">
                   <label htmlFor="frequency" className="font-semibold">
-                    Frequency:
+                    Frequency :
                   </label>
                   <select
                     name="frequency"
@@ -154,7 +167,7 @@ const EditServiceRoutine = () => {
                 </div>
                 <div className="flex flex-col">
                   <label htmlFor="start_date" className="font-semibold">
-                    Start Date:
+                    Start Date :
                   </label>
                   <input
                     type="date"
@@ -167,7 +180,7 @@ const EditServiceRoutine = () => {
                 </div>
                 <div className="flex flex-col">
                   <label htmlFor="end_date" className="font-semibold">
-                    End Date:
+                    End Date :
                   </label>
                   <input
                     type="date"
@@ -178,107 +191,122 @@ const EditServiceRoutine = () => {
                     onChange={(e) => setEndDate(e.target.value)}
                   />
                 </div>
+                <div className="flex flex-col">
+                  <label htmlFor="user_id" className="font-medium">Assigned To :</label>
+                  <select
+                    name="assign"
+                    id="assign"
+                    value={assign}
+                    onChange={(e)=> setAssign(e.target.value)}
+                    className="border p-1 px-4 border-gray-500 rounded-md"
+                  >
+                    <option value="">Select Assigned To</option>
+                    {assignedTo.map((assigned) => (
+                      <option value={assigned.id} key={assigned.id}>
+                        {assigned.firstname} {assigned.lastname}
+                      </option>
+                    ))}
+                  </select>
+                </div>
               </div>
               <div>
                 <div className="grid grid-cols-2 gap-4">
-
-                
-                {addNewQuestion.map((data, i) => (
-                  <div key={i}>
-                    <div className="my-5 ">
-                      <h2 className="border-b-2 border-black text font-medium">
-                        Add New Question
-                      </h2>
-                      <div className="my-2 grid gap-4  ">
-                        <input
-                          type="text"
-                          name={`question_${i}`}
-                          id={`question_${i}`}
-                          className="border p-1 px-4 border-gray-500 rounded-md"
-                          placeholder="Add New Question"
-                          value={data.name}
-                          onChange={(e) =>
-                            handleQuestionChange(i, "name", e.target.value)
-                          }
-                        />
-                      </div>
-                      <div className="my-2">
-                        <select
-                          name={`type_${i}`}
-                          id={`type_${i}`}
-                          value={data.type}
-                          onChange={(e) =>
-                            handleQuestionChange(i, "type", e.target.value)
-                          }
-                          className="border p-1 px-4 border-gray-500 rounded-md"
-                        >
-                          <option value="">Select Answer Type</option>
-                          <option value="multiple">
-                            Multiple Choice Question
-                          </option>
-                          <option value="inbox">Input box</option>
-                          <option value="description">Description box</option>
-                        </select>
-                        {data.type === "multiple" && (
-                          <div className="grid grid-cols-4 gap-4 my-2">
-                            <input
-                              type="text"
-                              name={`option1_${i}`}
-                              id={`option1_${i}`}
-                              className="border p-1 px-4 border-gray-500 rounded-md"
-                              placeholder="option 1"
-                              value={data.options[0]}
-                              onChange={(e) =>
-                                handleQuestionChange(i, 0, e.target.value)
-                              }
-                            />
-                            <input
-                              type="text"
-                              name={`option2_${i}`}
-                              id={`option2_${i}`}
-                              className="border p-1 px-4 border-gray-500 rounded-md"
-                              placeholder="option 2"
-                              value={data.options[1]}
-                              onChange={(e) =>
-                                handleQuestionChange(i, 1, e.target.value)
-                              }
-                            />
-                            <input
-                              type="text"
-                              name={`option3_${i}`}
-                              id={`option3_${i}`}
-                              className="border p-1 px-4 border-gray-500 rounded-md"
-                              placeholder="option 3"
-                              value={data.options[2]}
-                              onChange={(e) =>
-                                handleQuestionChange(i, 2, e.target.value)
-                              }
-                            />
-                            <input
-                              type="text"
-                              name={`option4_${i}`}
-                              id={`option4_${i}`}
-                              className="border p-1 px-4 border-gray-500 rounded-md"
-                              placeholder="option 4"
-                              value={data.options[3]}
-                              onChange={(e) =>
-                                handleQuestionChange(i, 3, e.target.value)
-                              }
-                            />
-                          </div>
-                        )}
-                      </div>
-                      <div className="flex justify-end gap-2">
-                        <button
-                          className="p-1 border-2 border-red-500 text-white hover:bg-white hover:text-red-500 bg-red-500 px-4 transition-all duration-300 rounded-md "
-                          onClick={() => handleRemoveQuestionFields(i)}
-                        >
-                          <IoClose />
-                        </button>
+                  {addNewQuestion.map((data, i) => (
+                    <div key={i}>
+                      <div className="my-5 ">
+                        <h2 className="border-b-2 border-black text font-medium">
+                          Add New Question
+                        </h2>
+                        <div className="my-2 grid gap-4  ">
+                          <input
+                            type="text"
+                            name={`question_${i}`}
+                            id={`question_${i}`}
+                            className="border p-1 px-4 border-gray-500 rounded-md"
+                            placeholder="Add New Question"
+                            value={data.name}
+                            onChange={(e) =>
+                              handleQuestionChange(i, "name", e.target.value)
+                            }
+                          />
+                        </div>
+                        <div className="my-2">
+                          <select
+                            name={`type_${i}`}
+                            id={`type_${i}`}
+                            value={data.type}
+                            onChange={(e) =>
+                              handleQuestionChange(i, "type", e.target.value)
+                            }
+                            className="border p-1 px-4 border-gray-500 rounded-md"
+                          >
+                            <option value="">Select Answer Type</option>
+                            <option value="multiple">
+                              Multiple Choice Question
+                            </option>
+                            <option value="inbox">Input box</option>
+                            <option value="description">Description box</option>
+                          </select>
+                          {data.type === "multiple" && (
+                            <div className="grid grid-cols-4 gap-4 my-2">
+                              <input
+                                type="text"
+                                name={`option1_${i}`}
+                                id={`option1_${i}`}
+                                className="border p-1 px-4 border-gray-500 rounded-md"
+                                placeholder="option 1"
+                                value={data.options[0]}
+                                onChange={(e) =>
+                                  handleQuestionChange(i, 0, e.target.value)
+                                }
+                              />
+                              <input
+                                type="text"
+                                name={`option2_${i}`}
+                                id={`option2_${i}`}
+                                className="border p-1 px-4 border-gray-500 rounded-md"
+                                placeholder="option 2"
+                                value={data.options[1]}
+                                onChange={(e) =>
+                                  handleQuestionChange(i, 1, e.target.value)
+                                }
+                              />
+                              <input
+                                type="text"
+                                name={`option3_${i}`}
+                                id={`option3_${i}`}
+                                className="border p-1 px-4 border-gray-500 rounded-md"
+                                placeholder="option 3"
+                                value={data.options[2]}
+                                onChange={(e) =>
+                                  handleQuestionChange(i, 2, e.target.value)
+                                }
+                              />
+                              <input
+                                type="text"
+                                name={`option4_${i}`}
+                                id={`option4_${i}`}
+                                className="border p-1 px-4 border-gray-500 rounded-md"
+                                placeholder="option 4"
+                                value={data.options[3]}
+                                onChange={(e) =>
+                                  handleQuestionChange(i, 3, e.target.value)
+                                }
+                              />
+                            </div>
+                          )}
+                        </div>
+                        <div className="flex justify-end gap-2">
+                          <button
+                            className="p-1 border-2 border-red-500 text-white hover:bg-white hover:text-red-500 bg-red-500 px-4 transition-all duration-300 rounded-md "
+                            onClick={() => handleRemoveQuestionFields(i)}
+                          >
+                            <IoClose />
+                          </button>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                ))}
+                  ))}
                 </div>
                 <button
                   type="button"

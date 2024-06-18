@@ -11,6 +11,7 @@ import Table from "../components/table/Table";
 import {
   getServicesChecklist,
   getServicesPPMList,
+  getServicesRoutineList,
   getSoftServices,
 } from "../api";
 // import jsPDF from "jspdf";
@@ -18,6 +19,9 @@ import {
 
 const Services = () => {
   const [searchText, setSearchText] = useState("");
+  const [searchChecklistText, setSearchChecklistCheck] = useState("")
+  const [searchPPMText, setSearchPPMCheck] = useState("")
+  const [searchRoutineText, setSearchRoutineCheck] = useState("")
   const [filter, setFilter] = useState(false);
   const [omitColumn, setOmitColumn] = useState(false);
   // const [visibleColumns, setVisibleColumns] = useState(serviceColumns);
@@ -25,7 +29,12 @@ const Services = () => {
   const [filteredData, setFilteredData] = useState([]);
   const [filteredChecklistData, setFilteredChecklistData] = useState([]);
   const [filteredPPMData, setFilteredPPMData] = useState([]);
+  const [filteredRoutineData, setFilteredRoutineData] = useState([]);
   const [page, setPage] = useState("service");
+  const [services, setServices]= useState([])
+  const [checklists, setChecklists]= useState([])
+  const [ppms, setPPms]= useState([])
+  const [routines, setRoutines]= useState([])
   const dateFormat = (dateString) => {
     const date = new Date(dateString);
     return date.toLocaleString();
@@ -205,6 +214,11 @@ const Services = () => {
       sortable: true,
     },
     {
+      name: "Assigned To",
+      selector: (row) => row.user_id,
+      sortable: true,
+    },  
+    {
       name: "No. Of Questions",
       selector: (row) => row.questions.length,
       sortable: true,
@@ -266,6 +280,7 @@ const Services = () => {
       const fetchService = async () => {
         const serviceResponse = await getSoftServices();
         setFilteredData(serviceResponse.data);
+        setServices(serviceResponse.data)
         console.log(serviceResponse);
       };
       fetchService();
@@ -279,6 +294,7 @@ const Services = () => {
       const fetchServicesChecklist = async () => {
         const checklistResponse = await getServicesChecklist();
         setFilteredChecklistData(checklistResponse.data.checklists);
+        setChecklists(checklistResponse.data.checklists)
         console.log(checklistResponse);
       };
       fetchServicesChecklist();
@@ -292,8 +308,21 @@ const Services = () => {
       const fetchServicePPM = async () => {
         const ServicePPMResponse = await getServicesPPMList();
         setFilteredPPMData(ServicePPMResponse.data.checklists);
+        setPPms(ServicePPMResponse.data.checklists)
       };
       fetchServicePPM();
+    } catch (error) {
+      console.log(error);
+    }
+  }, []);
+  useEffect(() => {
+    try {
+      const fetchServiceRoutine = async () => {
+        const ServicePPMResponse = await getServicesRoutineList();
+        setFilteredRoutineData(ServicePPMResponse.data.checklists);
+        setRoutines(ServicePPMResponse.data.checklists)
+      };
+      fetchServiceRoutine();
     } catch (error) {
       console.log(error);
     }
@@ -302,10 +331,56 @@ const Services = () => {
   const handleSearch = (event) => {
     const searchValue = event.target.value;
     setSearchText(searchValue);
-    const filteredResults = data.filter((item) =>
-      item.serviceName.toLowerCase().includes(searchValue.toLowerCase())
+    if (searchValue.trim() === "") {
+      setFilteredData(services);
+    } else {
+    const filteredResults = filteredData.filter((item) =>
+      item.name.toLowerCase().includes(searchValue.toLowerCase())
     );
     setFilteredData(filteredResults);
+  };
+}
+  const handleChecklistSearch = (event) => {
+    const searchValue = event.target.value;
+    setSearchChecklistCheck(searchValue);
+    if (searchValue.trim() === "") {
+      setFilteredChecklistData(checklists);
+    } else {
+    const filteredResults = filteredChecklistData.filter((item) =>
+      item.name.toLowerCase().includes(searchValue.toLowerCase())
+    );
+    setFilteredChecklistData(filteredResults);
+    console.log(filteredResults)
+    console.log(filteredData)
+  }
+  };
+  const handlePPMSearch = (event) => {
+    const searchValue = event.target.value;
+    setSearchPPMCheck(searchValue);
+    if (searchValue.trim() === "") {
+      setFilteredPPMData(ppms);
+    } else {
+    const filteredResults = filteredPPMData.filter((item) =>
+      item.name.toLowerCase().includes(searchValue.toLowerCase())
+    );
+    setFilteredPPMData(filteredResults);
+    console.log(filteredResults)
+    console.log(filteredData)
+  }
+  };
+  const handleRoutineSearch = (event) => {
+    const searchValue = event.target.value;
+    setSearchRoutineCheck(searchValue);
+    if (searchValue.trim() === "") {
+      setFilteredRoutineData(routines);
+    } else {
+    const filteredResults = filteredRoutineData.filter((item) =>
+      item.name.toLowerCase().includes(searchValue.toLowerCase())
+    );
+    setFilteredRoutineData(filteredResults);
+    console.log(filteredResults)
+    
+  }
   };
 
   const customStyle = {
@@ -344,12 +419,12 @@ const Services = () => {
       <Navbar />
       <div className="p-4 overflow-hidden w-full my-2 flex mx-3 flex-col">
         <div className="flex justify-center w-full">
-          <div className="sm:flex grid grid-cols-2 sm:flex-row gap-5 font-medium p-2 sm:rounded-full rounded-md opacity-90 bg-gray-200 ">
+          <div className="sm:flex grid grid-cols-2 text-sm md:text-base sm:flex-row gap-5 font-medium p-2 sm:rounded-full rounded-md opacity-90 bg-gray-200 ">
             <h2
               className={`p-1 ${
                 page === "service" &&
                 "bg-white text-blue-500 shadow-custom-all-sides"
-              } rounded-full px-4 cursor-pointer text-center  transition-all duration-300 ease-linear`}
+              } md:rounded-full px-4 cursor-pointer text-center  transition-all duration-300 ease-linear`}
               onClick={() => setPage("service")}
             >
               Services
@@ -359,7 +434,7 @@ const Services = () => {
               className={`p-1 ${
                 page === "checklist" &&
                 "bg-white text-blue-500 shadow-custom-all-sides"
-              } rounded-full px-4 cursor-pointer  transition-all duration-300 ease-linear`}
+              } md:rounded-full px-4 cursor-pointer text-center transition-all duration-300 ease-linear`}
               onClick={() => setPage("checklist")}
             >
               Checklist
@@ -368,7 +443,7 @@ const Services = () => {
               className={`p-1 ${
                 page === "ppm" &&
                 "bg-white text-blue-500 shadow-custom-all-sides"
-              } rounded-full px-4 cursor-pointer  transition-all duration-300 ease-linear`}
+              } md:rounded-full px-4 cursor-pointer text-center transition-all duration-300 ease-linear`}
               onClick={() => setPage("ppm")}
             >
               PPM
@@ -377,7 +452,7 @@ const Services = () => {
               className={`p-1 ${
                 page === "routine" &&
                 "bg-white text-blue-500 shadow-custom-all-sides"
-              } rounded-full px-4 cursor-pointer  transition-all duration-300 ease-linear`}
+              } md:rounded-full px-4 cursor-pointer text-center transition-all duration-300 ease-linear`}
               onClick={() => setPage("routine")}
             >
               Routine Task
@@ -522,10 +597,10 @@ const Services = () => {
               <div className="flex flex-wrap justify-between items-center my-5 ">
                 <input
                   type="text"
-                  placeholder="Search By Service name"
+                  placeholder="Search By name"
                   className="border-2 p-2 w-96 border-gray-300 rounded-lg"
-                  value={searchText}
-                  onChange={handleSearch}
+                  value={searchChecklistText}
+                  onChange={handleChecklistSearch}
                 />
                 <div className="flex flex-wrap gap-2">
                   {/* <button
@@ -622,10 +697,10 @@ const Services = () => {
               <div className="flex flex-wrap justify-between items-center my-5 ">
                 <input
                   type="text"
-                  placeholder="Search By Service name"
+                  placeholder="Search By name"
                   className="border-2 p-2 w-96 border-gray-300 rounded-lg"
-                  value={searchText}
-                  onChange={handleSearch}
+                  value={searchPPMText}
+                  onChange={handlePPMSearch}
                 />
                 <div className="flex flex-wrap gap-2">
                   {/* <button
@@ -722,10 +797,10 @@ const Services = () => {
               <div className="flex flex-wrap justify-between items-center my-5 ">
                 <input
                   type="text"
-                  placeholder="Search By Service name"
-                  className="border-2 p-2 w-96 border-gray-300 rounded-lg"
-                  value={searchText}
-                  onChange={handleSearch}
+                  placeholder="Search By name"
+                  className="border-2 p-2 w-96 border-gray-300 rounded-lg "
+                  value={searchRoutineText}
+                  onChange={handleRoutineSearch}
                 />
                 <div className="flex flex-wrap gap-2">
                   {/* <button
@@ -743,13 +818,13 @@ const Services = () => {
                     Filter
                   </button>
 
-                  <Link
+                  {/* <Link
                     to={"/services/add-service-ppm"}
                     className="bg-black  rounded-lg flex font-semibold  items-center gap-2 text-white p-2 "
                   >
                     <IoAddCircleOutline size={20} />
                     Add
-                  </Link>
+                  </Link> */}
                   <button
                     className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
                     onClick={exportToExcel}
@@ -765,7 +840,7 @@ const Services = () => {
           </button> */}
                 </div>
               </div>
-              <Table columns={routineColumn} data={filteredPPMData} />
+              <Table columns={routineColumn} data={filteredRoutineData} />
               {/* <DataTable
           selectableRows
           columns={column.filter((col) => visibleColumns.includes(col.name))}
