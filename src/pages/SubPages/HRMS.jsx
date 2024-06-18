@@ -2,10 +2,10 @@ import React from 'react';
 import { NavLink } from 'react-router-dom';
 
 const modules = [
-  { name: 'Employee Onboarding', path: '/employee-onboarding' },
-  { name: 'Attendance', path: '/hrms-attendance' },
-  { name: 'Salary Slip', path: '/hrms-salary-slip' },
-  { name: 'Auto Salary Breakup Creation', path: '/auto-salary-breakup' },
+  { name: 'Employee Onboarding', path: '/admin/employee-onboarding' },
+  { name: 'Attendance', path: '/admin/hrms-attendance' },
+  { name: 'Salary Slip', path: '/admin/hrms-salary-slip' },
+  { name: 'Auto Salary Breakup Creation', path: '/admin/auto-salary-breakup' },
   { name: 'Leaves', path: '/leaves' },
   { name: 'Roaster Planning', path: '/roaster-planning' },
   { name: 'Employee Advance Claim', path: '/employee-advance-claim' },

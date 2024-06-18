@@ -3,9 +3,9 @@ import { NavLink } from 'react-router-dom';
 
 const modules = [
   { name: 'Employee Onboarding', path: '/hrms-onboarding' },
-  { name: 'Attendance', path: '/hrms-attendance' },
-  { name: 'Salary Slip', path: '/hrms-salary-slip' },
-  { name: 'Auto Salary Breakup Creation', path: '/auto-salary-breakup' },
+  { name: 'Attendance', path: '/employee/hrms-attendance' },
+  { name: 'Salary Slip', path: '/employee/hrms-salary-slip' },
+  { name: 'Auto Salary Breakup Creation', path: '/employee/auto-salary-breakup' },
   { name: 'Leaves', path: '/leaves' },
   { name: 'Roaster Planning', path: '/roaster-planning' },
   { name: 'Employee Advance Claim', path: '/employee-advance-claim' },

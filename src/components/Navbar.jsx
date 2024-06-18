@@ -196,7 +196,7 @@ const Navbar = () => {
                 </h2>
               </NavLink>
               <NavLink
-                to={"/employee-onboarding"}
+                to={"/admin/employee-onboarding"}
                 className={({ isActive }) =>
                   ` ${
                     isActive

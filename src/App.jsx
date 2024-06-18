@@ -283,6 +283,18 @@ import EditEmployeeOnBoarding from "./pages/SubPages/EditEmployeeOnboarding.jsx"
 import Onboarding from "./pages/Employees/HRMS/Onboarding.jsx";
 import AddOnBoarding from "./pages/Employees/HRMS/AddOnboarding.jsx";
 import OnboardingDetails from "./pages/Employees/HRMS/OnboardingDetails.jsx";
+import HRMSAttendance from "./pages/SubPages/HRMSAttendance.jsx";
+import AttendanceHRMS from "./pages/Employees/HRMS/AttendanceHRMS.jsx";
+import HRMSAttendanceDetails from "./pages/SubPages/details/HRMSAttendanceDetails.jsx";
+import EmployeeHRMSAttendanceDetails from "./pages/Employees/HRMS/EmployeeHRMSAttendanceDetails.jsx";
+import HRMSSalarySlip from "./pages/SubPages/HRMSSalarySlip.jsx";
+import HRMSSalarySlipDetails from "./pages/SubPages/details/HRMSSalarySlipDetails.jsx";
+import HRMSAutoSalaryBreakupCreation from "./pages/SubPages/HRMSAutoSalaryBreakupCreation.jsx";
+import EmployeeHRMSSalarySlip from "./pages/Employees/HRMS/EmployeeHRMSSalarySlip.jsx";
+import EmployeeHRMSSalarySlipDetails from "./pages/Employees/HRMS/EmployeeHRMSSalarySlipDetails.jsx";
+import HRMSSalaryAutoDetails from "./pages/SubPages/details/HRMSSalaryAutoDetails.jsx";
+import EmployeeAutoSalaryBreakup from "./pages/Employees/HRMS/EmployeeAutoSalaryBreakup.jsx";
+import EmployeeAutoSalaryBreakupDetails from "./pages/Employees/HRMS/EmployeeAutoSalaryBreakupDetails.jsx";
 
 function App() {
   const themeColor = useSelector((state) => state.theme.color);
@@ -1905,10 +1917,62 @@ function App() {
               </ProtectedRoute>
             }
           />
-           <Route path="/hrms-onboarding" element={ <ProtectedRoute><Onboarding/></ProtectedRoute>} />
-            {/* <Route path="/hrms-attendance" element={<div>Attendance Content</div>} />
-            <Route path="/hrms-salary-slip" element={<div>Salary Slip Content</div>} />
-            <Route path="/auto-salary-breakup" element={<div>Auto Salary Breakup Creation Content</div>} />
+           <Route
+            path="/employee/hrms-attendance-details/:id"
+            element={
+              <ProtectedRoute>
+                <EmployeeHRMSAttendanceDetails/>
+              </ProtectedRoute>
+            }
+          />
+           <Route
+            path="/employee/hrms-salary-slip-details/:id"
+            element={
+              <ProtectedRoute>
+               <EmployeeHRMSSalarySlipDetails/>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/employee/hrms-salary-auto-details/:id"
+            element={
+              <ProtectedRoute>
+               <EmployeeAutoSalaryBreakupDetails/>
+              </ProtectedRoute>
+            }
+          />
+           <Route 
+           path="/hrms-onboarding" 
+           element={ 
+           <ProtectedRoute>
+            <Onboarding/>
+            </ProtectedRoute>
+          } 
+          />
+            <Route 
+            path="/employee/hrms-attendance" 
+            element={
+            <ProtectedRoute>
+              <AttendanceHRMS/>
+              </ProtectedRoute>
+            } 
+            />
+            <Route 
+            path="/employee/hrms-salary-slip" 
+            element={
+            <ProtectedRoute>
+              <EmployeeHRMSSalarySlip/>
+              </ProtectedRoute>
+            } 
+            />
+            <Route 
+            path="employee/auto-salary-breakup" 
+            element={
+            <ProtectedRoute>
+              <EmployeeAutoSalaryBreakup/>
+              </ProtectedRoute>
+            } 
+            />
             <Route path="/leaves" element={<div>Leaves Content</div>} />
             <Route path="/roaster-planning" element={<div>Roaster Planning Content</div>} />
             <Route path="/employee-advance-claim" element={<div>Employee Advance Claim Content</div>} />
@@ -1924,7 +1988,7 @@ function App() {
             <Route path="/employee-loans-advance" element={<div>Employee Loans & Advance Content</div>} />
             <Route path="/recruitment" element={<div>Recruitment Content</div>} />
             <Route path="/roaster" element={<div>Roaster Content</div>} />
-            <Route path="/provident-fund" element={<div>Provident Fund, ESIC, Legal Compliance Content</div>} /> */}
+            <Route path="/provident-fund" element={<div>Provident Fund, ESIC, Legal Compliance Content</div>} />
 
           {/* GDN*/}
           <Route
@@ -2357,10 +2421,62 @@ function App() {
               </ProtectedAdminRoutes>
             }
           />
-           <Route path="/employee-onboarding" element={<ProtectedAdminRoutes><EmployeeOnboarding/></ProtectedAdminRoutes>} />
-            {/* <Route path="/hrms-attendance" element={<div>Attendance Content</div>} />
-            <Route path="/hrms-salary-slip" element={<div>Salary Slip Content</div>} />
-            <Route path="/auto-salary-breakup" element={<div>Auto Salary Breakup Creation Content</div>} />
+          <Route
+            path="/admin/hrms-attendance-details/:id"
+            element={
+              <ProtectedAdminRoutes>
+                <HRMSAttendanceDetails/>
+              </ProtectedAdminRoutes>
+            }
+          />
+           <Route
+            path="/admin/hrms-salary-slip-details/:id"
+            element={
+              <ProtectedAdminRoutes>
+               <HRMSSalarySlipDetails/>
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/hrms-salary-auto-details/:id"
+            element={
+              <ProtectedAdminRoutes>
+               <HRMSSalaryAutoDetails/>
+              </ProtectedAdminRoutes>
+            }
+          />
+           <Route 
+           path="/admin/employee-onboarding" 
+           element={
+           <ProtectedAdminRoutes>
+            <EmployeeOnboarding/>
+            </ProtectedAdminRoutes>
+          } 
+          />
+            <Route 
+            path="/admin/hrms-attendance" 
+            element={
+            <ProtectedAdminRoutes>
+              <HRMSAttendance/>
+              </ProtectedAdminRoutes>
+            } 
+            />
+            <Route 
+            path="/admin/hrms-salary-slip" 
+            element={
+            <ProtectedAdminRoutes>
+              <HRMSSalarySlip/>
+              </ProtectedAdminRoutes>
+            }
+             />
+            <Route 
+            path="/admin/auto-salary-breakup" 
+            element={
+            <ProtectedAdminRoutes>
+              <HRMSAutoSalaryBreakupCreation/>
+              </ProtectedAdminRoutes>
+            } 
+            />
             <Route path="/leaves" element={<div>Leaves Content</div>} />
             <Route path="/roaster-planning" element={<div>Roaster Planning Content</div>} />
             <Route path="/employee-advance-claim" element={<div>Employee Advance Claim Content</div>} />
@@ -2376,7 +2492,7 @@ function App() {
             <Route path="/employee-loans-advance" element={<div>Employee Loans & Advance Content</div>} />
             <Route path="/recruitment" element={<div>Recruitment Content</div>} />
             <Route path="/roaster" element={<div>Roaster Content</div>} />
-            <Route path="/provident-fund" element={<div>Provident Fund, ESIC, Legal Compliance Content</div>} /> */}
+            <Route path="/provident-fund" element={<div>Provident Fund, ESIC, Legal Compliance Content</div>} />
         </Routes>
         
         
