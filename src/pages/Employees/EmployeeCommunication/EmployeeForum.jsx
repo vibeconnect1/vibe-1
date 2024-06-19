@@ -7,9 +7,9 @@ import { FcLike } from "react-icons/fc";
 import { FaComment } from 'react-icons/fa';
 import { IoMdShareAlt } from 'react-icons/io';
 import { BsThreeDots } from "react-icons/bs";
-import ForumCommentsModal from '../../containers/modals/ForumCommentsModal';
+import ForumCommentsModal from '../../../containers/modals/ForumCommentsModal';
 
-function Forum() {
+function EmployeeForum() {
   const [modal, showModal] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef(null);
@@ -39,9 +39,9 @@ function Forum() {
           placeholder="search"
           className="border-2 p-2 w-70 border-gray-300 rounded-lg "
         />
-        <Link to={`/admin/create-forum`} className="font-semibold border-2 border-black px-4 p-1 flex gap-2 items-center justify-center rounded-md ">
+        { <Link to={`/employee/employee-communication-create-forum`} className="font-semibold border-2 border-black px-4 p-1 flex gap-2 items-center justify-center rounded-md ">
           Create Forum
-        </Link>
+        </Link> }
       </div>
       <div className='flex justify-center'>
         <div className='shadow-lg rounded-md mb-10 md:w-3/5 relative'>
@@ -147,4 +147,4 @@ function Forum() {
   );
 }
 
-export default Forum;
+export default EmployeeForum

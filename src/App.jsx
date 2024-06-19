@@ -220,6 +220,11 @@ import CreateForum from "./pages/SubPages/CreateForum.jsx";
 import ChatBot from "./pages/SubPages/ChatBot.jsx";
 import CreateGroup from "./pages/SubPages/CreateGroup.jsx";
 // import IncidentSetup from "./pages/Setup/IncidentSetupPages/IncidentSetup.jsx";
+import EmployeeCommunication from "./pages/Employees/EmployeeCommunication/EmployeeCommunication.jsx";
+import CreateEmployeeForum from "./pages/Employees/EmployeeCommunication/CreateEmployeeForum.jsx";
+import EmployeeChatBot from "./pages/Employees/EmployeeCommunication/EmployeeChatBot.jsx";
+import EmployeeGroupJoinDetails from "./pages/Employees/EmployeeCommunication/EmployeeGroupJoinDetails.jsx";
+import GroupJoinDetails from "./pages/SubPages/GroupJoinDetails.jsx";
 
 function App() {
   const themeColor = useSelector((state) => state.theme.color);
@@ -1793,6 +1798,50 @@ function App() {
               <ProtectedAdminRoutes>
                 <CreateGroup/>
               </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/communication-group-details"
+            element={
+              <ProtectedAdminRoutes>
+                <GroupJoinDetails/>
+              </ProtectedAdminRoutes>
+            }
+          />
+          {/* employee Communication */}
+          <Route
+            path="/employee/employee-communication"
+            element={
+              <ProtectedRoute>
+                <EmployeeCommunication />
+              </ProtectedRoute>
+            }
+          />
+          {/* employee Communication create forum */}
+          <Route
+            path="/employee/employee-communication-create-forum"
+            element={
+              <ProtectedRoute>
+                <CreateEmployeeForum />
+              </ProtectedRoute>
+            }
+          />
+          {/* employee Communication chatbot */}
+          <Route
+            path="/employee/employee-communication-chatbot"
+            element={
+              <ProtectedRoute>
+                <EmployeeChatBot/>
+              </ProtectedRoute>
+            }
+          />
+          {/* employee Communication group detail */}
+          <Route
+            path="/employee/communication-groupdetail"
+            element={
+              <ProtectedRoute>
+                <EmployeeGroupJoinDetails/>
+              </ProtectedRoute>
             }
           />
         </Routes>
