@@ -92,29 +92,24 @@ const handleAddInventory = async()=>{
                 <label htmlFor="" className="font-semibold">
                   Group :
                 </label>
-                <input
-                  type="text"
-                  name="groupName"
-                  value={formData.groupName}
-                  onChange={handleChange}
-                  id=""
-                  className="border p-1 px-4 border-gray-500 rounded-md"
-                  placeholder="Enter Group"
-                />
+                <select name="" className="border p-1 px-4 border-gray-500 rounded-md">
+                  <option>Select Group</option>
+                  <option>Group 1</option>
+                  <option>Group 2</option>
+                  <option>Group 3</option>
+                </select>
               </div>
               <div className="flex flex-col">
                 <label htmlFor="" className="font-semibold">
                   Sub Group :
                 </label>
-                <input
-                  type="text"
-                  name="subGroupName"
-                  value={formData.subGroupName}
-                  onChange={handleChange}
-                  id=""
-                  className="border p-1 px-4 border-gray-500 rounded-md"
-                  placeholder="Enter Sub Group"
-                />
+                <select name="" className="border p-1 px-4 border-gray-500 rounded-md">
+                  <option>Select Group</option>
+                  <option>SubGroup 1</option>
+                  <option>SubGroup 2</option>
+                  <option>SubGroup 3</option>
+                </select>
+                
               </div>
             </div>
 

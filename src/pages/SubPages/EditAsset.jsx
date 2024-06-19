@@ -6,6 +6,7 @@ import {
   getAssetGroups,
   getAssetSubGroups,
   getFloors,
+  getParentAsset,
   getSiteAssetDetails,
   getUnits,
   getVendors,
@@ -40,6 +41,7 @@ const EditAsset = () => {
   const formattedDate = `${year}-${month}-${day}`;
   //
   const [assetSubGoups, setAssetSubGroups] = useState([]);
+  const [parentAssets, setParentAssets] = useState([]);
   const { id } = useParams();
   const [formData, setFormData] = useState({
     site_id: "",
@@ -55,7 +57,7 @@ const EditAsset = () => {
     capacity: "",
     unit: "",
     group: "",
-    sub_group_name: "",
+    sub_group_id: "",
     asset_type: "",
     purchased_on: "",
     breakdown: false,
@@ -67,7 +69,7 @@ const EditAsset = () => {
     is_meter: false,
     meter_type: "",
     applicable_meter_category: "",
-    parent_meter: "",
+    parent_asset_id: "",
     meter_category: "",
     vendor_id: "",
     description: "",
@@ -88,10 +90,19 @@ const EditAsset = () => {
     const getDetails = async () => {
       try {
         const details = await getSiteAssetDetails(id);
-        setFormData(details.data);
+        // setFormData(details.data);
+        setFormData(prevFormData => ({
+          ...prevFormData,
+          ...details.data,
+          invoice: details.data.invoice || [],
+          insurance: details.data.insurance || [],
+          manuals: details.data.manuals || [],
+          others: details.data.others || []
+        }));
         fetchFloor(details.data.building_id);
         getUnit(details.data.floor_id);
         fetchSubGroups(details.data.asset_group_id);
+        fetchParentAsset(details.data.asset_group_id);
       } catch (error) {
         console.error("Error fetching site asset details:", error);
       }
@@ -146,11 +157,28 @@ const EditAsset = () => {
         console.log(error);
       }
     };
+    const fetchParentAsset = async (groupId) => {
+      try {
+        const parentAssetResponse = await getParentAsset(groupId);
+        console.log(parentAssetResponse);
+        setParentAssets(
+          parentAssetResponse.data.site_assets.map((item) => ({
+            name: item.name,
+            id: item.id,
+          }))
+        );
+      
+      } catch (error) {
+        console.log(error);
+      }
+    };
 
     getDetails();
     fetchVendor();
     fetchAssetGroups();
   }, [id]);
+
+
 
   const handleChange = async (e) => {
     async function fetchFloor(floorID) {
@@ -187,6 +215,12 @@ const EditAsset = () => {
       }
     };
 
+    const fetchParentAsset = async (grpID) => {
+      const parentAssetResp = await getParentAsset(grpID);
+      console.log(parentAssetResp.data.site_assets);
+      setParentAssets(parentAssetResp.data.site_assets);
+    };
+
     if (e.target.type === "select-one" && e.target.name === "building_id") {
       const BuildID = Number(e.target.value);
       await fetchFloor(BuildID);
@@ -212,6 +246,8 @@ const EditAsset = () => {
       const groupId = Number(e.target.value);
       console.log("groupId:" + groupId);
       await fetchSubGroups(groupId);
+      await fetchParentAsset(groupId);
+
       setFormData({
         ...formData,
         asset_group_id: groupId,
@@ -249,13 +285,13 @@ const EditAsset = () => {
   // };
 
   const handleFileChange = (files, fieldName) => {
-    // Changed to receive 'files' directly
-    setFormData({
-      ...formData,
-      [fieldName]: files,
-    });
+    setFormData(prevFormData => ({
+      ...prevFormData,
+      [fieldName]: files || [], // Ensure it's always an array
+    }));
     console.log(fieldName);
   };
+  
   const navigate = useNavigate();
 
   const handleSubmit = async () => {
@@ -280,6 +316,7 @@ const EditAsset = () => {
       );
       // formDataSend.append("site_asset[user_id]", 2);
       formDataSend.append("site_asset[critical]", formData.critical);
+      formDataSend.append("site_asset[capacity]", formData.capacity);
       formDataSend.append("site_asset[breakdown]", formData.breakdown);
       formDataSend.append("site_asset[is_meter]", formData.is_meter);
       formDataSend.append(
@@ -289,7 +326,26 @@ const EditAsset = () => {
       formDataSend.append("site_asset[vendor_id]", formData.vendor_id);
       formDataSend.append("site_asset[remarks]", formData.remarks);
       formDataSend.append("site_asset[description]", formData.description);
-      formDataSend.append("site_asset[uom]", formData.unit);
+      formDataSend.append("site_asset[uom]", formData.uom);
+      formDataSend.append("site_asset[asset_type]", formData.asset_type);
+      (formData.invoice || []).forEach((file, index) => {
+        formDataSend.append(`purchase_invoices[]`, file);
+      });
+  
+      (formData.insurance || []).forEach((file, index) => {
+        console.log("-----------------");
+        console.log(index);
+        console.log(file);
+        formDataSend.append(`insurances[]`, file);
+      });
+  
+      (formData.manuals || []).forEach((file, index) => {
+        formDataSend.append(`manuals[]`, file);
+      });
+  
+      (formData.others || []).forEach((file, index) => {
+        formDataSend.append(`other_files[]`, file);
+      });
 
       const response = await EditSiteAsset(formDataSend, id);
       toast.dismiss();
@@ -519,8 +575,8 @@ const EditAsset = () => {
                 <div className="flex flex-col">
                   <select
                     className="border p-1 px-4 border-gray-500 rounded-md"
-                    name="sub_group_name"
-                    value={formData.sub_group_name}
+                    name="sub_group_id"
+                    value={formData.sub_group_id}
                     onChange={handleChange}
                   >
                     <option value="">Select Sub Group</option>
@@ -643,7 +699,7 @@ const EditAsset = () => {
                     </div>
                   </>
                 )}
-                {formData.is_meter && meterType === "parent" && (
+                {/* {formData.is_meter && meterType === "parent" && (
                   <div className="flex flex-col">
                     <select
                       className="border p-1 px-4 border-gray-500 rounded-md"
@@ -657,18 +713,18 @@ const EditAsset = () => {
                       <option value="meter 2">meter 3</option>
                     </select>
                   </div>
-                )}
-                {formData.is_meter && meterType === "sub" && (
+                )} */}
+                {formData.is_meter && formData.asset_type === "sub" && (
                   <select
                     className="border p-1 px-4 border-gray-500 rounded-md"
-                    name="parent_meter"
+                    name="parent_asset_id"
                     onChange={handleChange}
-                    value={formData.parent_meter}
+                    value={formData.parent_asset_id}
                   >
                     <option value="">Select Parent Asset </option>
-                    <option value="unit1">Parent 1</option>
-                    <option value="unit2">Parent 2</option>
-                    <option value="unit2">Parent 3</option>
+                    {parentAssets.map((parent)=>(
+                      <option value={parent.id} key={parent.id}>{parent.name}</option>
+                    ))}
                   </select>
                 )}
               </div>

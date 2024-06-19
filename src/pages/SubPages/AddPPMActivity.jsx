@@ -3,10 +3,7 @@ import { BiPlus } from "react-icons/bi";
 import { IoClose } from "react-icons/io5";
 import { getItemInLocalStorage } from "../../utils/localStorage";
 import { postChecklist } from "../../api";
-import toast from "react-hot-toast";
-import { useNavigate } from "react-router-dom";
-
-const AddServicesChecklist = () => {
+const AddPPMActivity = () => {
   const [name, setName] = useState("");
   const [frequency, setFrequency] = useState("");
   const [startDate, setStartDate] = useState("");
@@ -14,7 +11,6 @@ const AddServicesChecklist = () => {
   const [addNewQuestion, setAddNewQuestion] = useState([
     { name: "", type: "", options: ["", "", "", ""] },
   ]);
-
   const handleAddQuestionFields = () => {
     setAddNewQuestion([
       ...addNewQuestion,
@@ -27,8 +23,6 @@ const AddServicesChecklist = () => {
     newFields.splice(index, 1);
     setAddNewQuestion(newFields);
   };
-
-  const navigate = useNavigate()
   const handleQuestionChange = (index, field, value) => {
     const newQuestions = [...addNewQuestion];
     if (field === "name" || field === "type") {
@@ -38,8 +32,10 @@ const AddServicesChecklist = () => {
     }
     setAddNewQuestion(newQuestions);
   };
+
   const siteId = getItemInLocalStorage("SITEID");
   const userId = getItemInLocalStorage("UserId");
+
   const handleSubmit = async (event) => {
     event.preventDefault();
     const data = {
@@ -50,7 +46,7 @@ const AddServicesChecklist = () => {
         start_date: startDate,
         end_date: endDate,
         user_id: userId,
-        ctype: "soft_service",
+        ctype: "ppm",
         },
       frequency: frequency,
       question: addNewQuestion.map((q) => ({
@@ -66,8 +62,6 @@ const AddServicesChecklist = () => {
 
     try {
       const response = await postChecklist(data);
-      toast.success("Checklist Created Successfully")
-      navigate("/services")
       console.log(response);
       //   if (response.ok) {
       //     console.log("Checklist saved successfully!");
@@ -78,7 +72,6 @@ const AddServicesChecklist = () => {
       console.error("Error:", error);
     }
   };
-
   return (
     <section>
       <div className="m-2">
@@ -86,14 +79,13 @@ const AddServicesChecklist = () => {
           Add Checklist
         </h2>
         <div className="md:mx-20 my-5 mb-10 sm:border border-gray-400 p-5 px-10 rounded-lg sm:shadow-xl">
-          <form onSubmit={handleSubmit}>
-            <div className="flex flex-col justify-around">
-              <div className="grid md:grid-cols-3 item-start gap-x-4 gap-y-2 w-full">
-                <div className="flex flex-col">
-                  <label htmlFor="name" className="font-semibold">
-                    Name:
-                  </label>
-                  <input
+          <div className="flex  flex-col justify-around">
+            <div className="grid md:grid-cols-3 item-start gap-x-4 gap-y-2 w-full">
+              <div className="flex flex-col">
+                <label htmlFor="" className="font-semibold">
+                  Name :
+                </label>
+                <input
                     type="text"
                     name="name"
                     id="name"
@@ -102,12 +94,12 @@ const AddServicesChecklist = () => {
                     value={name}
                     onChange={(e) => setName(e.target.value)}
                   />
-                </div>
-                <div className="flex flex-col">
-                  <label htmlFor="frequency" className="font-semibold">
-                    Frequency:
-                  </label>
-                  <select
+              </div>
+              <div className="flex flex-col">
+                <label htmlFor="" className="font-semibold">
+                  Frequency :
+                </label>
+                <select
                     name="frequency"
                     id="frequency"
                     className="border p-1 px-4 border-gray-500 rounded-md"
@@ -124,12 +116,12 @@ const AddServicesChecklist = () => {
                     <option value="half yearly">Half yearly</option>
                     <option value="yearly">Yearly</option>
                   </select>
-                </div>
-                <div className="flex flex-col">
-                  <label htmlFor="start_date" className="font-semibold">
-                    Start Date:
-                  </label>
-                  <input
+              </div>
+              <div className="flex flex-col">
+                <label htmlFor="" className="font-semibold">
+                  Start Date :
+                </label>
+                <input
                     type="date"
                     name="start_date"
                     id="start_date"
@@ -137,12 +129,12 @@ const AddServicesChecklist = () => {
                     value={startDate}
                     onChange={(e) => setStartDate(e.target.value)}
                   />
-                </div>
-                <div className="flex flex-col">
-                  <label htmlFor="end_date" className="font-semibold">
-                    End Date:
-                  </label>
-                  <input
+              </div>
+              <div className="flex flex-col">
+                <label htmlFor="" className="font-semibold">
+                  End Date :
+                </label>
+                <input
                     type="date"
                     name="end_date"
                     id="end_date"
@@ -150,17 +142,17 @@ const AddServicesChecklist = () => {
                     value={endDate}
                     onChange={(e) => setEndDate(e.target.value)}
                   />
-                </div>
               </div>
-              <div>
-                {addNewQuestion.map((data, i) => (
-                  <div key={i}>
-                    <div className="my-5">
-                      <h2 className="border-b-2 border-black text font-medium">
-                        Add New Question
-                      </h2>
-                      <div className="my-2 grid gap-4">
-                        <input
+            </div>
+            <div>
+              {addNewQuestion.map((data, i) => (
+                <div key={i}>
+                  <div className="my-5">
+                    <h2 className="border-b-2 border-black text font-medium">
+                      Add New Question
+                    </h2>
+                    <div className="my-2 grid gap-4">
+                    <input
                           type="text"
                           name={`question_${i}`}
                           id={`question_${i}`}
@@ -171,9 +163,9 @@ const AddServicesChecklist = () => {
                             handleQuestionChange(i, "name", e.target.value)
                           }
                         />
-                      </div>
-                      <div className="my-2">
-                        <select
+                    </div>
+                    <div className="my-2">
+                    <select
                           name={`type_${i}`}
                           id={`type_${i}`}
                           value={data.type}
@@ -237,19 +229,19 @@ const AddServicesChecklist = () => {
                             />
                           </div>
                         )}
-                      </div>
-                      <div className="flex justify-end gap-2">
-                        <button
+                    </div>
+                    <div className="flex justify-end gap-2">
+                    <button
                           className="p-1 border-2 border-red-500 text-white hover:bg-white hover:text-red-500 bg-red-500 px-4 transition-all duration-300 rounded-md "
                           onClick={() => handleRemoveQuestionFields(i)}
                         >
                           <IoClose />
                         </button>
-                      </div>
                     </div>
                   </div>
-                ))}
-                <button
+                </div>
+              ))}
+              <button
                   type="button"
                   className="p-1 border-2 border-black px-4 rounded-md my-2 flex gap-2 items-center"
                   onClick={() => handleAddQuestionFields()}
@@ -257,21 +249,17 @@ const AddServicesChecklist = () => {
                   <BiPlus />
                   Add Question
                 </button>
-              </div>
-              <div className="flex justify-center">
-                <button
-                  type="submit"
-                  className="bg-black text-white p-2 px-4 rounded-md font-medium"
-                >
-                  Save
-                </button>
-              </div>
             </div>
-          </form>
+            <div className="flex justify-center">
+              <button onClick={handleSubmit} className="bg-black text-white p-2 px-4 rounded-md font-medium">
+                Save
+              </button>
+            </div>
+          </div>
         </div>
       </div>
     </section>
   );
 };
 
-export default AddServicesChecklist;
+export default AddPPMActivity;

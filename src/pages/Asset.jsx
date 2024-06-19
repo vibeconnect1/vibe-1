@@ -20,6 +20,7 @@ import ThemedButton from "../Buttons/Button";
 import bridge from "/bridge.jpg";
 import { IoIosArrowDown } from "react-icons/io";
 import { MdKeyboardArrowRight } from "react-icons/md";
+import PPMActivity from "./SubPages/PPMActivity";
 
 // import jsPDF from "jspdf";
 // import QRCode from "qrcode.react";
@@ -673,6 +674,7 @@ const Asset = () => {
         {page === "checklist" && <Checklist />}
         {page === "inventory" && <Inventory />}
         {page === "routine" && <RoutineTask />}
+        {page === "PPM" && <PPMActivity />}
       </div>
     </section>
   );

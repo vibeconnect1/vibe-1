@@ -207,11 +207,14 @@ export const getAssetGroups = async () =>
     },
   });
 export const getParentAsset = async (id) =>
-  axiosInstance.get(`/site_assets.json?q[asset_type_eq]=parent&q[asset_group_id_eq]=${id}`, {
-    params: {
-      token: token,
-    },
-  });
+  axiosInstance.get(
+    `/site_assets.json?q[asset_type_eq]=parent&q[asset_group_id_eq]=${id}`,
+    {
+      params: {
+        token: token,
+      },
+    }
+  );
 
 export const getAssetSubGroups = async (groupId) => {
   try {
@@ -247,6 +250,14 @@ export const postAssetparams = async (data) =>
       token: token,
     },
   });
+
+// asset checklist
+// export const postChecklist = async (data) =>
+//   axiosInstance.post("checklists.json", data, {
+//     params: {
+//       token: token,
+//     },
+//   });
 
 // amc
 export const getAMC = async () =>
@@ -346,6 +357,26 @@ export const getRoutineTask = async () =>
       token: token,
     },
   });
+export const getRoutineTaskDetails = async (assetId, activityId) =>
+  axiosInstance.get(
+    `/submissions.json?q[asset_id_eq]=${assetId}&q[checklist_ctype_eq]=routine&q[activity_id_eq]=${activityId}`,
+    {
+      params: {
+        token: token,
+        
+      },
+    }
+  );
+export const getPPMActivityDetails = async (assetId, activityId) =>
+  axiosInstance.get(
+    `/submissions.json?q[asset_id_eq]=${assetId}&q[checklist_ctype_eq]=ppm&q[activity_id_eq]=${activityId}`,
+    {
+      params: {
+        token: token,
+        
+      },
+    }
+  );
 export const getSetupUsers = async () =>
   axiosInstance.get("/users.json", {
     params: {
@@ -354,6 +385,12 @@ export const getSetupUsers = async () =>
   });
 export const getAttendance = async () =>
   axiosInstance.get("/attendances.json", {
+    params: {
+      token: token,
+    },
+  });
+export const getEmployeeAttendance = async (userId) =>
+  axiosInstance.get(`/attendances.json?q[attendance_of_id]=${userId}`, {
     params: {
       token: token,
     },
@@ -435,19 +472,19 @@ export const getSoftServices = async () =>
     },
   });
 export const getServicesChecklist = async () =>
-  axiosInstance.get("/checklists.json", {
+  axiosInstance.get("/checklists.json?q[ctype_eq]=soft_service", {
     params: {
       token: token,
     },
   });
-export const postServicesChecklist = async (data) =>
+export const postChecklist = async (data) =>
   axiosInstance.post("/checklists.json", data, {
     params: {
       token: token,
     },
   });
-export const editServicesChecklist = async (data, id) =>
-  axiosInstance.put(`/checklists//${id}.json`, data, {
+export const editChecklist = async (data, id) =>
+  axiosInstance.put(`/checklists/${id}.json`, data, {
     params: {
       token: token,
     },
@@ -459,7 +496,7 @@ export const getServicesChecklistDetails = async (checklistId) =>
     },
   });
 
-export const getServicesPPMList = async () =>
+export const getAssetPPMList = async () =>
   axiosInstance.get(`/checklists.json?q[ctype_eq]=ppm`, {
     params: {
       token: token,

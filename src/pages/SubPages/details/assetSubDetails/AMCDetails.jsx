@@ -45,7 +45,14 @@ const AMCDetails = () => {
       return toast.error("All fields are Required")
     }
     try {
-      const res = await postAMC(formData);
+      const dataToSend = new FormData()
+dataToSend.append("asset_amc[vendor_id]", formData.vendor_id)
+dataToSend.append("asset_amc[asset_id]", formData.asset_id)
+dataToSend.append("asset_amc[start_date]", formData.start_date)
+dataToSend.append("asset_amc[end_date]", formData.end_date)
+dataToSend.append("asset_amc[frequency]", formData.frequency)
+formData.terms.forEach((file)=> dataToSend.append("terms[]", file))
+      const res = await postAMC(dataToSend);
       console.log(res);
       setUpdate(true);
       toast.success("New AMC Added")

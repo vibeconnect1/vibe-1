@@ -25,7 +25,13 @@ const EditAssetAMC = () => {
     };
     const fetchAMCDetails = async () => {
       const amcResponse = await getEditAMCDetails(id);
-      setFormData(amcResponse.data)
+      // setFormData(amcResponse.data)
+      setFormData(prevFormData => ({
+        ...prevFormData,
+        ...amcResponse.data,
+        terms: amcResponse.data.terms || [],
+       
+      }));
       console.log(amcResponse);
     };
     fetchVendors();
@@ -42,7 +48,14 @@ const EditAssetAMC = () => {
   const handleEditAMC = async () => {
    
     try {
-      const res = await EditAMCDetails(formData, id);
+      const dataToSend = new FormData()
+      dataToSend.append("asset_amc[vendor_id]", formData.vendor_id)
+      dataToSend.append("asset_amc[asset_id]", formData.asset_id)
+      dataToSend.append("asset_amc[start_date]", formData.start_date)
+      dataToSend.append("asset_amc[end_date]", formData.end_date)
+      dataToSend.append("asset_amc[frequency]", formData.frequency)
+      formData.terms.forEach((file)=> dataToSend.append("terms[]", file))
+      const res = await EditAMCDetails(dataToSend, id);
       console.log(res);
       setUpdate(true);
       toast.success("AMC Edited Successfully")

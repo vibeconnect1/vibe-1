@@ -9,8 +9,9 @@ import * as XLSX from "xlsx";
 import { BiEdit, BiFilter, BiFilterAlt } from "react-icons/bi";
 import Table from "../components/table/Table";
 import {
+  getAssetPPMList,
   getServicesChecklist,
-  getServicesPPMList,
+  
   getServicesRoutineList,
   getSoftServices,
 } from "../api";
@@ -134,11 +135,7 @@ const Services = () => {
       selector: (row) => row.name,
       sortable: true,
     },
-    {
-      name: "Occurs",
-      selector: (row) => row.occurs,
-      sortable: true,
-    },
+   
     {
       name: "Start Date",
       selector: (row) => row.start_date,
@@ -243,11 +240,7 @@ const Services = () => {
       selector: (row) => row.name,
       sortable: true,
     },
-    {
-      name: "Occurs",
-      selector: (row) => row.occurs,
-      sortable: true,
-    },
+    
     {
       name: "Start Date",
       selector: (row) => row.start_date,
@@ -306,7 +299,7 @@ const Services = () => {
   useEffect(() => {
     try {
       const fetchServicePPM = async () => {
-        const ServicePPMResponse = await getServicesPPMList();
+        const ServicePPMResponse = await getAssetPPMList();
         setFilteredPPMData(ServicePPMResponse.data.checklists);
         setPPms(ServicePPMResponse.data.checklists)
       };
@@ -439,7 +432,7 @@ const Services = () => {
             >
               Checklist
             </h2>
-            <h2
+            {/* <h2
               className={`p-1 ${
                 page === "ppm" &&
                 "bg-white text-blue-500 shadow-custom-all-sides"
@@ -447,7 +440,7 @@ const Services = () => {
               onClick={() => setPage("ppm")}
             >
               PPM
-            </h2>
+            </h2> */}
             <h2
               className={`p-1 ${
                 page === "routine" &&
@@ -455,7 +448,7 @@ const Services = () => {
               } md:rounded-full px-4 cursor-pointer text-center transition-all duration-300 ease-linear`}
               onClick={() => setPage("routine")}
             >
-              Routine Task
+              Task
             </h2>
           </div>
         </div>
@@ -810,13 +803,13 @@ const Services = () => {
               <IoFilterOutline />
               Filter Columns
             </button> */}
-                  <button
+                  {/* <button
                     className="text-lg font-semibold border-2 border-black px-4 p-1 flex gap-2 items-center rounded-md"
                     onClick={() => setFilter(!filter)}
                   >
                     <BiFilterAlt />
                     Filter
-                  </button>
+                  </button> */}
 
                   {/* <Link
                     to={"/services/add-service-ppm"}

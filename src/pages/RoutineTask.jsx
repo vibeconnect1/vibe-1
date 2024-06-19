@@ -25,7 +25,7 @@ const RoutineTask = () => {
       name: "View",
       cell: (row) => (
         <div className="flex items-center gap-4">
-          <Link to={`/assets/asset-details/${row.id}`}>
+          <Link to={`/assets/routine-task-details/${row.asset_id}/${row.id}`}>
             <BsEye size={15} />
           </Link>
         </div>
@@ -39,23 +39,23 @@ const RoutineTask = () => {
     },
     { name: "Start Time", selector: (row) => row.start_time, sortable: true },
     { name: "End Time", selector: (row) => row.end_time, sortable: true },
-    { name: "Type", selector: (row) => row.type, sortable: true },
+    
     { name: "Status", selector: (row) => row.status, sortable: true },
-    { name: "Assigned To", selector: (row) => row.assigned_to, sortable: true },
+    { name: "Assigned To", selector: (row) => row.assigned_to_name, sortable: true },
 
-    {
-      name: "Action",
-      cell: (row) => (
-        <div className="flex items-center gap-4">
-          <Link to={`/assets/edit-asset/${row.id}`}>
-            <BiEdit size={15} />
-          </Link>
-          <button className="text-red-400">
-            <MdDeleteForever size={25} />
-          </button>
-        </div>
-      ),
-    },
+    // {
+    //   name: "Action",
+    //   cell: (row) => (
+    //     <div className="flex items-center gap-4">
+    //       <Link to={`/assets/edit-asset/${row.id}`}>
+    //         <BiEdit size={15} />
+    //       </Link>
+    //       <button className="text-red-400">
+    //         <MdDeleteForever size={25} />
+    //       </button>
+    //     </div>
+    //   ),
+    // },
   ];
 
   return (
@@ -69,7 +69,7 @@ const RoutineTask = () => {
           //   onChange={handleSearch}
         />
         <div className="md:flex grid grid-cols-2 sm:flex-row my-2 flex-col gap-2">
-          <Link
+          {/* <Link
             to={"/admin/add-checklist"}
             className="bg-black  text-sm rounded-lg flex justify-center font-semibold items-center gap-2 text-white py-2 px-4 border-2 border-black hover:bg-white hover:text-black transition-all duration-300 "
           >
@@ -82,7 +82,7 @@ const RoutineTask = () => {
             // onClick={exportToExcel}
           >
             Export
-          </button>
+          </button> */}
           {/* <button
     className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
     onClick={handleDownloadQRCode}

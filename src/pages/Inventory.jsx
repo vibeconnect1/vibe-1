@@ -13,7 +13,7 @@ const Inventory = () => {
     const fetchInventory = async () => {
       const invResp = await getInventory();
       setStocks(invResp.data);
-      console.log(stocks);
+      console.log(invResp);
     };
     fetchInventory();
   }, []);

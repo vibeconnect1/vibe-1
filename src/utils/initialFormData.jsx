@@ -34,6 +34,7 @@ export const initialAddAssetFormData = {
     meter_category: "",
     vendor_id: "",
     oem_name:"",
+    parent_asset_id:"",
   
     
   

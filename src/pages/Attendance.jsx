@@ -23,10 +23,31 @@ const Attendance = () => {
     fetchAttendance();
   }, []);
 
-  const dateFormat = (dateString)=>{
-    const date = new Date(dateString)
-    return date.toLocaleString()
-  }
+ const timeFormat = (dateString) => {
+    const date = new Date(dateString);
+    return date.toLocaleTimeString("en-GB", {
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit",
+      hour12: true,
+    });
+  };
+ const dateFormat = (dateString) => {
+    const date = new Date(dateString);
+    return date.toLocaleDateString("en-GB", {
+      day: "2-digit",
+      month: "short",
+      year: "numeric",
+ })
+  };
+
+  const TotalHours = (punchedIn, punchedOut) => {
+    const punchedInDate = new Date(punchedIn);
+    const punchedOutDate = new Date(punchedOut);
+    const diffMs = punchedOutDate - punchedInDate; 
+    const diffHrs = diffMs / (1000 * 60 * 60); 
+    return diffHrs.toFixed(2); 
+  };
   const column = [
     // {
     //   name: "Actions",
@@ -34,8 +55,11 @@ const Attendance = () => {
     //   selector: (row) => row.action,
     // },
 
-    { name: "Punch In", selector: (row) => dateFormat(row.punched_in_at), sortable: true },
-    { name: "Punch Out", selector: (row) => dateFormat(row.punched_out_at), sortable: true },
+    { name: "Name", selector: (row) => row.attendance_of_name, sortable: true },
+    { name: "Date", selector: (row) => dateFormat(row.created_at), sortable: true },
+    { name: "Punch In", selector: (row) => timeFormat(row.punched_in_at), sortable: true },
+    { name: "Punch Out", selector: (row) => timeFormat(row.punched_out_at), sortable: true },
+    { name: "Total Hours Worked", selector: (row) => TotalHours(row.punched_in_at, row.punched_out_at), sortable: true }
   ];
  
 

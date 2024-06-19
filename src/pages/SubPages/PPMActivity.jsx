@@ -1,0 +1,182 @@
+import React, { useEffect, useState } from "react";
+import { getAssetPPMList } from "../../api";
+
+import { BiEdit } from "react-icons/bi";
+import Table from "../../components/table/Table";
+import { Link } from "react-router-dom";
+import { IoAddCircleOutline } from "react-icons/io5";
+import { useSelector } from "react-redux";
+import { BsEye } from "react-icons/bs";
+
+const PPMActivity = () => {
+  const [ppms, setPPms] = useState([]);
+  const [searchPPMText, setSearchPPMCheck] = useState("");
+  const [filteredPPMData, setFilteredPPMData] = useState([]);
+  const themeColor = useSelector((state)=>state.theme.color)
+  const handlePPMSearch = (event) => {
+    const searchValue = event.target.value;
+    setSearchPPMCheck(searchValue);
+    if (searchValue.trim() === "") {
+      setFilteredPPMData(ppms);
+    } else {
+      const filteredResults = filteredPPMData.filter((item) =>
+        item.name.toLowerCase().includes(searchValue.toLowerCase())
+      );
+      setFilteredPPMData(filteredResults);
+      console.log(filteredResults);
+      
+    }
+  };
+  useEffect(() => {
+    try {
+      const fetchServicePPM = async () => {
+        const ServicePPMResponse = await getAssetPPMList();
+        setFilteredPPMData(ServicePPMResponse.data.checklists);
+        setPPms(ServicePPMResponse.data.checklists);
+        console.log(ServicePPMResponse.data.checklists);
+      };
+      fetchServicePPM();
+    } catch (error) {
+      console.log(error);
+    }
+  }, []);
+  console.log(filteredPPMData)
+  const PPMColumn = [
+    {
+      name: "Action",
+      cell: (row) => (
+        <div className="flex items-center gap-4">
+          <Link to={`/services/checklist-details/${row.asset_id}/${row.id}`}>
+                <BsEye size={15} />
+              </Link>
+          <Link to={`/services/edit-ppm/${row.id}`}>
+            <BiEdit size={15} />
+          </Link>
+        </div>
+      ),
+    },
+    {
+      name: "Name",
+      selector: (row) => row.name,
+      sortable: true,
+    },
+  
+    {
+      name: "Start Date",
+      selector: (row) => row.start_date,
+      sortable: true,
+    },
+    {
+      name: "End Date",
+      selector: (row) => row.end_date,
+      sortable: true,
+    },
+    {
+      name: "Frequency",
+      selector: (row) => row.frequency,
+      sortable: true,
+    },
+    {
+      name: "Assigned To",
+      selector: (row) => row.user_id,
+      sortable: true,
+    },
+    {
+      name: "No. Of Questions",
+      selector: (row) => row.questions.length,
+      sortable: true,
+    },
+  ];
+  return (
+    <div>
+      <div>
+        {/* {filter && (
+              <div className="flex items-center justify-center gap-2">
+                <div>
+                  <label htmlFor="" className="font-medium">
+                    Service Name:{" "}
+                  </label>
+                  <input
+                    type="text"
+                    name=""
+                    id=""
+                    placeholder="Enter Service Name"
+                    className="border p-1 placeholder:text-sm px-4 border-gray-500 rounded-md"
+                  />
+                </div>
+
+                <select className="border p-1 px-4 border-gray-500 rounded-md">
+                  <option value="">Select Area</option>
+                  <option value="unit1">Area 1</option>
+                  <option value="unit2">Area 2</option>
+                  <option value="unit2">Area 3</option>
+                </select>
+
+                <select className="border p-1 px-4 border-gray-500 rounded-md">
+                  <option value="">Select Building</option>
+                  <option value="unit1">Building 1</option>
+                  <option value="unit2">Building 2</option>
+                  <option value="unit2">Building 3</option>
+                </select>
+                <button className="bg-black p-1 px-4 text-white rounded-md">
+                  Apply
+                </button>
+              </div>
+            )} */}
+        <div className="flex flex-wrap justify-between items-center my-5 ">
+          <input
+            type="text"
+            placeholder="Search By name"
+            className="border-2 p-2 w-96 border-gray-300 rounded-lg"
+            value={searchPPMText}
+            onChange={handlePPMSearch}
+          />
+          <div className="flex flex-wrap gap-2">
+          <Link
+                  to={"/asset/add-asset-ppm"}
+                  style={{background: themeColor}}
+                  className="  rounded-lg flex font-semibold  items-center gap-2 text-white p-2 "
+                >
+                  <IoAddCircleOutline size={20} />
+                  Add
+                </Link>
+            {/* <button
+            className="text-lg font-semibold border-2 border-black px-4 p-1 flex gap-2 items-center rounded-md"
+            onClick={() => setOmitColumn(!omitColumn)}
+          >
+            <IoFilterOutline />
+            Filter Columns
+          </button> */}
+            {/* <button
+                  className="text-lg font-semibold border-2 border-black px-4 p-1 flex gap-2 items-center rounded-md"
+                  onClick={() => setFilter(!filter)}
+                >
+                  <BiFilterAlt />
+                  Filter
+                </button>
+
+               
+                <button
+                  className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                  onClick={exportToExcel}
+                >
+                  Export
+                </button> */}
+            {/* <button
+          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+          onClick={handleDownloadQRCode}
+          disabled={selectedRows.length === 0}
+        >
+          Download QR Code
+        </button> */}
+          </div>
+        </div>
+        <Table columns={PPMColumn} data={filteredPPMData} />
+        
+     
+      </div>
+    </div>
+  );
+};
+
+export default PPMActivity;

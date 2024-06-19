@@ -5,11 +5,11 @@ import { getItemInLocalStorage } from "../../utils/localStorage";
 
 import { useSelector } from "react-redux";
 import {
-  editServicesChecklist,
+  editChecklist,
   getAssignedTo,
   getChecklistDetails,
   getServicesRoutineDetails,
-  postServicesChecklist,
+  
 } from "../../api";
 import { useParams } from "react-router-dom";
 import toast from "react-hot-toast";
@@ -105,7 +105,7 @@ const EditServiceRoutine = () => {
 
     try {
       toast.loading("Updating Checklist please wait!");
-      const response = await editServicesChecklist(data, id);
+      const response = await editChecklist(data, id);
       console.log(response);
       setUpdate(true);
       toast.dismiss();

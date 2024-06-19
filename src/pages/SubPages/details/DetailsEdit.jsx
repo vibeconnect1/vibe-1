@@ -43,7 +43,8 @@ const DetailsEdit = () => {
     correction: "",
     documents: [],
     assigned_to_id: "",
-    issue_status_id:""
+    issue_status_id:"",
+    territory_manager_id:""
   });
   console.log(formData);
 
@@ -314,6 +315,26 @@ const DetailsEdit = () => {
           className="border p-1 px-4 max-w-40 w-40 border-gray-500 rounded-md"
         >
           <option value="">Select Assign To</option>
+          {assignedUser?.map((assign) => (
+            <option key={assign.id} value={assign.id}>
+              {assign.firstname} {assign.lastname}
+            </option>
+          ))}
+        </select>
+      ),
+    },
+    {
+      title: "Approval Authority:",
+      description: (
+        <select
+          value={formData.territory_manager_id || ""}
+          name="territory_manager_id"
+          onChange={(e) =>
+            setFormData({ ...formData, territory_manager_id: e.target.value })
+          }
+          className="border p-1 px-4 max-w-40 w-40 border-gray-500 rounded-md"
+        >
+          <option value="">Select Approval Authority</option>
           {assignedUser?.map((assign) => (
             <option key={assign.id} value={assign.id}>
               {assign.firstname} {assign.lastname}

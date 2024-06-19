@@ -306,6 +306,17 @@ import TravelingAllowanceDetails from "./pages/SubPages/Booking&Req/TravellingAl
 import MasterCheckListSetup from "./pages/Setup/MasterChecklistSetup.jsx";
 import AddMasterCheckListSetup from "./pages/Setup/AddMaterChecklistSetup.jsx";
 import EditServiceRoutine from "./pages/SubPages/EditServiceRoutine.jsx";
+import HRMS from "./pages/HRMS/HRMS.jsx";
+import EmployeeOnboarding from "./pages/HRMS/EmployeeOnboarding.jsx";
+import AddEmployeeOnBoarding from "./pages/HRMS/AddEmployeeOnBoarding.jsx";
+import EmployeeOnboardingDetails from "./pages/HRMS/EmployeeOnBoardingDetails.jsx";
+import EditEmployeeOnBoarding from "./pages/HRMS/EditEmployeeOnBoarding.jsx";
+import Onboarding from "./pages/Employees/EmployeeHRMS/Onboarding.jsx";
+import AddOnBoarding from "./pages/Employees/EmployeeHRMS/AddOnBoarding.jsx";
+import OnboardingDetails from "./pages/Employees/EmployeeHRMS/OnBoardingDetails.jsx";
+import AssetRoutineDetails from "./pages/SubPages/details/AssetRoutineDetails.jsx";
+import AddPPMActivity from "./pages/SubPages/AddPPMActivity.jsx";
+import PPMActivityDetails from "./pages/SubPages/details/PPMActivityDetails.jsx";
 
 function App() {
   const themeColor = useSelector((state) => state.theme.color);
@@ -407,6 +418,30 @@ function App() {
             element={
               <ProtectedAdminRoutes>
                 <AssetGroup />
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/assets/routine-task-details/:assetId/:activityId"
+            element={
+              <ProtectedAdminRoutes>
+                <AssetRoutineDetails />
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/asset/add-asset-ppm"
+            element={
+              <ProtectedAdminRoutes>
+                <AddPPMActivity />
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/asset/ppm-activity-details/:assetId/:activityId"
+            element={
+              <ProtectedAdminRoutes>
+                <PPMActivityDetails />
               </ProtectedAdminRoutes>
             }
           />
@@ -2654,23 +2689,24 @@ function App() {
           />
 
           {/* employee hrms */}
-          {/* <Route
+           <Route path="/hrms-onboarding" element={ <ProtectedRoute><Onboarding/></ProtectedRoute>} />
+          <Route
             path="/employee/add-onboarding"
             element={
               <ProtectedRoute>
                 <AddOnBoarding/>
               </ProtectedRoute>
             }
-          /> */}
-          {/* <Route
+          />
+          <Route
             path="/employee/employee-onboarding-details/:id"
             element={
               <ProtectedRoute>
                 <OnboardingDetails/>
               </ProtectedRoute>
             }
-          /> */}
-           {/* <Route path="/hrms-onboarding" element={ <ProtectedRoute><Onboarding/></ProtectedRoute>} /> */}
+          />
+          
             {/* <Route path="/hrms-attendance" element={<div>Attendance Content</div>} />
             <Route path="/hrms-salary-slip" element={<div>Salary Slip Content</div>} />
             <Route path="/auto-salary-breakup" element={<div>Auto Salary Breakup Creation Content</div>} />
@@ -2692,6 +2728,32 @@ function App() {
             <Route path="/provident-fund" element={<div>Provident Fund, ESIC, Legal Compliance Content</div>} /> */}
 
 
+{/* admin HRMS */}
+<Route path="admin/hrms/employee-onboarding" element={<ProtectedAdminRoutes><EmployeeOnboarding/></ProtectedAdminRoutes>} /> 
+<Route
+            path="/admin/add-employee-onboarding"
+            element={
+              <ProtectedAdminRoutes>
+                <AddEmployeeOnBoarding/>
+              </ProtectedAdminRoutes>
+            }
+          />
+            <Route
+            path="/admin/employee-onboarding-details/:id"
+            element={
+              <ProtectedAdminRoutes>
+                <EmployeeOnboardingDetails/>
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/employee-onboarding-edit/:id"
+            element={
+              <ProtectedAdminRoutes>
+                <EditEmployeeOnBoarding/>
+              </ProtectedAdminRoutes>
+            }
+          />
 {/* <Route
             path="/admin/hrms"
             element={
@@ -2700,31 +2762,10 @@ function App() {
               </ProtectedAdminRoutes>
             }
           /> */}
-          {/* <Route
-            path="/admin/add-employee-onboarding"
-            element={
-              <ProtectedAdminRoutes>
-                <AddEmployeeOnBoarding/>
-              </ProtectedAdminRoutes>
-            }
-          />
-          <Route
-            path="/admin/employee-onboarding-details/:id"
-            element={
-              <ProtectedAdminRoutes>
-                <EmployeeOnBoardingDetails/>
-              </ProtectedAdminRoutes>
-            }
-          />
-           <Route
-            path="/admin/employee-onboarding-edit/:id"
-            element={
-              <ProtectedAdminRoutes>
-                <EditEmployeeOnBoarding/>
-              </ProtectedAdminRoutes>
-            }
-          />
-           <Route path="/employee-onboarding" element={<ProtectedAdminRoutes><EmployeeOnboarding/></ProtectedAdminRoutes>} /> */}
+          {/*
+        
+           
+           
             {/* <Route path="/hrms-attendance" element={<div>Attendance Content</div>} />
             <Route path="/hrms-salary-slip" element={<div>Salary Slip Content</div>} />
             <Route path="/auto-salary-breakup" element={<div>Auto Salary Breakup Creation Content</div>} />
