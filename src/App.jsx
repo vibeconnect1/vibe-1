@@ -307,6 +307,7 @@ import HRMSAdvanceDetails from "./pages/SubPages/details/HRMSAdvanceDetails.jsx"
 import EmployeeAdvanceDetails from "./pages/Employees/HRMS/EmployeeAdvanceDetails.jsx";
 import AdminHRMSAdvanceClaim from "./pages/SubPages/AdminHRMSAdvanceClaim.jsx";
 import EmpHRMSAdvanceClaim from "./pages/Employees/HRMS/EmpHRMSAdvanceClaim.jsx";
+import HRMSPerformance from "./pages/SubPages/HRMSPerformance.jsx";
 
 function App() {
   const themeColor = useSelector((state) => state.theme.color);
@@ -2577,7 +2578,11 @@ function App() {
             <AdminHRMSAdvanceClaim/>
               </ProtectedAdminRoutes>
             } />
-            <Route path="admin/employee-performance" element={<div>Employee Performance Content</div>} />
+            <Route 
+            path="admin/employee-performance" 
+            element={
+            <HRMSPerformance/>
+            } />
             <Route path="admin/employee-expenses" element={<div>Employee Expenses Content</div>} />
             <Route path="admin/time-sheet-tracker" element={<div>Time Sheet Tracker Content</div>} />
             <Route path="admin/ijp-recruitment" element={<div>IJP/Recruitment Content</div>} />
