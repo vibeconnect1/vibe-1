@@ -35,9 +35,9 @@ export const EditSiteAsset = async (data, id) =>
     params: {
       token: token,
     },
-    //   headers: {
-    //     'Content-Type': 'multipart/form-data'
-    // }
+      headers: {
+        'Content-Type': 'multipart/form-data'
+    }
   });
 
 // vendor
@@ -367,9 +367,9 @@ export const getRoutineTaskDetails = async (assetId, activityId) =>
       },
     }
   );
-export const getPPMActivityDetails = async (assetId, activityId) =>
+export const getPPMActivityDetails = async (assetId) =>
   axiosInstance.get(
-    `/submissions.json?q[asset_id_eq]=${assetId}&q[checklist_ctype_eq]=ppm&q[activity_id_eq]=${activityId}`,
+    `/submissions.json?q[asset_id_eq]=${assetId}&q[checklist_ctype_eq]=ppm`,
     {
       params: {
         token: token,
@@ -858,3 +858,55 @@ export const updateVibeUserTask = async (data) => {
     throw error;
   }
 };
+export const getVibeStatus = async (userId) => {
+  try {
+    const response = await vibeAuth.get(
+      `/api/employee/task/get-status/?user_id=${userId}`,
+     
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error creating calendar events:", error);
+    throw error;
+  }
+};
+export const getVibeMedia = async () => {
+  try {
+    const response = await vibeAuth.get(
+      `https://vibecopilot.ai/api/media`,
+     
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error creating calendar events:", error);
+    throw error;
+  }
+};
+export const postVibeTaskChat = async (data) => {
+  try {
+    const response = await vibeAuth.post(
+      `/api/employee/task/add-message/`,
+     data,
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error creating calendar events:", error);
+    throw error;
+  }
+};
+

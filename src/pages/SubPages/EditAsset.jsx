@@ -1164,6 +1164,7 @@ const EditAsset = () => {
               <FileInputBox
                 handleChange={(files) => handleFileChange(files, "others")}
                 fieldName={"others"}
+                isMulti={true}
               />
             </div>
           </div>

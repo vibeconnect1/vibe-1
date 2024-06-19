@@ -30,7 +30,7 @@ const getFileIcon = (fileType) => {
   }
 };
 
-const FileInputBox = ({ handleChange, fieldName }) => {
+const FileInputBox = ({ handleChange, fieldName, isMulti }) => {
   const [files, setFiles] = useState([]);
   const [fileURLs, setFileURLs] = useState([]);
 
@@ -61,7 +61,7 @@ const FileInputBox = ({ handleChange, fieldName }) => {
           id={`file-upload-${fieldName}`}
           type="file"
           className="hidden"
-          multiple
+          multiple={isMulti}
           onChange={handleFileChange}
         />
       </label>

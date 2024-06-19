@@ -2,10 +2,23 @@ import React, { useEffect, useRef, useState } from "react";
 import { getItemInLocalStorage } from "../utils/localStorage";
 import Navbar from "../components/Navbar";
 import { useSelector } from "react-redux";
+import profile from "/profile.png"
 import {
+  FaArrowLeft,
   FaCheck,
+  FaComments,
+  FaDownload,
+  FaFileAlt,
+  FaFileExcel,
+  FaFileImage,
+  FaFilePdf,
+  FaFilePowerpoint,
+  FaFileWord,
   FaFilter,
   FaLaptop,
+  FaLongArrowAltRight,
+  FaPaperPlane,
+  FaPaperclip,
   FaPencilAlt,
   FaPlus,
   FaRegCalendarAlt,
@@ -17,12 +30,15 @@ import {
   deleteVibeTask,
   getVibeActionAndChat,
   getVibeComments,
+  getVibeMedia,
   getVibeMyBoardTask,
+  getVibeStatus,
   getVibeSubTaskChecklist,
   getVibeTaskAttachment,
   getVibeTaskChecklist,
   getVibeTaskUserAssign,
   getVibeUsers,
+  postVibeTaskChat,
   updateTaskStatus,
   updateVibeAssignedUser,
   updateVibeUserTask,
@@ -39,6 +55,7 @@ import { AiOutlineClose } from "react-icons/ai";
 import Select from "react-select";
 import ReactDatePicker from "react-datepicker";
 import { SendDueDateFormat } from "../utils/dateUtils";
+import { IoSend } from "react-icons/io5";
 // import TaskSelf from "./SubPages/TaskSelf";
 
 // import LinearProgress from "@material-ui/core/LinearProgress";
@@ -69,7 +86,7 @@ const TaskManagement = () => {
     label: taskStatus,
   });
   const [updateEffect, setUpdateEffect] = useState(false);
-  const [isModalChatOpen, setIsModalChatOpen] = useState(false);
+
   const [createdFirstName, setCreatedFirstName] = useState("");
   const [createdSecondName, setCreatedSecondName] = useState("");
   const [createdDate, setCreatedDate] = useState("");
@@ -104,8 +121,37 @@ const TaskManagement = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isModalOpennn, setIsModalOpennn] = useState(false);
+  const [showStatusList, setshowStatusList] = useState(true);
+  const [checklistid, setCheckListId] = useState("");
+  const [showComments, setShowComments] = useState(false);
+  const [addComent, setAddComent] = useState("");
+  const [showCommentsFinal, setShowCommentsFinal] = useState(false);
+  const [showChatsFinal, setShowChatsFinal] = useState(false);
+  const [isModalChatOpen, setIsModalChatOpen] = useState(false);
+  const [messages, setMessages] = useState([]);
+  const [isChatVisible, setChatVisible] = useState(false);
   const inputRef = useRef();
   const inputRefItem = useRef();
+  const chatContainerRef = useRef(null);
+  const [lightboxImage, setLightboxImage] = useState(null);
+
+  const openLightbox = (image) => {
+    setLightboxImage(image);
+  };
+  const closeLightbox = () => {
+    setLightboxImage(null);
+  };
+  useEffect(() => {
+    // Scroll to the bottom when chatsData or messages change
+    scrollToBottom();
+  }, [chatsData, messages]);
+
+  const scrollToBottom = () => {
+    if (chatContainerRef.current) {
+      chatContainerRef.current.scrollTop =
+        chatContainerRef.current.scrollHeight;
+    }
+  };
   const [usersAssignBoard, setUsersAssignBoard] = useState([]);
   useEffect(() => {
     const searchParams = new URLSearchParams(location.search);
@@ -681,6 +727,162 @@ const TaskManagement = () => {
     }
   };
 
+  const downloadFile = async (imagePath) => {
+    try {
+      const response = await fetch(imagePath);
+      const blob = await response.blob();
+      const url = URL.createObjectURL(blob);
+
+      const link = document.createElement("a");
+      link.href = url;
+      const fileName = imagePath.split("/").pop();
+      link.download = fileName;
+      link.click();
+    } catch (error) {
+      console.error("Error downloading image:", error);
+    }
+  };
+
+  const [message, setMessage] = useState("");
+  const send_msg = async (message) => {
+    console.log("Sending message:", message);
+  
+    const formData = new FormData();
+    formData.append("task_id", taskid);
+    formData.append("sender_id", user_id);
+    formData.append("message", message);
+
+    try {
+      const res = await postVibeTaskChat(formData);
+      console.log(res)
+      if (res.success) {
+        setMessage("");
+        console.log("success sending chat");
+        // setChatsData(res.data.chats)
+      }
+    } catch (error) {
+      // toast.error('Please Check Your Internet , Try again! ',{position: "top-center",autoClose: 2000})
+      console.log("chat error", error)
+    } 
+  };
+  const fileInputRef = useRef(null);
+
+  const handleFileChangeForChatFile = (e) => {
+    const file = e.target.files[0];
+
+    send_msg(file);
+    // Handle the file logic here
+  };
+  const renderMessageContent = (message, file_size) => {
+    if (message.startsWith("employee/chat_files/")) {
+      console.log(message);
+      // If the message is a file path
+      const fileExtension = message.split(".").pop().toLowerCase();
+
+      if (["jpg", "jpeg", "png", "gif"].includes(fileExtension)) {
+        // If the file is an image, render the image
+        return (
+          <div style={{ position: "relative" }}>
+            <img
+              // src={profile}
+              src={getVibeMedia + "/" + message}
+              alt="Chat Image"
+              style={{ maxWidth: "100%", maxHeight: "200px" }}
+              // onClick={() => downloadFile(Media + "/" + message)}
+              onClick={() => openLightbox(getVibeMedia + "/" + message)}
+            />
+            <span
+              style={{
+                position: "absolute",
+                bottom: 0,
+                right: 0,
+                padding: "8px",
+                // backgroundColor: "rgba(255, 255, 255, 0.8)",
+              }}
+              className="flex gap-2"
+            >
+              <span style={{ fontSize: "12px", color: "red" }}>
+                {file_size}
+              </span>
+              <FaDownload
+                style={{
+                  fontSize: "14px",
+                  color: "#28a745",
+                  marginLeft: "10px",
+                }}
+                onClick={() => downloadFile(getVibeMedia + "/" + message)}
+              />
+            </span>
+          </div>
+        );
+      } else {
+        const fileExtension = message.split(".").pop().toLowerCase();
+        // Define icons for specific file types
+        const fileTypeIcons = {
+          jpg: FaFileImage,
+          jpeg: FaFileImage,
+          png: FaFileImage,
+          gif: FaFileImage,
+          pdf: FaFilePdf,
+          doc: FaFileWord,
+          docx: FaFileWord,
+          xls: FaFileExcel,
+          xlsx: FaFileExcel,
+          ppt: FaFilePowerpoint,
+          pptx: FaFilePowerpoint,
+        };
+        // Choose the appropriate icon based on the file extension
+        const FileIcon = fileTypeIcons[fileExtension] || FaFileAlt;
+        // If the file is not an image, render a generic file message
+        return (
+          // <div style={{ display: 'flex', alignItems: 'center' }}>
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              padding: "8px",
+              border: "1px solid #ddd",
+              color:"black",
+              borderRadius: "8px",
+              marginBottom: "8px",
+              cursor: "pointer", // Add cursor style to indicate clickability
+            }}
+            onClick={() => downloadFile(getVibeMedia + "/" + message)}
+          >
+            <FileIcon style={{ marginRight: "15px", fontSize: "20px" }} />
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                flex: 1,
+                marginRight: "12px",
+              }}
+            >
+              <p
+                style={{
+                  margin: 0,
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
+                  wordWrap: "break-word",
+                  color: "black"
+                }}
+              >
+                {message.split("/").pop()}
+              </p>
+              <span style={{ fontSize: "12px", color: "#c9caca" }}>
+                {file_size}
+              </span>
+            </div>
+            <FaDownload style={{ fontSize: "14px", color: "#28a745" }} />
+          </div>
+        );
+      }
+    } else {
+      // Otherwise, render the text message
+      return <div className="text-black ">{message}</div>;
+    }
+  };
+
   const to_show_status_on_details = async (status) => {
     console.log("-----------------------------");
     console.log(status);
@@ -770,6 +972,28 @@ const TaskManagement = () => {
     }
   };
 
+  const UpdateUserTask = async (taskid) => {
+    // alert('update user task')
+
+    const formData = new FormData();
+    formData.append("user_id", user_id);
+    formData.append("task_id", taskid);
+    formData.append("task_topic", taskTopicText);
+    formData.append("task_description", taskDescription);
+    // formData.append('due_date',dueDate);
+
+    try {
+      const response = await updateVibeUserTask(formData);
+      console.log(response);
+      if (response.success) {
+        console.log("Success");
+        // window.location.reload();
+      } else {
+        console.log("unable to update");
+      }
+    } catch (error) {}
+  };
+
   const modalStyleChatName = {
     content: {
       // width: isMobile ? '270px' : '950px',
@@ -794,6 +1018,40 @@ const TaskManagement = () => {
   const handleIconClickText = () => {
     setIsEditing(true);
     setTimeout(() => inputRef.current.focus(), 0);
+  };
+
+  const handleToggleComments = (type) => {
+    console.log(type);
+    if (type === "chat" && showComments) {
+      if (!showChatsFinal) {
+        setShowChatsFinal(true);
+        setShowCommentsFinal(false);
+        setShowComments(!showComments);
+      } else {
+        setShowChatsFinal(false);
+      }
+    } else if (type === "comments" && !showComments) {
+      if (!showCommentsFinal) {
+        setShowCommentsFinal(true);
+        setShowChatsFinal(false);
+        setShowComments(!showComments);
+      } else {
+        setShowCommentsFinal(false);
+      }
+    }
+  };
+
+  const openModalChatWeb = () => {
+    // Get the desired timestamp, for example, the current time
+    // const currentTime = new Date();
+
+    // // Set the lastMessageTimestamp to the desired timestamp
+    //   setLastMessageTimestamp(currentTime);
+    setChatVisible(true);
+  };
+
+  const closeChatModalWeb = () => {
+    setChatVisible(false);
   };
 
   const fetchOrg_assignData = async (taskid) => {
@@ -927,6 +1185,78 @@ const TaskManagement = () => {
     } else {
       return false; // Past date
     }
+  };
+
+  const Get_Status = async () => {
+    try {
+      // const params = {
+      //   user_id: localStorage.getItem("user_id"),
+      // };
+
+      const response = await getVibeStatus(user_id);
+
+      if (response.success) {
+        console.log("success");
+        console.log(response.data);
+        settaskMoreStatus(response.data[0].status_name);
+        settaskMoreStatusId(response.data[0].id);
+        // settaskMoreStatusList(response.data.status_name)
+        // settaskMoreStatusIdList(response.data.id)
+
+        const statusOptionsdata = response.data.map((status) => ({
+          value: status.id,
+          label: status.status_name,
+        }));
+        settaskMoreStatusList(statusOptionsdata.map((option) => option.label));
+        settaskMoreStatusIdList(
+          statusOptionsdata.map((option) => option.value)
+        );
+        console.log(response.data[0].status_name);
+        console.log(response.data[0].id);
+      } else {
+        console.log("Something went wrong");
+      }
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
+  useEffect(() => {
+    Get_Status();
+  }, []);
+
+  const [isModalOpenn, setIsModalOpenn] = useState(false);
+  const [editedTaskId, setEditedTaskId] = useState(null);
+  const openStatusModall = (taskupdateid, currentTaskStatus) => {
+    console.log(currentTaskStatus);
+    console.log(taskupdateid);
+    setIsModalOpenn(true);
+    setEditedTaskId(taskupdateid);
+    setNewStatus({ value: currentTaskStatus, label: currentTaskStatus });
+  };
+
+  const closeStatusModall = () => {
+    setIsModalOpenn(false);
+    setEditedTaskId(null);
+    setNewStatus({ value: "", label: "" });
+  };
+  const handleStatusChange = (selectedOption) => {
+    console.log(selectedOption);
+    setNewStatus(selectedOption);
+    // setshowStatusList((prevCheck) => ({
+    //   ...prevCheck,
+    //   status: selectedOption.value, // Assuming the status is stored in the 'value' property
+    // }));
+  };
+  const statusOptions = taskMoreStatusList.map((status, index) => ({
+    value: taskMoreStatusIdList[index],
+    label: status,
+  }));
+
+  const truncateString = (inputString, maxLength) => {
+    if (inputString.length > maxLength) {
+      return inputString.substring(0, maxLength) + "...";
+    }
+    return inputString;
   };
   const handleDateChange1 = (date) => {
     console.log("==================================");
@@ -2009,13 +2339,24 @@ const TaskManagement = () => {
           <span>&times;</span>
         </button> */}
       {isModalChatOpen && (
-        <div className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-30 backdrop-blur-sm z-50 p-10 ">
+        // <div className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-30 backdrop-blur-sm z-50 p-10 ">
+        //   <div
+        //     style={{ background: themeColor }}
+        //     className=" md:w-auto w-full  p-4 md:px-10  flex flex-col rounded-md  overflow-auto max-h-[100%]"
+        //   >
+        //     <button
+        //       className="place-self-end fixed p-1 rounded-full  bg-white"
+        //       onClick={closeChatModal}
+        //     >
+        //       <AiOutlineClose size={20} />
+        //     </button>
+        <div className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-30 backdrop-blur-sm z-50 p-10">
           <div
-            style={{ background: themeColor }}
-            className=" md:w-auto w-full  p-4 md:px-10  flex flex-col rounded-md  overflow-auto max-h-[100%]"
+            style={{ background: themeColor }} // Replace with your theme color
+            className="md:w-auto w-full p-4 md:px-10 flex flex-col rounded-md overflow-auto max-h-[100%]"
           >
             <button
-              className="place-self-end fixed p-1 rounded-full  bg-white"
+              className="place-self-end p-1 rounded-full bg-white"
               onClick={closeChatModal}
             >
               <AiOutlineClose size={20} />
@@ -2154,7 +2495,7 @@ const TaskManagement = () => {
                   )}
                 </div>
 
-                <div className=" gap-4" style={{ display: "flex" }}>
+                <div className=" gap-4 flex-wrap" style={{ display: "flex" }}>
                   <div className=" ">
                     {createdBy_id === user_id ? (
                       <div
@@ -2387,7 +2728,497 @@ const TaskManagement = () => {
                       </div>
                     )}
                   </div>
+                  <div className="">
+                    {(() => {
+                      const displayedStatus = truncateString(
+                        newStatus.label || taskMoreStatus,
+                        8
+                      );
+                      console.log("test");
+                      return createdBy_id === user_id ||
+                        (Array.isArray(selectedEmail) &&
+                          selectedEmail.some(
+                            (item) => item.value === user_id
+                          )) ? (
+                        <div
+                          className="flex gap-2 items-center"
+                          style={{
+                            borderRadius: 10,
+                            padding: "5px",
+                            cursor: "pointer",
+                          }}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setshowStatusList(false);
+                            openStatusModall(taskid, taskMoreStatus);
+                            console.log("testing");
+                          }}
+                        >
+                          <FaLongArrowAltRight />{" "}
+                          {/* {newStatus.label ||taskMoreStatus} */}
+                          {/* {displayedStatus} */}
+                          {/* {taskMoreStatus} */}
+                          {taskMoreStatus.length > 8
+                            ? `${taskMoreStatus.slice(0, 8)}..`
+                            : taskMoreStatus}
+                        </div>
+                      ) : (
+                        <div
+                          className="flex gap-2 items-center"
+                          style={{
+                            borderRadius: 10,
+                            padding: "5px",
+                            cursor: "pointer",
+                          }}
+                        >
+                          <FaLongArrowAltRight
+                            style={{ fontSize: 20, color: "#767676" }}
+                          />{" "}
+                          {/* {taskMoreStatus} */}
+                          {displayedStatus}
+                        </div>
+                      );
+                    })()}
+
+                    {/* modal under modal for task status  */}
+                    {isModalOpenn && (
+                      <div className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-30 backdrop-blur-sm z-50 p-10 ">
+                        <div
+                          style={{ background: themeColor }}
+                          className=" md:w-auto w-full  p-4 md:px-10  flex flex-col rounded-md  overflow-auto max-h-[100%]"
+                        >
+                          <button
+                            className="place-self-end fixed p-1 rounded-full  bg-white text-black"
+                            onClick={closeStatusModall}
+                          >
+                            <AiOutlineClose size={20} />
+                          </button>
+                          <div className=" mx-4">
+                            <h4 className="font-medium text-white my-2 outline-none">
+                              Update Task Status
+                            </h4>
+                            <Select
+                              value={newStatus}
+                              onChange={handleStatusChange}
+                              options={statusOptions}
+                              styles={{
+                                menuPortal: (base) => ({
+                                  ...base,
+                                  zIndex: 9999,
+                                }),
+                                menu: (provided) => ({
+                                  ...provided,
+                                  zIndex: 9999,
+                                }),
+
+                                placeholder: (baseStyles, state) => ({
+                                  ...baseStyles,
+                                  color: "black",
+                                }),
+                                clearIndicator: (baseStyles) => ({
+                                  ...baseStyles,
+                                  color: "red",
+                                }),
+                                dropdownIndicator: (baseStyles) => ({
+                                  ...baseStyles,
+                                  color: "black",
+                                }),
+                                control: (baseStyles) => ({
+                                  ...baseStyles,
+                                  borderColor: "darkblue",
+                                }),
+                                option: (baseStyles) => ({
+                                  ...baseStyles,
+                                  color: "black",
+                                }),
+                              }}
+                              menuPortalTarget={document.body}
+                              className="w-72"
+                            />
+                            <div
+                              style={{ display: "flex", justifyContent: "end" }}
+                              className="my-2 gap-2"
+                            >
+                              <button
+                                className="bg-white p-1 px-4 rounded-full text-black font-medium hover:bg-green-400 transition-all duration-300"
+                                onClick={() =>
+                                  UpdatetaskStatus(
+                                    taskid,
+                                    checklistid,
+                                    "details"
+                                  )
+                                }
+                              >
+                                Save
+                              </button>
+
+                              <button
+                                className="bg-red-400 p-1 px-4 rounded-full font-medium shadow-custom-all-sides hover:bg-red-500 transition-all duration-300"
+                                onClick={closeStatusModall}
+                              >
+                                Cancel
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                  {/* chat */}
+                  <div className="">
+                    <div
+                      style={{
+                        height: "20",
+                        width: "20",
+                        color: "white",
+
+                        padding: "5px",
+                        cursor: "pointer",
+                      }}
+                      className="flex gap-2 items-center"
+                      // onClick={openModalChat} //for tab and mbl
+                      // onClick={openModalChatWeb}
+                      // onClick={isWideScreen ? openModalChatWeb :  openModalChat}
+                      onClick={() => {
+                        handleToggleComments("chat");
+                        // isWideScreen ?
+                        openModalChatWeb();
+                        //  : openModalChat();
+                      }}
+                    >
+                      <FaComments
+                        style={{
+                          fontSize: 20,
+                          color: "white",
+                          marginRight: "6",
+                          textAlign: "center",
+                        }}
+                      />
+                      {"   "}Chat
+                    </div>
+                  </div>
+
+                  {/*  */}
                 </div>
+                {isChatVisible && (
+                  <div className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-30 backdrop-blur-sm z-50 p-10 ">
+                    <div
+                      style={{ background: themeColor }}
+                      className=" md:w-auto w-full  p-4 md:px-10  flex flex-col rounded-md  overflow-auto max-h-[100%]"
+                    >
+                      {/* <button
+                        className="place-self-end fixed p-1 rounded-full  bg-white text-black"
+                        onClick={closeChatModalWeb}
+                      >
+                        <AiOutlineClose size={20} />
+                      </button> */}
+                      {/* <div className=" bg-red-400 overflow-auto  h-96" style={{ width: 350, marginRight: "1%" }}> */}
+                      <div className="p-2">
+                        {!showComments ? (
+                          <>
+                            <div
+                              className="flex gap-2 items-center"
+                              style={{
+                                borderRadius: 5,
+                              }}
+                            >
+                              <span className="" style={{ textAlign: "left" }}>
+                                <FaArrowLeft onClick={closeChatModalWeb} />
+                              </span>
+                              <span className=""></span>
+                              <span
+                                className="text-white"
+                                style={
+                                  {
+                                    // textAlign: 'center',
+                                  }
+                                }
+                              >
+                                CHAT & ACTIVITY{" "}
+                              </span>
+                            </div>
+                            <hr />
+
+                            <div
+                              className="h-96 overflow-auto  "
+                              ref={chatContainerRef}
+                            >
+                              {chatsData.length === 0 ? (
+                                <div
+                                  style={{
+                                    textAlign: "center",
+                                    paddingTop: "20px",
+                                  }}
+                                >
+                                  No chats available
+                                </div>
+                              ) : (
+                                chatsData.map((chat) => (
+                                  <div
+                                    key={chat.id}
+                                    className={
+                                      chat.sender_id === user_id
+                                        ? "ml-10 grid justify-end p-4"
+                                        : "mr-10 grid justify-start p-4"
+                                    }
+                                  >
+                                    <div
+                                      className="bg-white max-w-60 "
+                                      style={{
+                                        borderRadius: 5,
+                                        padding: "4px 10px",
+                                      }}
+                                    >
+                                      <b className="text-black font-medium">
+                                        {chat.sender_id === user_id
+                                          ? "You"
+                                          : `${chat.username}`}
+                                      </b>
+                                      <br />
+                                      {renderMessageContent(
+                                        chat.message,
+                                        chat.file_size
+                                      )}
+                                    </div>
+                                    <span
+                                     
+                                      className={
+                                        chat.sender_id === user_id
+                                          ? "text-right"
+                                          : "text-left"
+                                      }
+                                      style={{ fontSize: 10, color: "#ededed" }}
+                                    >
+                                      {new Date(
+                                        chat.created_at
+                                      ).toLocaleString()}
+                                    </span>
+                                  </div>
+                                ))
+                              )}
+
+                              <div></div>
+                            </div>
+                            <input
+                              type="file"
+                              accept="*"
+                              // accept=".jpg, .jpeg, .png, .gif, .pdf, .doc, .docx, .xls, .xlsx, .ppt, .pptx, py, js, jsx"
+                              style={{ display: "none" }}
+                              onChange={handleFileChangeForChatFile}
+                              ref={fileInputRef}
+                            />
+                            <div
+                              style={{
+                                display: "flex",
+                                justifyContent: "flex-end",
+                              }}
+                            >
+                              <div
+                                style={{ position: "relative", width: "100%" }}
+                              >
+                                <input
+                                  placeholder="Type your message here..."
+                                  className="rounded-full px-4 placeholder:text-gray-500 text-black outline-none"
+                                  spellCheck="true"
+                                  style={{
+                                    // color: "white",
+                                    
+                                    fontSize: 16,
+                                    backgroundColor: "white",
+                                    paddingLeft: 40, // Adjust padding to accommodate the icon
+                                    padding: 8,
+                                    width: "100%",
+                                    border: "none",
+                                  }}
+                                  value={message}
+                                  onChange={(e) => setMessage(e.target.value)}
+                                  onKeyDown={(e) => {
+                                    if (e.key === "Enter") {
+                                      send_msg(message);
+                                    }
+                                  }}
+                                  tabIndex="0"
+                                />
+                                <FaPaperclip
+                                  onClick={() => fileInputRef.current.click()}
+                                  style={{
+                                    position: "absolute",
+                                    top: "50%",
+                                    right: 10,
+                                    transform: "translateY(-50%)",
+                                    fontSize: 20,
+                                    // color: "white",
+                                    cursor: "pointer",
+                                  }}
+                                  className="text-gray-400 bg-white"
+                                />
+                              </div>
+                              <div style={{
+background: themeColor,
+                              }}
+                              className="p-2 px-3 ml-1 rounded-full flex items-center"
+                              >
+
+                              <IoSend 
+
+                                onClick={() => {
+                                  send_msg(message);
+                                  }}
+                                  style={{
+                                  // marginTop: 10,
+                                  // marginLeft: 8,
+                                  fontSize: 20,
+                                  color: "white",
+                                  cursor: "pointer",
+                                  
+                                  }} 
+                                  // size={30}
+                                  
+                                  />
+                                  </div>
+                            </div>
+                          </>
+                        ) : (
+                          <>
+                            <div
+                              className="row"
+                              style={{
+                                borderRadius: 5,
+                              }}
+                            >
+                              <span
+                                className="col-md-2"
+                                style={{ textAlign: "left" }}
+                              >
+                                <FaArrowLeft onClick={closeChatModalWeb} />
+                              </span>
+                              <span className="col-md-1"></span>
+                              <span
+                                className="col-md-9"
+                                style={
+                                  {
+                                    // textAlign: 'center',
+                                  }
+                                }
+                              >
+                                COMMENTS
+                              </span>
+                            </div>
+                            <hr />
+
+                            <div className="chat-container">
+                              {commentsData.length === 0 ? (
+                                <div
+                                  style={{
+                                    textAlign: "center",
+                                    paddingTop: "20px",
+                                  }}
+                                >
+                                  No comments available
+                                </div>
+                              ) : (
+                                commentsData.map((coment) => (
+                                  <div
+                                    key={coment.id}
+                                    className={
+                                      coment.sender_id === user_id
+                                        ? "my-chat"
+                                        : "other-chat"
+                                    }
+                                  >
+                                    <div
+                                      className="abc"
+                                      style={{
+                                        borderRadius: 5,
+                                        backgroundColor: "#30678edc",
+                                        color: "#fff",
+                                        padding: "4px 10px",
+                                      }}
+                                    >
+                                      <b style={{ color: "#10DF95" }}>
+                                        {/* {chat.sender.firstname} {chat.sender.lastname} */}
+                                        {coment.username}
+                                      </b>
+                                      <br />
+                                      {coment.message}
+                                    </div>
+                                    <span
+                                      style={{ fontSize: 10, color: "#ededed" }}
+                                    >
+                                      {new Date(
+                                        coment.created_at
+                                      ).toLocaleString()}
+                                    </span>
+                                  </div>
+                                ))
+                              )}
+                            </div>
+
+                            <div
+                              style={{
+                                display: "flex",
+                                justifyContent: "flex-end",
+                              }}
+                            >
+                              <input
+                                spellcheck="true"
+                                placeholder="Type your message here..."
+                                style={{
+                                  color: "white",
+                                  marginRight: 8,
+                                  borderRadius: 4,
+                                  fontSize: 16,
+                                  backgroundColor: "#30678e76",
+                                  paddingLeft: 10,
+                                  padding: 8,
+                                  width: "100%",
+                                  border: "none",
+                                }}
+                                value={addComent}
+                                onChange={(e) => setAddComent(e.target.value)}
+                                onKeyDown={(e) => {
+                                  if (e.key === "Enter") {
+                                    send_Comment(addComent);
+                                    // handleSubmitComment()
+                                  }
+                                }}
+                                tabIndex="0"
+                              />
+                              <FaPaperPlane
+                                onClick={() => {
+                                  send_Comment(addComent);
+                                  // handleSubmitComment();
+                                }}
+                                style={{
+                                  marginTop: 10,
+                                  fontSize: 20,
+                                  color: "white",
+                                }}
+                              />
+                            </div>
+                          </>
+                        )}
+                      </div>
+                      {lightboxImage && (
+                        <div
+                          className="lightbox-overlay"
+                          onClick={closeLightbox}
+                        >
+                          <div className="lightbox-content">
+                            <img src={lightboxImage} alt="Chat Image" />
+                            <div
+                              className="close-button"
+                              onClick={closeLightbox}
+                            >
+                              X
+                            </div>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                  // </div>
+                )}
               </div>
             </div>
             {/* </Modal> */}
