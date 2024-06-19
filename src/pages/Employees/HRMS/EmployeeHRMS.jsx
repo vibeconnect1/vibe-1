@@ -8,7 +8,7 @@ const modules = [
   { name: 'Auto Salary Breakup Creation', path: '/employee/auto-salary-breakup' },
   { name: 'Leaves', path: '/employee/leaves' },
   { name: 'Roaster Planning', path: '/employee/roaster-planning' },
-  { name: 'Employee Advance Claim', path: '/employee/employee-advance-claim' },
+  { name: 'Employee Advance Claim', path: '/employee/advance-claim' },
   { name: 'Employee Performance', path: '/employee/employee-performance' },
   { name: 'Employee Expenses', path: '/employee/employee-expenses' },
   { name: 'Time Sheet Tracker', path: '/employee/time-sheet-tracker' },

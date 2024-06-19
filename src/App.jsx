@@ -303,6 +303,10 @@ import HRMSRoasterPlanning from "./pages/SubPages/HRMSRoasterPlanning.jsx";
 import HRMSRoasterPlanningDetails from "./pages/SubPages/details/HRMSRoasterPlanningDetails.jsx";
 import EmployeeHRMSRoasterPlanning from "./pages/Employees/HRMS/EmployeeHRMSRoasterPlanning.jsx";
 import EmployeeHRMSRoasterDetails from "./pages/Employees/HRMS/EmployeeHRMSRoasterDetails.jsx";
+import HRMSAdvanceDetails from "./pages/SubPages/details/HRMSAdvanceDetails.jsx";
+import EmployeeAdvanceDetails from "./pages/Employees/HRMS/EmployeeAdvanceDetails.jsx";
+import AdminHRMSAdvanceClaim from "./pages/SubPages/AdminHRMSAdvanceClaim.jsx";
+import EmpHRMSAdvanceClaim from "./pages/Employees/HRMS/EmpHRMSAdvanceClaim.jsx";
 
 function App() {
   const themeColor = useSelector((state) => state.theme.color);
@@ -1965,6 +1969,14 @@ function App() {
               </ProtectedRoute>
             }
           />
+           <Route
+            path="/employee/hrms-advance-details/:id"
+            element={
+              <ProtectedRoute>
+              <EmployeeAdvanceDetails/>
+              </ProtectedRoute>
+            }
+          />
          
            <Route 
            path="/hrms-onboarding" 
@@ -2012,7 +2024,13 @@ function App() {
             <EmployeeHRMSRoasterPlanning/>
             </ProtectedRoute>
             } />
-            <Route path="/employee/employee-advance-claim" element={<div>Employee Advance Claim Content</div>} />
+            <Route 
+            path="/employee/advance-claim" 
+            element={
+              <ProtectedRoute>
+            <EmpHRMSAdvanceClaim/>
+              </ProtectedRoute>
+            } />
             <Route path="/employee/employee-performance" element={<div>Employee Performance Content</div>} />
             <Route path="/employee/employee-expenses" element={<div>Employee Expenses Content</div>} />
             <Route path="/employee/time-sheet-tracker" element={<div>Time Sheet Tracker Content</div>} />
@@ -2498,6 +2516,14 @@ function App() {
               </ProtectedAdminRoutes>
             }
           />
+            <Route
+            path="/admin/hrms-advance-details/:id"
+            element={
+              <ProtectedAdminRoutes>
+              <HRMSAdvanceDetails/>
+              </ProtectedAdminRoutes>
+            }
+          />
           
            <Route 
            path="/admin/employee-onboarding" 
@@ -2540,9 +2566,17 @@ function App() {
             <Route 
             path="admin/roaster-planning" 
             element={
+              <ProtectedAdminRoutes>
            <HRMSRoasterPlanning/>
+           </ProtectedAdminRoutes>
             } />
-            <Route path="admin/employee-advance-claim" element={<div>Employee Advance Claim Content</div>} />
+            <Route 
+            path="admin/employee-advance-claim" 
+            element={
+              <ProtectedAdminRoutes>
+            <AdminHRMSAdvanceClaim/>
+              </ProtectedAdminRoutes>
+            } />
             <Route path="admin/employee-performance" element={<div>Employee Performance Content</div>} />
             <Route path="admin/employee-expenses" element={<div>Employee Expenses Content</div>} />
             <Route path="admin/time-sheet-tracker" element={<div>Time Sheet Tracker Content</div>} />
