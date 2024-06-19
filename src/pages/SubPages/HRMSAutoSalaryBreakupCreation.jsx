@@ -1,18 +1,13 @@
 import { useState } from "react";
-import { PiPlusCircle } from "react-icons/pi";
 import { Link } from "react-router-dom";
-//import Navbar from "../../../components/Navbar";
-import DataTable from "react-data-table-component";
+
 import { BsEye } from "react-icons/bs";
-import { useSelector } from "react-redux";
-import { BiEdit } from "react-icons/bi";
-import { TiTick } from "react-icons/ti";
-import { IoClose } from "react-icons/io5";
+
 import Table from "../../components/table/Table";
 import HRMS from "./../SubPages/HRMS";
 const HRMSAutoSalaryBreakupCreation = () => {
   const [selectedStatus, setSelectedStatus] = useState("all");
-  const themeColor = useSelector((state) => state.theme.color);
+ 
   const columns = [
     {
       name: "Action",
