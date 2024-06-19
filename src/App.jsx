@@ -317,6 +317,26 @@ import OnboardingDetails from "./pages/Employees/EmployeeHRMS/OnBoardingDetails.
 import AssetRoutineDetails from "./pages/SubPages/details/AssetRoutineDetails.jsx";
 import AddPPMActivity from "./pages/SubPages/AddPPMActivity.jsx";
 import PPMActivityDetails from "./pages/SubPages/details/PPMActivityDetails.jsx";
+import HRMSAttendanceDetails from "./pages/HRMS/HRMSAttendanceDetails.jsx";
+import HRMSSalarySlipDetails from "./pages/HRMS/HRMSSalarySlipDetails.jsx";
+import HRMSSalaryAutoDetails from "./pages/HRMS/HRMSSalaryAutoDetails.jsx";
+import HRMSAttendance from "./pages/HRMS/HRMSAttendance.jsx";
+import HRMSSalarySlip from "./pages/HRMS/HRMSSalarySlip.jsx";
+import HRMSAutoSalaryBreakupCreation from "./pages/HRMS/HRMSAutoSalaryBreakupCreation.jsx";
+import EmployeeHRMSAttendanceDetails from "./pages/Employees/EmployeeHRMS/EmployeeHRMSAttendanceDetails.jsx";
+import EmployeeHRMSSalarySlipDetails from "./pages/Employees/EmployeeHRMS/EmployeeHRMSSalarySlipDetails.jsx";
+import EmployeeAutoSalaryBreakupDetails from "./pages/Employees/EmployeeHRMS/EmployeeAutoSalaryBreakupDetails.jsx";
+import AttendanceHRMS from "./pages/Employees/EmployeeHRMS/AttendanceHRMS.jsx";
+import EmployeeHRMSSalarySlip from "./pages/Employees/EmployeeHRMS/EmployeeHRMSSalarySlip.jsx";
+import EmployeeAutoSalaryBreakup from "./pages/Employees/EmployeeHRMS/EmployeeAutoSalaryBreakUp.jsx";
+import HRMSLeaves from "./pages/HRMS/HRMSLeave.jsx";
+import HRMSLeavesDetails from "./pages/HRMS/HRMSLeaveDetails.jsx";
+import EmployeeHRMSLeaves from "./pages/Employees/EmployeeHRMS/EmployeeHRMSLeave.jsx";
+import EmployeeLeavesDetails from "./pages/Employees/EmployeeHRMS/EmployeeHRMSLeaveDetails.jsx";
+import CreatePolls from "./pages/SubPages/CreatePoll.jsx";
+import CreateForum from "./pages/SubPages/CreateForum.jsx";
+import ChatBot from "./pages/SubPages/ChatBot.jsx";
+import CreateGroup from "./pages/SubPages/CreateGroup.jsx";
 
 function App() {
   const themeColor = useSelector((state) => state.theme.color);
@@ -564,6 +584,39 @@ function App() {
           <Route
             path="/communication/broadcast/broadcast-details/:id"
             element={<BroadcastDetails />}
+          />
+          {/*  */}
+           <Route
+            path="/admin/create-polls"
+            element={
+              <ProtectedAdminRoutes>
+                <CreatePolls/>
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/create-forum"
+            element={
+              <ProtectedAdminRoutes>
+                <CreateForum/>
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/communication-charbot"
+            element={
+              <ProtectedAdminRoutes>
+                <ChatBot/>
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/communication-create-group"
+            element={
+              <ProtectedAdminRoutes>
+                <CreateGroup/>
+              </ProtectedAdminRoutes>
+            }
           />
           {/* mail room */}
           <Route path="/mail-room" element={<MailRoom />} />
@@ -2707,25 +2760,55 @@ function App() {
             }
           />
           
-            {/* <Route path="/hrms-attendance" element={<div>Attendance Content</div>} />
-            <Route path="/hrms-salary-slip" element={<div>Salary Slip Content</div>} />
-            <Route path="/auto-salary-breakup" element={<div>Auto Salary Breakup Creation Content</div>} />
-            <Route path="/leaves" element={<div>Leaves Content</div>} />
-            <Route path="/roaster-planning" element={<div>Roaster Planning Content</div>} />
-            <Route path="/employee-advance-claim" element={<div>Employee Advance Claim Content</div>} />
-            <Route path="/employee-performance" element={<div>Employee Performance Content</div>} />
-            <Route path="/employee-expenses" element={<div>Employee Expenses Content</div>} />
-            <Route path="/time-sheet-tracker" element={<div>Time Sheet Tracker Content</div>} />
-            <Route path="/ijp-recruitment" element={<div>IJP/Recruitment Content</div>} />
-            <Route path="/employee-induction" element={<div>Employee Induction Content</div>} />
-            <Route path="/employee-it-declaration" element={<div>Employee IT Declaration Content</div>} />
-            <Route path="/offer-letter" element={<div>Offer Letter / Acceptance Content</div>} />
-            <Route path="/employee-talent-programs" element={<div>Employee Talent Programs Content</div>} />
-            <Route path="/memos" element={<div>Memos Content</div>} />
-            <Route path="/employee-loans-advance" element={<div>Employee Loans & Advance Content</div>} />
-            <Route path="/recruitment" element={<div>Recruitment Content</div>} />
-            <Route path="/roaster" element={<div>Roaster Content</div>} />
-            <Route path="/provident-fund" element={<div>Provident Fund, ESIC, Legal Compliance Content</div>} /> */}
+          <Route
+            path="/employee/hrms-attendance-details/:id"
+            element={
+              <ProtectedRoute>
+                <EmployeeHRMSAttendanceDetails/>
+              </ProtectedRoute>
+            }
+          />
+           <Route
+            path="/employee/hrms-salary-slip-details/:id"
+            element={
+              <ProtectedRoute>
+               <EmployeeHRMSSalarySlipDetails/>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/employee/hrms-salary-auto-details/:id"
+            element={
+              <ProtectedRoute>
+               <EmployeeAutoSalaryBreakupDetails/>
+              </ProtectedRoute>
+            }
+          />
+          
+            <Route 
+            path="/employee/hrms-attendance" 
+            element={
+            <ProtectedRoute>
+              <AttendanceHRMS/>
+              </ProtectedRoute>
+            } 
+            />
+            <Route 
+            path="/employee/hrms-salary-slip" 
+            element={
+            <ProtectedRoute>
+              <EmployeeHRMSSalarySlip/>
+              </ProtectedRoute>
+            } 
+            />
+            <Route 
+            path="employee/auto-salary-breakup" 
+            element={
+            <ProtectedRoute>
+              <EmployeeAutoSalaryBreakup/>
+              </ProtectedRoute>
+            } 
+            />
 
 
 {/* admin HRMS */}
@@ -2754,6 +2837,23 @@ function App() {
               </ProtectedAdminRoutes>
             }
           />
+
+<Route
+            path="/employee/hrms-leaves-details/:id"
+            element={
+              <ProtectedRoute>
+               <EmployeeLeavesDetails/>
+              </ProtectedRoute>
+            }
+          />
+            <Route 
+            path="/employee/leaves" 
+            element={ 
+            <ProtectedRoute>
+              <EmployeeHRMSLeaves/>
+              </ProtectedRoute>
+            } />
+
 {/* <Route
             path="/admin/hrms"
             element={
@@ -2762,29 +2862,73 @@ function App() {
               </ProtectedAdminRoutes>
             }
           /> */}
-          {/*
+
+<Route
+            path="/admin/hrms-attendance-details/:id"
+            element={
+              <ProtectedAdminRoutes>
+                <HRMSAttendanceDetails/>
+              </ProtectedAdminRoutes>
+            }
+          />
+           <Route
+            path="/admin/hrms-salary-slip-details/:id"
+            element={
+              <ProtectedAdminRoutes>
+               <HRMSSalarySlipDetails/>
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/hrms-salary-auto-details/:id"
+            element={
+              <ProtectedAdminRoutes>
+               <HRMSSalaryAutoDetails/>
+              </ProtectedAdminRoutes>
+            }
+          />
+          
+            <Route 
+            path="/admin/hrms-attendance" 
+            element={
+            <ProtectedAdminRoutes>
+              <HRMSAttendance/>
+              </ProtectedAdminRoutes>
+            } 
+            />
+            <Route 
+            path="/admin/hrms-salary-slip" 
+            element={
+            <ProtectedAdminRoutes>
+              <HRMSSalarySlip/>
+              </ProtectedAdminRoutes>
+            }
+             />
+            <Route 
+            path="/admin/auto-salary-breakup" 
+            element={
+            <ProtectedAdminRoutes>
+              <HRMSAutoSalaryBreakupCreation/>
+              </ProtectedAdminRoutes>
+            } 
+            />
+
+<Route path="admin/leaves" 
+            element={
+              <ProtectedAdminRoutes>
+              <HRMSLeaves/>
+              </ProtectedAdminRoutes>
+            } />
+             <Route
+            path="/admin/hrms-leaves-details/:id"
+            element={
+              <ProtectedAdminRoutes>
+               <HRMSLeavesDetails/>
+              </ProtectedAdminRoutes>
+            }
+          />
         
-           
-           
-            {/* <Route path="/hrms-attendance" element={<div>Attendance Content</div>} />
-            <Route path="/hrms-salary-slip" element={<div>Salary Slip Content</div>} />
-            <Route path="/auto-salary-breakup" element={<div>Auto Salary Breakup Creation Content</div>} />
-            <Route path="/leaves" element={<div>Leaves Content</div>} />
-            <Route path="/roaster-planning" element={<div>Roaster Planning Content</div>} />
-            <Route path="/employee-advance-claim" element={<div>Employee Advance Claim Content</div>} />
-            <Route path="/employee-performance" element={<div>Employee Performance Content</div>} />
-            <Route path="/employee-expenses" element={<div>Employee Expenses Content</div>} />
-            <Route path="/time-sheet-tracker" element={<div>Time Sheet Tracker Content</div>} />
-            <Route path="/ijp-recruitment" element={<div>IJP/Recruitment Content</div>} />
-            <Route path="/employee-induction" element={<div>Employee Induction Content</div>} />
-            <Route path="/employee-it-declaration" element={<div>Employee IT Declaration Content</div>} />
-            <Route path="/offer-letter" element={<div>Offer Letter / Acceptance Content</div>} />
-            <Route path="/employee-talent-programs" element={<div>Employee Talent Programs Content</div>} />
-            <Route path="/memos" element={<div>Memos Content</div>} />
-            <Route path="/employee-loans-advance" element={<div>Employee Loans & Advance Content</div>} />
-            <Route path="/recruitment" element={<div>Recruitment Content</div>} />
-            <Route path="/roaster" element={<div>Roaster Content</div>} />
-            <Route path="/provident-fund" element={<div>Provident Fund, ESIC, Legal Compliance Content</div>} /> */}
+        
        
         </Routes>
         <Footer />
