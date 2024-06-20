@@ -337,6 +337,11 @@ import CreatePolls from "./pages/SubPages/CreatePoll.jsx";
 import CreateForum from "./pages/SubPages/CreateForum.jsx";
 import ChatBot from "./pages/SubPages/ChatBot.jsx";
 import CreateGroup from "./pages/SubPages/CreateGroup.jsx";
+import EmployeeCommunication from "./pages/Employees/EmployeeCommunication/EmployeeCommunication.jsx";
+import CreateEmployeeForum from "./pages/Employees/EmployeeCommunication/CreateEmployeeForum.jsx";
+import EmployeeChatBot from "./pages/Employees/EmployeeCommunication/EmployeeChatBot.jsx";
+import EmployeeGroupJoinDetails from "./pages/Employees/EmployeeCommunication/EmployeeGroupJoinDetails.jsx";
+import GroupJoinDetails from "./pages/SubPages/details/GroupJoinDetails.jsx";
 
 function App() {
   const themeColor = useSelector((state) => state.theme.color);
@@ -570,27 +575,90 @@ function App() {
               </ProtectedRoute>
             }
           />
+          {/* employee Communication */}
+          {/* employee Communication */}
+          <Route
+            path="/employee/employee-communication"
+            element={
+              <ProtectedRoute>
+                <EmployeeCommunication />
+              </ProtectedRoute>
+            }
+          />
+          {/* employee Communication create forum */}
+          <Route
+            path="/employee/employee-communication-create-forum"
+            element={
+              <ProtectedRoute>
+                <CreateEmployeeForum />
+              </ProtectedRoute>
+            }
+          />
+          {/* employee Communication chatbot */}
+          <Route
+            path="/employee/employee-communication-chatbot"
+            element={
+              <ProtectedRoute>
+                <EmployeeChatBot />
+              </ProtectedRoute>
+            }
+          />
+          {/* employee Communication group detail */}
+          <Route
+            path="/employee/communication-groupdetail"
+            element={
+              <ProtectedRoute>
+                <EmployeeGroupJoinDetails />
+              </ProtectedRoute>
+            }
+          />
           {/* communication */}
-          <Route path="/communication" element={<Communication />} />
-          <Route path="/communication/create-event" element={<CreateEvent />} />
+          <Route
+            path="/communication"
+            element={
+              <ProtectedAdminRoutes>
+                <Communication />{" "}
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/communication/create-event"
+            element={
+              <ProtectedAdminRoutes>
+                <CreateEvent />
+              </ProtectedAdminRoutes>
+            }
+          />
           <Route
             path="/communication/event/event-details/:id"
-            element={<EventDetails />}
+            element={
+              <ProtectedAdminRoutes>
+                <EventDetails />
+              </ProtectedAdminRoutes>
+            }
           />
           <Route
             path="/communication/broadcast/create-broadcast"
-            element={<CreateBroadcast />}
+            element={
+              <ProtectedAdminRoutes>
+                <CreateBroadcast />
+              </ProtectedAdminRoutes>
+            }
           />
           <Route
             path="/communication/broadcast/broadcast-details/:id"
-            element={<BroadcastDetails />}
+            element={
+              <ProtectedAdminRoutes>
+                <BroadcastDetails />
+              </ProtectedAdminRoutes>
+            }
           />
           {/*  */}
-           <Route
+          <Route
             path="/admin/create-polls"
             element={
               <ProtectedAdminRoutes>
-                <CreatePolls/>
+                <CreatePolls />
               </ProtectedAdminRoutes>
             }
           />
@@ -598,7 +666,7 @@ function App() {
             path="/admin/create-forum"
             element={
               <ProtectedAdminRoutes>
-                <CreateForum/>
+                <CreateForum />
               </ProtectedAdminRoutes>
             }
           />
@@ -606,7 +674,7 @@ function App() {
             path="/admin/communication-charbot"
             element={
               <ProtectedAdminRoutes>
-                <ChatBot/>
+                <ChatBot />
               </ProtectedAdminRoutes>
             }
           />
@@ -614,7 +682,15 @@ function App() {
             path="/admin/communication-create-group"
             element={
               <ProtectedAdminRoutes>
-                <CreateGroup/>
+                <CreateGroup />
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/communication-group-details"
+            element={
+              <ProtectedAdminRoutes>
+                <GroupJoinDetails/>
               </ProtectedAdminRoutes>
             }
           />
@@ -2742,12 +2818,19 @@ function App() {
           />
 
           {/* employee hrms */}
-           <Route path="/hrms-onboarding" element={ <ProtectedRoute><Onboarding/></ProtectedRoute>} />
+          <Route
+            path="/hrms-onboarding"
+            element={
+              <ProtectedRoute>
+                <Onboarding />
+              </ProtectedRoute>
+            }
+          />
           <Route
             path="/employee/add-onboarding"
             element={
               <ProtectedRoute>
-                <AddOnBoarding/>
+                <AddOnBoarding />
               </ProtectedRoute>
             }
           />
@@ -2755,24 +2838,24 @@ function App() {
             path="/employee/employee-onboarding-details/:id"
             element={
               <ProtectedRoute>
-                <OnboardingDetails/>
+                <OnboardingDetails />
               </ProtectedRoute>
             }
           />
-          
+
           <Route
             path="/employee/hrms-attendance-details/:id"
             element={
               <ProtectedRoute>
-                <EmployeeHRMSAttendanceDetails/>
+                <EmployeeHRMSAttendanceDetails />
               </ProtectedRoute>
             }
           />
-           <Route
+          <Route
             path="/employee/hrms-salary-slip-details/:id"
             element={
               <ProtectedRoute>
-               <EmployeeHRMSSalarySlipDetails/>
+                <EmployeeHRMSSalarySlipDetails />
               </ProtectedRoute>
             }
           />
@@ -2780,52 +2863,58 @@ function App() {
             path="/employee/hrms-salary-auto-details/:id"
             element={
               <ProtectedRoute>
-               <EmployeeAutoSalaryBreakupDetails/>
+                <EmployeeAutoSalaryBreakupDetails />
               </ProtectedRoute>
             }
           />
-          
-            <Route 
-            path="/employee/hrms-attendance" 
-            element={
-            <ProtectedRoute>
-              <AttendanceHRMS/>
-              </ProtectedRoute>
-            } 
-            />
-            <Route 
-            path="/employee/hrms-salary-slip" 
-            element={
-            <ProtectedRoute>
-              <EmployeeHRMSSalarySlip/>
-              </ProtectedRoute>
-            } 
-            />
-            <Route 
-            path="employee/auto-salary-breakup" 
-            element={
-            <ProtectedRoute>
-              <EmployeeAutoSalaryBreakup/>
-              </ProtectedRoute>
-            } 
-            />
 
+          <Route
+            path="/employee/hrms-attendance"
+            element={
+              <ProtectedRoute>
+                <AttendanceHRMS />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/employee/hrms-salary-slip"
+            element={
+              <ProtectedRoute>
+                <EmployeeHRMSSalarySlip />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="employee/auto-salary-breakup"
+            element={
+              <ProtectedRoute>
+                <EmployeeAutoSalaryBreakup />
+              </ProtectedRoute>
+            }
+          />
 
-{/* admin HRMS */}
-<Route path="admin/hrms/employee-onboarding" element={<ProtectedAdminRoutes><EmployeeOnboarding/></ProtectedAdminRoutes>} /> 
-<Route
-            path="/admin/add-employee-onboarding"
+          {/* admin HRMS */}
+          <Route
+            path="admin/hrms/employee-onboarding"
             element={
               <ProtectedAdminRoutes>
-                <AddEmployeeOnBoarding/>
+                <EmployeeOnboarding />
               </ProtectedAdminRoutes>
             }
           />
-            <Route
+          <Route
+            path="/admin/add-employee-onboarding"
+            element={
+              <ProtectedAdminRoutes>
+                <AddEmployeeOnBoarding />
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
             path="/admin/employee-onboarding-details/:id"
             element={
               <ProtectedAdminRoutes>
-                <EmployeeOnboardingDetails/>
+                <EmployeeOnboardingDetails />
               </ProtectedAdminRoutes>
             }
           />
@@ -2833,28 +2922,29 @@ function App() {
             path="/admin/employee-onboarding-edit/:id"
             element={
               <ProtectedAdminRoutes>
-                <EditEmployeeOnBoarding/>
+                <EditEmployeeOnBoarding />
               </ProtectedAdminRoutes>
             }
           />
 
-<Route
+          <Route
             path="/employee/hrms-leaves-details/:id"
             element={
               <ProtectedRoute>
-               <EmployeeLeavesDetails/>
+                <EmployeeLeavesDetails />
               </ProtectedRoute>
             }
           />
-            <Route 
-            path="/employee/leaves" 
-            element={ 
-            <ProtectedRoute>
-              <EmployeeHRMSLeaves/>
+          <Route
+            path="/employee/leaves"
+            element={
+              <ProtectedRoute>
+                <EmployeeHRMSLeaves />
               </ProtectedRoute>
-            } />
+            }
+          />
 
-{/* <Route
+          {/* <Route
             path="/admin/hrms"
             element={
               <ProtectedAdminRoutes>
@@ -2863,19 +2953,19 @@ function App() {
             }
           /> */}
 
-<Route
+          <Route
             path="/admin/hrms-attendance-details/:id"
             element={
               <ProtectedAdminRoutes>
-                <HRMSAttendanceDetails/>
+                <HRMSAttendanceDetails />
               </ProtectedAdminRoutes>
             }
           />
-           <Route
+          <Route
             path="/admin/hrms-salary-slip-details/:id"
             element={
               <ProtectedAdminRoutes>
-               <HRMSSalarySlipDetails/>
+                <HRMSSalarySlipDetails />
               </ProtectedAdminRoutes>
             }
           />
@@ -2883,53 +2973,52 @@ function App() {
             path="/admin/hrms-salary-auto-details/:id"
             element={
               <ProtectedAdminRoutes>
-               <HRMSSalaryAutoDetails/>
+                <HRMSSalaryAutoDetails />
               </ProtectedAdminRoutes>
             }
           />
-          
-            <Route 
-            path="/admin/hrms-attendance" 
-            element={
-            <ProtectedAdminRoutes>
-              <HRMSAttendance/>
-              </ProtectedAdminRoutes>
-            } 
-            />
-            <Route 
-            path="/admin/hrms-salary-slip" 
-            element={
-            <ProtectedAdminRoutes>
-              <HRMSSalarySlip/>
-              </ProtectedAdminRoutes>
-            }
-             />
-            <Route 
-            path="/admin/auto-salary-breakup" 
-            element={
-            <ProtectedAdminRoutes>
-              <HRMSAutoSalaryBreakupCreation/>
-              </ProtectedAdminRoutes>
-            } 
-            />
 
-<Route path="admin/leaves" 
+          <Route
+            path="/admin/hrms-attendance"
             element={
               <ProtectedAdminRoutes>
-              <HRMSLeaves/>
+                <HRMSAttendance />
               </ProtectedAdminRoutes>
-            } />
-             <Route
+            }
+          />
+          <Route
+            path="/admin/hrms-salary-slip"
+            element={
+              <ProtectedAdminRoutes>
+                <HRMSSalarySlip />
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/auto-salary-breakup"
+            element={
+              <ProtectedAdminRoutes>
+                <HRMSAutoSalaryBreakupCreation />
+              </ProtectedAdminRoutes>
+            }
+          />
+
+          <Route
+            path="admin/leaves"
+            element={
+              <ProtectedAdminRoutes>
+                <HRMSLeaves />
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
             path="/admin/hrms-leaves-details/:id"
             element={
               <ProtectedAdminRoutes>
-               <HRMSLeavesDetails/>
+                <HRMSLeavesDetails />
               </ProtectedAdminRoutes>
             }
           />
-        
-        
-       
         </Routes>
         <Footer />
       </Router>

@@ -1,36 +1,64 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Collapsible from "react-collapsible";
 import CustomTrigger from "../../containers/CustomTrigger";
-
+import SeatTimeSlot, { initialSelectedTimes } from "./SeatTimeSlot";
+import Select from "react-select";
+import { getAssignedTo } from "../../api";
 const FacilityBooking = () => {
+  const today = new Date();
+  const year = today.getFullYear();
+  const month = String(today.getMonth() + 1).padStart(2, "0");
+  const day = String(today.getDate()).padStart(2, "0");
+  const formattedDate = `${year}-${month}-${day}`;
   const [selectedSlot, setSelectedSlot] = useState(null);
+  const [behalf, setBehalf] = useState("self");
   const [isOpen, setIsOpen] = useState(false);
   const [isTermOpen, setIsTermOpen] = useState(false);
+  const [selectedTimes, setSelectedTimes] = useState(initialSelectedTimes);
+  const [timeSelected, setTimeSelected] = useState(false);
+  const [time, setTime] = useState("")
+  const [users, setUsers] = useState([]);
+  const [date, setDate] = useState(formattedDate)
+  const [facility, setFacility] = useState("")
+  const [formData, setFormData] = useState({
+    building_id: "",
+    floor_id: "",
+    seat_date: formattedDate,
+    user_id: "",
+  });
+  const handleButtonClick = (selectedTime) => {
+    setSelectedTimes((prevState) => {
+      const newState = { ...prevState, [selectedTime]: !prevState[selectedTime] };
 
-  const generateTimeSlots = () => {
-    const startTime = "10:00"; // Start time
-    const endTime = "17:00"; // End time
-    const interval = 30; // Interval in minutes
+      // Determine if any time slot is selected
+      const anyTimeSelected = Object.values(newState).some((isSelected) => isSelected);
 
-    const slots = [];
-    let currentTime = startTime;
+      // Update the state for timeSelected and time
+      setTimeSelected(anyTimeSelected);
+      setTime(anyTimeSelected ? selectedTime : '');
 
-    while (currentTime <= endTime) {
-      slots.push(currentTime);
-      const [hours, minutes] = currentTime.split(":").map(Number);
-      const newTime = new Date();
-      newTime.setHours(hours);
-      newTime.setMinutes(minutes + interval);
-      currentTime = `${newTime.getHours()}:${
-        newTime.getMinutes() < 10 ? "0" : ""
-      }${newTime.getMinutes()}`;
-    }
-
-    return slots;
+      return newState;
+    });
   };
 
-  // Example time slots (9:00 AM to 5:00 PM with 30-minute interval)
-  const timeSlots = generateTimeSlots();
+  useEffect(() => {
+    const fetchAssignedTo = async () => {
+      try {
+        const response = await getAssignedTo();
+        const transformedUsers = response.data.map((user) => ({
+          value: user.id,
+          label: `${user.firstname} ${user.lastname}`,
+        }));
+        setUsers(transformedUsers);
+        // setUsers(response.data);
+        console.log(response);
+      } catch (error) {
+        console.error("Error fetching assigned users:", error);
+      }
+    };
+    fetchAssignedTo();
+    console.log(users);
+  }, []);
   return (
     <section className="w-screen">
       <div className="flex flex-col mb-10">
@@ -39,66 +67,71 @@ const FacilityBooking = () => {
             Book Facility
           </h2>
         </div>
-        <div className="border border-gray-400 rounded-md mx-20 p-4">
-          <div className="flex justify-center my-5">
-            <div className="flex gap-10">
-              <div className="flex gap-2">
-                <input type="radio" name="user" id="fm" />
-                <label htmlFor="fm">FM User</label>
-              </div>
-              <div className="flex gap-2">
-                <input type="radio" name="user" id="occupant" />
-                <label htmlFor="occupant">Occupant User</label>
-              </div>
+        <div className="md:border border-gray-400 rounded-md md:mx-20 p-4">
+          <div className="md:grid flex flex-col grid-cols-4 items-center">
+            <p className="font-semibold">For :</p>
+            <div className="flex gap-5">
+              <p
+                className={`border-2 p-1 px-6 border-black font-medium rounded-full cursor-pointer ${
+                  behalf === "self" && "bg-black text-white"
+                }`}
+                onClick={() => setBehalf("self")}
+              >
+                Self
+              </p>
+              <p
+                className={`border-2 p-1 px-6 border-black font-medium rounded-full cursor-pointer ${
+                  behalf === "others" && "bg-black text-white"
+                }`}
+                onClick={() => setBehalf("others")}
+              >
+                Others
+              </p>
             </div>
+            {behalf === "others" && (
+              <Select
+                options={users}
+                placeholder="Select User"
+                value={formData.on_behalf}
+                onChange={(selectedOption) =>
+                  setFormData({ ...formData, on_behalf: selectedOption })
+                }
+                className="w-full my-2"
+                isMulti
+              />
+            )}
           </div>
-          <div className="mx-5 flex justify-around">
+          <div className="flex md:flex-row flex-col md:gap-8 gap-2 my-5">
+            
             <div className="flex flex-col gap-2">
-              <p className="font-bold">Select User :</p>
-              <select className="border p-1 px-4 border-gray-500 rounded-md">
-                <option value="">Choose User</option>
-                <option value="user1">User 1</option>
-                <option value="User2">User 2</option>
-              </select>
-            </div>
-            <div className="flex flex-col gap-2">
-              <p className="font-bold">Select Facility :</p>
-              <select className="border p-1 px-4 border-gray-500 rounded-md">
+              <p className="font-semibold">Select Facility :</p>
+              <select className="border p-1 px-4 border-gray-500 rounded-md" value={facility} onChange={(e)=> setFacility(e.target.value)}>
                 <option value="">Choose Facility</option>
                 <option value="user1">Facility 1</option>
                 <option value="User2">Facility 2</option>
               </select>
             </div>
             <div className="flex flex-col gap-2">
-              <label htmlFor="" className="font-bold">
+              <label htmlFor="" className="font-semibold">
                 Select Date :
               </label>
               <input
                 type="date"
                 name=""
+                value={date}
+                onChange={(e)=> setDate(e.target.value)}
                 id=""
                 className="border p-[2px] px-4 border-gray-500 rounded-md"
               />
             </div>
           </div>
 
-          <div className="my-5">
+        {facility !== "" &&  <div className="my-5">
             <h2 className="border-b text-xl border-black font-semibold">
               Select Slot
             </h2>
-            <ul className="grid grid-cols-4 items-center">
-              {timeSlots.map((slot, index) => (
-                <li
-                  key={index}
-                  onClick={() => setSelectedSlot(slot)}
-                  style={{ cursor: "pointer" }}
-                >
-                  {slot}
-                </li>
-              ))}
-            </ul>
-            <p>{selectedSlot}</p>
-          </div>
+            <SeatTimeSlot handleButtonClick={handleButtonClick} selectedTimes={selectedTimes} />
+          </div>}
           <div>
             <h2 className="border-b text-xl border-black font-semibold">
               Payment Mode
@@ -131,7 +164,7 @@ const FacilityBooking = () => {
             }
             onOpen={() => setIsOpen(true)}
             onClose={() => setIsOpen(false)}
-            className="bg-gray-300 my-4 p-2 rounded-md font-bold "
+            className="bg-gray-100 my-4 p-2 rounded-md font-bold "
           >
             <div className="grid grid-cols-2 bg-gray-300 p-2 rounded-md gap-5 pb-4">
               <p className="font-medium"> will get policy from api</p>
@@ -145,7 +178,7 @@ const FacilityBooking = () => {
             }
             onOpen={() => setIsTermOpen(true)}
             onClose={() => setIsTermOpen(false)}
-            className="bg-gray-300 my-4 p-2 rounded-md font-bold "
+            className="bg-gray-100 my-4 p-2 rounded-md font-bold "
           >
             <div className="grid grid-cols-2 bg-gray-300 p-2 rounded-md gap-5 pb-4">
               <p className="font-medium"> will get terms from api</p>

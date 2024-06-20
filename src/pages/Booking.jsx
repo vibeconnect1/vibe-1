@@ -8,6 +8,7 @@ import ExportBookingModal from "../containers/modals/ExportBookingsModal";
 import { Link } from "react-router-dom";
 import SetupBookingFacility from "./SubPages/SetupBookingFacility";
 import SeatBooking from "./SubPages/SeatBooking";
+import Table from "../components/table/Table";
 
 const Booking = () => {
   const [searchText, setSearchText] = useState("");
@@ -99,19 +100,19 @@ const Booking = () => {
       <Navbar />
       <div className="w-full flex m-3 flex-col overflow-hidden">
         <div className="flex justify-center">
-          <div className="flex flex-row gap-5 text-lg font-semibold p-2 rounded-full bg-gray-400">
+          <div className="sm:flex grid grid-cols-2 sm:flex-row gap-5 font-medium p-2 sm:rounded-full rounded-md opacity-90 bg-gray-200 ">
             <h2
               className={`p-1 ${
-                page === "meetingBooking" && "bg-white text-blue-500"
-              } rounded-full px-4 cursor-pointer text-sm`}
+                page === "meetingBooking" && "bg-white text-blue-500 shadow-custom-all-sides"
+              } rounded-full px-4 cursor-pointer text-center  transition-all duration-300 ease-linear`}
               onClick={() => setPage("meetingBooking")}
             >
              Meeting Room Bookings
             </h2>
             <h2
               className={`p-1 ${
-                page === "seatBooking" && "bg-white text-blue-500"
-              } rounded-full px-4 cursor-pointer text-sm`}
+                page === "seatBooking" && "bg-white text-blue-500 shadow-custom-all-sides"
+              } rounded-full px-4 cursor-pointer text-center  transition-all duration-300 ease-linear`}
               onClick={() => setPage("seatBooking")}
             >
               Seat Bookings
@@ -145,7 +146,7 @@ const Booking = () => {
                 </button>
               </div>
             </div>
-            <DataTable
+            {/* <DataTable
               columns={column}
               data={filteredData}
               customStyles={customStyle}
@@ -155,6 +156,17 @@ const Booking = () => {
           selectableRowsHighlight
           highlightOnHover
           omitColumn={column}
+            /> */}
+            <Table
+              columns={column}
+              data={filteredData}
+          //     customStyles={customStyle}
+          //     fixedHeader
+          // fixedHeaderScrollHeight="500px"
+          // pagination
+          // selectableRowsHighlight
+          // highlightOnHover
+          // omitColumn={column}
             />
             {modal && <ExportBookingModal onclose={() => showModal(false)} />}
           </div>

@@ -4,11 +4,14 @@ import { BiExport } from "react-icons/bi";
 import { ImEye } from "react-icons/im";
 import { IoAddCircleOutline } from "react-icons/io5";
 import { Link } from "react-router-dom";
+import Table from "../../components/table/Table";
+import { useSelector } from "react-redux";
 
 const SeatBooking = () => {
     const [searchText, setSearchText] = useState("");
     const [modal, showModal] = useState(false);
     const [page, setPage] = useState("meetingBooking");
+    const themeColor = useSelector((state)=> state.theme.color)
     const column = [
       {
         name: "Action",
@@ -103,7 +106,8 @@ const SeatBooking = () => {
         <div className="flex gap-4 justify-end w-full">
           <Link
             to={"/admin/seat-booking"}
-            className="bg-black w-20 rounded-lg flex font-semibold items-center gap-2 text-white p-2 my-5"
+            style={{background: themeColor}}
+            className=" w-20 rounded-lg flex font-semibold items-center gap-2 text-white p-2 my-5"
           >
             <IoAddCircleOutline size={20} />
             Book
@@ -117,16 +121,16 @@ const SeatBooking = () => {
                 </button>
         </div>
       </div>
-      <DataTable
+      <Table
         columns={column}
         data={filteredData}
-        customStyles={customStyle}
-        fixedHeader
-        fixedHeaderScrollHeight="500px"
-        pagination
-        selectableRowsHighlight
-        highlightOnHover
-        omitColumn={column}
+        // customStyles={customStyle}
+        // fixedHeader
+        // fixedHeaderScrollHeight="500px"
+        // pagination
+        // selectableRowsHighlight
+        // highlightOnHover
+        // omitColumn={column}
       />
       {/* {modal && <ExportBookingModal onclose={() => showModal(false)} />} */}
     </div>

@@ -2,10 +2,11 @@ import React, { useEffect, useRef, useState } from "react";
 import { getItemInLocalStorage } from "../utils/localStorage";
 import Navbar from "../components/Navbar";
 import { useSelector } from "react-redux";
-import profile from "/profile.png"
+import profile from "/profile.png";
 import {
   FaArrowLeft,
   FaCheck,
+  FaComment,
   FaComments,
   FaDownload,
   FaFileAlt,
@@ -56,6 +57,7 @@ import Select from "react-select";
 import ReactDatePicker from "react-datepicker";
 import { SendDueDateFormat } from "../utils/dateUtils";
 import { IoSend } from "react-icons/io5";
+import useWebSocketServiceForTasks from "../components/WebSocketManagement/WebSocketServiceForTask";
 // import TaskSelf from "./SubPages/TaskSelf";
 
 // import LinearProgress from "@material-ui/core/LinearProgress";
@@ -134,17 +136,53 @@ const TaskManagement = () => {
   const inputRefItem = useRef();
   const chatContainerRef = useRef(null);
   const [lightboxImage, setLightboxImage] = useState(null);
-
+  const { sendMessage, disconnect, setOnMessageHandler, isWebSocketOpen } =
+  useWebSocketServiceForTasks(taskidForSocket);
   const openLightbox = (image) => {
     setLightboxImage(image);
   };
   const closeLightbox = () => {
     setLightboxImage(null);
   };
+
+  // socket manage
+  useEffect(() => {
+    // Connect on component mount
+    // or when taskId changes, depending on your requirements
+    setOnMessageHandler((data) => {
+      // Handle incoming messages here
+      console.log("Received message in MyBoard:", data);
+
+      // Set initial data
+      if (data.data) {
+        setChatsData(data.data);
+      }
+
+      const newData = Array.isArray(data.data) ? data.data : [data];
+
+      // Update state using a callback to avoid issues with asynchronous state updates
+      setChatsData((prevNotifications) => {
+        const newArray = Array.isArray(prevNotifications)
+          ? prevNotifications
+          : [];
+        return [...newArray, ...newData];
+      });
+    });
+
+    // Disconnect on component unmount or when taskId changes
+    return () => {
+      disconnect();
+    };
+  }, [taskidForSocket]);
+ 
+
+
+
+
   useEffect(() => {
     // Scroll to the bottom when chatsData or messages change
     scrollToBottom();
-  }, [chatsData, messages]);
+  }, [chatsData, messages,isChatVisible ]);
 
   const scrollToBottom = () => {
     if (chatContainerRef.current) {
@@ -744,9 +782,12 @@ const TaskManagement = () => {
   };
 
   const [message, setMessage] = useState("");
+ 
   const send_msg = async (message) => {
     console.log("Sending message:", message);
-  
+    if (message === "") {
+      return
+    }
     const formData = new FormData();
     formData.append("task_id", taskid);
     formData.append("sender_id", user_id);
@@ -754,7 +795,7 @@ const TaskManagement = () => {
 
     try {
       const res = await postVibeTaskChat(formData);
-      console.log(res)
+      console.log(res);
       if (res.success) {
         setMessage("");
         console.log("success sending chat");
@@ -762,8 +803,8 @@ const TaskManagement = () => {
       }
     } catch (error) {
       // toast.error('Please Check Your Internet , Try again! ',{position: "top-center",autoClose: 2000})
-      console.log("chat error", error)
-    } 
+      console.log("chat error", error);
+    }
   };
   const fileInputRef = useRef(null);
 
@@ -842,7 +883,7 @@ const TaskManagement = () => {
               alignItems: "center",
               padding: "8px",
               border: "1px solid #ddd",
-              color:"black",
+              color: "black",
               borderRadius: "8px",
               marginBottom: "8px",
               cursor: "pointer", // Add cursor style to indicate clickability
@@ -864,7 +905,7 @@ const TaskManagement = () => {
                   overflow: "hidden",
                   textOverflow: "ellipsis",
                   wordWrap: "break-word",
-                  color: "black"
+                  color: "black",
                 }}
               >
                 {message.split("/").pop()}
@@ -899,7 +940,7 @@ const TaskManagement = () => {
       // };
 
       const data = await getVibeComments(user_id, id);
-
+console.log(data)
       if (data.success) {
         console.log("success");
         console.log(data);
@@ -2897,7 +2938,40 @@ const TaskManagement = () => {
                       {"   "}Chat
                     </div>
                   </div>
-
+                  <div className=" ">
+                    <div
+                      style={{
+                        height: "20",
+                        width: "20",
+                        // color: "white",
+                        borderRadius: 10,
+                      
+                        padding: "5px",
+                        cursor: "pointer",
+                      }}
+                      // onClick={openModalChat} //for tab and mbl
+                      // onClick={openModalChatWeb}
+                      // onClick={isWideScreen ? openModalChatWeb :  openModalChat
+                      // }
+                      onClick={() => {
+                        handleToggleComments("comments");
+                        // isWideScreen ? openModalChatWeb() : openModalChat();
+                      }}
+className=" flex gap-2 items-center hover:text-gray-300 transition-all duration-300"
+                      // onClick={handleToggleComments}
+                    >
+                      <FaComment
+                        style={{
+                          fontSize: 20,
+                          // color: "white",
+                          marginRight: "4",
+                          marginLeft: "2",
+                          textAlign: "center",
+                        }}
+                      />
+                      {"   "}Comments
+                    </div>
+                  </div>
                   {/*  */}
                 </div>
                 {isChatVisible && (
@@ -2922,7 +2996,10 @@ const TaskManagement = () => {
                                 borderRadius: 5,
                               }}
                             >
-                              <span className="" style={{ textAlign: "left" }}>
+                              <span
+                                className="cursor-pointer"
+                                style={{ textAlign: "left" }}
+                              >
                                 <FaArrowLeft onClick={closeChatModalWeb} />
                               </span>
                               <span className=""></span>
@@ -2981,7 +3058,6 @@ const TaskManagement = () => {
                                       )}
                                     </div>
                                     <span
-                                     
                                       className={
                                         chat.sender_id === user_id
                                           ? "text-right"
@@ -3022,7 +3098,7 @@ const TaskManagement = () => {
                                   spellCheck="true"
                                   style={{
                                     // color: "white",
-                                    
+
                                     fontSize: 16,
                                     backgroundColor: "white",
                                     paddingLeft: 40, // Adjust padding to accommodate the icon
@@ -3053,29 +3129,26 @@ const TaskManagement = () => {
                                   className="text-gray-400 bg-white"
                                 />
                               </div>
-                              <div style={{
-background: themeColor,
-                              }}
-                              className="p-2 px-3 ml-1 rounded-full flex items-center"
+                              <div
+                                style={{
+                                  background: themeColor,
+                                }}
+                                className="p-2 px-3 ml-1 rounded-full shadow-custom-all-sides flex items-center"
                               >
-
-                              <IoSend 
-
-                                onClick={() => {
-                                  send_msg(message);
+                                <IoSend
+                                  onClick={() => {
+                                    send_msg(message);
                                   }}
                                   style={{
-                                  // marginTop: 10,
-                                  // marginLeft: 8,
-                                  fontSize: 20,
-                                  color: "white",
-                                  cursor: "pointer",
-                                  
-                                  }} 
+                                    // marginTop: 10,
+                                    // marginLeft: 8,
+                                    fontSize: 20,
+                                    color: "white",
+                                    cursor: "pointer",
+                                  }}
                                   // size={30}
-                                  
-                                  />
-                                  </div>
+                                />
+                              </div>
                             </div>
                           </>
                         ) : (
@@ -3200,17 +3273,30 @@ background: themeColor,
                         )}
                       </div>
                       {lightboxImage && (
-                        <div
-                          className="lightbox-overlay"
-                          onClick={closeLightbox}
-                        >
-                          <div className="lightbox-content">
-                            <img src={lightboxImage} alt="Chat Image" />
+                        <div className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-30 backdrop-blur-sm z-50 p-10 ">
+                          <div
+                            style={{ background: themeColor }}
+                            className=" md:w-auto w-full  p-4 md:px-10  flex flex-col rounded-md  overflow-auto max-h-[100%]"
+                          >
+                            <button
+                              className="place-self-end fixed p-1 rounded-full  bg-white text-black"
+                              onClick={closeChatModalWeb}
+                            >
+                              <AiOutlineClose size={20} />
+                            </button>
                             <div
-                              className="close-button"
+                              className="lightbox-overlay"
                               onClick={closeLightbox}
                             >
-                              X
+                              <div className="lightbox-content">
+                                <img src={lightboxImage} alt="Chat Image" />
+                                <div
+                                  className="close-button"
+                                  onClick={closeLightbox}
+                                >
+                                  X
+                                </div>
+                              </div>
                             </div>
                           </div>
                         </div>

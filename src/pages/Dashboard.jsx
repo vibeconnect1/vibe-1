@@ -1,15 +1,17 @@
 import React, { useEffect, useRef, useState } from "react";
 import Navbar from "../components/Navbar";
 import { useSelector } from "react-redux";
-import { getVibeCalendar } from "../api";
+import { getTicketDashboard, getVibeCalendar } from "../api";
 import { getItemInLocalStorage } from "../utils/localStorage";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import wave from "/wave.png";
 import HighchartsComponent from "../components/HighCharts";
+import TicketDashboard from "./SubPages/TicketDashboard";
 const Dashboard = () => {
   const themeColor = useSelector((state) => state.theme.color);
   const vibeUserId = getItemInLocalStorage("VIBEUSERID");
+
   console.log(vibeUserId);
   const contentRef = useRef(null);
 
@@ -22,6 +24,7 @@ const Dashboard = () => {
         console.log(error);
       }
     };
+   
     fetchCalendar();
   }, []);
 
@@ -66,22 +69,11 @@ const Dashboard = () => {
           <nav>
             <h1 className="text-white text-center text-xl">Vibe Connect</h1>
           </nav>
-          {/* <div  className="flex-grow bg-red-200">
-       
-        <button onClick={toggleFullScreen}>Toggle Full Screen</button>
-      </div> */}
         </header>
-        {/* <DatePicker
-            selected={dueDate}
-            onChange={handleDateChange1}
-            showTimeSelect
-            dateFormat="dd/MM/yyyy h:mm aa"
-            placeholderText="Select Date & Time"
-            ref={datePickerRef}
-            minDate={currentDate}
-            className="border-2 bordeer-black"
-
-          /> */}
+        <div className="m-5">
+        
+          <TicketDashboard/>
+        </div>
         <div className="w-full flex mx-3 flex-col p-2 mb-10 ">
           <HighchartsComponent />
         </div>

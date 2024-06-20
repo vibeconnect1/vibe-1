@@ -8,6 +8,15 @@ export const login = async (data) => axiosInstance.post("/login.json", data);
 
 export const getLogin = async () => axiosInstance.get("/login.json");
 
+
+
+// dashboard
+export const getTicketDashboard = async () =>
+  axiosInstance.get("/pms/admin/complaints/complaints_dashboard.json", {
+    params: {
+      token: token,
+    },
+  });
 //Assets
 export const getSiteAsset = async () =>
   axiosInstance.get("/site_assets.json", {
@@ -875,6 +884,7 @@ export const getVibeStatus = async (userId) => {
     throw error;
   }
 };
+export const API_URL_WS = 'wss://vibecopilot.ai/ws';
 export const getVibeMedia = async () => {
   try {
     const response = await vibeAuth.get(
@@ -899,7 +909,7 @@ export const postVibeTaskChat = async (data) => {
      data,
       {
         headers: {
-          "Content-Type": "application/json",
+          "Content-Type": "multipart/form-data",
         },
       }
     );

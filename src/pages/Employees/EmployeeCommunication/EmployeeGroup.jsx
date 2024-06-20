@@ -5,7 +5,7 @@ import pic1 from "/profile1.jpg";
 import pic2 from "/profile2.jpg";
 import pic3 from "/profile3.jpg";
 import pic4 from "/profile4.jpg";
-function Groups() {
+function EmployeeGroup() {
   return (
     <section>
       <div className="flex justify-between md:flex-row flex-col my-5 gap-y-3">
@@ -14,9 +14,9 @@ function Groups() {
           placeholder="search"
           className="border-2 p-2 w-70 border-gray-300 rounded-lg "
         />
-        <Link to={`/admin/communication-create-group`}  className=" font-semibold border-2 border-black px-4 p-1 flex gap-2 items-center justify-center rounded-md">
+        {/* <Link to={`/admin/communication-create-group`}  className=" font-semibold border-2 border-black px-4 p-1 flex gap-2 items-center justify-center rounded-md">
           Create Group
-        </Link>
+        </Link> */}
       </div>
       <div>
         <div className='md:grid grid-cols-4 mx-3 gap-5 my-3'>
@@ -24,7 +24,7 @@ function Groups() {
             <div className='border-2 border-gray-100 rounded-md'>
             <img src={interview} className=" rounded-md" alt="forum-profile" />
             <div className='my-6'>
-              <h2 className='text-lg font-semibold text-center'>All in the Mind</h2>
+              <Link to={"/employee/communication-groupdetail"} className='text-lg font-semibold flex justify-center'>All in the Mind</Link>
               <p className='text-base font-thin text-center'> Private Group</p>
               <div className='flex gap-5 justify-center'>
                 <div className='my-3'>
@@ -52,8 +52,7 @@ function Groups() {
               </div>
               <div className='border-t border-black'>
                 <div className='flex justify-center my-3'>
-                 
-                  <Link to={"/admin/communication-group-details"} className='border-2 border-grey-500 rounded-md p-1 px-4 bg-green-500 text-white'>Join Group</Link>
+                  <button  className='border-2 border-grey-500 rounded-md p-1 px-4 bg-green-500 text-white'>Join Group</button>
                 </div>
               </div>
             </div>
@@ -63,7 +62,7 @@ function Groups() {
             <div className='border-2 border-gray-100 rounded-md'>
             <img src={interview} className=" rounded-md" alt="forum-profile" />
             <div className='my-6'>
-              <h2 className='text-lg font-semibold text-center'>All in the Mind</h2>
+              <Link to={"/employee/communication-groupdetail"} className='text-lg font-semibold flex justify-center'>All in the Mind</Link>
               <p className='text-base font-thin text-center'> Private Group</p>
               <div className='flex gap-5 justify-center'>
                 <div className='my-3'>
@@ -91,7 +90,7 @@ function Groups() {
               </div>
               <div className='border-t border-black'>
                 <div className='flex justify-center my-3'>
-                  <button className='border-2 border-grey-500 rounded-md p-1 px-4 bg-green-500 text-white'>Join Group</button>
+                  <button  className='border-2 border-grey-500 rounded-md p-1 px-4 bg-green-500 text-white'>Join Group</button>
                 </div>
               </div>
             </div>
@@ -101,7 +100,7 @@ function Groups() {
             <div className='border-2 border-gray-100 rounded-md'>
             <img src={interview} className=" rounded-md" alt="forum-profile" />
             <div className='my-6'>
-              <h2 className='text-lg font-semibold text-center'>All in the Mind</h2>
+            <Link to={"/employee/communication-groupdetail"} className='text-lg font-semibold flex justify-center'>All in the Mind</Link>
               <p className='text-base font-thin text-center'> Private Group</p>
               <div className='flex gap-5 justify-center'>
                 <div className='my-3'>
@@ -129,7 +128,7 @@ function Groups() {
               </div>
               <div className='border-t border-black'>
                 <div className='flex justify-center my-3'>
-                  <button className='border-2 border-grey-500 rounded-md p-1 px-4 bg-green-500 text-white'>Join Group</button>
+                  <button  className='border-2 border-grey-500 rounded-md p-1 px-4 bg-green-500 text-white'>Join Group</button>
                 </div>
               </div>
             </div>
@@ -140,5 +139,4 @@ function Groups() {
     </section>
   )
 }
-
-export default Groups
+export default EmployeeGroup
