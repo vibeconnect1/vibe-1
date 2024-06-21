@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { getItemInLocalStorage } from "../utils/localStorage";
 import Navbar from "../components/Navbar";
 import { useSelector } from "react-redux";
-import profile from "/profile.png";
+import profile from "/wave.png";
 import {
   FaArrowLeft,
   FaCheck,
@@ -28,8 +28,10 @@ import {
 } from "react-icons/fa";
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 import {
+  API_URL,
   deleteVibeTask,
   getVibeActionAndChat,
+  getVibeBackground,
   getVibeComments,
   getVibeMedia,
   getVibeMyBoardTask,
@@ -58,16 +60,17 @@ import ReactDatePicker from "react-datepicker";
 import { SendDueDateFormat } from "../utils/dateUtils";
 import { IoSend } from "react-icons/io5";
 import useWebSocketServiceForTasks from "../components/WebSocketManagement/WebSocketServiceForTask";
+import vibeAuth from "../api/vibeAuth";
 // import TaskSelf from "./SubPages/TaskSelf";
 
 // import LinearProgress from "@material-ui/core/LinearProgress";
 
 const TaskManagement = () => {
   const user_id = getItemInLocalStorage("VIBEUSERID");
-  //   const defaultImage = { index: 0, src: f_image };
-  //   let selectedImageSrc = defaultImage.src;
-  //   let selectedImageIndex = defaultImage.index;
-  //   const [selectedImage, setSelectedImage] = useState(defaultImage);
+    // const defaultImage = { index: 0, src: profile };
+    // let selectedImageSrc = defaultImage.src;
+    // let selectedImageIndex = defaultImage.index;
+    // const [selectedImage, setSelectedImage] = useState(defaultImage);
   const [activeView, setActiveView] = useState("Kanban");
   const themeColor = useSelector((state) => state.theme.color);
   const [taskFilter, setTaskFilter] = useState([]);
@@ -174,13 +177,88 @@ const TaskManagement = () => {
       disconnect();
     };
   }, [taskidForSocket]);
- 
 
+  const defaultImage = { index: 0, src: profile };
+  let selectedImageSrc = defaultImage.src;
+  let selectedImageIndex = defaultImage.index;
+  const [selectedImage, setSelectedImage] = useState(defaultImage);
+  const [selectedIndex, setSelectedIndex] = useState(null);
+ 
+  // const send_background = async () => {
+  //   console.log("Sending bg:", selectedImageSrc);
+
+  //   const formData = new FormData();
+  //   const response = await fetch(selectedImageSrc);
+  //   const blob = await response.blob();
+  //   console.log(response);
+  //   formData.append("user_id", user_id);
+  //   formData.append("image", selectedImageSrc);
+  //   formData.append("index", selectedImageIndex);
+
+  //   try {
+  //     const res = await postDataToAPI(Add_Background, formData);
+
+  //     if (res.success) {
+  //       console.log("success");
+
+  //       selectedImageSrc = API_URL + res.data.image;
+  //       console.log(selectedImageSrc);
+  //       selectedImageIndex = res.data.index;
+
+  //       // Now, you can use selectedImageSrc and selectedImageIndex as needed
+  //       console.log("Received response:", res);
+
+  //       // For example, update state or perform any other actions
+  //       setSelectedImage(selectedImageSrc);
+  //       setSelectedIndex(selectedImageIndex);
+  //       console.log("Received selectedImageSrc:", selectedImageSrc);
+  //       console.log("Received selectedImageIndex:", selectedImageIndex);
+  //     }
+  //   } catch (error) {
+  //     // toast.error('Please Check Your Internet , Try again! ',{position: "top-center",autoClose: 2000})
+  //   } finally {
+  //   }
+  // };
+
+  const Get_Background = async () => {
+    try {
+      // const params = {
+      //   user_id: user_id,
+      // };
+      const user_id = getItemInLocalStorage("VIBEUSERID")
+console.log(user_id)
+      const data = await getVibeBackground(user_id)
+
+      if (data.success) {
+        console.log("sucess");
+
+        console.log(data.data);
+        selectedImageSrc = API_URL + data.data.image;
+        console.log();
+        selectedImageIndex = data.data.index;
+
+        // Now, you can use selectedImageSrc and selectedImageIndex as needed
+        console.log("Received response:", data);
+
+        // For example, update state or perform any other actions
+        setSelectedImage(selectedImageSrc);
+        setSelectedIndex(selectedImageIndex);
+        console.log("Received selectedImageSrc:", selectedImageSrc);
+        console.log("Received selectedImageIndex:", selectedImageIndex);
+        console.log(selectedImage)
+      } else {
+        console.log("Something went wrong");
+      }
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
 
 
 
   useEffect(() => {
     // Scroll to the bottom when chatsData or messages change
+    Get_Background()
     scrollToBottom();
   }, [chatsData, messages,isChatVisible ]);
 
@@ -1332,12 +1410,13 @@ console.log(data)
   return (
     <section
       className="flex"
+      // style={{
+      //   background: `url(${"https://vibecopilot.ai/api/media/employee/bg_images/bridge.jpg/?datetime=2024-06-21T10:45:04"}) no-repeat center center / cover`,
+      //   // background: `url(${"https://vibecopilot.ai/api/media/employee/bg_images/bridge.jpg/?datetime=2024-06-21T10:45:04"}) no-repeat center center / cover`,
+      
+      // }}
       style={{
-        background: `url(${bridge})`,
-        // backgroundSize: "100% 100% ",
-        backgroundSize: "cover",
-        backgroundRepeat: "no-repeat",
-        backgroundPosition: "center",
+        background: `url(${selectedImage})no-repeat center center / cover`,
       }}
     >
       <Navbar />
@@ -1358,6 +1437,7 @@ console.log(data)
                 //     height: 40,
                 //   }}
               >
+                
                 <div
                   className={`${
                     activeView !== "Kanban"
@@ -1397,8 +1477,8 @@ console.log(data)
                 >
                   List
                 </div>
-              </div>
-
+              </div> 
+              
               <div className="relative inline-block text-left">
                 <button
                   style={{ background: themeColor }}

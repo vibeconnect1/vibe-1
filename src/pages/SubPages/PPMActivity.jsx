@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { getAssetPPMList } from "../../api";
+import { API_URL, getAssetPPMList, getVibeBackground } from "../../api";
 
 import { BiEdit } from "react-icons/bi";
 import Table from "../../components/table/Table";
@@ -7,6 +7,9 @@ import { Link } from "react-router-dom";
 import { IoAddCircleOutline } from "react-icons/io5";
 import { useSelector } from "react-redux";
 import { BsEye } from "react-icons/bs";
+import AssetNav from "../../components/navbars/AssetNav";
+import Navbar from "../../components/Navbar";
+import { getItemInLocalStorage } from "../../utils/localStorage";
 
 const PPMActivity = () => {
   const [ppms, setPPms] = useState([]);
@@ -87,9 +90,61 @@ const PPMActivity = () => {
       sortable: true,
     },
   ];
+  const defaultImage = { index: 0, src: "" };
+  let selectedImageSrc = defaultImage.src;
+  let selectedImageIndex = defaultImage.index;
+const [selectedImage, setSelectedImage] = useState(defaultImage);
+const [selectedIndex, setSelectedIndex] = useState(null);
+const Get_Background = async () => {
+  try {
+    // const params = {
+    //   user_id: user_id,
+    // };
+    const user_id = getItemInLocalStorage("VIBEUSERID");
+    console.log(user_id);
+    const data = await getVibeBackground(user_id);
+
+    if (data.success) {
+      console.log("sucess");
+
+      console.log(data.data);
+      selectedImageSrc = API_URL + data.data.image;
+
+      
+      selectedImageIndex = data.data.index;
+
+      // Now, you can use selectedImageSrc and selectedImageIndex as needed
+      console.log("Received response:", data);
+
+      // For example, update state or perform any other actions
+      setSelectedImage(selectedImageSrc);
+      setSelectedIndex(selectedImageIndex);
+      console.log("Received selectedImageSrc:", selectedImageSrc);
+      console.log("Received selectedImageIndex:", selectedImageIndex);
+      console.log(selectedImage);
+      // dispatch(setBackground(selectedImageSrc));
+    } else {
+      console.log("Something went wrong");
+    }
+  } catch (error) {
+    console.error("Error:", error);
+  }
+};
+useEffect(() => {
+  // Call the function to get the background image when the component mounts
+  Get_Background();
+}, []);
+
   return (
-    <div>
-      <div>
+    <section
+      className="flex"
+      style={{
+        background: `url(${selectedImage})no-repeat center center / cover`,
+      }}
+    >
+      <Navbar />
+      <div className="p-4 w-full my-2 flex md:mx-2 overflow-hidden flex-col">
+        <AssetNav/>
         {/* {filter && (
               <div className="flex items-center justify-center gap-2">
                 <div>
@@ -175,7 +230,8 @@ const PPMActivity = () => {
         
      
       </div>
-    </div>
+    </section>
+    
   );
 };
 

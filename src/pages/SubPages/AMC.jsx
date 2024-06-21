@@ -1,10 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { IoAddCircleOutline } from "react-icons/io5";
 import { Link } from "react-router-dom";
-import { getAMC } from "../../api";
+import { API_URL, getAMC, getVibeBackground } from "../../api";
 import Table from "../../components/table/Table";
 import { BsEye } from "react-icons/bs";
 import { BiEdit } from "react-icons/bi";
+import { getItemInLocalStorage } from "../../utils/localStorage";
+import Navbar from "../../components/Navbar";
+import AssetNav from "../../components/navbars/AssetNav";
+import { DNA } from "react-loader-spinner";
 
 const AMC = () => {
   const [searchText, setSearchText] = useState("");
@@ -64,9 +68,61 @@ const AMC = () => {
     { name: "Status", selector: (row) => row.status },
     { name: "Created On", selector: (row) => dateFormat(row.created_at) },
   ];
+  const defaultImage = { index: 0, src: "" };
+  let selectedImageSrc = defaultImage.src;
+  let selectedImageIndex = defaultImage.index;
+const [selectedImage, setSelectedImage] = useState(defaultImage);
+const [selectedIndex, setSelectedIndex] = useState(null);
+const Get_Background = async () => {
+  try {
+    // const params = {
+    //   user_id: user_id,
+    // };
+    const user_id = getItemInLocalStorage("VIBEUSERID");
+    console.log(user_id);
+    const data = await getVibeBackground(user_id);
+
+    if (data.success) {
+      console.log("sucess");
+
+      console.log(data.data);
+      selectedImageSrc = API_URL + data.data.image;
+
+      
+      selectedImageIndex = data.data.index;
+
+      // Now, you can use selectedImageSrc and selectedImageIndex as needed
+      console.log("Received response:", data);
+
+      // For example, update state or perform any other actions
+      setSelectedImage(selectedImageSrc);
+      setSelectedIndex(selectedImageIndex);
+      console.log("Received selectedImageSrc:", selectedImageSrc);
+      console.log("Received selectedImageIndex:", selectedImageIndex);
+      console.log(selectedImage);
+      // dispatch(setBackground(selectedImageSrc));
+    } else {
+      console.log("Something went wrong");
+    }
+  } catch (error) {
+    console.error("Error:", error);
+  }
+};
+useEffect(() => {
+  // Call the function to get the background image when the component mounts
+  Get_Background();
+}, []);
 
   return (
-    <div>
+    <section
+      className="flex"
+      style={{
+        background: `url(${selectedImage})no-repeat center center / cover`,
+      }}
+    >
+      <Navbar />
+      <div className="p-4 w-full my-2 flex md:mx-2 overflow-hidden flex-col">
+        <AssetNav/>
       <div className="flex md:flex-row flex-col justify-between items-center my-2 gap-2  ">
         <input
           type="text"
@@ -85,8 +141,20 @@ const AMC = () => {
         </div>
       </div>
 
-      <Table columns={AMCColumn} data={filteredData} isPagination={true} />
+      {amc.length !== 0 ?<Table columns={AMCColumn} data={filteredData} isPagination={true} />:(
+              <div className="flex justify-center items-center h-full">
+                <DNA
+                  visible={true}
+                  height="120"
+                  width="120"
+                  ariaLabel="dna-loading"
+                  wrapperStyle={{}}
+                  wrapperClass="dna-wrapper"
+                />
+              </div>
+            )}
     </div>
+    </section>
   );
 };
 

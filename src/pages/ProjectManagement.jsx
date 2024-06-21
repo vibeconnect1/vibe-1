@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Navbar from "../components/Navbar";
 import { PiPlusCircle } from "react-icons/pi";
 import { Link } from "react-router-dom";
@@ -8,10 +8,58 @@ import { BsEye } from "react-icons/bs";
 import { useSelector } from "react-redux";
 import Boards from "../components/Boards";
 import bridge from "/bridge.jpg";
+import { getItemInLocalStorage } from "../utils/localStorage";
+import { API_URL, getVibeBackground } from "../api";
 
 const ProjectManagement = () => {
   const [selectedStatus, setSelectedStatus] = useState("all");
   const themeColor = useSelector((state) => state.theme.color);
+//   const backgroundImage = useSelector((state) => state.background.background);
+// console.log(backgroundImage)
+const defaultImage = { index: 0, src: "" };
+  let selectedImageSrc = defaultImage.src;
+  let selectedImageIndex = defaultImage.index;
+const [selectedImage, setSelectedImage] = useState(defaultImage);
+const [selectedIndex, setSelectedIndex] = useState(null);
+const Get_Background = async () => {
+  try {
+    // const params = {
+    //   user_id: user_id,
+    // };
+    const user_id = getItemInLocalStorage("VIBEUSERID");
+    console.log(user_id);
+    const data = await getVibeBackground(user_id);
+
+    if (data.success) {
+      console.log("sucess");
+
+      console.log(data.data);
+      selectedImageSrc = API_URL + data.data.image;
+
+      
+      selectedImageIndex = data.data.index;
+
+      // Now, you can use selectedImageSrc and selectedImageIndex as needed
+      console.log("Received response:", data);
+
+      // For example, update state or perform any other actions
+      setSelectedImage(selectedImageSrc);
+      setSelectedIndex(selectedImageIndex);
+      console.log("Received selectedImageSrc:", selectedImageSrc);
+      console.log("Received selectedImageIndex:", selectedImageIndex);
+      console.log(selectedImage);
+      // dispatch(setBackground(selectedImageSrc));
+    } else {
+      console.log("Something went wrong");
+    }
+  } catch (error) {
+    console.error("Error:", error);
+  }
+};
+useEffect(() => {
+  // Call the function to get the background image when the component mounts
+  Get_Background();
+}, []);
 
   const columns = [
     {
@@ -96,12 +144,15 @@ const ProjectManagement = () => {
   return (
     <section
       className="flex"
+      // style={{
+      //   background: `url(${bridge})`,
+      //   // backgroundSize: "100% 100% ",
+      //   backgroundSize: "cover",
+      //   backgroundRepeat: "no-repeat",
+      //   backgroundPosition: "center",
+      // }}
       style={{
-        background: `url(${bridge})`,
-        // backgroundSize: "100% 100% ",
-        backgroundSize: "cover",
-        backgroundRepeat: "no-repeat",
-        backgroundPosition: "center",
+        background: `url(${selectedImage})no-repeat center center / cover`,
       }}
     >
       <Navbar />

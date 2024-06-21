@@ -5,7 +5,7 @@ import fileExplorerReducer from "../features/FileExplorer/FileExplorer";
 import storage from "redux-persist/lib/storage";
 import { persistReducer, persistStore } from "redux-persist";
 import fontSizeReducer from "../features/font/fontSizeSlice";
-
+import backgroundReducer from "../features/theme/backgroundSlice"
 const persistConfig = {
   key: "root",
   storage,
@@ -16,6 +16,7 @@ const rootReducer = combineReducers({
   theme: themeReducer,
   file: fileExplorerReducer,
   fontSize: fontSizeReducer,
+  background: backgroundReducer
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

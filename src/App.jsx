@@ -342,6 +342,22 @@ import CreateEmployeeForum from "./pages/Employees/EmployeeCommunication/CreateE
 import EmployeeChatBot from "./pages/Employees/EmployeeCommunication/EmployeeChatBot.jsx";
 import EmployeeGroupJoinDetails from "./pages/Employees/EmployeeCommunication/EmployeeGroupJoinDetails.jsx";
 import GroupJoinDetails from "./pages/SubPages/details/GroupJoinDetails.jsx";
+import AdminHRMS from "./pages/AdminHrms/AdminHrms.jsx";
+import HRMSDashboard from "./pages/AdminHrms/HRMSDashboard.jsx";
+import { getItemInLocalStorage } from "./utils/localStorage.js";
+import { API_URL, getVibeBackground } from "./api/index.js";
+import { useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { setBackground } from "./features/theme/backgroundSlice.js";
+import ServicesTask from "./pages/SubPages/ServicesTask.jsx";
+import ServicePage from "./pages/SubPages/ServicePage.jsx";
+import ServiceChecklist from "./pages/SubPages/ServiceChecklist.jsx";
+import AMC from "./pages/SubPages/AMC.jsx";
+import Meter from "./pages/Meter.jsx";
+import Checklist from "./pages/Checklist.jsx";
+import RoutineTask from "./pages/RoutineTask.jsx";
+import PPMActivity from "./pages/SubPages/PPMActivity.jsx";
+import Inventory from "./pages/Inventory.jsx";
 
 function App() {
   const themeColor = useSelector((state) => state.theme.color);
@@ -350,6 +366,47 @@ function App() {
     themeColor
   );
   document.documentElement.style.setProperty("--calendar-Header", themeColor);
+const dispatch = useDispatch()
+  const Get_Background = async () => {
+    try {
+      // const params = {
+      //   user_id: user_id,
+      // };
+      const user_id = getItemInLocalStorage("VIBEUSERID");
+      console.log(user_id);
+      const data = await getVibeBackground(user_id);
+
+      if (data.success) {
+        console.log("sucess");
+
+        console.log(data.data);
+       const selectedImageSrc = API_URL + data.data.image;
+
+        
+       const selectedImageIndex = data.data.index;
+
+        // Now, you can use selectedImageSrc and selectedImageIndex as needed
+        console.log("Received response:", data);
+
+        // For example, update state or perform any other actions
+        // setSelectedImage(selectedImageSrc);
+        // setSelectedIndex(selectedImageIndex);
+        // console.log("Received selectedImageSrc:", selectedImageSrc);
+        // console.log("Received selectedImageIndex:", selectedImageIndex);
+        // console.log(selectedImage);
+        dispatch(setBackground(selectedImageSrc));
+      } else {
+        console.log("Something went wrong");
+      }
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
+
+useEffect(()=>{
+  Get_Background()
+},[setBackground])
+
   return (
     <>
       <Router>
@@ -690,7 +747,7 @@ function App() {
             path="/admin/communication-group-details"
             element={
               <ProtectedAdminRoutes>
-                <GroupJoinDetails/>
+                <GroupJoinDetails />
               </ProtectedAdminRoutes>
             }
           />
@@ -714,10 +771,58 @@ function App() {
           />
           {/* Asset */}
           <Route
-            path="/assets"
+            path="/assets/all-assets"
             element={
               <ProtectedAdminRoutes>
                 <Asset />
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/assets/amc"
+            element={
+              <ProtectedAdminRoutes>
+                <AMC />
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/assets/meter"
+            element={
+              <ProtectedAdminRoutes>
+                <Meter />
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/assets/checklist"
+            element={
+              <ProtectedAdminRoutes>
+                <Checklist />
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/assets/routine-task"
+            element={
+              <ProtectedAdminRoutes>
+                <RoutineTask />
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/assets/ppm"
+            element={
+              <ProtectedAdminRoutes>
+                <PPMActivity />
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/assets/stock-items"
+            element={
+              <ProtectedAdminRoutes>
+                <Inventory />
               </ProtectedAdminRoutes>
             }
           />
@@ -771,10 +876,26 @@ function App() {
           />
           {/*services*/}
           <Route
-            path="/services"
+            path="/services/soft-service"
             element={
               <ProtectedAdminRoutes>
-                <Services />
+                <ServicePage />
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/services/tasks"
+            element={
+              <ProtectedAdminRoutes>
+                <ServicesTask />
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/services/checklist"
+            element={
+              <ProtectedAdminRoutes>
+                <ServiceChecklist />
               </ProtectedAdminRoutes>
             }
           />
@@ -2892,7 +3013,23 @@ function App() {
               </ProtectedRoute>
             }
           />
-
+          <Route
+            path="/admin/hrms"
+            element={
+              <ProtectedAdminRoutes>
+                <AdminHRMS />
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/hrms/dashboard"
+            element={
+              <ProtectedAdminRoutes>
+                <HRMSDashboard />
+              </ProtectedAdminRoutes>
+            }
+          />
+          {/* paused */}
           {/* admin HRMS */}
           <Route
             path="admin/hrms/employee-onboarding"

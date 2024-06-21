@@ -7,7 +7,13 @@ import Navbar from "../components/Navbar";
 import * as XLSX from "xlsx";
 import { columnsData } from "../utils/assetColumns";
 import { BiEdit, BiFilter, BiFilterAlt } from "react-icons/bi";
-import { getFloors, getSiteAsset, getUnits } from "../api";
+import {
+  API_URL,
+  getFloors,
+  getSiteAsset,
+  getUnits,
+  getVibeBackground,
+} from "../api";
 import { getItemInLocalStorage } from "../utils/localStorage";
 import AMC from "./SubPages/AMC";
 import Meter from "./Meter";
@@ -21,6 +27,8 @@ import bridge from "/bridge.jpg";
 import { IoIosArrowDown } from "react-icons/io";
 import { MdKeyboardArrowRight } from "react-icons/md";
 import PPMActivity from "./SubPages/PPMActivity";
+import { CirclesWithBar, DNA, ThreeDots } from "react-loader-spinner";
+import AssetNav from "../components/navbars/AssetNav";
 
 // import jsPDF from "jspdf";
 // import QRCode from "qrcode.react";
@@ -421,22 +429,61 @@ const Asset = () => {
 
     reader.readAsText(file);
   };
+  const defaultImage = { index: 0, src: "" };
+  let selectedImageSrc = defaultImage.src;
+  let selectedImageIndex = defaultImage.index;
+  const [selectedImage, setSelectedImage] = useState(defaultImage);
+  const [selectedIndex, setSelectedIndex] = useState(null);
+  const Get_Background = async () => {
+    try {
+      // const params = {
+      //   user_id: user_id,
+      // };
+      const user_id = getItemInLocalStorage("VIBEUSERID");
+      console.log(user_id);
+      const data = await getVibeBackground(user_id);
+
+      if (data.success) {
+        console.log("sucess");
+
+        console.log(data.data);
+        selectedImageSrc = API_URL + data.data.image;
+
+        selectedImageIndex = data.data.index;
+
+        // Now, you can use selectedImageSrc and selectedImageIndex as needed
+        console.log("Received response:", data);
+
+        // For example, update state or perform any other actions
+        setSelectedImage(selectedImageSrc);
+        setSelectedIndex(selectedImageIndex);
+        console.log("Received selectedImageSrc:", selectedImageSrc);
+        console.log("Received selectedImageIndex:", selectedImageIndex);
+        console.log(selectedImage);
+        // dispatch(setBackground(selectedImageSrc));
+      } else {
+        console.log("Something went wrong");
+      }
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
+  useEffect(() => {
+    // Call the function to get the background image when the component mounts
+    Get_Background();
+  }, []);
 
   return (
     <section
       className="flex"
       style={{
-        background: `url(${bridge})`,
-        // backgroundSize: "100% 100% ",
-        backgroundSize: "cover",
-        backgroundRepeat: "no-repeat",
-        backgroundPosition: "center",
-        backgroundAttachment: "fixed",
+        background: `url(${selectedImage})no-repeat center center / cover`,
       }}
     >
       <Navbar />
       <div className="p-4 w-full my-2 flex md:mx-2 overflow-hidden flex-col">
-        <div className="flex justify-center w-full">
+        <AssetNav />
+        {/* <div className="flex justify-center w-full">
           <div className="sm:flex grid grid-cols-2 sm:flex-row gap-5 font-medium p-2 sm:rounded-full rounded-md opacity-90 bg-gray-200 ">
             <h2
               className={`p-1 ${
@@ -502,7 +549,7 @@ const Asset = () => {
               Stock Items
             </h2>
           </div>
-        </div>
+        </div> */}
         {/* {omitColumn && (
           <div className="grid grid-cols-10  gap-x-12 gap-y-4 border-2 border-black p-2 rounded-md mb-5">
             {column.map((col) => (
@@ -571,65 +618,62 @@ const Asset = () => {
             </button>
           </div>
         )}
-        {page === "assets" && (
-          <>
-            <div className="flex md:flex-row flex-col justify-between md:items-center my-2 gap-2  ">
-              <input
-                type="text"
-                placeholder="Search By Building, Asset, Unit or OEM Name"
-                className=" p-2 md:w-96 border-gray-300 rounded-md placeholder:text-sm outline-none"
-                value={searchText}
-                onChange={handleSearch}
-              />
-              <div className="md:flex grid grid-cols-2 sm:flex-row my-2 flex-col gap-2">
-                <ThemedButton
-                  to={"/assets/add-asset"}
-                  title={"Add Asset"}
-                  icon={<IoAddCircleOutline />}
-                  isLink
-                />
-                <div className="" ref={dropdownRef}>
-                  <button
-                    onClick={() => setDropdownOpen(!dropdownOpen)}
-                    className="px-4 py-2 border-2 font-medium text-white rounded-md flex gap-2 items-center justify-center"
-                  >
-                    Hide Columns
-                    {dropdownOpen ? (
-                      <IoIosArrowDown />
-                    ) : (
-                      <MdKeyboardArrowRight />
-                    )}
-                  </button>
-                  {dropdownOpen && (
-                    <div className="absolute mt-2 bg-white border rounded shadow-md w-64 max-h-64 overflow-y-auto z-10">
-                      {columnsData.map((column) => (
-                        <label
-                          key={column}
-                          className="flex items-center p-2 hover:bg-gray-100 cursor-pointer"
-                        >
-                          <input
-                            type="checkbox"
-                            value={column}
-                            checked={selectedOptions.includes(column)}
-                            onChange={handleCheckboxChange}
-                            className="form-checkbox h-4 w-4 text-blue-600"
-                          />
-                          <span className="ml-2">{column}</span>
-                        </label>
-                      ))}
-                    </div>
-                  )}
+        {/* {page === "assets" && (
+          <> */}
+        <div className="flex md:flex-row flex-col justify-between md:items-center my-2 gap-2  ">
+          <input
+            type="text"
+            placeholder="Search By Building, Asset, Unit or OEM Name"
+            className=" p-2 md:w-96 border-gray-300 rounded-md placeholder:text-sm outline-none border "
+            value={searchText}
+            onChange={handleSearch}
+          />
+          <div className="md:flex grid grid-cols-2 sm:flex-row my-2 flex-col gap-2">
+            <ThemedButton
+              to={"/assets/add-asset"}
+              title={"Add Asset"}
+              icon={<IoAddCircleOutline />}
+              isLink
+            />
+            <div className="" ref={dropdownRef}>
+              <button
+                onClick={() => setDropdownOpen(!dropdownOpen)}
+                style={{ background: themeColor }}
+                className="px-4 py-2  font-medium text-white rounded-md flex gap-2 items-center justify-center"
+              >
+                Hide Columns
+                {dropdownOpen ? <IoIosArrowDown /> : <MdKeyboardArrowRight />}
+              </button>
+              {dropdownOpen && (
+                <div className="absolute mt-2 bg-white border rounded shadow-md w-64 max-h-64 overflow-y-auto z-10">
+                  {columnsData.map((column) => (
+                    <label
+                      key={column}
+                      className="flex items-center p-2 hover:bg-gray-100 cursor-pointer"
+                    >
+                      <input
+                        type="checkbox"
+                        value={column}
+                        checked={selectedOptions.includes(column)}
+                        onChange={handleCheckboxChange}
+                        className="form-checkbox h-4 w-4 text-blue-600"
+                      />
+                      <span className="ml-2">{column}</span>
+                    </label>
+                  ))}
                 </div>
+              )}
+            </div>
 
-                <button
-                  className=" font-semibold border-2 border-black px-4 p-1 flex gap-2 items-center justify-center rounded-md"
-                  onClick={() => setFilter(!filter)}
-                >
-                  <BiFilterAlt />
-                  Filter
-                </button>
+            <button
+              className=" font-semibold border-2 border-black px-4 p-1 flex gap-2 items-center justify-center rounded-md"
+              onClick={() => setFilter(!filter)}
+            >
+              <BiFilterAlt />
+              Filter
+            </button>
 
-                {/* <Link
+            {/* <Link
                   to={"/assets/add-asset"}
                   className="bg-black  text-sm rounded-lg flex justify-center font-semibold items-center gap-2 text-white py-2 px-4 border-2 border-black hover:bg-white hover:text-black transition-all duration-300 "
                 >
@@ -637,38 +681,51 @@ const Asset = () => {
                   Add
                 </Link> */}
 
-                {/* <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+            {/* <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
                   <input type="file"  className="opacity-0 w-fit" onChange={handleFileChange} />
                   Import
                 </button> */}
-                <button
-                  className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-                  onClick={exportToExcel}
-                >
-                  Export
-                </button>
-                {/* <button
+            <button
+              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+              onClick={exportToExcel}
+            >
+              Export
+            </button>
+            {/* <button
             className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
             onClick={handleDownloadQRCode}
             disabled={selectedRows.length === 0}
           >
             Download QR Code
           </button> */}
-              </div>
-            </div>
+          </div>
+        </div>
 
-            <Table
-              selectableRows
-              columns={column.filter(
-                (col) => !selectedOptions.includes(col.name)
-              )}
-              data={filteredData}
-              fixedHeader
-              // fixedHeaderScrollHeight="450px"
-              isPagination={true}
+        {assets.length !== 0 ? (
+          <Table
+            selectableRows
+            columns={column.filter(
+              (col) => !selectedOptions.includes(col.name)
+            )}
+            data={filteredData}
+            fixedHeader
+            // fixedHeaderScrollHeight="450px"
+            isPagination={true}
+          />
+        ) : (
+          <div className="flex justify-center items-center h-full">
+            <DNA
+              visible={true}
+              height="120"
+              width="120"
+              ariaLabel="dna-loading"
+              wrapperStyle={{}}
+              wrapperClass="dna-wrapper"
             />
-          </>
+          </div>
         )}
+        {/* </>
+        )} */}
         {page === "AMC" && <AMC />}
         {page === "meter" && <Meter />}
         {page === "checklist" && <Checklist />}

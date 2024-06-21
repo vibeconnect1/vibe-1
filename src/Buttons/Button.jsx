@@ -37,7 +37,7 @@ const ThemedButton = ({ isLink, onClick, title, to, icon }) => {
   const themeColor = useSelector((state) => state.theme.color);
 
   const baseStyles =
-    "text-sm rounded-md flex justify-center font-semibold items-center gap-2 text-white py-3 px-4 transition-all duration-300";
+    "text-sm rounded-md flex justify-center font-semibold items-center gap-2 text-white py-2 px-4 transition-all duration-300";
   const hoverStyles = {
     background: themeColor,
     color: "black",

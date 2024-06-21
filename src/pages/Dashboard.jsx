@@ -61,7 +61,7 @@ const Dashboard = () => {
       // }}
     >
       <Navbar />
-      <div className=" w-full flex mx-3 flex-col overflow-hidden">
+      <div className=" w-full flex lg:mx-3 flex-col overflow-hidden">
         <header
           style={{ background: themeColor }}
           className="w-full h-10 rounded-md  my-1 flex justify-center items-center "

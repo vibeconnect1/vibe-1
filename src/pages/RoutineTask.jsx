@@ -5,8 +5,11 @@ import Table from "../components/table/Table";
 import { BsEye } from "react-icons/bs";
 import { MdDeleteForever } from "react-icons/md";
 import { BiEdit } from "react-icons/bi";
-import { getRoutineTask } from "../api";
+import { API_URL, getRoutineTask, getVibeBackground } from "../api";
 import toast from "react-hot-toast";
+import { getItemInLocalStorage } from "../utils/localStorage";
+import Navbar from "../components/Navbar";
+import AssetNav from "../components/navbars/AssetNav";
 
 const RoutineTask = () => {
   const [tasks, setTasks] = useState([]);
@@ -58,8 +61,60 @@ const RoutineTask = () => {
     // },
   ];
 
+  const defaultImage = { index: 0, src: "" };
+  let selectedImageSrc = defaultImage.src;
+  let selectedImageIndex = defaultImage.index;
+  const [selectedImage, setSelectedImage] = useState(defaultImage);
+  const [selectedIndex, setSelectedIndex] = useState(null);
+  const Get_Background = async () => {
+    try {
+      // const params = {
+      //   user_id: user_id,
+      // };
+      const user_id = getItemInLocalStorage("VIBEUSERID");
+      console.log(user_id);
+      const data = await getVibeBackground(user_id);
+
+      if (data.success) {
+        console.log("sucess");
+
+        console.log(data.data);
+        selectedImageSrc = API_URL + data.data.image;
+
+        selectedImageIndex = data.data.index;
+
+        // Now, you can use selectedImageSrc and selectedImageIndex as needed
+        console.log("Received response:", data);
+
+        // For example, update state or perform any other actions
+        setSelectedImage(selectedImageSrc);
+        setSelectedIndex(selectedImageIndex);
+        console.log("Received selectedImageSrc:", selectedImageSrc);
+        console.log("Received selectedImageIndex:", selectedImageIndex);
+        console.log(selectedImage);
+        // dispatch(setBackground(selectedImageSrc));
+      } else {
+        console.log("Something went wrong");
+      }
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
+  useEffect(() => {
+    // Call the function to get the background image when the component mounts
+    Get_Background();
+  }, []);
+
   return (
-    <div>
+    <section
+      className="flex"
+      style={{
+        background: `url(${selectedImage})no-repeat center center / cover`,
+      }}
+    >
+      <Navbar />
+      <div className="p-4 w-full my-2 flex md:mx-2 overflow-hidden flex-col">
+        <AssetNav />
       <div className="flex md:flex-row flex-col justify-between items-center my-2 gap-2  ">
         <input
           type="text"
@@ -94,6 +149,7 @@ const RoutineTask = () => {
       </div>
       <Table columns={RoutineColumns} data={tasks} isPagination={true} />
     </div>
+    </section>
   );
 };
 

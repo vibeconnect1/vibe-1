@@ -200,7 +200,8 @@ const Navbar = () => {
                 </h2>
               </NavLink>
               <NavLink
-                to={"/admin/hrms/employee-onboarding"}
+                to={"/admin/hrms/dashboard"}
+                // to={"/admin/hrms/employee-onboarding"}
                 className={({ isActive }) =>
                   ` ${
                     isActive
@@ -256,7 +257,7 @@ const Navbar = () => {
                 </h2>
               </NavLink>
               <NavLink
-                to={"/assets"}
+                to={"/assets/all-assets"}
                 className={({ isActive }) =>
                   ` ${
                     isActive
@@ -282,7 +283,7 @@ const Navbar = () => {
                 </h2>
               </NavLink>
               <NavLink
-                to={"/services"}
+                to={"/services/soft-service"}
                 className={({ isActive }) =>
                   ` ${
                     isActive

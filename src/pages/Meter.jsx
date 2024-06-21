@@ -7,10 +7,12 @@ import Navbar from "../components/Navbar";
 import * as XLSX from "xlsx";
 import { columnsData } from "../utils/assetColumns";
 import { BiEdit, BiFilter, BiFilterAlt } from "react-icons/bi";
-import { getFloors, getSiteAsset, getUnits } from "../api";
+import { API_URL, getFloors, getSiteAsset, getUnits, getVibeBackground } from "../api";
 import { getItemInLocalStorage } from "../utils/localStorage";
 import AMC from "./SubPages/AMC";
 import Table from "../components/table/Table";
+import AssetNav from "../components/navbars/AssetNav";
+import { DNA } from "react-loader-spinner";
 
 // import jsPDF from "jspdf";
 // import QRCode from "qrcode.react";
@@ -337,29 +339,62 @@ const Meter = () => {
     setSelectedUnit(unitId);
   };
 
+  const defaultImage = { index: 0, src: "" };
+  let selectedImageSrc = defaultImage.src;
+  let selectedImageIndex = defaultImage.index;
+const [selectedImage, setSelectedImage] = useState(defaultImage);
+const [selectedIndex, setSelectedIndex] = useState(null);
+const Get_Background = async () => {
+  try {
+    // const params = {
+    //   user_id: user_id,
+    // };
+    const user_id = getItemInLocalStorage("VIBEUSERID");
+    console.log(user_id);
+    const data = await getVibeBackground(user_id);
+
+    if (data.success) {
+      console.log("sucess");
+
+      console.log(data.data);
+      selectedImageSrc = API_URL + data.data.image;
+
+      
+      selectedImageIndex = data.data.index;
+
+      // Now, you can use selectedImageSrc and selectedImageIndex as needed
+      console.log("Received response:", data);
+
+      // For example, update state or perform any other actions
+      setSelectedImage(selectedImageSrc);
+      setSelectedIndex(selectedImageIndex);
+      console.log("Received selectedImageSrc:", selectedImageSrc);
+      console.log("Received selectedImageIndex:", selectedImageIndex);
+      console.log(selectedImage);
+      // dispatch(setBackground(selectedImageSrc));
+    } else {
+      console.log("Something went wrong");
+    }
+  } catch (error) {
+    console.error("Error:", error);
+  }
+};
+useEffect(() => {
+  // Call the function to get the background image when the component mounts
+  Get_Background();
+}, []);
+
   return (
-    <section className="flex">
-      <div className=" w-full my-2 flex overflow-hidden flex-col">
-        {/* {omitColumn && (
-          <div className="grid grid-cols-10  gap-x-12 gap-y-4 border-2 border-black p-2 rounded-md mb-5">
-            {column.map((col) => (
-              <label key={col.name} className="flex items-center ">
-                <input
-                  type="checkbox"
-                  checked={visibleColumns.includes(col.name)}
-                  onChange={() =>
-                    setVisibleColumns((prev) =>
-                      prev.includes(col.name)
-                        ? prev.filter((item) => item !== col.name)
-                        : [...prev, col.name]
-                    )
-                  }
-                />
-                <span className="ml-1 text-sm">{col.name}</span>
-              </label>
-            ))}
-          </div>
-        )} */}
+    <section
+      className="flex"
+      style={{
+        background: `url(${selectedImage})no-repeat center center / cover`,
+      }}
+    >
+      <Navbar />
+      <div className="p-4 w-full my-2 flex md:mx-2 overflow-hidden flex-col">
+        <AssetNav/>
+       
         {filter && (
           <div className="flex flex-col md:flex-row mt-1 items-center justify-center gap-2">
             <select
@@ -464,7 +499,7 @@ const Meter = () => {
               </div>
             </div>
 
-            <Table
+           {assets.length !==0 ? <Table
               // selectableRows
               // columns={column.filter((col) => visibleColumns.includes(col.name))}
               columns={column}
@@ -479,7 +514,20 @@ const Meter = () => {
               // selectableRowsHighlight
               // highlightOnHover
               // omitColumn={column}
-            />
+            />: (
+              <div className="flex justify-center items-center h-full">
+                <DNA
+                  visible={true}
+                  height="120"
+                  width="120"
+                  ariaLabel="dna-loading"
+                  wrapperStyle={{}}
+                  wrapperClass="dna-wrapper"
+                />
+              </div>
+            )
+          
+          }
           </>
         )}
 

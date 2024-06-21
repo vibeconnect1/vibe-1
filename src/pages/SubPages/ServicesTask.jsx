@@ -1,0 +1,196 @@
+import React, { useEffect, useState } from 'react'
+import { getServicesRoutineList } from '../../api';
+import Table from '../../components/table/Table';
+import { Link } from 'react-router-dom';
+import { BiEdit } from 'react-icons/bi';
+import Services from '../Services';
+import Navbar from '../../components/Navbar';
+
+const ServicesTask = () => {
+    const [routines, setRoutines]= useState([])
+    const [filter, setFilter] = useState(false);
+    const [searchRoutineText, setSearchRoutineCheck] = useState("")
+    const [filteredRoutineData, setFilteredRoutineData] = useState([]);
+    const routineColumn = [
+        {
+          name: "Action",
+          cell: (row) => (
+            <div className="flex items-center gap-4">
+              {/* <Link to={`/services/checklist-details/${row.id}`}>
+                <BsEye size={15} />
+              </Link> */}
+              <Link to={`/services/edit-routine/${row.id}`}>
+                <BiEdit size={15} />
+              </Link>
+            </div>
+          ),
+        },
+        {
+          name: "Name",
+          selector: (row) => row.name,
+          sortable: true,
+        },
+        
+        {
+          name: "Start Date",
+          selector: (row) => row.start_date,
+          sortable: true,
+        },
+        {
+          name: "End Date",
+          selector: (row) => row.end_date,
+          sortable: true,
+        },
+        {
+          name: "Frequency",
+          selector: (row) => row.frequency,
+          sortable: true,
+        },
+        {
+          name: "Assigned To",
+          selector: (row) => row.user_id,
+          sortable: true,
+        },  
+        {
+          name: "No. Of Questions",
+          selector: (row) => row.questions.length,
+          sortable: true,
+        },
+      ];
+
+      useEffect(() => {
+        try {
+          const fetchServiceRoutine = async () => {
+            const ServicePPMResponse = await getServicesRoutineList();
+            setFilteredRoutineData(ServicePPMResponse.data.checklists);
+            setRoutines(ServicePPMResponse.data.checklists)
+          };
+          fetchServiceRoutine();
+        } catch (error) {
+          console.log(error);
+        }
+      }, []);
+      const handleRoutineSearch = (event) => {
+        const searchValue = event.target.value;
+        setSearchRoutineCheck(searchValue);
+        if (searchValue.trim() === "") {
+          setFilteredRoutineData(routines);
+        } else {
+        const filteredResults = filteredRoutineData.filter((item) =>
+          item.name.toLowerCase().includes(searchValue.toLowerCase())
+        );
+        setFilteredRoutineData(filteredResults);
+        console.log(filteredResults)
+        
+      }
+      };
+    
+      const exportToExcel = () => {
+        const fileType =
+          "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8";
+        const fileName = "service_data.xlsx";
+        const ws = XLSX.utils.json_to_sheet(filtered);
+        const wb = { Sheets: { data: ws }, SheetNames: ["data"] };
+        const excelBuffer = XLSX.write(wb, { bookType: "xlsx", type: "array" });
+        const data = new Blob([excelBuffer], { type: fileType });
+        const url = URL.createObjectURL(data);
+        const link = document.createElement("a");
+        link.href = url;
+        link.download = fileName;
+        link.click();
+      };
+  return (
+    <section className="flex "> 
+    <Navbar /> 
+   <div className="p-4 overflow-hidden w-full my-2 flex mx-3 flex-col">
+     
+     <Services />
+       
+      {filter && (
+        <div className="flex items-center justify-center gap-2">
+          <div>
+            <label htmlFor="" className="font-medium">
+              Service Name:{" "}
+            </label>
+            <input
+              type="text"
+              name=""
+              id=""
+              placeholder="Enter Service Name"
+              className="border p-1 placeholder:text-sm px-4 border-gray-500 rounded-md"
+            />
+          </div>
+
+          <select className="border p-1 px-4 border-gray-500 rounded-md">
+            <option value="">Select Area</option>
+            <option value="unit1">Area 1</option>
+            <option value="unit2">Area 2</option>
+            <option value="unit2">Area 3</option>
+          </select>
+
+          <select className="border p-1 px-4 border-gray-500 rounded-md">
+            <option value="">Select Building</option>
+            <option value="unit1">Building 1</option>
+            <option value="unit2">Building 2</option>
+            <option value="unit2">Building 3</option>
+          </select>
+          <button className="bg-black p-1 px-4 text-white rounded-md">
+            Apply
+          </button>
+        </div>
+      )}
+      <div className="flex flex-wrap justify-between items-center my-5 ">
+        <input
+          type="text"
+          placeholder="Search By name"
+          className="border-2 p-2 w-96 border-gray-300 rounded-lg "
+          value={searchRoutineText}
+          onChange={handleRoutineSearch}
+        />
+        <div className="flex flex-wrap gap-2">
+          {/* <button
+      className="text-lg font-semibold border-2 border-black px-4 p-1 flex gap-2 items-center rounded-md"
+      onClick={() => setOmitColumn(!omitColumn)}
+    >
+      <IoFilterOutline />
+      Filter Columns
+    </button> */}
+          {/* <button
+            className="text-lg font-semibold border-2 border-black px-4 p-1 flex gap-2 items-center rounded-md"
+            onClick={() => setFilter(!filter)}
+          >
+            <BiFilterAlt />
+            Filter
+          </button> */}
+
+          {/* <Link
+            to={"/services/add-service-ppm"}
+            className="bg-black  rounded-lg flex font-semibold  items-center gap-2 text-white p-2 "
+          >
+            <IoAddCircleOutline size={20} />
+            Add
+          </Link> */}
+          <button
+            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+            onClick={exportToExcel}
+          >
+            Export
+          </button>
+          {/* <button
+    className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+    onClick={handleDownloadQRCode}
+    disabled={selectedRows.length === 0}
+  >
+    Download QR Code
+  </button> */}
+        </div>
+      </div>
+      <Table columns={routineColumn} data={filteredRoutineData} />
+    
+      
+    </div>
+  </section>
+  )
+}
+
+export default ServicesTask

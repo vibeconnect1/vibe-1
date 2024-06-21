@@ -1,7 +1,7 @@
 import { getItemInLocalStorage } from "../utils/localStorage";
 import axiosInstance from "./axiosInstance";
 import vibeAuth from "./vibeAuth";
-
+export const API_URL='https://vibecopilot.ai'
 const token = getItemInLocalStorage("TOKEN");
 
 export const login = async (data) => axiosInstance.post("/login.json", data);
@@ -907,6 +907,40 @@ export const postVibeTaskChat = async (data) => {
     const response = await vibeAuth.post(
       `/api/employee/task/add-message/`,
      data,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error creating calendar events:", error);
+    throw error;
+  }
+};
+export const postVibeBackground = async (data) => {
+  try {
+    const response = await vibeAuth.post(
+      `/api/employee/add_bg_image/`,
+     data,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error creating calendar events:", error);
+    throw error;
+  }
+};
+export const getVibeBackground = async (userId) => {
+  try {
+    const response = await vibeAuth.get(
+      `/api/employee/get_bg_image/?user_id=${userId}`,
+    
       {
         headers: {
           "Content-Type": "multipart/form-data",

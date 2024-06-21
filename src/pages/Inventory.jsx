@@ -1,11 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { IoAddCircleOutline } from "react-icons/io5";
 import { Link } from "react-router-dom";
-import { getInventory } from "../api";
+import { API_URL, getInventory, getVibeBackground } from "../api";
 import Table from "../components/table/Table";
 import { BiEdit } from "react-icons/bi";
 import { FiDelete } from "react-icons/fi";
 import { MdDeleteForever } from "react-icons/md";
+import AssetNav from "../components/navbars/AssetNav";
+import Navbar from "../components/Navbar";
+import { getItemInLocalStorage } from "../utils/localStorage";
 
 const Inventory = () => {
   const [stocks, setStocks] = useState([]);
@@ -44,8 +47,60 @@ const Inventory = () => {
     },
   ];
 
+  const defaultImage = { index: 0, src: "" };
+  let selectedImageSrc = defaultImage.src;
+  let selectedImageIndex = defaultImage.index;
+  const [selectedImage, setSelectedImage] = useState(defaultImage);
+  const [selectedIndex, setSelectedIndex] = useState(null);
+  const Get_Background = async () => {
+    try {
+      // const params = {
+      //   user_id: user_id,
+      // };
+      const user_id = getItemInLocalStorage("VIBEUSERID");
+      console.log(user_id);
+      const data = await getVibeBackground(user_id);
+
+      if (data.success) {
+        console.log("sucess");
+
+        console.log(data.data);
+        selectedImageSrc = API_URL + data.data.image;
+
+        selectedImageIndex = data.data.index;
+
+        // Now, you can use selectedImageSrc and selectedImageIndex as needed
+        console.log("Received response:", data);
+
+        // For example, update state or perform any other actions
+        setSelectedImage(selectedImageSrc);
+        setSelectedIndex(selectedImageIndex);
+        console.log("Received selectedImageSrc:", selectedImageSrc);
+        console.log("Received selectedImageIndex:", selectedImageIndex);
+        console.log(selectedImage);
+        // dispatch(setBackground(selectedImageSrc));
+      } else {
+        console.log("Something went wrong");
+      }
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
+  useEffect(() => {
+    // Call the function to get the background image when the component mounts
+    Get_Background();
+  }, []);
+
   return (
-    <div>
+    <section
+      className="flex"
+      style={{
+        background: `url(${selectedImage})no-repeat center center / cover`,
+      }}
+    >
+      <Navbar />
+      <div className="p-4 w-full my-2 flex md:mx-2 overflow-hidden flex-col">
+        <AssetNav />
       <div className="flex md:flex-row flex-col justify-between items-center my-2 gap-2  ">
         <input
           type="text"
@@ -80,6 +135,7 @@ const Inventory = () => {
       </div>
       <Table columns={columns} data={stocks} />
     </div>
+    </section>
   );
 };
 

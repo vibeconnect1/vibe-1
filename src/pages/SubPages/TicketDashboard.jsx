@@ -20,7 +20,7 @@ const TicketDashboard = () => {
   }, []);
   return (
     <div>
-      <div className="flex items-center gap-6 ">
+      <div className="flex items-center gap-6 overflow-auto p-2 ">
         <div className="bg-white min-w-44 shadow-custom-all-sides p-4 rounded-md flex flex-col items-center text-gray-500 text-sm w-fit font-medium">
           Tickets Created{" "}
           <span className="font-medium text-base text-black">

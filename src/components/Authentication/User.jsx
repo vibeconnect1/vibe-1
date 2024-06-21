@@ -10,6 +10,7 @@ import { useDispatch } from "react-redux";
 import { colors } from "../../utils/colors";
 import FontSizeSelector from "./FontSizeSelector";
 import { BsFillBrushFill } from "react-icons/bs";
+import Background from "../Background";
 
 function User() {
   const [user, setUser] = useState("");
@@ -155,6 +156,7 @@ function User() {
                   ))}
                 </div>
                 <FontSizeSelector />
+                <Background/>
               </div>
             )}
           </div>
