@@ -225,6 +225,10 @@ import CreateEmployeeForum from "./pages/Employees/EmployeeCommunication/CreateE
 import EmployeeChatBot from "./pages/Employees/EmployeeCommunication/EmployeeChatBot.jsx";
 import EmployeeGroupJoinDetails from "./pages/Employees/EmployeeCommunication/EmployeeGroupJoinDetails.jsx";
 import GroupJoinDetails from "./pages/SubPages/GroupJoinDetails.jsx";
+import EmployeeProfile from "./pages/Employees/EmployeeCommunication/EmployeeProfile.jsx";
+import EditEmployeeProfile from "./pages/Employees/EmployeeCommunication/EditEmployeeProfile.jsx";
+import Profile from "./pages/SubPages/Profile.jsx";
+import EditProfile from "./pages/SubPages/EditProfile.jsx";
 
 function App() {
   const themeColor = useSelector((state) => state.theme.color);
@@ -1842,6 +1846,39 @@ function App() {
               <ProtectedRoute>
                 <EmployeeGroupJoinDetails/>
               </ProtectedRoute>
+            }
+          />
+          {/* employee Communication group detail */}
+          <Route
+            path="/employee/communication-employee-profile"
+            element={
+              <ProtectedRoute>
+                <EmployeeProfile/>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/employee/communication-edit-employee-profile"
+            element={
+              <ProtectedRoute>
+                <EditEmployeeProfile/>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/admin/communication-profile"
+            element={
+              <ProtectedAdminRoutes>
+                <Profile/>
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/communication-edit-profile"
+            element={
+              <ProtectedAdminRoutes>
+                <EditProfile/>
+              </ProtectedAdminRoutes>
             }
           />
         </Routes>

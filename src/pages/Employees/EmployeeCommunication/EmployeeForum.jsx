@@ -44,7 +44,7 @@ function EmployeeForum() {
         </Link> }
       </div>
       <div className='flex justify-center'>
-        <div className='shadow-lg rounded-md mb-10 md:w-3/5 relative'>
+        <div className='shadow-lg rounded-md mb-10 md:w-3/5'>
           <div className='flex justify-between gap-2 md:mx-8 my-5 mt-5'>
             <div className='flex gap-3'>
               <img src={image} className="w-10 h-10" alt="forum-profile" />
@@ -94,7 +94,7 @@ function EmployeeForum() {
         </div>
       </div>
       <div className='flex justify-center mb-20'>
-        <div className='shadow-xl rounded-md  md:w-3/5 relative'>
+        <div className='shadow-xl rounded-md  md:w-3/5'>
           <div className='flex justify-between gap-2 mx-8 my-5 mt-5'>
             <div className='flex gap-3'>
               <img src={image} className="w-10 h-10" alt="forum-profile" />

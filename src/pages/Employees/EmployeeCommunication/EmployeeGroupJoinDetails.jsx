@@ -36,7 +36,7 @@ function EmployeeGroupJoinDetails() {
               <div className='flex flex-col'>
                 <div className='flex md:flex-row flex-col justify-between gap-y-3 mx-5'>
                   <div className='flex gap-2'>
-                    <img src={interview} className=" rounded-full w-20 h-20" alt="forum-profile" />
+                    <img src={interview} className=" rounded-full w-20 h-20" alt="" />
                     <div>
                       <h2 className='font-semibold text-lg'>Apple Education </h2>
                       <p className='font-normal text-sm'>Private group

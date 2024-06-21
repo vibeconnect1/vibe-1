@@ -8,7 +8,8 @@ import EmployeeBroadcast from './EmployeeBroadcast';
 import EmployeePolls from './EmployeePolls';
 import EmployeeForum from './EmployeeForum';
 import EmployeeGroup from './EmployeeGroup';
-
+import EmployeeNotification from './EmployeeNotification';
+import image from "/profile.png";
 const EmployeeCommunication = () => {
   const themeColor = useSelector((state) => state.theme.color);
   const [page, setPage] = useState("empolyeeEvent");
@@ -16,7 +17,7 @@ const EmployeeCommunication = () => {
     <section className='flex'>
       <Navbar/>
       <div className="w-full flex mx-3 flex-col overflow-hidden">
-        <div className="flex justify-center my-2">
+        <div className="flex  justify-center my-2 w-full">
           <div className="sm:flex grid grid-cols-2 sm:flex-row gap-5 font-medium p-2 sm:rounded-full rounded-md opacity-90 bg-gray-200 ">
             <h2
               className={`p-1 ${
@@ -59,11 +60,17 @@ const EmployeeCommunication = () => {
               Group
             </h2>
           </div>
-          <Link to={`/employee/employee-communication-chatbot`}>
-          <div  className="fixed bottom-10 right-5 ">
+          <Link to={`/employee/employee-communication-chatbot`} className="fixed bottom-10 right-5">
             <BsFillChatRightTextFill size={36} color={themeColor}/>
+          </Link>
+          <div className='fixed top-1 right-12 '>
+            <button type='sumbit' className='p-1 py-2'>
+              <EmployeeNotification />
+            </button>
           </div>
-        </Link>
+          <Link to={`/employee/communication-employee-profile`} className="fixed top-2 right-3">
+            <img src={image} className="w-10 h-10" alt="forum-profile" />
+          </Link>
         </div>
         {page === "empolyeeEvent" && (
           <div>

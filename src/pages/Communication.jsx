@@ -4,12 +4,12 @@ import Events from "./SubPages/Events";
 import Broadcast from "./SubPages/Broadcast";
 import Polls from "./SubPages/Polls";
 import Forum from "./SubPages/Forum";
-import ChatBot from "./SubPages/ChatBot";
 import Groups from "./SubPages/Groups";
 import { BsFillChatRightTextFill } from "react-icons/bs";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
-
+import Notification from "./SubPages/Notification";
+import image from "/profile.png";
 
 const Communication = () => {
   const themeColor = useSelector((state) => state.theme.color);
@@ -63,10 +63,14 @@ const Communication = () => {
             </h2>
           </div>
         </div>
-        <Link to={`/admin/communication-charbot`}>
-          <div  className="fixed bottom-10 right-5 ">
-            <BsFillChatRightTextFill size={36} color={themeColor}/>
-          </div>
+        <Link to={`/admin/communication-charbot`} className="fixed bottom-10 right-5 ">
+          <BsFillChatRightTextFill size={36} color={themeColor}/>
+        </Link>
+        <Link  className="fixed top-3 right-12 ">
+          <Notification/>
+        </Link>
+        <Link to={`/admin/communication-profile`} className="fixed top-2 right-3">
+          <img src={image} className="w-10 h-10" alt="forum-profile" />
         </Link>
         {page === "event" && (
           <div>

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import DataTable from "react-data-table-component";
+import Table from "../../components/table/Table";
 import { IoAddCircleOutline } from "react-icons/io5";
 import { ImEye } from "react-icons/im";
 import { Link } from "react-router-dom";
@@ -175,7 +175,7 @@ const Events = () => {
           </Link>}
         </div>
       </div>
-      <DataTable
+      <Table
         columns={column}
         data={filteredData}
         customStyles={customStyle}
