@@ -4,7 +4,7 @@ import { IoAddCircleOutline, IoFilterOutline } from "react-icons/io5";
 import { BsEye, BsFilterLeft } from "react-icons/bs";
 import { Link, NavLink } from "react-router-dom";
 import Navbar from "../components/Navbar";
-import * as XLSX from "xlsx";
+
 // import { serviceColumns } from "../utils/assetColumns";
 import { BiEdit, BiFilter, BiFilterAlt } from "react-icons/bi";
 import Table from "../components/table/Table";

@@ -105,7 +105,7 @@ const SeatBooking = () => {
         />
         <div className="flex gap-4 justify-end w-full">
           <Link
-            to={"/admin/seat-booking"}
+            to={"/seat-booking"}
             style={{background: themeColor}}
             className=" w-20 rounded-lg flex font-semibold items-center gap-2 text-white p-2 my-5"
           >

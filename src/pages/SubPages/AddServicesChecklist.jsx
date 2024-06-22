@@ -67,7 +67,7 @@ const AddServicesChecklist = () => {
     try {
       const response = await postChecklist(data);
       toast.success("Checklist Created Successfully")
-      navigate("/services")
+      navigate("/services/checklist")
       console.log(response);
       //   if (response.ok) {
       //     console.log("Checklist saved successfully!");

@@ -3,6 +3,7 @@ import Navbar from "../../components/Navbar";
 import { Link } from "react-router-dom";
 import { PiPlusCircle } from "react-icons/pi";
 import DataTable from "react-data-table-component";
+import Table from "../../components/table/Table";
 
 const EmployeeParking = () => {
   const [filteredData, setFilteredData] = useState([]);
@@ -93,16 +94,11 @@ const EmployeeParking = () => {
             Book
           </Link>
         </div>
-        <DataTable
+        <Table
           responsive
           columns={columns}
           data={data}
-          customStyles={customStyle}
-          pagination
-          fixedHeader
-          // fixedHeaderScrollHeight="450px"
-          selectableRowsHighlight
-          highlightOnHover
+          
         />
       </div>
     </section>

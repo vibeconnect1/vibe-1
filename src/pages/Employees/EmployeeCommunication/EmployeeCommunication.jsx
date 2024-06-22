@@ -6,7 +6,8 @@ import { useSelector } from 'react-redux';
 import EmployeeBroadcast from './EmployeeBroadcast';
 import EmployeePolls from './EmployeePoll';
 import EmployeeForum from './EmployeeForum';
-
+import EmployeeNotification from './EmployeeNotification';
+import image from "/profile.png";
 import EmployeeGroup from './EmployeeGroup';
 import EmployeeEvents from './EmployeeEvents';
 
@@ -65,6 +66,14 @@ const EmployeeCommunication = () => {
             <BsFillChatRightTextFill size={36} color={themeColor}/>
           </div>
         </Link>
+        <div className='fixed top-1 right-20 '>
+            <button type='sumbit' className='p-1 py-2'>
+              <EmployeeNotification />
+            </button>
+          </div>
+          <Link to={`/employee/communication-employee-profile`} className="fixed top-2 right-3">
+            <img src={image} className="w-10 h-10" alt="forum-profile" />
+          </Link>
         </div>
         {page === "empolyeeEvent" && (
           <div>

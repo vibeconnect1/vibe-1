@@ -7,11 +7,13 @@ import { Link } from 'react-router-dom';
 import { BsEye } from 'react-icons/bs';
 import Services from '../Services';
 import Navbar from '../../components/Navbar';
+import * as XLSX from "xlsx";
 
 const ServicePage = () => {
     const [searchText, setSearchText] = useState("");
     const [filter, setFilter] = useState(false);
     const [filteredData, setFilteredData] = useState([]);
+    const [servicess, setServices]= useState([])
     const dateFormat = (dateString) => {
         const date = new Date(dateString);
         return date.toLocaleString();
@@ -109,7 +111,7 @@ const ServicePage = () => {
         const searchValue = event.target.value;
         setSearchText(searchValue);
         if (searchValue.trim() === "") {
-          setFilteredData(services);
+          setFilteredData(servicess);
         } else {
         const filteredResults = filteredData.filter((item) =>
           item.name.toLowerCase().includes(searchValue.toLowerCase())
@@ -137,7 +139,10 @@ const ServicePage = () => {
       <div className="p-4 overflow-hidden w-full my-2 flex mx-3 flex-col">
         
         <Services />
-            {filter && (
+        <div className='my-2'>
+
+        
+            {/* {filter && (
               <div className="flex items-center justify-center gap-2">
                 <div>
                   <label htmlFor="" className="font-medium">
@@ -152,12 +157,7 @@ const ServicePage = () => {
                   />
                 </div>
 
-                <select className="border p-1 px-4 border-gray-500 rounded-md">
-                  <option value="">Select Area</option>
-                  <option value="unit1">Area 1</option>
-                  <option value="unit2">Area 2</option>
-                  <option value="unit2">Area 3</option>
-                </select>
+               
 
                 <select className="border p-1 px-4 border-gray-500 rounded-md">
                   <option value="">Select Building</option>
@@ -169,7 +169,8 @@ const ServicePage = () => {
                   Apply
                 </button>
               </div>
-            )}
+            )} */}
+            </div>
             <div className="flex flex-wrap justify-between items-center my-5 ">
               <input
                 type="text"
@@ -186,13 +187,13 @@ const ServicePage = () => {
               <IoFilterOutline />
               Filter Columns
             </button> */}
-                <button
+                {/* <button
                   className="text-lg font-semibold border-2 border-black px-4 p-1 flex gap-2 items-center rounded-md"
                   onClick={() => setFilter(!filter)}
                 >
                   <BiFilterAlt />
                   Filter
-                </button>
+                </button> */}
 
                 <Link
                   to={"/services/add-service"}

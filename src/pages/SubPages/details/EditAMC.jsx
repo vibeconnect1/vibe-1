@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import { EditAMCDetails, getAMCDetails, getEditAMCDetails, getVendors, postAMC } from '../../../api';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import FileInputBox from '../../../containers/Inputs/FileInputBox';
 import toast from 'react-hot-toast';
+import Navbar from '../../../components/Navbar';
 
 const EditAssetAMC = () => {
   const [vendors, setVendors] = useState([]);
@@ -45,6 +46,7 @@ const EditAssetAMC = () => {
       [e.target.name]: e.target.value,
     });
   };
+  const navigate = useNavigate()
   const handleEditAMC = async () => {
    
     try {
@@ -58,6 +60,7 @@ const EditAssetAMC = () => {
       const res = await EditAMCDetails(dataToSend, id);
       console.log(res);
       setUpdate(true);
+      navigate("/assets/amc")
       toast.success("AMC Edited Successfully")
     } catch (error) {
       console.log(error);
@@ -74,14 +77,18 @@ const EditAssetAMC = () => {
   };
 
   return (
-    <section>
-    <div className="m-2">
+    <section className="flex">
+      <div className='hidden md:block'>
+
+    <Navbar />
+      </div>
+    <div className="w-full flex mx-3 flex-col overflow-hidden">
       <div className="border-2 flex flex-col my-5 p-4 gap-4 rounded-md border-gray-400">
-      <div className="flex flex-col">
+      <div className="flex flex-col m-2">
           <h2 className="border-b  text-xl border-black font-semibold">
             Edit AMC
           </h2>
-          <div className="grid grid-cols-3 gap-5">
+          <div className="grid md:grid-cols-3 gap-5">
             <div className="flex flex-col">
               <label htmlFor="">Vendor :</label>
               <select

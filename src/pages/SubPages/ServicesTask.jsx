@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import { BiEdit } from 'react-icons/bi';
 import Services from '../Services';
 import Navbar from '../../components/Navbar';
-
+import * as XLSX from "xlsx";
 const ServicesTask = () => {
     const [routines, setRoutines]= useState([])
     const [filter, setFilter] = useState(false);
@@ -88,8 +88,8 @@ const ServicesTask = () => {
       const exportToExcel = () => {
         const fileType =
           "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8";
-        const fileName = "service_data.xlsx";
-        const ws = XLSX.utils.json_to_sheet(filtered);
+        const fileName = "service Task Data.xlsx";
+        const ws = XLSX.utils.json_to_sheet(filteredRoutineData);
         const wb = { Sheets: { data: ws }, SheetNames: ["data"] };
         const excelBuffer = XLSX.write(wb, { bookType: "xlsx", type: "array" });
         const data = new Blob([excelBuffer], { type: fileType });

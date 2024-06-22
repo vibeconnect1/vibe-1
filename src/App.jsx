@@ -358,6 +358,10 @@ import Checklist from "./pages/Checklist.jsx";
 import RoutineTask from "./pages/RoutineTask.jsx";
 import PPMActivity from "./pages/SubPages/PPMActivity.jsx";
 import Inventory from "./pages/Inventory.jsx";
+import Profile from "./pages/SubPages/Profile.jsx";
+import EditProfile from "./pages/SubPages/EditProfile.jsx";
+import EmployeeProfile from "./pages/Employees/EmployeeCommunication/EmployeeProfile.jsx";
+import EditEmployeeProfile from "./pages/Employees/EmployeeCommunication/EditEmployeeProfile.jsx";
 
 function App() {
   const themeColor = useSelector((state) => state.theme.color);
@@ -614,7 +618,7 @@ useEffect(()=>{
               </ProtectedAdminRoutes>
             }
           />
-          <Route path="/admin/seat-booking" element={<BookSeat />} />
+          <Route path="/seat-booking" element={<BookSeat />} />
           <Route path="/employees/booking" element={<EmployeeBooking />} />
           <Route
             path="/employees/facility-booking"
@@ -670,6 +674,45 @@ useEffect(()=>{
             }
           />
           {/* communication */}
+
+
+
+{/* employee Communication group detail */}
+<Route
+            path="/employee/communication-employee-profile"
+            element={
+              <ProtectedRoute>
+                <EmployeeProfile/>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/employee/communication-edit-employee-profile"
+            element={
+              <ProtectedRoute>
+                <EditEmployeeProfile/>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/admin/communication-profile"
+            element={
+              <ProtectedAdminRoutes>
+                <Profile/>
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/communication-edit-profile"
+            element={
+              <ProtectedAdminRoutes>
+                <EditProfile/>
+              </ProtectedAdminRoutes>
+            }
+          />
+
+
+
           <Route
             path="/communication"
             element={

@@ -2,15 +2,15 @@ import React, { useState } from "react";
 
 export const initialSelectedTimes = {
   
-  "10:00 AM": false,
-  "11:00 AM": false,
-  "12:00 PM": false,
-  "02:00 PM": false,
-  "03:00 PM": false,
-  "06:00 PM": false,
-  "08:00 PM": false,
-  "10:00 PM": false,
-  "11:00 PM": false,
+  "10:00 AM - 10:30 AM": false,
+  "11:00 AM - 11:30 AM": false,
+  "12:00 PM - 12:30 PM": false,
+  "02:00 PM - 02:30 PM": false,
+  "03:00 PM - 03:30 PM": false,
+  "06:00 PM - 06:30 PM": false,
+  "08:00 PM - 08:30 PM": false,
+  "10:00 PM - 10:30 PM": false,
+  "11:00 PM - 11:30 PM": false,
 };
 const SeatTimeSlot = ({ selectedTimes, handleButtonClick }) => {
  

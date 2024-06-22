@@ -23,7 +23,7 @@ const AssetQrCode = ({ onClose, QR }) => {
 
     doc.save(`Asset.pdf`);
   };
-
+console.log(QR)
   return (
     <ModalWrapper onclose={onClose}>
       <div className="mx-4 flex flex-col justify-between items-center gap-10">

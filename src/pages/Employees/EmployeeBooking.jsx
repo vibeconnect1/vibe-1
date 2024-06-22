@@ -6,6 +6,7 @@ import { BiExport } from "react-icons/bi";
 import { Link } from "react-router-dom";
 import Navbar from "../../components/Navbar";
 import EmployeeSeat from "./EmployeeSeat";
+import Table from "../../components/table/Table";
 
 const EmployeeBooking = () => {
   const [searchText, setSearchText] = useState("");
@@ -128,7 +129,7 @@ const EmployeeBooking = () => {
               />
               <div className="flex gap-4 justify-end w-full">
                 <Link
-                  to={"/employees/facility-booking"}
+                  to={"/bookings/new-facility-booking"}
                   className="bg-black w-20 rounded-lg flex font-semibold items-center gap-2 text-white p-2 my-5"
                 >
                   <IoAddCircleOutline size={20} />
@@ -136,16 +137,16 @@ const EmployeeBooking = () => {
                 </Link>
               </div>
             </div>
-            <DataTable
+            <Table
               columns={column}
               data={filteredData}
-              customStyles={customStyle}
-              fixedHeader
-              fixedHeaderScrollHeight="500px"
-              pagination
-              selectableRowsHighlight
-              highlightOnHover
-              omitColumn={column}
+              // customStyles={customStyle}
+              // fixedHeader
+              // fixedHeaderScrollHeight="500px"
+              // pagination
+              // selectableRowsHighlight
+              // highlightOnHover
+              // omitColumn={column}
             />
           </div>
         )}

@@ -3,6 +3,7 @@ import { BiPlus } from "react-icons/bi";
 import { IoClose } from "react-icons/io5";
 import { getItemInLocalStorage } from "../../utils/localStorage";
 import { postChecklist } from "../../api";
+import { useSelector } from "react-redux";
 const AddPPMActivity = () => {
   const [name, setName] = useState("");
   const [frequency, setFrequency] = useState("");
@@ -72,11 +73,12 @@ const AddPPMActivity = () => {
       console.error("Error:", error);
     }
   };
+  const themeColor = useSelector((state)=> state.theme.color)
   return (
     <section>
       <div className="m-2">
-        <h2 className="text-center text-xl font-bold p-2 bg-black rounded-full text-white">
-          Add Checklist
+        <h2 style={{background: themeColor}} className="text-center text-xl font-bold p-2 bg-black rounded-full text-white">
+          Add PPM
         </h2>
         <div className="md:mx-20 my-5 mb-10 sm:border border-gray-400 p-5 px-10 rounded-lg sm:shadow-xl">
           <div className="flex  flex-col justify-around">

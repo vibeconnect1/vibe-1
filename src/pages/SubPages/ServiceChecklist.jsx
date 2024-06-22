@@ -6,7 +6,7 @@ import Navbar from "../../components/Navbar";
 import { BiEdit, BiFilterAlt } from "react-icons/bi";
 import { Link } from "react-router-dom";
 import { IoAddCircleOutline } from "react-icons/io5";
-
+import * as XLSX from "xlsx";
 const ServiceChecklist = () => {
   const [searchChecklistText, setSearchChecklistCheck] = useState("");
   const [filteredChecklistData, setFilteredChecklistData] = useState([]);
@@ -97,7 +97,7 @@ const ServiceChecklist = () => {
   const exportToExcel = () => {
     const fileType =
       "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8";
-    const fileName = "service_data.xlsx";
+    const fileName = "Checklist_data.xlsx";
     const ws = XLSX.utils.json_to_sheet(filteredChecklistData);
     const wb = { Sheets: { data: ws }, SheetNames: ["data"] };
     const excelBuffer = XLSX.write(wb, { bookType: "xlsx", type: "array" });
@@ -114,7 +114,7 @@ const ServiceChecklist = () => {
       <div className="p-4 overflow-hidden w-full my-2 flex mx-3 flex-col">
         
         <Services />
-        {filter && (
+        {/* {filter && (
           <div className="flex items-center justify-center gap-2">
             <div>
               <label htmlFor="" className="font-medium">
@@ -146,7 +146,7 @@ const ServiceChecklist = () => {
               Apply
             </button>
           </div>
-        )}
+        )} */}
         <div className="flex flex-wrap justify-between items-center my-5 ">
           <input
             type="text"
@@ -163,13 +163,13 @@ const ServiceChecklist = () => {
       <IoFilterOutline />
       Filter Columns
     </button> */}
-            <button
+            {/* <button
               className="text-lg font-semibold border-2 border-black px-4 p-1 flex gap-2 items-center rounded-md"
               onClick={() => setFilter(!filter)}
             >
               <BiFilterAlt />
               Filter
-            </button>
+            </button> */}
 
             <Link
               to={"/services/add-service-checklist"}

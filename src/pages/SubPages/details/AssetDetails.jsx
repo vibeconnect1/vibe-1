@@ -67,7 +67,7 @@ const AssetDetails = () => {
             >
               Readings
             </h2>
-            <h2
+            {/* <h2
               className={`p-1 ${
                 page === "ppm" &&
                 "bg-white text-blue-500 shadow-custom-all-sides"
@@ -75,7 +75,7 @@ const AssetDetails = () => {
               onClick={() => setPage("ppm")}
             >
               PPM
-            </h2>
+            </h2> */}
             {/* <h2
               className={`p-1 ${
                 page === "activityFeed" && "bg-white text-blue-500"

@@ -67,10 +67,10 @@ import vibeAuth from "../api/vibeAuth";
 
 const TaskManagement = () => {
   const user_id = getItemInLocalStorage("VIBEUSERID");
-    // const defaultImage = { index: 0, src: profile };
-    // let selectedImageSrc = defaultImage.src;
-    // let selectedImageIndex = defaultImage.index;
-    // const [selectedImage, setSelectedImage] = useState(defaultImage);
+  // const defaultImage = { index: 0, src: profile };
+  // let selectedImageSrc = defaultImage.src;
+  // let selectedImageIndex = defaultImage.index;
+  // const [selectedImage, setSelectedImage] = useState(defaultImage);
   const [activeView, setActiveView] = useState("Kanban");
   const themeColor = useSelector((state) => state.theme.color);
   const [taskFilter, setTaskFilter] = useState([]);
@@ -140,7 +140,7 @@ const TaskManagement = () => {
   const chatContainerRef = useRef(null);
   const [lightboxImage, setLightboxImage] = useState(null);
   const { sendMessage, disconnect, setOnMessageHandler, isWebSocketOpen } =
-  useWebSocketServiceForTasks(taskidForSocket);
+    useWebSocketServiceForTasks(taskidForSocket);
   const openLightbox = (image) => {
     setLightboxImage(image);
   };
@@ -183,7 +183,7 @@ const TaskManagement = () => {
   let selectedImageIndex = defaultImage.index;
   const [selectedImage, setSelectedImage] = useState(defaultImage);
   const [selectedIndex, setSelectedIndex] = useState(null);
- 
+
   // const send_background = async () => {
   //   console.log("Sending bg:", selectedImageSrc);
 
@@ -225,9 +225,9 @@ const TaskManagement = () => {
       // const params = {
       //   user_id: user_id,
       // };
-      const user_id = getItemInLocalStorage("VIBEUSERID")
-console.log(user_id)
-      const data = await getVibeBackground(user_id)
+      const user_id = getItemInLocalStorage("VIBEUSERID");
+      console.log(user_id);
+      const data = await getVibeBackground(user_id);
 
       if (data.success) {
         console.log("sucess");
@@ -245,7 +245,7 @@ console.log(user_id)
         setSelectedIndex(selectedImageIndex);
         console.log("Received selectedImageSrc:", selectedImageSrc);
         console.log("Received selectedImageIndex:", selectedImageIndex);
-        console.log(selectedImage)
+        console.log(selectedImage);
       } else {
         console.log("Something went wrong");
       }
@@ -254,13 +254,11 @@ console.log(user_id)
     }
   };
 
-
-
   useEffect(() => {
     // Scroll to the bottom when chatsData or messages change
-    Get_Background()
+    Get_Background();
     scrollToBottom();
-  }, [chatsData, messages,isChatVisible ]);
+  }, [chatsData, messages, isChatVisible]);
 
   const scrollToBottom = () => {
     if (chatContainerRef.current) {
@@ -860,11 +858,11 @@ console.log(user_id)
   };
 
   const [message, setMessage] = useState("");
- 
+
   const send_msg = async (message) => {
     console.log("Sending message:", message);
     if (message === "") {
-      return
+      return;
     }
     const formData = new FormData();
     formData.append("task_id", taskid);
@@ -1018,7 +1016,7 @@ console.log(user_id)
       // };
 
       const data = await getVibeComments(user_id, id);
-console.log(data)
+      console.log(data);
       if (data.success) {
         console.log("success");
         console.log(data);
@@ -1410,11 +1408,6 @@ console.log(data)
   return (
     <section
       className="flex"
-      // style={{
-      //   background: `url(${"https://vibecopilot.ai/api/media/employee/bg_images/bridge.jpg/?datetime=2024-06-21T10:45:04"}) no-repeat center center / cover`,
-      //   // background: `url(${"https://vibecopilot.ai/api/media/employee/bg_images/bridge.jpg/?datetime=2024-06-21T10:45:04"}) no-repeat center center / cover`,
-      
-      // }}
       style={{
         background: `url(${selectedImage})no-repeat center center / cover`,
       }}
@@ -1422,10 +1415,7 @@ console.log(data)
       <Navbar />
 
       <div className="p-4 w-full my-2 flex md:mx-2 overflow-hidden flex-col">
-        <div
-
-        // style={{ background: `url(${selectedImage})no-repeat center center / cover` }}
-        >
+        <div>
           <div className="flex justify-between md:flex-row flex-col">
             <div className="flex gap-4 items-center">
               <div
@@ -1437,7 +1427,6 @@ console.log(data)
                 //     height: 40,
                 //   }}
               >
-                
                 <div
                   className={`${
                     activeView !== "Kanban"
@@ -1477,8 +1466,8 @@ console.log(data)
                 >
                   List
                 </div>
-              </div> 
-              
+              </div>
+
               <div className="relative inline-block text-left">
                 <button
                   style={{ background: themeColor }}
@@ -3025,7 +3014,7 @@ console.log(data)
                         width: "20",
                         // color: "white",
                         borderRadius: 10,
-                      
+
                         padding: "5px",
                         cursor: "pointer",
                       }}
@@ -3035,9 +3024,11 @@ console.log(data)
                       // }
                       onClick={() => {
                         handleToggleComments("comments");
-                        // isWideScreen ? openModalChatWeb() : openModalChat();
+                        // isWideScreen ?
+                         openModalChatWeb() 
+                        //  : openModalChat();
                       }}
-className=" flex gap-2 items-center hover:text-gray-300 transition-all duration-300"
+                      className=" flex gap-2 items-center hover:text-gray-300 transition-all duration-300"
                       // onClick={handleToggleComments}
                     >
                       <FaComment
@@ -3153,7 +3144,7 @@ className=" flex gap-2 items-center hover:text-gray-300 transition-all duration-
                                 ))
                               )}
 
-                              <div></div>
+                              
                             </div>
                             <input
                               type="file"
@@ -3181,7 +3172,7 @@ className=" flex gap-2 items-center hover:text-gray-300 transition-all duration-
 
                                     fontSize: 16,
                                     backgroundColor: "white",
-                                    paddingLeft: 40, // Adjust padding to accommodate the icon
+                                    // paddingLeft: 40, // Adjust padding to accommodate the icon
                                     padding: 8,
                                     width: "100%",
                                     border: "none",
@@ -3234,7 +3225,7 @@ className=" flex gap-2 items-center hover:text-gray-300 transition-all duration-
                         ) : (
                           <>
                             <div
-                              className="row"
+                              className="flex items-center gap-2"
                               style={{
                                 borderRadius: 5,
                               }}
@@ -3275,20 +3266,19 @@ className=" flex gap-2 items-center hover:text-gray-300 transition-all duration-
                                     key={coment.id}
                                     className={
                                       coment.sender_id === user_id
-                                        ? "my-chat"
-                                        : "other-chat"
+                                        ? "ml-10 grid justify-end p-4"
+                                        : "mr-10 grid justify-start p-4"
                                     }
                                   >
                                     <div
-                                      className="abc"
+                                      className="bg-white max-w-60 "
                                       style={{
                                         borderRadius: 5,
-                                        backgroundColor: "#30678edc",
-                                        color: "#fff",
+                                        
                                         padding: "4px 10px",
                                       }}
                                     >
-                                      <b style={{ color: "#10DF95" }}>
+                                      <b className="text-black font-medium">
                                         {/* {chat.sender.firstname} {chat.sender.lastname} */}
                                         {coment.username}
                                       </b>
@@ -3296,6 +3286,11 @@ className=" flex gap-2 items-center hover:text-gray-300 transition-all duration-
                                       {coment.message}
                                     </div>
                                     <span
+                                    className={
+                                      coment.sender_id === user_id
+                                        ? "text-right"
+                                        : "text-left"
+                                    }
                                       style={{ fontSize: 10, color: "#ededed" }}
                                     >
                                       {new Date(
@@ -3314,15 +3309,16 @@ className=" flex gap-2 items-center hover:text-gray-300 transition-all duration-
                               }}
                             >
                               <input
-                                spellcheck="true"
+                                spellCheck="true"
                                 placeholder="Type your message here..."
+                                 className="rounded-full px-4 placeholder:text-gray-500 text-black outline-none"
                                 style={{
-                                  color: "white",
-                                  marginRight: 8,
-                                  borderRadius: 4,
+                                  // color: "white",
+                                  // marginRight: 8,
+                                  // borderRadius: 4,
                                   fontSize: 16,
-                                  backgroundColor: "#30678e76",
-                                  paddingLeft: 10,
+                                  backgroundColor: "white",
+                                  // paddingLeft: 40,
                                   padding: 8,
                                   width: "100%",
                                   border: "none",
@@ -3337,17 +3333,23 @@ className=" flex gap-2 items-center hover:text-gray-300 transition-all duration-
                                 }}
                                 tabIndex="0"
                               />
-                              <FaPaperPlane
+                              <div style={{
+                                  background: themeColor,
+                                }}
+                                className="p-2 px-3 ml-1 rounded-full shadow-custom-all-sides flex items-center">
+
+                              <IoSend
                                 onClick={() => {
                                   send_Comment(addComent);
                                   // handleSubmitComment();
                                 }}
                                 style={{
-                                  marginTop: 10,
+                                  // marginTop: 10,
                                   fontSize: 20,
                                   color: "white",
                                 }}
-                              />
+                                />
+                                </div>
                             </div>
                           </>
                         )}

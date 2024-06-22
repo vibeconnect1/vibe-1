@@ -4,6 +4,7 @@ import CustomTrigger from "../../containers/CustomTrigger";
 import SeatTimeSlot, { initialSelectedTimes } from "./SeatTimeSlot";
 import Select from "react-select";
 import { getAssignedTo } from "../../api";
+import { useSelector } from "react-redux";
 const FacilityBooking = () => {
   const today = new Date();
   const year = today.getFullYear();
@@ -20,6 +21,7 @@ const FacilityBooking = () => {
   const [users, setUsers] = useState([]);
   const [date, setDate] = useState(formattedDate)
   const [facility, setFacility] = useState("")
+  const [paymentMode, setPaymentMode] = useState("post")
   const [formData, setFormData] = useState({
     building_id: "",
     floor_id: "",
@@ -59,10 +61,11 @@ const FacilityBooking = () => {
     fetchAssignedTo();
     console.log(users);
   }, []);
+  const themeColor = useSelector((state)=> state.theme.color)
   return (
     <section className="w-screen">
       <div className="flex flex-col mb-10">
-        <div className="flex justify-center bg-black m-5  p-2 rounded-md">
+        <div style={{background: themeColor}} className="flex justify-center  m-5  p-2 rounded-md">
           <h2 className="text-xl font-semibold text-center text-white ">
             Book Facility
           </h2>
@@ -102,16 +105,7 @@ const FacilityBooking = () => {
             )}
           </div>
           <div className="flex md:flex-row flex-col md:gap-8 gap-2 my-5">
-            
-            <div className="flex flex-col gap-2">
-              <p className="font-semibold">Select Facility :</p>
-              <select className="border p-1 px-4 border-gray-500 rounded-md" value={facility} onChange={(e)=> setFacility(e.target.value)}>
-                <option value="">Choose Facility</option>
-                <option value="user1">Facility 1</option>
-                <option value="User2">Facility 2</option>
-              </select>
-            </div>
-            <div className="flex flex-col gap-2">
+          <div className="flex flex-col gap-2">
               <label htmlFor="" className="font-semibold">
                 Select Date :
               </label>
@@ -124,6 +118,15 @@ const FacilityBooking = () => {
                 className="border p-[2px] px-4 border-gray-500 rounded-md"
               />
             </div>
+            <div className="flex flex-col gap-2">
+              <p className="font-semibold">Select Facility :</p>
+              <select className="border p-1 px-4 border-gray-500 rounded-md" value={facility} onChange={(e)=> setFacility(e.target.value)}>
+                <option value="">Choose Facility</option>
+                <option value="user1">Conference Room</option>
+                <option value="User2">Cabin</option>
+              </select>
+            </div>
+            
           </div>
 
         {facility !== "" &&  <div className="my-5">
@@ -132,12 +135,37 @@ const FacilityBooking = () => {
             </h2>
             <SeatTimeSlot handleButtonClick={handleButtonClick} selectedTimes={selectedTimes} />
           </div>}
-          <div>
+          <div className="my-2">
             <h2 className="border-b text-xl border-black font-semibold">
               Payment Mode
             </h2>
             <div>
-              "based on payment mode defined in setup will get that in api"
+            <div className="md:grid flex flex-col grid-cols-4 items-center my-2">
+            {/* <p className="font-semibold">For :</p> */}
+            <div className="flex gap-5">
+              <p
+                className={`border-2 p-1 px-6 border-black font-medium rounded-full cursor-pointer ${
+                  paymentMode === "post" && "bg-black text-white"
+                }`}
+                onClick={() => setPaymentMode("post")}
+              >
+                Post Paid
+              </p>
+              <p
+                className={`border-2 p-1 px-6 border-black font-medium rounded-full cursor-pointer ${
+                  paymentMode === "pre" && "bg-black text-white"
+                }`}
+                onClick={() => setPaymentMode("pre")}
+              >
+                Prepaid
+              </p>
+            </div>
+            {paymentMode === "pre" && (
+             <div>
+              <input type="text" placeholder="Enter upi" className="border border-gray-400 p-1 px-4" />
+             </div>
+            )}
+          </div>
             </div>
           </div>
           <div className="flex flex-col my-2">

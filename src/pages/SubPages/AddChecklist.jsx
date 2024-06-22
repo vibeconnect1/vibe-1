@@ -3,6 +3,7 @@ import { BiPlus } from "react-icons/bi";
 import { IoClose } from "react-icons/io5";
 import { getItemInLocalStorage } from "../../utils/localStorage";
 import { postChecklist } from "../../api";
+import { useNavigate } from "react-router-dom";
 const AddChecklist = () => {
   const [name, setName] = useState("");
   const [frequency, setFrequency] = useState("");
@@ -35,7 +36,7 @@ const AddChecklist = () => {
 
   const siteId = getItemInLocalStorage("SITEID");
   const userId = getItemInLocalStorage("UserId");
-
+const navigate = useNavigate()
   const handleSubmit = async (event) => {
     event.preventDefault();
     const data = {
@@ -68,6 +69,7 @@ const AddChecklist = () => {
       //   } else {
       //     console.error("Error saving checklist");
       //   }
+      navigate("/assets/checklist")
     } catch (error) {
       console.error("Error:", error);
     }

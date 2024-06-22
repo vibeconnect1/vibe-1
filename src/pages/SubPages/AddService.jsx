@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { getItemInLocalStorage } from "../../utils/localStorage";
 import { getFloors, getUnits, postSoftServices } from "../../api";
 import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 
 const AddService = () => {
   const [floors, setFloors] = useState([]);
@@ -74,7 +75,7 @@ const AddService = () => {
       [fieldName]: files,
     });
   };
-
+const navigate = useNavigate()
   const handleAddService = async () => {
     if (
       !formData.name ||
@@ -97,6 +98,7 @@ const AddService = () => {
       dataToSend.append("soft_service[user_id]", formData.user_id);
       const serviceResponse = await postSoftServices(dataToSend);
       console.log(serviceResponse);
+navigate("/services/soft-service")
       toast.dismiss();
       toast.success("Service Created Successfully");
     } catch (error) {

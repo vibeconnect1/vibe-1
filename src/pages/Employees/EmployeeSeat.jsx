@@ -3,6 +3,7 @@ import DataTable from "react-data-table-component";
 import { ImEye } from "react-icons/im";
 import { IoAddCircleOutline } from "react-icons/io5";
 import { Link } from "react-router-dom";
+import Table from "../../components/table/Table";
 
 const EmployeeSeat = () => {
     const [searchText, setSearchText] = useState("");
@@ -101,7 +102,7 @@ const EmployeeSeat = () => {
         />
         <div className="flex gap-4 justify-end w-full">
           <Link
-            to={"/employees/seat-booking"}
+            to={"/seat-booking"}
             className="bg-black w-20 rounded-lg flex font-semibold items-center gap-2 text-white p-2 my-5"
           >
             <IoAddCircleOutline size={20} />
@@ -116,16 +117,16 @@ const EmployeeSeat = () => {
                 </button> */}
         </div>
       </div>
-      <DataTable
+      <Table
         columns={column}
         data={filteredData}
-        customStyles={customStyle}
-        fixedHeader
-        fixedHeaderScrollHeight="500px"
-        pagination
-        selectableRowsHighlight
-        highlightOnHover
-        omitColumn={column}
+        // customStyles={customStyle}
+        // fixedHeader
+        // fixedHeaderScrollHeight="500px"
+        // pagination
+        // selectableRowsHighlight
+        // highlightOnHover
+        // omitColumn={column}
       />
       {/* {modal && <ExportBookingModal onclose={() => showModal(false)} />} */}
     </div>
