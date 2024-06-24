@@ -3,6 +3,7 @@ import DataTable from "react-data-table-component";
 import { IoAddCircleOutline } from "react-icons/io5";
 import { BiEdit } from "react-icons/bi";
 import DeliveryVendorModal from "../../containers/modals/DeliveryVendorModal";
+import Table from "../../components/table/Table";
 
 const DeliveryVendor = () => {
   const [modal, showModal] = useState(false);
@@ -121,16 +122,16 @@ const DeliveryVendor = () => {
           Add
         </button>
       </div>
-      <DataTable
+      <Table
         columns={column}
         data={filteredData}
-        customStyles={customStyle}
-        fixedHeader
-        fixedHeaderScrollHeight="500px"
-        pagination
-        selectableRowsHighlight
-        highlightOnHover
-        omitColumn={column}
+        // customStyles={customStyle}
+        // fixedHeader
+        // fixedHeaderScrollHeight="500px"
+        // pagination
+        // selectableRowsHighlight
+        // highlightOnHover
+        // omitColumn={column}
       />
       {modal && <DeliveryVendorModal onclose={() => showModal(false)} />}
       {add && (

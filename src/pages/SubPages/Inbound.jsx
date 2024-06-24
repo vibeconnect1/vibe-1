@@ -4,6 +4,7 @@ import { IoAddCircleOutline } from "react-icons/io5";
 import DeliveryVendorModal from "../../containers/modals/DeliveryVendorModal";
 import { BsEye } from "react-icons/bs";
 import { Link } from "react-router-dom";
+import Table from "../../components/table/Table";
 
 const Inbound = () => {
   const [modal, showModal] = useState(false);
@@ -156,16 +157,16 @@ const Inbound = () => {
           Add
         </Link>
       </div>
-      <DataTable
+      <Table
         columns={column}
         data={filteredData}
-        customStyles={customStyle}
-        fixedHeader
-          fixedHeaderScrollHeight="500px"
-          pagination
-          selectableRowsHighlight
-          highlightOnHover
-          omitColumn={column}
+        // customStyles={customStyle}
+        // fixedHeader
+        //   fixedHeaderScrollHeight="500px"
+        //   pagination
+        //   selectableRowsHighlight
+        //   highlightOnHover
+        //   omitColumn={column}
       />
       {modal && <DeliveryVendorModal onclose={() => showModal(false)} />}
       {add && (

@@ -7,6 +7,7 @@ import { FiSettings } from "react-icons/fi";
 import { IoAddCircleOutline } from "react-icons/io5";
 import profile from "/profile.png";
 import Switch from "../Buttons/Switch";
+import Table from "../components/table/Table";
 
 const Business = () => {
   const column = [
@@ -92,18 +93,18 @@ const Business = () => {
           </div>
         </div>
 
-        <DataTable
+        <Table
           columns={column}
           data={data}
-          customStyles={customStyle}
-          responsive
-          selectableRows
-          fixedHeader
-          fixedHeaderScrollHeight="500px"
-          pagination
-          selectableRowsHighlight
-          highlightOnHover
-          omitColumn={column}
+          // customStyles={customStyle}
+          // responsive
+          // selectableRows
+          // fixedHeader
+          // fixedHeaderScrollHeight="500px"
+          // pagination
+          // selectableRowsHighlight
+          // highlightOnHover
+          // omitColumn={column}
         />
       </div>
     </section>

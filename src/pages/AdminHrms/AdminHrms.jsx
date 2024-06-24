@@ -1215,7 +1215,7 @@ const AdminHRMS = () => {
                 {ispayOpen && (
                   <div className="ml-4">
                     <NavLink
-                      to="/hrms/organization-setting"
+                      to="/admin/hrms/run-payroll"
                       className={({ isActive }) =>
                         `${
                           isActive
@@ -1243,7 +1243,7 @@ const AdminHRMS = () => {
                       </h2>
                     </NavLink>
                     <NavLink
-                      to="/hrms/organization-setting"
+                      to="/admin/pay-slip"
                       className={({ isActive }) =>
                         `${
                           isActive
@@ -1271,7 +1271,7 @@ const AdminHRMS = () => {
                       </h2>
                     </NavLink>
                     <NavLink
-                      to="/hrms/user-setting"
+                      to="/admin/hrms/loan-app"
                       className={({ isActive }) =>
                         `${
                           isActive
@@ -1297,7 +1297,7 @@ const AdminHRMS = () => {
                       </h2>
                     </NavLink>
                     <NavLink
-                      to="/hrms/document-letter"
+                     to="/admin/hrms/payroll-setting"
                       className={({ isActive }) =>
                         `${
                           isActive
@@ -1325,7 +1325,7 @@ const AdminHRMS = () => {
                       </h2>
                     </NavLink>
                     <NavLink
-                      to="/hrms/document-letter"
+                       to="/admin/hrms/CTC-Template"
                       className={({ isActive }) =>
                         `${
                           isActive

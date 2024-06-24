@@ -428,6 +428,29 @@ import CreateEmployeeFieldSenseMeeting from "./pages/Employees/CreateEmployeeFIe
 import EmployeeFieldSenseMeetingDetails from "./pages/Employees/EmployeeFieldSenseMeetingDetails.jsx";
 import Roster from "./pages/AdminHrms/Roaster.jsx";
 import RosterShift from "./pages/AdminHrms/RoasterShift.jsx";
+import RunPayroll from "./pages/AdminHrms/RunPayroll.jsx";
+import Payslip from "./pages/AdminHrms/Payslip.jsx";
+import PayrollForm16 from "./pages/AdminHrms/PayrollForm16.jsx";
+import LoanApplication from "./pages/AdminHrms/LoanApplication.jsx";
+import PayrollSettings from "./pages/AdminHrms/PayrollSettings.jsx";
+import LocationMaster from "./pages/AdminHrms/LocationMaster.jsx";
+import FixedAllowance from "./pages/AdminHrms/FixedAllowance.jsx";
+import FixedDeduction from "./pages/AdminHrms/FixedDeduction.jsx";
+import VariableAllowance from "./pages/AdminHrms/VariableAllowance.jsx";
+import VariableDeduction from "./pages/AdminHrms/VariableDeduction.jsx";
+import OtherBenefit from "./pages/AdminHrms/OtherBenefit.jsx";
+import Loans from "./pages/AdminHrms/Loans.jsx";
+import AddLoan from "./pages/AdminHrms/AddLoan.jsx";
+import TaxSettings from "./pages/AdminHrms/TaxSettings.jsx";
+import PayslipSetting from "./pages/AdminHrms/PaySlipSetting.jsx";
+import CTCTemplate from "./pages/AdminHrms/CTCTemplate.jsx";
+import NPS from "./pages/AdminHrms/NPS.jsx";
+import Gratuity from "./pages/AdminHrms/Gratuity.jsx";
+import LeaveRecovery from "./pages/AdminHrms/LeaveRecovery.jsx";
+import NoticeRecovery from "./pages/AdminHrms/NoticeRecovery.jsx";
+import MinimumWage from "./pages/AdminHrms/MinimumWage.jsx";
+import PF from "./pages/AdminHrms/PF.jsx";
+import DailyWage from "./pages/AdminHrms/DailyWage.jsx";
 
 function App() {
   const themeColor = useSelector((state) => state.theme.color);
@@ -3639,6 +3662,193 @@ function App() {
             element={
               <ProtectedAdminRoutes>
                 <RosterShift />
+              </ProtectedAdminRoutes>
+            }
+          />
+          {/*  */}
+          <Route
+            path="/admin/hrms/run-payroll"
+            element={
+              <ProtectedAdminRoutes>
+                 <RunPayroll/>
+              </ProtectedAdminRoutes>
+            }
+          />
+           <Route
+            path="/admin/pay-slip"
+            element={
+              <ProtectedAdminRoutes>
+                 <Payslip/>
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/payroll/form-16"
+            element={
+              <ProtectedAdminRoutes>
+                 <PayrollForm16/>
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/hrms/loan-app"
+            element={
+              <ProtectedAdminRoutes>
+                <LoanApplication/>
+              </ProtectedAdminRoutes>
+            }
+          />
+           <Route
+            path="/admin/hrms/payroll-setting"
+            element={
+              <ProtectedAdminRoutes>
+               <PayrollSettings/>
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/location-master"
+            element={
+              <ProtectedAdminRoutes>
+               <LocationMaster/>
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/fixed-allowance"
+            element={
+              <ProtectedAdminRoutes>
+               <FixedAllowance/>
+              </ProtectedAdminRoutes>
+            }
+          />
+           <Route
+            path="/admin/fixed-deduction"
+            element={
+              <ProtectedAdminRoutes>
+               <FixedDeduction/>
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/variable-allowance"
+            element={
+              <ProtectedAdminRoutes>
+              <VariableAllowance/>
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/variable-deduction"
+            element={
+              <ProtectedAdminRoutes>
+              <VariableDeduction/>
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/other-benefit"
+            element={
+              <ProtectedAdminRoutes>
+              <OtherBenefit/>
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/loans"
+            element={
+              <ProtectedAdminRoutes>
+             <Loans/>
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/add-loan"
+            element={
+              <ProtectedAdminRoutes>
+             <AddLoan/>
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/tax-setting"
+            element={
+              <ProtectedAdminRoutes>
+            <TaxSettings/>
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/payslip-setting"
+            element={
+              <ProtectedAdminRoutes>
+            <PayslipSetting/>
+              </ProtectedAdminRoutes>
+            }
+          />
+           <Route
+            path="/admin/hrms/CTC-Template"
+            element={
+              <ProtectedAdminRoutes>
+            <CTCTemplate/>
+              </ProtectedAdminRoutes>
+            }
+          />
+           <Route
+            path="/admin/NPS"
+            element={
+              <ProtectedAdminRoutes>
+           <NPS/>
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/Gratuity"
+            element={
+              <ProtectedAdminRoutes>
+           <Gratuity/>
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/Leave-Recovery"
+            element={
+              <ProtectedAdminRoutes>
+          <LeaveRecovery/>
+              </ProtectedAdminRoutes>
+            }
+          />
+           <Route
+            path="admin/Notice-Recovery"
+            element={
+              <ProtectedAdminRoutes>
+          <NoticeRecovery/>
+              </ProtectedAdminRoutes>
+            }
+          />
+           <Route
+            path="admin/Minimum-Wage"
+            element={
+              <ProtectedAdminRoutes>
+          <MinimumWage/>
+              </ProtectedAdminRoutes>
+            }
+          />
+           <Route
+            path="admin/PF"
+            element={
+              <ProtectedAdminRoutes>
+          <PF/>
+              </ProtectedAdminRoutes>
+            }
+          />
+           
+         
+           <Route
+            path="admin/daily-wage"
+            element={
+              <ProtectedAdminRoutes>
+          <DailyWage/>
               </ProtectedAdminRoutes>
             }
           />

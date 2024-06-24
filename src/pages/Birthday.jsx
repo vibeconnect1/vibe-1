@@ -28,8 +28,8 @@ const Birthday = () => {
           </button>
         </div>
         <div className="border border-gray-500 my-2" />
-        <div className="w-56 rounded-md shadow-custom-all-sides h-80 mx-4 cursor-pointer" onClick={()=>setBirthdayModal(true)}>
-          <img src={wave} alt="" className="w-56 h-40 rounded-t-md" />
+        <div className="w-56 rounded-md shadow-custom-all-sides h-80 mx-4 cursor-pointer p-2" onClick={()=>setBirthdayModal(true)}>
+          <img src={wave} alt="" className="w-56 h-36 rounded-md" />
           <div className="flex flex-col p-2 gap-1">
             <div className="grid grid-cols-2">
               <p className="font-medium">Name :</p>
