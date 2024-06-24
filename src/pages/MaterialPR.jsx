@@ -78,7 +78,7 @@ const MaterialPR = () => {
   document.title = `Permit - Vibe Connect`;
   return (
     <section className="flex ">
-      <Navbar />
+      {/* <Navbar /> */}
       <div className="w-full flex mx-3 flex-col overflow-hidden">
          {/* <Purchase/> */}
       <div className="mt-10">

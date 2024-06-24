@@ -40,6 +40,7 @@ const AdminHRMS = () => {
   const [isAttOpen, setIsAttOpen] = useState(false);
   const [isLeaveOpen, setIsLeaveOpen] = useState(false);
   const [ispayOpen, setIspayOpen] = useState(false);
+  const [isRosterOpen, setIsRosterOpen] = useState(false);
   const navigate = useNavigate();
   const themeColor = useSelector((state) => state.theme.color);
 
@@ -49,6 +50,9 @@ const AdminHRMS = () => {
 
   const handleMouseLeave = () => {
     setOpen(false);
+  };
+  const toggleRosterMenu = () => {
+    setIsRosterOpen(!isRosterOpen);
   };
 
   useEffect(() => {
@@ -347,6 +351,7 @@ const AdminHRMS = () => {
                   Employees
                 </h2>
               </NavLink> */}
+              
                 <div>
                 <div
                   onClick={toggleEmpMenu}
@@ -900,10 +905,90 @@ const AdminHRMS = () => {
                       </h2>
                     </NavLink>
                   </div>
+                  
                 )}
               </div>
 
-
+              <div
+                  onClick={toggleRosterMenu}
+                  className="cursor-pointer flex items-center text-sm gap-3.5 font-medium p-2 hover:bg-gray-800 rounded-md"
+                >
+                  <div>
+                    {React.createElement(FaFileWord, { size: "20" })}
+                  </div>
+                  <h2
+                    className={`whitespace-pre duration-300 ${
+                      !open && "opacity-0 translate-x-28 overflow-hidden"
+                    }`}
+                  >
+                    Roster
+                  </h2>
+                  <div className="ml-auto">
+                    {isEmpOpen
+                      ? React.createElement(MdExpandLess, { size: "20" })
+                      : React.createElement(MdExpandMore, { size: "20" })}
+                  </div>
+                </div>
+                {isRosterOpen && (
+                  <div className="ml-4">
+              <NavLink
+                to="/admin/hrms/roaster"
+                className={({ isActive }) =>
+                  `${
+                    isActive
+                      ? "text-black bg-white flex p-2 gap-3.5 rounded-md group items-center text-sm font-medium"
+                      : "group flex items-center text-sm gap-3.5 font-medium p-2 hover:bg-gray-800 rounded-md"
+                  }`
+                }
+              >
+                <div>
+                  {React.createElement(FaRegFilePowerpoint, { size: "20" })}
+                </div>
+                <h2
+                  className={`whitespace-pre duration-300 ${
+                    !open && "opacity-0 translate-x-28 overflow-hidden"
+                  }`}
+                >
+                  Roaster Records
+                </h2>
+                <h2
+                  className={`${
+                    open && "hidden"
+                  } absolute left-48 bg-white font-semibold whitespace-pre text-gray-900 rounded-md drop-shadow-lg px-0 py-0 w-0 overflow-hidden group-hover:px-2 group-hover:py-1 group-hover:left-14 group-hover:duration-300 group-hover:w-fit`}
+                >
+                  Roaster Records
+                </h2>
+              </NavLink>
+              <NavLink
+                to="/admin/hrms/roaster-shift"
+                className={({ isActive }) =>
+                  `${
+                    isActive
+                      ? "text-black bg-white flex p-2 gap-3.5 rounded-md group items-center text-sm font-medium"
+                      : "group flex items-center text-sm gap-3.5 font-medium p-2 hover:bg-gray-800 rounded-md"
+                  }`
+                }
+              >
+                <div>
+                  {React.createElement(PiSignOutBold, { size: "20" })}
+                </div>
+                <h2
+                  className={`whitespace-pre duration-300 ${
+                    !open && "opacity-0 translate-x-28 overflow-hidden"
+                  }`}
+                >
+                  Shift
+                </h2>
+                <h2
+                  className={`${
+                    open && "hidden"
+                  } absolute left-48 bg-white font-semibold whitespace-pre text-gray-900 rounded-md drop-shadow-lg px-0 py-0 w-0 overflow-hidden group-hover:px-2 group-hover:py-1 group-hover:left-14 group-hover:duration-300 group-hover:w-fit`}
+                >
+                  Shift
+                </h2>
+              </NavLink>
+              </div> 
+)}
 
               {/* <NavLink
                 to="/hrms/attendance"
@@ -1278,7 +1363,7 @@ const AdminHRMS = () => {
 
 
               <NavLink
-                to="/hrms/attendance"
+                to="/admin/hrms/reports"
                 className={({ isActive }) =>
                   `${
                     isActive

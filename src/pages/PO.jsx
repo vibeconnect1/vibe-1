@@ -217,24 +217,24 @@ const PO = () => {
   };
   return (
     <section className="flex">
-      <Navbar />
+      {/* <Navbar /> */}
       <div className="w-full flex mx-3 flex-col overflow-hidden">
         {/* <Purchase/> */}
         <div className="flex  justify-start gap-4 my-5 flex-shrink flex-wrap ">
-          <div className="shadow-xl rounded-full border-4 border-gray-400 w-72  px-6 flex flex-col items-center">
+          <div className="shadow-xl rounded-full border-4 border-gray-400   px-6 flex flex-col items-center">
             <p className="font-semibold md:text-lg">Total number of po</p>
             <p className="text-center font-semibold md:text-lg ">2</p>
           </div>
-          <div className="shadow-xl rounded-full border-4 border-green-400 w-72  px-6 flex flex-col items-center">
+          <div className="shadow-xl rounded-full border-4 border-green-400   px-6 flex flex-col items-center">
             <p className="font-semibold md:text-lg">Total Value Amount</p>
             <p className="text-center font-semibold md:text-lg ">₹ 1,152</p>
           </div>
-          <div className="shadow-xl rounded-full border-4 border-red-400 w-72  px-6 flex flex-col items-center">
+          <div className="shadow-xl rounded-full border-4 border-red-400  px-6 flex flex-col items-center">
             <p className="font-semibold md:text-lg">Total Paid Amount</p> 
             <p className="text-center font-semibold md:text-lg "> ₹ 0</p>
           </div>
 
-          <div className="shadow-xl rounded-full border-4 border-orange-400 w-72  px-6 flex flex-col items-center">
+          <div className="shadow-xl rounded-full border-4 border-orange-400  px-6 flex flex-col items-center">
             <p className="font-semibold md:text-lg">Total Pending Amount</p>
             <p className="text-center font-semibold md:text-lg "> ₹ 1,152</p>
           </div>

@@ -9,7 +9,7 @@ function GDN() {
   const [page, setPage] = useState("gdnDetails");
   return (
     <section className="flex">
-      <Navbar />
+      {/* <Navbar /> */}
       <div className="w-full flex mx-3 flex-col overflow-hidden">
         <div className="flex justify-center my-2">
           <div className="flex flex-row gap-5 text-sm font-semibold p-1 rounded-full bg-gray-400">

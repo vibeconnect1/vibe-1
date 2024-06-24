@@ -399,6 +399,35 @@ import WorkflowTrigger from "./pages/AdminHrms/WorkFlowTrigger.jsx";
 import EmailIdMapping from "./pages/AdminHrms/EmailMapping.jsx";
 import CommunicationTemplate from "./pages/AdminHrms/CommunicationTemplate.jsx";
 import InvestmentSetting from "./pages/AdminHrms/InvestmentSetting.jsx";
+import ImportExport from "./pages/AdminHrms/ImportExport.jsx";
+import ReportGeneration from "./pages/AdminHrms/ReportGeneration.jsx";
+import AuditReports from "./pages/AdminHrms/AuditReports.jsx";
+import PayrollReports from "./pages/AdminHrms/PayrollReport.jsx";
+import ComplianceReports from "./pages/AdminHrms/ComplianceReport.jsx";
+import IncomeTaxReport from "./pages/AdminHrms/IncomeTaxDetails.jsx";
+import BankReport from "./pages/AdminHrms/BankReport.jsx";
+import LeaveReport from "./pages/AdminHrms/LeaveReport.jsx";
+import AttendanceReport from "./pages/AdminHrms/AttendanceReport.jsx";
+import ExpenseReport from "./pages/AdminHrms/ExpenseReport.jsx";
+import Form16 from "./pages/AdminHrms/Form16.jsx";
+import CustomReport from "./pages/AdminHrms/CustomReport.jsx";
+import HRReport from "./pages/AdminHrms/HRMSReport.jsx";
+import InvestmentReport from "./pages/AdminHrms/InvestmentReport.jsx";
+import OnBoarding from "./pages/AdminHrms/OnBoarding.jsx";
+import OffBoarding from "./pages/AdminHrms/OffBoarding.jsx";
+import AddChallan from "./pages/AdminHrms/AddChallan.jsx";
+import ViewForm16 from "./pages/AdminHrms/ViewForm16.jsx";
+import Purchase from "./pages/Purchase.jsx";
+import FieldSenseMeeting from "./pages/FieldSenseMeeting.jsx";
+import CreateFieldSenseMeeting from "./pages/SubPages/CreateFieldSenseMeeting.jsx";
+import FieldSenseMeetingDetails from "./pages/SubPages/details/FieldSenseMeeting.jsx";
+import FieldSenseLeads from "./pages/FieldSenseLeads.jsx";
+import CreateFieldSenseLeads from "./pages/SubPages/CreateFieldSenseLead.jsx";
+import EmployeeFieldSenseMeeting from "./pages/Employees/EmployeeFieldSenseMeeting.jsx";
+import CreateEmployeeFieldSenseMeeting from "./pages/Employees/CreateEmployeeFIeldSenseMeeting.jsx";
+import EmployeeFieldSenseMeetingDetails from "./pages/Employees/EmployeeFieldSenseMeetingDetails.jsx";
+import Roster from "./pages/AdminHrms/Roaster.jsx";
+import RosterShift from "./pages/AdminHrms/RoasterShift.jsx";
 
 function App() {
   const themeColor = useSelector((state) => state.theme.color);
@@ -407,7 +436,7 @@ function App() {
     themeColor
   );
   document.documentElement.style.setProperty("--calendar-Header", themeColor);
-const dispatch = useDispatch()
+  const dispatch = useDispatch();
   const Get_Background = async () => {
     try {
       // const params = {
@@ -421,10 +450,9 @@ const dispatch = useDispatch()
         console.log("sucess");
 
         console.log(data.data);
-       const selectedImageSrc = API_URL + data.data.image;
+        const selectedImageSrc = API_URL + data.data.image;
 
-        
-       const selectedImageIndex = data.data.index;
+        const selectedImageIndex = data.data.index;
 
         // Now, you can use selectedImageSrc and selectedImageIndex as needed
         console.log("Received response:", data);
@@ -444,9 +472,9 @@ const dispatch = useDispatch()
     }
   };
 
-useEffect(()=>{
-  Get_Background()
-},[setBackground])
+  useEffect(() => {
+    Get_Background();
+  }, [setBackground]);
 
   return (
     <>
@@ -712,14 +740,12 @@ useEffect(()=>{
           />
           {/* communication */}
 
-
-
-{/* employee Communication group detail */}
-<Route
+          {/* employee Communication group detail */}
+          <Route
             path="/employee/communication-employee-profile"
             element={
               <ProtectedRoute>
-                <EmployeeProfile/>
+                <EmployeeProfile />
               </ProtectedRoute>
             }
           />
@@ -727,7 +753,7 @@ useEffect(()=>{
             path="/employee/communication-edit-employee-profile"
             element={
               <ProtectedRoute>
-                <EditEmployeeProfile/>
+                <EditEmployeeProfile />
               </ProtectedRoute>
             }
           />
@@ -735,7 +761,7 @@ useEffect(()=>{
             path="/admin/communication-profile"
             element={
               <ProtectedAdminRoutes>
-                <Profile/>
+                <Profile />
               </ProtectedAdminRoutes>
             }
           />
@@ -743,12 +769,10 @@ useEffect(()=>{
             path="/admin/communication-edit-profile"
             element={
               <ProtectedAdminRoutes>
-                <EditProfile/>
+                <EditProfile />
               </ProtectedAdminRoutes>
             }
           />
-
-
 
           <Route
             path="/communication"
@@ -1666,6 +1690,14 @@ useEffect(()=>{
             }
           />
           {/* Admin PO*/}
+          <Route
+            path="/admin/purchase"
+            element={
+              <ProtectedAdminRoutes>
+                <Purchase />
+              </ProtectedAdminRoutes>
+            }
+          />
           <Route
             path="/admin/PO"
             element={
@@ -3110,27 +3142,27 @@ useEffect(()=>{
             }
           />
 
-<Route
+          <Route
             path="/admin/hrms/alerts"
             element={
               <ProtectedAdminRoutes>
-               <HRMSAlert/>
+                <HRMSAlert />
               </ProtectedAdminRoutes>
             }
           />
-            <Route
+          <Route
             path="/admin/hrms/leave-setting"
             element={
               <ProtectedAdminRoutes>
-             <GeneralSettings/>
+                <GeneralSettings />
               </ProtectedAdminRoutes>
             }
           />
-           <Route
+          <Route
             path="/general-settings"
             element={
               <ProtectedAdminRoutes>
-              <GeneralSettings/>
+                <GeneralSettings />
               </ProtectedAdminRoutes>
             }
           />
@@ -3138,7 +3170,7 @@ useEffect(()=>{
             path="/leave-categories"
             element={
               <ProtectedAdminRoutes>
-             <LeaveCategories/>
+                <LeaveCategories />
               </ProtectedAdminRoutes>
             }
           />
@@ -3146,7 +3178,7 @@ useEffect(()=>{
             path="/templates"
             element={
               <ProtectedAdminRoutes>
-             <Templates/>
+                <Templates />
               </ProtectedAdminRoutes>
             }
           />
@@ -3154,31 +3186,31 @@ useEffect(()=>{
             path="/templates-assignments"
             element={
               <ProtectedAdminRoutes>
-             <TemplateAssignment/>
+                <TemplateAssignment />
               </ProtectedAdminRoutes>
             }
           />
-           <Route
+          <Route
             path="admin/leave-categories"
             element={
               <ProtectedAdminRoutes>
-             <AddLeaveCategory/>
+                <AddLeaveCategory />
               </ProtectedAdminRoutes>
             }
           />
-           <Route
+          <Route
             path="/templates/leave-templates"
             element={
               <ProtectedAdminRoutes>
-             <AddTemplates/>
+                <AddTemplates />
               </ProtectedAdminRoutes>
             }
           />
-           <Route
+          <Route
             path="/admin/hrms/leave-application"
             element={
               <ProtectedAdminRoutes>
-               <LeaveApplication/>
+                <LeaveApplication />
               </ProtectedAdminRoutes>
             }
           />
@@ -3186,7 +3218,7 @@ useEffect(()=>{
             path="/admin/hrms/leave-balance"
             element={
               <ProtectedAdminRoutes>
-              <LeaveBalance/>
+                <LeaveBalance />
               </ProtectedAdminRoutes>
             }
           />
@@ -3194,50 +3226,48 @@ useEffect(()=>{
             path="/admin/hrms/rollover"
             element={
               <ProtectedAdminRoutes>
-              <Rollover/>
+                <Rollover />
               </ProtectedAdminRoutes>
             }
           />
-         <Route
-          path="admin/leave-categories/:id"
-          element={
-            <ProtectedAdminRoutes>
-           <EditLeaveCategory/>
-            </ProtectedAdminRoutes>
-          }
-        />
-         <Route
-          path="admin/edit-templates/:id"
-          element={
-            <ProtectedAdminRoutes>
-           <EditTemplates/>
-            </ProtectedAdminRoutes>
-          }
-        />
-        <Route
-           path="admin/hrms-leavebalance-details/:id"
-           element={
-             <ProtectedAdminRoutes>
-            <LeaveBalanceDetails/>
-             </ProtectedAdminRoutes>
-           }
-         /> 
-        
-         
-  
-         <Route
+          <Route
+            path="admin/leave-categories/:id"
+            element={
+              <ProtectedAdminRoutes>
+                <EditLeaveCategory />
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="admin/edit-templates/:id"
+            element={
+              <ProtectedAdminRoutes>
+                <EditTemplates />
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="admin/hrms-leavebalance-details/:id"
+            element={
+              <ProtectedAdminRoutes>
+                <LeaveBalanceDetails />
+              </ProtectedAdminRoutes>
+            }
+          />
+
+          <Route
             path="/admin/hrms/organization-setting"
             element={
               <ProtectedAdminRoutes>
-             <BasicInformation/>
+                <BasicInformation />
               </ProtectedAdminRoutes>
             }
           />
-           <Route
+          <Route
             path="/admin/company-profile/basic-information"
             element={
               <ProtectedAdminRoutes>
-             <BasicInformation/>
+                <BasicInformation />
               </ProtectedAdminRoutes>
             }
           />
@@ -3245,7 +3275,7 @@ useEffect(()=>{
             path="/admin/company-profile/address-information"
             element={
               <ProtectedAdminRoutes>
-             <AddressInformation/>
+                <AddressInformation />
               </ProtectedAdminRoutes>
             }
           />
@@ -3253,7 +3283,7 @@ useEffect(()=>{
             path="/admin/geographical-settings"
             element={
               <ProtectedAdminRoutes>
-            <GeographicalSetting/>
+                <GeographicalSetting />
               </ProtectedAdminRoutes>
             }
           />
@@ -3261,7 +3291,7 @@ useEffect(()=>{
             path="/admin/locations"
             element={
               <ProtectedAdminRoutes>
-           <Location/>
+                <Location />
               </ProtectedAdminRoutes>
             }
           />
@@ -3269,23 +3299,23 @@ useEffect(()=>{
             path="/admin/department"
             element={
               <ProtectedAdminRoutes>
-           <Department/>
+                <Department />
               </ProtectedAdminRoutes>
             }
           />
-           <Route
+          <Route
             path="/admin/company-holidays"
             element={
               <ProtectedAdminRoutes>
-          <Holiday/>
+                <Holiday />
               </ProtectedAdminRoutes>
             }
           />
-            <Route
+          <Route
             path="/admin/bank-accounts"
             element={
               <ProtectedAdminRoutes>
-         <BankAccount/>
+                <BankAccount />
               </ProtectedAdminRoutes>
             }
           />
@@ -3293,7 +3323,7 @@ useEffect(()=>{
             path="/admin/calendar-milestones-events"
             element={
               <ProtectedAdminRoutes>
-          <CalendarEvent/>
+                <CalendarEvent />
               </ProtectedAdminRoutes>
             }
           />
@@ -3301,7 +3331,7 @@ useEffect(()=>{
             path="/admin/employee-fields/personal-details"
             element={
               <ProtectedAdminRoutes>
-                  <PersonalInformation/>
+                <PersonalInformation />
               </ProtectedAdminRoutes>
             }
           />
@@ -3309,7 +3339,7 @@ useEffect(()=>{
             path="/admin/employee-fields/employment-details"
             element={
               <ProtectedAdminRoutes>
-                 <EmployeeAddress/>
+                <EmployeeAddress />
               </ProtectedAdminRoutes>
             }
           />
@@ -3317,15 +3347,15 @@ useEffect(()=>{
             path="/admin/employee-fields/documents"
             element={
               <ProtectedAdminRoutes>
-                <Document/>
+                <Document />
               </ProtectedAdminRoutes>
             }
           />
-           <Route
+          <Route
             path="/admin/hrms/user-setting"
             element={
               <ProtectedAdminRoutes>
-                 <ManageAdmin/>
+                <ManageAdmin />
               </ProtectedAdminRoutes>
             }
           />
@@ -3333,31 +3363,31 @@ useEffect(()=>{
             path="/admin/manage-admin"
             element={
               <ProtectedAdminRoutes>
-                <ManageAdmin/>
+                <ManageAdmin />
               </ProtectedAdminRoutes>
             }
           />
-           <Route
+          <Route
             path="/admin/third-party"
             element={
               <ProtectedAdminRoutes>
-                <ThirdParty/>
+                <ThirdParty />
               </ProtectedAdminRoutes>
             }
           />
-           <Route
+          <Route
             path="/admin/employee-fields/permission"
             element={
               <ProtectedAdminRoutes>
-                <PermissionsField/>
+                <PermissionsField />
               </ProtectedAdminRoutes>
             }
           />
-           <Route
+          <Route
             path="/admin/employee-fields/news-feed-permission"
             element={
               <ProtectedAdminRoutes>
-                <NewsFeedPermission/>
+                <NewsFeedPermission />
               </ProtectedAdminRoutes>
             }
           />
@@ -3365,7 +3395,7 @@ useEffect(()=>{
             path="/admin/hrms/document-letter"
             element={
               <ProtectedAdminRoutes>
-                <CompanyDocuments/>
+                <CompanyDocuments />
               </ProtectedAdminRoutes>
             }
           />
@@ -3373,7 +3403,7 @@ useEffect(()=>{
             path="/admin/company-documents"
             element={
               <ProtectedAdminRoutes>
-               <CompanyDocuments/>
+                <CompanyDocuments />
               </ProtectedAdminRoutes>
             }
           />
@@ -3381,7 +3411,7 @@ useEffect(()=>{
             path="/admin/document/letter-template"
             element={
               <ProtectedAdminRoutes>
-               <LetterTemplate/>
+                <LetterTemplate />
               </ProtectedAdminRoutes>
             }
           />
@@ -3389,7 +3419,7 @@ useEffect(()=>{
             path="/admin/add-letter-template"
             element={
               <ProtectedAdminRoutes>
-               <AddLetterTemplate/>
+                <AddLetterTemplate />
               </ProtectedAdminRoutes>
             }
           />
@@ -3397,23 +3427,23 @@ useEffect(()=>{
             path="/admin/document/old-letter-template"
             element={
               <ProtectedAdminRoutes>
-               <OldLetterTemplate/>
+                <OldLetterTemplate />
               </ProtectedAdminRoutes>
             }
           />
-           <Route
+          <Route
             path="/admin/hrms/workflow-setting"
             element={
               <ProtectedAdminRoutes>
-              <AddOnboardingSetting/>
+                <AddOnboardingSetting />
               </ProtectedAdminRoutes>
             }
           />
-           <Route
+          <Route
             path="/admin/onboarding-setting"
             element={
               <ProtectedAdminRoutes>
-              <AddOnboardingSetting/>
+                <AddOnboardingSetting />
               </ProtectedAdminRoutes>
             }
           />
@@ -3421,7 +3451,7 @@ useEffect(()=>{
             path="/admin/workflow-trigger"
             element={
               <ProtectedAdminRoutes>
-              <WorkflowTrigger/>
+                <WorkflowTrigger />
               </ProtectedAdminRoutes>
             }
           />
@@ -3429,7 +3459,7 @@ useEffect(()=>{
             path="/admin/emailid-mapping"
             element={
               <ProtectedAdminRoutes>
-              <EmailIdMapping/>
+                <EmailIdMapping />
               </ProtectedAdminRoutes>
             }
           />
@@ -3437,16 +3467,178 @@ useEffect(()=>{
             path="/admin/communication-template"
             element={
               <ProtectedAdminRoutes>
-              <CommunicationTemplate/>
+                <CommunicationTemplate />
               </ProtectedAdminRoutes>
             }
           />
-          
+
           <Route
             path="/admin/hrms/investment-setting"
             element={
               <ProtectedAdminRoutes>
-              <InvestmentSetting/>
+                <InvestmentSetting />
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/hrms/reports"
+            element={
+              <ProtectedAdminRoutes>
+                <ImportExport />
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/report-generation"
+            element={
+              <ProtectedAdminRoutes>
+                <ReportGeneration />
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/audit-reports"
+            element={
+              <ProtectedAdminRoutes>
+                <AuditReports />
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/Payroll-Reports"
+            element={
+              <ProtectedAdminRoutes>
+                <PayrollReports />
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/Compliance-reports"
+            element={
+              <ProtectedAdminRoutes>
+                <ComplianceReports />
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/income-tax-report"
+            element={
+              <ProtectedAdminRoutes>
+                <IncomeTaxReport />
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/bank-report"
+            element={
+              <ProtectedAdminRoutes>
+                <BankReport />
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/leave-report"
+            element={
+              <ProtectedAdminRoutes>
+                <LeaveReport />
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/attendance-report"
+            element={
+              <ProtectedAdminRoutes>
+                <AttendanceReport />
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/expense-report"
+            element={
+              <ProtectedAdminRoutes>
+                <ExpenseReport />
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/form16"
+            element={
+              <ProtectedAdminRoutes>
+                <Form16 />
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/custom-report"
+            element={
+              <ProtectedAdminRoutes>
+                <CustomReport />
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/hr-report"
+            element={
+              <ProtectedAdminRoutes>
+                <HRReport />
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/investment-report"
+            element={
+              <ProtectedAdminRoutes>
+                <InvestmentReport />
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/OnBoarding"
+            element={
+              <ProtectedAdminRoutes>
+                <OnBoarding />
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/OffBoarding"
+            element={
+              <ProtectedAdminRoutes>
+                <OffBoarding />
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/hrms/add-challan"
+            element={
+              <ProtectedAdminRoutes>
+                <AddChallan />
+              </ProtectedAdminRoutes>
+            }
+          />
+
+          <Route
+            path="/admin/view/form16/:id"
+            element={
+              <ProtectedAdminRoutes>
+                <ViewForm16 />
+              </ProtectedAdminRoutes>
+            }
+          />
+
+          <Route
+            path="/admin/hrms/roaster"
+            element={
+              <ProtectedAdminRoutes>
+                <Roster />
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/hrms/roaster-shift"
+            element={
+              <ProtectedAdminRoutes>
+                <RosterShift />
               </ProtectedAdminRoutes>
             }
           />
@@ -3576,6 +3768,75 @@ useEffect(()=>{
               <ProtectedAdminRoutes>
                 <HRMSLeavesDetails />
               </ProtectedAdminRoutes>
+            }
+          />
+
+          {/*field sense */}
+          <Route
+            path="/admin/field-sense-meeting"
+            element={
+              <ProtectedAdminRoutes>
+                <FieldSenseMeeting />
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/create-field-sense"
+            element={
+              <ProtectedAdminRoutes>
+                <CreateFieldSenseMeeting />
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/field-sense-details/:id"
+            element={
+              <ProtectedAdminRoutes>
+                <FieldSenseMeetingDetails />
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/create-field-sence-leads"
+            element={
+              <ProtectedAdminRoutes>
+                <CreateFieldSenseLeads />
+              </ProtectedAdminRoutes>
+            }
+          />
+
+          <Route
+            path="/admin/field-sense-leads"
+            element={
+              <ProtectedAdminRoutes>
+                <FieldSenseLeads />
+              </ProtectedAdminRoutes>
+            }
+          />
+          {/* employee field sense */}
+          <Route
+            path="/employee/field-sense-meeting"
+            element={
+              <ProtectedRoute>
+                <EmployeeFieldSenseMeeting />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/employee/field-sense-create-meeting"
+            element={
+              <ProtectedRoute>
+                <CreateEmployeeFieldSenseMeeting />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/employee/field-sence-meeting-details/:id"
+            element={
+              <ProtectedRoute>
+                <EmployeeFieldSenseMeetingDetails />
+              </ProtectedRoute>
             }
           />
         </Routes>

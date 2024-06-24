@@ -19,7 +19,7 @@ import {
   MdOutlinePolicy,
 } from "react-icons/md";
 import { HiMiniTicket, HiMiniUser } from "react-icons/hi2";
-import { RiSettings4Line } from "react-icons/ri";
+import { RiSettings4Line, RiUserLocationFill } from "react-icons/ri";
 import { LuParkingSquare, LuSettings2 } from "react-icons/lu";
 import {
   IoBusinessOutline,
@@ -335,7 +335,7 @@ const Navbar = () => {
                   Purchase
                 </h2>
               </NavLink>
-              <NavLink
+              {/* <NavLink
                 to={"/admin/material-pr"}
                 className={({ isActive }) =>
                   ` ${
@@ -361,7 +361,7 @@ const Navbar = () => {
                 >
                   Material PR
                 </h2>
-              </NavLink>
+              </NavLink> */}
               <NavLink
                 to={"/admin/service-pr"}
                 className={({ isActive }) =>
@@ -379,17 +379,17 @@ const Navbar = () => {
                     !open && "opacity-0 translate-x-28 overflow-hidden"
                   }`}
                 >
-                  Service PR
+                  Service PR/WO
                 </h2>
                 <h2
                   className={`${
                     open && "hidden"
                   } absolute left-48 bg-white font-semibold whitespace-pre text-gray-900 rounded-md drop-shadow-lg px-0 py-0 w-0 overflow-hidden group-hover:px-2 group-hover:py-1 group-hover:left-14 group-hover:duration-300 group-hover:w-fit  `}
                 >
-                  Service PR
+                  Service PR/WO
                 </h2>
               </NavLink>
-              <NavLink
+              {/* <NavLink
                 to={"/admin/PO"}
                 className={({ isActive }) =>
                   ` ${
@@ -417,8 +417,8 @@ const Navbar = () => {
                 >
                   PO
                 </h2>
-              </NavLink>
-              <NavLink
+              </NavLink> */}
+              {/* <NavLink
                 to={"/admin/WO"}
                 className={({ isActive }) =>
                   ` ${
@@ -444,8 +444,8 @@ const Navbar = () => {
                 >
                   WO
                 </h2>
-              </NavLink>
-              <NavLink
+              </NavLink> */}
+              {/* <NavLink
                 to={"/admin/Grn"}
                 className={({ isActive }) =>
                   ` ${
@@ -471,8 +471,8 @@ const Navbar = () => {
                 >
                   GRN
                 </h2>
-              </NavLink>
-              <NavLink
+              </NavLink> */}
+              {/* <NavLink
                 to={"/admin/Gdn"}
                 className={({ isActive }) =>
                   ` ${
@@ -498,7 +498,7 @@ const Navbar = () => {
                 >
                   GDN
                 </h2>
-              </NavLink>
+              </NavLink> */}
               <NavLink
                 to={"/admin/audit"}
                 className={({ isActive }) =>
@@ -577,6 +577,32 @@ const Navbar = () => {
                   } absolute left-48 bg-white font-semibold whitespace-pre text-gray-900 rounded-md drop-shadow-lg px-0 py-0 w-0 overflow-hidden group-hover:px-2 group-hover:py-1 group-hover:left-14 group-hover:duration-300 group-hover:w-fit  `}
                 >
                   Booking & Request
+                </h2>
+              </NavLink>
+              <NavLink
+                to={"/admin/field-sense-meeting"}
+                className={({ isActive }) =>
+              ` ${
+                isActive
+                  ? "text-black bg-white flex p-2  gap-3.5 rounded-md group items-center text-sm font-medium"
+                  : " group flex items-center text-sm gap-3.5 font-medium p-2 hover:bg-gray-800 rounded-md "
+                }`
+               }
+              >
+              <div>{React.createElement(RiUserLocationFill, { size: "20" })}</div>
+                <h2
+                  className={`whitespace-pre duration-300 ${
+                  !open && "opacity-0 translate-x-28 overflow-hidden"
+                }`}
+              >
+                Field Sense
+                </h2>
+                <h2
+                  className={`${
+                  open && "hidden"
+                  } absolute left-48 bg-white font-semibold whitespace-pre text-gray-900 rounded-md drop-shadow-lg px-0 py-0 w-0 overflow-hidden group-hover:px-2 group-hover:py-1 group-hover:left-14 group-hover:duration-300 group-hover:w-fit  `}
+                >
+                  Field Sense
                 </h2>
               </NavLink>
              
@@ -1404,7 +1430,7 @@ const Navbar = () => {
                     open && "hidden"
                   } absolute left-48 bg-white font-semibold whitespace-pre text-gray-900 rounded-md drop-shadow-lg px-0 py-0 w-0 overflow-hidden group-hover:px-2 group-hover:py-1 group-hover:left-14 group-hover:duration-300 group-hover:w-fit  `}
                 >
-                  Communiaction
+                  Communication
                 </h2>
               </NavLink>
 
@@ -1434,6 +1460,32 @@ const Navbar = () => {
                   } absolute left-48 bg-white font-semibold whitespace-pre text-gray-900 rounded-md drop-shadow-lg px-0 py-0 w-0 overflow-hidden group-hover:px-2 group-hover:py-1 group-hover:left-14 group-hover:duration-300 group-hover:w-fit  `}
                 >
                   Doctor Appointment
+                </h2>
+              </NavLink>
+              <NavLink
+                to={"/employee/field-sense-meeting"}
+                className={({ isActive }) =>
+                  ` ${
+                    isActive
+                      ? "text-black bg-white flex p-2  gap-3.5 rounded-md group items-center text-sm font-medium"
+                      : " group flex items-center text-sm gap-3.5 font-medium p-2 hover:bg-gray-800 rounded-md "
+                  }`
+                }
+              >
+                <div>{React.createElement(RiUserLocationFill, { size: "20" })}</div>
+                <h2
+                  className={`whitespace-pre duration-300 ${
+                    !open && "opacity-0 translate-x-28 overflow-hidden"
+                  }`}
+                >
+                  Field Sence
+                </h2>
+                <h2
+                  className={`${
+                    open && "hidden"
+                  } absolute left-48 bg-white font-semibold whitespace-pre text-gray-900 rounded-md drop-shadow-lg px-0 py-0 w-0 overflow-hidden group-hover:px-2 group-hover:py-1 group-hover:left-14 group-hover:duration-300 group-hover:w-fit  `}
+                >
+                  Field Sence
                 </h2>
               </NavLink>
               <NavLink

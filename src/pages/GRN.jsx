@@ -224,7 +224,7 @@ function GRN() {
 
   return (
     <section className="flex">
-      <Navbar />
+      {/* <Navbar /> */}
       <div className="w-full mx-3 flex flex-col overflow-hidden">
         <div>
           {filter && (

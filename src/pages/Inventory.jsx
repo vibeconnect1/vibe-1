@@ -9,9 +9,12 @@ import { MdDeleteForever } from "react-icons/md";
 import AssetNav from "../components/navbars/AssetNav";
 import Navbar from "../components/Navbar";
 import { getItemInLocalStorage } from "../utils/localStorage";
+import GRN from "./GRN";
+import GDN from "./GDN";
 
 const Inventory = () => {
   const [stocks, setStocks] = useState([]);
+  const [page, setPage] = useState("stocks");
   useEffect(() => {
     const fetchInventory = async () => {
       const invResp = await getInventory();
@@ -101,40 +104,85 @@ const Inventory = () => {
       <Navbar />
       <div className="p-4 w-full my-2 flex md:mx-2 overflow-hidden flex-col">
         <AssetNav />
-      <div className="flex md:flex-row flex-col justify-between items-center my-2 gap-2  ">
-        <input
-          type="text"
-          placeholder="Search By Stock name"
-          className="border-2 p-2 md:w-96 border-gray-300 rounded-lg placeholder:text-sm"
-          //   value={searchText}
-          //   onChange={handleSearch}
-        />
-        <div className="md:flex grid grid-cols-2 sm:flex-row my-2 flex-col gap-2">
-          <Link
-            to={"/admin/add-stock"}
-            className="bg-black  text-sm rounded-lg flex justify-center font-semibold items-center gap-2 text-white py-2 px-4 border-2 border-black hover:bg-white hover:text-black transition-all duration-300 "
-          >
-            <IoAddCircleOutline size={20} />
-            Add
-          </Link>
+        <div className=" w-full my-2 flex  overflow-hidden flex-col">
+          <div className="flex w-full">
+            <div className=" flex gap-2 p-2 pb-0 border-b-2 border-gray-200 w-full">
+              <h2
+                className={`p-1 ${
+                  page === "stocks" &&
+                  `bg-white font-medium text-blue-500 shadow-custom-all-sides`
+                } rounded-t-md px-4 cursor-pointer text-center transition-all duration-300 ease-linear`}
+                onClick={() => setPage("stocks")}
+              >
+                Stocks
+              </h2>
+              <h2
+                className={`p-1 ${
+                  page === "grn" &&
+                  "bg-white font-medium text-blue-500 shadow-custom-all-sides"
+                } rounded-t-md px-4 cursor-pointer transition-all duration-300 ease-linear`}
+                onClick={() => setPage("grn")}
+              >
+                GRN
+              </h2>
+              <h2
+                className={`p-1 ${
+                  page === "gdn" &&
+                  "bg-white font-medium text-blue-500 shadow-custom-all-sides"
+                } rounded-t-md px-4 cursor-pointer transition-all duration-300 ease-linear`}
+                onClick={() => setPage("gdn")}
+              >
+                GDN
+              </h2>
+            </div>
+          </div>
+          <div>
+            {/* {page === "scheduled" && <ScheduledAudit/> }
+        {page === "conducted" && <ConductedAudit/> }
+        {page === "checklists" && <AuditChecklist/> } */}
+          </div>
+        </div>
 
-          <button
-            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-            // onClick={exportToExcel}
-          >
-            Export
-          </button>
-          {/* <button
+        {page === "stocks" && (
+          <>
+            <div className="flex md:flex-row flex-col justify-between items-center my-2 gap-2  ">
+              <input
+                type="text"
+                placeholder="Search By Stock name"
+                className="border-2 p-2 md:w-96 border-gray-300 rounded-lg placeholder:text-sm"
+                //   value={searchText}
+                //   onChange={handleSearch}
+              />
+              <div className="md:flex grid grid-cols-2 sm:flex-row my-2 flex-col gap-2">
+                <Link
+                  to={"/admin/add-stock"}
+                  className="bg-black  text-sm rounded-lg flex justify-center font-semibold items-center gap-2 text-white py-2 px-4 border-2 border-black hover:bg-white hover:text-black transition-all duration-300 "
+                >
+                  <IoAddCircleOutline size={20} />
+                  Add
+                </Link>
+
+                <button
+                  className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                  // onClick={exportToExcel}
+                >
+                  Export
+                </button>
+                {/* <button
       className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
       onClick={handleDownloadQRCode}
       disabled={selectedRows.length === 0}
     >
       Download QR Code
     </button> */}
-        </div>
+              </div>
+            </div>
+            <Table columns={columns} data={stocks} />
+          </>
+        )}
+        {page === "grn" && <GRN />}
+        {page === "gdn" && <GDN />}
       </div>
-      <Table columns={columns} data={stocks} />
-    </div>
     </section>
   );
 };
