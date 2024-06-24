@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Navbar from "../../components/Navbar";
-import { getAssignedTo, getSoftServices, postServiceAssociation } from "../../api";
+import { getAssignedTo, getAssociationList, getSoftServices, postServiceAssociation } from "../../api";
 import Select from "react-select";
 import Table from "../../components/table/Table";
 import { useParams } from "react-router-dom";
@@ -9,6 +9,8 @@ const AssociateServiceChecklist = () => {
   const [services, setServices] = useState([]);
   const [selectedOption, setSelectedOption] = useState([]);
   const [assignedTo, setAssignedTo] = useState([]);
+  const [association, setAssociation] = useState([])
+  const [added, setAdded] = useState(false)
   const [formData, setFormData] = useState({
     assigned_to: "",
   });
@@ -16,12 +18,12 @@ const AssociateServiceChecklist = () => {
   const column = [
     {
       name: "Service Name",
-      selector: (row) => row.name,
+      selector: (row) => row.service_name,
       sortable: true,
     },
     {
       name: "Assigned To",
-      selector: (row) => row.assigned_to,
+      selector: (row) => row.user_name,
       sortable: true,
     },
   ];
@@ -42,10 +44,17 @@ const AssociateServiceChecklist = () => {
       console.log(assignedToList.data);
       setAssignedTo(assignedToList.data);
     };
+    const fetchAssociationList = async() =>{
+      const assoResp = await getAssociationList(id)
+      console.log(assoResp.data.associated_with)
+      setAssociation(assoResp.data.associated_with)
+    }
+
 
     fetchServicesList();
     fetchAssignedTo();
-  }, []);
+    fetchAssociationList()
+  }, [added]);
 
   var handleChangeSelect = (selectedOption) => {
     console.log(selectedOption);
@@ -72,6 +81,7 @@ const AssociateServiceChecklist = () => {
       toast.dismiss();
       // window.location.reload();
       toast.success("Checklist Associated");
+      setAdded(true)
     } catch (error) {
       console.log(error);
       toast.dismiss()
@@ -88,7 +98,7 @@ const AssociateServiceChecklist = () => {
           Associate Checklist
         </h2>
         <div className="grid md:grid-cols-3 items-center gap-4">
-          <div className="w-full">
+          <div className="w-full z-20">
             {/* <label htmlFor="" className="font-medium my-2">
               Services
             </label> */}
@@ -126,7 +136,7 @@ const AssociateServiceChecklist = () => {
           </div>
         </div>
         <div className="my-2">
-          <Table />
+          <Table columns={column} data={association} />
         </div>
       </div>
     </section>

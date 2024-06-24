@@ -26,14 +26,14 @@ const HRMSAlert = () => {
               >
                 Pending Requests
               </h2>
-              <h2
+              {/* <h2
                 className={`p-1 ${
                   page === "Setup Issues" && "bg-white text-blue-500"
                 } md:rounded-full rounded-sm px-4 cursor-pointer text-center text-sm`}
                 onClick={() => setPage("Setup Issues")}
               >
                Setup Issues
-              </h2>
+              </h2> */}
               <h2
                 className={`p-1 ${
                   page === "Process Alerts" && "bg-white text-blue-500"

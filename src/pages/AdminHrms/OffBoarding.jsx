@@ -1,4 +1,4 @@
-import {React,useState} from "react";
+import {React,useEffect,useState} from "react";
 import Table from "../../components/table/Table";
 import ReportDetailsList from "./ReportDetailsList";
 
@@ -60,6 +60,10 @@ const OffBoarding = () => {
     },
     // Add more data as needed
   ];
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   return (
     <section className="flex gap-3 ml-20">

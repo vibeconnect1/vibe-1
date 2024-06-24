@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Table from "../../components/table/Table";
 import ReportDetailsList from "./ReportDetailsList";
 import { BsEye } from "react-icons/bs";
@@ -47,6 +47,9 @@ const Form16 = () => {
       sortable: true,
     },
   ];
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   const data = [
     {

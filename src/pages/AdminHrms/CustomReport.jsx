@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { PiPlusCircle } from "react-icons/pi";
 import { Link } from "react-router-dom";
 import { BsEye } from "react-icons/bs";
@@ -126,6 +126,9 @@ const CustomReport = () => {
 //       },
 //     },
 //   };
+useEffect(() => {
+  window.scrollTo(0, 0);
+}, []);
   return (
     <section className="flex gap-3 ml-20">
      {/* <ReportDetailsList/> */}

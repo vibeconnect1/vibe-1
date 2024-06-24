@@ -155,7 +155,7 @@ function User() {
                     ></button>
                   ))}
                 </div>
-                <FontSizeSelector />
+                {/* <FontSizeSelector /> */}
                 <Background/>
               </div>
             )}

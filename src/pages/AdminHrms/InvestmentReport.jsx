@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { BiEdit } from "react-icons/bi";
 import Table from "../../components/table/Table";
@@ -53,6 +53,9 @@ const InvestmentReport = () => {
     },
     // Add more data as needed
   ];
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   return (
     <section className="flex gap-3 ml-20">

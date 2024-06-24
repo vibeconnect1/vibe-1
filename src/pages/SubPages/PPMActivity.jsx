@@ -52,9 +52,9 @@ const PPMActivity = () => {
           <Link to={`/services/checklist-details/${row.asset_id}/${row.id}`}>
                 <BsEye size={15} />
               </Link>
-          <Link to={`/services/edit-ppm/${row.id}`}>
+          {/* <Link to={`/services/edit-ppm/${row.id}`}>
             <BiEdit size={15} />
-          </Link>
+          </Link> */}
         </div>
       ),
     },
@@ -79,11 +79,11 @@ const PPMActivity = () => {
       selector: (row) => row.frequency,
       sortable: true,
     },
-    {
-      name: "Assigned To",
-      selector: (row) => row.user_id,
-      sortable: true,
-    },
+    // {
+    //   name: "Assigned To",
+    //   selector: (row) => row.user_id,
+    //   sortable: true,
+    // },
     {
       name: "No. Of Questions",
       selector: (row) => row.questions.length,

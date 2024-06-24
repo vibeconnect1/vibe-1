@@ -16,7 +16,9 @@ const LeavecycleFollower = () => {
       name: "view",
       cell: (row) => (
         <div className="flex items-center gap-4">
-          <Link to={`/admin/hrms-tasks-details/${row.id}`}>
+          <Link
+          //  to={`/admin/hrms-tasks-details/${row.id}`}
+           >
             <BsEye size={15} />
           </Link>
         </div>

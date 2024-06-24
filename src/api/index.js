@@ -88,13 +88,14 @@ export const getAdminComplaints = async () =>
     },
   });
 export const getCARItems = async (ticketId) =>
-  axiosInstance.get(`/ticket_items.json?items=true&q[ticket_id_eq]=${ticketId}`, {
-    params: {
-      token: token,
-    },
-  });
-
-
+  axiosInstance.get(
+    `/ticket_items.json?items=true&q[ticket_id_eq]=${ticketId}`,
+    {
+      params: {
+        token: token,
+      },
+    }
+  );
 
 // perPage
 
@@ -353,6 +354,16 @@ export const getChecklist = async () =>
       token: token,
     },
   });
+export const getAssociationList = async (checklistId) =>
+  axiosInstance.get(
+    `/checklist_associations.json?checklist_id=${checklistId}`,
+    {
+      params: {
+        token: token,
+      },
+    }
+  );
+
 export const getChecklistDetails = async (id) =>
   axiosInstance.get(`/checklists/${id}.json`, {
     params: {
