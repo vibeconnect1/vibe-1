@@ -9,6 +9,7 @@ import * as XLSX from "xlsx";
 import { BiEdit, BiFilter, BiFilterAlt } from "react-icons/bi";
 import { getVendors } from "../api";
 import Table from "../components/table/Table";
+import { useSelector } from "react-redux";
 // import jsPDF from "jspdf";
 // import QRCode from "qrcode.react";
 
@@ -18,6 +19,7 @@ const Suppliers = () => {
   const [suppliers, setSuppliers] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
   const [selectedRows, setSelectedRows] = useState([]);
+  const themeColor = useSelector((state)=> state.theme.color)
 
   useEffect(() => {
     const fetchVendor = async () => {
@@ -63,11 +65,11 @@ const Suppliers = () => {
       selector: (row) => row.mobile,
       sortable: true,
     },
-    {
-      name: "Supplier Type",
-      selector: (row) => row.vtype,
-      sortable: true,
-    },
+    // {
+    //   name: "Supplier Type",
+    //   selector: (row) => row.vtype,
+    //   sortable: true,
+    // },
     {
       name: "Email",
       selector: (row) => row.email,
@@ -75,34 +77,34 @@ const Suppliers = () => {
     },
     {
       name: "GSTIN Number",
-      selector: (row) => row.serviceCode,
+      selector: (row) => row.gstin_number,
       sortable: true,
     },
-    { name: "PAN Number", selector: (row) => row.ref, sortable: true },
+    { name: "PAN Number", selector: (row) => row.pan_number, sortable: true },
 
-    {
-      name: "PO Outstandings",
-      selector: (row) => row.group,
-      sortable: true,
-    },
-    {
-      name: "WO Outstandings",
-      selector: (row) => row.UOM,
-      sortable: true,
-    },
-    {
-      name: "Ratings",
-      selector: (row) => row.site,
-      sortable: true,
-    },
-    {
-      name: "Signed On Contract",
-      selector: (row) => row.floor,
-      sortable: true,
-    },
+    // {
+    //   name: "PO Outstandings",
+    //   selector: (row) => row.group,
+    //   sortable: true,
+    // },
+    // {
+    //   name: "WO Outstandings",
+    //   selector: (row) => row.UOM,
+    //   sortable: true,
+    // },
+    // {
+    //   name: "Ratings",
+    //   selector: (row) => row.site,
+    //   sortable: true,
+    // },
+    // {
+    //   name: "Signed On Contract",
+    //   selector: (row) => row.floor,
+    //   sortable: true,
+    // },
     {
       name: "Status",
-      selector: (row) => row.building,
+      selector: (row) => row.active,
       sortable: true,
     },
   ];
@@ -143,7 +145,7 @@ const Suppliers = () => {
   const exportToExcel = () => {
     const fileType =
       "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8";
-    const fileName = "service_data.xlsx";
+    const fileName = "supplier_data.xlsx";
     const ws = XLSX.utils.json_to_sheet(filteredData);
     const wb = { Sheets: { data: ws }, SheetNames: ["data"] };
     const excelBuffer = XLSX.write(wb, { bookType: "xlsx", type: "array" });
@@ -174,7 +176,8 @@ const Suppliers = () => {
           <div className="flex flex-wrap gap-2">
             <Link
               to={"/suppliers/add-supplier"}
-              className="bg-black  rounded-lg flex font-semibold  items-center gap-2 text-white p-2 "
+              style={{background: themeColor}}
+              className=" rounded-lg flex font-semibold  items-center gap-2 text-white p-2 "
             >
               <IoAddCircleOutline size={20} />
               Add

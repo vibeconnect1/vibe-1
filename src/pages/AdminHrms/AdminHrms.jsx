@@ -179,7 +179,7 @@ const AdminHRMS = () => {
                 {isOrgOpen && (
                   <div className="ml-4">
                     <NavLink
-                      to="/hrms/organization-setting"
+                      to="/admin/company-profile/basic-information"
                       className={({ isActive }) =>
                         `${
                           isActive
@@ -207,7 +207,7 @@ const AdminHRMS = () => {
                       </h2>
                     </NavLink>
                     <NavLink
-                      to="/hrms/user-setting"
+                      to="/admin/manage-admin"
                       className={({ isActive }) =>
                         `${
                           isActive
@@ -233,7 +233,7 @@ const AdminHRMS = () => {
                       </h2>
                     </NavLink>
                     <NavLink
-                      to="/hrms/document-letter"
+                      to="/admin/hrms/document-letter"
                       className={({ isActive }) =>
                         `${
                           isActive
@@ -261,7 +261,7 @@ const AdminHRMS = () => {
                       </h2>
                     </NavLink>
                     <NavLink
-                      to="/hrms/hr-workflow-setting"
+                      to="/admin/onboarding-setting"
                       className={({ isActive }) =>
                         `${
                           isActive
@@ -289,7 +289,7 @@ const AdminHRMS = () => {
                       </h2>
                     </NavLink>
                     <NavLink
-                      to="/hrms/investment-setting"
+                      to="/admin/hrms/investment-setting"
                       className={({ isActive }) =>
                         `${
                           isActive

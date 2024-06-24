@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Detail from "../../../containers/Detail";
-import { editComplaintsDetails, getComplaintsDetails } from "../../../api";
+import { editComplaintsDetails, getCARItems, getComplaintsDetails } from "../../../api";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import moment from "moment";
 import { BiEdit } from "react-icons/bi";
@@ -10,12 +10,15 @@ import { BiAngry, BiHappy, BiSad, BiSmile } from "react-icons/bi";
 import { MdAddCircleOutline, MdOutlineSentimentNeutral } from "react-icons/md";
 import { useSelector } from "react-redux";
 import CARAddItemsModal from "../../../containers/modals/CARAddItemsModal";
+import Table from "../../../components/table/Table";
+
 
 const TicketDetails = () => {
   const navigate = useNavigate();
   const { id } = useParams();
   const [ticketinfo, setTicketInfo] = useState([]);
   const [showModal, setShowModal] = useState(false);
+  const [items, setItems] = useState([])
   const [formData, setFormData] = useState({
     comment: "",
     of_phase: "pms",
@@ -30,7 +33,14 @@ const TicketDetails = () => {
       // console.log(response.data);
       setTicketInfo(response.data);
     };
+    const fetchCARItems = async()=>{
+      const itemsResp = await getCARItems(id)
+      setItems(itemsResp.data)
+      
+      
+    }
     fetchDetails();
+    fetchCARItems()
   }, [showModal]);
 
   const getTimeAgo = (timestamp) => {
@@ -101,6 +111,10 @@ const TicketDetails = () => {
         ) : null,
     },
   ];
+  const ItemColumn = [
+    { name: "Name", selector: (row) => row.item_name, sortable: true },
+    { name: "Rate", selector: (row) => row.rate, sortable: true },
+  ]
   const domainPrefix = "https://admin.vibecopilot.ai";
 
   console.log(ticketinfo);
@@ -176,6 +190,11 @@ const TicketDetails = () => {
           </div>
         </div>
         {/* <div className="border " /> */}
+
+        <div className="m-2">
+          <h2 className="font-medium my-2">Approval Requests</h2>
+          <Table columns={ItemColumn} data={items}  />
+        </div>
         <h2
           style={{ background: themeColor }}
           className="text-center   text-white font-semibold my-5 text-lg p-2 px-4 "

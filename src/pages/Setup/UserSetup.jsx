@@ -2,28 +2,43 @@ import React, { useEffect, useState } from "react";
 import { PiPlusCircle } from "react-icons/pi";
 import Navbar from "../../components/Navbar";
 import Table from "../../components/table/Table";
-import { getSetupUsers } from "../../api";
+import { getSetupUsers, sendMailToUsers } from "../../api";
 import { Link } from "react-router-dom";
 import { BsEye } from "react-icons/bs";
 import { useSelector } from "react-redux";
+import toast from "react-hot-toast";
 
 const UserSetup = () => {
   const [users, setUsers] = useState([]);
   const [searchText, setSearchText] = useState("");
   const [filteredData, setFilteredData] = useState([]);
-  const themeColor = useSelector((state)=> state.theme.color)
+  const themeColor = useSelector((state) => state.theme.color);
   useEffect(() => {
     const fetchUsers = async () => {
       try {
         const setupUsers = await getSetupUsers();
         setUsers(setupUsers.data);
-        setFilteredData(setupUsers.data)
+        setFilteredData(setupUsers.data);
       } catch (error) {
         console.log(error);
       }
     };
     fetchUsers();
   }, []);
+
+  const handleSendMail = async (userId, first, last) => {
+    try {
+      toast.loading(`Sending Mail to ${first} ${last}`);
+      const welcomeMail = await sendMailToUsers(userId);
+      console.log("mail sent", welcomeMail);
+      toast.dismiss()
+      toast.success("Welcome Mail Sent");
+    } catch (error) {
+      console.log(error);
+      toast.error("Something went wrong")
+      toast.dismiss()
+    }
+  };
 
   const handleSearch = (e) => {
     const searchValue = e.target.value;
@@ -32,11 +47,13 @@ const UserSetup = () => {
     if (searchValue.trim() === "") {
       setFilteredData(users);
     } else {
-      const filteredResults = users.filter((item) =>
-        // item.name.toLowerCase().includes(searchValue.toLowerCase())
-      (item.firstname &&
-        item.firstname.toLowerCase().includes(searchValue.toLowerCase())) || (item.lastname &&
-          item.lastname.toLowerCase().includes(searchValue.toLowerCase()))
+      const filteredResults = users.filter(
+        (item) =>
+          // item.name.toLowerCase().includes(searchValue.toLowerCase())
+          (item.firstname &&
+            item.firstname.toLowerCase().includes(searchValue.toLowerCase())) ||
+          (item.lastname &&
+            item.lastname.toLowerCase().includes(searchValue.toLowerCase()))
       );
       setFilteredData(filteredResults);
     }
@@ -82,8 +99,12 @@ const UserSetup = () => {
     {
       name: "Send Email",
       cell: (row) => (
-        <button style={{background: themeColor}} className="text-white md:text-sm text-xs rounded-full  shadow-custom-all-sides p-1 px-4">
-          Send 
+        <button
+          style={{ background: themeColor }}
+          onClick={() => handleSendMail(row.id, row.firstname, row.lastname)}
+          className="text-white md:text-sm text-xs rounded-full  shadow-custom-all-sides p-1 px-4"
+        >
+          Send
         </button>
       ),
       sortable: true,

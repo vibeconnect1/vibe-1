@@ -1,14 +1,12 @@
 import { getItemInLocalStorage } from "../utils/localStorage";
 import axiosInstance from "./axiosInstance";
 import vibeAuth from "./vibeAuth";
-export const API_URL='https://vibecopilot.ai'
+export const API_URL = "https://vibecopilot.ai";
 const token = getItemInLocalStorage("TOKEN");
 
 export const login = async (data) => axiosInstance.post("/login.json", data);
 
 export const getLogin = async () => axiosInstance.get("/login.json");
-
-
 
 // dashboard
 export const getTicketDashboard = async () =>
@@ -44,9 +42,9 @@ export const EditSiteAsset = async (data, id) =>
     params: {
       token: token,
     },
-      headers: {
-        'Content-Type': 'multipart/form-data'
-    }
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
   });
 
 // vendor
@@ -89,6 +87,14 @@ export const getAdminComplaints = async () =>
       token: token,
     },
   });
+export const getCARItems = async (ticketId) =>
+  axiosInstance.get(`/ticket_items.json?items=true&q[ticket_id_eq]=${ticketId}`, {
+    params: {
+      token: token,
+    },
+  });
+
+
 
 // perPage
 
@@ -372,7 +378,6 @@ export const getRoutineTaskDetails = async (assetId, activityId) =>
     {
       params: {
         token: token,
-        
       },
     }
   );
@@ -382,12 +387,18 @@ export const getPPMActivityDetails = async (assetId) =>
     {
       params: {
         token: token,
-        
       },
     }
   );
 export const getSetupUsers = async () =>
   axiosInstance.get("/users.json", {
+    params: {
+      token: token,
+    },
+  });
+
+export const sendMailToUsers = async (userId) =>
+  axiosInstance.get(`/users/send_welcome_email.json?id=${userId}`, {
     params: {
       token: token,
     },
@@ -871,7 +882,7 @@ export const getVibeStatus = async (userId) => {
   try {
     const response = await vibeAuth.get(
       `/api/employee/task/get-status/?user_id=${userId}`,
-     
+
       {
         headers: {
           "Content-Type": "application/json",
@@ -884,12 +895,12 @@ export const getVibeStatus = async (userId) => {
     throw error;
   }
 };
-export const API_URL_WS = 'wss://vibecopilot.ai/ws';
+export const API_URL_WS = "wss://vibecopilot.ai/ws";
 export const getVibeMedia = async () => {
   try {
     const response = await vibeAuth.get(
       `https://vibecopilot.ai/api/media`,
-     
+
       {
         headers: {
           "Content-Type": "application/json",
@@ -906,7 +917,7 @@ export const postVibeTaskChat = async (data) => {
   try {
     const response = await vibeAuth.post(
       `/api/employee/task/add-message/`,
-     data,
+      data,
       {
         headers: {
           "Content-Type": "multipart/form-data",
@@ -921,15 +932,11 @@ export const postVibeTaskChat = async (data) => {
 };
 export const postVibeBackground = async (data) => {
   try {
-    const response = await vibeAuth.post(
-      `/api/employee/add_bg_image/`,
-     data,
-      {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      }
-    );
+    const response = await vibeAuth.post(`/api/employee/add_bg_image/`, data, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
     return response.data;
   } catch (error) {
     console.error("Error creating calendar events:", error);
@@ -940,7 +947,7 @@ export const getVibeBackground = async (userId) => {
   try {
     const response = await vibeAuth.get(
       `/api/employee/get_bg_image/?user_id=${userId}`,
-    
+
       {
         headers: {
           "Content-Type": "multipart/form-data",
@@ -953,4 +960,3 @@ export const getVibeBackground = async (userId) => {
     throw error;
   }
 };
-

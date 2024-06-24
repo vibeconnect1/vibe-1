@@ -375,6 +375,30 @@ import Rollover from "./pages/AdminHrms/RollOver.jsx";
 import EditLeaveCategory from "./pages/AdminHrms/EditLeaveCategory.jsx";
 import EditTemplates from "./pages/AdminHrms/EditTemplate.jsx";
 import LeaveBalanceDetails from "./pages/AdminHrms/LeaveBalanceDetails.jsx";
+import BasicInformation from "./pages/AdminHrms/BasicInformation.jsx";
+import AddressInformation from "./pages/AdminHrms/AddressInformation.jsx";
+import GeographicalSetting from "./pages/AdminHrms/GEographicalSetting.jsx";
+import Location from "./pages/AdminHrms/Location.jsx";
+import Department from "./pages/AdminHrms/Department.jsx";
+import Holiday from "./pages/AdminHrms/Holiday.jsx";
+import BankAccount from "./pages/AdminHrms/BankAccount.jsx";
+import CalendarEvent from "./pages/AdminHrms/CalendarEvent.jsx";
+import PersonalInformation from "./pages/AdminHrms/PersonalInformation.jsx";
+import EmployeeAddress from "./pages/AdminHrms/EmployeeAddress.jsx";
+import Document from "./pages/AdminHrms/Document.jsx";
+import ManageAdmin from "./pages/AdminHrms/ManageAdmin.jsx";
+import ThirdParty from "./pages/AdminHrms/ThirdParty.jsx";
+import PermissionsField from "./pages/AdminHrms/PermissionField.jsx";
+import NewsFeedPermission from "./pages/AdminHrms/NewsFeedPermission.jsx";
+import CompanyDocuments from "./pages/AdminHrms/CompanyDocuments.jsx";
+import LetterTemplate from "./pages/AdminHrms/LetterTemplate.jsx";
+import AddLetterTemplate from "./pages/AdminHrms/AddLetterTemplate.jsx";
+import OldLetterTemplate from "./pages/AdminHrms/OldLetterTemplate.jsx";
+import AddOnboardingSetting from "./pages/AdminHrms/AddOnBoardingSetting.jsx";
+import WorkflowTrigger from "./pages/AdminHrms/WorkFlowTrigger.jsx";
+import EmailIdMapping from "./pages/AdminHrms/EmailMapping.jsx";
+import CommunicationTemplate from "./pages/AdminHrms/CommunicationTemplate.jsx";
+import InvestmentSetting from "./pages/AdminHrms/InvestmentSetting.jsx";
 
 function App() {
   const themeColor = useSelector((state) => state.theme.color);
@@ -3200,8 +3224,232 @@ useEffect(()=>{
          /> 
         
          
+  
+         <Route
+            path="/admin/hrms/organization-setting"
+            element={
+              <ProtectedAdminRoutes>
+             <BasicInformation/>
+              </ProtectedAdminRoutes>
+            }
+          />
+           <Route
+            path="/admin/company-profile/basic-information"
+            element={
+              <ProtectedAdminRoutes>
+             <BasicInformation/>
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/company-profile/address-information"
+            element={
+              <ProtectedAdminRoutes>
+             <AddressInformation/>
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/geographical-settings"
+            element={
+              <ProtectedAdminRoutes>
+            <GeographicalSetting/>
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/locations"
+            element={
+              <ProtectedAdminRoutes>
+           <Location/>
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/department"
+            element={
+              <ProtectedAdminRoutes>
+           <Department/>
+              </ProtectedAdminRoutes>
+            }
+          />
+           <Route
+            path="/admin/company-holidays"
+            element={
+              <ProtectedAdminRoutes>
+          <Holiday/>
+              </ProtectedAdminRoutes>
+            }
+          />
+            <Route
+            path="/admin/bank-accounts"
+            element={
+              <ProtectedAdminRoutes>
+         <BankAccount/>
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/calendar-milestones-events"
+            element={
+              <ProtectedAdminRoutes>
+          <CalendarEvent/>
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/employee-fields/personal-details"
+            element={
+              <ProtectedAdminRoutes>
+                  <PersonalInformation/>
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/employee-fields/employment-details"
+            element={
+              <ProtectedAdminRoutes>
+                 <EmployeeAddress/>
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/employee-fields/documents"
+            element={
+              <ProtectedAdminRoutes>
+                <Document/>
+              </ProtectedAdminRoutes>
+            }
+          />
+           <Route
+            path="/admin/hrms/user-setting"
+            element={
+              <ProtectedAdminRoutes>
+                 <ManageAdmin/>
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/manage-admin"
+            element={
+              <ProtectedAdminRoutes>
+                <ManageAdmin/>
+              </ProtectedAdminRoutes>
+            }
+          />
+           <Route
+            path="/admin/third-party"
+            element={
+              <ProtectedAdminRoutes>
+                <ThirdParty/>
+              </ProtectedAdminRoutes>
+            }
+          />
+           <Route
+            path="/admin/employee-fields/permission"
+            element={
+              <ProtectedAdminRoutes>
+                <PermissionsField/>
+              </ProtectedAdminRoutes>
+            }
+          />
+           <Route
+            path="/admin/employee-fields/news-feed-permission"
+            element={
+              <ProtectedAdminRoutes>
+                <NewsFeedPermission/>
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/hrms/document-letter"
+            element={
+              <ProtectedAdminRoutes>
+                <CompanyDocuments/>
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/company-documents"
+            element={
+              <ProtectedAdminRoutes>
+               <CompanyDocuments/>
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/document/letter-template"
+            element={
+              <ProtectedAdminRoutes>
+               <LetterTemplate/>
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/add-letter-template"
+            element={
+              <ProtectedAdminRoutes>
+               <AddLetterTemplate/>
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/document/old-letter-template"
+            element={
+              <ProtectedAdminRoutes>
+               <OldLetterTemplate/>
+              </ProtectedAdminRoutes>
+            }
+          />
+           <Route
+            path="/admin/hrms/workflow-setting"
+            element={
+              <ProtectedAdminRoutes>
+              <AddOnboardingSetting/>
+              </ProtectedAdminRoutes>
+            }
+          />
+           <Route
+            path="/admin/onboarding-setting"
+            element={
+              <ProtectedAdminRoutes>
+              <AddOnboardingSetting/>
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/workflow-trigger"
+            element={
+              <ProtectedAdminRoutes>
+              <WorkflowTrigger/>
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/emailid-mapping"
+            element={
+              <ProtectedAdminRoutes>
+              <EmailIdMapping/>
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/communication-template"
+            element={
+              <ProtectedAdminRoutes>
+              <CommunicationTemplate/>
+              </ProtectedAdminRoutes>
+            }
+          />
           
-         
+          <Route
+            path="/admin/hrms/investment-setting"
+            element={
+              <ProtectedAdminRoutes>
+              <InvestmentSetting/>
+              </ProtectedAdminRoutes>
+            }
+          />
 
           {/* paused */}
           {/* admin HRMS */}

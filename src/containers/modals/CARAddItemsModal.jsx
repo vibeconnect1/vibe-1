@@ -23,7 +23,7 @@ const CARAddItemsModal = ({ onclose }) => {
       const InventoryItems = itemsResponse.data;
       const ItemsList = InventoryItems.map((item) => ({
         value: item.id,
-        label: [item.name, "-", item.rate],
+        label: [item.name, " - ", item.rate],
       }));
       setItems(ItemsList);
     };
@@ -73,7 +73,7 @@ const handleCARReq = async()=>{
               options={items}
               noOptionsMessage={() => "No Services Available"}
               maxMenuHeight={90}
-              placeholder="Select Assets"
+              placeholder="Select Items"
             />
           </div>
           <div className="flex flex-col">
