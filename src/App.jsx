@@ -451,6 +451,18 @@ import NoticeRecovery from "./pages/AdminHrms/NoticeRecovery.jsx";
 import MinimumWage from "./pages/AdminHrms/MinimumWage.jsx";
 import PF from "./pages/AdminHrms/PF.jsx";
 import DailyWage from "./pages/AdminHrms/DailyWage.jsx";
+import AttendanceRecords from "./pages/AdminHrms/AttendanceRecord.jsx";
+import AttendanceProcess from "./pages/AdminHrms/AttendanceProcess.jsx";
+import RegularizationRequest from "./pages/AdminHrms/RegularizationRequest.jsx";
+import AttendanceAudit from "./pages/AdminHrms/AttendanceAudit.jsx";
+import DeviceRegistration from "./pages/AdminHrms/DeviceRegistration.jsx";
+import AttendanceValidation from "./pages/AdminHrms/AttendanceValidation.jsx";
+import AttendanceLogs from "./pages/AdminHrms/AttendanceLogs.jsx";
+import AttendanceGeneralSetting from "./pages/AdminHrms/AdminGeneralSetting.jsx";
+import RegularizationReason from "./pages/AdminHrms/RegularizationReason.jsx";
+import AttendanceTemplate from "./pages/AdminHrms/AttendanceTemplate.jsx";
+import AttendanceTemplateAssign from "./pages/AdminHrms/AttendanceTemplateAssign.jsx";
+import AttAddTemplate from "./pages/AdminHrms/AttAddTemplate.jsx";
 
 function App() {
   const themeColor = useSelector((state) => state.theme.color);
@@ -3852,6 +3864,106 @@ function App() {
               </ProtectedAdminRoutes>
             }
           />
+
+{/*  */}
+<Route
+            path="/admin/hrms/attendance-records"
+            element={
+              <ProtectedAdminRoutes>
+         <AttendanceRecords/>
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/hrms/Attendance-Process"
+            element={
+              <ProtectedAdminRoutes>
+        <AttendanceProcess/>
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/hrms/Regularization-Requests"
+            element={
+              <ProtectedAdminRoutes>
+        <RegularizationRequest/>
+              </ProtectedAdminRoutes>
+            }
+          />
+            <Route
+            path="/admin/hrms/Attendance-Audit"
+            element={
+              <ProtectedAdminRoutes>
+        <AttendanceAudit/>
+              </ProtectedAdminRoutes>
+            }
+          />
+           <Route
+            path="/admin/hrms/Device-Request"
+            element={
+              <ProtectedAdminRoutes>
+       <DeviceRegistration/>
+              </ProtectedAdminRoutes>
+            }
+          />
+             <Route
+            path="/admin/hrms/Attendance-Validation"
+            element={
+              <ProtectedAdminRoutes>
+      <AttendanceValidation/>
+              </ProtectedAdminRoutes>
+            }
+          />
+           <Route
+            path="/admin/hrms/Attendance-Log"
+            element={
+              <ProtectedAdminRoutes>
+      <AttendanceLogs/>
+              </ProtectedAdminRoutes>
+            }
+          />
+           <Route
+            path="/admin/hrms/setting"
+            element={
+              <ProtectedAdminRoutes>
+      <AttendanceGeneralSetting/>
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/attendance/Regularization-Reason"
+            element={
+              <ProtectedAdminRoutes>
+                <RegularizationReason/>
+              </ProtectedAdminRoutes>
+            }
+          />
+           <Route
+            path="/admin/att/template"
+            element={
+              <ProtectedAdminRoutes>
+               <AttendanceTemplate/>
+              </ProtectedAdminRoutes>
+            }
+          />
+           <Route
+            path="/admin/att/template-assign"
+            element={
+              <ProtectedAdminRoutes>
+               <AttendanceTemplateAssign/>
+              </ProtectedAdminRoutes>
+            }
+          />
+          
+           <Route
+            path="/admin/att/template/add"
+            element={
+              <ProtectedAdminRoutes>
+              <AttAddTemplate/>
+              </ProtectedAdminRoutes>
+            }
+          />
+
 
           {/* paused */}
           {/* admin HRMS */}

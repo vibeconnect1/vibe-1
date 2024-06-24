@@ -683,7 +683,7 @@ const AdminHRMS = () => {
                 {isAttOpen && (
                   <div className="ml-4">
                     <NavLink
-                      to="/hrms/organization-setting"
+                      to="/admin/hrms/attendance-records"
                       className={({ isActive }) =>
                         `${
                           isActive
@@ -711,7 +711,7 @@ const AdminHRMS = () => {
                       </h2>
                     </NavLink>
                     <NavLink
-                      to="/hrms/organization-setting"
+                     to="/admin/hrms/Regularization-Requests"
                       className={({ isActive }) =>
                         `${
                           isActive
@@ -739,7 +739,7 @@ const AdminHRMS = () => {
                       </h2>
                     </NavLink>
                     <NavLink
-                      to="/hrms/user-setting"
+                      to="/admin/hrms/Attendance-Audit"
                       className={({ isActive }) =>
                         `${
                           isActive
@@ -765,7 +765,7 @@ const AdminHRMS = () => {
                       </h2>
                     </NavLink>
                     <NavLink
-                      to="/hrms/document-letter"
+                       to="/admin/hrms/Attendance-Process"
                       className={({ isActive }) =>
                         `${
                           isActive
@@ -793,7 +793,7 @@ const AdminHRMS = () => {
                       </h2>
                     </NavLink>
                     <NavLink
-                      to="/hrms/hr-workflow-setting"
+                     to="/admin/hrms/setting"
                       className={({ isActive }) =>
                         `${
                           isActive
@@ -821,7 +821,7 @@ const AdminHRMS = () => {
                       </h2>
                     </NavLink>
                     <NavLink
-                      to="/hrms/investment-setting"
+                      to="/admin/hrms/Device-Request"
                       className={({ isActive }) =>
                         `${
                           isActive
@@ -849,7 +849,7 @@ const AdminHRMS = () => {
                       </h2>
                     </NavLink>
                     <NavLink
-                      to="/hrms/investment-setting"
+                      to="/admin/hrms/Attendance-Validation"
                       className={({ isActive }) =>
                         `${
                           isActive
@@ -877,7 +877,7 @@ const AdminHRMS = () => {
                       </h2>
                     </NavLink>
                     <NavLink
-                      to="/hrms/investment-setting"
+                       to="/admin/hrms/Attendance-Log"
                       className={({ isActive }) =>
                         `${
                           isActive
