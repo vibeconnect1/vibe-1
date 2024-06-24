@@ -362,6 +362,19 @@ import Profile from "./pages/SubPages/Profile.jsx";
 import EditProfile from "./pages/SubPages/EditProfile.jsx";
 import EmployeeProfile from "./pages/Employees/EmployeeCommunication/EmployeeProfile.jsx";
 import EditEmployeeProfile from "./pages/Employees/EmployeeCommunication/EditEmployeeProfile.jsx";
+import HRMSAlert from "./pages/AdminHrms/HRMSAlert.jsx";
+import GeneralSettings from "./pages/AdminHrms/GeneralSetting.jsx";
+import LeaveCategories from "./pages/AdminHrms/LeaveCategories.jsx";
+import Templates from "./pages/AdminHrms/Templates.jsx";
+import TemplateAssignment from "./pages/AdminHrms/TemplateAssignment.jsx";
+import AddLeaveCategory from "./pages/AdminHrms/AddLeaveCategory.jsx";
+import AddTemplates from "./pages/AdminHrms/AddTemplate.jsx";
+import LeaveApplication from "./pages/AdminHrms/LeaveApplication.jsx";
+import LeaveBalance from "./pages/AdminHrms/LeaveBalance.jsx";
+import Rollover from "./pages/AdminHrms/RollOver.jsx";
+import EditLeaveCategory from "./pages/AdminHrms/EditLeaveCategory.jsx";
+import EditTemplates from "./pages/AdminHrms/EditTemplate.jsx";
+import LeaveBalanceDetails from "./pages/AdminHrms/LeaveBalanceDetails.jsx";
 
 function App() {
   const themeColor = useSelector((state) => state.theme.color);
@@ -3072,6 +3085,124 @@ useEffect(()=>{
               </ProtectedAdminRoutes>
             }
           />
+
+<Route
+            path="/admin/hrms/alerts"
+            element={
+              <ProtectedAdminRoutes>
+               <HRMSAlert/>
+              </ProtectedAdminRoutes>
+            }
+          />
+            <Route
+            path="/admin/hrms/leave-setting"
+            element={
+              <ProtectedAdminRoutes>
+             <GeneralSettings/>
+              </ProtectedAdminRoutes>
+            }
+          />
+           <Route
+            path="/general-settings"
+            element={
+              <ProtectedAdminRoutes>
+              <GeneralSettings/>
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/leave-categories"
+            element={
+              <ProtectedAdminRoutes>
+             <LeaveCategories/>
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/templates"
+            element={
+              <ProtectedAdminRoutes>
+             <Templates/>
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/templates-assignments"
+            element={
+              <ProtectedAdminRoutes>
+             <TemplateAssignment/>
+              </ProtectedAdminRoutes>
+            }
+          />
+           <Route
+            path="admin/leave-categories"
+            element={
+              <ProtectedAdminRoutes>
+             <AddLeaveCategory/>
+              </ProtectedAdminRoutes>
+            }
+          />
+           <Route
+            path="/templates/leave-templates"
+            element={
+              <ProtectedAdminRoutes>
+             <AddTemplates/>
+              </ProtectedAdminRoutes>
+            }
+          />
+           <Route
+            path="/admin/hrms/leave-application"
+            element={
+              <ProtectedAdminRoutes>
+               <LeaveApplication/>
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/hrms/leave-balance"
+            element={
+              <ProtectedAdminRoutes>
+              <LeaveBalance/>
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/hrms/rollover"
+            element={
+              <ProtectedAdminRoutes>
+              <Rollover/>
+              </ProtectedAdminRoutes>
+            }
+          />
+         <Route
+          path="admin/leave-categories/:id"
+          element={
+            <ProtectedAdminRoutes>
+           <EditLeaveCategory/>
+            </ProtectedAdminRoutes>
+          }
+        />
+         <Route
+          path="admin/edit-templates/:id"
+          element={
+            <ProtectedAdminRoutes>
+           <EditTemplates/>
+            </ProtectedAdminRoutes>
+          }
+        />
+        <Route
+           path="admin/hrms-leavebalance-details/:id"
+           element={
+             <ProtectedAdminRoutes>
+            <LeaveBalanceDetails/>
+             </ProtectedAdminRoutes>
+           }
+         /> 
+        
+         
+          
+         
+
           {/* paused */}
           {/* admin HRMS */}
           <Route

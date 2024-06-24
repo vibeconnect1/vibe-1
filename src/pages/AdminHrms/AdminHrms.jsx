@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { HiMenuAlt3 } from "react-icons/hi";
+import { HiCheck } from "react-icons/hi";
+import { FaBuilding } from "react-icons/fa";
 import { useNavigate, NavLink } from "react-router-dom";
 import { getItemInLocalStorage } from "../../utils/localStorage";
 import { MdOutlineDashboard, MdExpandMore, MdExpandLess } from "react-icons/md";
@@ -7,23 +9,26 @@ import { AiOutlineFieldTime } from "react-icons/ai";
 import { useSelector } from "react-redux";
 import { PiSignOutBold } from "react-icons/pi";
 import {  RiFileListLine } from "react-icons/ri";
-import {
+import { FaRegCalendarTimes } from 'react-icons/fa';
+import { FaMoneyBillAlt } from 'react-icons/fa';
 
+import {
+  
   IoPeopleOutline,
   IoCashOutline,
-
+ 
 } from "react-icons/io5";
 // import { PiSignOutBold } from "react-icons/pi";
 import { IoSettingsOutline } from "react-icons/io5";
 import { FaUserCog,FaRegCalendarAlt } from "react-icons/fa";
 import {
-
+ 
   FaFileInvoice,
   FaFileWord,
   FaRegFile,
-
+  
   FaRegFilePowerpoint,
-
+ 
 } from "react-icons/fa";
 import { ImFileText2 } from "react-icons/im";
 import { RiSettings3Line } from "react-icons/ri";
@@ -71,7 +76,7 @@ const AdminHRMS = () => {
   const togglepayMenu = () => {
     setIspayOpen(!ispayOpen);
   };
-
+  
   return (
     <section className="flex gap-6 fixed top-0 left-0 bottom-0 h-screen z-30">
       <div
@@ -92,7 +97,7 @@ const AdminHRMS = () => {
           />
         </div>
         <div className="flex flex-col h-full gap-4 mb-5 relative">
-
+          
             <>
               <NavLink
                 to="/admin/hrms/dashboard"
@@ -123,7 +128,7 @@ const AdminHRMS = () => {
                 </h2>
               </NavLink>
               <NavLink
-                to="/hrms/dashboard"
+                to="/admin/hrms/alerts"
                 className={({ isActive }) =>
                   `${
                     isActive
@@ -156,7 +161,7 @@ const AdminHRMS = () => {
                   className="cursor-pointer flex items-center text-sm gap-3.5 font-medium p-2 hover:bg-gray-800 rounded-md"
                 >
                   <div>
-                    {React.createElement(MdOutlineDashboard, { size: "20" })}
+                    {React.createElement(FaBuilding, { size: "20" })}
                   </div>
                   <h2
                     className={`whitespace-pre duration-300 ${
@@ -655,7 +660,7 @@ const AdminHRMS = () => {
                   className="cursor-pointer flex items-center text-sm gap-3.5 font-medium p-2 hover:bg-gray-800 rounded-md"
                 >
                   <div>
-                    {React.createElement(MdOutlineDashboard, { size: "20" })}
+                    {React.createElement(HiCheck, { size: "20" })}
                   </div>
                   <h2
                     className={`whitespace-pre duration-300 ${
@@ -935,7 +940,7 @@ const AdminHRMS = () => {
                   className="cursor-pointer flex items-center text-sm gap-3.5 font-medium p-2 hover:bg-gray-800 rounded-md"
                 >
                   <div>
-                    {React.createElement(MdOutlineDashboard, { size: "20" })}
+                    {React.createElement(FaRegCalendarTimes, { size: "20" })}
                   </div>
                   <h2
                     className={`whitespace-pre duration-300 ${
@@ -953,7 +958,7 @@ const AdminHRMS = () => {
                 {isLeaveOpen && (
                   <div className="ml-4">
                     <NavLink
-                      to="/hrms/organization-setting"
+                      to="/admin/hrms/leave-application"
                       className={({ isActive }) =>
                         `${
                           isActive
@@ -981,7 +986,7 @@ const AdminHRMS = () => {
                       </h2>
                     </NavLink>
                     <NavLink
-                      to="/hrms/organization-setting"
+                      to="/admin/hrms/leave-balance"
                       className={({ isActive }) =>
                         `${
                           isActive
@@ -1009,7 +1014,7 @@ const AdminHRMS = () => {
                       </h2>
                     </NavLink>
                     <NavLink
-                      to="/hrms/user-setting"
+                      to="/admin/hrms/rollover"
                       className={({ isActive }) =>
                         `${
                           isActive
@@ -1035,7 +1040,7 @@ const AdminHRMS = () => {
                       </h2>
                     </NavLink>
                     <NavLink
-                      to="/hrms/document-letter"
+                      to="/general-settings"
                       className={({ isActive }) =>
                         `${
                           isActive
@@ -1062,9 +1067,9 @@ const AdminHRMS = () => {
                         Setting
                       </h2>
                     </NavLink>
-
-
-
+                    
+                   
+                   
                   </div>
                 )}
               </div>
@@ -1107,7 +1112,7 @@ const AdminHRMS = () => {
                   className="cursor-pointer flex items-center text-sm gap-3.5 font-medium p-2 hover:bg-gray-800 rounded-md"
                 >
                   <div>
-                    {React.createElement(MdOutlineDashboard, { size: "20" })}
+                    {React.createElement(FaMoneyBillAlt, { size: "20" })}
                   </div>
                   <h2
                     className={`whitespace-pre duration-300 ${
@@ -1262,9 +1267,9 @@ const AdminHRMS = () => {
                         CTC Template
                       </h2>
                     </NavLink>
-
-
-
+                    
+                   
+                   
                   </div>
                 )}
               </div>
@@ -1300,13 +1305,13 @@ const AdminHRMS = () => {
                   Reports
                 </h2>
               </NavLink>
-
-
-
+             
+              
+              
             </>
-
+         
         </div>
-
+        
       </div>
     </section>
   );

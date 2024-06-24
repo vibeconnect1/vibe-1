@@ -8,6 +8,7 @@ import { ImEye } from "react-icons/im";
 import Table from "../components/table/Table"
 import { Link } from 'react-router-dom';
 import { BsEye } from 'react-icons/bs';
+import Purchase from './Purchase';
 const PO = () => {
   const [filter, setFilter] = useState(false);
   const buildings = getItemInLocalStorage("Building");
@@ -218,6 +219,7 @@ const PO = () => {
     <section className="flex">
       <Navbar />
       <div className="w-full flex mx-3 flex-col overflow-hidden">
+        {/* <Purchase/> */}
         <div className="flex  justify-start gap-4 my-5 flex-shrink flex-wrap ">
           <div className="shadow-xl rounded-full border-4 border-gray-400 w-72  px-6 flex flex-col items-center">
             <p className="font-semibold md:text-lg">Total number of po</p>

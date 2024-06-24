@@ -23,13 +23,19 @@ const HRMSDashboard = () => {
   };
 
   const departmentDistributionData = {
-    labels: ['Unassigned', 'Trainer', 'Content & Ed', 'Management', 'Driver', 'Marketing', 'Sales'],
+    labels: ['Unassigned', 'Trainer'],
     datasets: [
       {
-        data: [1, 2, 3, 4, 5, 6, 7],
-        backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#AA6384', '#46A2EB', '#6CE56B', '#F43834'],
+        data: [1, 2],
+        backgroundColor: ['#FF6384', '#36A2EB'],
       },
     ],
+  };
+  const options = {
+    maintainAspectRatio: false,
+    legend: {
+      position: 'bottom',
+    },
   };
 
   const employeeHeadCountData = {
@@ -103,7 +109,7 @@ const HRMSDashboard = () => {
           <div className="flex justify-between ">
             <div className="bg-white p-6 rounded-lg shadow-custom-all-sides m-4 z-10" style={{ width: '380px', height: '360px' }}>
               <h3 className="text-xl font-semibold">Department Distribution</h3>
-              <Doughnut data={departmentDistributionData} options={{ maintainAspectRatio: false }} />
+              <Doughnut data={departmentDistributionData} options={{options}} />
             </div>
             <div className="bg-white p-6 rounded-lg shadow-custom-all-sides m-4 z-10" style={{ width: '380px', height: '350px' }}>
               <h3 className="text-xl font-semibold mb-4">Employee Head Count</h3>

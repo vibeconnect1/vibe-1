@@ -80,6 +80,7 @@ const MaterialPR = () => {
     <section className="flex ">
       <Navbar />
       <div className="w-full flex mx-3 flex-col overflow-hidden">
+         {/* <Purchase/> */}
       <div className="mt-10">
         <div className=" flex my-3 flex-col">
           <div className="flex justify-end gap-2">

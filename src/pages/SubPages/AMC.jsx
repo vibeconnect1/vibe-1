@@ -9,7 +9,7 @@ import { getItemInLocalStorage } from "../../utils/localStorage";
 import Navbar from "../../components/Navbar";
 import AssetNav from "../../components/navbars/AssetNav";
 import { DNA } from "react-loader-spinner";
-
+import * as XLSX from "xlsx";
 const AMC = () => {
   const [searchText, setSearchText] = useState("");
   const [amc, setAmc] = useState([]);
@@ -113,6 +113,21 @@ useEffect(() => {
   Get_Background();
 }, []);
 
+const exportToExcel = () => {
+  const fileType =
+    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8";
+  const fileName = "AMC data.xlsx";
+  const ws = XLSX.utils.json_to_sheet(filteredData);
+  const wb = { Sheets: { data: ws }, SheetNames: ["data"] };
+  const excelBuffer = XLSX.write(wb, { bookType: "xlsx", type: "array" });
+  const data = new Blob([excelBuffer], { type: fileType });
+  const url = URL.createObjectURL(data);
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = fileName;
+  link.click();
+};
+
   return (
     <section
       className="flex"
@@ -134,7 +149,7 @@ useEffect(() => {
         <div className="md:flex grid grid-cols-2 sm:flex-row my-2 flex-col gap-2">
           <button
             className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-            // onClick={exportToExcel}
+            onClick={exportToExcel}
           >
             Export
           </button>

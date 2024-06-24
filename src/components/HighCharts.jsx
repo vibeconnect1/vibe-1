@@ -30,6 +30,15 @@ const TicketHighCharts = () => {
     fetchTicketInfo();
   }, []);
 
+  const sortData = (data, order = "ascending") => {
+    const sortedEntries = Object.entries(data).sort(([, a], [, b]) => 
+      order === "ascending" ? b - a : a - b 
+    );
+    return Object.fromEntries(sortedEntries);
+  };
+
+  
+
   const generatePieChartOptions = (title, data) => {
     return {
       chart: {
@@ -52,7 +61,46 @@ const TicketHighCharts = () => {
     };
   };
 
-  const generateBarChartOptions = (title, data) => {
+  // const generateBarChartOptions = (title, data,order) => {
+  //   const sortedData = sortData(data, order);
+  //   return {
+  //     chart: {
+  //       type: "bar",
+  //       borderRadius: 30,
+  //     },
+  //     title: {
+  //       text: title,
+  //     },
+  //     xAxis: {
+  //       categories: Object.keys(sortedData),
+  //       // categories: Object.keys(data),
+  //       title: {
+  //         text: null,
+  //       },
+  //     },
+  //     yAxis: {
+  //       min: 0,
+  //       title: {
+  //         text: "Tickets",
+  //         // align: "high",
+  //       },
+  //       labels: {
+  //         overflow: "justify",
+  //       },
+  //     },
+  //     series: [
+  //       {
+  //         name: title,
+  //         data: Object.values(sortedData),
+  //         color: themeColor,
+  //       },
+  //     ],
+  //   };
+  // };
+
+  const generateBarChartOptions = (title, data, order) => {
+    const sortedData = sortData(data, order);
+    
     return {
       chart: {
         type: "bar",
@@ -62,7 +110,7 @@ const TicketHighCharts = () => {
         text: title,
       },
       xAxis: {
-        categories: Object.keys(data),
+        categories: Object.keys(sortedData),
         title: {
           text: null,
         },
@@ -70,25 +118,39 @@ const TicketHighCharts = () => {
       yAxis: {
         min: 0,
         title: {
-          text: "Count",
-          align: "high",
+          text: "Tickets",
         },
         labels: {
           overflow: "justify",
         },
       },
+      plotOptions: {
+        bar: {
+          dataLabels: {
+            enabled: true,
+            formatter: function() {
+              return this.y; // Display the y value (data value) on the bar
+            },
+            style: {
+              textOutline: false // Remove text outline (optional)
+            }
+          }
+        }
+      },
       series: [
         {
           name: title,
-          data: Object.values(data),
+          data: Object.values(sortedData),
           color: themeColor,
         },
       ],
     };
   };
 
-  const generateColumnChartOptions = (title, data) => {
-    const ticketTypes = Object.keys(data);
+  const generateColumnChartOptions = (title, data,order="ascending") => {
+    const sortedData = sortData(data, order);
+    const TicketsType = Object.keys(sortedData);
+    const ticketValues = Object.values(sortedData);
 
     return {
       chart: {
@@ -99,7 +161,7 @@ const TicketHighCharts = () => {
         text: title,
       },
       xAxis: {
-        categories: ticketTypes,
+        categories: TicketsType,
         title: {
           text: "Ticket Types",
         },
@@ -107,21 +169,23 @@ const TicketHighCharts = () => {
       yAxis: {
         min: 0,
         title: {
-          text: "Count",
+          text: "Tickets",
         },
       },
       series: [
         {
           name: "Tickets",
-          data: ticketTypes.map((type) => data[type]),
+          data: ticketValues,
           color: themeColor,
         },
       ],
     };
   };
-  const generateFloorColumnChartOptions = (title, data) => {
-    const floorTickets = Object.keys(data);
-
+  const generateFloorColumnChartOptions = (title, data, order = "ascending") => {
+    const sortedData = sortData(data, order);
+    const floorTickets = Object.keys(sortedData);
+    const ticketValues = Object.values(sortedData);
+  
     return {
       chart: {
         type: "column",
@@ -133,26 +197,28 @@ const TicketHighCharts = () => {
       xAxis: {
         categories: floorTickets,
         title: {
-          text: " Floors",
+          text: "Floors",
         },
       },
       yAxis: {
         min: 0,
         title: {
-          text: "Count",
+          text: "Tickets",
         },
       },
       series: [
         {
           name: "Tickets By Floor",
-          data: floorTickets.map((type) => data[type]),
+          data: ticketValues,
           color: themeColor,
         },
       ],
     };
   };
-  const generateUnitColumnChartOptions = (title, data) => {
-    const unitTickets = Object.keys(data);
+  const generateUnitColumnChartOptions = (title, data, order = "ascending") => {
+    const sortedData = sortData(data, order);
+    const unitTickets = Object.keys(sortedData);
+    const ticketValues = Object.values(sortedData);
 
     return {
       chart: {
@@ -171,13 +237,13 @@ const TicketHighCharts = () => {
       yAxis: {
         min: 0,
         title: {
-          text: "Count",
+          text: "Tickets",
         },
       },
       series: [
         {
           name: "Tickets by Units",
-          data: unitTickets.map((type) => data[type]),
+          data: ticketValues,
           color: themeColor,
         },
       ],
@@ -185,7 +251,7 @@ const TicketHighCharts = () => {
   };
   return (
     <div>
-      <div className="lg:grid lg:grid-cols-2 mr-2 flex flex-col gap-2">
+      <div className="lg:grid lg:grid-cols-2 mr-2 flex gap-2">
         <div className=" shadow-custom-all-sides rounded-md">
           {statusData ? (
             <HighchartsReact
@@ -212,8 +278,9 @@ const TicketHighCharts = () => {
               highcharts={Highcharts}
               options={generateBarChartOptions(
                 "Tickets by Category",
-                categoryData
+                categoryData,
               )}
+              order="descending"
             />
           ) : (
             <div className="flex justify-center items-center h-full">
@@ -232,6 +299,8 @@ const TicketHighCharts = () => {
           {ticketTypes ? <HighchartsReact
             highcharts={Highcharts}
             options={generateColumnChartOptions("Tickets by Type", ticketTypes)}
+              order="ascending"
+
           /> : (
             <div className="flex justify-center items-center h-full">
               <DNA
@@ -253,6 +322,7 @@ const TicketHighCharts = () => {
               "Tickets by Floor",
               floorTickets
             )}
+          
           />: (
             <div className="flex justify-center items-center h-full">
               <DNA
