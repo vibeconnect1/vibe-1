@@ -376,7 +376,7 @@ const AdminHRMS = () => {
                 {isEmpOpen && (
                   <div className="ml-4">
                     <NavLink
-                      to="/hrms/employee-directory"
+                       to="/admin/hrms/employee-directory"
                       className={({ isActive }) =>
                         `${
                           isActive
@@ -599,7 +599,7 @@ const AdminHRMS = () => {
                         Generated Letter
                       </h2>
                     </NavLink>
-                    <NavLink
+                    {/* <NavLink
                       to="/hrms/calendar"
                       className={({ isActive }) =>
                         `${
@@ -626,7 +626,7 @@ const AdminHRMS = () => {
                       >
                         Calendar
                       </h2>
-                    </NavLink>
+                    </NavLink> */}
                   </div>
                 )}
               </div>

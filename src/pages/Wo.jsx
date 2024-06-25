@@ -302,14 +302,14 @@ function Wo() {
         <Table
           columns={column}
           data={data}
-          customStyles={customStyle}
-          responsive
-          fixedHeader
-          fixedHeaderScrollHeight="500px"
-          pagination
-          selectableRowsHighlight
-          highlightOnHover
-          omitColumn={column}
+          // customStyles={customStyle}
+          // responsive
+          // fixedHeader
+          // fixedHeaderScrollHeight="500px"
+          // pagination
+          // selectableRowsHighlight
+          // highlightOnHover
+          // omitColumn={column}
         />
       </div>
     </section>

@@ -7,6 +7,7 @@ import Navbar from "../components/Navbar";
 import { PiPlusCircle } from "react-icons/pi";
 import { TiTick } from "react-icons/ti";
 import { IoClose } from "react-icons/io5";
+import Table from "../components/table/Table";
 
 const Pantry = () => {
   const columns = [
@@ -84,7 +85,7 @@ const Pantry = () => {
 
   return (
     <section className="flex">
-      <Navbar />
+      {/* <Navbar /> */}
       <div className=" w-full flex m-3 flex-col overflow-hidden">
         <div className=" flex justify-between my-5">
           <input
@@ -102,16 +103,16 @@ const Pantry = () => {
             Add new Items
           </Link>
         </div>
-        <DataTable
+        <Table
           responsive
           columns={columns}
           data={data}
-          customStyles={customStyle}
-          pagination
-          fixedHeader
-          // fixedHeaderScrollHeight="450px"
-          selectableRowsHighlight
-          highlightOnHover
+          // customStyles={customStyle}
+          // pagination
+          // fixedHeader
+          // // fixedHeaderScrollHeight="450px"
+          // selectableRowsHighlight
+          // highlightOnHover
         />
       </div>
     </section>

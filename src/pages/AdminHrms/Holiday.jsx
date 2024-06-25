@@ -3,6 +3,7 @@ import { PiPlusCircle } from "react-icons/pi";
 import { BiEdit } from "react-icons/bi";
 import Table from "../../components/table/Table";
 import OrganisationSetting from "./OrganisationSetting";
+import HRMSHelpCenter from "./HRMSHelpCenter";
 
 const Holiday = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -80,6 +81,7 @@ const Holiday = () => {
         </div>
         <Table columns={columns} data={data} isPagination={true} />
       </div>
+      <HRMSHelpCenter help={"holiday"} />
       {isModalOpen && (
         <div className="fixed inset-0 flex items-center justify-center z-10 bg-black bg-opacity-50">
           <div className="bg-white p-6 rounded-md w-1/3">

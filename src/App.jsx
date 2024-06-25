@@ -463,6 +463,16 @@ import RegularizationReason from "./pages/AdminHrms/RegularizationReason.jsx";
 import AttendanceTemplate from "./pages/AdminHrms/AttendanceTemplate.jsx";
 import AttendanceTemplateAssign from "./pages/AdminHrms/AttendanceTemplateAssign.jsx";
 import AttAddTemplate from "./pages/AdminHrms/AttAddTemplate.jsx";
+import EmployeeDirectory from "./pages/AdminHrms/EmployeeDirectory.jsx";
+import AddEmployee from "./pages/AdminHrms/AddEmployee.jsx";
+import InvestmentApproval from "./pages/AdminHrms/InvestmentApproval.jsx";
+import GenerationLetter from "./pages/AdminHrms/GeneratedLetter.jsx";
+import OrganizationTree from "./pages/AdminHrms/OrganisationTree.jsx";
+import DataChangeRequest from "./pages/AdminHrms/DateChangeRequest.jsx";
+import CTCBasket from "./pages/AdminHrms/CTCBasket.jsx";
+import EmpOnboarding from "./pages/AdminHrms/EmpOnBoarding.jsx";
+import SeparationApplication from "./pages/AdminHrms/SeparationApplication.jsx";
+import PendingContract from "./pages/AdminHrms/PendingContract.jsx";
 
 function App() {
   const themeColor = useSelector((state) => state.theme.color);
@@ -3964,6 +3974,88 @@ function App() {
             }
           />
 
+<Route
+            path="/admin/hrms/employee-directory"
+            element={
+              <ProtectedAdminRoutes>
+              <EmployeeDirectory/>
+              </ProtectedAdminRoutes>
+            }
+          />
+           <Route
+            path="/admin/add-employee"
+            element={
+              <ProtectedAdminRoutes>
+              <AddEmployee/>
+              </ProtectedAdminRoutes>
+            }
+          />
+           <Route
+            path="/hrms/investment"
+            element={
+              <ProtectedAdminRoutes>
+             <InvestmentApproval/>
+              </ProtectedAdminRoutes>
+            }
+          />
+           <Route
+            path="/hrms/calendar"
+            element={
+              <ProtectedAdminRoutes>
+           <Calender />
+              </ProtectedAdminRoutes>
+            }
+          />
+           <Route
+            path="/hrms/generated-letter"
+            element={
+              <ProtectedAdminRoutes>
+          <GenerationLetter/>
+              </ProtectedAdminRoutes>
+            }
+          />
+           <Route
+            path="/hrms/organization-tree-setting"
+            element={
+              <ProtectedAdminRoutes>
+          <OrganizationTree/>
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/hrms/employee-transaction"
+            element={
+              <ProtectedAdminRoutes>
+          <DataChangeRequest/>
+              </ProtectedAdminRoutes>
+            }
+          />
+           <Route
+            path="/admin/ctc-basket"
+            element={
+              <ProtectedAdminRoutes>
+         <CTCBasket/>
+              </ProtectedAdminRoutes>
+            }
+          />
+           <Route
+            path="/hrms/onboarding"
+            element={
+              <ProtectedAdminRoutes>
+         <EmpOnboarding/>
+              </ProtectedAdminRoutes>
+            }
+          />
+           
+           <Route
+            path="/hrms/separation-request"
+            element={
+              <ProtectedAdminRoutes>
+        <SeparationApplication/>
+              </ProtectedAdminRoutes>
+            }
+          />
+
 
           {/* paused */}
           {/* admin HRMS */}
@@ -4089,6 +4181,14 @@ function App() {
             element={
               <ProtectedAdminRoutes>
                 <HRMSLeavesDetails />
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/hrms/pending-contract-renewal"
+            element={
+              <ProtectedAdminRoutes>
+                <PendingContract />
               </ProtectedAdminRoutes>
             }
           />

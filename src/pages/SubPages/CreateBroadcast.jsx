@@ -157,13 +157,14 @@ const CreateBroadcast = () => {
                 Attachments
               </h2>
               {/* <FileInputBox handleChange={handleFileChange}  /> */}
-              <input
+              {/* <input
                   id={`file-upload-${formData.notice_title}`}
                   type="file"
                   // className="hidden"
                   multiple
                   onChange={handleFileChange}
-                />
+                /> */}
+                <FileInputBox />
             </div>
             <div className="">
               <h2 className="border-b t border-black my-5 text-lg font-semibold">

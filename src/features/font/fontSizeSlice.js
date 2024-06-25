@@ -2,7 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const fontSizeSlice = createSlice({
   name: "fontSize",
-  initialState: "text-base",
+  initialState: "text-sm",
   reducers: {
     setFontSize: (state, action) => action.payload,
   },

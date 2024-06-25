@@ -1,15 +1,14 @@
 import React, { useState } from "react";
-
+import { PiPlusCircle } from "react-icons/pi";
 import { Link } from "react-router-dom";
 
 import Table from "../../components/table/Table";
 
 import { BiEdit } from "react-icons/bi";
 
-import OrganisationSetting from "./OrganisationSetting";
-import HRMSHelpCenter from "./HRMSHelpCenter";
+import EmployeeDetailsList from "./EmployeeDetailsList";
 
-const PersonalInformation = () => {
+const DataChangeRequest = () => {
   const columns = [
     {
       name: "view",
@@ -25,36 +24,63 @@ const PersonalInformation = () => {
       ),
     },
     {
-      name: "Field",
-      selector: (row) => row.Field,
+      name: "Employee Name	",
+      selector: (row) => row.Location,
       sortable: true,
     },
     {
-      name: "Requirement",
-      selector: (row) => row.Requirement,
+      name: "Request Type",
+      selector: (row) => row.Label,
       sortable: true,
     },
     {
-      name: "Access",
+      name: "Submitted Date",
       selector: (row) => row.City,
       sortable: true,
     },
     {
-      name: "Sensitive Data",
-      selector: (row) => row.Sensitive_Data,
+      name: "Requested By",
+      selector: (row) => row.State,
       sortable: true,
     },
-
+    // {
+    //     name: "Country",
+    //     selector: (row) => row.Country,
+    //     sortable: true,
+    //   },
+    // {
+    //     name: "Leave Days",
+    //     selector: (row) => row.Leave_Days,
+    //     sortable: true,
+    //   },
+    //   {
+    //     name: "Comment",
+    //     selector: (row) => row.Comment,
+    //     sortable: true,
+    //   },
+    {
+      name: "Status",
+      selector: (row) => row.status,
+      sortable: true,
+    },
+    // {
+    //   name: "Action",
+    //   selector: (row) =>
+    //     row.status !== "Expired" && (
+    //       <button className="text-red-500">Cancel</button>
+    //     ),
+    //   sortable: true,
+    // },
   ];
 
   const data = [
     {
-        Field: "person 1",
-        Requirement: "Mumbai",
+      Name: "person 1",
+      Location: "Mumbai",
       City: "Mumbai",
       State: "Maharashtra",
 
-      Sensitive_Data:"India",
+      Country:"India",
 
     },
 
@@ -76,7 +102,8 @@ const PersonalInformation = () => {
 //   };
   return (
     <section className="flex ml-20">
-     <OrganisationSetting/>
+     {/* <OrganisationSetting/> */}
+     <EmployeeDetailsList/>
       <div className=" w-full flex m-3 flex-col overflow-hidden">
         {/* <div className="flex  justify-start gap-4 my-5  ">
           <div className="shadow-xl rounded-full border-4 border-gray-400 w-52  px-6 flex flex-col items-center">
@@ -114,9 +141,8 @@ const PersonalInformation = () => {
         </div>
         <Table columns={columns} data={data} isPagination={true} />
       </div>
-      <HRMSHelpCenter help={"personal"} />
     </section>
   );
 };
 
-export default PersonalInformation;
+export default DataChangeRequest;

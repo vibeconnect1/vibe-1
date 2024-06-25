@@ -7,6 +7,7 @@ import Table from "../../components/table/Table";
 import { BiEdit } from "react-icons/bi";
 
 import OrganisationSetting from "./OrganisationSetting";
+import HRMSHelpCenter from "./HRMSHelpCenter";
 
 const Location = () => {
   const columns = [
@@ -140,6 +141,7 @@ const Location = () => {
         </div>
         <Table columns={columns} data={data} isPagination={true} />
       </div>
+      <HRMSHelpCenter help={"location"}/>
     </section>
   );
 };

@@ -1,15 +1,15 @@
 import React, { useState } from "react";
-
+import { PiPlusCircle } from "react-icons/pi";
 import { Link } from "react-router-dom";
-
+import { BsEye } from "react-icons/bs";
 import Table from "../../components/table/Table";
-
+import AdminHRMS from "./AdminHrms";
 import { BiEdit } from "react-icons/bi";
-
+import LeaveSetting from "./LeaveSetting";
 import OrganisationSetting from "./OrganisationSetting";
-import HRMSHelpCenter from "./HRMSHelpCenter";
-
-const PersonalInformation = () => {
+import { TiTick } from "react-icons/ti";
+import { IoClose } from "react-icons/io5";
+const LetterTable = () => {
   const columns = [
     {
       name: "view",
@@ -25,36 +25,73 @@ const PersonalInformation = () => {
       ),
     },
     {
-      name: "Field",
-      selector: (row) => row.Field,
+      name: "Employee Name",
+      selector: (row) => row.Location,
       sortable: true,
     },
     {
-      name: "Requirement",
-      selector: (row) => row.Requirement,
+      name: "Document Id	",
+      selector: (row) => row.Label,
       sortable: true,
     },
     {
-      name: "Access",
+      name: "Letter Template",
       selector: (row) => row.City,
       sortable: true,
     },
     {
-      name: "Sensitive Data",
-      selector: (row) => row.Sensitive_Data,
+      name: "Created By",
+      selector: (row) => row.State,
       sortable: true,
     },
-
+    {
+        name: "Status",
+        selector: (row) => row.Country,
+        sortable: true,
+      },
+    {
+        name: "Signed By Company",
+        selector: (row) => row.Leave_Days,
+        sortable: true,
+      },
+      {
+        name: "Signed By Employee	",
+        selector: (row) => row.Comment,
+        sortable: true,
+      },
+    // {
+    //   name: "Status",
+    //   selector: (row) => row.status,
+    //   sortable: true,
+    // },
+    // {
+    //   name: "Action",
+    //   selector: (row) =>
+    //     row.status !== "Expired" && (
+    //       <button className="text-red-500">Cancel</button>
+    //     ),
+    //   sortable: true,
+    // },
+    {
+        name: "Approval",
+        selector: (row) => (row.status === "Upcoming" && 
+        <div className="flex justify-center gap-2">
+            <button className="text-green-400 font-medium hover:bg-green-400 hover:text-white transition-all duration-200 p-1 rounded-full"><TiTick size={20} /></button>
+            <button className="text-red-400 font-medium hover:bg-red-400 hover:text-white transition-all duration-200 p-1 rounded-full"><IoClose size={20}  /></button>
+        </div>
+      ),
+        sortable: true,
+      },
   ];
 
   const data = [
     {
-        Field: "person 1",
-        Requirement: "Mumbai",
+      Name: "person 1",
+      Location: "Mumbai",
       City: "Mumbai",
       State: "Maharashtra",
 
-      Sensitive_Data:"India",
+      Country:"India",
 
     },
 
@@ -75,8 +112,9 @@ const PersonalInformation = () => {
 //     },
 //   };
   return (
-    <section className="flex ml-20">
-     <OrganisationSetting/>
+    <section className="flex">
+     {/* <OrganisationSetting/> */}
+     {/* <AdminHRMS/> */}
       <div className=" w-full flex m-3 flex-col overflow-hidden">
         {/* <div className="flex  justify-start gap-4 my-5  ">
           <div className="shadow-xl rounded-full border-4 border-gray-400 w-52  px-6 flex flex-col items-center">
@@ -114,9 +152,8 @@ const PersonalInformation = () => {
         </div>
         <Table columns={columns} data={data} isPagination={true} />
       </div>
-      <HRMSHelpCenter help={"personal"} />
     </section>
   );
 };
 
-export default PersonalInformation;
+export default LetterTable;

@@ -13,10 +13,10 @@ function LetterOfIndent() {
   const [page, setPage] = useState("PO");
   return (
     <section className="flex">
-      <Navbar />
+      {/* <Navbar /> */}
       <div className="w-full flex mx-3 flex-col overflow-hidden">
         <div className="flex justify-center my-2">
-          <div className="flex flex-row gap-5 text-sm font-semibold p-1 rounded-full bg-gray-400">
+          {/* <div className="flex flex-row gap-5 text-sm font-semibold p-1 rounded-full bg-gray-400">
             <h2
               className={`p-1 ${
                 page === "PO" && "bg-white text-blue-500"
@@ -33,7 +33,7 @@ function LetterOfIndent() {
             >
               WO
             </h2>
-          </div>
+          </div> */}
         </div>
          {page === "PO" && (
              <div>

@@ -19,6 +19,7 @@ const UserSetup = () => {
         const setupUsers = await getSetupUsers();
         setUsers(setupUsers.data);
         setFilteredData(setupUsers.data);
+        console.log(setupUsers.data)
       } catch (error) {
         console.log(error);
       }

@@ -1,60 +1,92 @@
 import React, { useState } from "react";
 
-import { Link } from "react-router-dom";
-
 import Table from "../../components/table/Table";
+import { Link } from "react-router-dom";
+import { PiPlusCircle } from "react-icons/pi";
 
-import { BiEdit } from "react-icons/bi";
-
-import OrganisationSetting from "./OrganisationSetting";
-import HRMSHelpCenter from "./HRMSHelpCenter";
-
-const PersonalInformation = () => {
+const OnBoardingTable = () => {
   const columns = [
-    {
-      name: "view",
+    // {
+    //   name: "view",
 
-      cell: (row) => (
-        <div className="flex items-center gap-4">
-          <Link 
-        //   to={`/admin/edit-templates/${row.id}`}
-          >
-            <BiEdit size={15} />
-          </Link>
-        </div>
-      ),
-    },
+    //   cell: (row) => (
+    //     <div className="flex items-center gap-4">
+    //       <Link 
+    //     //   to={`/admin/edit-templates/${row.id}`}
+    //       >
+    //         <BiEdit size={15} />
+    //       </Link>
+    //     </div>
+    //   ),
+    // },
     {
-      name: "Field",
-      selector: (row) => row.Field,
+      name: "Employee Name",
+      selector: (row) => row.Location,
       sortable: true,
     },
     {
-      name: "Requirement",
-      selector: (row) => row.Requirement,
+      name: "Joining Date",
+      selector: (row) => row.Label,
       sortable: true,
     },
     {
-      name: "Access",
+      name: "Onboarding Status",
       selector: (row) => row.City,
       sortable: true,
     },
     {
-      name: "Sensitive Data",
-      selector: (row) => row.Sensitive_Data,
+      name: "Onboarding Checklist",
+      selector: (row) => row.State,
       sortable: true,
     },
-
+    {
+        name: "Portal Activation",
+        selector: (row) => row.Country,
+        sortable: true,
+      },
+    {
+        name: "Pending Letters Awaiting Signatures	",
+        selector: (row) => row.Leave_Days,
+        sortable: true,
+      },
+    //   {
+    //     name: "Signed By Employee	",
+    //     selector: (row) => row.Comment,
+    //     sortable: true,
+    //   },
+    // {
+    //   name: "Status",
+    //   selector: (row) => row.status,
+    //   sortable: true,
+    // },
+    // {
+    //   name: "Action",
+    //   selector: (row) =>
+    //     row.status !== "Expired" && (
+    //       <button className="text-red-500">Cancel</button>
+    //     ),
+    //   sortable: true,
+    // },
+    // {
+    //     name: "Approval",
+    //     selector: (row) => (row.status === "Upcoming" && 
+    //     <div className="flex justify-center gap-2">
+    //         <button className="text-green-400 font-medium hover:bg-green-400 hover:text-white transition-all duration-200 p-1 rounded-full"><TiTick size={20} /></button>
+    //         <button className="text-red-400 font-medium hover:bg-red-400 hover:text-white transition-all duration-200 p-1 rounded-full"><IoClose size={20}  /></button>
+    //     </div>
+    //   ),
+    //     sortable: true,
+    //   },
   ];
 
   const data = [
     {
-        Field: "person 1",
-        Requirement: "Mumbai",
+      Name: "person 1",
+      Location: "Mumbai",
       City: "Mumbai",
       State: "Maharashtra",
 
-      Sensitive_Data:"India",
+      Country:"India",
 
     },
 
@@ -75,8 +107,9 @@ const PersonalInformation = () => {
 //     },
 //   };
   return (
-    <section className="flex ml-20">
-     <OrganisationSetting/>
+    <section className="flex">
+     {/* <OrganisationSetting/> */}
+     {/* <AdminHRMS/> */}
       <div className=" w-full flex m-3 flex-col overflow-hidden">
         {/* <div className="flex  justify-start gap-4 my-5  ">
           <div className="shadow-xl rounded-full border-4 border-gray-400 w-52  px-6 flex flex-col items-center">
@@ -104,19 +137,20 @@ const PersonalInformation = () => {
             //   value={searchText}
             //   onChange={handleSearch}
           />
-          {/* <Link
-            to={"/templates/leave-templates"}
+          <div className='flex justify-end'>
+      <Link
+            to={"/admin/add-employee"}
             className="border-2 font-semibold hover:bg-black hover:text-white duration-150 transition-all border-black p-2 rounded-md text-black cursor-pointer text-center flex items-center  gap-2 justify-center"
           >
             <PiPlusCircle size={20} />
-            Add
-          </Link> */}
+            Add Employee
+          </Link> 
+      </div>
         </div>
         <Table columns={columns} data={data} isPagination={true} />
       </div>
-      <HRMSHelpCenter help={"personal"} />
     </section>
   );
 };
 
-export default PersonalInformation;
+export default OnBoardingTable;

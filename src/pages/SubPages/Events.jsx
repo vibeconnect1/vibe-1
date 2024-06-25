@@ -47,7 +47,7 @@ const Events = () => {
     { name: "Venue", selector: (row) => row.venue, sortable: true },
     {
       name: "Description",
-      selector: (row) => row.description,
+      selector: (row) => row.discription,
       sortable: true,
     },
     { name: "Created By", selector: (row) => row.created_by, sortable: true },

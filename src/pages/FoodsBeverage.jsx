@@ -10,10 +10,12 @@ import { IoClose } from "react-icons/io5";
 import { useSelector } from "react-redux";
 import Table from "../components/table/Table";
 import ToggleSwitch from "../Buttons/ToggleSwitch";
+import Pantry from "./Pantry";
 
 const FoodsBeverage = () => {
   const [selectedStatus, setSelectedStatus] = useState("all");
   const themeColor = useSelector((state) => state.theme.color);
+  const [page, setPage] = useState("F&B")
 
   const columns = [
     {
@@ -134,6 +136,29 @@ const FoodsBeverage = () => {
     <section className="flex">
       <Navbar/>
       <div className=" w-full flex mx-3 flex-col overflow-hidden">
+      <div className="flex justify-center my-2 w-full">
+      <div className="sm:flex grid grid-cols-2 sm:flex-row gap-5 font-medium p-1 sm:rounded-full rounded-md bg-gray-200">
+            <h2
+              className={`p-1 ${
+                page === "F&B" &&
+                "bg-white text-blue-500 shadow-custom-all-sides"
+              } rounded-full px-4 cursor-pointer text-center transition-all duration-300 ease-linear`}
+              onClick={() => setPage("F&B")}
+            >
+              F&B
+            </h2>
+            <h2
+              className={`p-1 ${
+                page === "pantry" &&
+                "bg-white text-blue-500 shadow-custom-all-sides"
+              } rounded-full px-4 cursor-pointer transition-all duration-300 ease-linear`}
+              onClick={() => setPage("pantry")}
+            >
+              Pantry
+            </h2>
+          </div>
+        </div>
+        {page === "F&B" && <>
         <div className="flex md:flex-row flex-col gap-5 justify-between mt-10 my-2">
           <div className="sm:flex grid grid-cols-2 items-center justify-center  gap-4 border border-gray-300 rounded-md px-3 p-2 w-auto">
             <div className="flex items-center gap-2">
@@ -221,6 +246,8 @@ const FoodsBeverage = () => {
           data={data}
           isPagination={true}
         />
+         </>}
+         {page === "pantry" && <Pantry/>}
       </div>
     </section>
   );

@@ -7,6 +7,7 @@ import Table from "../../components/table/Table";
 import { BiEdit } from "react-icons/bi";
 
 import OrganisationSetting from "./OrganisationSetting";
+import HRMSHelpCenter from "./HRMSHelpCenter";
 
 const CalendarEvent = () => {
   const columns = [
@@ -138,6 +139,7 @@ const CalendarEvent = () => {
         </div>
         <Table columns={columns} data={data} isPagination={true} />
       </div>
+      <HRMSHelpCenter help={"calendar"} />
     </section>
   );
 };

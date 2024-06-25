@@ -1,60 +1,72 @@
 import React, { useState } from "react";
-
+import { PiPlusCircle } from "react-icons/pi";
 import { Link } from "react-router-dom";
-
+import { BsEye } from "react-icons/bs";
 import Table from "../../components/table/Table";
+import AdminHRMS from "./AdminHrms";
 
-import { BiEdit } from "react-icons/bi";
 
-import OrganisationSetting from "./OrganisationSetting";
-import HRMSHelpCenter from "./HRMSHelpCenter";
-
-const PersonalInformation = () => {
+const InvestmentApproval = () => {
   const columns = [
-    {
-      name: "view",
 
-      cell: (row) => (
-        <div className="flex items-center gap-4">
-          <Link 
-        //   to={`/admin/edit-templates/${row.id}`}
-          >
-            <BiEdit size={15} />
-          </Link>
-        </div>
-      ),
-    },
     {
-      name: "Field",
-      selector: (row) => row.Field,
+      name: "Employee Name",
+      selector: (row) => row.Location,
       sortable: true,
     },
     {
-      name: "Requirement",
-      selector: (row) => row.Requirement,
+      name: "Joining Date",
+      selector: (row) => row.Label,
       sortable: true,
     },
     {
-      name: "Access",
+      name: "Submitted On",
       selector: (row) => row.City,
       sortable: true,
     },
     {
-      name: "Sensitive Data",
-      selector: (row) => row.Sensitive_Data,
+      name: "Type Of Submission	",
+      selector: (row) => row.State,
       sortable: true,
     },
-
+    {
+        name: "Status",
+        selector: (row) => row.Country,
+        sortable: true,
+      },
+    {
+        name: "Approved On",
+        selector: (row) => row.Leave_Days,
+        sortable: true,
+      },
+      {
+        name: "Batch No.",
+        selector: (row) => row.Comment,
+        sortable: true,
+      },
+    // {
+    //   name: "Status",
+    //   selector: (row) => row.status,
+    //   sortable: true,
+    // },
+    // {
+    //   name: "Action",
+    //   selector: (row) =>
+    //     row.status !== "Expired" && (
+    //       <button className="text-red-500">Cancel</button>
+    //     ),
+    //   sortable: true,
+    // },
   ];
 
   const data = [
     {
-        Field: "person 1",
-        Requirement: "Mumbai",
+      Name: "person 1",
+      Location: "Mumbai",
       City: "Mumbai",
       State: "Maharashtra",
 
-      Sensitive_Data:"India",
+      Country:"India",
 
     },
 
@@ -76,7 +88,8 @@ const PersonalInformation = () => {
 //   };
   return (
     <section className="flex ml-20">
-     <OrganisationSetting/>
+     {/* <OrganisationSetting/> */}
+     <AdminHRMS/>
       <div className=" w-full flex m-3 flex-col overflow-hidden">
         {/* <div className="flex  justify-start gap-4 my-5  ">
           <div className="shadow-xl rounded-full border-4 border-gray-400 w-52  px-6 flex flex-col items-center">
@@ -114,9 +127,8 @@ const PersonalInformation = () => {
         </div>
         <Table columns={columns} data={data} isPagination={true} />
       </div>
-      <HRMSHelpCenter help={"personal"} />
     </section>
   );
 };
 
-export default PersonalInformation;
+export default InvestmentApproval;

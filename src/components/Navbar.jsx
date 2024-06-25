@@ -337,6 +337,33 @@ const Navbar = () => {
                 </h2>
               </NavLink>
               {/* <NavLink
+                to={"/admin/letterofindent"}
+                className={({ isActive }) =>
+                  ` ${
+                    isActive
+                      ? "text-black bg-white flex p-2  gap-3.5 rounded-md group items-center text-sm font-medium"
+                      : " group flex items-center text-sm gap-3.5 font-medium p-2 hover:bg-gray-800 rounded-md "
+                  }`
+                }
+              >
+                <div>{React.createElement(FaRegFileAlt, { size: "20" })}</div>
+
+                <h2
+                  className={`whitespace-pre duration-300 ${
+                    !open && "opacity-0 translate-x-28 overflow-hidden"
+                  }`}
+                >
+                  Letter Of Indent
+                </h2>
+                <h2
+                  className={`${
+                    open && "hidden"
+                  } absolute left-48 bg-white font-semibold whitespace-pre text-gray-900 rounded-md drop-shadow-lg px-0 py-0 w-0 overflow-hidden group-hover:px-2 group-hover:py-1 group-hover:left-14 group-hover:duration-300 group-hover:w-fit  `}
+                >
+                  Letter Of Indent
+                </h2>
+              </NavLink> */}
+              {/* <NavLink
                 to={"/admin/material-pr"}
                 className={({ isActive }) =>
                   ` ${
@@ -381,14 +408,14 @@ const Navbar = () => {
                     !open && "opacity-0 translate-x-28 overflow-hidden"
                   }`}
                 >
-                  Admin Tickets
+                  Service Desk
                 </h2>
                 <h2
                   className={`${
                     open && "hidden"
                   } absolute left-48 bg-white font-semibold whitespace-pre text-gray-900 rounded-md drop-shadow-lg px-0 py-0 w-0 overflow-hidden group-hover:px-2 group-hover:py-1 group-hover:left-14 group-hover:duration-300 group-hover:w-fit  `}
                 >
-                  Admin Tickets
+                  Service Desk
                 </h2>
               </NavLink>
               <NavLink
@@ -689,33 +716,7 @@ const Navbar = () => {
                 </h2>
               </NavLink>
              
-              <NavLink
-                to={"/admin/letterofindent"}
-                className={({ isActive }) =>
-                  ` ${
-                    isActive
-                      ? "text-black bg-white flex p-2  gap-3.5 rounded-md group items-center text-sm font-medium"
-                      : " group flex items-center text-sm gap-3.5 font-medium p-2 hover:bg-gray-800 rounded-md "
-                  }`
-                }
-              >
-                <div>{React.createElement(FaRegFileAlt, { size: "20" })}</div>
-
-                <h2
-                  className={`whitespace-pre duration-300 ${
-                    !open && "opacity-0 translate-x-28 overflow-hidden"
-                  }`}
-                >
-                  Letter Of Indent
-                </h2>
-                <h2
-                  className={`${
-                    open && "hidden"
-                  } absolute left-48 bg-white font-semibold whitespace-pre text-gray-900 rounded-md drop-shadow-lg px-0 py-0 w-0 overflow-hidden group-hover:px-2 group-hover:py-1 group-hover:left-14 group-hover:duration-300 group-hover:w-fit  `}
-                >
-                  Letter Of Indent
-                </h2>
-              </NavLink>
+              
             
 
               <NavLink
@@ -801,6 +802,33 @@ const Navbar = () => {
                   F&B
                 </h2>
               </NavLink>
+              {/* <NavLink
+                to={"/admin/pantry"}
+                className={({ isActive }) =>
+                  ` ${
+                    isActive
+                      ? "text-black bg-white flex p-2  gap-3.5 rounded-md group items-center text-sm font-medium"
+                      : " group flex items-center text-sm gap-3.5 font-medium p-2 hover:bg-gray-800 rounded-md "
+                  }`
+                }
+              >
+                <div>{React.createElement(MdFastfood, { size: "20" })}</div>
+
+                <h2
+                  className={`whitespace-pre duration-300 ${
+                    !open && "opacity-0 translate-x-28 overflow-hidden"
+                  }`}
+                >
+                  Pantry
+                </h2>
+                <h2
+                  className={`${
+                    open && "hidden"
+                  } absolute left-48 bg-white font-semibold whitespace-pre text-gray-900 rounded-md drop-shadow-lg px-0 py-0 w-0 overflow-hidden group-hover:px-2 group-hover:py-1 group-hover:left-14 group-hover:duration-300 group-hover:w-fit  `}
+                >
+                  Pantry
+                </h2>
+              </NavLink> */}
 
               <NavLink
                 to={"/admin/incidents"}
@@ -1242,33 +1270,7 @@ const Navbar = () => {
                   Parking
                 </h2>
               </NavLink>
-              <NavLink
-                to={"/admin/pantry"}
-                className={({ isActive }) =>
-                  ` ${
-                    isActive
-                      ? "text-black bg-white flex p-2  gap-3.5 rounded-md group items-center text-sm font-medium"
-                      : " group flex items-center text-sm gap-3.5 font-medium p-2 hover:bg-gray-800 rounded-md "
-                  }`
-                }
-              >
-                <div>{React.createElement(MdFastfood, { size: "20" })}</div>
-
-                <h2
-                  className={`whitespace-pre duration-300 ${
-                    !open && "opacity-0 translate-x-28 overflow-hidden"
-                  }`}
-                >
-                  Pantry
-                </h2>
-                <h2
-                  className={`${
-                    open && "hidden"
-                  } absolute left-48 bg-white font-semibold whitespace-pre text-gray-900 rounded-md drop-shadow-lg px-0 py-0 w-0 overflow-hidden group-hover:px-2 group-hover:py-1 group-hover:left-14 group-hover:duration-300 group-hover:w-fit  `}
-                >
-                  Pantry
-                </h2>
-              </NavLink>
+             
             </>
           )}
 

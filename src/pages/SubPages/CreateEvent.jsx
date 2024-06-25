@@ -241,12 +241,13 @@ const CreateEvent = () => {
             <h2 className="border-b text-xl border-black my-5 font-semibold">
               Upload Attachments
             </h2>
-            <input
+            {/* <input
               ref={fileInputRef}
               type="file"
               multiple
               onChange={handleFileAttachment}
-            />
+            /> */}
+            <FileInputBox />
             <div className="">
               <h2 className="border-b t border-black my-5 text-lg font-semibold">
                 Share With
