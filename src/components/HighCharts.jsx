@@ -251,7 +251,7 @@ const TicketHighCharts = () => {
   };
   return (
     <div>
-      <div className="lg:grid lg:grid-cols-2 mr-2 flex gap-2">
+      <div className="grid md:grid-cols-2 mr-2  gap-2">
         <div className=" shadow-custom-all-sides rounded-md">
           {statusData ? (
             <HighchartsReact

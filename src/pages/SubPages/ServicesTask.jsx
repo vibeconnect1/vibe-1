@@ -27,45 +27,46 @@ const ServicesTask = () => {
           ),
         },
         {
-          name: "Name",
-          selector: (row) => row.name,
+          name: "Service Name",
+          selector: (row) => row.soft_service_name,
+          sortable: true,
+        },
+        {
+          name: "Checklist Name",
+          selector: (row) => row.checklist_name,
           sortable: true,
         },
         
         {
-          name: "Start Date",
-          selector: (row) => row.start_date,
+          name: "Start Time",
+          selector: (row) => row.start_time,
           sortable: true,
         },
         {
-          name: "End Date",
-          selector: (row) => row.end_date,
+          name: "End Time",
+          selector: (row) => row.end_time,
           sortable: true,
         },
         {
-          name: "Frequency",
-          selector: (row) => row.frequency,
+          name: "Status",
+          selector: (row) => row.status,
           sortable: true,
         },
         {
           name: "Assigned To",
-          selector: (row) => row.user_id,
+          selector: (row) => row.assigned_to_name,
           sortable: true,
         },  
-        {
-          name: "No. Of Questions",
-          selector: (row) => row.questions.length,
-          sortable: true,
-        },
+        
       ];
 
       useEffect(() => {
         try {
           const fetchServiceRoutine = async () => {
-            const ServicePPMResponse = await getServicesRoutineList();
-            setFilteredRoutineData(ServicePPMResponse.data.checklists);
-            setRoutines(ServicePPMResponse.data.checklists)
-            console.log(ServicePPMResponse.data.checklists)
+            const ServiceRoutineResponse = await getServicesRoutineList();
+            console.log(ServiceRoutineResponse.data.activities)
+            setFilteredRoutineData(ServiceRoutineResponse.data.activities);
+            setRoutines(ServiceRoutineResponse.data.activities)
           };
           fetchServiceRoutine();
         } catch (error) {

@@ -16,6 +16,7 @@ import {
   postComplaintsDetails,
 } from "../../api";
 import toast from "react-hot-toast";
+import { useSelector } from "react-redux";
 
 const CreateTicket = () => {
   const navigate = useNavigate();
@@ -316,7 +317,7 @@ const CreateTicket = () => {
       footer.removeEventListener("mouseleave", handleMouseLeave);
     };
   }, []);
-
+const themeColor = useSelector((state)=> state.theme.color)
   return (
     <section className="min-h-screen p-4 sm:p-0 flex flex-col md:flex-row">
       <div className="fixed hidden sm:block left-0 top-0 h-full md:static md:h-auto md:flex-shrink-0">
@@ -327,7 +328,7 @@ const CreateTicket = () => {
           className="border border-gray-300 rounded-lg sm:w-[60rem] p-8 flex flex-col gap-5"
           onSubmit={handleSubmit}
         >
-          <h2 className="text-center text-xl font-bold p-2 bg-black rounded-full text-white">
+          <h2 style={{background: themeColor}} className="text-center text-xl font-bold p-2 bg-black rounded-full text-white">
             Create Ticket
           </h2>
 

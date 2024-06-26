@@ -544,11 +544,17 @@ export const getServicesPPMDetails = async (id) =>
 
 //
 export const getServicesRoutineList = async () =>
-  axiosInstance.get(`/checklists.json?q[ctype_eq]=routine`, {
+  axiosInstance.get(`/activities.json`, {
     params: {
       token: token,
     },
   });
+// export const getServicesRoutineList = async () =>
+//   axiosInstance.get(`/checklists.json?q[ctype_eq]=routine`, {
+//     params: {
+//       token: token,
+//     },
+//   });
 export const getServicesRoutineDetails = async (id) =>
   axiosInstance.get(`/checklists/${id}.json?q[ctype_eq]=routine`, {
     params: {

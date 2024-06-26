@@ -15,6 +15,7 @@ import { getItemInLocalStorage } from "../../utils/localStorage";
 import toast from "react-hot-toast";
 import Collapsible from "react-collapsible";
 import CustomTrigger from "../../containers/CustomTrigger";
+import { useSelector } from "react-redux";
 
 const UserTicket = () => {
   const navigate = useNavigate();
@@ -182,7 +183,7 @@ const UserTicket = () => {
     setSelectedCategory("");
     setSelectedSubCategory("");
   };
-
+const themeColor = useSelector((state)=> state.theme.color)
   return (
     <section className="min-h-screen p-4 sm:p-0 flex flex-col  md:flex-row">
       <div className="fixed hidden sm:block  left-0 top-0 h-full md:static md:h-auto md:flex-shrink-0">
@@ -193,7 +194,7 @@ const UserTicket = () => {
           className="border p-2 sm:p-0  border-gray-300 rounded-lg md:p-8 w-full max-w-[60rem]"
           onSubmit={handleSubmit}
         >
-          <h2 className="text-center text-xl font-bold p-2 bg-black rounded-full text-white">
+          <h2 style={{background: themeColor}} className="text-center text-xl font-bold p-2 bg-black rounded-full text-white">
             New Ticket
           </h2>
           {/* Requestor Details or Requestor Deatils (typo?) */}

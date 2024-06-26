@@ -54,23 +54,24 @@ const UserSetup = () => {
           (item.firstname &&
             item.firstname.toLowerCase().includes(searchValue.toLowerCase())) ||
           (item.lastname &&
-            item.lastname.toLowerCase().includes(searchValue.toLowerCase()))
+            item.lastname.toLowerCase().includes(searchValue.toLowerCase())) ||(item.unit_name &&
+              item.unit_name.toLowerCase().includes(searchValue.toLowerCase()))
       );
       setFilteredData(filteredResults);
     }
   };
 
   const userColumn = [
-    {
-      name: "View",
-      cell: (row) => (
-        <div className="flex items-center gap-4">
-          <Link to={`/setup/user-details/${row.id}`}>
-            <BsEye size={15} />
-          </Link>
-        </div>
-      ),
-    },
+    // {
+    //   name: "View",
+    //   cell: (row) => (
+    //     <div className="flex items-center gap-4">
+    //       <Link to={`/setup/user-details/${row.id}`}>
+    //         <BsEye size={15} />
+    //       </Link>
+    //     </div>
+    //   ),
+    // },
     {
       name: "First Name",
       selector: (row) => row.firstname,
@@ -91,10 +92,15 @@ const UserSetup = () => {
       selector: (row) => row.mobile,
       sortable: true,
     },
+    {
+      name: "Unit",
+      selector: (row) => row.unit_name,
+      sortable: true,
+    },
 
     {
       name: "Type",
-      selector: (row) => row.user_type,
+      selector: (row) => row.user_type === "pms_admin"? "Admin" :row.user_type === "pms_occupant_admin" ? "Unit Owner" : row.user_type === "pms_technician"? "Technician": row.user_type  ,
       sortable: true,
     },
     {
@@ -118,15 +124,15 @@ const UserSetup = () => {
         <div className="mt-5 flex md:flex-row flex-col justify-between md:items-center gap-4">
           <input
             type="text"
-            placeholder="Search By Name"
+            placeholder="Search By Name or Unit"
             className=" p-2 md:w-96 border border-gray-300 rounded-md placeholder:text-sm outline-none"
             value={searchText}
             onChange={handleSearch}
           />
-          <button className="border-2 font-semibold hover:bg-black hover:text-white duration-300 ease-in-out transition-all border-black p-1 px-4 rounded-md text-black cursor-pointer text-center flex items-center gap-2 justify-center">
+          {/* <button className="border-2 font-semibold hover:bg-black hover:text-white duration-300 ease-in-out transition-all border-black p-1 px-4 rounded-md text-black cursor-pointer text-center flex items-center gap-2 justify-center">
             <PiPlusCircle size={20} />
             Add User
-          </button>
+          </button> */}
         </div>
         <Table columns={userColumn} data={filteredData} />
       </div>

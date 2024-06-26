@@ -7,6 +7,7 @@ import {
   getAdminComplaints,
   getAdminPerPageComplaints,
   getComplaints,
+  getTicketDashboard,
 } from "../api";
 import { BsEye } from "react-icons/bs";
 import { BiEdit } from "react-icons/bi";
@@ -164,9 +165,25 @@ const Ticket = () => {
         console.error("Error fetching data:", error);
       }
     };
+    
 
     fetchData(currentPage, perPage);
   }, [currentPage]);
+  const [ticketTypes, setTicketsTypes] = useState({});
+  const [statusData, setStatusData] = useState({});
+  useEffect(() => {
+    const fetchTicketInfo = async () => {
+      try {
+        const ticketInfoResp = await getTicketDashboard();
+        setTicketsTypes(ticketInfoResp.data.by_type);
+        setStatusData(ticketInfoResp.data.by_status);
+        console.log(ticketInfoResp);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchTicketInfo();
+  }, []);
 
   const handleNext = () => {
     setCurrentPage((prevPage) => prevPage + 1);
@@ -302,14 +319,42 @@ const Ticket = () => {
   };
 
   document.title = `Tickets - Vibe Connect`;
-
+  const getRandomColor = () => {
+    const letters = '0123456789ABCDEF';
+    let color = '#';
+    for (let i = 0; i < 6; i++) {
+      color += letters[Math.floor(Math.random() * 16)];
+    }
+    return color;
+  };
   return (
     <section className="flex">
       <Navbar />
       <div className="w-full flex mx-3 mb-10 flex-col overflow-hidden">
         <div className="sm:flex grid grid-cols-2 m-5 justify-start w-fit gap-5 sm:flex-row flex-col flex-shrink flex-wrap ">
           {/* <div className="flex gap-2 mt-2"> */}
-          {Object.entries(ticketStatusCounts).map(([status, count]) => (
+          {Object.entries(statusData).map(([key, value]) => (
+          <div
+            key={key}
+            className="shadow-xl sm:rounded-full rounded-xl border-4 sm:w-48 sm:px-6 px-4 flex flex-col items-center flex-shrink"
+            style={{ border: `4px solid ${getRandomColor()}` }}
+          >
+            {key}{" "}
+            <span className="font-medium text-base text-black">{value}</span>
+          </div>
+        ))}
+          {Object.entries(ticketTypes).map(([key, value]) => (
+          <div
+            key={key}
+            className="shadow-xl sm:rounded-full rounded-xl border-4 sm:w-48 sm:px-6 px-4 flex flex-col items-center flex-shrink"
+            style={{ border: `4px solid ${getRandomColor()}` }}
+          >
+            {key}{" "}
+            <span className="font-medium text-base text-black">{value}</span>
+          </div>
+        ))}
+          {/* {Object.entries(ticketStatusCounts).map(([status, count]) => (
+            
             <div
               key={status}
               className={`shadow-xl sm:rounded-full rounded-xl border-4 sm:w-48 sm:px-6 px-4 flex flex-col items-center flex-shrink ${
@@ -343,10 +388,10 @@ const Ticket = () => {
               <p className="font-medium text-center">{status}</p>
               <p className="font-medium">{count}</p>
             </div>
-          ))}
+          ))} */}
           {/* </div> */}
 
-          {allTicketTypes.map((type) => (
+          {/* {allTicketTypes.map((type) => (
             <div
               key={type}
               className={`shadow-xl sm:rounded-full rounded-xl border-4 sm:w-48 sm:px-6  flex flex-col items-center flex-shrink ${
@@ -366,7 +411,7 @@ const Ticket = () => {
                 ? ticketTypeCounts[type]
                 : 0}
             </div>
-          ))}
+          ))} */}
         </div>
 
         <div className="flex sm:flex-row flex-col gap-10 my-5">

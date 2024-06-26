@@ -156,7 +156,7 @@ function User() {
                   ))}
                 </div>
                 {/* <FontSizeSelector /> */}
-                <Background/>
+                {/* <Background /> */}
               </div>
             )}
           </div>

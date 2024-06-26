@@ -52,7 +52,6 @@ const Login = () => {
       // console.log("vibe", vibeResponse);
       // const vibeToken = vibeResponse.data.token.access.token;
       // setItemInLocalStorage("VIBETOKEN", vibeToken);
-
       // const vibeUserId = vibeResponse.data.data.user_id;
       // setItemInLocalStorage("VIBEUSERID", vibeUserId);
       // const vibeOrganizationId = vibeResponse.data.data.organization_id;
