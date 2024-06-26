@@ -3,7 +3,7 @@ import { getRandomColors } from "./getRandomColors";
 
 export const Board = {
 	backlog: {
-		name: "Sales",
+		name: "GO Live",
 		items: [
 			{
 				id: uuidv4(),
@@ -32,7 +32,7 @@ export const Board = {
 		],
 	},
 	pending: {
-		name: "IT",
+		name: "Frontend Development",
 		items: [
 			{
 				id: uuidv4(),
@@ -61,7 +61,7 @@ export const Board = {
 		],
 	},
 	todo: {
-		name: "Testing",
+		name: "Backend Development",
 		items: [
 			{
 				id: uuidv4(),
@@ -79,7 +79,7 @@ export const Board = {
 		],
 	},
 	doing: {
-		name: "Finance",
+		name: "Testing",
 		items: [
 			{
 				id: uuidv4(),
@@ -106,7 +106,7 @@ export const Board = {
 		],
 	},
 	done: {
-		name: "Testing 2",
+		name: "Completed",
 		items: [
 			{
 				id: uuidv4(),

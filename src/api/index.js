@@ -349,7 +349,7 @@ export const getInventoryDetails = async (id) =>
   });
 
 export const getChecklist = async () =>
-  axiosInstance.get("/checklists.json", {
+  axiosInstance.get("/checklists.json?q[ctype_eq]=routine", {
     params: {
       token: token,
     },
@@ -432,7 +432,8 @@ export const getEmployeeAttendance = async (userId) =>
 export const getEvents = async () =>
   axiosInstance.get("/events.json", {
     params: {
-      token: token,
+      // token: token,
+      token: "775d6ae27272741669a65456ea10cc56cd4cce2bb99287b6",
     },
   });
 export const getEventsDetails = async (id) =>
@@ -452,7 +453,8 @@ export const postEvents = async (data) =>
 export const getBroadCast = async () =>
   axiosInstance.get("/notices.json", {
     params: {
-      token: token,
+      // token: token,
+      token: "775d6ae27272741669a65456ea10cc56cd4cce2bb99287b6",
     },
   });
 export const postBroadCast = async (data) =>
@@ -910,7 +912,7 @@ export const API_URL_WS = "wss://vibecopilot.ai/ws";
 export const getVibeMedia = async () => {
   try {
     const response = await vibeAuth.get(
-      `https://vibecopilot.ai/api/media`,
+      `https://vibecopilot.ai/api/media/`,
 
       {
         headers: {

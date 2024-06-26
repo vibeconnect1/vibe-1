@@ -81,11 +81,11 @@ const ServicePage = () => {
         //   selector: (row) => row.area,
         //   sortable: true,
         // },
-        {
-          name: "Status",
-          selector: (row) => row.status,
-          sortable: true,
-        },
+        // {
+        //   name: "Status",
+        //   selector: (row) => row.status,
+        //   sortable: true,
+        // },
     
         {
           name: "Created On",

@@ -86,8 +86,8 @@ const Events = () => {
   const handleSearch = (event) => {
     const searchValue = event.target.value;
     setSearchText(searchValue);
-    const filteredResults = data.filter((item) =>
-      item.facility.toLowerCase().includes(searchValue.toLowerCase())
+    const filteredResults = events.filter((item) =>
+      item.event_name.toLowerCase().includes(searchValue.toLowerCase())
     );
     setFilteredData(filteredResults);
   };

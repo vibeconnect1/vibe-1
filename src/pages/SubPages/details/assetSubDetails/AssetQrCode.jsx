@@ -23,6 +23,24 @@ const AssetQrCode = ({ onClose, QR }) => {
 
     doc.save(`Asset.pdf`);
   };
+
+  const downloadFile = async (imagePath) => {
+    console.log(imagePath)
+    try {
+      const response = await fetch(imagePath);
+      const blob = await response.blob();
+      const url = URL.createObjectURL(blob);
+
+      const link = document.createElement("a");
+      link.href = url;
+      //asset name
+      const fileName = imagePath.split("/").pop();
+      link.download = fileName;
+      link.click();
+    } catch (error) {
+      console.error("Error downloading image:", error);
+    }
+  };
 console.log(QR)
   return (
     <ModalWrapper onclose={onClose}>
@@ -33,7 +51,10 @@ console.log(QR)
           width={200}
           className="border shadow-xl rounded-md"
         />
-        <button className="px-4 w-full border-2 border-black rounded-md flex justify-center items-center gap-2 py-1" onClick={handlePrintQRCode}>
+        <button className="px-4 w-full border-2 border-black rounded-md flex justify-center items-center gap-2 py-1" 
+        // onClick={handlePrintQRCode}
+        onClick={() => downloadFile(QR)}
+        >
           <FaQrcode />
           Print QR Code
         </button>

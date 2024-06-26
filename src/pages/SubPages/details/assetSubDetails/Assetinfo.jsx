@@ -150,6 +150,8 @@ const Assetinfo = ({ assetData }) => {
     }
   };
 
+ 
+
   const domainPrefix = "https://admin.vibecopilot.ai";
   console.log(assetData.purchase_invoices);
 

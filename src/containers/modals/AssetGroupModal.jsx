@@ -93,7 +93,7 @@ const AssetGroupModal = ({ onclose }) => {
  <div>
  <div className="flex flex-col gap-2">
    <label htmlFor="" className="text-sm font-bold">
-     Service Group Name :
+     Stock Group Name :
    </label>
    <input
      type="text"

@@ -11,6 +11,7 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { format } from "date-fns";
 import toast from "react-hot-toast";
+import { useParams } from "react-router-dom";
 
 const CreateEvent = () => {
   const siteId = getItemInLocalStorage("SITEID");
@@ -66,6 +67,8 @@ const CreateEvent = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
+  const navigate = useParams()
+
   const handleCreateEvent = async () => {
     try {
       toast.loading("Creating Event Please Wait!");
@@ -96,6 +99,7 @@ const CreateEvent = () => {
       toast.success("Event Created Successfully");
       console.log("Response:", response.data);
       toast.dismiss();
+      navigate("/communication")
     } catch (error) {
       console.log(error);
       toast.dismiss();

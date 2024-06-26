@@ -128,7 +128,7 @@ const AssetSubGroupModal = ({ onclose }) => {
           <div className="grid grid-cols-2 gap-4">
             <div className="flex flex-col gap-2">
               <label htmlFor="" className="text-sm font-bold">
-               Service Group Name:
+               Stock Group Name:
               </label>
               <select
                 name="group_id"

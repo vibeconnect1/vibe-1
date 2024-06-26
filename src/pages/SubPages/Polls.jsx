@@ -19,7 +19,7 @@ function Polls() {
       </div>
       <div className='flex justify-center w-full p-2 mb-14'>
         <div className="max-w-2xl w-full py-10">
-          <div className="bg-white shadow-lg rounded-lg p-6">
+          <div className="bg-white shadow-custom-all-sides rounded-lg p-6">
             <h2 className="text-xl font-semibold mb-4">How do you protect your business against cyber-crime?</h2>
             <div className='flex justify-between my-3'>
               <span className='text-gray-500 text-sm'>16/20 responded</span>

@@ -3,6 +3,7 @@ import { getItemInLocalStorage } from "../../utils/localStorage";
 import { getFloors, getUnits, postSoftServices } from "../../api";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 const AddService = () => {
   const [floors, setFloors] = useState([]);
@@ -107,10 +108,12 @@ navigate("/services/soft-service")
     }
   };
 
+const themeColor = useSelector((state)=> state.theme.color)
+
   return (
     <section>
       <div className="m-2">
-        <h2 className="text-center text-xl font-bold p-2 bg-black rounded-full text-white">
+        <h2 style={{background: themeColor}} className="text-center text-xl font-bold p-2  rounded-full text-white">
           Create Service
         </h2>
         <div className="md:mx-20 my-5 md:mb-10 sm:border border-gray-400 p-5 px-10 rounded-lg ">

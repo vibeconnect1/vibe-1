@@ -6,6 +6,7 @@ import { BiEdit } from 'react-icons/bi';
 import Services from '../Services';
 import Navbar from '../../components/Navbar';
 import * as XLSX from "xlsx";
+import { BsEye } from 'react-icons/bs';
 const ServicesTask = () => {
     const [routines, setRoutines]= useState([])
     const [filter, setFilter] = useState(false);
@@ -16,12 +17,12 @@ const ServicesTask = () => {
           name: "Action",
           cell: (row) => (
             <div className="flex items-center gap-4">
-              {/* <Link to={`/services/checklist-details/${row.id}`}>
+              <Link to={`/services/checklist-details/${row.id}`}>
                 <BsEye size={15} />
-              </Link> */}
-              <Link to={`/services/edit-routine/${row.id}`}>
-                <BiEdit size={15} />
               </Link>
+              {/* <Link to={`/services/edit-routine/${row.id}`}>
+                <BiEdit size={15} />
+              </Link> */}
             </div>
           ),
         },
@@ -64,6 +65,7 @@ const ServicesTask = () => {
             const ServicePPMResponse = await getServicesRoutineList();
             setFilteredRoutineData(ServicePPMResponse.data.checklists);
             setRoutines(ServicePPMResponse.data.checklists)
+            console.log(ServicePPMResponse.data.checklists)
           };
           fetchServiceRoutine();
         } catch (error) {

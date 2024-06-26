@@ -47,7 +47,7 @@ import {
   updateVibeUserTask,
 } from "../api";
 import RemainingTime from "../components/RemainingTime";
-import { BiPlus } from "react-icons/bi";
+import { BiPlus, BiSolidCalendarEdit } from "react-icons/bi";
 import LinearProgressBar from "../components/LinearProgessBar";
 import toast from "react-hot-toast";
 import DeleteTaskModal from "../containers/modals/DeleteTaskModal";
@@ -57,7 +57,10 @@ import Modal from "react-modal";
 import { AiOutlineClose } from "react-icons/ai";
 import Select from "react-select";
 import ReactDatePicker from "react-datepicker";
-import { SendDueDateFormat } from "../utils/dateUtils";
+import {
+  FormattedDateToShowProperly,
+  SendDueDateFormat,
+} from "../utils/dateUtils";
 import { IoSend } from "react-icons/io5";
 import useWebSocketServiceForTasks from "../components/WebSocketManagement/WebSocketServiceForTask";
 import vibeAuth from "../api/vibeAuth";
@@ -146,6 +149,12 @@ const TaskManagement = () => {
   };
   const closeLightbox = () => {
     setLightboxImage(null);
+  };
+
+  const [isEditingDesc, setIsEditingDesc] = useState(false);
+  const handleIconClickDesc = () => {
+    setIsEditingDesc(true);
+    setTimeout(() => inputRef.current.focus(), 0);
   };
 
   // socket manage
@@ -902,11 +911,15 @@ const TaskManagement = () => {
           <div style={{ position: "relative" }}>
             <img
               // src={profile}
-              src={getVibeMedia + "/" + message}
+              src={"https://vibecopilot.ai/api/media/" + message}
+              // src={getVibeMedia + "/" + message}
               alt="Chat Image"
               style={{ maxWidth: "100%", maxHeight: "200px" }}
               // onClick={() => downloadFile(Media + "/" + message)}
-              onClick={() => openLightbox(getVibeMedia + "/" + message)}
+              onClick={() =>
+                openLightbox("https://vibecopilot.ai/api/media/" + message)
+              }
+              className="cursor-pointer"
             />
             <span
               style={{
@@ -916,7 +929,7 @@ const TaskManagement = () => {
                 padding: "8px",
                 // backgroundColor: "rgba(255, 255, 255, 0.8)",
               }}
-              className="flex gap-2"
+              className="flex gap-2 w-full justify-end bg-gray-100"
             >
               <span style={{ fontSize: "12px", color: "red" }}>
                 {file_size}
@@ -927,6 +940,7 @@ const TaskManagement = () => {
                   color: "#28a745",
                   marginLeft: "10px",
                 }}
+                className="cursor-pointer"
                 onClick={() => downloadFile(getVibeMedia + "/" + message)}
               />
             </span>
@@ -1402,6 +1416,39 @@ const TaskManagement = () => {
       }
     } catch (error) {
     } finally {
+    }
+  };
+  const [subTaskIdForDueDateRequest, setSubTaskIdForDueDateRequest] =
+    useState(null);
+  const [subTaskDueDateRequest, setSubTaskDueDateRequest] = useState("");
+  const [isModalOpenSubDateRequest, setIsModalOpenSubDateRequest] =
+    useState(false);
+  const handleDueDateClickSubDateRequest = (checksubtaskid, due_date) => {
+    console.log(checksubtaskid);
+    console.log(due_date);
+
+    if (!dueDate) {
+      toast.warning("Please add a due date before proceeding.", {
+        position: "top-center",
+        autoClose: 5000,
+      });
+      return;
+    }
+
+    if (due_date) {
+      // Split the due_date string to remove any timezone information
+      const dateTimeString = due_date.split("+")[0];
+      // Parse the date and time string into a Date object
+      const targetDate = new Date(dateTimeString);
+      // Set state variables
+      setSubTaskIdForDueDateRequest(checksubtaskid);
+      setSubTaskDueDateRequest(targetDate); // check this again
+      setIsModalOpenSubDateRequest(true);
+    } else {
+      setSubTaskIdForDueDateRequest(checksubtaskid);
+      setIsModalOpenSubDateRequest(true);
+      // Handle case where due_date is null
+      console.error("Due date is null");
     }
   };
 
@@ -3025,7 +3072,7 @@ const TaskManagement = () => {
                       onClick={() => {
                         handleToggleComments("comments");
                         // isWideScreen ?
-                         openModalChatWeb() 
+                        openModalChatWeb();
                         //  : openModalChat();
                       }}
                       className=" flex gap-2 items-center hover:text-gray-300 transition-all duration-300"
@@ -3045,6 +3092,146 @@ const TaskManagement = () => {
                   </div>
                   {/*  */}
                 </div>
+                {taskDescription !== undefined ? (
+                  <div
+                    className="flex gap-2 w-full"
+                    style={{
+                      borderRadius: 5,
+                      maxWidth: "100%",
+                      wordWrap: "break-word",
+                      wordBreak: "break-all",
+                      padding: "3px",
+                      paddingLeft: 6,
+                    }}
+                    // onMouseEnter={(e) => e.target.style.background = '#132A3A'} onMouseLeave={(e) => e.target.style.background = '#133953'}
+                  >
+                    {isEditingDesc ? (
+                      <div
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          width: "100%",
+                        }}
+                      >
+                        <input
+                          spellCheck="true"
+                          ref={inputRef}
+                          value={taskDescription}
+                          onChange={(e) => setTaskDescription(e.target.value)}
+                          onKeyDown={(e) => {
+                            if (e.key === "Enter") {
+                              e.preventDefault();
+                              setIsEditingDesc(false);
+                              UpdateUserTask(taskid, taskDescription);
+                            }
+                          }}
+                          onBlur={() => {
+                            setIsEditingDesc(false);
+                            UpdateUserTask(taskid, taskDescription);
+                          }}
+                          className="outline-none text-black"
+                          style={{
+                            border: "none",
+                            width: "100%",
+
+                            paddingLeft: 4,
+                            paddingRight: 4,
+                            borderRadius: 4,
+                          }}
+                        />
+                        <span
+                          onClick={() => {
+                            setIsEditingDesc(false);
+                            UpdateUserTask(taskid, taskDescription);
+                          }}
+                        >
+                          <FaCheck
+                            style={{
+                              marginLeft: 10,
+                              marginRight: 10,
+                              fontSize: 14,
+                              color: "white",
+                            }}
+                            className="cursor-pointer"
+                          />
+                        </span>
+                      </div>
+                    ) : (
+                      <div
+                        onClick={() => setIsEditingDesc(true)}
+                        className="flex gap-2 items-center"
+                      >
+                        {taskDescription}
+                        <FaPencilAlt
+                          onClick={handleIconClickDesc}
+                          style={{ marginLeft: 10, fontSize: 14 }}
+                          title="Edit"
+                          className="cursor-pointer"
+                        />
+                      </div>
+                    )}
+                  </div>
+                ) : null}
+
+                <div className=" " style={{ cursor: "default" }}>
+                  <div
+                    className="font-medium grid grid-cols-4"
+                    style={{ cursor: "default" }}
+                  >
+                    {" "}
+                    <p>Created By :</p>
+                    <p className="col-span-3">
+                      {createdFirstName} {createdSecondName}
+                    </p>
+                  </div>
+                  <div
+                    className="font-medium grid grid-cols-4"
+                    style={{ cursor: "default" }}
+                  >
+                    {" "}
+                    <p>Created Date :</p>
+                    <p className="col-span-3">
+                      {FormattedDateToShowProperly(createdDate)}
+                    </p>
+                  </div>
+                  <div
+                    className="font-medium grid grid-cols-4"
+                    style={{ cursor: "default" }}
+                  >
+                    {" "}
+                    <p>Due Date :</p>
+                    {/* <p className="col-span-3"> */}
+<p className="flex gap-2 col-span-3 items-center">
+
+                    {dueDate && FormattedDateToShowProperly(dueDate)} 
+                    {createdBy_id.toString() !== user_id && dueDate ? (
+                      <BiSolidCalendarEdit
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleDueDateClickSubDateRequest();
+                      }}
+                      size={18}
+                      />
+                    ) : (
+                      
+                      ""
+                    )}
+                    </p>
+                    {/* </p> */}
+                  </div>
+                  <div className="font-medium grid grid-cols-4" style={{ cursor: "default" }}>
+                    {" "}
+                    <p>
+
+                    Assign To :
+                    </p>
+                    <p className="cols-span-3">
+
+                     {showStatusChecklist1}{" "}
+                    </p>
+                  </div>
+                </div>
+
                 {isChatVisible && (
                   <div className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-30 backdrop-blur-sm z-50 p-10 ">
                     <div
@@ -3143,8 +3330,6 @@ const TaskManagement = () => {
                                   </div>
                                 ))
                               )}
-
-                              
                             </div>
                             <input
                               type="file"
@@ -3274,7 +3459,7 @@ const TaskManagement = () => {
                                       className="bg-white max-w-60 "
                                       style={{
                                         borderRadius: 5,
-                                        
+
                                         padding: "4px 10px",
                                       }}
                                     >
@@ -3286,11 +3471,11 @@ const TaskManagement = () => {
                                       {coment.message}
                                     </div>
                                     <span
-                                    className={
-                                      coment.sender_id === user_id
-                                        ? "text-right"
-                                        : "text-left"
-                                    }
+                                      className={
+                                        coment.sender_id === user_id
+                                          ? "text-right"
+                                          : "text-left"
+                                      }
                                       style={{ fontSize: 10, color: "#ededed" }}
                                     >
                                       {new Date(
@@ -3311,7 +3496,7 @@ const TaskManagement = () => {
                               <input
                                 spellCheck="true"
                                 placeholder="Type your message here..."
-                                 className="rounded-full px-4 placeholder:text-gray-500 text-black outline-none"
+                                className="rounded-full px-4 placeholder:text-gray-500 text-black outline-none"
                                 style={{
                                   // color: "white",
                                   // marginRight: 8,
@@ -3333,23 +3518,24 @@ const TaskManagement = () => {
                                 }}
                                 tabIndex="0"
                               />
-                              <div style={{
+                              <div
+                                style={{
                                   background: themeColor,
                                 }}
-                                className="p-2 px-3 ml-1 rounded-full shadow-custom-all-sides flex items-center">
-
-                              <IoSend
-                                onClick={() => {
-                                  send_Comment(addComent);
-                                  // handleSubmitComment();
-                                }}
-                                style={{
-                                  // marginTop: 10,
-                                  fontSize: 20,
-                                  color: "white",
-                                }}
+                                className="p-2 px-3 ml-1 rounded-full shadow-custom-all-sides flex items-center"
+                              >
+                                <IoSend
+                                  onClick={() => {
+                                    send_Comment(addComent);
+                                    // handleSubmitComment();
+                                  }}
+                                  style={{
+                                    // marginTop: 10,
+                                    fontSize: 20,
+                                    color: "white",
+                                  }}
                                 />
-                                </div>
+                              </div>
                             </div>
                           </>
                         )}
@@ -3362,7 +3548,7 @@ const TaskManagement = () => {
                           >
                             <button
                               className="place-self-end fixed p-1 rounded-full  bg-white text-black"
-                              onClick={closeChatModalWeb}
+                              onClick={closeLightbox}
                             >
                               <AiOutlineClose size={20} />
                             </button>
@@ -3370,15 +3556,21 @@ const TaskManagement = () => {
                               className="lightbox-overlay"
                               onClick={closeLightbox}
                             >
-                              <div className="lightbox-content">
+                              <img
+                                src={lightboxImage}
+                                alt="Chat Image"
+                                className="w-96"
+                              />
+
+                              {/* <div className="lightbox-content">
                                 <img src={lightboxImage} alt="Chat Image" />
                                 <div
                                   className="close-button"
                                   onClick={closeLightbox}
                                 >
                                   X
-                                </div>
-                              </div>
+                                </div> */}
+                              {/* </div> */}
                             </div>
                           </div>
                         </div>

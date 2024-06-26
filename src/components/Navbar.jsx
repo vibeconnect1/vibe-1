@@ -19,7 +19,7 @@ import {
   MdOutlinePolicy,
 } from "react-icons/md";
 import { HiMiniTicket, HiMiniUser } from "react-icons/hi2";
-import { RiSettings4Line, RiUserLocationFill } from "react-icons/ri";
+import { RiBillLine, RiSettings4Line, RiUserLocationFill } from "react-icons/ri";
 import { LuParkingSquare, LuSettings2 } from "react-icons/lu";
 import {
   IoBusinessOutline,
@@ -470,6 +470,32 @@ const Navbar = () => {
                   } absolute left-48 bg-white font-semibold whitespace-pre text-gray-900 rounded-md drop-shadow-lg px-0 py-0 w-0 overflow-hidden group-hover:px-2 group-hover:py-1 group-hover:left-14 group-hover:duration-300 group-hover:w-fit  `}
                 >
                   Suppliers
+                </h2>
+              </NavLink>
+              <NavLink
+                to={"/admin/bill-pay"}
+                className={({ isActive }) =>
+              ` ${
+                isActive
+                  ? "text-black bg-white flex p-2  gap-3.5 rounded-md group items-center text-sm font-medium"
+                  : " group flex items-center text-sm gap-3.5 font-medium p-2 hover:bg-gray-800 rounded-md "
+                }`
+               }
+              >
+              <div>{React.createElement(RiBillLine, { size: "20" })}</div>
+                <h2
+                  className={`whitespace-pre duration-300 ${
+                  !open && "opacity-0 translate-x-28 overflow-hidden"
+                }`}
+              >
+                Bill Pay
+                </h2>
+                <h2
+                  className={`${
+                  open && "hidden"
+                  } absolute left-48 bg-white font-semibold whitespace-pre text-gray-900 rounded-md drop-shadow-lg px-0 py-0 w-0 overflow-hidden group-hover:px-2 group-hover:py-1 group-hover:left-14 group-hover:duration-300 group-hover:w-fit  `}
+                >
+                  Bill Pay
                 </h2>
               </NavLink>
               {/* <NavLink
@@ -1023,6 +1049,33 @@ const Navbar = () => {
               Communication
             </h2>
           </NavLink>
+          <NavLink
+                to={"/admin/meetings"}
+                className={({ isActive }) =>
+                  ` ${
+                    isActive
+                      ? "text-black bg-white flex p-2  gap-3.5 rounded-md group items-center text-sm font-medium"
+                      : " group flex items-center text-sm gap-3.5 font-medium p-2 hover:bg-gray-800 rounded-md "
+                  }`
+                }
+              >
+                <div>{React.createElement(IoIosPeople, { size: "20" })}</div>
+
+                <h2
+                  className={`whitespace-pre duration-300 ${
+                    !open && "opacity-0 translate-x-28 overflow-hidden"
+                  }`}
+                >
+                  Meeting
+                </h2>
+                <h2
+                  className={`${
+                    open && "hidden"
+                  } absolute left-48 bg-white font-semibold whitespace-pre text-gray-900 rounded-md drop-shadow-lg px-0 py-0 w-0 overflow-hidden group-hover:px-2 group-hover:py-1 group-hover:left-14 group-hover:duration-300 group-hover:w-fit  `}
+                >
+                  Meeting
+                </h2>
+              </NavLink>
               <NavLink
                 to={"/attendance"}
                 className={({ isActive }) =>
@@ -1161,33 +1214,7 @@ const Navbar = () => {
                   Insights
                 </h2>
               </NavLink> */}
-              <NavLink
-                to={"/admin/meetings"}
-                className={({ isActive }) =>
-                  ` ${
-                    isActive
-                      ? "text-black bg-white flex p-2  gap-3.5 rounded-md group items-center text-sm font-medium"
-                      : " group flex items-center text-sm gap-3.5 font-medium p-2 hover:bg-gray-800 rounded-md "
-                  }`
-                }
-              >
-                <div>{React.createElement(IoIosPeople, { size: "20" })}</div>
-
-                <h2
-                  className={`whitespace-pre duration-300 ${
-                    !open && "opacity-0 translate-x-28 overflow-hidden"
-                  }`}
-                >
-                  Meeting
-                </h2>
-                <h2
-                  className={`${
-                    open && "hidden"
-                  } absolute left-48 bg-white font-semibold whitespace-pre text-gray-900 rounded-md drop-shadow-lg px-0 py-0 w-0 overflow-hidden group-hover:px-2 group-hover:py-1 group-hover:left-14 group-hover:duration-300 group-hover:w-fit  `}
-                >
-                  Meeting
-                </h2>
-              </NavLink>
+             
               <NavLink
                 to={"/admin/fitness"}
                 className={({ isActive }) =>
@@ -1437,6 +1464,32 @@ const Navbar = () => {
                   } absolute left-48 bg-white font-semibold whitespace-pre text-gray-900 rounded-md drop-shadow-lg px-0 py-0 w-0 overflow-hidden group-hover:px-2 group-hover:py-1 group-hover:left-14 group-hover:duration-300 group-hover:w-fit  `}
                 >
                   Communication
+                </h2>
+              </NavLink>
+              <NavLink
+                to={"/employee/bill-pay"}
+                className={({ isActive }) =>
+                  ` ${
+                    isActive
+                      ? "text-black bg-white flex p-2  gap-3.5 rounded-md group items-center text-sm font-medium"
+                      : " group flex items-center text-sm gap-3.5 font-medium p-2 hover:bg-gray-800 rounded-md "
+                  }`
+                }
+              >
+                <div>{React.createElement(RiBillLine, { size: "20" })}</div>
+                <h2
+                  className={`whitespace-pre duration-300 ${
+                    !open && "opacity-0 translate-x-28 overflow-hidden"
+                  }`}
+                >
+                  Bill Pay
+                </h2>
+                <h2
+                  className={`${
+                    open && "hidden"
+                  } absolute left-48 bg-white font-semibold whitespace-pre text-gray-900 rounded-md drop-shadow-lg px-0 py-0 w-0 overflow-hidden group-hover:px-2 group-hover:py-1 group-hover:left-14 group-hover:duration-300 group-hover:w-fit  `}
+                >
+                  Bill Pay
                 </h2>
               </NavLink>
 

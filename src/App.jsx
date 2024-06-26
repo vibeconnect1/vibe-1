@@ -473,6 +473,10 @@ import CTCBasket from "./pages/AdminHrms/CTCBasket.jsx";
 import EmpOnboarding from "./pages/AdminHrms/EmpOnBoarding.jsx";
 import SeparationApplication from "./pages/AdminHrms/SeparationApplication.jsx";
 import PendingContract from "./pages/AdminHrms/PendingContract.jsx";
+import BillPay from "./pages/BillPay.jsx";
+import BillPayDetails from "./pages/SubPages/details/BillPayDetails.jsx";
+import EmployeeBillPay from "./pages/Employees/EmployeeBillPay.jsx";
+import EmployeeBillPayDetails from "./pages/Employees/EmployeeBillPayDetails.jsx";
 
 function App() {
   const themeColor = useSelector((state) => state.theme.color);
@@ -4258,6 +4262,41 @@ function App() {
             element={
               <ProtectedRoute>
                 <EmployeeFieldSenseMeetingDetails />
+              </ProtectedRoute>
+            }
+          />
+           {/*Bill Pay */}
+           <Route
+            path="/admin/bill-pay"
+            element={
+              <ProtectedAdminRoutes>
+                <BillPay/>
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/bill-pay-details"
+            element={
+              <ProtectedAdminRoutes>
+                <BillPayDetails/>
+              </ProtectedAdminRoutes>
+            }
+          />
+          {/* Employee Bill Pay */}
+          <Route
+            path="/employee/bill-pay"
+            element={
+              <ProtectedRoute>
+                <EmployeeBillPay/>
+              </ProtectedRoute>
+            }
+          />
+          
+          <Route
+            path="/employee/bill-pay-detail"
+            element={
+              <ProtectedRoute>
+                <EmployeeBillPayDetails/>
               </ProtectedRoute>
             }
           />

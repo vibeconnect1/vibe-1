@@ -15,6 +15,7 @@ const AssetGroup = () => {
   const [subGroupModal, setsubGroupModal] = useState(false);
   const [group, setGroup] = useState([]);
   const [subGroup, setSubGroup] = useState([]);
+  const [page,setPage] = useState("asset")
   // const groups = useSelector((state) => state.group.groups);
   // const subGroups = useSelector((state) => state.group.subGroups);
   // console.log("sub", subGroups);
@@ -105,6 +106,28 @@ const AssetGroup = () => {
     <section className="flex">
       <Navbar />
       <div className="w-full flex mx-3 mb-5 flex-col overflow-hidden">
+
+      <div className=" flex gap-2 p-2 pb-0 border-b-2 border-gray-200 w-full">
+          <h2
+            className={`p-1 ${
+              page === "asset" &&
+              `bg-white font-medium text-blue-500 shadow-custom-all-sides`
+            } rounded-t-md px-4 cursor-pointer text-center transition-all duration-300 ease-linear`}
+            onClick={() => setPage("asset")}
+          >
+            Asset
+          </h2>
+          <h2
+            className={`p-1 ${
+              page === "stock" &&
+              "bg-white font-medium text-blue-500 shadow-custom-all-sides"
+            } rounded-t-md px-4 cursor-pointer transition-all duration-300 ease-linear`}
+            onClick={() => setPage("stock")}
+          >
+            Stock
+          </h2>
+         
+        </div>
         <div className="mt-5 flex justify-end items-center gap-4">
           <button
             onClick={() => setGroupModal(true)}
@@ -121,7 +144,7 @@ const AssetGroup = () => {
             Add Sub Group
           </button>
         </div>
-        <div className=" my-2">
+        {page === "asset" && <div className=" my-2">
           <Table
             columns={groupColumns}
             data={group}
@@ -136,7 +159,23 @@ const AssetGroup = () => {
             height={"300px"}
             title={"Sub Groups"}
           />
-        </div>
+        </div>}
+        {page === "stock" && <div className=" my-2">
+          <Table
+            columns={groupColumns}
+            data={group}
+            isPagination={true}
+            height={"300px"}
+            title={"Groups"}
+          />
+          <Table
+            columns={subGroupColumns}
+            data={subGroup}
+            isPagination={true}
+            height={"300px"}
+            title={"Sub Groups"}
+          />
+        </div>}
       </div>
       {groupModal && <AssetGroupModal onclose={() => setGroupModal(false)} />}
       {subGroupModal && (
