@@ -36,6 +36,7 @@ const SetupNavbar = () => {
         <Link to={"/setup/permit-setup"} className="hover:bg-white hover:text-black  p-2 rounded-lg ">Permit</Link>
         {/* <Link to={"/setup/parking-setup"} className="hover:bg-white hover:text-black  p-2 rounded-lg ">Parking</Link> */}
         <Link to={"/admin/setup-incidents"}className="hover:bg-white hover:text-black  p-2 rounded-lg ">Incidents Setup</Link>
+        <Link to={"/admin/communication-access-control"}className="hover:bg-white hover:text-black  p-2 rounded-lg ">Communication Setup Control</Link>
       </ul>
     </div>
   </div>

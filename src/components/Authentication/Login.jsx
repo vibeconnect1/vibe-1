@@ -45,17 +45,17 @@ const Login = () => {
         },
       });
       // vibe login
-      // const vibeResponse = await vibeLogin({
-      //   email: formData.email,
-      //   password: formData.password,
-      // });
-      // console.log("vibe", vibeResponse);
-      // const vibeToken = vibeResponse.data.token.access.token;
-      // setItemInLocalStorage("VIBETOKEN", vibeToken);
-      // const vibeUserId = vibeResponse.data.data.user_id;
-      // setItemInLocalStorage("VIBEUSERID", vibeUserId);
-      // const vibeOrganizationId = vibeResponse.data.data.organization_id;
-      // setItemInLocalStorage("VIBEORGID", vibeOrganizationId);
+      const vibeResponse = await vibeLogin({
+        email: formData.email,
+        password: formData.password,
+      });
+      console.log("vibe", vibeResponse);
+      const vibeToken = vibeResponse.data.token.access.token;
+      setItemInLocalStorage("VIBETOKEN", vibeToken);
+      const vibeUserId = vibeResponse.data.data.user_id;
+      setItemInLocalStorage("VIBEUSERID", vibeUserId);
+      const vibeOrganizationId = vibeResponse.data.data.organization_id;
+      setItemInLocalStorage("VIBEORGID", vibeOrganizationId);
 
       //
       const loginD = response.data.user;

@@ -477,6 +477,23 @@ import BillPay from "./pages/BillPay.jsx";
 import BillPayDetails from "./pages/SubPages/details/BillPayDetails.jsx";
 import EmployeeBillPay from "./pages/Employees/EmployeeBillPay.jsx";
 import EmployeeBillPayDetails from "./pages/Employees/EmployeeBillPayDetails.jsx";
+import CommunicationAccessControl from "./pages/Setup/CommunicationAccessControl.jsx";
+import PersonalFinancialLogin from "./pages/PersonalFinance/PersonalFinanceLogin.jsx";
+import PersonalFinancialSetup from "./pages/PersonalFinance/PersonalFinancialSetup.jsx";
+import PersonalFinancialEdit from "./pages/PersonalFinance/PersonalFinancialEdit.jsx";
+import EmergencyFund from "./pages/PersonalFinance/EmergencyFund.jsx";
+import AddEmergencyFund from "./pages/PersonalFinance/AddEmergencyFund.jsx";
+import Investment from "./pages/PersonalFinance/Investment.jsx";
+import AddInvestment from "./pages/PersonalFinance/AddInvestment.jsx";
+import GoalPlanning from "./pages/PersonalFinance/GoalPlanning.jsx";
+import AddGoalPlanning from "./pages/PersonalFinance/AddGoalPlanning.jsx";
+import PersonalInsurance from "./pages/PersonalFinance/PersonalInsurance.jsx";
+import AddPersonalInsurance from "./pages/PersonalFinance/AddPersonalInsurance.jsx";
+import InsuranceDetails from "./pages/PersonalFinance/InsuranceDetails.jsx";
+import IndividualDetails from "./pages/PersonalFinance/IndividualDetails.jsx";
+import InvestmentDetails from "./pages/PersonalFinance/InvestmentDetails.jsx";
+import GoalDetails from "./pages/PersonalFinance/GoalDetails.jsx";
+import EmergencyFundDetails from "./pages/PersonalFinance/EmergencyFundDetails.jsx";
 
 function App() {
   const themeColor = useSelector((state) => state.theme.color);
@@ -4297,6 +4314,146 @@ function App() {
             element={
               <ProtectedRoute>
                 <EmployeeBillPayDetails/>
+              </ProtectedRoute>
+            }
+          />
+           <Route
+            path="/admin/communication-access-control"
+            element={
+              <ProtectedAdminRoutes>
+                <CommunicationAccessControl/>
+              </ProtectedAdminRoutes>
+            }
+          />
+
+          {/*personal financial */}
+          <Route
+            path="/personal-finance"
+            element={
+              <ProtectedRoute>
+                <PersonalFinancialLogin/>
+              </ProtectedRoute>
+            }
+          />
+
+<Route
+ path="/personal-financial-setup"
+ element={
+   <ProtectedRoute>
+    <PersonalFinancialSetup/>
+   </ProtectedRoute>
+ }
+/>
+<Route
+ path="/personal-financial-edit/:id"
+ element={
+   <ProtectedAdminRoutes>
+   <PersonalFinancialEdit/>
+   </ProtectedAdminRoutes>
+ }
+/>
+<Route
+ path="/emergency-fund"
+ element={
+   <ProtectedRoute>
+   <EmergencyFund/>
+   </ProtectedRoute>
+ }
+/>
+<Route
+ path="/add-emergency-fund"
+ element={
+   <ProtectedRoute>
+  <AddEmergencyFund/>
+   </ProtectedRoute>
+ }
+/>
+<Route
+  path="/personal-investment"
+  element={
+    <ProtectedRoute>
+   <Investment/>
+    </ProtectedRoute>
+  }
+/>
+<Route
+  path="/add-investment"
+  element={
+    <ProtectedRoute>
+   <AddInvestment/>
+    </ProtectedRoute>
+  }
+/>
+<Route
+ path="/goal-plan"
+ element={
+   <ProtectedRoute>
+  <GoalPlanning/>
+   </ProtectedRoute>
+ }
+/>
+<Route
+  path="/add-goal-plan"
+  element={
+    <ProtectedRoute>
+  <AddGoalPlanning/>
+    </ProtectedRoute>
+  }
+/>
+<Route
+  path="/personal-insurance"
+  element={
+    <ProtectedRoute>
+  <PersonalInsurance/>
+    </ProtectedRoute>
+  }
+/>
+<Route
+ path="/add-insurance"
+ element={
+   <ProtectedRoute>
+ <AddPersonalInsurance/>
+   </ProtectedRoute>
+ }
+/>
+<Route
+ path="/personal-insurance-details/:id"
+ element={
+   <ProtectedRoute>
+ <InsuranceDetails/>
+   </ProtectedRoute>
+ }
+/>
+<Route
+  path="/personal-financial-details/:id"
+  element={
+    <ProtectedRoute>
+  <IndividualDetails/>
+    </ProtectedRoute>
+  }
+/>
+<Route
+  path="/emergency-details/:id"
+  element={
+    <ProtectedRoute>
+  <EmergencyFundDetails/>
+    </ProtectedRoute>
+  }
+/>
+<Route
+ path="/investment-details/:id"
+ element={
+   <ProtectedRoute>
+<InvestmentDetails/>
+   </ProtectedRoute>
+ }
+/>
+           
+           <Route
+            path="/goal-details/:id"
+            element={
+              <ProtectedRoute>
+          <GoalDetails/>
               </ProtectedRoute>
             }
           />
