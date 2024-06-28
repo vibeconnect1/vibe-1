@@ -17,8 +17,8 @@ const UserDetails = () => {
   const [modal, setModal] = useState(false);
   const [closeModal, setCloseModal] = useState(false);
   const [reopenStatusId, setReopenStatusId] = useState("");
-  const [closeStatusId, setCloseStatusID] = useState("")
-  const themeColor = useSelector((state)=> state.theme.color)
+  const [closeStatusId, setCloseStatusID] = useState("");
+  const themeColor = useSelector((state) => state.theme.color);
   const [formData, setFormData] = useState({
     comment: "",
     of_phase: "pms",
@@ -84,7 +84,7 @@ const UserDetails = () => {
       console.log(response.data);
       setTicketInfo(response.data);
       setReopenStatusId(response.data.reopen_status_id);
-      setCloseStatusID(response.data.close_status_id)
+      setCloseStatusID(response.data.close_status_id);
     };
     fetchDetails();
   }, [formData.comment]);
@@ -119,7 +119,7 @@ const UserDetails = () => {
     { title: "Site Owner  :", description: ticketinfo.responsible_person },
     { title: "Ticket No  :", description: ticketinfo.ticket_number },
     { title: "Title  :", description: ticketinfo.heading },
-    { title: "Status  :", description: ticketinfo.current_status },
+    { title: "Status  :", description: ticketinfo.issue_status },
     { title: "Site  :", description: ticketinfo.site_name },
     { title: "Issue Type  :", description: ticketinfo.issue_type },
     { title: "Assigned To  :", description: ticketinfo.assigned_to },
@@ -139,10 +139,17 @@ const UserDetails = () => {
     // {title: "Rating :", description : ticketinfo.rating === 1 ?  <BiAngry size={0}  style={{ color: "red" }} /> :ticketinfo.rating === 2 ? <BiSad size={50} /> : ticketinfo.rating === 3 ?<MdOutlineSentimentNeutral size={50} /> : ticketinfo.rating === 4 ?  <BiSmile size={50} />: ticketinfo.rating === 5 ? <BiHappy size={30} /> : null }
     {
       title: "Rating :",
-      description: ticketinfo.rating >= 1 && ticketinfo.rating <= 5 ? 
-        <>{React.cloneElement(smielyRating[ticketinfo.rating - 1].icon, { style: { color: smielyRating[ticketinfo.rating - 1].defaultColor } })}</> : 
-        null
-    }
+      description:
+        ticketinfo.rating >= 1 && ticketinfo.rating <= 5 ? (
+          <>
+            {React.cloneElement(smielyRating[ticketinfo.rating - 1].icon, {
+              style: {
+                color: smielyRating[ticketinfo.rating - 1].defaultColor,
+              },
+            })}
+          </>
+        ) : null,
+    },
   ];
   const domainPrefix = "https://admin.vibecopilot.ai";
   return (
@@ -150,37 +157,36 @@ const UserDetails = () => {
       <div className="flex flex-col justify-around ">
         {ticketinfo.current_fixed_state === "complete" && (
           <div className="flex justify-end">
-         
-          <div className="flex justify-end mx-2">
-            <button
-              className="bg-black w-20 rounded-md mx-4 my-2 hover:bg-white hover:text-black border-2 border-black transition-all duration-300 font-medium text-white p-2 "
-              onClick={() => setModal(true)}
-            >
-              Re open
-            </button>
+            <div className="flex justify-end mx-2">
+              <button
+                className="bg-black w-20 rounded-md mx-4 my-2 hover:bg-white hover:text-black border-2 border-black transition-all duration-300 font-medium text-white p-2 "
+                onClick={() => setModal(true)}
+              >
+                Re open
+              </button>
+            </div>
+
+            <div className="flex justify-end mx-2">
+              <button
+                className="bg-black w-20 rounded-md mx-4 my-2 hover:bg-white hover:text-black border-2 border-black transition-all duration-300 font-medium text-white p-2 "
+                onClick={() => setCloseModal(true)}
+              >
+                Close
+              </button>
+            </div>
           </div>
-        
-          <div className="flex justify-end mx-2">
-            <button
-              className="bg-black w-20 rounded-md mx-4 my-2 hover:bg-white hover:text-black border-2 border-black transition-all duration-300 font-medium text-white p-2 "
-              onClick={() => setCloseModal(true)}
-            >
-              Close
-            </button>
-          </div>
-          </div>
-        )} 
+        )}
         <div className=" w-screen">
           {/* <h2 className="text-center mb-2 bg-black text-white font-semibold text-lg p-2 px-4 ">
             Ticket Details
           </h2> */}
           <Detail details={ticketDetails} heading={"Ticket Details"} />
-
         </div>
         <div className="flex flex-col sm:items-start flex-wrap gap-2">
           <h2
-          style={{background: themeColor}}
-          className="text-center sm:w-screen text-white font-semibold mt-5 text-lg p-2 px-4 ">
+            style={{ background: themeColor }}
+            className="text-center sm:w-screen text-white font-semibold mt-5 text-lg p-2 px-4 "
+          >
             Additional Info
           </h2>
           <div className="px-4 flex flex-col gap-1 mx-2  ">
@@ -222,16 +228,21 @@ const UserDetails = () => {
           </div>
         </div>
         {/* <div className="border " /> */}
-        <h2 
-        style={{background: themeColor}}
-        className="text-center   text-white font-semibold my-5 text-lg p-2 px-4 ">
+        <h2
+          style={{ background: themeColor }}
+          className="text-center   text-white font-semibold my-5 text-lg p-2 px-4 "
+        >
           Attachments
         </h2>
         <div className="flex  sm:flex-row flex-col items-center ">
           {ticketinfo.documents &&
             ticketinfo.documents.map((doc, index) => (
               <div key={index} className="flex justify-start p-4">
-                <a href={domainPrefix + doc.document} target="_blank" className="inline-block  w-40">
+                <a
+                  href={domainPrefix + doc.document}
+                  target="_blank"
+                  className="inline-block  w-40"
+                >
                   <img
                     src={domainPrefix + doc.document}
                     alt={`Attachment ${index}`}
@@ -245,8 +256,9 @@ const UserDetails = () => {
 
         {/* <div className="border m-10" /> */}
         <h2
-        style={{background: themeColor}}
-        className="text-center w-screen text-white font-semibold my-5 text-lg p-2 px-4 ">
+          style={{ background: themeColor }}
+          className="text-center w-screen text-white font-semibold my-5 text-lg p-2 px-4 "
+        >
           Logs
         </h2>
         {/* <div className="border m-10 " /> */}
