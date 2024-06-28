@@ -20,7 +20,7 @@ const HotelRequest = () => {
         to={to}
         className={({ isActive }) =>
           `p-1 rounded-full px-4 cursor-pointer text-center transition-all duration-300 ease-linear ${
-            isActive ? 'bg-white text-blue-500 shadow-custom-all-sides' : 'hover:bg-gray-800'
+            isActive ? 'bg-white text-blue-500 shadow-custom-all-sides' : 'hover:text-blue-400'
           }`
         }
       >
@@ -177,7 +177,7 @@ const HotelRequest = () => {
             <CustomNavLink to="/admin/booking-request/flight-ticket-request">Flight Ticket Request</CustomNavLink>
             <CustomNavLink to="/admin/booking-request/cab-bus-request">Cab/Bus Request</CustomNavLink>
             <CustomNavLink to="/admin/booking-request/transportation-request">Transportation Request</CustomNavLink>
-            <CustomNavLink to="/admin/booking-request/traveling-allowance-request">Add Traveling Allowance Request</CustomNavLink>
+            <CustomNavLink to="/admin/booking-request/traveling-allowance-request"> Traveling Allowance Request</CustomNavLink>
           </div>
         </div>
 

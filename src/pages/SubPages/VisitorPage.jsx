@@ -59,7 +59,7 @@ const VisitorPage = () => {
             <div>
               <select
                 className="border p-2 rounded-md border-black"
-                style={{ width: "1100px" }}
+              
               >
                 <option>Select Person to meet</option>
                 <option>abc</option>

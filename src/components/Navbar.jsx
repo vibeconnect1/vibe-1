@@ -4,6 +4,7 @@ import { useNavigate, NavLink } from "react-router-dom";
 import { menus } from "../utils/menus";
 import { PiFiles, PiSignOutBold } from "react-icons/pi";
 import { getItemInLocalStorage } from "../utils/localStorage";
+import { FaMoneyBillTrendUp } from "react-icons/fa6";
 import {
   BsBroadcast,
   BsBuilding,
@@ -54,6 +55,7 @@ import {
 import { IoIosPeople } from "react-icons/io";
 import { useSelector } from "react-redux";
 import { ImFileText2 } from "react-icons/im";
+import { FcMoneyTransfer } from "react-icons/fc";
 
 const Navbar = () => {
   const [open, setOpen] = useState(false);
@@ -173,7 +175,7 @@ const Navbar = () => {
                 </h2>
               </NavLink>
               <NavLink
-                to={"/admin/Task-management"}
+                to={"/Task-management"}
                 className={({ isActive }) =>
                   ` ${
                     isActive
@@ -1023,6 +1025,32 @@ const Navbar = () => {
                   Bookings
                 </h2>
               </NavLink>
+              <NavLink
+                to={"/admin/advance-salary-request"}
+                className={({ isActive }) =>
+              ` ${
+                isActive
+                  ? "text-black bg-white flex p-2  gap-3.5 rounded-md group items-center text-sm font-medium"
+                  : " group flex items-center text-sm gap-3.5 font-medium p-2 hover:bg-gray-800 rounded-md "
+                }`
+               }
+              >
+              <div>{React.createElement(FcMoneyTransfer, { size: "20" })}</div>
+                <h2
+                  className={`whitespace-pre duration-300 ${
+                  !open && "opacity-0 translate-x-28 overflow-hidden"
+                }`}
+              >
+                Advance Salary 
+                </h2>
+                <h2
+                  className={`${
+                  open && "hidden"
+                  } absolute left-48 bg-white font-semibold whitespace-pre text-gray-900 rounded-md drop-shadow-lg px-0 py-0 w-0 overflow-hidden group-hover:px-2 group-hover:py-1 group-hover:left-14 group-hover:duration-300 group-hover:w-fit  `}
+                >
+                  Advance Salary 
+                </h2>
+              </NavLink>
              
               <NavLink
             to={"/communication"}
@@ -1051,7 +1079,7 @@ const Navbar = () => {
             </h2>
           </NavLink>
           <NavLink
-                to={"/admin/meetings"}
+                to={"/meetings"}
                 className={({ isActive }) =>
                   ` ${
                     isActive
@@ -1226,7 +1254,7 @@ const Navbar = () => {
                 }
               >
                 <div>
-                  {React.createElement(FaDollarSign, { size: "20" })}
+                  {React.createElement(FaMoneyBillTrendUp, { size: "20" })}
                 </div>
 
                 <h2
@@ -1390,6 +1418,34 @@ const Navbar = () => {
                   } absolute left-48 bg-white font-semibold whitespace-pre text-gray-900 rounded-md drop-shadow-lg px-0 py-0 w-0 overflow-hidden group-hover:px-2 group-hover:py-1 group-hover:left-14 group-hover:duration-300 group-hover:w-fit  `}
                 >
                   Project management
+                </h2>
+              </NavLink>
+              <NavLink
+                to={"/Task-management"}
+                className={({ isActive }) =>
+                  ` ${
+                    isActive
+                      ? "text-black bg-white flex p-2  gap-3.5 rounded-md group items-center text-sm font-medium"
+                      : " group flex items-center text-sm gap-3.5 font-medium p-2 hover:bg-gray-800 rounded-md "
+                  }`
+                }
+              >
+                <div>
+                  {React.createElement(FaTasks , { size: "20" })}
+                </div>
+                <h2
+                  className={`whitespace-pre duration-300 ${
+                    !open && "opacity-0 translate-x-28 overflow-hidden"
+                  }`}
+                >
+                  Task Management
+                </h2>
+                <h2
+                  className={`${
+                    open && "hidden"
+                  } absolute left-48 bg-white font-semibold whitespace-pre text-gray-900 rounded-md drop-shadow-lg px-0 py-0 w-0 overflow-hidden group-hover:px-2 group-hover:py-1 group-hover:left-14 group-hover:duration-300 group-hover:w-fit  `}
+                >
+                  Task management
                 </h2>
               </NavLink>
               <NavLink
@@ -1563,7 +1619,7 @@ const Navbar = () => {
                 }
               >
                 <div>
-                  {React.createElement(FaDollarSign, { size: "20" })}
+                  {React.createElement(FaMoneyBillTrendUp , { size: "20" })}
                 </div>
 
                 <h2
@@ -1579,6 +1635,32 @@ const Navbar = () => {
                   } absolute left-48 bg-white font-semibold whitespace-pre text-gray-900 rounded-md drop-shadow-lg px-0 py-0 w-0 overflow-hidden group-hover:px-2 group-hover:py-1 group-hover:left-14 group-hover:duration-300 group-hover:w-fit  `}
                 >
                   Personal Financial
+                </h2>
+              </NavLink>
+              <NavLink
+                to={"/employee/advance-salary"}
+                className={({ isActive }) =>
+                  ` ${
+                    isActive
+                      ? "text-black bg-white flex p-2  gap-3.5 rounded-md group items-center text-sm font-medium"
+                      : " group flex items-center text-sm gap-3.5 font-medium p-2 hover:bg-gray-800 rounded-md "
+                  }`
+                }
+              >
+                <div>{React.createElement(FcMoneyTransfer, { size: "20" })}</div>
+                <h2
+                  className={`whitespace-pre duration-300 ${
+                    !open && "opacity-0 translate-x-28 overflow-hidden"
+                  }`}
+                >
+                  Advance Salary 
+                </h2>
+                <h2
+                  className={`${
+                    open && "hidden"
+                  } absolute left-48 bg-white font-semibold whitespace-pre text-gray-900 rounded-md drop-shadow-lg px-0 py-0 w-0 overflow-hidden group-hover:px-2 group-hover:py-1 group-hover:left-14 group-hover:duration-300 group-hover:w-fit  `}
+                >
+                  Advance Salary 
                 </h2>
               </NavLink>
 
@@ -1802,7 +1884,7 @@ const Navbar = () => {
                 </h2>
               </NavLink>
               <NavLink
-                to={"/employee/meetings"}
+                to={"/meetings"}
                 className={({ isActive }) =>
                   ` ${
                     isActive

@@ -2,6 +2,7 @@ import { getItemInLocalStorage } from "../utils/localStorage";
 import axiosInstance from "./axiosInstance";
 import vibeAuth from "./vibeAuth";
 export const API_URL = "https://vibecopilot.ai";
+export const vibeMedia = 'https://vibecopilot.ai/api/media';
 const token = getItemInLocalStorage("TOKEN");
 
 export const login = async (data) => axiosInstance.post("/login.json", data);
@@ -432,8 +433,8 @@ export const getEmployeeAttendance = async (userId) =>
 export const getEvents = async () =>
   axiosInstance.get("/events.json", {
     params: {
-      // token: token,
-      token: "775d6ae27272741669a65456ea10cc56cd4cce2bb99287b6",
+      token: token,
+      // token: "775d6ae27272741669a65456ea10cc56cd4cce2bb99287b6",
     },
   });
 export const getEventsDetails = async (id) =>
@@ -453,8 +454,8 @@ export const postEvents = async (data) =>
 export const getBroadCast = async () =>
   axiosInstance.get("/notices.json", {
     params: {
-      // token: token,
-      token: "775d6ae27272741669a65456ea10cc56cd4cce2bb99287b6",
+      token: token,
+      // token: "775d6ae27272741669a65456ea10cc56cd4cce2bb99287b6",
     },
   });
 export const postBroadCast = async (data) =>
@@ -967,6 +968,58 @@ export const getVibeBackground = async (userId) => {
     const response = await vibeAuth.get(
       `/api/employee/get_bg_image/?user_id=${userId}`,
 
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error creating calendar events:", error);
+    throw error;
+  }
+};
+export const getVibeMeeting = async (userId) => {
+  try {
+    const response = await vibeAuth.get(
+      `/api/employee/calender/get-meeting/?user_id=${userId}`,
+
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error creating calendar events:", error);
+    throw error;
+  }
+};
+export const getVibeMeetingDetails = async (userId,meetingId) => {
+  try {
+    const response = await vibeAuth.get(
+      // `/api/employee/calender/get-specific_event/?user_id=32&category=Meeting&object_id=349`,
+      `/api/employee/calender/get-specific_event/?user_id=${userId}&category=Meeting&object_id=${meetingId}&summery=true`,
+      
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error getting meeting details:", error);
+    throw error;
+  }
+};
+export const generateVibeMeetingSummary = async (data) => {
+  try {
+    const response = await vibeAuth.post(
+      `/api/employee/calender/meet/generate-summery/`,
+data,
       {
         headers: {
           "Content-Type": "multipart/form-data",

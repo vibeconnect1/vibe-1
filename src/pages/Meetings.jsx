@@ -7,33 +7,62 @@ import { BiEdit } from "react-icons/bi";
 import DataTable from "react-data-table-component";
 import { IoClose, IoVideocam } from "react-icons/io5";
 import Navbar from "../components/Navbar";
-import Table from "../components/table/Table"
-import { getVibeCalendar } from "../api";
+import Table from "../components/table/Table";
+import { generateVibeMeetingSummary, getVibeCalendar, getVibeMeeting } from "../api";
 import { getItemInLocalStorage } from "../utils/localStorage";
+import { useSelector } from "react-redux";
 
 const Meetings = () => {
   const [selectedStatus, setSelectedStatus] = useState("all");
-  const [filteredData, setFilteredData] = useState([])
+  const [filteredData, setFilteredData] = useState([]);
+  const [meetings, setMeetings] = useState([]);
+  const themeColor = useSelector((state) => state.theme.color);
+  const [searchMeetingText, setSearchMeetingText] = useState("")
 
   const handleStatusChange = (status) => {
     setSelectedStatus(status);
 
     if (status === "all") {
-      setFilteredData(complaints);
+      setFilteredData(meetings);
+      
     } else {
-      const filteredResults = complaints.filter(
-        (item) => item.issue_status.toLowerCase() === status.toLowerCase()
-      );
+      const filteredResults = meetings.filter((item) => {
+        if (status === "upcoming" && !item.status_complete) {
+          console.log(item.status_complete)
+          return true;
+        }
+        if (status === "completed" && item.status_complete) {
+          return true;
+        }
+        return false;
+      });
 
       setFilteredData(filteredResults);
+      
     }
   };
+
+  const handleSearchMeeting = (event) => {
+    const searchValue = event.target.value;
+    setSearchMeetingText(searchValue);
+    if (searchValue.trim() === "") {
+      setFilteredData(meetings);
+    } else {
+    const filteredResults = meetings.filter((item) =>
+      item.title.toLowerCase().includes(searchValue.toLowerCase())
+    );
+    setFilteredData(filteredResults);
+    console.log(filteredResults)
+    
+  }
+  };
+
   const columns = [
     {
-      name: "Action",
+      name: "View",
       cell: (row) => (
         <div className="flex items-center gap-4">
-          <Link to={`/admin/meetings/meeting-details/${row.id}`}>
+          <Link to={`/meetings/meeting-details/${row.id}`}>
             <BsEye size={15} />
           </Link>
         </div>
@@ -46,94 +75,75 @@ const Meetings = () => {
     },
     {
       name: "Date",
-      selector: (row) => row.date,
+      selector: (row) => row.from_date,
       sortable: true,
     },
     {
       name: "Time",
-      selector: (row) => row.time,
+      selector: (row) => row.from_time,
       sortable: true,
     },
     {
       name: "No. of Attendees ",
-      selector: (row) => row.attendees,
+      selector: (row) => row.participant.length,
       sortable: true,
     },
     {
       name: "Status",
-      selector: (row) => row.status,
+      selector: (row) => (row.status_complete ? "Completed" : "Upcoming"),
       sortable: true,
     },
+    // {
+    //   name: "Created By",
+    //   selector: (row) => row.created_by,
+    //   sortable: true,
+    // },
     {
-      name: "Created By",
-      selector: (row) => row.created_by,
-      sortable: true,
-    },
-    {
-      name: "Join/Cacellation",
+      name: "Join",
       selector: (row) =>
-        row.status === "Upcoming" && (
+        !row.status_complete && (
           <div className="flex gap-2">
-          <button className="p-1 px-4 bg-green-400 rounded-full hover:bg-green-600 text-white font-medium flex justify-center items-center gap-2 transition-all ease-in-out duration-300">
-            <IoVideocam /> Join
-          </button>
-          <button className=" p-2 bg-red-400 rounded-full hover:bg-red-600 text-white font-medium flex justify-center items-center gap-2 transition-all ease-in-out duration-300">
-            <IoClose /> 
-          </button>
+            <Link
+              to={row.meet_link}
+              target="_blank"
+              className="p-1 px-4 bg-green-400 rounded-full hover:bg-green-600 text-white font-medium flex justify-center items-center gap-2 transition-all ease-in-out duration-300"
+            >
+              <IoVideocam /> Join
+            </Link>
+            {/* <button className=" p-2 bg-red-400 rounded-full hover:bg-red-600 text-white font-medium flex justify-center items-center gap-2 transition-all ease-in-out duration-300">
+              <IoClose />
+            </button> */}
           </div>
         ),
       sortable: true,
     },
   ];
-
-  const data = [
-    {
-      id: 1,
-      title: "website Discussion",
-      date: "21/05/2024",
-      time: "12:20 PM",
-      attendees: 3,
-      status: "Upcoming",
-      created_by: "Kunal",
-    },
-    {
-      id: 2,
-      title: "Sales Discussion",
-      date: "21/05/2024",
-      time: "12:20 PM",
-      attendees: 3,
-      status: "Completed",
-      created_by: "Akshat",
-    },
-  ];
-
-  const customStyle = {
-    headRow: {
-      style: {
-        backgroundColor: "black",
-        color: "white",
-
-        fontSize: "10px",
-      },
-    },
-    headCells: {
-      style: {
-        textTransform: "upperCase",
-      },
-    },
-  };
-  const vibeUserId = getItemInLocalStorage("VIBEUSERID")
+  const user_id = getItemInLocalStorage("VIBEUSERID");
   useEffect(() => {
-    const fetchCalendar = async () => {
+    const fetchMeetingList = async () => {
       try {
-        const calendarResponse = await getVibeCalendar(vibeUserId);
-        console.log(calendarResponse.data);
+        const jsonData = await getVibeMeeting(user_id);
+
+        if (jsonData.success) {
+          console.log(jsonData);
+          console.log(jsonData.data);
+       
+          const sortedMeetings = jsonData.data.sort((a, b) => new Date(b.from_date) - new Date(a.from_date));
+          setMeetings(sortedMeetings);
+          setFilteredData(sortedMeetings)
+        } else {
+          console.log("Something went wrong");
+        }
       } catch (error) {
-        console.log(error);
+        console.error("Error:", error);
+        // setIsLoadingMeeting(false);
       }
     };
-    fetchCalendar();
+    fetchMeetingList();
   }, []);
+
+
+
 
   return (
     <section className="flex">
@@ -187,12 +197,13 @@ const Meetings = () => {
                 type="text"
                 placeholder="Search by Title "
                 className="border border-gray-400 w-96 placeholder:text-xs rounded-lg p-2"
-                //   value={searchText}
-                //   onChange={handleSearch}
+                  value={searchMeetingText}
+                  onChange={handleSearchMeeting}
               />
               <Link
-                to={"/admin/meetings/create-meeting"}
-                className="border-2 font-semibold hover:bg-black hover:text-white duration-300 ease-in-out transition-all border-black p-2 rounded-md text-black cursor-pointer text-center flex items-center px-4 gap-2 justify-center"
+                to={"/meetings/create-meeting"}
+                style={{ background: themeColor }}
+                className=" font-semibold text-white duration-300 ease-in-out transition-all  p-2 rounded-md  cursor-pointer text-center flex items-center px-4 gap-2 justify-center"
                 // onClick={() => setShowCountry(!showCountry)}
               >
                 <PiPlusCircle size={20} />
@@ -202,13 +213,7 @@ const Meetings = () => {
           </div>
         </div>
         <div className="flex flex-col gap-4  mb-5">
-          <Table
-           
-            columns={columns}
-            data={data}
-          isPagination={true}
-           
-          />
+          <Table columns={columns} data={filteredData} isPagination={true} />
         </div>
       </div>
     </section>

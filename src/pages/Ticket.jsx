@@ -165,7 +165,6 @@ const Ticket = () => {
         console.error("Error fetching data:", error);
       }
     };
-    
 
     fetchData(currentPage, perPage);
   }, [currentPage]);
@@ -200,58 +199,6 @@ const Ticket = () => {
   const handlePerRowsChange = async (newPerPage, page) => {
     setCurrentPage(page);
   };
-
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     try {
-  //       const response = await getComplaints();
-  //       const complaints = response.data.complaints;
-  //       setFilteredData(complaints);
-
-  //       const statusCounts = complaints.reduce((acc, curr) => {
-  //         acc[curr.issue_status] = (acc[curr.issue_status] || 0) + 1;
-  //         return acc;
-  //       }, {});
-  //       setTicketStatusCounts(statusCounts);
-  //       const typeCounts = complaints.reduce((acc, curr) => {
-  //         acc[curr.issue_type] = (acc[curr.issue_type] || 0) + 1;
-  //         return acc;
-  //       }, {});
-  //       setTicketTypeCounts(typeCounts);
-  //     } catch (error) {
-  //       console.error("Error fetching data:", error);
-  //     }
-  //   };
-  //   fetchData();
-  // }, []);
-
-  // const handleSearch = (e) => {
-  //   const searchValue = e.target.value;
-  //   setSearchText(searchValue);
-  //   const filteredResults = filteredData.filter(
-  //     (item) =>
-  //       item.ticket_number.toLowerCase().includes(searchValue.toLowerCase()) ||
-  //       item.category_type.toLowerCase().includes(searchValue.toLowerCase())
-  //   );
-  //   setFilteredData(filteredResults);
-  // };
-
-  // const handleStatusChange = (status) => {
-  //   setSelectedStatus(status);
-  // };
-
-  // const handleSearch = (e) => {
-  //   const searchValue = e.target.value;
-  //   setSearchText(searchValue);
-  //   const filteredResults = filteredData.filter(
-  //     (item) =>
-  //       (selectedStatus === "all" ||
-  //         item.issue_status.toLowerCase() === selectedStatus) &&
-  //       (item.ticket_number.toLowerCase().includes(searchValue.toLowerCase()) ||
-  //         item.category_type.toLowerCase().includes(searchValue.toLowerCase()))
-  //   );
-  //   setFilteredData(filteredResults);
-  // };
 
   const handleSearch = (e) => {
     const searchValue = e.target.value;
@@ -298,6 +245,14 @@ const Ticket = () => {
     }
   };
 
+  const [exportAllTickets, setExportAllTickets] = useState([]);
+  const getAllTickets = async () => {
+    const allTicketResp = await getComplaints();
+    console.log(allTicketResp);
+    setExportAllTickets(allTicketResp.data.complaints);
+    return allTicketResp.data.complaints;
+  };
+
   // export data
   const exportToExcel = () => {
     // const modifiedData = filteredData.map((item) => ({
@@ -317,11 +272,52 @@ const Ticket = () => {
     link.download = fileName;
     link.click();
   };
+  const exportAllToExcel = async () => {
+    // const modifiedData = filteredData.map((item) => ({
+    //   ...item,
+    //   "Ticket Number": item.ticket_number,
+    // }));
+    const Alltickets = await getAllTickets();
+    const mappedData = Alltickets.map((ticket) => ({
+      "Site Name": ticket.site_name,
+      "Ticket No.": ticket.ticket_number,
+      "Related To": ticket.issue_type_id,
+      Title: ticket.heading,
+      Description: ticket.text,
+      Building: ticket.building_name,
+      Floor: ticket.floor_name,
+      Unit: ticket.unit,
+      Category: ticket.category_type,
+      "Sub Category": ticket.sub_category,
+      Status: ticket.issue_status,
+      Type: ticket.issue_type,
+      Priority: ticket.priority,
+      "Assigned To": ticket.assigned_to,
+      "Created By": ticket.created_by,
+      "Created On": dateFormat(ticket.created_at),
+      "Updated On": dateFormat(ticket.updated_at),
+      "Update By": ticket.updated_by,
+      "Resolution Breached": ticket.resolution_breached ? "Yes" : "No",
+      "Response Breached": ticket.response_breached,
+    }));
+    const fileType =
+      "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8";
+    const fileName = "helpdesk_data.xlsx";
+    const ws = XLSX.utils.json_to_sheet(mappedData);
+    const wb = { Sheets: { data: ws }, SheetNames: ["data"] };
+    const excelBuffer = XLSX.write(wb, { bookType: "xlsx", type: "array" });
+    const data = new Blob([excelBuffer], { type: fileType });
+    const url = URL.createObjectURL(data);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = fileName;
+    link.click();
+  };
 
   document.title = `Tickets - Vibe Connect`;
   const getRandomColor = () => {
-    const letters = '0123456789ABCDEF';
-    let color = '#';
+    const letters = "0123456789ABCDEF";
+    let color = "#";
     for (let i = 0; i < 6; i++) {
       color += letters[Math.floor(Math.random() * 16)];
     }
@@ -334,25 +330,25 @@ const Ticket = () => {
         <div className="sm:flex grid grid-cols-2 m-5 justify-start w-fit gap-5 sm:flex-row flex-col flex-shrink flex-wrap ">
           {/* <div className="flex gap-2 mt-2"> */}
           {Object.entries(statusData).map(([key, value]) => (
-          <div
-            key={key}
-            className="shadow-xl sm:rounded-full rounded-xl border-4 sm:w-48 sm:px-6 px-4 flex flex-col items-center flex-shrink"
-            style={{ border: `4px solid ${getRandomColor()}` }}
-          >
-            {key}{" "}
-            <span className="font-medium text-base text-black">{value}</span>
-          </div>
-        ))}
+            <div
+              key={key}
+              className="shadow-xl sm:rounded-full rounded-xl border-4 sm:w-48 sm:px-6 px-4 flex flex-col items-center flex-shrink"
+              style={{ border: `4px solid ${getRandomColor()}` }}
+            >
+              {key}{" "}
+              <span className="font-medium text-base text-black">{value}</span>
+            </div>
+          ))}
           {Object.entries(ticketTypes).map(([key, value]) => (
-          <div
-            key={key}
-            className="shadow-xl sm:rounded-full rounded-xl border-4 sm:w-48 sm:px-6 px-4 flex flex-col items-center flex-shrink"
-            style={{ border: `4px solid ${getRandomColor()}` }}
-          >
-            {key}{" "}
-            <span className="font-medium text-base text-black">{value}</span>
-          </div>
-        ))}
+            <div
+              key={key}
+              className="shadow-xl sm:rounded-full rounded-xl border-4 sm:w-48 sm:px-6 px-4 flex flex-col items-center flex-shrink"
+              style={{ border: `4px solid ${getRandomColor()}` }}
+            >
+              {key}{" "}
+              <span className="font-medium text-base text-black">{value}</span>
+            </div>
+          ))}
           {/* {Object.entries(ticketStatusCounts).map(([status, count]) => (
             
             <div
@@ -414,8 +410,8 @@ const Ticket = () => {
           ))} */}
         </div>
 
-        <div className="flex sm:flex-row flex-col gap-10 my-5">
-          <div className="sm:flex grid grid-cols-2 items-center justify-center  gap-4 border border-gray-300 rounded-md px-3 p-2 w-auto">
+        <div className="flex sm:flex-row flex-col gap-2 my-5">
+          <div className="sm:flex grid grid-cols-2 items-center justify-center  gap-2 border border-gray-300 rounded-md px-3 p-2 w-auto">
             <div className="flex items-center gap-2">
               <input
                 type="radio"
@@ -500,11 +496,17 @@ const Ticket = () => {
                 Search
               </button> */}
           </div>
-          <button
+          {/* <button
             className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
             onClick={exportToExcel}
           >
             Export
+          </button> */}
+          <button
+            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+            onClick={exportAllToExcel}
+          >
+            Export 
           </button>
         </div>
 

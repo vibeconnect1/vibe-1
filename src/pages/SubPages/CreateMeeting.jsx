@@ -335,7 +335,7 @@ const CreateMeeting = () => {
       const meetingResp = await CreateVibeMeeting(formData);
       toast.dismiss();
       toast.success("Meeting Created Successfully");
-      setPopupDate(null);
+      // setPopupDate(null);
       if (meetingResp.success) {
         setMeetingTitle("");
         setMeetingDate("");
@@ -349,12 +349,14 @@ const CreateMeeting = () => {
         // setSelectedToDate('');
         setSelectedWeekdays("");
         // setRepeatMeet('');
-        setPopupDate(null);
+        // setPopupDate(null);
         // setLoadingMeet(false);
       }
 
     } catch (error) {
       toast.dismiss();
+      console.log(error)
+      toast.error("Something went wrong please try again")
     }
   };
 

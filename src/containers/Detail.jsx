@@ -9,7 +9,7 @@ const Detail = ({ heading, details }) => {
 
 
   return (
-    <div className="flex flex-col sm:items-center gap-8">
+    <div className="flex flex-col  gap-8">
       <h2 style={{
         background: themeColor
       }} className="text-center w-full text-white font-semibold text-lg p-2 px-4 ">

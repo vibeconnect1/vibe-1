@@ -494,6 +494,14 @@ import IndividualDetails from "./pages/PersonalFinance/IndividualDetails.jsx";
 import InvestmentDetails from "./pages/PersonalFinance/InvestmentDetails.jsx";
 import GoalDetails from "./pages/PersonalFinance/GoalDetails.jsx";
 import EmergencyFundDetails from "./pages/PersonalFinance/EmergencyFundDetails.jsx";
+import AdvanceSalaryRequest from "./pages/AdvanceSalary/AdvanceSalaryRequest.jsx";
+import BankAccountCreation from "./pages/AdvanceSalary/BankAccountCreation.jsx";
+import CreateBankAccount from "./pages/AdvanceSalary/CreateBankAccount.jsx";
+import BankAccountDetails from "./pages/AdvanceSalary/BankAccountDetails.jsx";
+import EmployeeAdvanceSalaryRequest from "./pages/Employees/EmployeeAdvanceSalary/EmployeeAdvanceSalaryRequestDetails.jsx";
+import EmployeeBankAccountCreation from "./pages/Employees/EmployeeAdvanceSalary/EmployeeBankAccountCreation.jsx";
+import EmployeeCreateBankAccount from "./pages/Employees/EmployeeAdvanceSalary/EmployeeCreateBankAccount.jsx";
+import EmployeeBankAccountDetails from "./pages/Employees/EmployeeAdvanceSalary/EmployeeBankAccountDetails.jsx";
 
 function App() {
   const themeColor = useSelector((state) => state.theme.color);
@@ -1577,8 +1585,8 @@ function App() {
           />
 
           {/* employee meeting */}
-          <Route
-            path="/employee/meetings"
+          {/* <Route
+            path="/meetings"
             element={
               <ProtectedRoute>
                 <EmployeeMeeting />
@@ -1586,7 +1594,7 @@ function App() {
             }
           />
           <Route
-            path="/employee/meetings/create-meeting"
+            path="/meetings/create-meeting"
             element={
               <ProtectedRoute>
                 <EmployeeCreateMeeting />
@@ -1594,38 +1602,38 @@ function App() {
             }
           />
           <Route
-            path="/employee/meeting-details/:id"
+            path="/meeting-details/:id"
             element={
               <ProtectedRoute>
                 <EmployeeMeetingDetails />
               </ProtectedRoute>
             }
-          />
+          /> */}
 
-          {/* admin Meetings */}
+          {/*  Meetings */}
 
           <Route
-            path="/admin/meetings"
+            path="/meetings"
             element={
-              <ProtectedAdminRoutes>
+              <ProtectedRoute>
                 <Meetings />
-              </ProtectedAdminRoutes>
+              </ProtectedRoute>
             }
           />
           <Route
-            path="/admin/meetings/create-meeting"
+            path="/meetings/create-meeting"
             element={
-              <ProtectedAdminRoutes>
+              <ProtectedRoute>
                 <CreateMeeting />
-              </ProtectedAdminRoutes>
+              </ProtectedRoute>
             }
           />
           <Route
-            path="/admin/meetings/meeting-details/:id"
+            path="/meetings/meeting-details/:id"
             element={
-              <ProtectedAdminRoutes>
+              <ProtectedRoute>
                 <MeetingDetails />
-              </ProtectedAdminRoutes>
+              </ProtectedRoute>
             }
           />
           {/*admin project management */}
@@ -2626,11 +2634,11 @@ function App() {
           />
           {/* task-management */}
           <Route
-            path="/admin/Task-management"
+            path="/Task-management"
             element={
-              <ProtectedAdminRoutes>
+              <ProtectedRoute>
                 <TaskManagement />
-              </ProtectedAdminRoutes>
+              </ProtectedRoute>
             }
           />
           {/* Email Rule */}
@@ -3713,15 +3721,15 @@ function App() {
             path="/admin/hrms/run-payroll"
             element={
               <ProtectedAdminRoutes>
-                 <RunPayroll/>
+                <RunPayroll />
               </ProtectedAdminRoutes>
             }
           />
-           <Route
+          <Route
             path="/admin/pay-slip"
             element={
               <ProtectedAdminRoutes>
-                 <Payslip/>
+                <Payslip />
               </ProtectedAdminRoutes>
             }
           />
@@ -3729,7 +3737,7 @@ function App() {
             path="/admin/payroll/form-16"
             element={
               <ProtectedAdminRoutes>
-                 <PayrollForm16/>
+                <PayrollForm16 />
               </ProtectedAdminRoutes>
             }
           />
@@ -3737,15 +3745,15 @@ function App() {
             path="/admin/hrms/loan-app"
             element={
               <ProtectedAdminRoutes>
-                <LoanApplication/>
+                <LoanApplication />
               </ProtectedAdminRoutes>
             }
           />
-           <Route
+          <Route
             path="/admin/hrms/payroll-setting"
             element={
               <ProtectedAdminRoutes>
-               <PayrollSettings/>
+                <PayrollSettings />
               </ProtectedAdminRoutes>
             }
           />
@@ -3753,7 +3761,7 @@ function App() {
             path="/admin/location-master"
             element={
               <ProtectedAdminRoutes>
-               <LocationMaster/>
+                <LocationMaster />
               </ProtectedAdminRoutes>
             }
           />
@@ -3761,15 +3769,15 @@ function App() {
             path="/admin/fixed-allowance"
             element={
               <ProtectedAdminRoutes>
-               <FixedAllowance/>
+                <FixedAllowance />
               </ProtectedAdminRoutes>
             }
           />
-           <Route
+          <Route
             path="/admin/fixed-deduction"
             element={
               <ProtectedAdminRoutes>
-               <FixedDeduction/>
+                <FixedDeduction />
               </ProtectedAdminRoutes>
             }
           />
@@ -3777,7 +3785,7 @@ function App() {
             path="/admin/variable-allowance"
             element={
               <ProtectedAdminRoutes>
-              <VariableAllowance/>
+                <VariableAllowance />
               </ProtectedAdminRoutes>
             }
           />
@@ -3785,7 +3793,7 @@ function App() {
             path="/admin/variable-deduction"
             element={
               <ProtectedAdminRoutes>
-              <VariableDeduction/>
+                <VariableDeduction />
               </ProtectedAdminRoutes>
             }
           />
@@ -3793,7 +3801,7 @@ function App() {
             path="/admin/other-benefit"
             element={
               <ProtectedAdminRoutes>
-              <OtherBenefit/>
+                <OtherBenefit />
               </ProtectedAdminRoutes>
             }
           />
@@ -3801,7 +3809,7 @@ function App() {
             path="/admin/loans"
             element={
               <ProtectedAdminRoutes>
-             <Loans/>
+                <Loans />
               </ProtectedAdminRoutes>
             }
           />
@@ -3809,7 +3817,7 @@ function App() {
             path="/admin/add-loan"
             element={
               <ProtectedAdminRoutes>
-             <AddLoan/>
+                <AddLoan />
               </ProtectedAdminRoutes>
             }
           />
@@ -3817,7 +3825,7 @@ function App() {
             path="/admin/tax-setting"
             element={
               <ProtectedAdminRoutes>
-            <TaxSettings/>
+                <TaxSettings />
               </ProtectedAdminRoutes>
             }
           />
@@ -3825,23 +3833,23 @@ function App() {
             path="/admin/payslip-setting"
             element={
               <ProtectedAdminRoutes>
-            <PayslipSetting/>
+                <PayslipSetting />
               </ProtectedAdminRoutes>
             }
           />
-           <Route
+          <Route
             path="/admin/hrms/CTC-Template"
             element={
               <ProtectedAdminRoutes>
-            <CTCTemplate/>
+                <CTCTemplate />
               </ProtectedAdminRoutes>
             }
           />
-           <Route
+          <Route
             path="/admin/NPS"
             element={
               <ProtectedAdminRoutes>
-           <NPS/>
+                <NPS />
               </ProtectedAdminRoutes>
             }
           />
@@ -3849,7 +3857,7 @@ function App() {
             path="/admin/Gratuity"
             element={
               <ProtectedAdminRoutes>
-           <Gratuity/>
+                <Gratuity />
               </ProtectedAdminRoutes>
             }
           />
@@ -3857,51 +3865,50 @@ function App() {
             path="/admin/Leave-Recovery"
             element={
               <ProtectedAdminRoutes>
-          <LeaveRecovery/>
+                <LeaveRecovery />
               </ProtectedAdminRoutes>
             }
           />
-           <Route
+          <Route
             path="admin/Notice-Recovery"
             element={
               <ProtectedAdminRoutes>
-          <NoticeRecovery/>
+                <NoticeRecovery />
               </ProtectedAdminRoutes>
             }
           />
-           <Route
+          <Route
             path="admin/Minimum-Wage"
             element={
               <ProtectedAdminRoutes>
-          <MinimumWage/>
+                <MinimumWage />
               </ProtectedAdminRoutes>
             }
           />
-           <Route
+          <Route
             path="admin/PF"
             element={
               <ProtectedAdminRoutes>
-          <PF/>
-              </ProtectedAdminRoutes>
-            }
-          />
-           
-         
-           <Route
-            path="admin/daily-wage"
-            element={
-              <ProtectedAdminRoutes>
-          <DailyWage/>
+                <PF />
               </ProtectedAdminRoutes>
             }
           />
 
-{/*  */}
-<Route
+          <Route
+            path="admin/daily-wage"
+            element={
+              <ProtectedAdminRoutes>
+                <DailyWage />
+              </ProtectedAdminRoutes>
+            }
+          />
+
+          {/*  */}
+          <Route
             path="/admin/hrms/attendance-records"
             element={
               <ProtectedAdminRoutes>
-         <AttendanceRecords/>
+                <AttendanceRecords />
               </ProtectedAdminRoutes>
             }
           />
@@ -3909,7 +3916,7 @@ function App() {
             path="/admin/hrms/Attendance-Process"
             element={
               <ProtectedAdminRoutes>
-        <AttendanceProcess/>
+                <AttendanceProcess />
               </ProtectedAdminRoutes>
             }
           />
@@ -3917,47 +3924,47 @@ function App() {
             path="/admin/hrms/Regularization-Requests"
             element={
               <ProtectedAdminRoutes>
-        <RegularizationRequest/>
+                <RegularizationRequest />
               </ProtectedAdminRoutes>
             }
           />
-            <Route
+          <Route
             path="/admin/hrms/Attendance-Audit"
             element={
               <ProtectedAdminRoutes>
-        <AttendanceAudit/>
+                <AttendanceAudit />
               </ProtectedAdminRoutes>
             }
           />
-           <Route
+          <Route
             path="/admin/hrms/Device-Request"
             element={
               <ProtectedAdminRoutes>
-       <DeviceRegistration/>
+                <DeviceRegistration />
               </ProtectedAdminRoutes>
             }
           />
-             <Route
+          <Route
             path="/admin/hrms/Attendance-Validation"
             element={
               <ProtectedAdminRoutes>
-      <AttendanceValidation/>
+                <AttendanceValidation />
               </ProtectedAdminRoutes>
             }
           />
-           <Route
+          <Route
             path="/admin/hrms/Attendance-Log"
             element={
               <ProtectedAdminRoutes>
-      <AttendanceLogs/>
+                <AttendanceLogs />
               </ProtectedAdminRoutes>
             }
           />
-           <Route
+          <Route
             path="/admin/hrms/setting"
             element={
               <ProtectedAdminRoutes>
-      <AttendanceGeneralSetting/>
+                <AttendanceGeneralSetting />
               </ProtectedAdminRoutes>
             }
           />
@@ -3965,81 +3972,81 @@ function App() {
             path="/admin/attendance/Regularization-Reason"
             element={
               <ProtectedAdminRoutes>
-                <RegularizationReason/>
+                <RegularizationReason />
               </ProtectedAdminRoutes>
             }
           />
-           <Route
+          <Route
             path="/admin/att/template"
             element={
               <ProtectedAdminRoutes>
-               <AttendanceTemplate/>
+                <AttendanceTemplate />
               </ProtectedAdminRoutes>
             }
           />
-           <Route
+          <Route
             path="/admin/att/template-assign"
             element={
               <ProtectedAdminRoutes>
-               <AttendanceTemplateAssign/>
-              </ProtectedAdminRoutes>
-            }
-          />
-          
-           <Route
-            path="/admin/att/template/add"
-            element={
-              <ProtectedAdminRoutes>
-              <AttAddTemplate/>
+                <AttendanceTemplateAssign />
               </ProtectedAdminRoutes>
             }
           />
 
-<Route
+          <Route
+            path="/admin/att/template/add"
+            element={
+              <ProtectedAdminRoutes>
+                <AttAddTemplate />
+              </ProtectedAdminRoutes>
+            }
+          />
+
+          <Route
             path="/admin/hrms/employee-directory"
             element={
               <ProtectedAdminRoutes>
-              <EmployeeDirectory/>
+                <EmployeeDirectory />
               </ProtectedAdminRoutes>
             }
           />
-           <Route
+          <Route
             path="/admin/add-employee"
             element={
               <ProtectedAdminRoutes>
-              <AddEmployee/>
+                <AddEmployee />
               </ProtectedAdminRoutes>
             }
           />
-           <Route
+          <Route
             path="/hrms/investment"
             element={
               <ProtectedAdminRoutes>
-             <InvestmentApproval/>
+                <InvestmentApproval />
               </ProtectedAdminRoutes>
             }
           />
-           <Route
+          <Route
             path="/hrms/calendar"
             element={
               <ProtectedAdminRoutes>
-           <Calender />
+                <Calender />
               </ProtectedAdminRoutes>
             }
           />
-           <Route
+          <Route
             path="/hrms/generated-letter"
             element={
               <ProtectedAdminRoutes>
-          <GenerationLetter/>
+                <GenerationLetter />
               </ProtectedAdminRoutes>
             }
           />
-           <Route
+          <Route
             path="/hrms/organization-tree-setting"
             element={
               <ProtectedAdminRoutes>
-          <OrganizationTree/>
+                <OrganizationTree />
               </ProtectedAdminRoutes>
             }
           />
@@ -4047,36 +4054,35 @@ function App() {
             path="/hrms/employee-transaction"
             element={
               <ProtectedAdminRoutes>
-          <DataChangeRequest/>
+                <DataChangeRequest />
               </ProtectedAdminRoutes>
             }
           />
-           <Route
+          <Route
             path="/admin/ctc-basket"
             element={
               <ProtectedAdminRoutes>
-         <CTCBasket/>
+                <CTCBasket />
               </ProtectedAdminRoutes>
             }
           />
-           <Route
+          <Route
             path="/hrms/onboarding"
             element={
               <ProtectedAdminRoutes>
-         <EmpOnboarding/>
-              </ProtectedAdminRoutes>
-            }
-          />
-           
-           <Route
-            path="/hrms/separation-request"
-            element={
-              <ProtectedAdminRoutes>
-        <SeparationApplication/>
+                <EmpOnboarding />
               </ProtectedAdminRoutes>
             }
           />
 
+          <Route
+            path="/hrms/separation-request"
+            element={
+              <ProtectedAdminRoutes>
+                <SeparationApplication />
+              </ProtectedAdminRoutes>
+            }
+          />
 
           {/* paused */}
           {/* admin HRMS */}
@@ -4282,12 +4288,12 @@ function App() {
               </ProtectedRoute>
             }
           />
-           {/*Bill Pay */}
-           <Route
+          {/*Bill Pay */}
+          <Route
             path="/admin/bill-pay"
             element={
               <ProtectedAdminRoutes>
-                <BillPay/>
+                <BillPay />
               </ProtectedAdminRoutes>
             }
           />
@@ -4295,7 +4301,7 @@ function App() {
             path="/admin/bill-pay-details"
             element={
               <ProtectedAdminRoutes>
-                <BillPayDetails/>
+                <BillPayDetails />
               </ProtectedAdminRoutes>
             }
           />
@@ -4304,24 +4310,24 @@ function App() {
             path="/employee/bill-pay"
             element={
               <ProtectedRoute>
-                <EmployeeBillPay/>
+                <EmployeeBillPay />
               </ProtectedRoute>
             }
           />
-          
+
           <Route
             path="/employee/bill-pay-detail"
             element={
               <ProtectedRoute>
-                <EmployeeBillPayDetails/>
+                <EmployeeBillPayDetails />
               </ProtectedRoute>
             }
           />
-           <Route
+          <Route
             path="/admin/communication-access-control"
             element={
               <ProtectedAdminRoutes>
-                <CommunicationAccessControl/>
+                <CommunicationAccessControl />
               </ProtectedAdminRoutes>
             }
           />
@@ -4331,132 +4337,204 @@ function App() {
             path="/personal-finance"
             element={
               <ProtectedRoute>
-                <PersonalFinancialLogin/>
+                <PersonalFinancialLogin />
               </ProtectedRoute>
             }
           />
 
-<Route
- path="/personal-financial-setup"
- element={
-   <ProtectedRoute>
-    <PersonalFinancialSetup/>
-   </ProtectedRoute>
- }
-/>
-<Route
- path="/personal-financial-edit/:id"
- element={
-   <ProtectedAdminRoutes>
-   <PersonalFinancialEdit/>
-   </ProtectedAdminRoutes>
- }
-/>
-<Route
- path="/emergency-fund"
- element={
-   <ProtectedRoute>
-   <EmergencyFund/>
-   </ProtectedRoute>
- }
-/>
-<Route
- path="/add-emergency-fund"
- element={
-   <ProtectedRoute>
-  <AddEmergencyFund/>
-   </ProtectedRoute>
- }
-/>
-<Route
-  path="/personal-investment"
-  element={
-    <ProtectedRoute>
-   <Investment/>
-    </ProtectedRoute>
-  }
-/>
-<Route
-  path="/add-investment"
-  element={
-    <ProtectedRoute>
-   <AddInvestment/>
-    </ProtectedRoute>
-  }
-/>
-<Route
- path="/goal-plan"
- element={
-   <ProtectedRoute>
-  <GoalPlanning/>
-   </ProtectedRoute>
- }
-/>
-<Route
-  path="/add-goal-plan"
-  element={
-    <ProtectedRoute>
-  <AddGoalPlanning/>
-    </ProtectedRoute>
-  }
-/>
-<Route
-  path="/personal-insurance"
-  element={
-    <ProtectedRoute>
-  <PersonalInsurance/>
-    </ProtectedRoute>
-  }
-/>
-<Route
- path="/add-insurance"
- element={
-   <ProtectedRoute>
- <AddPersonalInsurance/>
-   </ProtectedRoute>
- }
-/>
-<Route
- path="/personal-insurance-details/:id"
- element={
-   <ProtectedRoute>
- <InsuranceDetails/>
-   </ProtectedRoute>
- }
-/>
-<Route
-  path="/personal-financial-details/:id"
-  element={
-    <ProtectedRoute>
-  <IndividualDetails/>
-    </ProtectedRoute>
-  }
-/>
-<Route
-  path="/emergency-details/:id"
-  element={
-    <ProtectedRoute>
-  <EmergencyFundDetails/>
-    </ProtectedRoute>
-  }
-/>
-<Route
- path="/investment-details/:id"
- element={
-   <ProtectedRoute>
-<InvestmentDetails/>
-   </ProtectedRoute>
- }
-/>
-           
-           <Route
-            path="/goal-details/:id"
+          <Route
+            path="/personal-financial-setup"
             element={
               <ProtectedRoute>
-          <GoalDetails/>
+                <PersonalFinancialSetup />
               </ProtectedRoute>
             }
           />
+          <Route
+            path="/personal-financial-edit/:id"
+            element={
+              <ProtectedAdminRoutes>
+                <PersonalFinancialEdit />
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/emergency-fund"
+            element={
+              <ProtectedRoute>
+                <EmergencyFund />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/add-emergency-fund"
+            element={
+              <ProtectedRoute>
+                <AddEmergencyFund />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/personal-investment"
+            element={
+              <ProtectedRoute>
+                <Investment />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/add-investment"
+            element={
+              <ProtectedRoute>
+                <AddInvestment />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/goal-plan"
+            element={
+              <ProtectedRoute>
+                <GoalPlanning />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/add-goal-plan"
+            element={
+              <ProtectedRoute>
+                <AddGoalPlanning />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/personal-insurance"
+            element={
+              <ProtectedRoute>
+                <PersonalInsurance />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/add-insurance"
+            element={
+              <ProtectedRoute>
+                <AddPersonalInsurance />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/personal-insurance-details/:id"
+            element={
+              <ProtectedRoute>
+                <InsuranceDetails />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/personal-financial-details/:id"
+            element={
+              <ProtectedRoute>
+                <IndividualDetails />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/emergency-details/:id"
+            element={
+              <ProtectedRoute>
+                <EmergencyFundDetails />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/investment-details/:id"
+            element={
+              <ProtectedRoute>
+                <InvestmentDetails />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/goal-details/:id"
+            element={
+              <ProtectedRoute>
+                <GoalDetails />
+              </ProtectedRoute>
+            }
+          />
+
+{/*Advance Salary Module */}
+<Route
+            path="/admin/advance-salary-request"
+            element={
+              <ProtectedAdminRoutes>
+                <AdvanceSalaryRequest/>
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/bank-account-creation"
+            element={
+              <ProtectedAdminRoutes>
+                <BankAccountCreation/>
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/create-bank-account"
+            element={
+              <ProtectedAdminRoutes>
+                <CreateBankAccount/>
+              </ProtectedAdminRoutes>
+            }
+          />
+          
+          <Route
+            path="/admin/bank-account-details/:id"
+            element={
+              <ProtectedAdminRoutes>
+                <BankAccountDetails/>
+              </ProtectedAdminRoutes>
+            }
+          />
+          {/*Employee Advance Salary Module */}
+          <Route
+           path="/employee/advance-salary"
+           element={
+             <ProtectedRoute>
+               <EmployeeAdvanceSalaryRequest/>
+             </ProtectedRoute>
+           }
+         />
+          <Route
+            path="/employee/bank-account-creation"
+            element={
+              <ProtectedRoute>
+                <EmployeeBankAccountCreation/>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/employee/create-bank-account"
+            element={
+              <ProtectedRoute>
+                <EmployeeCreateBankAccount/>
+              </ProtectedRoute>
+            }
+          />
+          
+          <Route
+            path="/employee/bank-account-details/:id"
+            element={
+              <ProtectedRoute>
+                <EmployeeBankAccountDetails/>
+              </ProtectedRoute>
+            }
+          />
+
+
+
         </Routes>
         <Footer />
       </Router>

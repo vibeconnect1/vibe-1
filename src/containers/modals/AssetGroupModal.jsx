@@ -65,8 +65,8 @@ const AssetGroupModal = ({ onclose }) => {
               className="border rounded-md border-gray-500 p-1 px-2"
             />
           </div>
-          <div className="flex flex-col gap-2">
-            <label htmlFor="" className="text-sm font-bold">
+          <div className="flex flex-col gap-2 ">
+            <label htmlFor="" className="text-sm font-bold mt-1">
               Description :
             </label>
             <textarea
@@ -79,11 +79,11 @@ const AssetGroupModal = ({ onclose }) => {
               placeholder="Enter Description"
               className="border rounded-md border-gray-500 p-1 px-2"
             ></textarea>
-            <input type="text" />
+            
           </div>
           <div className="flex justify-center">
             <button
-              className="bg-black p-1 px-4 text-white rounded-md my-5 hover:bg-white hover:text-black border-2 border-black transition-all duration-300"
+              className="bg-black p-1 px-4 text-white rounded-md my-2 hover:bg-white hover:text-black border-2 border-black transition-all duration-300"
               onClick={createGroup}
             >
               Create
@@ -106,7 +106,7 @@ const AssetGroupModal = ({ onclose }) => {
    />
  </div>
  <div className="flex flex-col gap-2">
-   <label htmlFor="" className="text-sm font-bold">
+   <label htmlFor="" className="text-sm font-bold mt-1">
      Description :
    </label>
    <textarea
@@ -119,11 +119,11 @@ const AssetGroupModal = ({ onclose }) => {
      placeholder="Enter Description"
      className="border rounded-md border-gray-500 p-1 px-2"
    ></textarea>
-   <input type="text" />
+   
  </div>
  <div className="flex justify-center">
    <button
-     className="bg-black p-1 px-4 text-white rounded-md my-5 hover:bg-white hover:text-black border-2 border-black transition-all duration-300"
+     className="bg-black p-1 px-4 text-white rounded-md my-2 hover:bg-white hover:text-black border-2 border-black transition-all duration-300"
      onClick={createGroup}
    >
      Create
