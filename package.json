@@ -5,10 +5,9 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
+    "build": "node --max-old-space-size=4096 ./node_modules/.bin/webpack",
     "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview"
-    
   },
   "dependencies": {
     "@emotion/react": "^11.11.4",
@@ -72,6 +71,8 @@
     "eslint-plugin-react-refresh": "^0.4.6",
     "postcss": "^8.4.38",
     "tailwindcss": "^3.4.3",
-    "vite": "^5.2.11"
+    "vite": "^5.2.11",
+    "webpack": "^5.92.1",
+    "webpack-cli": "^5.1.4"
   }
 }
