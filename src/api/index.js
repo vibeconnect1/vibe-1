@@ -473,6 +473,15 @@ export const getBroadcastDetails = async (id) =>
   });
 
 //services
+export const getServicesTaskDetails = async (serviceId, activityId) =>
+  axiosInstance.get(
+    `/submissions.json?q[soft_service_id_eq]=${serviceId}&q[checklist_ctype_eq]=routine&q[activity_id_eq]=${activityId}`,
+    {
+      params: {
+        token: token,
+      },
+    }
+  );
 
 export const postSoftServices = async (data) =>
   axiosInstance.post("/soft_services.json", data, {

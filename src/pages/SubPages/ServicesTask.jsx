@@ -17,7 +17,7 @@ const ServicesTask = () => {
           name: "Action",
           cell: (row) => (
             <div className="flex items-center gap-4">
-              <Link to={`/services/checklist-details/${row.id}`}>
+              <Link to={`/service/checklist/${row.soft_service_id}/${row.id}`}>
                 <BsEye size={15} />
               </Link>
               {/* <Link to={`/services/edit-routine/${row.id}`}>
@@ -64,9 +64,10 @@ const ServicesTask = () => {
         try {
           const fetchServiceRoutine = async () => {
             const ServiceRoutineResponse = await getServicesRoutineList();
-            console.log(ServiceRoutineResponse.data.activities)
-            setFilteredRoutineData(ServiceRoutineResponse.data.activities);
-            setRoutines(ServiceRoutineResponse.data.activities)
+            const filteredServiceTask = ServiceRoutineResponse.data.activities.filter(asset => asset.soft_service_name);
+            console.log(filteredServiceTask)
+            setFilteredRoutineData(filteredServiceTask);
+            setRoutines(filteredServiceTask)
           };
           fetchServiceRoutine();
         } catch (error) {
@@ -80,7 +81,7 @@ const ServicesTask = () => {
           setFilteredRoutineData(routines);
         } else {
         const filteredResults = filteredRoutineData.filter((item) =>
-          item.name.toLowerCase().includes(searchValue.toLowerCase())
+         {item.soft_service_name && item.soft_service_name.toLowerCase().includes(searchValue.toLowerCase())}
         );
         setFilteredRoutineData(filteredResults);
         console.log(filteredResults)

@@ -17,8 +17,9 @@ const RoutineTask = () => {
   useEffect(() => {
     const fetchRoutineTask = async () => {
       const taskResponse = await getRoutineTask();
-      console.log(taskResponse)
-      setTasks(taskResponse.data.activities);
+      const filteredServiceTask = taskResponse.data.activities.filter(asset => asset.asset_name);
+      console.log(filteredServiceTask)
+      setTasks(filteredServiceTask);
     };
     fetchRoutineTask();
     console.log(tasks);

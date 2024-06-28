@@ -743,12 +743,12 @@ const Navbar = () => {
                 >
                   Field Sense
                 </h2>
-              </NavLink> */}
+              </NavLink>
              
               
             
 
-              {/* <NavLink
+              <NavLink
                 to={"/admin/birthday"}
                 className={({ isActive }) =>
                   ` ${
@@ -1271,9 +1271,9 @@ const Navbar = () => {
                 >
                   Personal Financial
                 </h2>
-              </NavLink>
+              </NavLink> */}
              
-              <NavLink
+              {/* <NavLink
                 to={"/admin/fitness"}
                 className={({ isActive }) =>
                   ` ${
@@ -1448,7 +1448,7 @@ const Navbar = () => {
                   Task management
                 </h2>
               </NavLink> */}
-              {/* my ticket */}
+              
               <NavLink
                 to={"/mytickets"}
                 className={({ isActive }) =>

@@ -502,6 +502,7 @@ import EmployeeAdvanceSalaryRequest from "./pages/Employees/EmployeeAdvanceSalar
 import EmployeeBankAccountCreation from "./pages/Employees/EmployeeAdvanceSalary/EmployeeBankAccountCreation.jsx";
 import EmployeeCreateBankAccount from "./pages/Employees/EmployeeAdvanceSalary/EmployeeCreateBankAccount.jsx";
 import EmployeeBankAccountDetails from "./pages/Employees/EmployeeAdvanceSalary/EmployeeBankAccountDetails.jsx";
+import ServiceTaskDetails from "./pages/SubPages/details/ServiceTaskDetails.jsx";
 
 function App() {
   const themeColor = useSelector((state) => state.theme.color);
@@ -667,6 +668,16 @@ function App() {
             element={
               <ProtectedAdminRoutes>
                 <PPMActivityDetails />
+              </ProtectedAdminRoutes>
+            }
+          />
+
+          {/* Service */}
+          <Route
+            path="/service/checklist/:serviceId/:activityId"
+            element={
+              <ProtectedAdminRoutes>
+                <ServiceTaskDetails />
               </ProtectedAdminRoutes>
             }
           />
