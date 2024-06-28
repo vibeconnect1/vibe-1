@@ -125,13 +125,13 @@ const TicketDetails = () => {
       {showModal && <CARAddItemsModal onclose={()=>setShowModal(false)}/> }
       <div className="flex flex-col justify-around">
         <div className="flex justify-end m-1 gap-2">
-          <button
+          {/* <button
             onClick={() => setShowModal(true)}
             className="border-2 border-black  flex gap-2 p-1 rounded-md items-center px-4"
           >
             <MdAddCircleOutline />
             Add Items
-          </button>
+          </button> */}
           <Link
             to={`/edit/${id}`}
             className="border-2 border-black flex gap-2 p-1 rounded-md items-center px-4 "
@@ -191,10 +191,10 @@ const TicketDetails = () => {
         </div>
         {/* <div className="border " /> */}
 
-        <div className="m-2">
+        {/* <div className="m-2">
           <h2 className="font-medium my-2">Approval Requests</h2>
           <Table columns={ItemColumn} data={items}  />
-        </div>
+        </div> */}
         <h2
           style={{ background: themeColor }}
           className="text-center   text-white font-semibold my-5 text-lg p-2 px-4 "

@@ -1325,8 +1325,8 @@ const Navbar = () => {
                 >
                   Transportation
                 </h2>
-              </NavLink> */}
-              {/* <NavLink
+              </NavLink>
+              <NavLink
                 to={"/admin/parking"}
                 className={({ isActive }) =>
                   ` ${
@@ -1419,8 +1419,8 @@ const Navbar = () => {
                 >
                   Project management
                 </h2>
-              </NavLink> */}
-              {/* <NavLink
+              </NavLink>
+               <NavLink
                 to={"/Task-management"}
                 className={({ isActive }) =>
                   ` ${
@@ -1448,7 +1448,8 @@ const Navbar = () => {
                   Task management
                 </h2>
               </NavLink> */}
-               <NavLink
+              {/* my ticket */}
+              <NavLink
                 to={"/mytickets"}
                 className={({ isActive }) =>
                   ` ${
@@ -1474,8 +1475,7 @@ const Navbar = () => {
                   My Ticket
                 </h2>
               </NavLink>
-              {/*
-              <NavLink
+              {/* <NavLink
                 to={"/employee-attendance"}
                 className={({ isActive }) =>
                   ` ${
@@ -1608,8 +1608,8 @@ const Navbar = () => {
                 >
                   Bill Pay
                 </h2>
-              </NavLink> */}
-              {/* <NavLink
+              </NavLink>
+              <NavLink
                 to={"/personal-finance"}
                 className={({ isActive }) =>
                   ` ${
@@ -1637,8 +1637,8 @@ const Navbar = () => {
                 >
                   Personal Financial
                 </h2>
-              </NavLink> */}
-              {/* <NavLink
+              </NavLink>
+              <NavLink
                 to={"/employee/advance-salary"}
                 className={({ isActive }) =>
                   ` ${
@@ -1692,8 +1692,8 @@ const Navbar = () => {
                 >
                   Doctor Appointment
                 </h2>
-              </NavLink> */}
-              {/* <NavLink
+              </NavLink>
+              <NavLink
                 to={"/employee/field-sense-meeting"}
                 className={({ isActive }) =>
                   ` ${
@@ -1883,8 +1883,8 @@ const Navbar = () => {
                 >
                   Birthday
                 </h2>
-              </NavLink> */}
-              {/* <NavLink
+              </NavLink>
+              <NavLink
                 to={"/meetings"}
                 className={({ isActive }) =>
                   ` ${

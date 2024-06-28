@@ -172,6 +172,19 @@ const TicketHighCharts = () => {
           text: "Tickets",
         },
       },
+      plotOptions: {
+        column: {
+          dataLabels: {
+            enabled: true,
+            formatter: function() {
+              return this.y; // Display the y value (data value) on the bar
+            },
+            style: {
+              textOutline: false // Remove text outline (optional)
+            }
+          }
+        }
+      },
       series: [
         {
           name: "Tickets",
@@ -190,9 +203,17 @@ const TicketHighCharts = () => {
       chart: {
         type: "column",
         borderRadius: 30,
+        scrollablePlotArea: {
+          minWidth: 700, 
+          scrollPositionX: 1
+        }
       },
       title: {
         text: title,
+      },
+      max: 10, 
+      scrollbar: {
+        enabled: true
       },
       xAxis: {
         categories: floorTickets,
@@ -205,6 +226,19 @@ const TicketHighCharts = () => {
         title: {
           text: "Tickets",
         },
+      },
+      plotOptions: {
+        column: {
+          dataLabels: {
+            enabled: true,
+            formatter: function() {
+              return this.y; // Display the y value (data value) on the bar
+            },
+            style: {
+              textOutline: false // Remove text outline (optional)
+            }
+          }
+        }
       },
       series: [
         {
@@ -224,9 +258,17 @@ const TicketHighCharts = () => {
       chart: {
         type: "column",
         borderRadius: 30,
+        scrollablePlotArea: {
+          minWidth: 700, 
+          scrollPositionX: 1
+        }
       },
       title: {
         text: title,
+      },
+      max: 10, 
+      scrollbar: {
+        enabled: true
       },
       xAxis: {
         categories: unitTickets,
@@ -239,6 +281,19 @@ const TicketHighCharts = () => {
         title: {
           text: "Tickets",
         },
+      },
+      plotOptions: {
+        column: {
+          dataLabels: {
+            enabled: true,
+            formatter: function() {
+              return this.y; // Display the y value (data value) on the bar
+            },
+            style: {
+              textOutline: false // Remove text outline (optional)
+            }
+          }
+        }
       },
       series: [
         {

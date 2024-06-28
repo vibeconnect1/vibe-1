@@ -153,7 +153,7 @@ const UserDetails = () => {
   ];
   const domainPrefix = "https://admin.vibecopilot.ai";
   return (
-    <div className=" w-screen">
+    <div className="">
       <div className="flex flex-col justify-around ">
         {ticketinfo.current_fixed_state === "complete" && (
           <div className="flex justify-end">
@@ -176,26 +176,26 @@ const UserDetails = () => {
             </div>
           </div>
         )}
-        <div className=" w-screen">
+        <div className="">
           {/* <h2 className="text-center mb-2 bg-black text-white font-semibold text-lg p-2 px-4 ">
             Ticket Details
           </h2> */}
           <Detail details={ticketDetails} heading={"Ticket Details"} />
         </div>
-        <div className="flex flex-col sm:items-start flex-wrap gap-2">
+        <div className="flex flex-col gap-2">
           <h2
             style={{ background: themeColor }}
-            className="text-center sm:w-screen text-white font-semibold mt-5 text-lg p-2 px-4 "
+            className="text-center  text-white font-semibold mt-5 text-lg p-2 px-4 "
           >
             Additional Info
           </h2>
-          <div className="px-4 flex flex-col gap-1 mx-2  ">
+          <div className="px-4 flex flex-col gap-1 justify-center  ">
             <p className="font-medium">Description :</p>
             <p className="text-wrap bg-gray-200 p-2 rounded-md">
               {ticketinfo.text}
             </p>
           </div>
-          <div className="px-4 flex flex-col gap-1 justify-center mx-2 ">
+          <div className="px-4 flex flex-col gap-1 justify-center  ">
             <label htmlFor="addComment" className="font-medium">
               Add Comment :
             </label>
@@ -257,7 +257,7 @@ const UserDetails = () => {
         {/* <div className="border m-10" /> */}
         <h2
           style={{ background: themeColor }}
-          className="text-center w-screen text-white font-semibold my-5 text-lg p-2 px-4 "
+          className="text-center text-white font-semibold my-5 text-lg p-2 px-4 "
         >
           Logs
         </h2>

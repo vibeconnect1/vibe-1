@@ -156,6 +156,10 @@ const TaskManagement = () => {
     setIsEditingDesc(true);
     setTimeout(() => inputRef.current.focus(), 0);
   };
+  useEffect(() => {
+    const assignedEmails = usersAssignAlready.map((user) => user.email);
+    setShowStatusChecklist1(assignedEmails.join(', '));
+  }, [usersAssignAlready]);
 
   // socket manage
   useEffect(() => {
@@ -685,7 +689,7 @@ const TaskManagement = () => {
         setUsersAssignAlready(usersData);
         setShowStatusChecklist1(jsonData.data.email);
         console.log("api assigned");
-        console.log(setShowStatusChecklist1);
+        console.log(showStatusChecklist1);
 
         const selectedEmails = usersData.map((user) => ({
           value: user.id,
@@ -2652,7 +2656,7 @@ const TaskManagement = () => {
                   )}
                 </div>
 
-                <div className=" gap-4 flex-wrap" style={{ display: "flex" }}>
+                <div className=" gap-4 flex-wrap  md:flex grid grid-cols-2" >
                   <div className=" ">
                     {createdBy_id === user_id ? (
                       <div
@@ -2817,7 +2821,7 @@ const TaskManagement = () => {
                       </div>
                     )}
 
-                    <br />
+                    {/* <br /> */}
                     {/* Render the modal conditionally based on isModalOpen state */}
                     {isModalOpennn && (
                       <div className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-30 backdrop-blur-sm z-50 p-10 ">
@@ -3173,35 +3177,35 @@ const TaskManagement = () => {
                   </div>
                 ) : null}
 
-                <div className=" " style={{ cursor: "default" }}>
+                <div className=" my-5" style={{ cursor: "default" }}>
                   <div
-                    className="font-medium grid grid-cols-4"
+                    className="font-medium grid md:grid-cols-4 text-sm gap-2"
                     style={{ cursor: "default" }}
                   >
                     {" "}
                     <p>Created By :</p>
-                    <p className="col-span-3">
+                    <p className="col-span-3 font-normal">
                       {createdFirstName} {createdSecondName}
                     </p>
                   </div>
                   <div
-                    className="font-medium grid grid-cols-4"
+                    className="font-medium grid md:grid-cols-4 text-sm"
                     style={{ cursor: "default" }}
                   >
                     {" "}
                     <p>Created Date :</p>
-                    <p className="col-span-3">
+                    <p className="col-span-3 font-normal">
                       {FormattedDateToShowProperly(createdDate)}
                     </p>
                   </div>
                   <div
-                    className="font-medium grid grid-cols-4"
+                    className="font-medium grid md:grid-cols-4 text-sm"
                     style={{ cursor: "default" }}
                   >
                     {" "}
                     <p>Due Date :</p>
                     {/* <p className="col-span-3"> */}
-<p className="flex gap-2 col-span-3 items-center">
+<p className="flex gap-2 md:col-span-3 items-center font-normal">
 
                     {dueDate && FormattedDateToShowProperly(dueDate)} 
                     {createdBy_id.toString() !== user_id && dueDate ? (
@@ -3219,13 +3223,13 @@ const TaskManagement = () => {
                     </p>
                     {/* </p> */}
                   </div>
-                  <div className="font-medium grid grid-cols-4" style={{ cursor: "default" }}>
+                  <div className="font-medium grid md:grid-cols-4 text-sm" style={{ cursor: "default" }}>
                     {" "}
                     <p>
 
                     Assign To :
                     </p>
-                    <p className="cols-span-3">
+                    <p className="cols-span-3 font-normal">
 
                      {showStatusChecklist1}{" "}
                     </p>
