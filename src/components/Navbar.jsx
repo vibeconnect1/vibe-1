@@ -94,7 +94,7 @@ const Navbar = () => {
     navigate("/login");
     window.location.reload();
   };
-
+const siteId = getItemInLocalStorage("SITEID")
   return (
     <section className="flex gap-6 sticky top-0 left-0 bottom-0 h-screen z-10">
       <div
@@ -145,7 +145,36 @@ const Navbar = () => {
                 >
                   Dashboard
                 </h2>
-              </NavLink>
+                </NavLink>
+               {siteId === 25 ? <NavLink
+                to={"/tickets"}
+                className={({ isActive }) =>
+                  ` ${
+                    isActive
+                      ? "text-black bg-white flex p-2  gap-3.5 rounded-md group items-center text-sm font-medium"
+                      : " group flex items-center text-sm gap-3.5 font-medium p-2 hover:bg-gray-800 rounded-md "
+                  }`
+                }
+              >
+                <div>
+                  {React.createElement(BsTicketPerforated, { size: "20" })}
+                </div>
+                <h2
+                  className={`whitespace-pre duration-300 ${
+                    !open && "opacity-0 translate-x-28 overflow-hidden"
+                  }`}
+                >
+                  Service Desk
+                </h2>
+                <h2
+                  className={`${
+                    open && "hidden"
+                  } absolute left-48 bg-white font-semibold whitespace-pre text-gray-900 rounded-md drop-shadow-lg px-0 py-0 w-0 overflow-hidden group-hover:px-2 group-hover:py-1 group-hover:left-14 group-hover:duration-300 group-hover:w-fit  `}
+                >
+                  Service Desk
+                </h2>
+              </NavLink>:<>
+              
               <NavLink
                 to={"/admin/project-management"}
                 className={({ isActive }) =>
@@ -202,7 +231,6 @@ const Navbar = () => {
                   Task management
                 </h2>
               </NavLink>
-              
               <NavLink
                 to={"/admin/calendar"}
                 className={({ isActive }) =>
@@ -339,60 +367,8 @@ const Navbar = () => {
                   Purchase
                 </h2>
               </NavLink>
-              {/* <NavLink
-                to={"/admin/letterofindent"}
-                className={({ isActive }) =>
-                  ` ${
-                    isActive
-                      ? "text-black bg-white flex p-2  gap-3.5 rounded-md group items-center text-sm font-medium"
-                      : " group flex items-center text-sm gap-3.5 font-medium p-2 hover:bg-gray-800 rounded-md "
-                  }`
-                }
-              >
-                <div>{React.createElement(FaRegFileAlt, { size: "20" })}</div>
-
-                <h2
-                  className={`whitespace-pre duration-300 ${
-                    !open && "opacity-0 translate-x-28 overflow-hidden"
-                  }`}
-                >
-                  Letter Of Indent
-                </h2>
-                <h2
-                  className={`${
-                    open && "hidden"
-                  } absolute left-48 bg-white font-semibold whitespace-pre text-gray-900 rounded-md drop-shadow-lg px-0 py-0 w-0 overflow-hidden group-hover:px-2 group-hover:py-1 group-hover:left-14 group-hover:duration-300 group-hover:w-fit  `}
-                >
-                  Letter Of Indent
-                </h2>
-              </NavLink> */}
-              {/* <NavLink
-                to={"/admin/material-pr"}
-                className={({ isActive }) =>
-                  ` ${
-                    isActive
-                      ? "text-black bg-white flex p-2  gap-3.5 rounded-md group items-center text-sm font-medium"
-                      : " group flex items-center text-sm gap-3.5 font-medium p-2 hover:bg-gray-800 rounded-md "
-                  }`
-                }
-              >
-                <div>{React.createElement(PiFiles, { size: "20" })}</div>
-
-                <h2
-                  className={`whitespace-pre duration-300 ${
-                    !open && "opacity-0 translate-x-28 overflow-hidden"
-                  }`}
-                >
-                  Material PR
-                </h2>
-                <h2
-                  className={`${
-                    open && "hidden"
-                  } absolute left-48 bg-white font-semibold whitespace-pre text-gray-900 rounded-md drop-shadow-lg px-0 py-0 w-0 overflow-hidden group-hover:px-2 group-hover:py-1 group-hover:left-14 group-hover:duration-300 group-hover:w-fit  `}
-                >
-                  Material PR
-                </h2>
-              </NavLink> */}
+             
+              
                <NavLink
                 to={"/tickets"}
                 className={({ isActive }) =>
@@ -501,116 +477,6 @@ const Navbar = () => {
                   Bill Pay
                 </h2>
               </NavLink>
-              {/* <NavLink
-                to={"/admin/PO"}
-                className={({ isActive }) =>
-                  ` ${
-                    isActive
-                      ? "text-black bg-white flex p-2  gap-3.5 rounded-md group items-center text-sm font-medium"
-                      : " group flex items-center text-sm gap-3.5 font-medium p-2 hover:bg-gray-800 rounded-md "
-                  }`
-                }
-              >
-                <div>
-                  {React.createElement(FaRegFilePowerpoint, { size: "20" })}
-                </div>
-
-                <h2
-                  className={`whitespace-pre duration-300 ${
-                    !open && "opacity-0 translate-x-28 overflow-hidden"
-                  }`}
-                >
-                  PO
-                </h2>
-                <h2
-                  className={`${
-                    open && "hidden"
-                  } absolute left-48 bg-white font-semibold whitespace-pre text-gray-900 rounded-md drop-shadow-lg px-0 py-0 w-0 overflow-hidden group-hover:px-2 group-hover:py-1 group-hover:left-14 group-hover:duration-300 group-hover:w-fit  `}
-                >
-                  PO
-                </h2>
-              </NavLink> */}
-              {/* <NavLink
-                to={"/admin/WO"}
-                className={({ isActive }) =>
-                  ` ${
-                    isActive
-                      ? "text-black bg-white flex p-2  gap-3.5 rounded-md group items-center text-sm font-medium"
-                      : " group flex items-center text-sm gap-3.5 font-medium p-2 hover:bg-gray-800 rounded-md "
-                  }`
-                }
-              >
-                <div>{React.createElement(FaFileWord, { size: "20" })}</div>
-
-                <h2
-                  className={`whitespace-pre duration-300 ${
-                    !open && "opacity-0 translate-x-28 overflow-hidden"
-                  }`}
-                >
-                  Wo
-                </h2>
-                <h2
-                  className={`${
-                    open && "hidden"
-                  } absolute left-48 bg-white font-semibold whitespace-pre text-gray-900 rounded-md drop-shadow-lg px-0 py-0 w-0 overflow-hidden group-hover:px-2 group-hover:py-1 group-hover:left-14 group-hover:duration-300 group-hover:w-fit  `}
-                >
-                  WO
-                </h2>
-              </NavLink> */}
-              {/* <NavLink
-                to={"/admin/Grn"}
-                className={({ isActive }) =>
-                  ` ${
-                    isActive
-                      ? "text-black bg-white flex p-2  gap-3.5 rounded-md group items-center text-sm font-medium"
-                      : " group flex items-center text-sm gap-3.5 font-medium p-2 hover:bg-gray-800 rounded-md "
-                  }`
-                }
-              >
-                <div>{React.createElement(FaRegFile, { size: "20" })}</div>
-
-                <h2
-                  className={`whitespace-pre duration-300 ${
-                    !open && "opacity-0 translate-x-28 overflow-hidden"
-                  }`}
-                >
-                  GRN
-                </h2>
-                <h2
-                  className={`${
-                    open && "hidden"
-                  } absolute left-48 bg-white font-semibold whitespace-pre text-gray-900 rounded-md drop-shadow-lg px-0 py-0 w-0 overflow-hidden group-hover:px-2 group-hover:py-1 group-hover:left-14 group-hover:duration-300 group-hover:w-fit  `}
-                >
-                  GRN
-                </h2>
-              </NavLink> */}
-              {/* <NavLink
-                to={"/admin/Gdn"}
-                className={({ isActive }) =>
-                  ` ${
-                    isActive
-                      ? "text-black bg-white flex p-2  gap-3.5 rounded-md group items-center text-sm font-medium"
-                      : " group flex items-center text-sm gap-3.5 font-medium p-2 hover:bg-gray-800 rounded-md "
-                  }`
-                }
-              >
-                <div>{React.createElement(PiFiles, { size: "20" })}</div>
-
-                <h2
-                  className={`whitespace-pre duration-300 ${
-                    !open && "opacity-0 translate-x-28 overflow-hidden"
-                  }`}
-                >
-                  GDN
-                </h2>
-                <h2
-                  className={`${
-                    open && "hidden"
-                  } absolute left-48 bg-white font-semibold whitespace-pre text-gray-900 rounded-md drop-shadow-lg px-0 py-0 w-0 overflow-hidden group-hover:px-2 group-hover:py-1 group-hover:left-14 group-hover:duration-300 group-hover:w-fit  `}
-                >
-                  GDN
-                </h2>
-              </NavLink> */}
               <NavLink
                 to={"/admin/audit"}
                 className={({ isActive }) =>
@@ -744,10 +610,6 @@ const Navbar = () => {
                   Field Sense
                 </h2>
               </NavLink>
-             
-              
-            
-
               <NavLink
                 to={"/admin/birthday"}
                 className={({ isActive }) =>
@@ -777,33 +639,7 @@ const Navbar = () => {
               </NavLink>
               {/* admin tickets */}
              
-              {/* <NavLink
-                to={"/admin/CAR"}
-                className={({ isActive }) =>
-                  ` ${
-                    isActive
-                      ? "text-black bg-white flex p-2  gap-3.5 rounded-md group items-center text-sm font-medium"
-                      : " group flex items-center text-sm gap-3.5 font-medium p-2 hover:bg-gray-800 rounded-md "
-                  }`
-                }
-              >
-                <div>{React.createElement(FaFileInvoice, { size: "20" })}</div>
-
-                <h2
-                  className={`whitespace-pre duration-300 ${
-                    !open && "opacity-0 translate-x-28 overflow-hidden"
-                  }`}
-                >
-                  CAR
-                </h2>
-                <h2
-                  className={`${
-                    open && "hidden"
-                  } absolute left-48 bg-white font-semibold whitespace-pre text-gray-900 rounded-md drop-shadow-lg px-0 py-0 w-0 overflow-hidden group-hover:px-2 group-hover:py-1 group-hover:left-14 group-hover:duration-300 group-hover:w-fit  `}
-                >
-                  CAR
-                </h2>
-              </NavLink> */}
+             
               <NavLink
                 to={"/admin/fb"}
                 className={({ isActive }) =>
@@ -831,33 +667,7 @@ const Navbar = () => {
                   F&B
                 </h2>
               </NavLink>
-              {/* <NavLink
-                to={"/admin/pantry"}
-                className={({ isActive }) =>
-                  ` ${
-                    isActive
-                      ? "text-black bg-white flex p-2  gap-3.5 rounded-md group items-center text-sm font-medium"
-                      : " group flex items-center text-sm gap-3.5 font-medium p-2 hover:bg-gray-800 rounded-md "
-                  }`
-                }
-              >
-                <div>{React.createElement(MdFastfood, { size: "20" })}</div>
-
-                <h2
-                  className={`whitespace-pre duration-300 ${
-                    !open && "opacity-0 translate-x-28 overflow-hidden"
-                  }`}
-                >
-                  Pantry
-                </h2>
-                <h2
-                  className={`${
-                    open && "hidden"
-                  } absolute left-48 bg-white font-semibold whitespace-pre text-gray-900 rounded-md drop-shadow-lg px-0 py-0 w-0 overflow-hidden group-hover:px-2 group-hover:py-1 group-hover:left-14 group-hover:duration-300 group-hover:w-fit  `}
-                >
-                  Pantry
-                </h2>
-              </NavLink> */}
+             
 
               <NavLink
                 to={"/admin/incidents"}
@@ -967,35 +777,6 @@ const Navbar = () => {
                   Business Card
                 </h2>
               </NavLink>
-
-              {/* <NavLink
-                to={"/admin/documents"}
-                className={({ isActive }) =>
-                  ` ${
-                    isActive
-                      ? "text-black bg-white flex p-2  gap-3.5 rounded-md group items-center text-sm font-medium"
-                      : " group flex items-center text-sm gap-3.5 font-medium p-2 hover:bg-gray-800 rounded-md "
-                  }`
-                }
-              >
-                <div>
-                  {React.createElement(IoDocumentTextOutline, { size: "20" })}
-                </div>
-                <h2
-                  className={`whitespace-pre duration-300 ${
-                    !open && "opacity-0 translate-x-28 overflow-hidden"
-                  }`}
-                >
-                  Document Pro
-                </h2>
-                <h2
-                  className={`${
-                    open && "hidden"
-                  } absolute left-48 bg-white font-semibold whitespace-pre text-gray-900 rounded-md drop-shadow-lg px-0 py-0 w-0 overflow-hidden group-hover:px-2 group-hover:py-1 group-hover:left-14 group-hover:duration-300 group-hover:w-fit  `}
-                >
-                  Document Pro
-                </h2>
-              </NavLink> */}
               <NavLink
                 to={"/bookings"}
                 className={({ isActive }) =>
@@ -1216,33 +997,7 @@ const Navbar = () => {
                   Other Bills
                 </h2>
               </NavLink>
-              {/* <NavLink
-                to={"/admin/Insights"}
-                className={({ isActive }) =>
-                  ` ${
-                    isActive
-                      ? "text-black bg-white flex p-2  gap-3.5 rounded-md group items-center text-sm font-medium"
-                      : " group flex items-center text-sm gap-3.5 font-medium p-2 hover:bg-gray-800 rounded-md "
-                  }`
-                }
-              >
-                <div>{React.createElement(PiFiles, { size: "20" })}</div>
-
-                <h2
-                  className={`whitespace-pre duration-300 ${
-                    !open && "opacity-0 translate-x-28 overflow-hidden"
-                  }`}
-                >
-                  Insights
-                </h2>
-                <h2
-                  className={`${
-                    open && "hidden"
-                  } absolute left-48 bg-white font-semibold whitespace-pre text-gray-900 rounded-md drop-shadow-lg px-0 py-0 w-0 overflow-hidden group-hover:px-2 group-hover:py-1 group-hover:left-14 group-hover:duration-300 group-hover:w-fit  `}
-                >
-                  Insights
-                </h2>
-              </NavLink> */}
+             
                <NavLink
                 to={"/personal-finance"}
                 className={({ isActive }) =>
@@ -1355,7 +1110,46 @@ const Navbar = () => {
                   Parking
                 </h2>
               </NavLink>
+              </>}
+              
+           
+             
+             
+             
+              
+            
+
+
               {/* <NavLink
+                to={"/admin/documents"}
+                className={({ isActive }) =>
+                  ` ${
+                    isActive
+                      ? "text-black bg-white flex p-2  gap-3.5 rounded-md group items-center text-sm font-medium"
+                      : " group flex items-center text-sm gap-3.5 font-medium p-2 hover:bg-gray-800 rounded-md "
+                  }`
+                }
+              >
+                <div>
+                  {React.createElement(IoDocumentTextOutline, { size: "20" })}
+                </div>
+                <h2
+                  className={`whitespace-pre duration-300 ${
+                    !open && "opacity-0 translate-x-28 overflow-hidden"
+                  }`}
+                >
+                  Document Pro
+                </h2>
+                <h2
+                  className={`${
+                    open && "hidden"
+                  } absolute left-48 bg-white font-semibold whitespace-pre text-gray-900 rounded-md drop-shadow-lg px-0 py-0 w-0 overflow-hidden group-hover:px-2 group-hover:py-1 group-hover:left-14 group-hover:duration-300 group-hover:w-fit  `}
+                >
+                  Document Pro
+                </h2>
+              </NavLink> */}
+             
+             {siteId === 25 && <NavLink
                 to={"/setup/users-setup"}
                 className={({ isActive }) =>
                   ` ${
@@ -1383,7 +1177,7 @@ const Navbar = () => {
                 >
                   Users
                 </h2>
-              </NavLink> */}
+              </NavLink>}
 
              
             </>
@@ -2048,7 +1842,7 @@ const Navbar = () => {
             </h2>
           </NavLink> */}
 
-          {user === "pms_admin" && (
+          {user === "pms_admin" && siteId !== 25   && (
             <NavLink
               to={"/setup"}
               className={({ isActive }) =>

@@ -203,10 +203,10 @@ const TicketHighCharts = () => {
       chart: {
         type: "column",
         borderRadius: 30,
-        scrollablePlotArea: {
-          minWidth: 700, 
-          scrollPositionX: 1
-        }
+        // scrollablePlotArea: {
+        //   minWidth: 700, 
+        //   scrollPositionX: 1
+        // }
       },
       title: {
         text: title,

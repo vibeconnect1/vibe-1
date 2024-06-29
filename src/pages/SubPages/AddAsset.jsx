@@ -172,6 +172,20 @@ const AddAsset = () => {
   const navigate = useNavigate();
 
   const handleSubmit = async () => {
+
+    if (formData.warranty_start >= formData.warranty_expiry) {
+      toast.error("Warranty Start Date must be before Expiry Date.");
+      return;
+    }
+  
+    if (formData.warranty_start < formData.purchased_on || formData.installation < formData.purchased_on) {
+      toast.error(
+        "Warranty Start Date and Commissioning Date must be after or equal to Purchase Date."
+      );
+      return;
+    }
+
+
     try {
       toast.loading("Creating Asset Please Wait!");
       const formDataSend = new FormData();
@@ -580,230 +594,7 @@ const AddAsset = () => {
                 )}
               </div>
             </div>
-            {/* {formData.is_meter && meterType === "parent" && (
-              <>
-                <p className="border-b border-black font-semibold my-2">
-                  Consumption Asset Measure
-                </p>
-                {addConsumptionFields.map((data, i) => (
-                  <div key={i}>
-                    <div className="my-5">
-                      <div className="grid md:grid-cols-4 my-5 gap-4">
-                        <input
-                          type="text"
-                          name=""
-                          id=""
-                          placeholder="Name"
-                          className="border p-1 px-4 border-gray-500 rounded-md"
-                        />
-                        <div className="flex flex-col">
-                          <select className="border p-1 px-4 border-gray-500 rounded-md">
-                            <option value="" className="text-gray-300">
-                              Select Unit Type{" "}
-                            </option>
-                            <option value="unit1">Type 1</option>
-                            <option value="unit2">Type 2</option>
-                            <option value="unit2">Type 3</option>
-                          </select>
-                        </div>
-                        <input
-                          type="text"
-                          name=""
-                          id=""
-                          placeholder="Min"
-                          className="border p-1 px-4 border-gray-500 rounded-md"
-                        />
-                        <input
-                          type="text"
-                          name=""
-                          id=""
-                          placeholder="Max"
-                          className="border p-1 px-4 border-gray-500 rounded-md"
-                        />
-                        <input
-                          type="text"
-                          name=""
-                          id=""
-                          placeholder="Alert Below Value"
-                          className="border p-1 px-4 border-gray-500 rounded-md"
-                        />
-                        <input
-                          type="text"
-                          name=""
-                          id=""
-                          placeholder="Alert Above Value"
-                          className="border p-1 px-4 border-gray-500 rounded-md"
-                        />
-                        <input
-                          type="text"
-                          name=""
-                          id=""
-                          placeholder=" Multiplier Factor"
-                          className="border p-1 px-4 border-gray-500 rounded-md"
-                        />
-                        <div className="flex items-center gap-2">
-                          <input type="checkbox" name="" id="" />
-                          <label htmlFor="">Check Previous Reading</label>
-                        </div>
-                      </div>
-                      <div className="flex justify-end gap-2">
-                        <button
-                          className="p-1 border-2 border-red-500 text-white hover:bg-white hover:text-red-500 bg-red-500 px-4 transition-all duration-300 rounded-md "
-                          onClick={() => handleRemoveConsumptionFields()}
-                        >
-                          <IoClose />
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-                <button
-                  className="p-1 border-2 border-black px-4 rounded-md my-2"
-                  onClick={() => handleConsumptionAddFields()}
-                >
-                  <BiPlus />
-                </button>
-                <p className="border-b border-black font-semibold">
-                  Non Consumption Asset Measure
-                </p>
-                {addNonConsumptionFields.map((data, i) => (
-                  <div key={i}>
-                    <div className="my-5">
-                      <div className="grid md:grid-cols-4 my-5 gap-4">
-                        <input
-                          type="text"
-                          name=""
-                          id=""
-                          placeholder="Name"
-                          className="border p-1 px-4 border-gray-500 rounded-md"
-                        />
-                        <div className="flex flex-col">
-                          <select className="border p-1 px-4 border-gray-500 rounded-md">
-                            <option value="" className="text-gray-300">
-                              Select Unit Type{" "}
-                            </option>
-                            <option value="unit1">Type 1</option>
-                            <option value="unit2">Type 2</option>
-                            <option value="unit2">Type 3</option>
-                          </select>
-                        </div>
-                        <input
-                          type="text"
-                          name=""
-                          id=""
-                          placeholder="Min"
-                          className="border p-1 px-4 border-gray-500 rounded-md"
-                        />
-                        <input
-                          type="text"
-                          name=""
-                          id=""
-                          placeholder="Max"
-                          className="border p-1 px-4 border-gray-500 rounded-md"
-                        />
-                        <input
-                          type="text"
-                          name=""
-                          id=""
-                          placeholder="Alert Below Value"
-                          className="border p-1 px-4 border-gray-500 rounded-md"
-                        />
-                        <input
-                          type="text"
-                          name=""
-                          id=""
-                          placeholder="Alert Above Value"
-                          className="border p-1 px-4 border-gray-500 rounded-md"
-                        />
-                        <input
-                          type="text"
-                          name=""
-                          id=""
-                          placeholder=" Multiplier Factor"
-                          className="border p-1 px-4 border-gray-500 rounded-md"
-                        />
-                        <div className="flex items-center gap-2">
-                          <input type="checkbox" name="" id="" />
-                          <label htmlFor=""> Check Previous Reading</label>
-                        </div>
-                      </div>
-                      <div className="flex justify-end gap-2">
-                        <button
-                          className="p-1 border-2 border-red-500 text-white hover:bg-white hover:text-red-500 bg-red-500 px-4 transition-all duration-300 rounded-md "
-                          onClick={() => handleRemoveNonConsumptionFields()}
-                        >
-                          <IoClose />
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-                <button
-                  className="p-1 border-2 border-black px-4 rounded-md my-2"
-                  onClick={() => handleNonConsumptionAddFields()}
-                >
-                  <BiPlus />
-                </button>
-              </>
-            )}
-            {formData.is_meter && meterType === "sub" && (
-              <div className="my-5">
-                <p className="border-b border-black font-semibold">
-                  Consumption Asset Measure
-                </p>
-                <div className="grid grid-cols-4 my-5 gap-4">
-                  <input
-                    type="text"
-                    name=""
-                    id=""
-                    placeholder="Name"
-                    className="border p-1 px-4 border-gray-500 rounded-md"
-                  />
-                  <div className="flex flex-col">
-                    <select className="border p-1 px-4 border-gray-500 rounded-md">
-                      <option value="" className="text-gray-300">
-                        Select Unit Type{" "}
-                      </option>
-                      <option value="unit1">Type 1</option>
-                      <option value="unit2">Type 2</option>
-                      <option value="unit2">Type 3</option>
-                    </select>
-                  </div>
-                  <input
-                    type="text"
-                    name=""
-                    id=""
-                    placeholder="Min"
-                    className="border p-1 px-4 border-gray-500 rounded-md"
-                  />
-                  <input
-                    type="text"
-                    name=""
-                    id=""
-                    placeholder="Max"
-                    className="border p-1 px-4 border-gray-500 rounded-md"
-                  />
-                  <input
-                    type="text"
-                    name=""
-                    id=""
-                    placeholder="Alert Below Value"
-                    className="border p-1 px-4 border-gray-500 rounded-md"
-                  />
-                  <input
-                    type="text"
-                    name=""
-                    id=""
-                    placeholder="Alert Above Value"
-                    className="border p-1 px-4 border-gray-500 rounded-md"
-                  />
-                  <div className="flex items-center gap-2">
-                    <input type="checkbox" name="" id="" />
-                    <label htmlFor=""> Check Previous Reading</label>
-                  </div>
-                </div>
-              </div>
-            )} */}
+           
           </div>
           <div className="my-5">
             <p className="border-b border-black font-semibold">

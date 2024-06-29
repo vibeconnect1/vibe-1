@@ -295,6 +295,17 @@ const EditAsset = () => {
   const navigate = useNavigate();
 
   const handleSubmit = async () => {
+    if (formData.warranty_start >= formData.warranty_expiry) {
+      toast.error("Warranty Start Date must be before Expiry Date.");
+      return;
+    }
+  
+    if (formData.warranty_start < formData.purchased_on || formData.installation < formData.purchased_on) {
+      toast.error(
+        "Warranty Start Date and Commissioning Date must be after or equal to Purchase Date."
+      );
+      return;
+    }
     try {
       toast.loading("Creating Asset Please Wait!");
       const formDataSend = new FormData();

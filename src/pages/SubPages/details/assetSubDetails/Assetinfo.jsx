@@ -153,7 +153,7 @@ const Assetinfo = ({ assetData }) => {
  
 
   const domainPrefix = "https://admin.vibecopilot.ai";
-  console.log(assetData.purchase_invoices);
+  
 
   return (
     <section>
@@ -248,11 +248,11 @@ const Assetinfo = ({ assetData }) => {
 
               <div className="grid grid-cols-2">
                 <p>Capacity : </p>
-                <p className="text-sm">{capacity}</p>
+                <p className="text-sm font-normal">{capacity}</p>
               </div>
               <div className="grid grid-cols-2">
                 <p>UOM : </p>
-                <p className="text-sm">{uom}</p>
+                <p className="text-sm font-normal">{uom}</p>
               </div>
               <div className="grid grid-cols-2">
                 <p>Purchase Cost : </p>
