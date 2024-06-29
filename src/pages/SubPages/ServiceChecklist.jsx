@@ -7,6 +7,7 @@ import { BiEdit, BiFilterAlt } from "react-icons/bi";
 import { Link } from "react-router-dom";
 import { IoAddCircleOutline } from "react-icons/io5";
 import * as XLSX from "xlsx";
+import { DNA } from "react-loader-spinner";
 const ServiceChecklist = () => {
   const [searchChecklistText, setSearchChecklistCheck] = useState("");
   const [filteredChecklistData, setFilteredChecklistData] = useState([]);
@@ -94,11 +95,25 @@ const ServiceChecklist = () => {
       console.log(filteredData);
     }
   };
+
+  const dateFormat = (dateString) => {
+    const date = new Date(dateString);
+    return date.toLocaleString();
+  };
   const exportToExcel = () => {
+    const mappedData = filteredChecklistData.map((check) => ({
+     
+      "Checklist Name": check.name,
+      "Start Date": check.start_date,
+      "End Date": check.end_date,
+      "Frequency": check.frequency,
+      "Created On": dateFormat(check.created_at),
+      // "Question": check.questions.map(q => q.toString()).join(', ')
+    }));
     const fileType =
       "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8";
     const fileName = "Checklist_data.xlsx";
-    const ws = XLSX.utils.json_to_sheet(filteredChecklistData);
+    const ws = XLSX.utils.json_to_sheet(mappedData);
     const wb = { Sheets: { data: ws }, SheetNames: ["data"] };
     const excelBuffer = XLSX.write(wb, { bookType: "xlsx", type: "array" });
     const data = new Blob([excelBuffer], { type: fileType });
@@ -109,10 +124,9 @@ const ServiceChecklist = () => {
     link.click();
   };
   return (
-    <section className="flex "> 
-       <Navbar /> 
+    <section className="flex ">
+      <Navbar />
       <div className="p-4 overflow-hidden w-full my-2 flex mx-3 flex-col">
-        
         <Services />
         {/* {filter && (
           <div className="flex items-center justify-center gap-2">
@@ -193,21 +207,20 @@ const ServiceChecklist = () => {
   </button> */}
           </div>
         </div>
-        <Table columns={checklistColumn} data={filteredChecklistData} />
-        {/* <DataTable
-  selectableRows
-  columns={column.filter((col) => visibleColumns.includes(col.name))}
-  data={filteredData}
-  customStyles={customStyle}
-  responsive
-  onSelectedRowsChange={handleRowSelected}
-  fixedHeader
-  // fixedHeaderScrollHeight="500px"
-  pagination
-  selectableRowsHighlight
-  highlightOnHover
-  omitColumn={column}
-/> */}
+        {checklists.length !== 0 ? (
+          <Table columns={checklistColumn} data={filteredChecklistData} />
+        ) : (
+          <div className="flex justify-center items-center h-full">
+            <DNA
+              visible={true}
+              height="120"
+              width="120"
+              ariaLabel="dna-loading"
+              wrapperStyle={{}}
+              wrapperClass="dna-wrapper"
+            />
+          </div>
+        )}
       </div>
     </section>
   );

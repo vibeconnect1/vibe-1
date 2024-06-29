@@ -503,6 +503,8 @@ import EmployeeBankAccountCreation from "./pages/Employees/EmployeeAdvanceSalary
 import EmployeeCreateBankAccount from "./pages/Employees/EmployeeAdvanceSalary/EmployeeCreateBankAccount.jsx";
 import EmployeeBankAccountDetails from "./pages/Employees/EmployeeAdvanceSalary/EmployeeBankAccountDetails.jsx";
 import ServiceTaskDetails from "./pages/SubPages/details/ServiceTaskDetails.jsx";
+import AssetAmcDetails from "./pages/SubPages/details/assetSubDetails/AssetAmcDetails.jsx";
+import InventoryDetails from "./pages/SubPages/details/InventoryDetails.jsx";
 
 function App() {
   const themeColor = useSelector((state) => state.theme.color);
@@ -668,6 +670,14 @@ function App() {
             element={
               <ProtectedAdminRoutes>
                 <PPMActivityDetails />
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/asset/asset-amc/:id"
+            element={
+              <ProtectedAdminRoutes>
+                <AssetAmcDetails />
               </ProtectedAdminRoutes>
             }
           />
@@ -1012,6 +1022,14 @@ function App() {
             element={
               <ProtectedAdminRoutes>
                 <Inventory />
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/stock-details/:id"
+            element={
+              <ProtectedAdminRoutes>
+                <InventoryDetails />
               </ProtectedAdminRoutes>
             }
           />

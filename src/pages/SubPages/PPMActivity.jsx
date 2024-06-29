@@ -34,8 +34,13 @@ const PPMActivity = () => {
     try {
       const fetchServicePPM = async () => {
         const ServicePPMResponse = await getAssetPPMList();
-        setFilteredPPMData(ServicePPMResponse.data.checklists);
-        setPPms(ServicePPMResponse.data.checklists);
+        const sortedPPMData = ServicePPMResponse.data.checklists.sort((a, b) => {
+         
+          return new Date(b.created_at) - new Date(a.created_at);
+        });
+
+        setFilteredPPMData(sortedPPMData);
+        setPPms(sortedPPMData);
         console.log(ServicePPMResponse.data.checklists);
       };
       fetchServicePPM();
@@ -105,7 +110,7 @@ const Get_Background = async () => {
     const data = await getVibeBackground(user_id);
 
     if (data.success) {
-      console.log("sucess");
+      console.log("success");
 
       console.log(data.data);
       selectedImageSrc = API_URL + data.data.image;

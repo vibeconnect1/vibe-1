@@ -82,18 +82,18 @@ const Services = () => {
     },
   ];
 
-  useEffect(() => {
-    try {
-      const fetchServicePPM = async () => {
-        const ServicePPMResponse = await getAssetPPMList();
-        setFilteredPPMData(ServicePPMResponse.data.checklists);
-        setPPms(ServicePPMResponse.data.checklists);
-      };
-      fetchServicePPM();
-    } catch (error) {
-      console.log(error);
-    }
-  }, []);
+  // useEffect(() => {
+  //   try {
+  //     const fetchServicePPM = async () => {
+  //       const ServicePPMResponse = await getAssetPPMList();
+  //       setFilteredPPMData(ServicePPMResponse.data.checklists);
+  //       setPPms(ServicePPMResponse.data.checklists);
+  //     };
+  //     fetchServicePPM();
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // }, []);
 
  
   const handlePPMSearch = (event) => {

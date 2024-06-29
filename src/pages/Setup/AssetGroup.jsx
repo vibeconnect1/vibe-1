@@ -7,33 +7,55 @@ import AssetGroupModal from "../../containers/modals/AssetGroupModal";
 import AssetSubGroupModal from "../../containers/modals/AssetSubGroupModal";
 import { useSelector } from "react-redux";
 import { useEffect } from "react";
-import { getAssetGroups, getAssetSubGroups, getSubGroupsList } from "../../api";
+import { getAssetGroups, getAssetSubGroups, getStockGroupsList, getSubGroupsList } from "../../api";
 import Table from "../../components/table/Table";
 
 const AssetGroup = () => {
   const [groupModal, setGroupModal] = useState(false);
   const [subGroupModal, setsubGroupModal] = useState(false);
   const [group, setGroup] = useState([]);
+  const [stockGroup, setStockGroup] = useState([])
+  const [stockSubGroup, setStockSubGroup] = useState([])
   const [subGroup, setSubGroup] = useState([]);
   const [page,setPage] = useState("asset")
-  // const groups = useSelector((state) => state.group.groups);
-  // const subGroups = useSelector((state) => state.group.subGroups);
-  // console.log("sub", subGroups);
   useEffect(() => {
     const fetchGroups = async () => {
       const groupResponse = await getAssetGroups();
       console.log(groupResponse);
       setGroup(groupResponse.data);
     };
-    fetchGroups();
     const fetchSubGroups = async () => {
       const subGroupResponse = await getSubGroupsList();
       setSubGroup(subGroupResponse.data);
       console.log(subGroupResponse);
     };
+    const fetchStockGroups = async () => {
+      const stockGroupResponse = await getStockGroupsList();
+      setStockGroup(stockGroupResponse.data);
+      console.log(stockGroupResponse);
+    };
+    fetchStockGroups()
+    fetchGroups();
     fetchSubGroups();
   }, []);
   const groupColumns = [
+    {
+      name: "Sr. No",
+      selector: (row, index) => index + 1,
+      sortable: true,
+    },
+    {
+      name: "Group Name",
+      selector: (row) => row.name,
+      sortable: true,
+    },
+    {
+      name: "Description",
+      selector: (row) => row.description,
+      sortable: true,
+    },
+  ];
+  const stockGroupColumns = [
     {
       name: "Sr. No",
       selector: (row, index) => index + 1,
@@ -58,7 +80,7 @@ const AssetGroup = () => {
   const subGroupColumns = [
     {
       name: "Sr. No",
-      selector: (row) => row.serial_number,
+      selector: (row, index) => index + 1,
       sortable: true,
     },
     {
@@ -73,19 +95,7 @@ const AssetGroup = () => {
     },
   ];
 
-  // const subGroupData = Object.keys(subGroups).reduce(
-  //   (acc, groupName, index) => {
-  //     const subGroupsWithSerial = subGroups[groupName].map(
-  //       (subGroup, subIndex) => ({
-  //         serial_number: index + 1,
-  //         group_name: groupName,
-  //         sub_group_name: subGroup,
-  //       })
-  //     );
-  //     return [...acc, ...subGroupsWithSerial];
-  //   },
-  //   []
-  // );
+  
 
   const customStyle = {
     headRow: {
@@ -162,8 +172,8 @@ const AssetGroup = () => {
         </div>}
         {page === "stock" && <div className=" my-2">
           <Table
-            columns={groupColumns}
-            data={group}
+            columns={stockGroupColumns}
+            data={stockGroup}
             isPagination={true}
             height={"300px"}
             title={"Groups"}
@@ -179,7 +189,7 @@ const AssetGroup = () => {
       </div>
       {groupModal && <AssetGroupModal onclose={() => setGroupModal(false)} />}
       {subGroupModal && (
-        <AssetSubGroupModal onclose={() => setsubGroupModal(false)} />
+        <AssetSubGroupModal assetGroup={group} stockGroup={stockGroup} onclose={() => setsubGroupModal(false)} />
       )}
     </section>
   );

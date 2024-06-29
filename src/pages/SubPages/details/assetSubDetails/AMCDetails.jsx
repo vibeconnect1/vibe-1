@@ -3,11 +3,18 @@ import Detail from "../../../../containers/Detail";
 import { useSelector } from "react-redux";
 import { getAMCDetails, getVendors, postAMC } from "../../../../api";
 import FileInputBox from "../../../../containers/Inputs/FileInputBox";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import Table from "../../../../components/table/Table";
 import toast from "react-hot-toast";
+import { BsEye } from "react-icons/bs";
 
 const AMCDetails = () => {
+  const today = new Date().toISOString().split("T")[0];
+  const toDay = new Date();
+  const year = toDay.getFullYear();
+  const month = String(toDay.getMonth() + 1).padStart(2, "0");
+  const day = String(toDay.getDate()).padStart(2, "0");
+  const formattedDate = `${year}-${month}-${day}`;
   const { id } = useParams();
   const [vendors, setVendors] = useState([]);
   const [amcDetails, setAmcDetails] = useState([]);
@@ -15,8 +22,8 @@ const AMCDetails = () => {
   const [formData, setFormData] = useState({
     vendor_id: "",
     asset_id: id,
-    start_date: "",
-    end_date: "",
+    start_date: formattedDate,
+    end_date: formattedDate,
     frequency: "",
     terms: [],
   });
@@ -77,9 +84,14 @@ formData.terms.forEach((file)=> dataToSend.append("terms[]", file))
   };
   const columns = [
     {
-      name: "Name",
-      selector: (row) => row.asset_name,
-      sortable: true,
+      name: "View",
+      cell: (row) => (
+        <div className="flex items-center gap-4">
+          <Link to={`/asset/asset-amc/${row.id}`}>
+            <BsEye size={15} />
+          </Link>
+        </div>
+      ),
     },
     {
       name: "Vendor ",
@@ -110,44 +122,15 @@ formData.terms.forEach((file)=> dataToSend.append("terms[]", file))
           <h2 className="border-b  text-xl border-black font-semibold">
             AMC Details
           </h2>
-          {/* <div className=" flex sm:flex-row flex-col gap-5 justify-between "> */}
-          {/* <div className="my-5 md:px-10 text-sm items-center font-medium grid gap-4 md:grid-cols-2">
-            <div className="grid grid-cols-2 items-center">
-              <p>Asset :</p>
-              <p className="text-sm font-normal ">{amcDetails.asset_name}</p>
-            </div>
-            <div className="grid grid-cols-2 items-center">
-              <p>Vendor :</p>
-              <p className="text-sm font-normal ">{amcDetails.vendor_name}</p>
-            </div>
-            <div className="grid grid-cols-2">
-              <p>Start Date : </p>
-              <p className="text-sm font-normal">{amcDetails.start_date}</p>
-            </div>
-            <div className="grid grid-cols-2 items-center">
-              <p>End Date :</p>
-              <p className="text-sm font-normal">{amcDetails.end_date}</p>
-            </div>
-            <div className="grid grid-cols-2 items-center">
-              <p>Frequency : </p>
-              <p className="text-sm font-normal">{amcDetails.frequency}</p>
-            </div>
-            <div className="grid grid-cols-2 items-center">
-              <p>Created On : </p>
-              <p className="text-sm font-normal">{amcDetails.created_at}</p>
-            </div>
-          </div> */}
+         
           <Table columns={columns} data={amcDetails} />
-          {/* <h2 className="border-b  text-xl border-black font-semibold">
-            AMC Terms Attachments
-          </h2>
-          <p>No Attachments</p> */}
+         
         </div>
         <div className="flex flex-col">
           <h2 className="border-b  text-xl border-black font-semibold">
             Add AMC
           </h2>
-          <div className="grid grid-cols-3 gap-5">
+          <div className="grid md:grid-cols-3 gap-5">
             <div className="flex flex-col">
               <label htmlFor="">Vendor :</label>
               <select
@@ -174,6 +157,7 @@ formData.terms.forEach((file)=> dataToSend.append("terms[]", file))
                 onChange={handleChange}
                 id=""
                 className="border p-1 px-4 border-gray-500 rounded-md"
+                min={today}
               />
             </div>
             <div className="flex flex-col">
@@ -185,6 +169,7 @@ formData.terms.forEach((file)=> dataToSend.append("terms[]", file))
                 onChange={handleChange}
                 id=""
                 className="border p-1 px-4 border-gray-500 rounded-md"
+                min={today}
               />
             </div>
             <div className="flex flex-col">

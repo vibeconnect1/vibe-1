@@ -10,6 +10,7 @@ import {
 import toast from "react-hot-toast";
 import { useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
+import FileInputBox from "../../containers/Inputs/FileInputBox";
 
 const EditService = () => {
   const [floors, setFloors] = useState([]);
@@ -28,7 +29,7 @@ const EditService = () => {
     name: "",
     // wing_id: "",
     // area_id: "",
-    file: [],
+    attachments: [],
   });
   console.log(formData);
   const buildings = getItemInLocalStorage("Building");
@@ -107,12 +108,13 @@ const EditService = () => {
       });
     }
   };
-  const handleFileChange = (event, fieldName) => {
-    const files = Array.from(event.target.files);
+  const handleFileChange = (files, fieldName) => {
+    // Changed to receive 'files' directly
     setFormData({
       ...formData,
       [fieldName]: files,
     });
+    console.log(fieldName);
   };
 
   const handleEditService = async () => {
@@ -134,6 +136,9 @@ const EditService = () => {
       dataToSend.append("soft_service[floor_id]", formData.floor_id);
       dataToSend.append("soft_service[unit_id]", formData.unit_id);
       dataToSend.append("soft_service[user_id]", formData.user_id);
+      (formData.attachments || []).forEach((file, index) => {
+        dataToSend.append(`attachments[]`, file);
+      });
       const serviceResponse = await EditSoftServices(dataToSend, id);
       console.log(serviceResponse);
       toast.dismiss();
@@ -204,22 +209,7 @@ const EditService = () => {
                 ))}
               </select>
             </div>
-            {/* <div className="flex flex-col ">
-              <label htmlFor="" className="font-semibold">
-                Select Wing:
-              </label>
-              <select
-                className="border p-1 px-4 border-gray-500 rounded-md"
-                value={formData.wing_id}
-                name="wing_id"
-                onChange={handleChange}
-              >
-                <option value="">Select Wing</option>
-                <option value="unit1">Wing 1</option>
-                <option value="unit2">Wing 2</option>
-                <option value="unit2">Wing 3</option>
-              </select>
-            </div> */}
+           
             <div className="flex flex-col">
               <label htmlFor="" className="font-semibold">
                 Select Floor:
@@ -257,32 +247,16 @@ const EditService = () => {
               </select>
             </div>
 
-            {/* <div className="flex flex-col ">
-              <label
-                htmlFor=""
-                className="font-semibold"
-                value={formData.area_id}
-                name="area_id"
-                onChange={handleChange}
-              >
-                Select Area:
-              </label>
-              <select className="border p-1 px-4 border-gray-500 rounded-md" value={formData.area_id} onChange={handleChange} name="area_id">
-                <option value="">Select Area</option>
-                <option value="unit1">Area 1</option>
-                <option value="unit2">Area 2</option>
-                <option value="unit2">Area 3</option>
-              </select>
-            </div> */}
+           
           </div>
-          {/* <h2 className="border-b text-center text-xl border-black mb-6 font-bold">
+          <h2 className="border-b text-center text-xl border-black mb-6 font-bold">
             Attachments
           </h2>
-          <input
-            type="file"
-            onChange={(event) => handleFileChange(event, "file")}
-            multiple
-          /> */}
+          <FileInputBox
+            handleChange={(files) => handleFileChange(files, "attachments")}
+            fieldName={"attachments"}
+            isMulti={true}
+          />
           <div className="flex my-5 justify-center">
             <button
               style={{ background: themeColor }}
@@ -291,15 +265,7 @@ const EditService = () => {
             >
               Save & Show Details
             </button>
-            {/* <button className=" border-black border-2 p-1 px-4 rounded-md font-medium">
-              Save & Add PPM
-            </button>
-            <button className=" border-black border-2 p-1 px-4 rounded-md font-medium">
-              Save & Create New Service
-            </button>
-            <button className="border-black border-2 p-1 px-4 rounded-md font-medium">
-              Save & Add AMC
-            </button> */}
+            
           </div>
         </div>
       </div>

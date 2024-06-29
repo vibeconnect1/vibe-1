@@ -11,20 +11,52 @@ import Navbar from "../components/Navbar";
 import { getItemInLocalStorage } from "../utils/localStorage";
 import GRN from "./GRN";
 import GDN from "./GDN";
+import { BsEye } from "react-icons/bs";
+import * as XLSX from "xlsx";
 
 const Inventory = () => {
   const [stocks, setStocks] = useState([]);
+  const [searchText, setSearchText] = useState("")
+  const [filteredData, setFilteredData] = useState([])
   const [page, setPage] = useState("stocks");
   useEffect(() => {
     const fetchInventory = async () => {
-      const invResp = await getInventory();
-      setStocks(invResp.data);
-      console.log(invResp);
+     try {
+       const invResp = await getInventory();
+       const sortedInvData = invResp.data.sort((a, b) => {
+         
+        return new Date(b.created_at) - new Date(a.created_at);
+      });
+       setStocks(sortedInvData);
+       setFilteredData(sortedInvData)
+       console.log(invResp);
+     } catch (error) {
+      console.log(error)
+     }
     };
     fetchInventory();
   }, []);
 
+  const dateFormat = (dateString) => {
+    const date = new Date(dateString);
+    return date.toLocaleString(); 
+  };
+
   const columns = [
+    {
+      name: "Action",
+      cell: (row) => (
+        <div className="flex items-center gap-4">
+          <Link to={`/admin/stock-details/${row.id}`}>
+            <BsEye size={15} />
+          </Link>
+          <Link to={`/admin/edit-stock/${row.id}`}>
+            <BiEdit size={15} />
+          </Link>
+        </div>
+      ),
+    },
+    
     { name: "Name", selector: (row) => row.name, sortable: true },
     { name: "Description", selector: (row) => row.description, sortable: true },
     {
@@ -33,21 +65,12 @@ const Inventory = () => {
       sortable: true,
     },
     { name: "Rate", selector: (row) => row.rate, sortable: true },
-    { name: "Group", selector: (row) => row.group, sortable: true },
-    { name: "Sub Group", selector: (row) => row.sub_group, sortable: true },
-    {
-      name: "Action",
-      cell: (row) => (
-        <div className="flex items-center gap-4">
-          <Link to={`/admin/edit-stock/${row.id}`}>
-            <BiEdit size={15} />
-          </Link>
-          {/* <button className="text-red-400">
-            <MdDeleteForever size={25} />
-          </button> */}
-        </div>
-      ),
-    },
+    { name: "Group", selector: (row) => row.group_name, sortable: true },
+    { name: "Sub Group", selector: (row) => row.sub_group_name, sortable: true },
+    { name: "Min Order Level", selector: (row) => row.min_stock, sortable: true },
+    { name: "Max Order Level", selector: (row) => row.max_stock, sortable: true },
+    { name: "Added On", selector: (row) => dateFormat(row.created_at), sortable: true },
+   
   ];
 
   const defaultImage = { index: 0, src: "" };
@@ -93,6 +116,36 @@ const Inventory = () => {
     // Call the function to get the background image when the component mounts
     Get_Background();
   }, []);
+
+  const handleSearch = (event) => {
+    const searchValue = event.target.value;
+    setSearchText(searchValue);
+    if (searchValue.trim() === "") {
+      setFilteredData(stocks);
+    } else {
+      const filteredResults = stocks.filter((item) =>
+        item.name.toLowerCase().includes(searchValue.toLowerCase())
+      );
+      setFilteredData(filteredResults);
+      console.log(filteredResults);
+      
+    }
+  };
+
+  const exportToExcel = () => {
+    const fileType =
+      "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8";
+    const fileName = "Stocks Data.xlsx";
+    const ws = XLSX.utils.json_to_sheet(stocks);
+    const wb = { Sheets: { data: ws }, SheetNames: ["data"] };
+    const excelBuffer = XLSX.write(wb, { bookType: "xlsx", type: "array" });
+    const data = new Blob([excelBuffer], { type: fileType });
+    const url = URL.createObjectURL(data);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = fileName;
+    link.click();
+  };
 
   return (
     <section
@@ -150,8 +203,8 @@ const Inventory = () => {
                 type="text"
                 placeholder="Search By Stock name"
                 className="border-2 p-2 md:w-96 border-gray-300 rounded-lg placeholder:text-sm"
-                //   value={searchText}
-                //   onChange={handleSearch}
+                  value={searchText}
+                  onChange={handleSearch}
               />
               <div className="md:flex grid grid-cols-2 sm:flex-row my-2 flex-col gap-2">
                 <Link
@@ -164,7 +217,7 @@ const Inventory = () => {
 
                 <button
                   className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-                  // onClick={exportToExcel}
+                  onClick={exportToExcel}
                 >
                   Export
                 </button>
@@ -177,7 +230,7 @@ const Inventory = () => {
     </button> */}
               </div>
             </div>
-            <Table columns={columns} data={stocks} />
+            <Table columns={columns} data={filteredData} />
           </>
         )}
         {page === "grn" && <GRN />}

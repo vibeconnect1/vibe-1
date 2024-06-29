@@ -4,11 +4,18 @@ import { IoClose } from "react-icons/io5";
 import { getItemInLocalStorage } from "../../utils/localStorage";
 import { postChecklist } from "../../api";
 import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 const AddPPMActivity = () => {
+  const today = new Date().toISOString().split("T")[0];
+  const toDay = new Date();
+  const year = toDay.getFullYear();
+  const month = String(toDay.getMonth() + 1).padStart(2, "0");
+  const day = String(toDay.getDate()).padStart(2, "0");
+  const formattedDate = `${year}-${month}-${day}`;
   const [name, setName] = useState("");
   const [frequency, setFrequency] = useState("");
-  const [startDate, setStartDate] = useState("");
-  const [endDate, setEndDate] = useState("");
+  const [startDate, setStartDate] = useState(formattedDate);
+  const [endDate, setEndDate] = useState(formattedDate);
   const [addNewQuestion, setAddNewQuestion] = useState([
     { name: "", type: "", options: ["", "", "", ""] },
   ]);
@@ -36,7 +43,7 @@ const AddPPMActivity = () => {
 
   const siteId = getItemInLocalStorage("SITEID");
   const userId = getItemInLocalStorage("UserId");
-
+const Navigate = useNavigate()
   const handleSubmit = async (event) => {
     event.preventDefault();
     const data = {
@@ -64,11 +71,7 @@ const AddPPMActivity = () => {
     try {
       const response = await postChecklist(data);
       console.log(response);
-      //   if (response.ok) {
-      //     console.log("Checklist saved successfully!");
-      //   } else {
-      //     console.error("Error saving checklist");
-      //   }
+     Navigate("/assets/ppm")
     } catch (error) {
       console.error("Error:", error);
     }
@@ -130,6 +133,7 @@ const AddPPMActivity = () => {
                     className="border p-1 px-4 border-gray-500 rounded-md"
                     value={startDate}
                     onChange={(e) => setStartDate(e.target.value)}
+                    min={today}
                   />
               </div>
               <div className="flex flex-col">
@@ -143,6 +147,7 @@ const AddPPMActivity = () => {
                     className="border p-1 px-4 border-gray-500 rounded-md"
                     value={endDate}
                     onChange={(e) => setEndDate(e.target.value)}
+                    min={today}
                   />
               </div>
             </div>

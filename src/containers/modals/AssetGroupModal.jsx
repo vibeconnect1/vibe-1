@@ -11,16 +11,34 @@ const AssetGroupModal = ({ onclose }) => {
 
   const dispatch = useDispatch();
   const createGroup = async () => {
-    const addGroup = await postAssetGroups({
-      name: groupName,
-      description: description,
-    });
-
-    onclose();
-    // if (groupName.trim()) {
-    //   dispatch(addGroup(groupName));
-    //   setGroupName("");
-    // }
+    try {
+      const addGroup = await postAssetGroups({
+        name: groupName,
+        description: description,
+        group_for: "asset"
+      });
+  console.log(addGroup)
+      onclose();
+      window.location.reload()
+    } catch (error) {
+      console.log(error)
+    }
+    
+  };
+  const createStockGroup = async () => {
+    try {
+      const addStockGroup = await postAssetGroups({
+        name: groupName,
+        description: description,
+        group_for: "item"
+      });
+  console.log(addStockGroup)
+      onclose();
+      window.location.reload()
+    } catch (error) {
+      console.log(error)
+    }
+    
   };
 
   console.log(groupName);
@@ -124,7 +142,7 @@ const AssetGroupModal = ({ onclose }) => {
  <div className="flex justify-center">
    <button
      className="bg-black p-1 px-4 text-white rounded-md my-2 hover:bg-white hover:text-black border-2 border-black transition-all duration-300"
-     onClick={createGroup}
+     onClick={createStockGroup}
    >
      Create
    </button>

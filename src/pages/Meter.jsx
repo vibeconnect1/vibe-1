@@ -225,10 +225,34 @@ const Meter = () => {
   }, []);
 
   const exportToExcel = () => {
+    const mappedData = filteredData.map((asset) => ({
+      "Asset Name": asset.name,
+      "Asset Type": asset.asset_type,
+      "Serial No.": asset.serial_number,
+      "Model No.": asset.model_number,
+      "Description": asset.description,
+      "Building": asset.building_name,
+      "Floor": asset.floor_name,
+      "Unit": asset.unit_name,
+      "Vendor": asset.vendor_name,
+      "Asset Group": asset.group_name, 
+      "Asset Sub Group": asset.sub_group_name, 
+      "Purchased On": asset.purchased_on,
+      "Purchased Cost": asset.purchase_cost,
+      "Critical": asset.critical? "Yes": "No",
+      "Breakdown": asset.breakdown? "Yes": "No",
+      "Meter Configured": asset.is_meter?"Yes":"No",
+      "Created On": dateFormat(asset.created_at),
+      "Updated On": dateFormat(asset.updated_at),
+      "Comment": asset.remarks,
+      "Installation": asset.installation,
+      "Warranty Start": asset.warranty_start,
+      "Warranty Expiry" : asset.warranty_expiry
+    }));
     const fileType =
       "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8";
-    const fileName = "asset_data.xlsx";
-    const ws = XLSX.utils.json_to_sheet(filteredData);
+    const fileName = "metered_asset_data.xlsx";
+    const ws = XLSX.utils.json_to_sheet(mappedData);
     const wb = { Sheets: { data: ws }, SheetNames: ["data"] };
     const excelBuffer = XLSX.write(wb, { bookType: "xlsx", type: "array" });
     const data = new Blob([excelBuffer], { type: fileType });

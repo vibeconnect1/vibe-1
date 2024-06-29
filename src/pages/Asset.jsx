@@ -259,34 +259,19 @@ const Asset = () => {
     }
   };
 
-  const customStyle = {
-    headRow: {
-      style: {
-        backgroundColor: themeColor,
-        color: "white",
-        fontSize: "10px",
-      },
-    },
-    headCells: {
-      style: {
-        textTransform: "upperCase",
-      },
-    },
-    cells: {
-      style: {
-        fontWeight: "bold",
-        fontSize: "10px",
-        width: "auto",
-      },
-    },
-  };
+  
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await getSiteAsset();
-        setFilteredData(response.data.site_assets);
-        setAssets(response.data.site_assets);
+        const sortedData = response.data.site_assets.sort((a, b) => {
+          return new Date(b.created_at) - new Date(a.created_at);
+        });
+        setFilteredData(sortedData);
+        // setFilteredData(response.data.site_assets);
+        // setAssets(response.data.site_assets);
+        setAssets(sortedData);
         console.log(response);
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -295,11 +280,36 @@ const Asset = () => {
     fetchData();
   }, []);
 
+
   const exportToExcel = () => {
+    const mappedData = filteredData.map((asset) => ({
+      "Asset Name": asset.name,
+      "Asset Type": asset.asset_type,
+      "Serial No.": asset.serial_number,
+      "Model No.": asset.model_number,
+      "Description": asset.description,
+      "Building": asset.building_name,
+      "Floor": asset.floor_name,
+      "Unit": asset.unit_name,
+      "Vendor": asset.vendor_name,
+      "Asset Group": asset.group_name, 
+      "Asset Sub Group": asset.sub_group_name, 
+      "Purchased On": asset.purchased_on,
+      "Purchased Cost": asset.purchase_cost,
+      "Critical": asset.critical? "Yes": "No",
+      "Breakdown": asset.breakdown? "Yes": "No",
+      "Meter Configured": asset.is_meter?"Yes":"No",
+      "Created On": dateFormat(asset.created_at),
+      "Updated On": dateFormat(asset.updated_at),
+      "Comment": asset.remarks,
+      "Installation": asset.installation,
+      "Warranty Start": asset.warranty_start,
+      "Warranty Expiry" : asset.warranty_expiry
+    }));
     const fileType =
       "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8";
     const fileName = "asset_data.xlsx";
-    const ws = XLSX.utils.json_to_sheet(filteredData);
+    const ws = XLSX.utils.json_to_sheet(mappedData);
     const wb = { Sheets: { data: ws }, SheetNames: ["data"] };
     const excelBuffer = XLSX.write(wb, { bookType: "xlsx", type: "array" });
     const data = new Blob([excelBuffer], { type: fileType });
@@ -315,53 +325,7 @@ const Asset = () => {
   };
 
   const buildings = getItemInLocalStorage("Building");
-  // const buildingChange = async (e) => {
-  //   async function fetchFloor(buildingId) {
-  //     try {
-  //       const build = await getFloors(buildingId);
-  //       // console.log("units n", build.data);
-  //       setFloor(build.data.map((item) => ({ name: item.name, id: item.id })));
-  //     } catch (e) {
-  //       console.log(e);
-  //     }
-  //   }
-
-  //   async function getUnit(floorId) {
-  //     try {
-  //       const unit = await getUnits(floorId);
-  //       setUnitName(
-  //         unit.data.map((item) => ({ name: item.name, id: item.id }))
-  //       );
-  //     } catch (error) {
-  //       console.log(error);
-  //     }
-  //   }
-
-  //   if (e.target.type === "select-one" && e.target.name === "building_name") {
-  //     const BuildID = Number(e.target.value);
-  //     await fetchFloor(BuildID);
-
-  //     setFormData({
-  //       ...formData,
-  //       building_name: BuildID,
-  //     });
-  //   } else if (
-  //     e.target.type === "select-one" &&
-  //     e.target.name === "floor_name"
-  //   ) {
-  //     const UnitID = Number(e.target.value);
-  //     await getUnit(UnitID);
-  //     setFormData({
-  //       ...formData,
-  //       floor_name: UnitID,
-  //     });
-  //   } else {
-  //     setFormData({
-  //       ...formData,
-  //       [e.target.name]: e.target.value,
-  //     });
-  //   }
-  // };
+  
 
   const handleFilterApply = () => {
     let filteredResults = [...filteredData];
@@ -483,93 +447,8 @@ const Asset = () => {
       <Navbar />
       <div className="p-4 w-full my-2 flex md:mx-2 overflow-hidden flex-col">
         <AssetNav />
-        {/* <div className="flex justify-center w-full">
-          <div className="sm:flex grid grid-cols-2 sm:flex-row gap-5 font-medium p-2 sm:rounded-full rounded-md opacity-90 bg-gray-200 ">
-            <h2
-              className={`p-1 ${
-                page === "assets" &&
-                "bg-white text-blue-500 shadow-custom-all-sides"
-              } rounded-full px-4 cursor-pointer text-center  transition-all duration-300 ease-linear`}
-              onClick={() => setPage("assets")}
-            >
-              Assets
-            </h2>
-            <h2
-              className={`p-1 ${
-                page === "AMC" &&
-                "bg-white text-blue-500 shadow-custom-all-sides"
-              } rounded-full px-4 cursor-pointer  transition-all duration-300 ease-linear`}
-              onClick={() => setPage("AMC")}
-            >
-              AMC
-            </h2>
-            <h2
-              className={`p-1 ${
-                page === "meter" &&
-                "bg-white text-blue-500 shadow-custom-all-sides"
-              } rounded-full px-4 cursor-pointer transition-all duration-300 ease-linear`}
-              onClick={() => setPage("meter")}
-            >
-              Meter
-            </h2>
-            <h2
-              className={`p-1 ${
-                page === "checklist" &&
-                "bg-white text-blue-500 shadow-custom-all-sides"
-              } rounded-full px-4 cursor-pointer  transition-all duration-300 ease-linear`}
-              onClick={() => setPage("checklist")}
-            >
-              Checklist
-            </h2>
-            <h2
-              className={`p-1 ${
-                page === "routine" &&
-                "bg-white text-blue-500 shadow-custom-all-sides"
-              } rounded-full px-4 cursor-pointer  transition-all duration-300 ease-linear`}
-              onClick={() => setPage("routine")}
-            >
-              Routine Task
-            </h2>
-            <h2
-              className={`p-1 ${
-                page === "PPM" &&
-                "bg-white text-blue-500 shadow-custom-all-sides"
-              } rounded-full px-4 cursor-pointer  transition-all duration-300 ease-linear`}
-              onClick={() => setPage("PPM")}
-            >
-              PPM Activity
-            </h2>
-            <h2
-              className={`p-1 ${
-                page === "inventory" &&
-                "bg-white text-blue-500 shadow-custom-all-sides"
-              } rounded-full px-4 cursor-pointer  transition-all duration-300 ease-linear`}
-              onClick={() => setPage("inventory")}
-            >
-              Stock Items
-            </h2>
-          </div>
-        </div> */}
-        {/* {omitColumn && (
-          <div className="grid grid-cols-10  gap-x-12 gap-y-4 border-2 border-black p-2 rounded-md mb-5">
-            {column.map((col) => (
-              <label key={col.name} className="flex items-center ">
-                <input
-                  type="checkbox"
-                  checked={visibleColumns.includes(col.name)}
-                  onChange={() =>
-                    setVisibleColumns((prev) =>
-                      prev.includes(col.name)
-                        ? prev.filter((item) => item !== col.name)
-                        : [...prev, col.name]
-                    )
-                  }
-                />
-                <span className="ml-1 text-sm">{col.name}</span>
-              </label>
-            ))}
-          </div>
-        )} */}
+       
+       
         {filter && page === "assets" && (
           <div className="flex flex-col md:flex-row mt-1 items-center justify-center gap-2">
             <select

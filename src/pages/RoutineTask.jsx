@@ -13,17 +13,42 @@ import AssetNav from "../components/navbars/AssetNav";
 
 const RoutineTask = () => {
   const [tasks, setTasks] = useState([]);
+  const [searchText, setSearchText] = useState("");
+  const [filteredData, setFilteredData] = useState([]);
 
   useEffect(() => {
     const fetchRoutineTask = async () => {
-      const taskResponse = await getRoutineTask();
-      const filteredServiceTask = taskResponse.data.activities.filter(asset => asset.asset_name);
-      console.log(filteredServiceTask)
-      setTasks(filteredServiceTask);
+      try {
+        const taskResponse = await getRoutineTask();
+        // const filteredServiceTask = taskResponse.data.activities.filter(
+        //   (asset) => asset.asset_name
+        // );
+        const filteredServiceTask = taskResponse.data.activities
+        .filter((asset) => asset.asset_name) 
+        .sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+        console.log(filteredServiceTask);
+        setTasks(filteredServiceTask);
+        setFilteredData(filteredServiceTask);
+      } catch (error) {
+        console.log(error);
+      }
     };
     fetchRoutineTask();
     console.log(tasks);
   }, []);
+
+  const dateFormat = (dateString) => {
+    const date = new Date(dateString);
+    return date.toLocaleDateString("en-GB", {
+      day: "2-digit",
+      month: "short", // or 'long' for full month names
+      year: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+      // second: '2-digit'
+      hour12: true,
+    });
+  };
   const RoutineColumns = [
     {
       name: "View",
@@ -41,25 +66,19 @@ const RoutineTask = () => {
       selector: (row) => row.checklist_name,
       sortable: true,
     },
-    { name: "Start Time", selector: (row) => row.start_time, sortable: true },
+    {
+      name: "Start Time",
+      selector: (row) => dateFormat(row.start_time),
+      sortable: true,
+    },
     { name: "End Time", selector: (row) => row.end_time, sortable: true },
-    
-    { name: "Status", selector: (row) => row.status, sortable: true },
-    { name: "Assigned To", selector: (row) => row.assigned_to_name, sortable: true },
 
-    // {
-    //   name: "Action",
-    //   cell: (row) => (
-    //     <div className="flex items-center gap-4">
-    //       <Link to={`/assets/edit-asset/${row.id}`}>
-    //         <BiEdit size={15} />
-    //       </Link>
-    //       <button className="text-red-400">
-    //         <MdDeleteForever size={25} />
-    //       </button>
-    //     </div>
-    //   ),
-    // },
+    { name: "Status", selector: (row) => row.status, sortable: true },
+    {
+      name: "Assigned To",
+      selector: (row) => row.assigned_to_name,
+      sortable: true,
+    },
   ];
 
   const defaultImage = { index: 0, src: "" };
@@ -106,6 +125,28 @@ const RoutineTask = () => {
     Get_Background();
   }, []);
 
+  const handleSearch = (e) => {
+    const searchValue = e.target.value;
+    setSearchText(searchValue);
+
+    if (searchValue.trim() === "") {
+      setFilteredData(tasks);
+    } else {
+      const filteredResults = tasks.filter(
+        (item) =>
+          (item.asset_name &&
+            item.asset_name
+              .toLowerCase()
+              .includes(searchValue.toLowerCase())) ||
+          (item.checklist_name &&
+            item.checklist_name
+              .toLowerCase()
+              .includes(searchValue.toLowerCase()))
+      );
+      setFilteredData(filteredResults);
+    }
+  };
+
   return (
     <section
       className="flex"
@@ -116,16 +157,16 @@ const RoutineTask = () => {
       <Navbar />
       <div className="p-4 w-full my-2 flex md:mx-2 overflow-hidden flex-col">
         <AssetNav />
-      <div className="flex md:flex-row flex-col justify-between items-center my-2 gap-2  ">
-        <input
-          type="text"
-          placeholder="Search By name"
-          className="border-2 p-2 md:w-96 border-gray-300 rounded-lg placeholder:text-sm"
-          //   value={searchText}
-          //   onChange={handleSearch}
-        />
-        <div className="md:flex grid grid-cols-2 sm:flex-row my-2 flex-col gap-2">
-          {/* <Link
+        <div className="flex md:flex-row flex-col justify-between items-center my-2 gap-2  ">
+          <input
+            type="text"
+            placeholder="Search By Asset name or Checklist name"
+            className="border-2 p-2 md:w-96 border-gray-300 rounded-lg placeholder:text-sm"
+            value={searchText}
+            onChange={handleSearch}
+          />
+          <div className="md:flex grid grid-cols-2 sm:flex-row my-2 flex-col gap-2">
+            {/* <Link
             to={"/admin/add-checklist"}
             className="bg-black  text-sm rounded-lg flex justify-center font-semibold items-center gap-2 text-white py-2 px-4 border-2 border-black hover:bg-white hover:text-black transition-all duration-300 "
           >
@@ -139,17 +180,21 @@ const RoutineTask = () => {
           >
             Export
           </button> */}
-          {/* <button
+            {/* <button
     className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
     onClick={handleDownloadQRCode}
     disabled={selectedRows.length === 0}
   >
     Download QR Code
   </button> */}
+          </div>
         </div>
+        <Table
+          columns={RoutineColumns}
+          data={filteredData}
+          isPagination={true}
+        />
       </div>
-      <Table columns={RoutineColumns} data={tasks} isPagination={true} />
-    </div>
     </section>
   );
 };

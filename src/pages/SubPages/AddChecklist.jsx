@@ -4,11 +4,18 @@ import { IoClose } from "react-icons/io5";
 import { getItemInLocalStorage } from "../../utils/localStorage";
 import { postChecklist } from "../../api";
 import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 const AddChecklist = () => {
+  const today = new Date().toISOString().split("T")[0];
+  const toDay = new Date();
+  const year = toDay.getFullYear();
+  const month = String(toDay.getMonth() + 1).padStart(2, "0");
+  const day = String(toDay.getDate()).padStart(2, "0");
+  const formattedDate = `${year}-${month}-${day}`;
   const [name, setName] = useState("");
   const [frequency, setFrequency] = useState("");
-  const [startDate, setStartDate] = useState("");
-  const [endDate, setEndDate] = useState("");
+  const [startDate, setStartDate] = useState(formattedDate);
+  const [endDate, setEndDate] = useState(formattedDate);
   const [addNewQuestion, setAddNewQuestion] = useState([
     { name: "", type: "", options: ["", "", "", ""] },
   ]);
@@ -74,10 +81,11 @@ const navigate = useNavigate()
       console.error("Error:", error);
     }
   };
+  const themeColor = useSelector((state)=> state.theme.color)
   return (
     <section>
       <div className="m-2">
-        <h2 className="text-center text-xl font-bold p-2 bg-black rounded-full text-white">
+        <h2 style={{background: themeColor}} className="text-center text-xl font-bold p-2  rounded-full text-white">
           Add Checklist
         </h2>
         <div className="md:mx-20 my-5 mb-10 sm:border border-gray-400 p-5 px-10 rounded-lg sm:shadow-xl">
@@ -130,6 +138,7 @@ const navigate = useNavigate()
                     className="border p-1 px-4 border-gray-500 rounded-md"
                     value={startDate}
                     onChange={(e) => setStartDate(e.target.value)}
+                    min={today}
                   />
               </div>
               <div className="flex flex-col">
@@ -143,6 +152,7 @@ const navigate = useNavigate()
                     className="border p-1 px-4 border-gray-500 rounded-md"
                     value={endDate}
                     onChange={(e) => setEndDate(e.target.value)}
+                    min={today}
                   />
               </div>
             </div>

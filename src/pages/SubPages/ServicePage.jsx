@@ -8,6 +8,7 @@ import { BsEye } from 'react-icons/bs';
 import Services from '../Services';
 import Navbar from '../../components/Navbar';
 import * as XLSX from "xlsx";
+import { DNA } from 'react-loader-spinner';
 
 const ServicePage = () => {
     const [searchText, setSearchText] = useState("");
@@ -32,7 +33,7 @@ const ServicePage = () => {
             </div>
           ),
         },
-        { name: "ID", selector: (row) => row.id, sortable: true },
+        
         {
           name: "Service Name",
           selector: (row) => row.name,
@@ -53,39 +54,8 @@ const ServicePage = () => {
           selector: (row) => row.unit_name,
           sortable: true,
         },
-        // {
-        //   name: "Service Code",
-        //   selector: (row) => row.serviceCode,
-        //   sortable: true,
-        // },
-        // { name: "Reference Number", selector: (row) => row.ref, sortable: true },
-        // { name: "Category", selector: (row) => row.category, sortable: true },
-        // {
-        //   name: "Group",
-        //   selector: (row) => row.group,
-        //   sortable: true,
-        // },
-        // {
-        //   name: "UOM",
-        //   selector: (row) => row.UOM,
-        //   sortable: true,
-        // },
-        // {
-        //   name: "Site",
-        //   selector: (row) => row.site,
-        //   sortable: true,
-        // },
-    
-        // {
-        //   name: "Area",
-        //   selector: (row) => row.area,
-        //   sortable: true,
-        // },
-        // {
-        //   name: "Status",
-        //   selector: (row) => row.status,
-        //   sortable: true,
-        // },
+        
+       
     
         {
           name: "Created On",
@@ -95,17 +65,21 @@ const ServicePage = () => {
       ];
 
       useEffect(() => {
-        try {
-          const fetchService = async () => {
+        const fetchService = async () => {
+            try {
             const serviceResponse = await getSoftServices();
-            setFilteredData(serviceResponse.data);
-            setServices(serviceResponse.data)
+            const sortedServiceData = serviceResponse.data.sort((a, b) => {
+              return new Date(b.created_at) - new Date(a.created_at);
+            });
+             setFilteredData(sortedServiceData);
+            setServices(sortedServiceData)
             console.log(serviceResponse);
-          };
-          fetchService();
+          
         } catch (error) {
           console.log(error);
         }
+      }
+        fetchService();
       }, []);
       const handleSearch = (event) => {
         const searchValue = event.target.value;
@@ -120,10 +94,19 @@ const ServicePage = () => {
       };
     }
     const exportToExcel = () => {
+      const mappedData = filteredData.map((serv) => ({
+    "Service Name": serv.name,
+    "building" : serv.building_name,
+    "Floor": serv.floor_name,
+    "Unit": serv.unit_name,
+        "Created On": dateFormat(serv.created_at),
+        
+        
+      }));
         const fileType =
           "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8";
         const fileName = "service_data.xlsx";
-        const ws = XLSX.utils.json_to_sheet(filteredData);
+        const ws = XLSX.utils.json_to_sheet(mappedData);
         const wb = { Sheets: { data: ws }, SheetNames: ["data"] };
         const excelBuffer = XLSX.write(wb, { bookType: "xlsx", type: "array" });
         const data = new Blob([excelBuffer], { type: fileType });
@@ -179,7 +162,7 @@ const ServicePage = () => {
                 value={searchText}
                 onChange={handleSearch}
               />
-              <div className="flex flex-wrap gap-2">
+              <div className="flex flex-wrap md:my-0 my-2 gap-2">
                 {/* <button
               className="text-lg font-semibold border-2 border-black px-4 p-1 flex gap-2 items-center rounded-md"
               onClick={() => setOmitColumn(!omitColumn)}
@@ -217,7 +200,21 @@ const ServicePage = () => {
           </button> */}
               </div>
             </div>
+            {servicess.length !== 0 ? (
             <Table columns={column} data={filteredData} />
+            ):(
+              <div className="flex justify-center items-center h-full">
+              <DNA
+                visible={true}
+                height="120"
+                width="120"
+                ariaLabel="dna-loading"
+                wrapperStyle={{}}
+                wrapperClass="dna-wrapper"
+              />
+            </div>
+
+            )}
             {/* <DataTable
           selectableRows
           columns={column.filter((col) => visibleColumns.includes(col.name))}

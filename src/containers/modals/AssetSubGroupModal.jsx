@@ -5,7 +5,7 @@ import { addSubGroup } from "../../features/group/groupSlice";
 import { getAssetGroups, postAssetSubGroups } from "../../api";
 import toast from "react-hot-toast";
 
-const AssetSubGroupModal = ({ onclose }) => {
+const AssetSubGroupModal = ({ onclose, assetGroup, stockGroup }) => {
   const [subGroupName, setSubGroupName] = useState("");
   const [selectedGroup, setSelectedGroup] = useState("");
   const [assetGroups, setAssetGroups] = useState([]);
@@ -93,7 +93,7 @@ const AssetSubGroupModal = ({ onclose }) => {
                 className="border rounded-md border-gray-500 p-1 px-2"
               >
                 <option value="">Select Group</option>
-                {assetGroups.map((group) => (
+                {assetGroup.map((group) => (
                   <option value={group.id} key={group.id}>
                     {group.name}
                   </option>
@@ -138,7 +138,7 @@ const AssetSubGroupModal = ({ onclose }) => {
                 className="border rounded-md border-gray-500 p-1 px-2"
               >
                 <option value="">Select Group</option>
-                {assetGroups.map((group) => (
+                {stockGroup.map((group) => (
                   <option value={group.id} key={group.id}>
                     {group.name}
                   </option>

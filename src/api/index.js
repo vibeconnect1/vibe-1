@@ -218,7 +218,7 @@ export const resetPassword = async (data) =>
 // }
 
 export const getAssetGroups = async () =>
-  axiosInstance.get("/asset_groups.json", {
+  axiosInstance.get("/asset_groups.json?q[group_for_eq]=asset", {
     params: {
       token: token,
     },
@@ -304,6 +304,7 @@ export const getEditAMCDetails = async (id) =>
     },
   });
 
+
 export const EditAMCDetails = async (data, id) =>
   axiosInstance.put(`/asset_amcs/${id}.json`, data, {
     params: {
@@ -317,6 +318,13 @@ export const getSubGroupsList = async () =>
       token: token,
     },
   });
+export const getStockGroupsList = async () =>
+  axiosInstance.get("/asset_groups.json?q[group_for_eq]=item", {
+    params: {
+      token: token,
+    },
+  });
+
 export const postTicketAddItems = async (data) =>
   axiosInstance.post("/pms/admin/complaint_items.json", data, {
     params: {

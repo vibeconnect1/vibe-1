@@ -4,6 +4,7 @@ import { getFloors, getUnits, postSoftServices } from "../../api";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
+import FileInputBox from "../../containers/Inputs/FileInputBox";
 
 const AddService = () => {
   const [floors, setFloors] = useState([]);
@@ -19,7 +20,7 @@ const AddService = () => {
     name: "",
     // wing_id: "",
     // area_id: "",
-    file: [],
+    attachments: [],
   });
   console.log(formData);
   const buildings = getItemInLocalStorage("Building");
@@ -69,14 +70,15 @@ const AddService = () => {
       });
     }
   };
-  const handleFileChange = (event, fieldName) => {
-    const files = Array.from(event.target.files);
+  const handleFileChange = (files, fieldName) => {
+    // Changed to receive 'files' directly
     setFormData({
       ...formData,
       [fieldName]: files,
     });
+    console.log(fieldName);
   };
-const navigate = useNavigate()
+  const navigate = useNavigate();
   const handleAddService = async () => {
     if (
       !formData.name ||
@@ -90,16 +92,18 @@ const navigate = useNavigate()
     try {
       toast.loading("Creating Service Please Wait!");
       const dataToSend = new FormData();
-
       dataToSend.append("soft_service[site_id]", formData.site_id);
       dataToSend.append("soft_service[name]", formData.name);
       dataToSend.append("soft_service[building_id]", formData.building_id);
       dataToSend.append("soft_service[floor_id]", formData.floor_id);
       dataToSend.append("soft_service[unit_id]", formData.unit_id);
       dataToSend.append("soft_service[user_id]", formData.user_id);
+      (formData.attachments || []).forEach((file, index) => {
+        dataToSend.append(`attachments[]`, file);
+      });
       const serviceResponse = await postSoftServices(dataToSend);
       console.log(serviceResponse);
-navigate("/services/soft-service")
+      navigate("/services/soft-service");
       toast.dismiss();
       toast.success("Service Created Successfully");
     } catch (error) {
@@ -108,12 +112,15 @@ navigate("/services/soft-service")
     }
   };
 
-const themeColor = useSelector((state)=> state.theme.color)
+  const themeColor = useSelector((state) => state.theme.color);
 
   return (
     <section>
       <div className="m-2">
-        <h2 style={{background: themeColor}} className="text-center text-xl font-bold p-2  rounded-full text-white">
+        <h2
+          style={{ background: themeColor }}
+          className="text-center text-xl font-bold p-2  rounded-full text-white"
+        >
           Create Service
         </h2>
         <div className="md:mx-20 my-5 md:mb-10 sm:border border-gray-400 p-5 px-10 rounded-lg ">
@@ -131,22 +138,7 @@ const themeColor = useSelector((state)=> state.theme.color)
                 className="border p-1 px-4 border-gray-500 rounded-md placeholder:text-sm"
               />
             </div>
-            {/* <div className="flex flex-col">
-              <label htmlFor="" className="font-semibold">
-                Select Site:
-              </label>
-              <select
-                className="border p-1 px-4 border-gray-500 rounded-md"
-                value={formData.site_id}
-                name="site_id"
-                onChange={handleChange}
-              >
-                <option value="">Select Site</option>
-                <option value="unit1">Site 1</option>
-                <option value="unit2">Site 2</option>
-                <option value="unit2">Site 3</option>
-              </select>
-            </div> */}
+
             <div className="flex flex-col ">
               <label htmlFor="" className="font-semibold">
                 Select Building:
@@ -165,22 +157,7 @@ const themeColor = useSelector((state)=> state.theme.color)
                 ))}
               </select>
             </div>
-            {/* <div className="flex flex-col ">
-              <label htmlFor="" className="font-semibold">
-                Select Wing:
-              </label>
-              <select
-                className="border p-1 px-4 border-gray-500 rounded-md"
-                value={formData.wing_id}
-                name="wing_id"
-                onChange={handleChange}
-              >
-                <option value="">Select Wing</option>
-                <option value="unit1">Wing 1</option>
-                <option value="unit2">Wing 2</option>
-                <option value="unit2">Wing 3</option>
-              </select>
-            </div> */}
+
             <div className="flex flex-col">
               <label htmlFor="" className="font-semibold">
                 Select Floor:
@@ -217,49 +194,22 @@ const themeColor = useSelector((state)=> state.theme.color)
                 ))}
               </select>
             </div>
-
-            {/* <div className="flex flex-col ">
-              <label
-                htmlFor=""
-                className="font-semibold"
-                value={formData.area_id}
-                name="area_id"
-                onChange={handleChange}
-              >
-                Select Area:
-              </label>
-              <select className="border p-1 px-4 border-gray-500 rounded-md" value={formData.area_id} onChange={handleChange} name="area_id">
-                <option value="">Select Area</option>
-                <option value="unit1">Area 1</option>
-                <option value="unit2">Area 2</option>
-                <option value="unit2">Area 3</option>
-              </select>
-            </div> */}
           </div>
-          {/* <h2 className="border-b text-center text-xl border-black mb-6 font-bold">
+          <h2 className="border-b text-center text-xl border-black mb-6 font-bold">
             Attachments
           </h2>
-          <input
-            type="file"
-            onChange={(event) => handleFileChange(event, "file")}
-            multiple
-          /> */}
-          <div className="md:flex grid grid-cols-2 gap-2 my-5 justify-center">
+          <FileInputBox
+            handleChange={(files) => handleFileChange(files, "attachments")}
+            fieldName={"attachments"}
+            isMulti={true}
+          />
+          <div className="md:flex grid md:grid-cols-2 gap-2 my-5 justify-center">
             <button
               className="bg-black text-white p-1 px-4 rounded-md font-medium"
               onClick={handleAddService}
             >
               Save & Show Details
             </button>
-            {/* <button className=" border-black border-2 p-1 px-4 rounded-md font-medium">
-              Save & Add PPM
-            </button>
-            <button className=" border-black border-2 p-1 px-4 rounded-md font-medium">
-              Save & Create New Service
-            </button>
-            <button className="border-black border-2 p-1 px-4 rounded-md font-medium">
-              Save & Add AMC
-            </button> */}
           </div>
         </div>
       </div>

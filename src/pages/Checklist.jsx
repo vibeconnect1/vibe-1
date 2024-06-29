@@ -9,15 +9,23 @@ import AssetNav from "../components/navbars/AssetNav";
 import Navbar from "../components/Navbar";
 import { getItemInLocalStorage } from "../utils/localStorage";
 import { DNA } from "react-loader-spinner";
+import * as XLSX from "xlsx";
 
 const Checklist = () => {
   const [checklists, setChecklists] = useState([]);
+  const [filteredData, setFilteredData] = useState([])
+  const [searchText, setSearchText] = useState("")
 
   useEffect(() => {
     const fetchChecklist = async () => {
-      const checklist = await getChecklist();
-      setChecklists(checklist.data.checklists);
-      console.log(checklist.data.checklists)
+     try {
+       const checklist = await getChecklist();
+       setChecklists(checklist.data.checklists);
+       console.log(checklist.data.checklists)
+       setFilteredData(checklist.data.checklists)
+     } catch (error) {
+      console.log(error)
+     }
     };
     fetchChecklist();
     console.log(checklists);
@@ -38,11 +46,7 @@ const Checklist = () => {
       selector: (row) => row.questions.length,
       sortable: true,
     },
-    {
-      name: "Type",
-      selector: (row) => row.ctype,
-      sortable: true,
-    },
+   
     {
       name: "Associations",
       selector: (row) => (
@@ -111,6 +115,51 @@ const Checklist = () => {
     Get_Background();
   }, []);
 
+  const handleSearch = (e) => {
+    const searchValue = e.target.value;
+    setSearchText(searchValue);
+
+    if (searchValue.trim() === "") {
+      setFilteredData(checklists);
+    } else {
+      const filteredResults = checklists.filter(
+        (item) =>
+          
+          item.name.toLowerCase().includes(searchValue.toLowerCase())
+      );
+      setFilteredData(filteredResults);
+    }
+  };
+
+  const dateFormat = (dateString) => {
+    const date = new Date(dateString);
+    return date.toLocaleString();
+  };
+
+  const exportToExcel = () => {
+    const mappedData = filteredData.map((check) => ({
+     
+      "Checklist Name": check.name,
+      "Start Date": check.start_date,
+      "End Date": check.end_date,
+      "Frequency": check.frequency,
+      "Created On": dateFormat(check.created_at),
+      // "Question": check.questions.map(q => q.toString()).join(', ')
+    }));
+    const fileType =
+      "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8";
+    const fileName = "Checklist_data.xlsx";
+    const ws = XLSX.utils.json_to_sheet(mappedData);
+    const wb = { Sheets: { data: ws }, SheetNames: ["data"] };
+    const excelBuffer = XLSX.write(wb, { bookType: "xlsx", type: "array" });
+    const data = new Blob([excelBuffer], { type: fileType });
+    const url = URL.createObjectURL(data);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = fileName;
+    link.click();
+  };
+
   return (
     <section
       className="flex"
@@ -126,8 +175,8 @@ const Checklist = () => {
           type="text"
           placeholder="Search By name"
           className="border-2 p-2 md:w-96 border-gray-300 rounded-lg placeholder:text-sm"
-          //   value={searchText}
-          //   onChange={handleSearch}
+            value={searchText}
+            onChange={handleSearch}
         />
         <div className="md:flex grid grid-cols-2 sm:flex-row my-2 flex-col gap-2">
           <Link
@@ -140,20 +189,14 @@ const Checklist = () => {
 
           <button
             className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-            // onClick={exportToExcel}
+            onClick={exportToExcel}
           >
             Export
           </button>
-          {/* <button
-    className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-    onClick={handleDownloadQRCode}
-    disabled={selectedRows.length === 0}
-  >
-    Download QR Code
-  </button> */}
+         
         </div>
       </div>
-      {checklists.length !== 0 ?<Table columns={columns} data={checklists} isPagination={true} /> 
+      {checklists.length !== 0 ?<Table columns={columns} data={filteredData} isPagination={true} /> 
      : (
       <div className="flex justify-center items-center h-full">
         <DNA

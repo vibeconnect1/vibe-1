@@ -631,7 +631,7 @@ const Assetinfo = ({ assetData }) => {
             isPagination={true}
           />
         </div>
-        {qrCode && <AssetQrCode onClose={() => setQrCode(false)} QR={domainPrefix + assetData.qr_code_image_url
+        {qrCode && <AssetQrCode assetName={name} onClose={() => setQrCode(false)} QR={domainPrefix + assetData.qr_code_image_url
 } />}
       </div>
     </section>

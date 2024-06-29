@@ -146,7 +146,7 @@ const Navbar = () => {
                   Dashboard
                 </h2>
               </NavLink>
-              {/* <NavLink
+              <NavLink
                 to={"/admin/project-management"}
                 className={({ isActive }) =>
                   ` ${
@@ -338,7 +338,7 @@ const Navbar = () => {
                 >
                   Purchase
                 </h2>
-              </NavLink> */}
+              </NavLink>
               {/* <NavLink
                 to={"/admin/letterofindent"}
                 className={({ isActive }) =>
@@ -421,7 +421,7 @@ const Navbar = () => {
                   Service Desk
                 </h2>
               </NavLink>
-              {/* <NavLink
+              <NavLink
                 to={"/admin/service-pr"}
                 className={({ isActive }) =>
                   ` ${
@@ -500,7 +500,7 @@ const Navbar = () => {
                 >
                   Bill Pay
                 </h2>
-              </NavLink> */}
+              </NavLink>
               {/* <NavLink
                 to={"/admin/PO"}
                 className={({ isActive }) =>
@@ -611,7 +611,7 @@ const Navbar = () => {
                   GDN
                 </h2>
               </NavLink> */}
-              {/* <NavLink
+              <NavLink
                 to={"/admin/audit"}
                 className={({ isActive }) =>
                   ` ${
@@ -774,7 +774,7 @@ const Navbar = () => {
                 >
                   Birthday
                 </h2>
-              </NavLink> */}
+              </NavLink>
               {/* admin tickets */}
              
               {/* <NavLink
@@ -804,7 +804,7 @@ const Navbar = () => {
                   CAR
                 </h2>
               </NavLink> */}
-              {/* <NavLink
+              <NavLink
                 to={"/admin/fb"}
                 className={({ isActive }) =>
                   ` ${
@@ -830,7 +830,7 @@ const Navbar = () => {
                 >
                   F&B
                 </h2>
-              </NavLink> */}
+              </NavLink>
               {/* <NavLink
                 to={"/admin/pantry"}
                 className={({ isActive }) =>
@@ -859,7 +859,7 @@ const Navbar = () => {
                 </h2>
               </NavLink> */}
 
-              {/* <NavLink
+              <NavLink
                 to={"/admin/incidents"}
                 className={({ isActive }) =>
                   ` ${
@@ -966,7 +966,7 @@ const Navbar = () => {
                 >
                   Business Card
                 </h2>
-              </NavLink> */}
+              </NavLink>
 
               {/* <NavLink
                 to={"/admin/documents"}
@@ -996,7 +996,7 @@ const Navbar = () => {
                   Document Pro
                 </h2>
               </NavLink> */}
-              {/* <NavLink
+              <NavLink
                 to={"/bookings"}
                 className={({ isActive }) =>
                   ` ${
@@ -1015,7 +1015,7 @@ const Navbar = () => {
                     !open && "opacity-0 translate-x-28 overflow-hidden"
                   }`}
                 >
-                 Facility Bookings
+                 Space Bookings
                 </h2>
                 <h2
                   className={`${
@@ -1215,7 +1215,7 @@ const Navbar = () => {
                 >
                   Other Bills
                 </h2>
-              </NavLink> */}
+              </NavLink>
               {/* <NavLink
                 to={"/admin/Insights"}
                 className={({ isActive }) =>
@@ -1243,7 +1243,7 @@ const Navbar = () => {
                   Insights
                 </h2>
               </NavLink> */}
-               {/* <NavLink
+               <NavLink
                 to={"/personal-finance"}
                 className={({ isActive }) =>
                   ` ${
@@ -1271,9 +1271,9 @@ const Navbar = () => {
                 >
                   Personal Financial
                 </h2>
-              </NavLink> */}
+              </NavLink>
              
-              {/* <NavLink
+              <NavLink
                 to={"/admin/fitness"}
                 className={({ isActive }) =>
                   ` ${
@@ -1354,8 +1354,8 @@ const Navbar = () => {
                 >
                   Parking
                 </h2>
-              </NavLink> */}
-              <NavLink
+              </NavLink>
+              {/* <NavLink
                 to={"/setup/users-setup"}
                 className={({ isActive }) =>
                   ` ${
@@ -1383,7 +1383,7 @@ const Navbar = () => {
                 >
                   Users
                 </h2>
-              </NavLink>
+              </NavLink> */}
 
              
             </>
@@ -1392,7 +1392,7 @@ const Navbar = () => {
           {/* user */}
           {user !== "pms_admin" && (
             <>
-              {/* <NavLink
+              <NavLink
                 to={"/employee/project-management"}
                 className={({ isActive }) =>
                   ` ${
@@ -1447,8 +1447,7 @@ const Navbar = () => {
                 >
                   Task management
                 </h2>
-              </NavLink> */}
-              
+              </NavLink>
               <NavLink
                 to={"/mytickets"}
                 className={({ isActive }) =>
@@ -1475,7 +1474,7 @@ const Navbar = () => {
                   My Ticket
                 </h2>
               </NavLink>
-              {/* <NavLink
+              <NavLink
                 to={"/employee-attendance"}
                 className={({ isActive }) =>
                   ` ${
@@ -2019,7 +2018,7 @@ const Navbar = () => {
                 >
                   Pantry
                 </h2>
-              </NavLink> */}
+              </NavLink>
             </>
           )}
           {/* <NavLink
@@ -2049,7 +2048,7 @@ const Navbar = () => {
             </h2>
           </NavLink> */}
 
-          {/* {user === "pms_admin" && (
+          {user === "pms_admin" && (
             <NavLink
               to={"/setup"}
               className={({ isActive }) =>
@@ -2076,7 +2075,7 @@ const Navbar = () => {
                 Setup
               </h2>
             </NavLink>
-          )} */}
+          )}
           <div className="border border-white" />
           <div className=" ">
             <NavLink

@@ -3,17 +3,17 @@ import { getServicesTaskDetails } from "../../../api";
 import { useParams } from "react-router-dom";
 
 const ServiceTaskDetails = () => {
-  const { assetId, activityId } = useParams();
+  const { serviceId, activityId } = useParams();
   const [taskDetails, setTaskDetails] = useState([]);
 
   useEffect(() => {
     const fetchTaskDetails = async () => {
-      const detailsResp = await getServicesTaskDetails(assetId, activityId);
+      const detailsResp = await getServicesTaskDetails(serviceId, activityId);
       console.log(detailsResp.data);
       setTaskDetails(detailsResp.data);
     };
     fetchTaskDetails();
-  }, [assetId, activityId]);
+  }, [serviceId, activityId]);
 
   if (taskDetails.length === 0)  {
     return (
@@ -23,7 +23,7 @@ const ServiceTaskDetails = () => {
     );
   }
 
-  const { asset_name, checklist_name, created_at } = taskDetails[0];
+  const { soft_service_name, checklist_name, created_at } = taskDetails[0];
   const dateFormat = (dateString) => {
     const date = new Date(dateString);
     return date.toLocaleDateString("en-GB", {
@@ -40,8 +40,8 @@ const ServiceTaskDetails = () => {
     <div className="flex flex-col justify-center items-center p-2">
       <div className="flex justify-between bg-gray-400 rounded p-2 w-full mx-20 text-white">
         <div className="grid grid-cols-2">
-          <p className="font-medium">Asset Name :</p>
-          <p>{asset_name}</p>
+          <p className="font-medium">Service Name :</p>
+          <p>{soft_service_name}</p>
         </div>
         <p>{dateFormat(created_at)}</p>
         <div className="grid grid-cols-2">

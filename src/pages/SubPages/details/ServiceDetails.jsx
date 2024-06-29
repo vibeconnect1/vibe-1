@@ -25,12 +25,13 @@ const ServiceDetails = () => {
   };
   const domainPrefix = "https://admin.vibecopilot.ai";
   console.log(details.qr_code_image_url)
+ 
   return (
     <section>
       <div className="m-2">
         <h2
           style={{ background: themeColor }}
-          className="text-center text-xl font-bold p-2  rounded-full text-white"
+          className="text-center text-xl font-bold p-2 rounded-full text-white"
         >
           Service Details
         </h2>
@@ -53,7 +54,7 @@ const ServiceDetails = () => {
             </h1>
           </div>
           <div className="my-2 flex justify-end"></div>
-          <div className="p-5 grid md:grid-cols-3 gap-5 bg-gray-200 rounded-md font-medium">
+          <div className="p-5 grid md:grid-cols-3 gap-5 bg-gray-100 rounded-md font-medium">
             <div className="grid grid-cols-2">
               <p>Building :</p>
               <p className="text-sm">{details.building_name}</p>
@@ -79,8 +80,37 @@ const ServiceDetails = () => {
               <p className="text-sm">{FormatedDate(details.updated_at)}</p>
             </div>
           </div>
-          {/* <h1 className="border-b border-black font-semibold my-5">Attachments</h1> */}
-          {qrCode && <AssetQrCode onClose={() => setQrCode(false)} QR={domainPrefix + details.qr_code_image_url
+          <h1 className="border-b border-black font-semibold my-5">Attachments</h1>
+          <div className="flex  gap-4 flex-wrap my-4 items-center  text-center">
+                  {details.attachments &&
+                  details.attachments.length > 0
+                    ? details.attachments.map((doc, index) => (
+                        <div key={doc.id} className="">
+                          {isImage(domainPrefix + doc.document) ? (
+                            <img
+                              src={domainPrefix + doc.document}
+                              alt={`Attachment ${index + 1}`}
+                              className="w-40 h-28 object-cover rounded-md"
+                              onClick={() =>
+                                window.open(doc.document, "_blank")
+                              }
+                            />
+                          ) : (
+                            <a
+                              href={domainPrefix + doc.document}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="attachment-link hover:text-blue-400 transition-all duration-300  text-center flex flex-col items-center  "
+                            >
+                              <FaRegFileAlt size={50} />
+                              {getFileName(doc.document)}
+                            </a>
+                          )}
+                        </div>
+                      ))
+                    : (<p className="text-center w-full">No Attachments</p>)}
+                </div>
+          {qrCode && <AssetQrCode assetName={details.name} onClose={() => setQrCode(false)} QR={domainPrefix + details.qr_code_image_url
 } />}
         </div>
       </div>

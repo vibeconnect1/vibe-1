@@ -7,11 +7,24 @@ import Services from '../Services';
 import Navbar from '../../components/Navbar';
 import * as XLSX from "xlsx";
 import { BsEye } from 'react-icons/bs';
+import { DNA } from 'react-loader-spinner';
 const ServicesTask = () => {
     const [routines, setRoutines]= useState([])
     const [filter, setFilter] = useState(false);
     const [searchRoutineText, setSearchRoutineCheck] = useState("")
     const [filteredRoutineData, setFilteredRoutineData] = useState([]);
+    const dateFormat = (dateString) => {
+      const date = new Date(dateString);
+      return date.toLocaleDateString("en-GB", {
+        day: "2-digit",
+        month: "short", // or 'long' for full month names
+        year: "numeric",
+        hour: "2-digit",
+        minute: "2-digit",
+        // second: '2-digit'
+        hour12: true,
+      });
+    };
     const routineColumn = [
         {
           name: "Action",
@@ -39,7 +52,7 @@ const ServicesTask = () => {
         
         {
           name: "Start Time",
-          selector: (row) => row.start_time,
+          selector: (row) => dateFormat(row.start_time),
           sortable: true,
         },
         {
@@ -90,6 +103,7 @@ const ServicesTask = () => {
       };
     
       const exportToExcel = () => {
+        
         const fileType =
           "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8";
         const fileName = "service Task Data.xlsx";
@@ -189,7 +203,21 @@ const ServicesTask = () => {
   </button> */}
         </div>
       </div>
-      <Table columns={routineColumn} data={filteredRoutineData} />
+      {routines.length !== 0 ?(
+        <Table columns={routineColumn} data={filteredRoutineData} />
+
+      ):(
+        <div className="flex justify-center items-center h-full">
+        <DNA
+          visible={true}
+          height="120"
+          width="120"
+          ariaLabel="dna-loading"
+          wrapperStyle={{}}
+          wrapperClass="dna-wrapper"
+        />
+      </div>
+      )}
     
       
     </div>

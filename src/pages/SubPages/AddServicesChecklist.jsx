@@ -5,12 +5,21 @@ import { getItemInLocalStorage } from "../../utils/localStorage";
 import { postChecklist } from "../../api";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
+import Cron from "../../components/Cron";
+import CronChecklist from "../../components/Cron";
+import { useSelector } from "react-redux";
 
 const AddServicesChecklist = () => {
+  const today = new Date().toISOString().split("T")[0];
+  const toDay = new Date();
+  const year = toDay.getFullYear();
+  const month = String(toDay.getMonth() + 1).padStart(2, "0");
+  const day = String(toDay.getDate()).padStart(2, "0");
+  const formattedDate = `${year}-${month}-${day}`;
   const [name, setName] = useState("");
   const [frequency, setFrequency] = useState("");
-  const [startDate, setStartDate] = useState("");
-  const [endDate, setEndDate] = useState("");
+  const [startDate, setStartDate] = useState(formattedDate);
+  const [endDate, setEndDate] = useState(formattedDate);
   const [addNewQuestion, setAddNewQuestion] = useState([
     { name: "", type: "", options: ["", "", "", ""] },
   ]);
@@ -28,7 +37,7 @@ const AddServicesChecklist = () => {
     setAddNewQuestion(newFields);
   };
 
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const handleQuestionChange = (index, field, value) => {
     const newQuestions = [...addNewQuestion];
     if (field === "name" || field === "type") {
@@ -51,7 +60,7 @@ const AddServicesChecklist = () => {
         end_date: endDate,
         user_id: userId,
         ctype: "soft_service",
-        },
+      },
       frequency: frequency,
       question: addNewQuestion.map((q) => ({
         name: q.name,
@@ -66,8 +75,8 @@ const AddServicesChecklist = () => {
 
     try {
       const response = await postChecklist(data);
-      toast.success("Checklist Created Successfully")
-      navigate("/services/checklist")
+      toast.success("Checklist Created Successfully");
+      navigate("/services/checklist");
       console.log(response);
       //   if (response.ok) {
       //     console.log("Checklist saved successfully!");
@@ -78,11 +87,15 @@ const AddServicesChecklist = () => {
       console.error("Error:", error);
     }
   };
+  const themeColor = useSelector((state) => state.theme.color);
 
   return (
     <section>
       <div className="m-2">
-        <h2 className="text-center text-xl font-bold p-2 bg-black rounded-full text-white">
+        <h2
+          style={{ background: themeColor }}
+          className="text-center text-xl font-bold p-2 bg-black rounded-full text-white"
+        >
           Add Checklist
         </h2>
         <div className="md:mx-20 my-5 mb-10 sm:border border-gray-400 p-5 px-10 rounded-lg sm:shadow-xl">
@@ -136,6 +149,8 @@ const AddServicesChecklist = () => {
                     className="border p-1 px-4 border-gray-500 rounded-md"
                     value={startDate}
                     onChange={(e) => setStartDate(e.target.value)}
+                    min={today}
+                    
                   />
                 </div>
                 <div className="flex flex-col">
@@ -149,6 +164,7 @@ const AddServicesChecklist = () => {
                     className="border p-1 px-4 border-gray-500 rounded-md"
                     value={endDate}
                     onChange={(e) => setEndDate(e.target.value)}
+                    min={today}
                   />
                 </div>
               </div>
@@ -238,6 +254,7 @@ const AddServicesChecklist = () => {
                           </div>
                         )}
                       </div>
+                      <CronChecklist/>
                       <div className="flex justify-end gap-2">
                         <button
                           className="p-1 border-2 border-red-500 text-white hover:bg-white hover:text-red-500 bg-red-500 px-4 transition-all duration-300 rounded-md "
