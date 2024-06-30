@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { getPPMActivityDetails } from "../../../api";
+import { getPPMDetails } from "../../../api";
 import { useParams } from "react-router-dom";
 
 const PPMActivityDetails = () => {
@@ -8,7 +8,7 @@ const PPMActivityDetails = () => {
 
   useEffect(() => {
     const fetchTaskDetails = async () => {
-      const detailsResp = await getPPMActivityDetails(assetId, activityId);
+      const detailsResp = await getPPMDetails(assetId, activityId);
       console.log(detailsResp.data);
       setTaskDetails(detailsResp.data);
     };

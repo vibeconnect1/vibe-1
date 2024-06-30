@@ -2,7 +2,7 @@ import { getItemInLocalStorage } from "../utils/localStorage";
 import axiosInstance from "./axiosInstance";
 import vibeAuth from "./vibeAuth";
 export const API_URL = "https://vibecopilot.ai";
-export const vibeMedia = 'https://vibecopilot.ai/api/media';
+export const vibeMedia = "https://vibecopilot.ai/api/media";
 const token = getItemInLocalStorage("TOKEN");
 
 export const login = async (data) => axiosInstance.post("/login.json", data);
@@ -134,10 +134,10 @@ export const fetchUserComplaints = async (data) =>
 //
 
 export const getUnits = async (floor_id) =>
-  axiosInstance.get(`/units.json`, {
+  axiosInstance.get(`/units.json?q[floor_id_eq]=${floor_id}`, {
     params: {
       token: token,
-      floor_id_eq: floor_id,
+      // floor_id_eq: floor_id,
     },
   });
 
@@ -304,7 +304,6 @@ export const getEditAMCDetails = async (id) =>
     },
   });
 
-
 export const EditAMCDetails = async (data, id) =>
   axiosInstance.put(`/asset_amcs/${id}.json`, data, {
     params: {
@@ -401,7 +400,12 @@ export const getRoutineTaskDetails = async (assetId, activityId) =>
       },
     }
   );
-export const getPPMActivityDetails = async (assetId) =>
+
+  
+
+
+
+export const getAssetPPMActivityDetails = async (assetId) =>
   axiosInstance.get(
     `/submissions.json?q[asset_id_eq]=${assetId}&q[checklist_ctype_eq]=ppm`,
     {
@@ -410,6 +414,27 @@ export const getPPMActivityDetails = async (assetId) =>
       },
     }
   );
+export const getPPMDetails = async (assetId, activityId) =>
+  axiosInstance.get(
+    `/submissions.json?q[asset_id_eq]=${assetId}&q[activity_id_eq]=${activityId}`,
+    {
+      params: {
+        token: token,
+      },
+    }
+  );
+// ppm details
+export const getAssetReadingDetails = async (assetId) =>
+  axiosInstance.get(
+    `/submissions.json?q[asset_id_eq]=${assetId}&q[asset_param_id_null]=0`,
+
+    {
+      params: {
+        token: token,
+      },
+    }
+  );
+
 export const getSetupUsers = async () =>
   axiosInstance.get("/users.json", {
     params: {
@@ -483,7 +508,7 @@ export const getBroadcastDetails = async (id) =>
 //services
 export const getServicesTaskDetails = async (serviceId, activityId) =>
   axiosInstance.get(
-    `/submissions.json?q[soft_service_id_eq]=${serviceId}&q[checklist_ctype_eq]=routine&q[activity_id_eq]=${activityId}`,
+    `/submissions.json?q[soft_service_id_eq]=${serviceId}&q[activity_id_eq]=${activityId}`,
     {
       params: {
         token: token,
@@ -562,7 +587,7 @@ export const getServicesPPMDetails = async (id) =>
 
 //
 export const getServicesRoutineList = async () =>
-  axiosInstance.get(`/activities.json`, {
+  axiosInstance.get(`/activities.json?q[soft_service_id_null]=0`, {
     params: {
       token: token,
     },
@@ -1014,12 +1039,12 @@ export const getVibeMeeting = async (userId) => {
     throw error;
   }
 };
-export const getVibeMeetingDetails = async (userId,meetingId) => {
+export const getVibeMeetingDetails = async (userId, meetingId) => {
   try {
     const response = await vibeAuth.get(
       // `/api/employee/calender/get-specific_event/?user_id=32&category=Meeting&object_id=349`,
       `/api/employee/calender/get-specific_event/?user_id=${userId}&category=Meeting&object_id=${meetingId}&summery=true`,
-      
+
       {
         headers: {
           "Content-Type": "multipart/form-data",
@@ -1036,7 +1061,7 @@ export const generateVibeMeetingSummary = async (data) => {
   try {
     const response = await vibeAuth.post(
       `/api/employee/calender/meet/generate-summery/`,
-data,
+      data,
       {
         headers: {
           "Content-Type": "multipart/form-data",

@@ -505,6 +505,7 @@ import EmployeeBankAccountDetails from "./pages/Employees/EmployeeAdvanceSalary/
 import ServiceTaskDetails from "./pages/SubPages/details/ServiceTaskDetails.jsx";
 import AssetAmcDetails from "./pages/SubPages/details/assetSubDetails/AssetAmcDetails.jsx";
 import InventoryDetails from "./pages/SubPages/details/InventoryDetails.jsx";
+import PPMTask from "./pages/SubPages/PPMTask.jsx";
 
 function App() {
   const themeColor = useSelector((state) => state.theme.color);
@@ -662,6 +663,14 @@ function App() {
             element={
               <ProtectedAdminRoutes>
                 <AddPPMActivity />
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/assets/ppm-task"
+            element={
+              <ProtectedAdminRoutes>
+                <PPMTask />
               </ProtectedAdminRoutes>
             }
           />

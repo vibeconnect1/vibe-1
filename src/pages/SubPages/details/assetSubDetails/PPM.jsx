@@ -1,12 +1,13 @@
 import React, { useEffect } from 'react'
-import { getPPMActivityDetails } from '../../../../api'
+import { getAssetPPMActivityDetails } from '../../../../api'
 import { useParams } from 'react-router-dom'
 
 const PPM = () => {
-  const {assetId} = useParams()
+  const {id} = useParams()
+
   useEffect(()=>{
     const fetchPPMDetails = async()=>{
-      const PPMDetailsResp = await getPPMActivityDetails(assetId)
+      const PPMDetailsResp = await getAssetPPMActivityDetails(id)
       console.log(PPMDetailsResp)
     }
     fetchPPMDetails()

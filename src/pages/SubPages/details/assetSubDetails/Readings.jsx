@@ -1,10 +1,12 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import DataTable from "react-data-table-component";
 import { BiEdit } from "react-icons/bi";
 import { BsEye } from "react-icons/bs";
 import { Link, useParams } from "react-router-dom";
 import MyDateTable from "../../../../containers/MyDateTable";
 import { useSelector } from "react-redux";
+import { getAssetReadingDetails } from "../../../../api";
+import Table from "../../../../components/table/Table";
 
 const getDateArray = (start, end) => {
   let arr = [];
@@ -24,6 +26,7 @@ const tasks = [
 const Readings = () => {
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
+  const [readings, setReadings] = useState([])
   const themeColor = useSelector((state) => state.theme.color);
   const [dates, setDates] = useState([]);
   // const dates =
@@ -37,6 +40,67 @@ const Readings = () => {
     setDates([]);
   };
 const {id} = useParams()
+useEffect(()=> {
+  const fetchReading = async()=>{
+   try {
+     const readingResp = await getAssetReadingDetails(id)
+     console.log(readingResp.data)
+     setReadings(readingResp.data)
+   } catch (error) {
+    console.log(error)
+   }
+  }
+  fetchReading()
+},[])
+
+const dateFormat = (dateString) => {
+  const date = new Date(dateString);
+  return date.toLocaleDateString("en-GB", {
+    day: "2-digit",
+    month: "short", // or 'long' for full month names
+    year: "numeric",
+    
+  });
+};
+const TimeFormat = (dateString) => {
+  const date = new Date(dateString);
+  return date.toLocaleTimeString("en-GB", {
+    hour: "2-digit",
+    minute: "2-digit",
+    // second: '2-digit'
+    hour12: true,
+  });
+};
+const column = [
+  {
+    name: "Date",
+    selector: (row) => dateFormat(row.created_at),
+    sortable: true,
+  },
+  {
+    name: "Time",
+    selector: (row) => TimeFormat(row.created_at),
+    sortable: true,
+  },
+  {
+    name: "Parameter",
+    selector: (row) => row.asset_param_name,
+    sortable: true,
+  },
+  {
+    name: "Value",
+    selector: (row) => row.value,
+    sortable: true,
+  },
+  {
+    name: "Submitted by",
+    selector: (row) => row.user_name,
+    sortable: true,
+  },
+
+  
+
+]
   return (
     <div className="p-4">
       {/* <div className="flex md:flex-row flex-col gap-2 items-center my-2">
@@ -76,15 +140,15 @@ const {id} = useParams()
         >
           Reset
         </button>
-      </div>
-      <div className="overflow-x-auto">
+      </div> */}
+      {/* <div className="overflow-x-auto">
         <table className="min-w-full bg-white ">
           <thead className="">
             <tr style={{ background: themeColor }} className="text-white ">
               <th className="px-4 py-2 border min-w-96">Consumption</th>
-              {dates.map((date) => (
+              {readings.map((date) => (
                 <th key={date} className="px-4 py-2 border min-w-40">
-                  {date}
+                  {dateFormat(date.created_at)}
                 </th>
               ))}
             </tr>
@@ -109,8 +173,9 @@ const {id} = useParams()
           </tbody>
         </table>
       </div> */}
+      <Table columns={column} data={readings} />
 
-      <iframe src={`https://admin.vibecopilot.ai/show_readings?asset_id=${id}&wv=true&token=efe990d24b0379af8b5ba3d0a986ac802796bc2e0db15552`} width="100%" height="600px"></iframe>
+      {/* <iframe src={`https://admin.vibecopilot.ai/show_readings?asset_id=${id}&wv=true&token=efe990d24b0379af8b5ba3d0a986ac802796bc2e0db15552`} width="100%" height="600px"></iframe> */}
     </div>
   );
 };

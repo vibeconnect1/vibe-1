@@ -63,6 +63,16 @@ const AssetNav = () => {
             }`
           }
         >
+          PPM Checklist
+        </NavLink>
+        <NavLink
+          to={"/assets/ppm-task"}
+          className={({ isActive }) =>
+            `  md:rounded-full px-4 cursor-pointer text-center transition-all duration-300 ease-linear ${
+              isActive && "bg-white text-blue-500 shadow-custom-all-sides"
+            }`
+          }
+        >
           PPM Activity
         </NavLink>
         <NavLink

@@ -1,23 +1,24 @@
 import React, { useEffect, useState } from "react";
 import { IoAddCircleOutline } from "react-icons/io5";
 import { Link } from "react-router-dom";
-import Table from "../components/table/Table";
+import Table from "../../components/table/Table";
 import { BsEye } from "react-icons/bs";
 import { MdDeleteForever } from "react-icons/md";
 import { BiEdit } from "react-icons/bi";
-import { API_URL, getRoutineTask, getVibeBackground } from "../api";
+import { API_URL, getRoutineTask, getVibeBackground } from "../../api"
 import toast from "react-hot-toast";
-import { getItemInLocalStorage } from "../utils/localStorage";
-import Navbar from "../components/Navbar";
-import AssetNav from "../components/navbars/AssetNav";
 
-const RoutineTask = () => {
+import Navbar from "../../components/Navbar";
+import AssetNav from "../../components/navbars/AssetNav";
+import { getItemInLocalStorage } from "../../utils/localStorage";
+
+const PPMTask = () => {
   const [tasks, setTasks] = useState([]);
   const [searchText, setSearchText] = useState("");
   const [filteredData, setFilteredData] = useState([]);
 
   useEffect(() => {
-    const fetchRoutineTask = async () => {
+    const fetchPPMTask = async () => {
       try {
         const taskResponse = await getRoutineTask();
         // const filteredServiceTask = taskResponse.data.activities.filter(
@@ -33,7 +34,7 @@ const RoutineTask = () => {
         console.log(error);
       }
     };
-    fetchRoutineTask();
+    fetchPPMTask();
     console.log(tasks);
   }, []);
 
@@ -199,4 +200,7 @@ const RoutineTask = () => {
   );
 };
 
-export default RoutineTask;
+
+
+
+export default PPMTask

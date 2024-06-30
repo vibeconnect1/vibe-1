@@ -463,7 +463,7 @@ const Assetinfo = ({ assetData }) => {
            
             <div className="">
               <h2 className="border-b  text-xl border-black font-semibold">
-                Consumption Asset Measure
+                Asset Parameter
               </h2>
               <div className="grid md:grid-cols-3 item-start gap-x-4 gap-y-2 w-full py-2">
                 <div className="flex flex-col">

@@ -54,7 +54,8 @@ const PPMActivity = () => {
       name: "Action",
       cell: (row) => (
         <div className="flex items-center gap-4">
-          <Link to={`/services/checklist-details/${row.asset_id}/${row.id}`}>
+          {/* :assetId/:activityId */}
+          <Link to={`/asset/ppm-activity-details/${row.asset_id}/${row.id}`}>
                 <BsEye size={15} />
               </Link>
           {/* <Link to={`/services/edit-ppm/${row.id}`}>
@@ -92,6 +93,15 @@ const PPMActivity = () => {
     {
       name: "No. Of Questions",
       selector: (row) => row.questions.length,
+      sortable: true,
+    },
+    {
+      name: "Associations",
+      selector: (row) => (
+        <div>
+          <Link to={`/assets/associate-checklist/${row.id}`} className=" px-4 bg-green-400 text-white rounded-full">Associate</Link>
+        </div>
+      ),
       sortable: true,
     },
   ];

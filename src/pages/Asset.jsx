@@ -29,6 +29,7 @@ import { MdKeyboardArrowRight } from "react-icons/md";
 import PPMActivity from "./SubPages/PPMActivity";
 import { CirclesWithBar, DNA, ThreeDots } from "react-loader-spinner";
 import AssetNav from "../components/navbars/AssetNav";
+import ImportAssetModal from "../containers/modals/ImportAssetModal";
 
 // import jsPDF from "jspdf";
 // import QRCode from "qrcode.react";
@@ -50,6 +51,7 @@ const Asset = () => {
   const [selectedOptions, setSelectedOptions] = useState([]);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const dropdownRef = useRef(null);
+  const [uploadModal, setUploadModal] = useState(false)
 
   const handleCheckboxChange = (event) => {
     const value = event.target.value;
@@ -437,6 +439,8 @@ const Asset = () => {
     Get_Background();
   }, []);
 
+  console.log(uploadModal)
+
   return (
     <section
       className="flex"
@@ -566,6 +570,12 @@ const Asset = () => {
                 </button> */}
             <button
               className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+              onClick={()=> setUploadModal(true)}
+            >
+              Import
+            </button>
+            <button
+              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
               onClick={exportToExcel}
             >
               Export
@@ -611,6 +621,7 @@ const Asset = () => {
         {page === "inventory" && <Inventory />}
         {page === "routine" && <RoutineTask />}
         {page === "PPM" && <PPMActivity />}
+        {uploadModal && <ImportAssetModal  onClose={() => setUploadModal(false)} />}
       </div>
     </section>
   );

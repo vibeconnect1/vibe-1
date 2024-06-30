@@ -88,7 +88,7 @@ const Navbar = () => {
     localStorage.removeItem("SITEID");
     localStorage.removeItem("STATUS");
     localStorage.removeItem("complaint");
-    localStorage.removeItem("USERID");
+    localStorage.removeItem("UserId");
     localStorage.removeItem("VIBETOKEN");
     localStorage.removeItem("VIBEUSERID");
     navigate("/login");

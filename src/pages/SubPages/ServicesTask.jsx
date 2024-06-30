@@ -55,11 +55,11 @@ const ServicesTask = () => {
           selector: (row) => dateFormat(row.start_time),
           sortable: true,
         },
-        {
-          name: "End Time",
-          selector: (row) => row.end_time,
-          sortable: true,
-        },
+        // {
+        //   name: "End Time",
+        //   selector: (row) => row.end_time,
+        //   sortable: true,
+        // },
         {
           name: "Status",
           selector: (row) => row.status,

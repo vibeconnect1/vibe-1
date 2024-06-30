@@ -3,7 +3,7 @@ import { BiEditAlt } from "react-icons/bi";
 import { useSelector } from "react-redux";
 import { Link, useParams } from "react-router-dom";
 import { getSoftServicesDetails } from "../../../api";
-import { FaQrcode } from "react-icons/fa";
+import { FaQrcode, FaRegFileAlt } from "react-icons/fa";
 import AssetQrCode from "./assetSubDetails/AssetQrCode";
 
 const ServiceDetails = () => {
@@ -25,6 +25,14 @@ const ServiceDetails = () => {
   };
   const domainPrefix = "https://admin.vibecopilot.ai";
   console.log(details.qr_code_image_url)
+  const isImage = (filePath) => {
+    const imageExtensions = ["jpg", "jpeg", "png", "gif", "bmp", "svg"];
+    const extension = filePath.split(".").pop().split("?")[0].toLowerCase();
+    return imageExtensions.includes(extension);
+  };
+  const getFileName = (filePath) => {
+    return filePath.split("/").pop().split("?")[0];
+  };
  
   return (
     <section>

@@ -53,7 +53,7 @@ const ServiceTaskDetails = () => {
        
         {taskDetails.map((task, index) => (
           <div key={task.id}>
-            {index === 0 ? null : (
+            
               <>
               <div className="my-4 flex flex-col bg-gray-100 shadow-custom-all-sides p-2 rounded-md gap-2">
 
@@ -67,7 +67,7 @@ const ServiceTaskDetails = () => {
               </div>
                 </div>
               </>
-            )}
+            
           </div>
         ))}
       </div>

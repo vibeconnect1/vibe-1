@@ -99,7 +99,7 @@ const AddService = () => {
       dataToSend.append("soft_service[unit_id]", formData.unit_id);
       dataToSend.append("soft_service[user_id]", formData.user_id);
       (formData.attachments || []).forEach((file, index) => {
-        dataToSend.append(`attachments[]`, file);
+        dataToSend.append(`attachfiles[]`, file);
       });
       const serviceResponse = await postSoftServices(dataToSend);
       console.log(serviceResponse);

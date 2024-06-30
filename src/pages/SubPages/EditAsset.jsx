@@ -350,9 +350,9 @@ const EditAsset = () => {
         formDataSend.append(`insurances[]`, file);
       });
   
-      // (formData.manuals || []).forEach((file, index) => {
-      //   formDataSend.append(`manuals[]`, file);
-      // });
+      (formData.manuals || []).forEach((file, index) => {
+        formDataSend.append(`manuals[]`, file);
+      });
   
       (formData.others || []).forEach((file, index) => {
         formDataSend.append(`other_files[]`, file);
