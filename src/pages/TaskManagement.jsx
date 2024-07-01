@@ -42,6 +42,7 @@ import {
   getVibeTaskUserAssign,
   getVibeUsers,
   postVibeTaskChat,
+  requestVibeDueDate,
   updateTaskStatus,
   updateVibeAssignedUser,
   updateVibeUserTask,
@@ -1427,13 +1428,13 @@ const TaskManagement = () => {
   const [subTaskDueDateRequest, setSubTaskDueDateRequest] = useState("");
   const [isModalOpenSubDateRequest, setIsModalOpenSubDateRequest] =
     useState(false);
+
   const handleDueDateClickSubDateRequest = (checksubtaskid, due_date) => {
     console.log(checksubtaskid);
     console.log(due_date);
 
     if (!dueDate) {
-      toast.warning("Please add a due date before proceeding.", {
-        position: "top-center",
+      toast.error("Please add a due date before proceeding.", {
         autoClose: 5000,
       });
       return;
@@ -1453,6 +1454,49 @@ const TaskManagement = () => {
       setIsModalOpenSubDateRequest(true);
       // Handle case where due_date is null
       console.error("Due date is null");
+    }
+  };
+
+  const datePickerRefSubDateRequest = useRef(null);
+  const handleDateChangeSubDateRequest = (
+    checksubtaskid,
+    subTaskDueDateRequest
+  ) => {
+    
+    console.log(checksubtaskid);
+    console.log(subTaskDueDateRequest);
+    // setSubTaskData(date); // Update the selected date in the state
+    Update_SubTask_DuedateRequest(checksubtaskid, subTaskDueDateRequest);
+  };
+
+  const Update_SubTask_DuedateRequest = async (
+    checksubtaskid,
+    updatedueDate
+  ) => {
+    console.log(checksubtaskid);
+    console.log(updatedueDate);
+    if (subTaskIdForDueDateRequest === null) {
+      return;
+    }
+    const formData = new FormData();
+    formData.append("user_id", user_id);
+    formData.append("task_id", checksubtaskid);
+    formData.append("due_date", SendDueDateFormat(updatedueDate));
+    formData.append("request_from", "task"); 
+
+    try {
+      const res = await requestVibeDueDate(formData);
+
+      if (res.success) {
+        console.log("Success");
+        //window.location.reload();
+        Get_SubChecklist_Task(taskid);
+        setSubTaskIdForDueDateRequest(updatedueDate);
+        toast.success("Due Date Request Submitted")
+        set
+      }
+    } catch (error) {
+    } finally {
     }
   };
 
@@ -3208,7 +3252,7 @@ const TaskManagement = () => {
 <p className="flex gap-2 md:col-span-3 items-center font-normal">
 
                     {dueDate && FormattedDateToShowProperly(dueDate)} 
-                    {createdBy_id.toString() !== user_id && dueDate ? (
+                    {createdBy_id !== user_id && dueDate ? (
                       <BiSolidCalendarEdit
                       onClick={(e) => {
                         e.stopPropagation();
@@ -3222,6 +3266,71 @@ const TaskManagement = () => {
                     )}
                     </p>
                     {/* </p> */}
+
+                    {isModalOpenSubDateRequest && (
+                      <div className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-30 backdrop-blur-sm z-50 p-10 ">
+                        <div
+                          style={{ background: themeColor }}
+                          className=" md:w-auto w-full  p-4 md:px-10  flex flex-col rounded-md  overflow-auto max-h-[100%]"
+                        >
+                          <button
+                            className="place-self-end fixed p-1 rounded-full  bg-white text-black"
+                            onClick={()=>  setIsModalOpenSubDateRequest(false)}
+                          >
+                            <AiOutlineClose size={20} />
+                          </button>
+
+                          <div>
+                            <div className="mt-5">
+                              <div>
+                                <h5 className="font-medium">
+                                  Select Request Due Date{" "}
+                                </h5>
+                              </div>
+                              <div>
+                                <ReactDatePicker
+                                   selected={subTaskDueDateRequest}
+                                   onChange={(date) => setSubTaskDueDateRequest(date)}
+                                  showTimeSelect
+                                  dateFormat="dd/MM/yyyy h:mm aa"
+                                  timeIntervals={5}
+                                  ref={datePickerRefSubDateRequest}
+                                  minDate={new Date()}
+                                  // minTime={currentTime}
+                                  // maxTime={maxTime}
+                                  filterTime={filterTime}
+                                  placeholderText="Request Due Date and Time"
+                                  className="text-black my-2 p-2 rounded-md w-96"
+                                />
+                              </div>
+                              <div className="flex justify-end gap-4">
+                                <button
+                                  type="button"
+                                  className="bg-white p-1 px-4 rounded-full text-black font-medium hover:bg-green-400 transition-all duration-300"
+                                  onClick={() => {
+                                    handleDateChangeSubDateRequest(
+                                      taskid,
+                                      subTaskDueDateRequest
+                                    );
+                                    setIsModalOpenSubDateRequest(false);
+                                    datePickerRef.current.setOpen(false);
+                                  }}
+                                >
+                                  Save
+                                </button>
+                                <button
+                                  type="button"
+                                  className="bg-red-400 p-1 px-4 rounded-full text-white font-medium hover:bg-red-500 transition-all duration-300"
+                                  onClick={()=>  setIsModalOpenSubDateRequest(false)}
+                                >
+                                  Close
+                                </button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    )}
                   </div>
                   <div className="font-medium grid md:grid-cols-4 text-sm" style={{ cursor: "default" }}>
                     {" "}

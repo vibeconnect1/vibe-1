@@ -60,6 +60,7 @@ import { FcMoneyTransfer } from "react-icons/fc";
 const Navbar = () => {
   const [open, setOpen] = useState(false);
   const [user, setUser] = useState("");
+  const [feat, setFeat] = useState("")
   const navigate = useNavigate();
   const themeColor = useSelector((state) => state.theme.color);
   const fontSize = useSelector((state) => state.fontSize);
@@ -75,6 +76,7 @@ const Navbar = () => {
   useEffect(() => {
     const userType = getItemInLocalStorage("USERTYPE");
     setUser(userType);
+    getAllowedFeatures()
   }, []);
 
   const handleLogout = () => {
@@ -91,10 +93,21 @@ const Navbar = () => {
     localStorage.removeItem("UserId");
     localStorage.removeItem("VIBETOKEN");
     localStorage.removeItem("VIBEUSERID");
+    localStorage.removeItem("FEATURES");
     navigate("/login");
     window.location.reload();
   };
 const siteId = getItemInLocalStorage("SITEID")
+const features = getItemInLocalStorage("FEATURES")
+
+const getAllowedFeatures = () => {
+  const storedFeatures = getItemInLocalStorage("FEATURES");
+  if (storedFeatures) {
+    setFeat(storedFeatures.map(feature => feature.feature_name));
+  }
+};
+console.log(feat)
+
   return (
     <section className="flex gap-6 sticky top-0 left-0 bottom-0 h-screen z-10">
       <div

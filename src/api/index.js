@@ -386,20 +386,20 @@ export const postAssetAssociation = async (data) =>
   });
 
 export const getRoutineTask = async () =>
-  axiosInstance.get("/activities.json", {
+  axiosInstance.get("/activities.json?q[checklist_ctype_eq]=routine", {
     params: {
       token: token,
     },
   });
 export const getPPMTask = async () =>
-  axiosInstance.get("/activities.json?q[ctype_eq]=ppm", {
+  axiosInstance.get("/activities.json?q[checklist_ctype_eq]=ppm", {
     params: {
       token: token,
     },
   });
 export const getRoutineTaskDetails = async (assetId, activityId) =>
   axiosInstance.get(
-    `/submissions.json?q[asset_id_eq]=${assetId}&q[checklist_ctype_eq]=routine&q[activity_id_eq]=${activityId}`,
+    `/submissions.json?q[asset_id_eq]=${assetId}&q[activity_id_eq]=${activityId}`,
     {
       params: {
         token: token,
@@ -1077,6 +1077,23 @@ export const generateVibeMeetingSummary = async (data) => {
     return response.data;
   } catch (error) {
     console.error("Error creating calendar events:", error);
+    throw error;
+  }
+};
+export const requestVibeDueDate = async (data) => {
+  try {
+    const response = await vibeAuth.post(
+      `/api/employee/request/make_request/`,
+      data,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error Requesting Due Date:", error);
     throw error;
   }
 };

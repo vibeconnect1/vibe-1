@@ -112,7 +112,7 @@ const Navigate = useNavigate()
                     onChange={(e) => setFrequency(e.target.value)}
                   >
                     <option value="">Select Frequency</option>
-                    <option value="One time">One Time</option>
+                    
                     <option value="hourly">Hourly</option>
                     <option value="daily">Daily</option>
                     <option value="weekly">Weekly</option>

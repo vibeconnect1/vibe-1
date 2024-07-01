@@ -95,6 +95,9 @@ const Login = () => {
       const complaint = response.data.complanits;
       setItemInLocalStorage("complaint", complaint);
 
+      const features = response.data.features
+      setItemInLocalStorage("FEATURES", features)
+
       // console.log(userName)
       // console.log("Sit",selectedSiteId)
       toast.loading("Processing your data please wait...");
