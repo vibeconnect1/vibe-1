@@ -1199,7 +1199,7 @@ console.log(feat)
           {/* user */}
           {user !== "pms_admin" && (
             <>
-              <NavLink
+              {/* <NavLink
                 to={"/employee/project-management"}
                 className={({ isActive }) =>
                   ` ${
@@ -1254,8 +1254,8 @@ console.log(feat)
                 >
                   Task management
                 </h2>
-              </NavLink>
-              <NavLink
+              </NavLink> */}
+               {siteId === 25 ? <NavLink
                 to={"/mytickets"}
                 className={({ isActive }) =>
                   ` ${
@@ -1281,6 +1281,8 @@ console.log(feat)
                   My Ticket
                 </h2>
               </NavLink>
+              :<>
+              
               <NavLink
                 to={"/employee-attendance"}
                 className={({ isActive }) =>
@@ -1826,6 +1828,8 @@ console.log(feat)
                   Pantry
                 </h2>
               </NavLink>
+              </>}
+
             </>
           )}
           {/* <NavLink
