@@ -72,8 +72,9 @@ const ServiceChecklist = () => {
     try {
       const fetchServicesChecklist = async () => {
         const checklistResponse = await getServicesChecklist();
-        setFilteredChecklistData(checklistResponse.data.checklists);
-        setChecklists(checklistResponse.data.checklists);
+        const sortedChecklists = checklistResponse.data.checklists.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+        setFilteredChecklistData(sortedChecklists);
+        setChecklists(sortedChecklists);
         console.log(checklistResponse);
       };
       fetchServicesChecklist();

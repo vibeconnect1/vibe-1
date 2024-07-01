@@ -13,8 +13,8 @@ const PPM = () => {
     fetchPPMDetails()
   },[])
   return (
-    <div>
-      PPM
+    <div className='flex justify-center items-center h-full my-10'>
+      No Data Available
     </div>
   )
 }

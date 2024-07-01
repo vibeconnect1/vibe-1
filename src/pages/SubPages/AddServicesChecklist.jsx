@@ -254,7 +254,7 @@ const AddServicesChecklist = () => {
                           </div>
                         )}
                       </div>
-                      <CronChecklist/>
+                      {/* <CronChecklist/> */}
                       <div className="flex justify-end gap-2">
                         <button
                           className="p-1 border-2 border-red-500 text-white hover:bg-white hover:text-red-500 bg-red-500 px-4 transition-all duration-300 rounded-md "

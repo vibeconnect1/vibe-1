@@ -5,7 +5,7 @@ import Table from "../../components/table/Table";
 import { BsEye } from "react-icons/bs";
 import { MdDeleteForever } from "react-icons/md";
 import { BiEdit } from "react-icons/bi";
-import { API_URL, getRoutineTask, getVibeBackground } from "../../api"
+import { API_URL, getPPMTask, getRoutineTask, getVibeBackground } from "../../api"
 import toast from "react-hot-toast";
 
 import Navbar from "../../components/Navbar";
@@ -20,7 +20,7 @@ const PPMTask = () => {
   useEffect(() => {
     const fetchPPMTask = async () => {
       try {
-        const taskResponse = await getRoutineTask();
+        const taskResponse = await getPPMTask();
         // const filteredServiceTask = taskResponse.data.activities.filter(
         //   (asset) => asset.asset_name
         // );
@@ -44,10 +44,10 @@ const PPMTask = () => {
       day: "2-digit",
       month: "short", // or 'long' for full month names
       year: "numeric",
-      hour: "2-digit",
-      minute: "2-digit",
-      // second: '2-digit'
-      hour12: true,
+    //   hour: "2-digit",
+    //   minute: "2-digit",
+    //   // second: '2-digit'
+    //   hour12: true,
     });
   };
   const RoutineColumns = [
@@ -68,7 +68,7 @@ const PPMTask = () => {
       sortable: true,
     },
     {
-      name: "Start Time",
+      name: "Start Date",
       selector: (row) => dateFormat(row.start_time),
       sortable: true,
     },

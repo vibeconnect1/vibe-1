@@ -43,10 +43,10 @@ const RoutineTask = () => {
       day: "2-digit",
       month: "short", // or 'long' for full month names
       year: "numeric",
-      hour: "2-digit",
-      minute: "2-digit",
-      // second: '2-digit'
-      hour12: true,
+      // hour: "2-digit",
+      // minute: "2-digit",
+      // // second: '2-digit'
+      // hour12: true,
     });
   };
   const RoutineColumns = [
@@ -67,7 +67,7 @@ const RoutineTask = () => {
       sortable: true,
     },
     {
-      name: "Start Time",
+      name: "Start Date",
       selector: (row) => dateFormat(row.start_time),
       sortable: true,
     },

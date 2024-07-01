@@ -391,6 +391,12 @@ export const getRoutineTask = async () =>
       token: token,
     },
   });
+export const getPPMTask = async () =>
+  axiosInstance.get("/activities.json?q[ctype_eq]=ppm", {
+    params: {
+      token: token,
+    },
+  });
 export const getRoutineTaskDetails = async (assetId, activityId) =>
   axiosInstance.get(
     `/submissions.json?q[asset_id_eq]=${assetId}&q[checklist_ctype_eq]=routine&q[activity_id_eq]=${activityId}`,

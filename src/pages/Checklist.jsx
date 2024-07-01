@@ -20,9 +20,10 @@ const Checklist = () => {
     const fetchChecklist = async () => {
      try {
        const checklist = await getChecklist();
-       setChecklists(checklist.data.checklists);
+       const sortedChecklists = checklist.data.checklists.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+       setChecklists(sortedChecklists);
        console.log(checklist.data.checklists)
-       setFilteredData(checklist.data.checklists)
+       setFilteredData(sortedChecklists)
      } catch (error) {
       console.log(error)
      }
