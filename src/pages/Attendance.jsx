@@ -58,8 +58,14 @@ const Attendance = () => {
     { name: "Name", selector: (row) => row.attendance_of_name, sortable: true },
     { name: "Date", selector: (row) => dateFormat(row.created_at), sortable: true },
     { name: "Punch In", selector: (row) => timeFormat(row.punched_in_at), sortable: true },
-    { name: "Punch Out", selector: (row) => timeFormat(row.punched_out_at), sortable: true },
-    { name: "Total Hours Worked", selector: (row) => TotalHours(row.punched_in_at, row.punched_out_at), sortable: true }
+    { name: "Punch Out",  selector: (row) => row.punched_out_at ? timeFormat(row.punched_out_at) : "", sortable:true },
+    { name: "Total Hours Worked",  selector: (row) => {
+      if (row.punched_in_at && row.punched_out_at) {
+        return TotalHours(row.punched_in_at, row.punched_out_at);
+      } else {
+        return "";
+      }
+    }, sortable: true }
   ];
  
 

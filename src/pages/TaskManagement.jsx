@@ -3354,7 +3354,7 @@ const TaskManagement = () => {
                   </div>
                 ) : null}
 
-                <div className=" my-5" style={{ cursor: "default" }}>
+                <div className=" my-5 flex flex-col gap-2" style={{ cursor: "default" }}>
                   <div
                     className="font-medium grid md:grid-cols-4 text-sm gap-2"
                     style={{ cursor: "default" }}
