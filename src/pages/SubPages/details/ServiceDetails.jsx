@@ -15,7 +15,7 @@ const ServiceDetails = () => {
     const fetchServiceDetails = async () => {
       const ServiceDetailsResponse = await getSoftServicesDetails(id);
       setDetails(ServiceDetailsResponse.data);
-      console.log(ServiceDetailsResponse)
+      console.log(ServiceDetailsResponse);
     };
     fetchServiceDetails();
   }, []);
@@ -24,7 +24,7 @@ const ServiceDetails = () => {
     return date.toLocaleString();
   };
   const domainPrefix = "https://admin.vibecopilot.ai";
-  console.log(details.qr_code_image_url)
+  console.log(details.qr_code_image_url);
   const isImage = (filePath) => {
     const imageExtensions = ["jpg", "jpeg", "png", "gif", "bmp", "svg"];
     const extension = filePath.split(".").pop().split("?")[0].toLowerCase();
@@ -33,7 +33,7 @@ const ServiceDetails = () => {
   const getFileName = (filePath) => {
     return filePath.split("/").pop().split("?")[0];
   };
- 
+
   return (
     <section>
       <div className="m-2">
@@ -45,13 +45,16 @@ const ServiceDetails = () => {
         </h2>
         <div className="my-2 mb-10 md:border-2 p-2 px-5 rounded-md border-gray-400 md:mx-20">
           <div className="flex gap-2 justify-end">
-          <button
-                className="flex gap-2 items-center justify-center border-2 border-black px-4 p-1 rounded-full hover:bg-black hover:text-white transition-all duration-500"
-                onClick={() => setQrCode(true)}
-              >
-                <FaQrcode /> QR Code
-              </button>
-            <Link to={`/services/edit-service/${id}`} className="flex gap-2 items-center border-2 border-black px-4 p-1 rounded-full hover:bg-black transition-all duration-300 hover:text-white">
+            <button
+              className="flex gap-2 items-center justify-center border-2 border-black px-4 p-1 rounded-full hover:bg-black hover:text-white transition-all duration-500"
+              onClick={() => setQrCode(true)}
+            >
+              <FaQrcode /> QR Code
+            </button>
+            <Link
+              to={`/services/edit-service/${id}`}
+              className="flex gap-2 items-center border-2 border-black px-4 p-1 rounded-full hover:bg-black transition-all duration-300 hover:text-white"
+            >
               <BiEditAlt />
               Edit Details
             </Link>
@@ -88,38 +91,44 @@ const ServiceDetails = () => {
               <p className="text-sm">{FormatedDate(details.updated_at)}</p>
             </div>
           </div>
-          <h1 className="border-b border-black font-semibold my-5">Attachments</h1>
-          <div className="flex  gap-4 flex-wrap my-4 items-center  text-center">
-                  {details.attachments &&
-                  details.attachments.length > 0
-                    ? details.attachments.map((doc, index) => (
-                        <div key={doc.id} className="">
-                          {isImage(domainPrefix + doc.document) ? (
-                            <img
-                              src={domainPrefix + doc.document}
-                              alt={`Attachment ${index + 1}`}
-                              className="w-40 h-28 object-cover rounded-md"
-                              onClick={() =>
-                                window.open(doc.document, "_blank")
-                              }
-                            />
-                          ) : (
-                            <a
-                              href={domainPrefix + doc.document}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="attachment-link hover:text-blue-400 transition-all duration-300  text-center flex flex-col items-center  "
-                            >
-                              <FaRegFileAlt size={50} />
-                              {getFileName(doc.document)}
-                            </a>
-                          )}
-                        </div>
-                      ))
-                    : (<p className="text-center w-full">No Attachments</p>)}
+          <h1 className="border-b border-black font-semibold my-5">
+            Attachments
+          </h1>
+          <div className="flex gap-4 flex-wrap my-4 items-center  text-center">
+            {details.attachments && details.attachments.length > 0 ? (
+              details.attachments.map((doc, index) => (
+                <div key={doc.id} className="">
+                  {isImage(domainPrefix + doc.document) ? (
+                    <img
+                      src={domainPrefix + doc.document}
+                      alt={`Attachment ${index + 1}`}
+                      className="w-40 h-28 object-cover rounded-md"
+                      onClick={() => window.open(domainPrefix + doc.document, "_blank")}
+                    />
+                  ) : (
+                    <a
+                      href={domainPrefix + doc.document}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className=" hover:text-blue-400 transition-all duration-300  text-center flex flex-col items-center"
+                    >
+                      <FaRegFileAlt size={50} />
+                      {getFileName(doc.document)}
+                    </a>
+                  )}
                 </div>
-          {qrCode && <AssetQrCode assetName={details.name} onClose={() => setQrCode(false)} QR={domainPrefix + details.qr_code_image_url
-} />}
+              ))
+            ) : (
+              <p className="text-center w-full">No Attachments</p>
+            )}
+          </div>
+          {qrCode && (
+            <AssetQrCode
+              assetName={details.name}
+              onClose={() => setQrCode(false)}
+              QR={domainPrefix + details.qr_code_image_url}
+            />
+          )}
         </div>
       </div>
     </section>

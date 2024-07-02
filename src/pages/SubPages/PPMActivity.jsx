@@ -55,7 +55,7 @@ const PPMActivity = () => {
       cell: (row) => (
         <div className="flex items-center gap-4">
           {/* :assetId/:activityId */}
-          <Link to={`/asset/ppm-activity-details/${row.asset_id}/${row.id}`}>
+          <Link to={`/asset/ppm-activity-details/${row.id}`}>
                 <BsEye size={15} />
               </Link>
           {/* <Link to={`/services/edit-ppm/${row.id}`}>

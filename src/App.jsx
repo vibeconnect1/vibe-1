@@ -506,6 +506,8 @@ import ServiceTaskDetails from "./pages/SubPages/details/ServiceTaskDetails.jsx"
 import AssetAmcDetails from "./pages/SubPages/details/assetSubDetails/AssetAmcDetails.jsx";
 import InventoryDetails from "./pages/SubPages/details/InventoryDetails.jsx";
 import PPMTask from "./pages/SubPages/PPMTask.jsx";
+import PPMChecklistDetails from "./pages/SubPages/details/PPMChecklistDetails.jsx";
+import AssetWidgets from "./pages/SubPages/AssetWidgets.jsx";
 
 function App() {
   const themeColor = useSelector((state) => state.theme.color);
@@ -675,10 +677,10 @@ function App() {
             }
           />
           <Route
-            path="/asset/ppm-activity-details/:assetId/:activityId"
+            path="/asset/ppm-activity-details/:id"
             element={
               <ProtectedAdminRoutes>
-                <PPMActivityDetails />
+                <PPMChecklistDetails />
               </ProtectedAdminRoutes>
             }
           />
@@ -978,6 +980,7 @@ function App() {
             element={<OutBoundDetails />}
           />
           {/* Asset */}
+          <Route path="/assets" element={<Navigate to="/assets/all-assets" replace />} />
           <Route
             path="/assets/all-assets"
             element={
@@ -1045,52 +1048,61 @@ function App() {
           <Route
             path="/assets/add-asset"
             element={
-              <ProtectedRoute>
+              <ProtectedAdminRoutes>
                 <AddAsset />
-              </ProtectedRoute>
+              </ProtectedAdminRoutes>
             }
           />
           <Route
             path="/assets/asset-details/:id"
             element={
-              <ProtectedRoute>
+              <ProtectedAdminRoutes>
                 <AssetDetails />
-              </ProtectedRoute>
+              </ProtectedAdminRoutes>
             }
           />
           <Route
             path="/assets/edit-asset/:id"
             element={
-              <ProtectedRoute>
+              <ProtectedAdminRoutes>
                 <EditAsset />
-              </ProtectedRoute>
+              </ProtectedAdminRoutes>
             }
           />
           <Route
             path="/assets/add-amc"
             element={
-              <ProtectedRoute>
+              <ProtectedAdminRoutes>
                 <AddAMC />
-              </ProtectedRoute>
+              </ProtectedAdminRoutes>
             }
           />
           <Route
             path="/assets/edit-amc/:id"
             element={
-              <ProtectedRoute>
+              <ProtectedAdminRoutes>
                 <EditAssetAMC />
-              </ProtectedRoute>
+              </ProtectedAdminRoutes>
             }
           />
           <Route
             path="/assets/associate-checklist/:id"
             element={
-              <ProtectedRoute>
+              <ProtectedAdminRoutes>
                 <AssociateAssetChecklist />
-              </ProtectedRoute>
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/assets/overview"
+            element={
+              <ProtectedAdminRoutes>
+                <AssetWidgets />
+              </ProtectedAdminRoutes>
             }
           />
           {/*services*/}
+          <Route path="/services" element={<Navigate to="/services/soft-service" replace />} />
           <Route
             path="/services/soft-service"
             element={

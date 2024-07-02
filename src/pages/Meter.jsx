@@ -177,11 +177,11 @@ const Meter = () => {
     } else {
       const filteredResults = assets.filter(
         (item) =>
-          item.building_name
+         (item.building_name && item.building_name
             .toLowerCase()
-            .includes(searchValue.toLowerCase()) ||
-          item.name.toLowerCase().includes(searchValue.toLowerCase()) ||
-          item.unit_name.toLowerCase().includes(searchValue.toLowerCase())
+            .includes(searchValue.toLowerCase())) ||
+          (item.name && item.name.toLowerCase().includes(searchValue.toLowerCase())) ||
+          (item.unit && item.unit_name.toLowerCase().includes(searchValue.toLowerCase()))
       );
       setFilteredData(filteredResults);
     }
@@ -213,9 +213,12 @@ const Meter = () => {
       try {
         const response = await getSiteAsset();
         const filteredAssets = response.data.site_assets.filter(asset => asset.is_meter);
-        setFilteredData(filteredAssets)
+        const sortedData = filteredAssets.sort((a, b) => {
+          return new Date(b.created_at) - new Date(a.created_at);
+        });
+        setFilteredData(sortedData)
         // setFilteredData(response.data.site_assets);
-        setAssets(response.data.site_assets);
+        setAssets(sortedData);
         console.log(response);
       } catch (error) {
         console.error("Error fetching data:", error);

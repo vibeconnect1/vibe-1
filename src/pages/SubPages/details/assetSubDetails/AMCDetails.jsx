@@ -19,14 +19,15 @@ const AMCDetails = () => {
   const [vendors, setVendors] = useState([]);
   const [amcDetails, setAmcDetails] = useState([]);
   const [update, setUpdate] = useState(false);
-  const [formData, setFormData] = useState({
+  const initialFormData = {
     vendor_id: "",
     asset_id: id,
     start_date: formattedDate,
     end_date: formattedDate,
     frequency: "",
     terms: [],
-  });
+  };
+  const [formData, setFormData] = useState(initialFormData);
   // console.log(formData)
 
   // vendor_id, :asset_id, :start_date, :end_date, :frequency},
@@ -48,21 +49,28 @@ const AMCDetails = () => {
   }, [update]);
 
   const handlePostAMC = async () => {
-    if(formData.vendor_id==="" || formData.start_date==="" || formData.end_date==="" || formData.frequency=== "" ){
-      return toast.error("All fields are Required")
+    if (
+      formData.vendor_id === "" ||
+      formData.start_date === "" ||
+      formData.end_date === "" ||
+      formData.frequency === ""
+    ) {
+      return toast.error("All fields are Required");
     }
     try {
-      const dataToSend = new FormData()
-dataToSend.append("asset_amc[vendor_id]", formData.vendor_id)
-dataToSend.append("asset_amc[asset_id]", formData.asset_id)
-dataToSend.append("asset_amc[start_date]", formData.start_date)
-dataToSend.append("asset_amc[end_date]", formData.end_date)
-dataToSend.append("asset_amc[frequency]", formData.frequency)
-formData.terms.forEach((file)=> dataToSend.append("terms[]", file))
+      const dataToSend = new FormData();
+      dataToSend.append("asset_amc[vendor_id]", formData.vendor_id);
+      dataToSend.append("asset_amc[asset_id]", formData.asset_id);
+      dataToSend.append("asset_amc[start_date]", formData.start_date);
+      dataToSend.append("asset_amc[end_date]", formData.end_date);
+      dataToSend.append("asset_amc[frequency]", formData.frequency);
+      formData.terms.forEach((file) => dataToSend.append("terms[]", file));
       const res = await postAMC(dataToSend);
       console.log(res);
+      setFormData(initialFormData);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
       setUpdate(true);
-      toast.success("New AMC Added")
+      toast.success("New AMC Added");
     } catch (error) {
       console.log(error);
     }
@@ -122,9 +130,8 @@ formData.terms.forEach((file)=> dataToSend.append("terms[]", file))
           <h2 className="border-b  text-xl border-black font-semibold">
             AMC Details
           </h2>
-         
+
           <Table columns={columns} data={amcDetails} />
-         
         </div>
         <div className="flex flex-col">
           <h2 className="border-b  text-xl border-black font-semibold">

@@ -40,3 +40,8 @@ export function FormattedDateToShowProperly(inputDateTime) {
   };
   return date.toLocaleString('en-US',options);
 }
+
+export const dateFormat = (dateString) => {
+  const date = new Date(dateString);
+  return date.toLocaleString(); // Adjust the format as needed
+};

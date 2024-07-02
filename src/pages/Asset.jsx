@@ -22,7 +22,7 @@ import Inventory from "./Inventory";
 import Checklist from "./Checklist";
 import RoutineTask from "./RoutineTask";
 import Table from "../components/table/Table";
-import ThemedButton from "../Buttons/Button";
+
 import bridge from "/bridge.jpg";
 import { IoIosArrowDown } from "react-icons/io";
 import { MdKeyboardArrowRight } from "react-icons/md";
@@ -113,16 +113,7 @@ const Asset = () => {
       selector: (row) => row.oem_name,
       sortable: true,
     },
-    // {
-    //   name: "Asset Code",
-    //   selector: (row) => row.code,
-    //   sortable: true,
-    // },
-    // {
-    //   name: "Asset Number",
-    //   selector: (row) => row.code,
-    //   sortable: true,
-    // },
+    
 
     {
       name: "Serial Number",
@@ -135,16 +126,7 @@ const Asset = () => {
       selector: (row) => row.model_number,
       sortable: true,
     },
-    // {
-    //   name: "Asset Type",
-    //   selector: (row) => row.asset_type,
-    //   sortable: true,
-    // },
-    // {
-    //   name: "Client Name",
-    //   selector: (row) => row.client_name,
-    //   sortable: true,
-    // },
+    
     {
       name: "Group",
       selector: (row) => row.group_name,
@@ -512,12 +494,16 @@ const Asset = () => {
             onChange={handleSearch}
           />
           <div className="md:flex grid grid-cols-2 sm:flex-row my-2 flex-col gap-2">
-            <ThemedButton
-              to={"/assets/add-asset"}
-              title={"Add Asset"}
-              icon={<IoAddCircleOutline />}
-              isLink
-            />
+           
+             <Link
+                to={"/assets/add-asset"}
+                style={{ background: themeColor }}
+                className="px-4 py-2  font-medium text-white rounded-md flex gap-2 items-center justify-center"
+              >
+                <IoAddCircleOutline/>
+                Add Asset
+                
+              </Link>
             <div className="" ref={dropdownRef}>
               <button
                 onClick={() => setDropdownOpen(!dropdownOpen)}

@@ -344,7 +344,7 @@ const Assetinfo = ({ assetData }) => {
                               alt={`Attachment ${index + 1}`}
                               className="w-full h-auto cursor-pointer"
                               onClick={() =>
-                                window.open(invoice.document, "_blank")
+                                window.open(domainPrefix +invoice.document, "_blank")
                               }
                             />
                           ) : (
@@ -496,7 +496,7 @@ const Assetinfo = ({ assetData }) => {
                 </div>
                 <div className="flex flex-col">
                   <label htmlFor="charactorLimt" className="font-medium">
-                    Input Charactor Limit :
+                    Input Character Limit :
                   </label>
                   <input
                     type="text"
@@ -504,7 +504,7 @@ const Assetinfo = ({ assetData }) => {
                     value={formData.digit || ""}
                     onChange={handleAssetParamsChange}
                     id="charactorLimit"
-                    placeholder="Input Charactor Limit"
+                    placeholder="Input Character Limit"
                     className="border p-1 px-4 border-gray-500 rounded-md"
                   />
                 </div>

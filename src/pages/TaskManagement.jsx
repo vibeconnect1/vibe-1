@@ -22,6 +22,7 @@ import {
   FaPaperclip,
   FaPencilAlt,
   FaPlus,
+  FaPlusCircle,
   FaRegCalendarAlt,
   FaTrashAlt,
   FaUserCog,
@@ -30,6 +31,7 @@ import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 import {
   API_URL,
   deleteVibeTask,
+  deleteVibeTaskChecklist,
   getVibeActionAndChat,
   getVibeBackground,
   getVibeComments,
@@ -41,10 +43,13 @@ import {
   getVibeTaskChecklist,
   getVibeTaskUserAssign,
   getVibeUsers,
+  postVibeChecklist,
   postVibeTaskChat,
   requestVibeDueDate,
+  updateSalesView,
   updateTaskStatus,
   updateVibeAssignedUser,
+  updateVibeChecklistItems,
   updateVibeUserTask,
 } from "../api";
 import RemainingTime from "../components/RemainingTime";
@@ -143,6 +148,9 @@ const TaskManagement = () => {
   const inputRefItem = useRef();
   const chatContainerRef = useRef(null);
   const [lightboxImage, setLightboxImage] = useState(null);
+  const [editingIndex, setEditingIndex] = useState(null);
+  const [editingIndexSub, setEditingIndexSub] = useState(null);
+  const [newItem, setNewItem] = useState("");
   const { sendMessage, disconnect, setOnMessageHandler, isWebSocketOpen } =
     useWebSocketServiceForTasks(taskidForSocket);
   const openLightbox = (image) => {
@@ -159,7 +167,7 @@ const TaskManagement = () => {
   };
   useEffect(() => {
     const assignedEmails = usersAssignAlready.map((user) => user.email);
-    setShowStatusChecklist1(assignedEmails.join(', '));
+    setShowStatusChecklist1(assignedEmails.join(", "));
   }, [usersAssignAlready]);
 
   // socket manage
@@ -197,42 +205,6 @@ const TaskManagement = () => {
   let selectedImageIndex = defaultImage.index;
   const [selectedImage, setSelectedImage] = useState(defaultImage);
   const [selectedIndex, setSelectedIndex] = useState(null);
-
-  // const send_background = async () => {
-  //   console.log("Sending bg:", selectedImageSrc);
-
-  //   const formData = new FormData();
-  //   const response = await fetch(selectedImageSrc);
-  //   const blob = await response.blob();
-  //   console.log(response);
-  //   formData.append("user_id", user_id);
-  //   formData.append("image", selectedImageSrc);
-  //   formData.append("index", selectedImageIndex);
-
-  //   try {
-  //     const res = await postDataToAPI(Add_Background, formData);
-
-  //     if (res.success) {
-  //       console.log("success");
-
-  //       selectedImageSrc = API_URL + res.data.image;
-  //       console.log(selectedImageSrc);
-  //       selectedImageIndex = res.data.index;
-
-  //       // Now, you can use selectedImageSrc and selectedImageIndex as needed
-  //       console.log("Received response:", res);
-
-  //       // For example, update state or perform any other actions
-  //       setSelectedImage(selectedImageSrc);
-  //       setSelectedIndex(selectedImageIndex);
-  //       console.log("Received selectedImageSrc:", selectedImageSrc);
-  //       console.log("Received selectedImageIndex:", selectedImageIndex);
-  //     }
-  //   } catch (error) {
-  //     // toast.error('Please Check Your Internet , Try again! ',{position: "top-center",autoClose: 2000})
-  //   } finally {
-  //   }
-  // };
 
   const Get_Background = async () => {
     try {
@@ -362,7 +334,7 @@ const TaskManagement = () => {
     formData.append("board_name", "myboard");
 
     try {
-      const res = await postDataToAPI(UpdateSalesView, formData);
+      const res = await updateSalesView(formData);
 
       if (res.success) {
         console.log("Success");
@@ -1462,7 +1434,6 @@ const TaskManagement = () => {
     checksubtaskid,
     subTaskDueDateRequest
   ) => {
-    
     console.log(checksubtaskid);
     console.log(subTaskDueDateRequest);
     // setSubTaskData(date); // Update the selected date in the state
@@ -1482,7 +1453,7 @@ const TaskManagement = () => {
     formData.append("user_id", user_id);
     formData.append("task_id", checksubtaskid);
     formData.append("due_date", SendDueDateFormat(updatedueDate));
-    formData.append("request_from", "task"); 
+    formData.append("request_from", "task");
 
     try {
       const res = await requestVibeDueDate(formData);
@@ -1492,11 +1463,172 @@ const TaskManagement = () => {
         //window.location.reload();
         Get_SubChecklist_Task(taskid);
         setSubTaskIdForDueDateRequest(updatedueDate);
-        toast.success("Due Date Request Submitted")
-        set
+        toast.success("Due Date Request Submitted");
+        set;
       }
     } catch (error) {
     } finally {
+    }
+  };
+  const [subMenuOpen, setSubMenuOpen] = useState(
+    Array(items.length).fill(false)
+  );
+  const handleItemToggleSubChecklist = (index, itemId) => {
+    const newSubMenuOpen = [...subMenuOpen];
+    newSubMenuOpen[index] = !newSubMenuOpen[index];
+    setSubMenuOpen(newSubMenuOpen);
+  };
+
+  const [isEditingItem, setIsEditingItem] = useState(false);
+  const handleToggleCompletion = async (checktaskid, checkComplete) => {
+    console.log(checktaskid);
+    console.log("completed-----------------------------------------------");
+    // setIsCompleted(!isCompleted);
+    // console.log(typeof isCompleted);
+    console.log(isCompleted);
+    const updatedIsCompleted = !checkComplete; // Toggle the completion status
+    setIsCompleted(updatedIsCompleted);
+
+    const formData = new FormData();
+    formData.append("user_id", user_id);
+    formData.append("checklist_id", checktaskid);
+    formData.append("completed", updatedIsCompleted);
+
+    try {
+      const response = await updateVibeChecklistItems(formData);
+      console.log(response);
+      if (response.success) {
+        console.log("Success");
+
+        console.log(updatedIsCompleted);
+
+        Get_Checklist_Task(taskid);
+      } else {
+        console.log("unable to update");
+      }
+    } catch (error) {}
+  };
+
+  const [isModalOpenDeleteTaskCheckList, setIsModalOpenDeleteTaskCheckList] =
+    useState(false);
+
+  const [taskDeleteIDCheckList, setTaskDeleteIDCheckList] = useState("");
+  function openModalDeleteTaskCheckList(taskId, event) {
+    event.stopPropagation();
+    console.log(taskId);
+    setTaskDeleteIDCheckList(taskId);
+    setIsModalOpenDeleteTaskCheckList(true);
+  }
+
+  const UpdateItemTask = async (checktaskid, updatedTextItem) => {
+    console.log(updatedTextItem);
+    // alert('update item task')
+
+    const formData = new FormData();
+    formData.append("user_id", user_id);
+    formData.append("checklist_id", checktaskid);
+    formData.append("name", updatedTextItem);
+    // formData.append('completed', isCompleted ? "true" : "false");
+
+    try {
+      const response = await updateVibeChecklistItems(formData);
+      console.log(response);
+      if (response.success) {
+        console.log("Success");
+        // window.location.reload();
+
+        setItemTaskTopicText(true);
+
+        setEditingIndex(null);
+        setIsEditingItem(false);
+        Get_Checklist_Task(taskid);
+      } else {
+        console.log("unable to update");
+      }
+    } catch (error) {}
+  };
+
+  const handleIconClickTextItem = () => {
+    setIsEditingItem(true);
+  };
+
+  const handleAddItem = async (event) => {
+    //console.log(taskid);
+
+    if (event.key === "Enter" || event.type === "click") {
+      console.log("--------");
+      event.preventDefault(); // To prevent form submission and page reload
+      // alert(taskid);
+
+      const formData = new FormData();
+
+      formData.append("Task", taskid);
+      formData.append("name", newItem);
+      formData.append("created_by", user_id);
+      try {
+        const response = await postVibeChecklist(formData);
+
+        console.log(`---------${items}`);
+        console.log(`---------${newItem}`);
+        // setItems([...items, newItem]);
+        console.log(`---------${items}`);
+        setNewItem("");
+        Get_Checklist_Task(taskid);
+
+        if (!response.ok) {
+          console.error("Failed to add checklist item");
+          return;
+        }
+      } catch (error) {
+        console.error("Error adding checklist item:", error);
+      }
+    }
+  };
+
+  function closeModalDeleteTaskCheckList() {
+    setIsModalOpenDeleteTaskCheckList(false);
+  }
+
+  const handleDeleteTaskCheckList = async () => {
+    settaskList((prevTaskList) => {
+      console.log(prevTaskList);
+
+      const updatedTaskList = JSON.parse(JSON.stringify(prevTaskList));
+
+      const boardIndex = updatedTaskList.findIndex((board) =>
+        board.tasks.some((task) => task.id === taskDeleteIDCheckList)
+      );
+
+      if (boardIndex !== -1) {
+        const taskIndex = updatedTaskList[boardIndex].tasks.findIndex(
+          (task) => task.id === taskDeleteIDCheckList
+        );
+
+        if (taskIndex !== -1) {
+          updatedTaskList[boardIndex].tasks.splice(taskIndex, 1);
+        }
+      }
+
+      return updatedTaskList;
+    });
+
+    try {
+      const deleteResp = await deleteVibeTaskChecklist(
+        taskDeleteIDCheckList,
+        user_id
+      );
+     console.log(deleteResp)
+        toast.success("Task has been deleted");
+
+        console.log("Task deleted successfully");
+        closeModalDeleteTaskCheckList();
+        Get_Checklist_Task(taskid);
+      
+    } catch (error) {
+      console.log(error);
+      
+      closeModalDeleteTaskCheckList();
+      Get_Checklist_Task(taskid);
     }
   };
 
@@ -2523,6 +2655,7 @@ const TaskManagement = () => {
       )}
       {isModalOpenDeleteTask && (
         <DeleteTaskModal
+        title={"Do you want to Delete Task ?"}
           onclose={() => setIsModalOpenDeleteTask(false)}
           handleDeleteTask={() => handleDeleteTask()}
         />
@@ -2700,11 +2833,11 @@ const TaskManagement = () => {
                   )}
                 </div>
 
-                <div className=" gap-4 flex-wrap  md:flex grid grid-cols-2" >
+                <div className=" gap-4 flex-wrap  md:flex grid grid-cols-2">
                   <div className=" ">
                     {createdBy_id === user_id ? (
                       <div
-                        className=" flex items-center gap-2 cursor-pointer"
+                        className=" flex items-center gap-2 cursor-pointer hover:shadow-custom-all-sides transition-all duration-300"
                         style={{
                           height: "20",
                           width: "20",
@@ -2721,7 +2854,7 @@ const TaskManagement = () => {
                       </div>
                     ) : (
                       <div
-                        className=" flex items-center gap-2 cursor-pointer"
+                        className=" flex items-center text-gray-400 cursor-not-allowed gap-2  "
                         style={{
                           height: "20",
                           width: "20",
@@ -2840,7 +2973,7 @@ const TaskManagement = () => {
                           padding: "5px",
                         }}
                         onClick={handleDueDateClick} // Attach onClick to the div
-                        className="flex items-center gap-2"
+                        className="flex items-center gap-2 hover:shadow-custom-all-sides transition-all duration-300"
                       >
                         <FaRegCalendarAlt />
                         {"Due Date"}{" "}
@@ -2853,12 +2986,12 @@ const TaskManagement = () => {
                           alignItems: "center",
                           // boxShadow: "0 2px 4px #0a283c",
                           // backgroundColor: "#132A3A",
-                          // borderRadius: 10,
+                          borderRadius: 10,
                           padding: "5px",
                           // color: "#767676", // Set the color for non-clickable version
                           // pointerEvents: "none", // Make it non-clickable
                         }}
-                        className="flex items-center gap-2"
+                        className="flex items-center text-gray-400 gap-2 cursor-not-allowed"
                       >
                         <FaRegCalendarAlt />
                         {"Due Date"}{" "}
@@ -2946,7 +3079,7 @@ const TaskManagement = () => {
                             (item) => item.value === user_id
                           )) ? (
                         <div
-                          className="flex gap-2 items-center"
+                          className="flex gap-2 items-center  hover:shadow-custom-all-sides transition-all duration-300"
                           style={{
                             borderRadius: 10,
                             padding: "5px",
@@ -2969,7 +3102,7 @@ const TaskManagement = () => {
                         </div>
                       ) : (
                         <div
-                          className="flex gap-2 items-center"
+                          className="flex gap-2 items-center hover:shadow-custom-all-sides transition-all duration-300"
                           style={{
                             borderRadius: 10,
                             padding: "5px",
@@ -3076,11 +3209,11 @@ const TaskManagement = () => {
                         height: "20",
                         width: "20",
                         color: "white",
-
+                        borderRadius: 10,
                         padding: "5px",
                         cursor: "pointer",
                       }}
-                      className="flex gap-2 items-center"
+                      className="flex gap-2 items-center  hover:shadow-custom-all-sides transition-all duration-300"
                       // onClick={openModalChat} //for tab and mbl
                       // onClick={openModalChatWeb}
                       // onClick={isWideScreen ? openModalChatWeb :  openModalChat}
@@ -3123,7 +3256,7 @@ const TaskManagement = () => {
                         openModalChatWeb();
                         //  : openModalChat();
                       }}
-                      className=" flex gap-2 items-center hover:text-gray-300 transition-all duration-300"
+                      className=" flex gap-2 items-center   hover:shadow-custom-all-sides transition-all duration-300"
                       // onClick={handleToggleComments}
                     >
                       <FaComment
@@ -3249,24 +3382,21 @@ const TaskManagement = () => {
                     {" "}
                     <p>Due Date :</p>
                     {/* <p className="col-span-3"> */}
-<p className="flex gap-2 md:col-span-3 items-center font-normal">
-
-                    {dueDate && FormattedDateToShowProperly(dueDate)} 
-                    {createdBy_id !== user_id && dueDate ? (
-                      <BiSolidCalendarEdit
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        handleDueDateClickSubDateRequest();
-                      }}
-                      size={18}
-                      />
-                    ) : (
-                      
-                      ""
-                    )}
+                    <p className="flex gap-2 md:col-span-3 items-center font-normal">
+                      {dueDate && FormattedDateToShowProperly(dueDate)}
+                      {createdBy_id !== user_id && dueDate ? (
+                        <BiSolidCalendarEdit
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleDueDateClickSubDateRequest();
+                          }}
+                          size={18}
+                        />
+                      ) : (
+                        ""
+                      )}
                     </p>
                     {/* </p> */}
-
                     {isModalOpenSubDateRequest && (
                       <div className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-30 backdrop-blur-sm z-50 p-10 ">
                         <div
@@ -3275,7 +3405,7 @@ const TaskManagement = () => {
                         >
                           <button
                             className="place-self-end fixed p-1 rounded-full  bg-white text-black"
-                            onClick={()=>  setIsModalOpenSubDateRequest(false)}
+                            onClick={() => setIsModalOpenSubDateRequest(false)}
                           >
                             <AiOutlineClose size={20} />
                           </button>
@@ -3289,8 +3419,10 @@ const TaskManagement = () => {
                               </div>
                               <div>
                                 <ReactDatePicker
-                                   selected={subTaskDueDateRequest}
-                                   onChange={(date) => setSubTaskDueDateRequest(date)}
+                                  selected={subTaskDueDateRequest}
+                                  onChange={(date) =>
+                                    setSubTaskDueDateRequest(date)
+                                  }
                                   showTimeSelect
                                   dateFormat="dd/MM/yyyy h:mm aa"
                                   timeIntervals={5}
@@ -3321,7 +3453,9 @@ const TaskManagement = () => {
                                 <button
                                   type="button"
                                   className="bg-red-400 p-1 px-4 rounded-full text-white font-medium hover:bg-red-500 transition-all duration-300"
-                                  onClick={()=>  setIsModalOpenSubDateRequest(false)}
+                                  onClick={() =>
+                                    setIsModalOpenSubDateRequest(false)
+                                  }
                                 >
                                   Close
                                 </button>
@@ -3332,16 +3466,297 @@ const TaskManagement = () => {
                       </div>
                     )}
                   </div>
-                  <div className="font-medium grid md:grid-cols-4 text-sm" style={{ cursor: "default" }}>
+                  <div
+                    className="font-medium grid md:grid-cols-4 text-sm"
+                    style={{ cursor: "default" }}
+                  >
                     {" "}
-                    <p>
-
-                    Assign To :
-                    </p>
+                    <p>Assign To :</p>
                     <p className="cols-span-3 font-normal">
-
-                     {showStatusChecklist1}{" "}
+                      {showStatusChecklist1}{" "}
                     </p>
+                  </div>
+                  <div className="my-5">
+                    <div>
+                      <div className="border-b-2 border-white font-medium text-white">
+                        Checklist
+                      </div>
+                    </div>
+                    {/* <Modal
+                  isOpen={isModalOpenDelete}
+                  onRequestClose={closeModalDelete}
+                  contentLabel="Modal"
+                  style={customStylesDelete}
+                >
+                  <div>
+                    <div
+                      className="col-md-12 p-1"
+                      style={{
+                        color: "white",
+                        borderRadius: 4,
+                        backgroundColor: checklistDeleteHovered
+                          ? "rgba(0, 0, 0, 0.4)"
+                          : "initial",
+                      }}
+                      onMouseEnter={handleChecklistDeleteMouseEnter}
+                      onMouseLeave={handleChecklistDeleteMouseLeave}
+                    >
+                      Delete
+                    </div>
+                  </div>
+                </Modal> */}
+                    {/* <hr style={taglineStyle}></hr> */}
+                    {items.map((item, i) => (
+                      <div
+                        key={i}
+                        className=" bg-black bg-opacity-40 backdrop-blur-sm my-1 rounded-md"
+                        // style={{ borderRadius: 4, backgroundColor: "#30678edc" }}
+                      >
+                        <div
+                          htmlFor={`item-${i}`}
+                          style={{
+                            fontSize: "normal",
+                            cursor: "default",
+                            display: "flex",
+                            justifyContent: "space-between",
+                          }}
+                          className=""
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleItemToggleSubChecklist(i, item.id);
+                          }}
+                        >
+                          <div
+                            className="w-full"
+                            style={{
+                              textAlign: "start",
+                              borderRadius: 8,
+                              transition: "background-color 0.3s ease",
+                              padding: "2px",
+                            }}
+                          >
+                            <div className="flex justify-end mx-2 ">
+                              <span
+                                title={
+                                  item.completed === true
+                                    ? "Click to Mark as Incomplete"
+                                    : "Click to Mark as Completed"
+                                }
+                                className={` cursor-pointer shadow-custom-all-sides px-4 rounded-b-md transition-all duraction-300 ${
+                                  !item.completed
+                                    ? "text-gray-200 hover:text-green-400"
+                                    : "text-green-300 "
+                                }`}
+                                onClick={() =>
+                                  handleToggleCompletion(
+                                    item.id,
+                                    item.completed,
+                                    i
+                                  )
+                                }
+                                style={{
+                                  justifyContent: "flex-end",
+                                  fontSize: 16,
+                                }}
+                              >
+                                {item.completed ? (
+                                  <i
+                                    className="fa fa-check-circle pt-1"
+                                    style={{ fontSize: 14 }}
+                                  ></i>
+                                ) : null}{" "}
+                                {item.completed === true
+                                  ? "Completed"
+                                  : "Mark as Completed"}
+                              </span>
+                              {item.created_by.toString() ===
+                              user_id.toString() ? (
+                                <>
+                                  <FaTrashAlt
+                                    title="Delete Checklist"
+                                    className="cursor-pointer m-2 "
+                                    style={{ fontSize: 14 }}
+                                    onClick={(event) =>
+                                      openModalDeleteTaskCheckList(
+                                        item.id,
+                                        event
+                                      )
+                                    }
+                                  />
+                                </>
+                              ) : (
+                                <></>
+                              )}
+                            </div>
+                            {editingIndex === i ? (
+                              <div
+                                style={{
+                                  display: "flex",
+                                  alignItems: "center",
+                                }}
+                                className="w-full"
+                              >
+                                <textarea
+                                  className="w-full rounded-md outline-none text-black p-2 pt-0"
+                                  spellCheck="true"
+                                  ref={inputRefItem}
+                                  value={itemtaskTopicText[i] || ""}
+                                  onChange={(e) => {
+                                    const updatedText = e.target.value;
+                                    const updatedArray = [...itemtaskTopicText];
+                                    updatedArray[i] = updatedText;
+                                    setItemTaskTopicText(updatedArray);
+                                  }}
+                                />
+                                <span
+                                  onClick={(e) => {
+                                    e.preventDefault();
+                                    if (itemtaskTopicText[i] !== "") {
+                                      UpdateItemTask(
+                                        item.id,
+                                        itemtaskTopicText[i]
+                                      );
+                                    } else {
+                                      toast.info("Task name can't be empty", {
+                                        position: "top-center",
+                                        autoClose: 2000,
+                                      });
+                                    }
+                                    setIsEditingItem(false);
+                                  }}
+                                >
+                                  <FaCheck
+                                    className="FaIcon"
+                                    style={{
+                                      marginLeft: 10,
+                                      marginRight: 10,
+                                      fontSize: 14,
+                                      cursor: "pointer",
+                                    }}
+                                  />
+                                </span>
+                              </div>
+                            ) : (
+                              <div
+                                onClick={() => setEditingIndex(i)}
+                                className="flex items-center mx-4 cursor-pointer "
+                                style={{ wordBreak: "break-all" }}
+                              >
+                                {itemtaskTopicText[i]}
+                                <span
+                                  onClick={(e) => {
+                                    setEditingIndex(i);
+                                    e.stopPropagation();
+                                    handleIconClickTextItem();
+                                  }}
+                                >
+                                  <FaPencilAlt
+                                    className="FaIcon"
+                                    style={{
+                                      marginLeft: 10,
+                                      fontSize: 14,
+                                      cursor: "pointer",
+                                    }}
+                                    title="Edit"
+                                  />
+                                </span>
+                              </div>
+                            )}
+                          </div>
+                        </div>
+
+                        {/* <Modal
+                      isOpen={isModalOpenCheck}
+                      onRequestClose={closeModalCheck}
+                      style={customStyles}
+                      contentLabel="Update Task Status CheckList"
+                    >
+                      <h4 style={{ color: "white" }}>
+                        Update Task Status CheckList
+                      </h4>
+                      <Select
+                        value={newStatusCheck}
+                        onChange={handleStatusChangeCheck}
+                        options={statusOptionsSub}
+                        styles={{
+                          menuPortal: (base) => ({ ...base, zIndex: 9999 }),
+                          menu: (provided) => ({ ...provided, zIndex: 9999 }),
+
+                          placeholder: (baseStyles, state) => ({
+                            ...baseStyles,
+                            color: "black",
+                          }),
+                          clearIndicator: (baseStyles) => ({
+                            ...baseStyles,
+                            color: "red",
+                          }),
+                          dropdownIndicator: (baseStyles) => ({
+                            ...baseStyles,
+                            color: "black",
+                          }),
+                          control: (baseStyles) => ({
+                            ...baseStyles,
+                            borderColor: "darkblue",
+                          }),
+                          option: (baseStyles) => ({
+                            ...baseStyles,
+                            color: "black",
+                          }),
+                        }}
+                        menuPortalTarget={document.body}
+                      />
+                      <div style={{ display: "flex", justifyContent: "end" }}>
+                        <button
+                          className="mt-4 mr-2 p-1"
+                          style={{ color: "#fff" }}
+                          onClick={() =>
+                            Update_CheckList_Status(item.id, checkid, "details")
+                          }
+                        >
+                          Save
+                        </button>
+
+                        <button
+                          className="mt-4 mr-2 p-1"
+                          style={{ color: "#fff" }}
+                          onClick={closeModalCheck}
+                        >
+                          Cancel
+                        </button>
+                      </div>
+                    </Modal> */}
+                      </div>
+                    ))}
+                    {isModalOpenDeleteTaskCheckList && (
+                      <DeleteTaskModal
+                      title={"Do you want to Delete Checklist ?"}
+                        onclose={() => setIsModalOpenDeleteTaskCheckList(false)}
+                        handleDeleteTask={() => handleDeleteTaskCheckList()}
+                      />
+                    )}
+
+                    <div className="flex justify-between my-2">
+                      <div className="flex gap-2 items-center w-full">
+                        <FaPlusCircle style={{ color: "#cdcdcd" }} />
+                        <input
+                          type="text"
+                          spellcheck="true"
+                          className="w-full bg-transparent mr-4 outline-none"
+                          onKeyPress={handleAddItem}
+                          onChange={(e) => setNewItem(e.target.value)}
+                          value={newItem}
+                          placeholder="Add New Checklist"
+                          // style={{ backgroundColor: "#133953", color: "white" }}
+                          title="Add New Checklist"
+                        />
+                      </div>
+                      <button
+                        className="bg-white text-black px-2 rounded-md shadow-custom-all-sides"
+                        onClick={handleAddItem}
+                      >
+                        Add
+                      </button>
+                    </div>
                   </div>
                 </div>
 

@@ -100,10 +100,18 @@ const Table = ({ columns, title, height, data, apiEndpoint, customStyles }) => {
         textTransform: "uppercase",
       },
     },
+    // cells: {
+    //   style: {
+    //   
+    //   },
+    // },
     cells: {
       style: {
+        paddingLeft: '16px',
+        paddingRight: '16px',
+        whiteSpace: 'nowrap',
         fontWeight: "bold",
-        fontSize: "10px",
+            fontSize: "10px",
       },
     },
   };

@@ -50,9 +50,13 @@ const AMC = () => {
       name: "Action",
       cell: (row) => (
         <div className="flex items-center gap-4">
+          <Link to={`/asset/asset-amc/${row.id}`}>
+            <BsEye size={15} />
+          </Link>
           <Link to={`/assets/edit-amc/${row.id}`}>
             <BiEdit size={15} />
           </Link>
+          
         </div>
       ),
     },

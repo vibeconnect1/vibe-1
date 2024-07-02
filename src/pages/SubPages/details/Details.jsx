@@ -21,6 +21,7 @@ const TicketDetails = () => {
   const [ticketinfo, setTicketInfo] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [items, setItems] = useState([])
+  const [feat, setFeat] = useState("")
   const [formData, setFormData] = useState({
     comment: "",
     of_phase: "pms",
@@ -28,6 +29,13 @@ const TicketDetails = () => {
   });
 
   // console.log(formData);
+
+  const getAllowedFeatures = () => {
+    const storedFeatures = getItemInLocalStorage("FEATURES");
+    if (storedFeatures) {
+      setFeat(storedFeatures.map(feature => feature.feature_name));
+    }
+  };
 
   useEffect(() => {
     const fetchDetails = async () => {
@@ -43,6 +51,7 @@ const TicketDetails = () => {
     }
     fetchDetails();
     fetchCARItems()
+    getAllowedFeatures()
   }, [showModal]);
 
   const getTimeAgo = (timestamp) => {
@@ -127,7 +136,7 @@ const TicketDetails = () => {
       {showModal && <CARAddItemsModal onclose={()=>setShowModal(false)}/> }
       <div className="flex flex-col justify-around">
         <div className="flex justify-end m-1 gap-2">
-         {siteId !== 25 && <button
+        {feat.includes('items') && <button
             onClick={() => setShowModal(true)}
             className="border-2 border-black  flex gap-2 p-1 rounded-md items-center px-4"
           >
@@ -193,7 +202,7 @@ const TicketDetails = () => {
         </div>
         {/* <div className="border " /> */}
 
-       {siteId !== 25 && <div className="m-2">
+        {feat.includes('items') && <div className="m-2">
           <h2 className="font-medium my-2">Approval Requests</h2>
           <Table columns={ItemColumn} data={items}  />
         </div>}

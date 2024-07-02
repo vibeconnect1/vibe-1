@@ -1097,3 +1097,71 @@ export const requestVibeDueDate = async (data) => {
     throw error;
   }
 };
+export const updateVibeChecklistItems = async (data) => {
+  try {
+    const response = await vibeAuth.put(
+      `/api/employee/task/update-checklist-fields/`,
+      data,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error updating Vibe checklist Items :", error);
+    throw error;
+  }
+};
+export const updateSalesView = async (data) => {
+  try {
+    const response = await vibeAuth.post(
+      `/api/employee/filter/add-filter/`,
+      data,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error updating sales view :", error);
+    throw error;
+  }
+};
+export const postVibeChecklist = async (data) => {
+  try {
+    const response = await vibeAuth.post(
+      `/api/employee/task/create-task-checklist/`,
+      data,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error creating checklist :", error);
+    throw error;
+  }
+};
+export const deleteVibeTaskChecklist = async (taskDeleteIDCheckList, user_id) => {
+  try {
+    const response = await vibeAuth.delete(
+      `/api/employee/task/checklist/trash/?checklist_id=${taskDeleteIDCheckList}&user_id=${user_id}`,
+      
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error creating checklist :", error);
+    throw error;
+  }
+};
