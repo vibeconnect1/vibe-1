@@ -11,7 +11,7 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { format } from "date-fns";
 import toast from "react-hot-toast";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 const CreateEvent = () => {
   const siteId = getItemInLocalStorage("SITEID");
@@ -67,9 +67,12 @@ const CreateEvent = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const navigate = useParams()
+  const navigate = useNavigate()
 
   const handleCreateEvent = async () => {
+    if(formData.event_name === "" || formData.start_date_time === ""){
+      return toast.error("All fields are Required")
+     }
     try {
       toast.loading("Creating Event Please Wait!");
       const formDataSend = new FormData();
@@ -92,7 +95,7 @@ const CreateEvent = () => {
       });
 
       formData.event_image.forEach((file) => {
-        formDataSend.append("event[event_image][]", file);
+        formDataSend.append("event_image[]", file);
       });
 
       const response = await postEvents(formDataSend);

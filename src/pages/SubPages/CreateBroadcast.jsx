@@ -7,6 +7,7 @@ import { getAssignedTo, postBroadCast } from "../../api";
 import FileInputBox from "../../containers/Inputs/FileInputBox";
 import { getItemInLocalStorage } from "../../utils/localStorage";
 import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 const CreateBroadcast = () => {
   const [share, setShare] = useState("all");
   const themeColor = useSelector((state) => state.theme.color);
@@ -48,6 +49,8 @@ const CreateBroadcast = () => {
     fetchUsers();
   }, []);
 
+  const navigate = useNavigate()
+
   const handleSelectChange = (selectedOptions) => {
     const selectedIds = selectedOptions
       ? selectedOptions.map((option) => option.value)
@@ -56,6 +59,9 @@ const CreateBroadcast = () => {
   };
 
   const handleCreateBroadCast = async () => {
+    if(formData.notice_title === "" || formData.expiry_date === ""){
+     return toast.error("Please Enter Title & Expiry Date")
+    }
     try {
       toast.loading("Creating Broadcast Please Wait!");
       const formDataSend = new FormData();
@@ -77,6 +83,7 @@ const CreateBroadcast = () => {
 
       const response = await postBroadCast(formDataSend);
       toast.success("Broadcast Created Successfully");
+      navigate("/communication")
       console.log("Response:", response.data);
       toast.dismiss();
     } catch (error) {
