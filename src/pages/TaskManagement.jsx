@@ -3159,16 +3159,7 @@ const TaskManagement = () => {
                                 ))}
                                 {provided.placeholder}
                               </div>
-                              {/* {section.title == "Pending"  ? (
-                            // <div className='col-md-12 mb-0 ' style={{ fontSize: '16', border: '2px solid #30678edc', padding: '4px 6px', borderRadius: 6, height: 40, color: '#dcdcdc' }} onClick={openTaskSelf}><i class="fa fa-plus ml-2 mr-2" style={{}}></i> Add Task</div>
-                            <div className='col-12 col-md-12 mb-0 mt-1 add-task-btn' style={{ cursor:'pointer'}} onClick={openTaskSelf} >
-                            <i class="fa fa-plus ml-2 mr-2"></i> Add Task
-                            </div>
-
-
-                          ) : (
-                            null
-                          )} */}
+                              
 
                               {section.fixed_state === "Pending" && (
                                 <>
@@ -3235,7 +3226,7 @@ const TaskManagement = () => {
                       ))
                     ) : (
                       <div className="w-full" style={{ textAlign: "center" }}>
-                        <div class="m-4 ">
+                        <div className="m-4 ">
                           <center>
                             No Tasks
                             <br />
@@ -3269,43 +3260,7 @@ const TaskManagement = () => {
                   overflow: "auto",
                 }}
               >
-                {/* <div
-                  className="flex justify-between p-2 font-medium text-white  "
-                  style={{ position: "sticky", top: 0, zIndex: 1, background:themeColor  }}
-                >
-                  <div
-                    
-                    // style={{ color: "#fff", fontSize: 14, paddingLeft: 20 }}
-                  >
-                    Title
-                  </div>
-                  <div
-                  
-                    style={{ color: "#fff", }}
-                  >
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Status
-                  </div>
-                  <div
-                    
-                    style={{ color: "#fff"}}
-                  ></div>
-                  <div
-                    
-                    style={{ color: "#fff"}}
-                  >
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Created by{" "}
-                  </div>
-                  <div
-                   
-                    style={{ color: "#fff" }}
-                  >
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Due Date
-                  </div>
-                  <div
-                    
-                    style={{ color: "#fff" }}
-                  ></div>
-                </div> */}
+                
 
                 <hr className="m-0" />
                 <DragDropContext onDragEnd={onDragEndTask}>
@@ -3580,16 +3535,7 @@ const TaskManagement = () => {
                               ))}
                               {provided.placeholder}
                             </div>
-                            {/* {section.title == "Pending" ?  (
-                            // <div className='col-md-12 mb-0 ' style={{ fontSize: '16', border: '2px solid #30678edc', padding: '4px 6px', borderRadius: 6, height: 40, color: '#dcdcdc' }} onClick={openTaskSelf}><i class="fa fa-plus ml-2 mr-2" style={{}}></i> Add Task</div>
-                            <div className='col-12 col-md-12 mb-0 mt-1 add-task-btn' style={{ cursor:'pointer', borderRadius:1}} onClick={openTaskSelf} >
-                            <i class="fa fa-plus ml-2 mr-2"></i> Add Task
-                          </div>
-
-
-                          ) : (
-                            null
-                          )} */}
+                           
                             {section.fixed_state === "Pending" && (
                               <>
                                 {(() => {
@@ -3718,7 +3664,7 @@ const TaskManagement = () => {
                     >
                       <input
                         ref={inputRef}
-                        spellcheck="true"
+                        spellCheck="true"
                         value={taskTopicText}
                         onChange={(e) => setTaskTopicText(e.target.value)}
                         onKeyDown={(e) => {
@@ -4697,7 +4643,7 @@ const TaskManagement = () => {
                         <FaPlusCircle style={{ color: "#cdcdcd" }} />
                         <input
                           type="text"
-                          spellcheck="true"
+                          spellCheck="true"
                           className="w-full bg-transparent border-b border-gray-400 mr-4 outline-none"
                           onKeyPress={handleAddItem}
                           onChange={(e) => setNewItem(e.target.value)}
@@ -4847,14 +4793,14 @@ const TaskManagement = () => {
                                 className="subDateStatus"
                                 style={{ display: "flex" }}
                               >
-                                {createdBy_id.toString() === user_id ||
-                                subCheck.created_by.user_id.toString() ===
+                                {createdBy_id === user_id ||
+                                subCheck.created_by.user_id ===
                                   user_id ||
                                 (Array.isArray(selectedEmail) &&
                                   selectedEmail.some(
                                     (item) =>
-                                      item.value.toString() ===
-                                      user_id.toString()
+                                      item.value ===
+                                      user_id
                                   )) ? (
                                   <span
                                     className="flex items-center gap-2"
@@ -4881,23 +4827,17 @@ const TaskManagement = () => {
                                   </span>
                                 ) : (
                                   <span
+                                    className="flex items-center gap-2 "
                                     style={{
-                                      color: "#767676",
+                                      color: "white",
                                       fontSize: 14,
-                                      boxShadow:
-                                        "rgb(0 0 0 / 17%) 1px 1px 1px 1px",
-                                      // backgroundColor: "#245272",
                                       width: 180,
-                                      borderRadius: 4,
-                                      paddingLeft: 6,
-                                      marginLeft: 4,
                                       cursor: "pointer",
                                     }}
                                   >
                                     <FaRegCalendarAlt
                                       style={{
-                                        color: "darkgoldenrod",
-                                        marginBottom: 4,
+                                      
                                       }}
                                     />{" "}
                                     {subCheck.due_date
@@ -4908,7 +4848,7 @@ const TaskManagement = () => {
                                   </span>
                                 )}
                                 &nbsp;
-                                {createdBy_id.toString() !== user_id &&
+                                {createdBy_id !== user_id &&
                                 subCheck.due_date ? (
                                   <MdEditCalendar
                                     title="Request to change due date"
@@ -4926,47 +4866,21 @@ const TaskManagement = () => {
                                 ) : (
                                   <></>
                                 )}
-                                {/* <FaRegCalendarAlt style={{ color: 'yellow', marginRight: '6px' }}  /> */}
-                                {/* { subCheck.due_date &&
-                                    shouldDisplaySpanRequestedDateSubtask && (
-                                    // <span onClick={(e) => { e.stopPropagation(); handleDueDateClickSubDateRequestSubtask(subCheck.id, subCheck.due_date); }}>
-                                    //   Request Subtask
-                                    // </span>
-                                    <div className="hover-info-reqSubtask pb-3" ref={infoRef}  onMouseEnter={handleMouseEnterSubtask}
-                                    onMouseLeave={handleMouseLeaveSubtask} >
-                                      
-                                    <u  > <span onClick={(e) => { e.stopPropagation(); handleDueDateClickSubDateRequestSubtask(subCheck.id, subCheck.due_date); }}>
-                                        Request Subtask
-                                      </span></u>
-                                    </div>
-                                    ) 
-                                  
-                                  } */}
-                                {/* 
-                                  {shouldDisplaySpanRequestedDateSubtask && (
-                                      <span onClick={(e) => { e.stopPropagation(); handleDueDateClickSubDateRequestSubtask(subCheck.id, subCheck.due_date); }}>
-                                        Request Subtask
-                                      </span>
-                                    ) 
-                                    // : (
-                                    //   <span style={{color:'grey'}} onClick={(e) => { e.stopPropagation();handleIconClickRequestedDateSubtask(subCheck.due_date); }}>
-                                        
-                                    //   </span>
-                                    // )
-                                  } */}
+                               
+                               
                                 &nbsp; &nbsp; &nbsp;
-                                {subCheck.created_by.user_id.toString() ===
+                                {subCheck.created_by.user_id ===
                                   user_id ||
-                                createdBy_id.toString() === user_id ||
+                                createdBy_id === user_id ||
                                 subCheck.assign_to.some(
                                   (assignee) =>
-                                    assignee.user_id.toString() === user_id
+                                    assignee.user_id === user_id
                                 ) ||
                                 (Array.isArray(selectedEmail) &&
                                   selectedEmail.some(
                                     (item) =>
-                                      item.value.toString() ===
-                                      user_id.toString()
+                                      item.value ===
+                                      user_id
                                   )) ? (
                                   <div
                                     className={
@@ -4976,7 +4890,7 @@ const TaskManagement = () => {
                                     }
                                     onClick={(e) => {
                                       if (!subCheck.due_date) {
-                                        toast.warning(
+                                        toast.error(
                                           "Please add a due date before proceeding.",
                                           {
                                             position: "top-center",
@@ -5030,28 +4944,7 @@ const TaskManagement = () => {
                                     {subCheck.status.status_name}
                                   </div>
                                 )}
-                                {/* -----Subtask request */}
-                                {/* <div className="col-md"> */}
-                                {/* 
-                                          <div className='ml-2 '
-                                            style={{
-                                              display: 'flow-root',
-                                              alignItems: 'center',
-                                              cursor: 'pointer',
-                                              boxShadow: '2px 2px 5px rgba(0, 0, 0, 0.2)',
-                                              backgroundColor: '#245272',
-                                              borderRadius: 4,
-                                              padding: '0px 6px'
-                                            }}
-                                            // onClick={handleDueDateClickSubDateRequestSubtask} // Attach onClick to the div
-                                            onClick={() => handleDueDateClickSubDateRequestSubtask(subCheck.id, subCheck.due_date)} // Attach onClick to the div
-
-                                          >   
-                                            <FaRegCalendarAlt style={{ color: 'darkgoldenrod', marginRight: '6px' }} />
-                                            {'Request subtask'} 
-                                            {FormattedDateToShowProperly(subTaskDueDateRequest)}
-                                          </div> */}
-                                {/* </div>   */}
+                               
                               </div>
                               <div className="mt-1" style={{ display: "flex" }}>
                                 <>
@@ -5162,29 +5055,18 @@ const TaskManagement = () => {
                                       className="subDateStatus"
                                       style={{ display: "flex" }}
                                     >
-                                      {createdBy_id.toString() === user_id ||
-                                      sublist.created_by.user_id.toString() ===
+                                      {createdBy_id === user_id ||
+                                      sublist.created_by.user_id ===
                                         user_id ||
                                       (Array.isArray(selectedEmail) &&
                                         selectedEmail.some(
                                           (item) =>
-                                            item.value.toString() ===
-                                            user_id.toString()
+                                            item.value ===
+                                            user_id
                                         )) ? (
                                         <span
-                                          // style={{
-                                          //   color: "#ededed",
-                                          //   fontSize: 14,
-                                          //   boxShadow:
-                                          //     "2px 2px 5px rgba(0, 0, 0, 0.2)",
-                                          //   backgroundColor: "#245272",
-                                          //   width: 174,
-                                          //   borderRadius: 4,
-                                          //   paddingLeft: 6,
-                                          //   marginLeft: 4,
-                                          //   cursor: "pointer",
-                                          // }}
-                                          className="flex items-center gap-2"
+                                          
+                                          className="flex items-center gap-2 cursor-pointer "
                                           onClick={(e) => {
                                             e.stopPropagation();
                                             handleDueDateClickSubDateChild(
@@ -5203,18 +5085,7 @@ const TaskManagement = () => {
                                         </span>
                                       ) : (
                                         <span
-                                          style={{
-                                            color: "#767676",
-                                            fontSize: 14,
-                                            boxShadow:
-                                              "rgb(0 0 0 / 17%) 1px 1px 1px 1px",
-                                            backgroundColor: "#245272",
-                                            width: 174,
-                                            borderRadius: 4,
-                                            paddingLeft: 6,
-                                            marginLeft: 4,
-                                            cursor: "pointer",
-                                          }}
+                                         className="flex items-center gap-2"
                                           onClick={(e) => {
                                             e.stopPropagation();
                                           }}
@@ -5281,7 +5152,7 @@ const TaskManagement = () => {
                                         {sublist.status.status_name}
                                       </div>
                                     </div>
-                                    <div className="flex gap-2 flex-wrap">
+                                    <div className="flex gap-2 flex-wrap mt-2">
                                       <div
                                         className="cursor-pointer "
                                         onClick={() => {
@@ -5298,7 +5169,7 @@ const TaskManagement = () => {
                                       >
                                         {" "}
                                         <i
-                                          class="fa fa-user-plus mr-2"
+                                          className="fa fa-user-plus mr-2"
 
                                           //  onClick={handleIconClickSubTaskAssignChild(sublist.id)}
                                         >
@@ -5351,7 +5222,7 @@ const TaskManagement = () => {
                                
                               ))}
                               <div className="">
-                                {createdBy_id.toString() === user_id || //task created by
+                                {createdBy_id === user_id || //task created by
                                 isTaskAssignedTo ? ( //taskassgnee
                                   <div className="flex justify-between items-center">
                                     <div className="flex items-center gap-2 w-full">
@@ -5362,7 +5233,7 @@ const TaskManagement = () => {
                                         }}
                                       />
                                       <input
-                                        spellcheck="true"
+                                        spellCheck="true"
                                         type="text"
                                         className="px-2 outline-none border-b border-gray-400 bg-transparent w-full mr-2"
                                         onChange={(e) =>
@@ -5389,7 +5260,8 @@ const TaskManagement = () => {
                                     </button>
                                   </div>
                                 ) : (
-                                  <>
+                                  <div className="flex justify-between items-center">
+                                    <div className="flex items-center gap-2 w-full">
                                     <FaPlusCircle
                                       style={{
                                         color: "#cdcdcd",
@@ -5397,9 +5269,9 @@ const TaskManagement = () => {
                                       }}
                                     />
                                     <input
-                                      spellcheck="true"
+                                      spellCheck="true"
                                       type="text"
-                                      className="rounded-md px-2 outline-none bg-transparent border-b border-gray-400 w-96"
+                                      className="w-full px-2 outline-none bg-transparent border-b border-gray-400 mr-2"
                                       onChange={(e) =>
                                         handleInputChange(
                                           subIndex,
@@ -5408,16 +5280,13 @@ const TaskManagement = () => {
                                       }
                                       value={newSubtasksChild[subIndex]}
                                       placeholder="Add Task"
-                                      style={{
-                                        backgroundColor:
-                                          "rgb(82 129 161 / 38%)",
-                                        color: "white",
-                                        marginRight: 4,
-                                      }}
+                                      
                                       title="Add Subtask Task"
                                     />
-                                    <button>Add</button>
-                                  </>
+                                    </div>
+                                    <button  className="bg-white text-black px-2 shadow-custom-all-sides rounded-md">Add</button>
+                                  </div>
+                                  
                                 )}
                               </div>
                             </div>
@@ -5999,7 +5868,7 @@ const TaskManagement = () => {
                       </div>
                     )}
                     <div className="flex justify-between my-2">
-                      {createdBy_id.toString() === user_id || //task created by
+                      {createdBy_id === user_id || //task created by
                       isTaskAssignedTo ? ( //taskassgnee
                         <>
                           <div className="flex items-center gap-2 w-full ">
@@ -6007,7 +5876,7 @@ const TaskManagement = () => {
                               style={{ color: "#cdcdcd", marginRight: 4 }}
                             />
                             <input
-                              spellcheck="true"
+                              spellCheck="true"
                               type="text"
                               className="w-full bg-transparent mr-4 outline-none border-b border-gray-400"
                               // onKeyPress={Add_Checklist_Subtask}
@@ -6028,24 +5897,21 @@ const TaskManagement = () => {
                         </>
                       ) : (
                         <>
+                        <div className="flex items-center gap-2 w-full ">
                           <FaPlusCircle
                             style={{ color: "#cdcdcd", marginRight: 4 }}
                           />
                           <input
-                            spellcheck="true"
+                            spellCheck="true"
                             type="text"
-                            className="taskInput"
+                            className="w-full bg-transparent mr-4 outline-none border-b border-gray-400"
                             // onKeyPress={Add_Checklist_Subtask}
                             onChange={(e) => {
                               setNewSubtasks(e.target.value);
                             }}
                             value={newSubtasks}
                             placeholder="Add New Subtask "
-                            style={{
-                              backgroundColor: "#133953",
-                              color: "white",
-                              marginRight: 4,
-                            }}
+                           
                             title="Add New Subtask"
                           />
                           <button
@@ -6056,6 +5922,7 @@ const TaskManagement = () => {
                           >
                             Add
                           </button>
+                          </div>
                         </>
                       )}
                     </div>

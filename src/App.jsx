@@ -509,6 +509,8 @@ import PPMTask from "./pages/SubPages/PPMTask.jsx";
 import PPMChecklistDetails from "./pages/SubPages/details/PPMChecklistDetails.jsx";
 import AssetWidgets from "./pages/SubPages/AssetWidgets.jsx";
 import DocumentMain from "./pages/DocumentsPro/DocumentMain.jsx";
+import Integration from "./pages/Integrations/Integration.jsx";
+import Gmail from "./pages/Integrations/Gmail.jsx";
 
 function App() {
   const themeColor = useSelector((state) => state.theme.color);
@@ -4580,6 +4582,22 @@ function App() {
             element={
               <ProtectedRoute>
                 <EmployeeBankAccountDetails/>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/integration"
+            element={
+              <ProtectedRoute>
+                <Integration/>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/gmail"
+            element={
+              <ProtectedRoute>
+                <Gmail/>
               </ProtectedRoute>
             }
           />

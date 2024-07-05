@@ -72,6 +72,9 @@ const AddServicesChecklist = () => {
       })),
     };
     console.log(data);
+    if(startDate>= endDate){
+      return toast.error("Start date must be before End date ")
+    }
 
     try {
       const response = await postChecklist(data);

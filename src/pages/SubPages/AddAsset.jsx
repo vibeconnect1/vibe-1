@@ -217,15 +217,9 @@ const AddAsset = () => {
       formDataSend.append("site_asset[breakdown]", formData.breakdown);
       formDataSend.append("site_asset[is_meter]", formData.is_meter);
       formDataSend.append("site_asset[asset_type]", formData.asset_type);
-      // formDataSend.append(
-      //   "site_asset[asset_group_id]",
-      //   formData.asset_group_id
-      // );
+     
       formDataSend.append("site_asset[vendor_id]", formData.vendor_id);
-      // formDataSend.append("site_asset[purchase_invoices]", formData.invoice);
-      // formDataSend.append("site_asset[insurances]", formData.insurance);
-      // formDataSend.append("site_asset[manuals]", formData.manuals);
-      // formDataSend.append("site_asset[other_files]", formData.others);
+      
       formData.invoice.forEach((file, index) => {
        
         formDataSend.append(`purchase_invoices[]`, file);

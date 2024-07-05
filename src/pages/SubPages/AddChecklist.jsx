@@ -5,6 +5,7 @@ import { getItemInLocalStorage } from "../../utils/localStorage";
 import { postChecklist } from "../../api";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
+import toast from "react-hot-toast";
 const AddChecklist = () => {
   const today = new Date().toISOString().split("T")[0];
   const toDay = new Date();
@@ -68,14 +69,14 @@ const navigate = useNavigate()
     };
     console.log(data);
 
+    if (startDate >= endDate) {
+      return toast.error("Start date must be before End date")
+    }
+
     try {
       const response = await postChecklist(data);
       console.log(response);
-      //   if (response.ok) {
-      //     console.log("Checklist saved successfully!");
-      //   } else {
-      //     console.error("Error saving checklist");
-      //   }
+      toast.success("New Checklist Created")
       navigate("/assets/checklist")
     } catch (error) {
       console.error("Error:", error);

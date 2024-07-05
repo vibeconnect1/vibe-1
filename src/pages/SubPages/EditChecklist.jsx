@@ -13,6 +13,7 @@ import { useParams } from "react-router-dom";
 import toast from "react-hot-toast";
 
 const EditChecklist = () => {
+  const today = new Date().toISOString().split("T")[0];
   const [name, setName] = useState("");
   const [frequency, setFrequency] = useState("");
   const [startDate, setStartDate] = useState("");
@@ -90,6 +91,10 @@ const EditChecklist = () => {
     };
     console.log(data);
 
+    if (startDate >= endDate) {
+      return toast.error("Start date must be Before End date")
+    }
+
     try {
       toast.loading("Updating Checklist please wait!");
       const response = await editChecklist(data, id);
@@ -142,7 +147,7 @@ const EditChecklist = () => {
                     onChange={(e) => setFrequency(e.target.value)}
                   >
                     <option value="">Select Frequency</option>
-                    <option value="One time">One Time</option>
+                    
                     <option value="hourly">Hourly</option>
                     <option value="daily">Daily</option>
                     <option value="weekly">Weekly</option>
@@ -163,6 +168,7 @@ const EditChecklist = () => {
                     className="border p-1 px-4 border-gray-500 rounded-md"
                     value={startDate}
                     onChange={(e) => setStartDate(e.target.value)}
+                    min={today}
                   />
                 </div>
                 <div className="flex flex-col">
@@ -176,6 +182,7 @@ const EditChecklist = () => {
                     className="border p-1 px-4 border-gray-500 rounded-md"
                     value={endDate}
                     onChange={(e) => setEndDate(e.target.value)}
+                    min={today}
                   />
                 </div>
               </div>

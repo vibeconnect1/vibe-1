@@ -5,6 +5,7 @@ import { getItemInLocalStorage } from "../../utils/localStorage";
 import { postChecklist } from "../../api";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 const AddPPMActivity = () => {
   const today = new Date().toISOString().split("T")[0];
   const toDay = new Date();
@@ -67,6 +68,10 @@ const Navigate = useNavigate()
       })),
     };
     console.log(data);
+
+    if (startDate>= endDate) {
+      return toast.error("Start date must be before End date")
+    }
 
     try {
       const response = await postChecklist(data);

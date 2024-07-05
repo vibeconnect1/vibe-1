@@ -18,8 +18,9 @@ const AMC = () => {
   useEffect(() => {
     const fetchAmc = async () => {
       const AMCResponse = await getAMC();
-      setFilteredData(AMCResponse.data);
-      setAmc(AMCResponse.data);
+      const sortedAmc = AMCResponse.data.sort((a,b)=> new Date(b.created_at)- new Date(a.created_at))
+      setFilteredData(sortedAmc);
+      setAmc(sortedAmc);
       console.log(AMCResponse);
     };
     fetchAmc();
@@ -67,7 +68,7 @@ const AMC = () => {
     { name: "Start Date", selector: (row) => row.start_date },
     { name: "End Date", selector: (row) => row.end_date },
     { name: "Frequency", selector: (row) => row.frequency },
-    { name: "type", selector: (row) => row.type },
+    
     { name: "First Service", selector: (row) => row.first_service },
     { name: "Status", selector: (row) => row.status },
     { name: "Created On", selector: (row) => dateFormat(row.created_at) },

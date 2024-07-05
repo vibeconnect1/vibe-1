@@ -6,6 +6,7 @@ import toast from 'react-hot-toast';
 import Navbar from '../../../components/Navbar';
 
 const EditAssetAMC = () => {
+  const today = new Date().toISOString().split("T")[0];
   const [vendors, setVendors] = useState([]);
   const [update, setUpdate] = useState(false);
   const {id}= useParams()
@@ -48,6 +49,10 @@ const EditAssetAMC = () => {
   };
   const navigate = useNavigate()
   const handleEditAMC = async () => {
+    if (formData.start_date >= formData.end_date) {
+      toast.error("Start Date must be before End Date.");
+      return;
+    }
    
     try {
       const dataToSend = new FormData()

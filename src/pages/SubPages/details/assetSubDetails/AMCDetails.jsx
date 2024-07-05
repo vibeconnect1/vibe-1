@@ -49,6 +49,10 @@ const AMCDetails = () => {
   }, [update]);
 
   const handlePostAMC = async () => {
+    if (formData.start_date >= formData.end_date) {
+      toast.error(" Start Date must be before End Date.");
+      return;
+    }
     if (
       formData.vendor_id === "" ||
       formData.start_date === "" ||
@@ -164,7 +168,7 @@ const AMCDetails = () => {
                 onChange={handleChange}
                 id=""
                 className="border p-1 px-4 border-gray-500 rounded-md"
-                min={today}
+                // min={today}
               />
             </div>
             <div className="flex flex-col">
@@ -176,7 +180,7 @@ const AMCDetails = () => {
                 onChange={handleChange}
                 id=""
                 className="border p-1 px-4 border-gray-500 rounded-md"
-                min={today}
+                // min={today}
               />
             </div>
             <div className="flex flex-col">

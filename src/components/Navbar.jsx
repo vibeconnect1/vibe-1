@@ -18,6 +18,7 @@ import {
   MdManageAccounts,
   MdOutlineDashboard,
   MdOutlinePolicy,
+  MdOutlineSocialDistance,
 } from "react-icons/md";
 import { HiMiniTicket, HiMiniUser } from "react-icons/hi2";
 import {
@@ -86,6 +87,7 @@ const Navbar = () => {
   const handleLogout = () => {
     localStorage.removeItem("TOKEN");
     localStorage.removeItem("Name");
+    localStorage.removeItem("LASTNAME");
     localStorage.removeItem("USERTYPE");
     localStorage.removeItem("user");
     localStorage.removeItem("UNITID");
@@ -97,6 +99,7 @@ const Navbar = () => {
     localStorage.removeItem("UserId");
     localStorage.removeItem("VIBETOKEN");
     localStorage.removeItem("VIBEUSERID");
+    localStorage.removeItem("VIBEORGID");
     localStorage.removeItem("FEATURES");
     navigate("/login");
     window.location.reload();
@@ -1189,6 +1192,35 @@ const Navbar = () => {
                       } absolute left-48 bg-white font-semibold whitespace-pre text-gray-900 rounded-md drop-shadow-lg px-0 py-0 w-0 overflow-hidden group-hover:px-2 group-hover:py-1 group-hover:left-14 group-hover:duration-300 group-hover:w-fit  `}
                     >
                       Transportation
+                    </h2>
+                  </NavLink>
+                )}
+                {feat.includes("meeting") && (
+                  <NavLink
+                    to={"/integration"}
+                    className={({ isActive }) =>
+                      ` ${
+                        isActive
+                          ? "text-black bg-white flex p-2  gap-3.5 rounded-md group items-center text-sm font-medium"
+                          : " group flex items-center text-sm gap-3.5 font-medium p-2 hover:bg-gray-800 rounded-md "
+                      }`
+                    }
+                  >
+                    <div>{React.createElement(MdOutlineSocialDistance, { size: "20" })}</div>
+
+                    <h2
+                      className={`whitespace-pre duration-300 ${
+                        !open && "opacity-0 translate-x-28 overflow-hidden"
+                      }`}
+                    >
+                      Integration
+                    </h2>
+                    <h2
+                      className={`${
+                        open && "hidden"
+                      } absolute left-48 bg-white font-semibold whitespace-pre text-gray-900 rounded-md drop-shadow-lg px-0 py-0 w-0 overflow-hidden group-hover:px-2 group-hover:py-1 group-hover:left-14 group-hover:duration-300 group-hover:w-fit  `}
+                    >
+                      Integration
                     </h2>
                   </NavLink>
                 )}

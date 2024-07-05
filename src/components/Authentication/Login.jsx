@@ -44,20 +44,34 @@ const Login = () => {
           password: formData.password,
         },
       });
+
+      const selectedSiteId = response.data.user.selected_site_id;
+      const userName = response.data.user.firstname;
+      setItemInLocalStorage("SITEID", selectedSiteId);
+      setItemInLocalStorage("Name", userName);
+      const features = response.data.features
+      setItemInLocalStorage("FEATURES", features)
+      
+      const featNames = features.map((feature) => feature.feature_name);
       // vibe login
-      // const vibeResponse = await vibeLogin({
-      //   email: formData.email,
-      //   password: formData.password,
-      // });
-      // console.log("vibe", vibeResponse);
-      // const vibeToken = vibeResponse.data.token.access.token;
-      // setItemInLocalStorage("VIBETOKEN", vibeToken);
-      // const vibeUserId = vibeResponse.data.data.user_id;
-      // setItemInLocalStorage("VIBEUSERID", vibeUserId);
-      // const vibeOrganizationId = vibeResponse.data.data.organization_id;
-      // setItemInLocalStorage("VIBEORGID", vibeOrganizationId);
+      // if (selectedSiteId === 10) {
+        if (featNames.includes('project_task')) {
+        console.log("running copilot login")
+        const vibeResponse = await vibeLogin({
+            email: formData.email,
+            password: formData.password,
+          });
+          console.log("vibe", vibeResponse);
+          const vibeToken = vibeResponse.data.token.access.token;
+          setItemInLocalStorage("VIBETOKEN", vibeToken);
+          const vibeUserId = vibeResponse.data.data.user_id;
+          setItemInLocalStorage("VIBEUSERID", vibeUserId);
+          const vibeOrganizationId = vibeResponse.data.data.organization_id;
+          setItemInLocalStorage("VIBEORGID", vibeOrganizationId);
+        }
 
       //
+      console.log("skipped copilot")
       const loginD = response.data.user;
       setItemInLocalStorage("user", loginD);
       console.log("User details", loginD);
@@ -76,10 +90,7 @@ const Login = () => {
       setItemInLocalStorage("categories", categories);
       const token = response.data.user.api_key;
       setItemInLocalStorage("TOKEN", token);
-      const selectedSiteId = response.data.user.selected_site_id;
-      const userName = response.data.user.firstname;
-      setItemInLocalStorage("SITEID", selectedSiteId);
-      setItemInLocalStorage("Name", userName);
+    
       // console.log(userName)
       const lastName = response.data.user.lastname;
       setItemInLocalStorage("LASTNAME", lastName);
@@ -95,8 +106,7 @@ const Login = () => {
       const complaint = response.data.complanits;
       setItemInLocalStorage("complaint", complaint);
 
-      const features = response.data.features
-      setItemInLocalStorage("FEATURES", features)
+      
 
       // console.log(userName)
       // console.log("Sit",selectedSiteId)
