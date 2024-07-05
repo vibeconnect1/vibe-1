@@ -141,6 +141,13 @@ const CreateEvent = () => {
     }
   };
 
+  const handleFileChange =(files, fieldName)=>{
+setFormData({
+  ...formData, 
+  [fieldName]: files
+})
+  }
+
   return (
     <section className="flex">
       <div className="hidden md:block">
@@ -254,7 +261,7 @@ const CreateEvent = () => {
               multiple
               onChange={handleFileAttachment}
             /> */}
-            <FileInputBox />
+            <FileInputBox fieldName={"event_image"} handleChange={(files)=> handleFileChange(files, "event_image" )}  />
             <div className="">
               <h2 className="border-b t border-black my-5 text-lg font-semibold">
                 Share With

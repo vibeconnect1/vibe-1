@@ -241,7 +241,7 @@ const InwardsTable = () => {
         <Table
           columns={columns}
           data={data}
-          customStyles={customStyle}
+          // customStyles={customStyle}
           isPagination={true}
         />
       </div>

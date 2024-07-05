@@ -1165,3 +1165,156 @@ export const deleteVibeTaskChecklist = async (taskDeleteIDCheckList, user_id) =>
     throw error;
   }
 };
+export const updateVibeSubTask = async (data) => {
+  try {
+    const response = await vibeAuth.put(
+      `/api/employee/task/sub_task/update-checklist-task/`,
+      data,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error creating checklist :", error);
+    throw error;
+  }
+};
+export const updateVibeUserSubTask = async (data) => {
+  try {
+    const response = await vibeAuth.put(
+      `/api/employee/task/sub_task/update-checklist-task/`,
+      data,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error updating subtask :", error);
+    throw error;
+  }
+};
+export const createVibeChecklistSubTask = async (data) => {
+  try {
+    const response = await vibeAuth.post(
+      `/api/employee/task/checklist/create-task/`,
+      data,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error Creating subtask :", error);
+    throw error;
+  }
+};
+export const deleteVibeSubTask = async (taskId,userId) => {
+  try {
+    const response = await vibeAuth.delete(
+      `/api/employee/task/checklist/task/trash/?task_id=${taskId}&user_id=${userId}`,
+     
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error Creating subtask :", error);
+    throw error;
+  }
+};
+export const createVibeChildSubTask = async (data) => {
+  try {
+    const response = await vibeAuth.post(
+      `/api/employee/subtask/child/create/`,
+     data,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error Creating child subtask :", error);
+    throw error;
+  }
+};
+export const updateSubTaskChild = async (data) => {
+  try {
+    const response = await vibeAuth.put(
+      `/api/employee/subtask/child/update/`,
+     data,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error updating child subtask :", error);
+    throw error;
+  }
+};
+export const deleteTaskChecklistSubTaskChild = async (taskChildId,userId) => {
+  try {
+    const response = await vibeAuth.delete(
+      `/api/employee/subtask/child/delete/?task_child_id=${taskChildId}&user_id=${userId}`,
+     
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error updating child subtask :", error);
+    throw error;
+  }
+};
+export const addVibeTaskAttachment = async (data) => {
+  try {
+    const response = await vibeAuth.post(
+      `/api/employee/task/add-attachment/`,
+     data,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error posting Attachments :", error);
+    throw error;
+  }
+};
+export const deleteVibeTaskAttachment = async (attachmentId, taskId) => {
+  try {
+    const response = await vibeAuth.delete(
+      `/api/employee/task/delete-attachment/?attachment_id=${attachmentId}&task_id=${taskId}`,
+     
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error posting Attachments :", error);
+    throw error;
+  }
+};

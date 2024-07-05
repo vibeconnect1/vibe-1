@@ -328,7 +328,7 @@ const Assetinfo = ({ assetData }) => {
             <h2 className="border-b  text-xl border-black font-semibold">
               Attachments
             </h2>
-           <div className="flex justify-between gap-2 w-full">
+           <div className="flex md:flex-row flex-col justify-between gap-2 w-full">
 
            
               <div className="bg-gray-100 p-1 rounded-md my-2 px-2 w-96">
@@ -376,7 +376,7 @@ const Assetinfo = ({ assetData }) => {
                               alt={`Attachment ${index + 1}`}
                               className="w-40 h-28 object-cover rounded-md"
                               onClick={() =>
-                                window.open(insurance.document, "_blank")
+                                window.open(domainPrefix +insurance.document, "_blank")
                               }
                             />
                           ) : (
@@ -408,7 +408,7 @@ const Assetinfo = ({ assetData }) => {
                               alt={`Attachment ${index + 1}`}
                               className="w-40 h-28 object-cover rounded-md"
                               onClick={() =>
-                                window.open(manual.document, "_blank")
+                                window.open(domainPrefix +manual.document, "_blank")
                               }
                             />
                           ) : (
@@ -441,7 +441,7 @@ const Assetinfo = ({ assetData }) => {
                               alt={`Attachment ${index + 1}`}
                               className="w-40 h-28 object-cover rounded-md"
                               onClick={() =>
-                                window.open(other.document, "_blank")
+                                window.open(domainPrefix +other.document, "_blank")
                               }
                             />
                           ) : (

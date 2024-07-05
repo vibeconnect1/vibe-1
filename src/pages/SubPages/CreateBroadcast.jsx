@@ -49,7 +49,7 @@ const CreateBroadcast = () => {
     fetchUsers();
   }, []);
 
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const handleSelectChange = (selectedOptions) => {
     const selectedIds = selectedOptions
@@ -59,8 +59,8 @@ const CreateBroadcast = () => {
   };
 
   const handleCreateBroadCast = async () => {
-    if(formData.notice_title === "" || formData.expiry_date === ""){
-     return toast.error("Please Enter Title & Expiry Date")
+    if (formData.notice_title === "" || formData.expiry_date === "") {
+      return toast.error("Please Enter Title & Expiry Date");
     }
     try {
       toast.loading("Creating Broadcast Please Wait!");
@@ -78,12 +78,12 @@ const CreateBroadcast = () => {
         formDataSend.append("notice[user_ids][]", user_id);
       });
       formData.notice_image.forEach((file) => {
-        formDataSend.append("notice[notice_image][]", file);
+        formDataSend.append("notice_image[]", file);
       });
 
       const response = await postBroadCast(formDataSend);
       toast.success("Broadcast Created Successfully");
-      navigate("/communication")
+      navigate("/communication");
       console.log("Response:", response.data);
       toast.dismiss();
     } catch (error) {
@@ -92,9 +92,11 @@ const CreateBroadcast = () => {
       toast.dismiss();
     }
   };
-
-  const handleFileChange = (e) => {
-    setFormData({ ...formData, notice_image: Array.from(e.target.files) });
+  const handleFileChange = (files, fieldName) => {
+    setFormData({
+      ...formData,
+      [fieldName]: files,
+    });
   };
 
   return (
@@ -140,10 +142,6 @@ const CreateBroadcast = () => {
               />
             </div>
             <div className="flex justify-between">
-              <div className="flex gap-2 items-center">
-                <input type="checkbox" name="" id="imp" />
-                <label htmlFor="imp">Mark as Important</label>
-              </div>
               <div className="flex flex-col">
                 <p className="font-medium">Expire On</p>
                 <ReactDatePicker
@@ -157,21 +155,18 @@ const CreateBroadcast = () => {
                   className="border border-black p-1 rounded-md"
                 />
               </div>
+              <div className="flex gap-2 items-center">
+                <input type="checkbox" name="" id="imp" />
+                <label htmlFor="imp">Mark as Important</label>
+              </div>
             </div>
 
             <div className="my-5">
               <h2 className="border-b text-center text-xl border-black mb-6 font-bold">
                 Attachments
               </h2>
-              {/* <FileInputBox handleChange={handleFileChange}  /> */}
-              {/* <input
-                  id={`file-upload-${formData.notice_title}`}
-                  type="file"
-                  // className="hidden"
-                  multiple
-                  onChange={handleFileChange}
-                /> */}
-                <FileInputBox />
+
+              <FileInputBox fieldName={"notice_image"} isMulti={true} handleChange={(files)=> handleFileChange(files, "notice_image")} />
             </div>
             <div className="">
               <h2 className="border-b t border-black my-5 text-lg font-semibold">

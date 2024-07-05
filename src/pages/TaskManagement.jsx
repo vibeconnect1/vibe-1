@@ -16,6 +16,7 @@ import {
   FaFilePowerpoint,
   FaFileWord,
   FaFilter,
+  FaInfoCircle,
   FaLaptop,
   FaLongArrowAltRight,
   FaPaperPlane,
@@ -24,13 +25,20 @@ import {
   FaPlus,
   FaPlusCircle,
   FaRegCalendarAlt,
+  FaSearchPlus,
   FaTrashAlt,
   FaUserCog,
 } from "react-icons/fa";
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 import {
   API_URL,
+  addVibeTaskAttachment,
+  createVibeChecklistSubTask,
+  createVibeChildSubTask,
+  deleteTaskChecklistSubTaskChild,
+  deleteVibeSubTask,
   deleteVibeTask,
+  deleteVibeTaskAttachment,
   deleteVibeTaskChecklist,
   getVibeActionAndChat,
   getVibeBackground,
@@ -47,9 +55,12 @@ import {
   postVibeTaskChat,
   requestVibeDueDate,
   updateSalesView,
+  updateSubTaskChild,
   updateTaskStatus,
   updateVibeAssignedUser,
   updateVibeChecklistItems,
+  updateVibeSubTask,
+  updateVibeUserSubTask,
   updateVibeUserTask,
 } from "../api";
 import RemainingTime from "../components/RemainingTime";
@@ -63,6 +74,7 @@ import Modal from "react-modal";
 import { AiOutlineClose } from "react-icons/ai";
 import Select from "react-select";
 import ReactDatePicker from "react-datepicker";
+import DatePicker from "react-datepicker";
 import {
   FormattedDateToShowProperly,
   SendDueDateFormat,
@@ -70,6 +82,7 @@ import {
 import { IoSend } from "react-icons/io5";
 import useWebSocketServiceForTasks from "../components/WebSocketManagement/WebSocketServiceForTask";
 import vibeAuth from "../api/vibeAuth";
+import { MdEditCalendar } from "react-icons/md";
 // import TaskSelf from "./SubPages/TaskSelf";
 
 // import LinearProgress from "@material-ui/core/LinearProgress";
@@ -83,6 +96,7 @@ const TaskManagement = () => {
   const [activeView, setActiveView] = useState("Kanban");
   const themeColor = useSelector((state) => state.theme.color);
   const [taskFilter, setTaskFilter] = useState([]);
+  const [subchecklistid, setSubcheckListId] = useState("");
   const [activeTaskAssign, setActiveTaskAssign] = useState("");
   const [filterIsOpen, setFilterIsOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
@@ -94,6 +108,18 @@ const TaskManagement = () => {
   const [showStatus, setshowStatus] = useState(true);
   const [taskStatus, setTaskStatus] = useState("");
   const [isModalOpenDeleteTask, setIsModalOpenDeleteTask] = useState(false);
+  const [
+    isModalOpenSubDateRequestSubtask,
+    setIsModalOpenSubDateRequestSubtask,
+  ] = useState(false);
+  const [
+    isModalOpenSubDateRequestSubtaskChild,
+    setIsModalOpenSubDateRequestSubtaskChild,
+  ] = useState(false);
+  const [isModalOpenSubDate, setIsModalOpenSubDate] = useState(false);
+  const [isModalOpenSubTaskAssign, setIsModalOpenSubTaskAssign] =
+    useState(false);
+
   const [dueDate, setDueDate] = useState(null);
   const [newStatus, setNewStatus] = useState({
     value: taskStatus,
@@ -153,11 +179,20 @@ const TaskManagement = () => {
   const [newItem, setNewItem] = useState("");
   const { sendMessage, disconnect, setOnMessageHandler, isWebSocketOpen } =
     useWebSocketServiceForTasks(taskidForSocket);
+  const [subTaskMenuOpen, setSubTaskMenuOpen] = useState(
+    Array(items.length).fill(false)
+  );
   const openLightbox = (image) => {
     setLightboxImage(image);
   };
   const closeLightbox = () => {
     setLightboxImage(null);
+  };
+
+  const handleItemToggleSubTask = (index, itemId) => {
+    const newSubMenuOpen = [...subTaskMenuOpen];
+    newSubMenuOpen[index] = !newSubMenuOpen[index];
+    setSubTaskMenuOpen(newSubMenuOpen);
   };
 
   const [isEditingDesc, setIsEditingDesc] = useState(false);
@@ -1617,18 +1652,1003 @@ const TaskManagement = () => {
         taskDeleteIDCheckList,
         user_id
       );
-     console.log(deleteResp)
-        toast.success("Task has been deleted");
+      console.log(deleteResp);
+      toast.success("Task has been deleted");
 
-        console.log("Task deleted successfully");
-        closeModalDeleteTaskCheckList();
-        Get_Checklist_Task(taskid);
-      
-    } catch (error) {
-      console.log(error);
-      
+      console.log("Task deleted successfully");
       closeModalDeleteTaskCheckList();
       Get_Checklist_Task(taskid);
+    } catch (error) {
+      console.log(error);
+
+      closeModalDeleteTaskCheckList();
+      Get_Checklist_Task(taskid);
+    }
+  };
+  const [editedSubItemIndex, setEditedSubItemIndex] = useState(null);
+  const [isEditingSubItem, setIsEditingSubItem] = useState(false);
+  const [isModalOpenSubTaskAssignChild, setIsModalOpenSubTaskAssignChild] =
+    useState(false);
+  const handleIconClickTextItemSub = () => {
+    setIsEditingSubItem(true);
+
+    setEditedSubItemIndex();
+  };
+  const handleInputChange = (index, value) => {
+    const updatedSubtasks = [...newSubtasksChild];
+    updatedSubtasks[index] = value;
+    setNewSubtasksChild(updatedSubtasks);
+  };
+  const [newSubtasksChild, setNewSubtasksChild] = useState(
+    Array(subTaskItems.length).fill("")
+  );
+
+  const UpdateItemSubTask = async (checksubtaskid, updatedTextItem) => {
+    console.log(updatedTextItem);
+    // alert('update item task')
+
+    const formData = new FormData();
+    formData.append("user_id", user_id);
+    formData.append("task_id", checksubtaskid);
+    formData.append("task_topic", updatedTextItem);
+
+    try {
+      const response = await updateVibeSubTask(formData);
+      console.log(response);
+      if (response.success) {
+        console.log("Success");
+        // window.location.reload();
+
+        setSubItemTaskTopicText(true);
+
+        setEditingIndexSub(null);
+        setIsEditingSubItem(false);
+        Get_SubChecklist_Task(taskid);
+      } else {
+        console.log("unable to update");
+      }
+    } catch (error) {}
+  };
+
+  const Add_Checklist_SubtaskChild = async (childId, index) => {
+    console.log("Check list id Add_Subtask ");
+    console.log(childId);
+    const newSubtask = newSubtasksChild[index];
+    if (!newSubtask || newSubtask.trim() === "") {
+      return;
+    }
+    const formData = new FormData();
+    formData.append("subtasks", childId);
+    formData.append("task_topic", newSubtask);
+    formData.append("user_id", user_id);
+
+    try {
+      const res = await createVibeChildSubTask(formData);
+      if (res.success) {
+        console.log("Success");
+        Get_SubChecklist_Task(TaskIdForTaskCheckList);
+        const updatedSubtasks = [...newSubtasksChild];
+        updatedSubtasks[index] = ""; // Set the corresponding index to an empty string
+        setNewSubtasksChild(updatedSubtasks);
+      }
+    } catch (error) {
+      console.error("Error:", error);
+    } finally {
+      const updatedSubtasks = [...newSubtasksChild];
+      updatedSubtasks[index] = ""; // Set the corresponding index to an empty string
+      setNewSubtasksChild(updatedSubtasks);
+    }
+    // }
+  };
+  const [subTaskIdForDueDate, setSubTaskIdForDueDate] = useState(null);
+  const handleDueDateClickSubDate = (checksubtaskid, due_date) => {
+    console.log(checksubtaskid);
+    console.log(due_date);
+    if (due_date) {
+      const dateTimeString = due_date.split("+")[0];
+      const targetDate = new Date(dateTimeString);
+      setSubTaskIdForDueDate(checksubtaskid);
+      setSubTaskDueDate(targetDate);
+      setIsModalOpenSubDate(true);
+    } else {
+      setSubTaskIdForDueDate(checksubtaskid);
+      setIsModalOpenSubDate(true);
+      console.error("Due date is null");
+    }
+  };
+
+  const handleModalCloseSubDate = () => {
+    setIsModalOpenSubDate(false);
+  };
+  const [subTaskDueDate, setSubTaskDueDate] = useState("");
+  const datePickerRefSubDate = useRef(null);
+  const handleDateChangeSubDate = (checksubtaskid, date) => {
+    console.log(checksubtaskid);
+    console.log(date);
+
+    Update_SubTask_Duedate(date);
+  };
+
+  const Update_SubTask_Duedate = async (updatedueDate) => {
+    if (subTaskIdForDueDate === null) {
+      return;
+    }
+
+    if (new Date(updatedueDate) > new Date(dueDate)) {
+      toast.error("Updated due date cannot be greater than the main due date.");
+      return;
+    }
+    const formData = new FormData();
+    formData.append("user_id", user_id);
+    formData.append("task_id", subTaskIdForDueDate);
+    formData.append("due_date", SendDueDateFormat(updatedueDate));
+
+    try {
+      const res = await updateVibeUserSubTask(formData);
+
+      if (res.success) {
+        console.log("Success");
+        //window.location.reload();
+        Get_SubChecklist_Task(taskid);
+      }
+    } catch (error) {
+      console.log(error);
+    } finally {
+    }
+  };
+  const [deleteId, setDeleteId] = useState("");
+  const [subTaskIdForDueDateChild, setSubTaskIdForDueDateChild] =
+    useState(null);
+  const handleDueDateClickSubDateChild = (checksubtaskid, due_date) => {
+    console.log(checksubtaskid);
+    console.log(due_date);
+
+    if (due_date) {
+      // Split the due_date string to remove any timezone information
+      const dateTimeString = due_date.split("+")[0];
+      // Parse the date and time string into a Date object
+      const targetDate = new Date(dateTimeString);
+      // Set state variables
+      setSubTaskIdForDueDateChild(checksubtaskid);
+      setSubTaskDueDateChild(targetDate); // check this again
+      setIsModalOpenSubDateChild(true);
+    } else {
+      setSubTaskIdForDueDateChild(checksubtaskid);
+      setIsModalOpenSubDateChild(true);
+      // Handle case where due_date is null
+      console.error("Due date is null");
+    }
+  };
+
+  const [
+    subTaskIdForDueDateRequestSubtask,
+    setSubTaskIdForDueDateRequestSubtask,
+  ] = useState(null);
+  const [subTaskDueDateRequestSubtask, setSubTaskDueDateRequestSubtask] =
+    useState("");
+
+  const handleDueDateClickSubDateRequestSubtask = (
+    checksubtaskid,
+    due_date
+  ) => {
+    if (!due_date) {
+      toast.warning("Please add a due date before proceeding.", {
+        position: "top-center",
+        autoClose: 5000,
+      });
+      return;
+    }
+    console.log(checksubtaskid);
+    console.log(due_date);
+
+    if (due_date) {
+      // Split the due_date string to remove any timezone information
+      const dateTimeString = due_date.split("+")[0];
+      // Parse the date and time string into a Date object
+      const targetDate = new Date(dateTimeString);
+      // Set state variables
+      setSubTaskIdForDueDateRequestSubtask(checksubtaskid);
+      setSubTaskDueDateRequestSubtask(targetDate); // check this again
+      setIsModalOpenSubDateRequestSubtask(true);
+    } else {
+      setSubTaskIdForDueDateRequestSubtask(checksubtaskid);
+      setIsModalOpenSubDateRequestSubtask(true);
+      // Handle case where due_date is null
+      console.error("Due date is null");
+    }
+  };
+  const datePickerRefSubDateRequestSubtask = useRef(null);
+  const handleDateChangeSubDateRequestSubtask = (
+    checksubtaskreqid,
+    subTaskDueDateRequestSubtask
+  ) => {
+    Update_SubTask_DuedateRequestSubtask(
+      checksubtaskreqid,
+      subTaskDueDateRequestSubtask
+    );
+  };
+  const Update_SubTask_DuedateRequestSubtask = async (
+    checksubtaskreqid,
+    updatedueDate
+  ) => {
+    console.log(checksubtaskreqid);
+    console.log(updatedueDate);
+    if (subTaskIdForDueDateRequestSubtask === null) {
+      return;
+    }
+
+    // if (new Date(updatedueDate) > new Date(dueDate)) {
+    //   toast.info('Updated due date cannot be greater than the main due date.',{position: "top-center",autoClose: 5000});
+    //   return;
+    // }
+    const formData = new FormData();
+    formData.append("user_id", user_id);
+    formData.append("task_id", checksubtaskreqid);
+    formData.append("due_date", SendDueDateFormat(updatedueDate));
+    formData.append("request_from", "subtask"); //task, subtask,subtaskchild
+
+    try {
+      const res = await requestVibeDueDate(formData);
+
+      if (res.success) {
+        console.log("Success");
+        //window.location.reload();
+        Get_SubChecklist_Task(taskid);
+        setSubTaskIdForDueDateRequestSubtask(updatedueDate);
+      }
+    } catch (error) {
+    } finally {
+    }
+  };
+  const [usersAssignBoardSubTask, setUsersAssignBoardSubTask] = useState([]);
+  const [selectedEmailSubTaskAssign, setSelectedEmailSubTaskAssign] = useState(
+    []
+  );
+  const [checkSubTaskId, setCheckSubTaskId] = useState(null);
+  const fetchOrg_assignDataSubTask = async (checksubtaskid) => {
+    setCheckSubTaskId(checksubtaskid);
+
+    try {
+      // GetUsers
+      const jsonData = await getVibeUsers(user_id);
+      if (jsonData.success) {
+        console.log(jsonData.data);
+        const usersData = jsonData.data;
+        console.log(usersData);
+        setUsersAssignBoardSubTask(usersData);
+
+        // Reset the state to prevent repeated API calls
+      } else {
+        console.log("Failed to fetch users");
+      }
+    } catch (error) {
+      console.error("Error fetching users:", error);
+    }
+  };
+  const handleIconClickSubTaskAssign = (
+    checksubtaskid,
+    subtaskAssignto,
+    due_date
+  ) => {
+    if (!due_date) {
+      toast.error("Please add a due date before proceeding.");
+      return;
+    }
+    const formattedData = subtaskAssignto.map((assignee) => ({
+      value: assignee.user_id,
+      label: assignee.email,
+    }));
+    setSelectedEmailSubTaskAssign(formattedData);
+    console.log("data", formattedData);
+
+    fetchOrg_assignDataSubTask(checksubtaskid);
+
+    setIsModalOpenSubTaskAssign(true);
+  };
+  const [checkSubTaskChildId, setCheckSubTaskChildId] = useState(null);
+  const [usersAssignBoardSubTaskChild, setUsersAssignBoardSubTaskChild] =
+    useState([]);
+  const [selectedEmailSubTaskAssignChild, setSelectedEmailSubTaskAssignChild] =
+    useState([]);
+
+  const handleDropdownItemClickSubTaskAssignChild = (selectedOption) => {
+    console.log("Newly selected options:", selectedOption);
+    setSelectedEmailSubTaskAssignChild(selectedOption);
+    // Calculate canceled options
+    const canceledOptions = selectedEmailSubTaskAssignChild.filter(
+      (email) => !selectedOption.includes(email)
+    );
+    if (canceledOptions.length > 0) {
+      // Extract canceled emails data
+      const canceledEmailsData = canceledOptions.map((email) => ({
+        user_id: email.value,
+        email: email.label,
+      }));
+      // Update state with canceled emails data
+      setUsersAssignBoardSubTaskChild((prevUsersAssignBoard) => [
+        ...prevUsersAssignBoard,
+        ...canceledEmailsData,
+      ]);
+    }
+  };
+  const [
+    shouldFetchUsersSubTaskAssignChild,
+    setShouldFetchUsersSubTaskAssignChild,
+  ] = useState(false);
+
+  const fetchOrg_assignDataSubTaskChild = async (checksubtaskid) => {
+    setCheckSubTaskChildId(checksubtaskid);
+
+    try {
+      // GetUsers
+      const jsonData = await getVibeUsers(user_id);
+      if (jsonData.success) {
+        console.log(jsonData.data);
+        const usersData = jsonData.data;
+        console.log(usersData);
+        setUsersAssignBoardSubTaskChild(usersData);
+        setShouldFetchUsersSubTaskAssignChild(true);
+      } else {
+        console.log("Failed to fetch users");
+      }
+    } catch (error) {
+      console.error("Error fetching users:", error);
+    }
+  };
+
+  const handleIconClickSubTaskAssignChild = (
+    checksubchildId,
+    subtaskchildAssignto,
+    due_date
+  ) => {
+    if (!due_date) {
+      toast.error("Please add a due date before proceeding.");
+      return;
+    }
+    console.log(checksubchildId);
+    console.log("sub sub assign", subtaskchildAssignto);
+    // fetchOrg_assignAlready(id, checksubtaskid);
+    const formattedData = subtaskchildAssignto.map((assignee) => ({
+      value: assignee.user_id,
+      label: assignee.email,
+    }));
+    setSelectedEmailSubTaskAssign(formattedData);
+    // Get_Checklist_Task(taskid)
+    fetchOrg_assignDataSubTaskChild(checksubchildId);
+    setShouldFetchUsersSubTaskAssignChild(true);
+    setIsModalOpenSubTaskAssignChild(true);
+    setSelectedEmailSubTaskAssignChild(formattedData);
+  };
+
+  const closeModalSubTaskAssign = () => {
+    setSelectedEmailSubTaskAssign(null);
+    setIsModalOpenSubTaskAssign(false);
+    // window.location.reload();
+  };
+
+  const [optionsSubTaskAssign, setOptionsSubTaskAssign] = useState([]);
+  useEffect(() => {
+    console.log(optionsSubTaskAssign);
+  }, [optionsSubTaskAssign]);
+  useEffect(() => {
+    console.log("print emails");
+    console.log(usersAssignBoardSubTask);
+    if (usersAssignBoardSubTask.length > 0) {
+      console.log("print emails good");
+      console.log(usersAssignBoardSubTask);
+      setOptionsSubTaskAssign(
+        usersAssignBoardSubTask.map((user) => ({
+          value: user.user_id,
+          label: user.email,
+        }))
+      );
+    }
+  }, [usersAssignBoardSubTask]);
+
+  const handleDropdownItemClickSubTaskAssign = (selectedOption) => {
+    console.log("Newly selected options:", selectedOption);
+    setSelectedEmailSubTaskAssign(selectedOption);
+    // Calculate canceled options
+    const canceledOptions = selectedEmailSubTaskAssign.filter(
+      (email) => !selectedOption.includes(email)
+    );
+    if (canceledOptions.length > 0) {
+      // Extract canceled emails data
+      const canceledEmailsData = canceledOptions.map((email) => ({
+        user_id: email.value,
+        email: email.label,
+      }));
+      // Update state with canceled emails data
+      setUsersAssignBoardSubTask((prevUsersAssignBoard) => [
+        ...prevUsersAssignBoard,
+        ...canceledEmailsData,
+      ]);
+    }
+  };
+
+  const handleConfirmClickSubTaskAssign = () => {
+    const idList = selectedEmailSubTaskAssign.map((email) =>
+      parseInt(email.value)
+    );
+    console.log(idList);
+    Update_SubTask_AssignTo(idList);
+
+    console.log(selectedEmailSubTaskAssign);
+
+    setIsModalOpenSubTaskAssign(false);
+  };
+
+  const Update_SubTask_AssignTo = async (idList) => {
+    const formData = new FormData();
+    formData.append("user_id", user_id);
+    formData.append("task_id", checkSubTaskId);
+    formData.append("assign_to", idList);
+
+    try {
+      const res = await updateVibeSubTask(formData);
+
+      if (res.success) {
+        console.log("Success");
+        Get_SubChecklist_Task(taskid);
+        //window.location.reload();
+      }
+    } catch (error) {
+      console.log(error);
+    } finally {
+    }
+  };
+  const [isModalOpenSubCheck, setIsModalOpenSubCheck] = useState(false);
+  const [newStatusSubCheck, setNewStatusSubCheck] = useState({
+    value: taskStatus,
+    label: taskStatus,
+  });
+  const [editedSubTaskId, setEditedSubTaskId] = useState(null);
+  const openModalSubCheck = (subtaskId, currentStatus) => {
+    setIsModalOpenSubCheck(true);
+    setEditedSubTaskId(subtaskId);
+    setNewStatusSubCheck({ value: currentStatus, label: currentStatus });
+  };
+  const closeModalSubCheck = () => {
+    setIsModalOpenSubCheck(false);
+    setEditedSubTaskId(null);
+    // Reset newStatusSubCheck to an empty string when closing the modal
+    setNewStatusSubCheck({ value: "", label: "" });
+  };
+
+  const handleStatusChangeSubCheck = (selectedOption) => {
+    console.log(selectedOption);
+    setNewStatusSubCheck(selectedOption);
+  };
+  const statusOptionsSub = taskMoreStatusList.map((status, index) => ({
+    value: taskMoreStatusIdList[index],
+    label: status,
+  }));
+
+  const Update_SubTask_Status = async (
+    checksubtaskid,
+    subchecklistid,
+    fromwhere
+  ) => {
+    console.log("Update_SubTask_Status");
+    console.log("checksubtaskid:", checksubtaskid);
+    console.log("subchecklistid:", subchecklistid);
+
+    if (!newStatusSubCheck.value) {
+      newStatusSubCheck.value = taskStatus;
+    }
+
+    const formData = new FormData();
+    formData.append("user_id", user_id);
+    formData.append("task_id", checksubtaskid);
+    if (fromwhere == "details") {
+      formData.append("status", newStatusSubCheck.value);
+    } else {
+      formData.append("status", subchecklistid);
+    }
+    console.log(newStatusSubCheck.value);
+
+    try {
+      const res = await updateVibeUserSubTask(formData);
+
+      if (res.success) {
+        console.log("Success");
+        //window.location.reload();
+        Get_SubChecklist_Task(taskid);
+        // GetBoardData();
+        setNewStatusSubCheck({ value: "", label: "" });
+        closeModalSubCheck();
+        console.log("Update_SubTask_Status success");
+        console.log(checksubtaskid);
+        if (res.status === 124) {
+          // alert(res.message)
+          toast.error(`${res.message}`, {
+            position: "top-center",
+            autoClose: 2000,
+          });
+        }
+      }
+    } catch (error) {
+    } finally {
+    }
+  };
+
+  const [newSubtasks, setNewSubtasks] = useState(Array(items.length).fill(""));
+  const Add_Checklist_Subtask = async (event) => {
+    if (!newSubtasks || newSubtasks.trim() === "") {
+      toast.error("Please Enter Subtask");
+      return;
+    }
+    // if (event.key === 'Enter'|| event.type === 'click') {
+    //   console.log("--------")
+    //   event.preventDefault();
+    const formData = new FormData();
+    formData.append("Task", taskid);
+    formData.append("task_topic", newSubtasks);
+    formData.append("created_by", user_id);
+    formData.append("user_id", user_id);
+
+    try {
+      const res = await createVibeChecklistSubTask(formData);
+      if (res.success) {
+        console.log("Success");
+        Get_SubChecklist_Task(TaskIdForTaskCheckList);
+        // setSubtask([...subtask, newSubtask ])
+        // const updatedSubtasks = [...newSubtasks];
+        // // updatedSubtasks[index] = '';
+        setNewSubtasks("");
+        // Get_SubChecklist_Task(taskid);
+      }
+    } catch (error) {
+      setNewSubtasks("");
+    } finally {
+      setNewSubtasks("");
+    }
+    // }
+  };
+  const [
+    isModalOpenDeleteTaskCheckListSubtask,
+    setIsModalOpenDeleteTaskCheckListSubtask,
+  ] = useState(false);
+  const [taskDeleteIDCheckListSubtask, setTaskDeleteIDCheckListSubtask] =
+    useState("");
+  function openModalDeleteTaskCheckListSubtask(taskId, event) {
+    event.stopPropagation();
+    console.log(taskId);
+    setTaskDeleteIDCheckListSubtask(taskId);
+    setIsModalOpenDeleteTaskCheckListSubtask(true);
+  }
+
+  function closeModalDeleteTaskCheckListSubtask() {
+    setIsModalOpenDeleteTaskCheckListSubtask(false);
+  }
+
+  const handleDeleteTaskCheckListSubtask = async () => {
+    settaskList((prevTaskList) => {
+      console.log(prevTaskList);
+
+      const updatedTaskList = JSON.parse(JSON.stringify(prevTaskList));
+
+      const boardIndex = updatedTaskList.findIndex((board) =>
+        board.tasks.some((task) => task.id === taskDeleteIDCheckListSubtask)
+      );
+
+      if (boardIndex !== -1) {
+        const taskIndex = updatedTaskList[boardIndex].tasks.findIndex(
+          (task) => task.id === taskDeleteIDCheckListSubtask
+        );
+
+        if (taskIndex !== -1) {
+          updatedTaskList[boardIndex].tasks.splice(taskIndex, 1);
+        }
+      }
+
+      return updatedTaskList;
+    });
+
+    const res = await deleteVibeSubTask(taskDeleteIDCheckListSubtask, user_id);
+
+    if (res.success) {
+      // window.location.reload();
+      toast.success("Task has been Deleted");
+
+      closeModalDeleteTaskCheckListSubtask();
+      Get_SubChecklist_Task(taskid);
+    } else {
+      if (res.success === false) toast.error("Error Deleting Task");
+
+      closeModalDeleteTaskCheckListSubtask();
+      console.error("Failed to delete task.");
+      Get_SubChecklist_Task(taskid);
+    }
+  };
+  const [isModalOpenSubCheckChild, setIsModalOpenSubCheckChild] =
+    useState(false);
+
+  const [
+    subTaskIdForDueDateRequestSubtaskChild,
+    setSubTaskIdForDueDateRequestSubtaskChild,
+  ] = useState(null);
+
+  const handleModalCloseSubDateRequestSubtaskChild = () => {
+    // GetBoardData();
+    setIsModalOpenSubDateRequestSubtaskChild(false);
+    // window.location.reload();
+  };
+  const [newStatusSubCheckChild, setNewStatusSubCheckChild] = useState({
+    value: taskStatus,
+    label: taskStatus,
+  });
+  const [
+    subTaskDueDateRequestSubtaskChild,
+    setSubTaskDueDateRequestSubtaskChild,
+  ] = useState("");
+
+  const handleDueDateClickSubDateRequestSubtaskChild = (
+    checksubtaskChildid,
+    due_date
+  ) => {
+    if (!due_date) {
+      toast.error("Please add a due date before proceeding.");
+      return;
+    }
+
+    if (due_date) {
+      // Split the due_date string to remove any timezone information
+      const dateTimeString = due_date.split("+")[0];
+      // Parse the date and time string into a Date object
+      const targetDate = new Date(dateTimeString);
+      // Set state variables
+      setSubTaskIdForDueDateRequestSubtaskChild(checksubtaskChildid);
+      setSubTaskDueDateRequestSubtaskChild(targetDate); // check this again
+      setIsModalOpenSubDateRequestSubtaskChild(true);
+    } else {
+      setSubTaskIdForDueDateRequestSubtaskChild(checksubtaskChildid);
+      setIsModalOpenSubDateRequestSubtaskChild(true);
+      // Handle case where due_date is null
+      console.error("Due date is null");
+    }
+  };
+  const Update_SubTask_StatusChild = async (
+    childId,
+    subchecklistid,
+    fromwhere
+  ) => {
+    console.log("Update_SubTask_Status");
+    console.log("child id:", childId);
+    console.log("status subchecklistid:", subchecklistid);
+
+    if (!newStatusSubCheckChild.value) {
+      newStatusSubCheckChild.value = taskStatus;
+    }
+   
+
+    const formData = new FormData();
+    formData.append("user_id", user_id);
+    formData.append("child_task_id", childId);
+    // formData.append('status', subTaskStatus);
+    if (fromwhere == "details") {
+      formData.append("status", newStatusSubCheckChild.value);
+    } else {
+      formData.append("status", subchecklistid);
+    }
+    console.log(newStatusSubCheckChild.value);
+
+    try {
+      const res = await updateSubTaskChild(formData);
+
+      if (res.success) {
+        console.log("Success");
+        //window.location.reload();
+        Get_SubChecklist_Task(taskid);
+        // GetBoardData();
+        setNewStatusSubCheckChild({ value: "", label: "" });
+        closeModalSubCheckChild();
+        console.log("Update_SubTask_Status Child success");
+        // console.log(checksubtaskid)
+        if (res.status === 124) {
+          // alert(res.message)
+          toast.error(`${res.message}`);
+        }
+      }
+    } catch (error) {
+      console.log(error);
+    } finally {
+    }
+  };
+  const [editedSubTaskIdChild, setEditedSubTaskIdChild] = useState(null);
+  const Update_SubTask_DuedateRequestSubtaskChild = async (
+    checksubtaskreqChildid,
+    updatedueDate
+  ) => {
+    console.log(checksubtaskreqChildid);
+    console.log(updatedueDate);
+    if (subTaskIdForDueDateRequestSubtaskChild === null) {
+      toast.error("subTaskIdForDueDateRequestSubtaskChild is null");
+      return;
+    }
+
+    // if (new Date(updatedueDate) > new Date(dueDate)) {
+    //   toast.info('Updated due date cannot be greater than the main due date.',{position: "top-center",autoClose: 5000});
+    //   return;
+    // }
+    const formData = new FormData();
+    formData.append("user_id", user_id);
+    formData.append("task_id", checksubtaskreqChildid);
+    formData.append("due_date", SendDueDateFormat(updatedueDate));
+    formData.append("request_from", "subtaskchild"); //task, subtask,subtaskchild
+
+    try {
+      const res = await requestVibeDueDate(formData);
+
+      if (res.success) {
+        console.log("Success");
+        toast.success("Request send!");
+        //window.location.reload();
+        Get_SubChecklist_Task(taskid);
+        setSubTaskIdForDueDateRequestSubtaskChild(updatedueDate);
+      }
+    } catch (error) {
+      console.log(error);
+    } finally {
+    }
+  };
+  const closeModalSubCheckChild = () => {
+    setIsModalOpenSubCheckChild(false);
+    setEditedSubTaskIdChild(null);
+    // Reset newStatusSubCheck to an empty string when closing the modal
+    setNewStatusSubCheckChild({ value: "", label: "" });
+  };
+
+  console.log("emails", selectedEmailSubTaskAssignChild);
+  const [optionsSubTaskAssignChild, setOptionsSubTaskAssignChild] = useState(
+    []
+  );
+  useEffect(() => {
+    console.log("print emails");
+    console.log(usersAssignBoardSubTaskChild);
+    if (usersAssignBoardSubTaskChild.length > 0) {
+      console.log("print emails good");
+      console.log(usersAssignBoardSubTaskChild);
+      setOptionsSubTaskAssignChild(
+        usersAssignBoardSubTaskChild.map((user) => ({
+          value: user.user_id,
+          label: user.email,
+        }))
+      );
+    }
+  }, [usersAssignBoardSubTaskChild]);
+  const closeModalSubTaskAssignChild = () => {
+    setSelectedEmailSubTaskAssignChild(null);
+    setIsModalOpenSubTaskAssignChild(false);
+    // window.location.reload();
+  };
+
+  const handleConfirmClickSubTaskAssignChild = () => {
+    const idList = selectedEmailSubTaskAssignChild.map((email) =>
+      parseInt(email.value)
+    );
+    console.log(idList);
+    Update_SubTask_AssignToChild(idList);
+
+    console.log(selectedEmailSubTaskAssignChild);
+
+    setIsModalOpenSubTaskAssignChild(false);
+  };
+  const Update_SubTask_AssignToChild = async (idList) => {
+    console.log("iiiiiiiiiiiiiii");
+    console.log(checkSubTaskChildId);
+    console.log(idList);
+
+    const formData = new FormData();
+    formData.append("user_id", user_id);
+    formData.append("child_task_id", checkSubTaskChildId);
+    formData.append("assign_to", idList);
+
+    try {
+      const res = await updateSubTaskChild(formData);
+
+      if (res.success) {
+        console.log("Success");
+        Get_SubChecklist_Task(taskid);
+        //window.location.reload();
+      }
+    } catch (error) {
+      console.log(error);
+    } finally {
+    }
+  };
+
+  const handleStatusChangeSubCheckChild = (selectedOption) => {
+    console.log(selectedOption);
+    setNewStatusSubCheckChild(selectedOption);
+    setshowStatusSubChecklistChild((prevSubCheck) => ({
+      ...prevSubCheck,
+      status: selectedOption.value, // Assuming the status is stored in the 'value' property
+    }));
+  };
+
+  const statusOptionsSubChild = taskMoreStatusList.map((status, index) => ({
+    value: taskMoreStatusIdList[index],
+    label: status,
+  }));
+  const datePickerRefSubDateChild = useRef(null);
+  const [isModalOpenSubDateChild, setIsModalOpenSubDateChild] = useState(false);
+  const [subTaskDueDateChild, setSubTaskDueDateChild] = useState("");
+  const handleModalCloseSubDateChild = () => {
+    // GetBoardData();
+    setIsModalOpenSubDateChild(false);
+    // window.location.reload();
+  };
+  const handleDateChangeSubDateChild = (checksubtaskid, date) => {
+    console.log(checksubtaskid);
+    console.log(date);
+
+    Update_SubTask_DuedateChild(checksubtaskid, date);
+  };
+
+  const Update_SubTask_DuedateChild = async (checksubtaskid, updatedueDate) => {
+    console.log(updatedueDate);
+    if (subTaskIdForDueDateChild === null) {
+      return;
+    }
+
+    if (new Date(updatedueDate) > new Date(dueDate)) {
+      toast.error("Updated due date cannot be greater than the main due date.");
+      return;
+    }
+    const formData = new FormData();
+    formData.append("user_id", user_id);
+    formData.append("child_task_id", subTaskIdForDueDateChild);
+    formData.append("due_date", SendDueDateFormat(updatedueDate));
+
+    try {
+      const res = await updateSubTaskChild(formData);
+
+      if (res.success) {
+        console.log("Success");
+        //window.location.reload();
+        Get_SubChecklist_Task(taskid);
+      }
+    } catch (error) {
+      console.log(error);
+    } finally {
+    }
+  };
+
+  const datePickerRefSubDateRequestSubtaskChild = useRef(null);
+  const handleDateChangeSubDateRequestSubtaskChild = (
+    checksubtaskreqChildid,
+    subTaskDueDateRequestSubtaskChild
+  ) => {
+    console.log("---------------------------------------------------------");
+    console.log(checksubtaskreqChildid);
+    console.log(subTaskDueDateRequest);
+    // setSubTaskData(date); // Update the selected date in the state
+    Update_SubTask_DuedateRequestSubtaskChild(
+      checksubtaskreqChildid,
+      subTaskDueDateRequestSubtaskChild
+    );
+  };
+
+  const openModalSubCheckChild = (subtaskId, currentStatus) => {
+    console.log("clicked one");
+    setIsModalOpenSubCheckChild(true);
+    setEditedSubTaskIdChild(subtaskId);
+    setNewStatusSubCheckChild({ value: currentStatus, label: currentStatus });
+  };
+
+  const [
+    taskDeleteIDCheckListSubtaskChild,
+    setTaskDeleteIDCheckListSubtaskChild,
+  ] = useState("");
+
+  const [
+    isModalOpenDeleteTaskCheckListSubtaskChild,
+    setIsModalOpenDeleteTaskCheckListSubtaskChild,
+  ] = useState(false);
+
+  function openModalDeleteTaskCheckListSubtaskChild(taskChildId, event) {
+    event.stopPropagation();
+    
+    setTaskDeleteIDCheckListSubtaskChild(taskChildId);
+    setIsModalOpenDeleteTaskCheckListSubtaskChild(true);
+  }
+  function closeModalDeleteTaskCheckListSubtaskChild() {
+    setIsModalOpenDeleteTaskCheckListSubtaskChild(false);
+  }
+  const handleDeleteTaskCheckListSubtaskChild = async() => {
+   
+    // deleteDataFromAPI(
+    //   `${DeleteTaskCheckListSubTask_Child}?task_child_id=${taskDeleteIDCheckListSubtaskChild}&user_id=${user_id}`
+    // )
+    //   .then((res) => {
+      const res = await deleteTaskChecklistSubTaskChild(taskDeleteIDCheckListSubtaskChild, user_id)
+        // if (res.success) {
+        //   // window.location.reload();
+        //   toast.info("Task has been moved to Trash", {
+        //     position: "top-center",
+        //     autoClose: 2000,
+        //   });
+        //   console.log("Task deleted successfully");
+        //   
+        //   Get_SubChecklist_Task(taskid);
+        // } else {
+        //   if (res.success === false)
+        //     toast.error("Task has been Failed to delete task");
+        //   // window.location.reload();
+        //   closeModalDeleteTaskCheckListSubtaskChild();
+        //   console.error("Failed to delete task.");
+        //   Get_SubChecklist_Task(taskid);
+        // }
+        toast.success("Task Deleted Successfully");
+        setIsModalOpenDeleteTask(false);
+        closeModalDeleteTaskCheckListSubtaskChild();
+        Get_SubChecklist_Task(taskid);
+      // })
+      // .catch((error) => {
+      //   console.error("An error occurred:", error);
+      // });
+  };
+  const handleOnDownload = async (downloadUrl) => {
+    try {
+      const response = await fetch(downloadUrl);
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "Attchment";
+      document.body.appendChild(a);
+      a.click();
+      window.URL.revokeObjectURL(url);
+      a.remove();
+    } catch (error) {
+      console.error("Error downloading file:", error);
+    }
+  };
+  let fileInput = React.createRef();
+  const handleIconClicks = () => {
+    fileInput.current.click();
+  };
+
+  const handleFileChange = async (taskid, event) => {
+    const selectedFiles = event.target.files;
+
+    const formData = new FormData();
+    formData.append("task_id", taskid);
+    formData.append("user_id", user_id);
+
+    for (let i = 0; i < selectedFiles.length; i++) {
+      formData.append("attachment", selectedFiles[i]);
+    }
+
+    try {
+      const res = await addVibeTaskAttachment(formData);
+
+      if (res.success) {
+        console.log("Success");
+        // setFiles(res.attachments)
+        Get_Task_Attachment(taskid);
+      }
+    } catch (error) {
+    } finally {
+    }
+  };
+
+  const handleRemoveFile = async(attachment_id, task_id) => {
+    if (attachment_id != "No") {
+    try {
+      
+        const res = await deleteVibeTaskAttachment(attachment_id, task_id)
+          
+            setFiles(res.attachments);
+         
+    } catch (error) {
+      console.log(error)
+    }
+        
+      
+    } else {
+      return;
     }
   };
 
@@ -1775,20 +2795,7 @@ const TaskManagement = () => {
           </div>
           {activeView === "Kanban" && (
             <section
-              style={
-                {
-                  //   overflowX: 'auto', // Enable horizontal scrolling
-                  //   // overflowY: 'hidden',
-                  // scrollbarWidth: 'thin',
-                  // scrollbarColor: '#888 #ddd',
-                  //   overflowY:'scroll',
-                  //   // minHeight: 530
-                  //   // minHeight: 630
-                  //   // minHeight: 730
-                  //   // height:'auto'
-                  //   // minHeight: '100%',
-                }
-              }
+           
               // scrollable-content section-table-height
               className="h-full overflow-x-auto scroll  rounded-md "
             >
@@ -2655,43 +3662,19 @@ const TaskManagement = () => {
       )}
       {isModalOpenDeleteTask && (
         <DeleteTaskModal
-        title={"Do you want to Delete Task ?"}
+          title={"Do you want to Delete Task ?"}
           onclose={() => setIsModalOpenDeleteTask(false)}
           handleDeleteTask={() => handleDeleteTask()}
         />
       )}
 
-      {/* <Modal
-        isOpen={isModalChatOpen}
-        onRequestClose={closeChatModal}
-        contentLabel="Add Project Name Popup Modal"
-        style={modalStyleChatName}
-
-      >
-        <button
-          type="button"
-          className=" btn_clo close"
-          onClick={closeChatModal}
-          style={{ position: "sticky" }}
-        >
-          <span>&times;</span>
-        </button> */}
+    
       {isModalChatOpen && (
-        // <div className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-30 backdrop-blur-sm z-50 p-10 ">
-        //   <div
-        //     style={{ background: themeColor }}
-        //     className=" md:w-auto w-full  p-4 md:px-10  flex flex-col rounded-md  overflow-auto max-h-[100%]"
-        //   >
-        //     <button
-        //       className="place-self-end fixed p-1 rounded-full  bg-white"
-        //       onClick={closeChatModal}
-        //     >
-        //       <AiOutlineClose size={20} />
-        //     </button>
+        
         <div className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-30 backdrop-blur-sm z-50 p-10">
           <div
             style={{ background: themeColor }} // Replace with your theme color
-            className="md:w-auto w-full p-4 md:px-10 flex flex-col rounded-md overflow-auto max-h-[100%]"
+            className="md:w-auto w-full p-4 md:px-10 flex flex-col rounded-md overflow-auto max-h-[100%] hide-scrollbar"
           >
             <button
               className="place-self-end p-1 rounded-full bg-white"
@@ -2712,40 +3695,7 @@ const TaskManagement = () => {
                   marginRight: "1%",
                 }}
               >
-                {/* <button className="close" onClick={closeChatModal}>
-                      &times;
-                    </button>
-
-                    <div style={{ display: 'flex', marginBottom: '6%' }}>&nbsp;</div> */}
-
-                {/* <div className='col md-12 ' style={{ textAlign: 'start', fontSize: '25px', borderRadius: 8, transition: 'background-color 0.3s ease', padding: '2px' }} onMouseEnter={(e) => e.target.style.background = '#132A3A'} onMouseLeave={(e) => e.target.style.background = 'transparent'}
-                    >
-                      {isEditing ? (
-                        <input
-                          ref={inputRef}
-                          value={taskTopicText}
-                          onChange={(e) => setTaskTopicText(e.target.value)}
-                          onKeyDown={(e) => {
-                            if (e.key === 'Enter') {
-                              e.preventDefault();
-                              setIsEditing(false);
-                              UpdateUserTask(taskid);
-                            }
-                          }}
-                          onBlur={() => setIsEditing(false)}
-                          style={{ background: '#132A3A', border: 'none', width: '100%', color: 'white' }}
-                        />
-                      ) : (
-                        <div onClick={() => setIsEditing(true)}>
-                          {taskTopicText}
-                          <span onClick={handleIconClickText} >
-                            <FaPencilAlt style={{ marginLeft: 10, fontSize: 14, backgroundColor: 'none' }} />
-                          </span>
-                        </div>
-                      )}
-
-                    </div> */}
-
+               
                 <div
                   className=" "
                   style={{
@@ -3072,7 +4022,7 @@ const TaskManagement = () => {
                         newStatus.label || taskMoreStatus,
                         8
                       );
-                      console.log("test");
+
                       return createdBy_id === user_id ||
                         (Array.isArray(selectedEmail) &&
                           selectedEmail.some(
@@ -3354,7 +4304,10 @@ const TaskManagement = () => {
                   </div>
                 ) : null}
 
-                <div className=" my-5 flex flex-col gap-2" style={{ cursor: "default" }}>
+                <div
+                  className=" my-5 flex flex-col gap-2"
+                  style={{ cursor: "default" }}
+                >
                   <div
                     className="font-medium grid md:grid-cols-4 text-sm gap-2"
                     style={{ cursor: "default" }}
@@ -3472,7 +4425,10 @@ const TaskManagement = () => {
                   >
                     {" "}
                     <p>Assign To :</p>
-                    <p className="cols-span-3 font-normal">
+                    <p className="cols-span-4 font-normal"  style={{
+                                          overflowWrap: "break-word",
+                                          maxWidth: "350px",
+                                        }}>
                       {showStatusChecklist1}{" "}
                     </p>
                   </div>
@@ -3664,7 +4620,8 @@ const TaskManagement = () => {
                             )}
                           </div>
                         </div>
-
+                       
+      
                         {/* <Modal
                       isOpen={isModalOpenCheck}
                       onRequestClose={closeModalCheck}
@@ -3729,7 +4686,7 @@ const TaskManagement = () => {
                     ))}
                     {isModalOpenDeleteTaskCheckList && (
                       <DeleteTaskModal
-                      title={"Do you want to Delete Checklist ?"}
+                        title={"Do you want to Delete Checklist ?"}
                         onclose={() => setIsModalOpenDeleteTaskCheckList(false)}
                         handleDeleteTask={() => handleDeleteTaskCheckList()}
                       />
@@ -3741,7 +4698,7 @@ const TaskManagement = () => {
                         <input
                           type="text"
                           spellcheck="true"
-                          className="w-full bg-transparent mr-4 outline-none"
+                          className="w-full bg-transparent border-b border-gray-400 mr-4 outline-none"
                           onKeyPress={handleAddItem}
                           onChange={(e) => setNewItem(e.target.value)}
                           value={newItem}
@@ -3758,6 +4715,1417 @@ const TaskManagement = () => {
                       </button>
                     </div>
                   </div>
+                  <div className="">
+                    <div className="border-b-2 border-white flex items-center justify-between">
+                      Sub Task
+                      <FaInfoCircle
+                        style={{
+                          fontSize: 16,
+                          color: "#fff",
+                          cursor: "pointer",
+                        }}
+                        title="Note: Please set a Due Date to track the task."
+                      />
+                    </div>
+                    {subTaskItems.map((subCheck, subIndex) => (
+                      <div
+                        key={subIndex}
+                        className=" bg-black p-2 bg-opacity-40 backdrop-blur-sm my-1 rounded-md"
+                      >
+                        <div
+                          htmlFor={`item-${subIndex}`}
+                          style={{
+                            fontSize: "normal",
+                            cursor: "default",
+                            display: "flex",
+                            justifyContent: "space-between",
+                          }}
+                          className=""
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleItemToggleSubTask(subIndex, subCheck.id);
+                          }}
+                        >
+                          <div className="">
+                            {editingIndexSub === subIndex ? (
+                              <div className="flex items-center gap-2 w-full">
+                                <textarea
+                                  className="w-full rounded-md outline-none text-black p-2 pt-0"
+                                  ref={inputRefItem}
+                                  spellCheck="true"
+                                  value={subItemTaskTopicText[subIndex] || ""}
+                                  onChange={(e) => {
+                                    const updatedText = e.target.value;
+                                    const updatedArray = [
+                                      ...subItemTaskTopicText,
+                                    ];
+                                    updatedArray[subIndex] = updatedText;
+                                    setSubItemTaskTopicText(updatedArray);
+                                  }}
+                                  onKeyDown={(e) => {
+                                    if (e.key === "Enter") {
+                                      e.preventDefault();
+                                      setIsEditingSubItem(false);
+                                      UpdateItemSubTask(
+                                        subCheck.id,
+                                        subItemTaskTopicText[subIndex]
+                                      ); // Pass single value instead of array
+                                    }
+                                  }}
+                                  cols={150}
+                                  // style={{
+                                  //   background: "#132A3A",
+                                  //   border: "none",
+                                  //   width: "100%",
+                                  //   color: "white",
+                                  //   paddingLeft: 4,
+                                  //   paddingRight: 4,
+                                  //   borderRadius: 4,
+                                  // }}
+                                />
+                                <span
+                                  onClick={(e) => {
+                                    e.preventDefault();
+                                    setIsEditingSubItem(false);
+                                    UpdateItemSubTask(
+                                      subCheck.id,
+                                      subItemTaskTopicText[subIndex]
+                                    ); // Pass single value instead of array
+                                  }}
+                                >
+                                  <FaCheck
+                                    style={{
+                                      marginLeft: 10,
+                                      marginRight: 10,
+                                      fontSize: 14,
+                                      color: "white",
+                                      cursor: "pointer",
+                                    }}
+                                  />
+                                </span>
+                              </div>
+                            ) : (
+                              <div
+                                className="flex items-center"
+                                onClick={() => setEditingIndexSub(subIndex)}
+                                style={{ wordBreak: "break-all" }}
+                              >
+                                {subItemTaskTopicText[subIndex]}
+                                <span
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    handleIconClickTextItemSub();
+                                    setEditingIndexSub(subIndex);
+                                  }}
+                                >
+                                  <FaPencilAlt
+                                    className="FaIcon"
+                                    style={{
+                                      marginLeft: 10,
+                                      fontSize: 14,
+                                      cursor: "pointer",
+                                    }}
+                                    title="Edit"
+                                  />
+                                </span>
+                              </div>
+                            )}
+
+                            {/* <br /> */}
+                            <div className="mt-2" style={{ fontSize: 15 }}>
+                              Created by: {subCheck.created_by.firstname}{" "}
+                              {subCheck.created_by.lastname}
+                            </div>
+                            <div
+                              style={{
+                                color: "#ededed",
+                                fontSize: 14,
+                                display: "block",
+                              }}
+                            >
+                              <div
+                                className="subDateStatus"
+                                style={{ display: "flex" }}
+                              >
+                                {createdBy_id.toString() === user_id ||
+                                subCheck.created_by.user_id.toString() ===
+                                  user_id ||
+                                (Array.isArray(selectedEmail) &&
+                                  selectedEmail.some(
+                                    (item) =>
+                                      item.value.toString() ===
+                                      user_id.toString()
+                                  )) ? (
+                                  <span
+                                    className="flex items-center gap-2"
+                                    style={{
+                                      color: "white",
+                                      fontSize: 14,
+                                      width: 180,
+                                      cursor: "pointer",
+                                    }}
+                                    onClick={(e) => {
+                                      e.stopPropagation();
+                                      handleDueDateClickSubDate(
+                                        subCheck.id,
+                                        subCheck.due_date
+                                      );
+                                    }}
+                                  >
+                                    <FaRegCalendarAlt />{" "}
+                                    {subCheck.due_date
+                                      ? ShowFormatedDueDateOnDateField(
+                                          subCheck.due_date
+                                        )
+                                      : "Due Date"}
+                                  </span>
+                                ) : (
+                                  <span
+                                    style={{
+                                      color: "#767676",
+                                      fontSize: 14,
+                                      boxShadow:
+                                        "rgb(0 0 0 / 17%) 1px 1px 1px 1px",
+                                      // backgroundColor: "#245272",
+                                      width: 180,
+                                      borderRadius: 4,
+                                      paddingLeft: 6,
+                                      marginLeft: 4,
+                                      cursor: "pointer",
+                                    }}
+                                  >
+                                    <FaRegCalendarAlt
+                                      style={{
+                                        color: "darkgoldenrod",
+                                        marginBottom: 4,
+                                      }}
+                                    />{" "}
+                                    {subCheck.due_date
+                                      ? ShowFormatedDueDateOnDateField(
+                                          subCheck.due_date
+                                        )
+                                      : "Due Date"}
+                                  </span>
+                                )}
+                                &nbsp;
+                                {createdBy_id.toString() !== user_id &&
+                                subCheck.due_date ? (
+                                  <MdEditCalendar
+                                    title="Request to change due date"
+                                    style={{ width: 16, height: 16 }}
+                                    onClick={(e) => {
+                                      e.stopPropagation();
+                                      handleDueDateClickSubDateRequestSubtask(
+                                        subCheck.id,
+                                        subCheck.due_date
+                                      );
+                                      console.log("clicked");
+                                    }}
+                                    className="cursor-pointer "
+                                  />
+                                ) : (
+                                  <></>
+                                )}
+                                {/* <FaRegCalendarAlt style={{ color: 'yellow', marginRight: '6px' }}  /> */}
+                                {/* { subCheck.due_date &&
+                                    shouldDisplaySpanRequestedDateSubtask && (
+                                    // <span onClick={(e) => { e.stopPropagation(); handleDueDateClickSubDateRequestSubtask(subCheck.id, subCheck.due_date); }}>
+                                    //   Request Subtask
+                                    // </span>
+                                    <div className="hover-info-reqSubtask pb-3" ref={infoRef}  onMouseEnter={handleMouseEnterSubtask}
+                                    onMouseLeave={handleMouseLeaveSubtask} >
+                                      
+                                    <u  > <span onClick={(e) => { e.stopPropagation(); handleDueDateClickSubDateRequestSubtask(subCheck.id, subCheck.due_date); }}>
+                                        Request Subtask
+                                      </span></u>
+                                    </div>
+                                    ) 
+                                  
+                                  } */}
+                                {/* 
+                                  {shouldDisplaySpanRequestedDateSubtask && (
+                                      <span onClick={(e) => { e.stopPropagation(); handleDueDateClickSubDateRequestSubtask(subCheck.id, subCheck.due_date); }}>
+                                        Request Subtask
+                                      </span>
+                                    ) 
+                                    // : (
+                                    //   <span style={{color:'grey'}} onClick={(e) => { e.stopPropagation();handleIconClickRequestedDateSubtask(subCheck.due_date); }}>
+                                        
+                                    //   </span>
+                                    // )
+                                  } */}
+                                &nbsp; &nbsp; &nbsp;
+                                {subCheck.created_by.user_id.toString() ===
+                                  user_id ||
+                                createdBy_id.toString() === user_id ||
+                                subCheck.assign_to.some(
+                                  (assignee) =>
+                                    assignee.user_id.toString() === user_id
+                                ) ||
+                                (Array.isArray(selectedEmail) &&
+                                  selectedEmail.some(
+                                    (item) =>
+                                      item.value.toString() ===
+                                      user_id.toString()
+                                  )) ? (
+                                  <div
+                                    className={
+                                      subCheck.status.status_name.length > 8
+                                        ? "col-md-4"
+                                        : "col-md-2"
+                                    }
+                                    onClick={(e) => {
+                                      if (!subCheck.due_date) {
+                                        toast.warning(
+                                          "Please add a due date before proceeding.",
+                                          {
+                                            position: "top-center",
+                                            autoClose: 5000,
+                                          }
+                                        );
+                                        return;
+                                      }
+                                      e.stopPropagation();
+
+                                      openModalSubCheck(
+                                        subCheck.id,
+                                        subCheck.status.status_name
+                                      );
+                                    }}
+                                    style={{
+                                      textAlign: "center",
+                                      cursor: "pointer",
+                                      fontSize: 12,
+                                      borderRadius: 20,
+                                      boxShadow:
+                                        "2px 2px 5px rgba(0, 0, 0, 0.2)",
+                                      width: 80,
+                                      color: "white",
+                                      padding: "1px",
+                                      backgroundColor: `${subCheck.status.color}`,
+                                    }}
+                                  >
+                                    {subCheck.status.status_name}
+                                  </div>
+                                ) : (
+                                  <div
+                                    className={
+                                      subCheck.status.status_name.length > 8
+                                        ? "col-md-4"
+                                        : "col-md-2"
+                                    }
+                                    style={{
+                                      textAlign: "center",
+
+                                      fontSize: 12,
+                                      borderRadius: 20,
+                                      width: 80,
+                                      color: "#767676",
+                                      pointerEvents: "none",
+
+                                      padding: "1px",
+                                      backgroundColor: "rgb(36, 82, 114)",
+                                    }}
+                                  >
+                                    {subCheck.status.status_name}
+                                  </div>
+                                )}
+                                {/* -----Subtask request */}
+                                {/* <div className="col-md"> */}
+                                {/* 
+                                          <div className='ml-2 '
+                                            style={{
+                                              display: 'flow-root',
+                                              alignItems: 'center',
+                                              cursor: 'pointer',
+                                              boxShadow: '2px 2px 5px rgba(0, 0, 0, 0.2)',
+                                              backgroundColor: '#245272',
+                                              borderRadius: 4,
+                                              padding: '0px 6px'
+                                            }}
+                                            // onClick={handleDueDateClickSubDateRequestSubtask} // Attach onClick to the div
+                                            onClick={() => handleDueDateClickSubDateRequestSubtask(subCheck.id, subCheck.due_date)} // Attach onClick to the div
+
+                                          >   
+                                            <FaRegCalendarAlt style={{ color: 'darkgoldenrod', marginRight: '6px' }} />
+                                            {'Request subtask'} 
+                                            {FormattedDateToShowProperly(subTaskDueDateRequest)}
+                                          </div> */}
+                                {/* </div>   */}
+                              </div>
+                              <div className="mt-1" style={{ display: "flex" }}>
+                                <>
+                                  <div
+                                    className="flex gap-1 items-center"
+                                    style={{
+                                      textAlign: "center",
+                                      cursor: "pointer",
+
+                                      borderRadius: 4,
+                                      color: "white",
+                                      height: 20,
+                                    }}
+                                    onClick={() => {
+                                      handleIconClickSubTaskAssign(
+                                        subCheck.id,
+                                        subCheck.assign_to,
+                                        subCheck.due_date
+                                      );
+                                    }}
+                                  >
+                                    <div>
+                                      <i className="fa fa-user-plus mr-2"></i>
+                                      Assign to :
+                                    </div>
+                                  </div>
+                                  <div
+                                    className="mx-2 flex items-center"
+                                    style={{
+                                      overflowWrap: "break-word",
+                                      maxWidth: "350px",
+                                    }}
+                                  >
+                                    {subCheck.assign_to.length > 0
+                                      ? subCheck.assign_to.map(
+                                          (user, index) => (
+                                            <span key={index}>
+                                              {user.email}
+                                              {index <
+                                                subCheck.assign_to.length - 1 &&
+                                                ","}{" "}
+                                              {/* Add comma if not the last element */}
+                                            </span>
+                                          )
+                                        )
+                                      : "Not Assigned"}
+                                  </div>
+                                </>
+
+                                {subCheck.created_by.user_id.toString() ===
+                                user_id.toString() ? (
+                                  <>
+                                  
+                                    <FaTrashAlt
+                                      title="Delete SubTask"
+                                      className="mt-1 cursor-pointer "
+                                      onClick={(event) =>
+                                        openModalDeleteTaskCheckListSubtask(
+                                          subCheck.id,
+                                          event
+                                        )
+                                      }
+                                    />
+                                  </>
+                                ) : (
+                                  <></>
+                                )}
+                              </div>
+                            </div>
+                          </div>
+                          {/* // ))} */}
+                          <span title="Add CheckList Subtask">
+                            {subTaskMenuOpen[subIndex] ? "▼" : "▶"}
+                            {/* {subTaskMenuOpen[subIndex] && Get_SubTask_Child(subCheck.id)} */}
+                          </span>
+                        </div>
+                        <div className="">
+                          {subTaskMenuOpen[subIndex] && (
+                            <div className="">
+                              {/* <hr style={{ marginTop: 4, marginBottom: 6 }} /> */}
+                              {subCheck.subtaskchild_set?.map((sublist, i) => (
+                                <div
+                                  htmlFor={`item-${i}`}
+                                  className="shadow-custom-all-sides m-2 p-2 rounded-md  border-dashed border border-gray-400"
+                                  style={
+                                    {
+                                      // borderRadius: 4,
+                                      // backgroundColor: "rgb(82 129 161 / 58%)",
+                                      // boxShadow: "2px 2px 5px rgba(0, 0, 0, 0.2)",
+                                    }
+                                  }
+                                  key={subIndex}
+                                >
+                                  {sublist.task_topic}
+
+                                  <div className="mb" style={{ fontSize: 14 }}>
+                                    Created by : {sublist.created_by.firstname}{" "}
+                                    {sublist.created_by.lastname}
+                                  </div>
+                                  <div
+                                    style={{
+                                      color: "#ededed",
+                                      fontSize: 14,
+                                      display: "block",
+                                    }}
+                                  >
+                                    <div
+                                      className="subDateStatus"
+                                      style={{ display: "flex" }}
+                                    >
+                                      {createdBy_id.toString() === user_id ||
+                                      sublist.created_by.user_id.toString() ===
+                                        user_id ||
+                                      (Array.isArray(selectedEmail) &&
+                                        selectedEmail.some(
+                                          (item) =>
+                                            item.value.toString() ===
+                                            user_id.toString()
+                                        )) ? (
+                                        <span
+                                          // style={{
+                                          //   color: "#ededed",
+                                          //   fontSize: 14,
+                                          //   boxShadow:
+                                          //     "2px 2px 5px rgba(0, 0, 0, 0.2)",
+                                          //   backgroundColor: "#245272",
+                                          //   width: 174,
+                                          //   borderRadius: 4,
+                                          //   paddingLeft: 6,
+                                          //   marginLeft: 4,
+                                          //   cursor: "pointer",
+                                          // }}
+                                          className="flex items-center gap-2"
+                                          onClick={(e) => {
+                                            e.stopPropagation();
+                                            handleDueDateClickSubDateChild(
+                                              sublist.id,
+                                              sublist.due_date
+                                            );
+                                            setDeleteId(sublist.id);
+                                          }}
+                                        >
+                                          <FaRegCalendarAlt />{" "}
+                                          {sublist.due_date
+                                            ? ShowFormatedDueDateOnDateField(
+                                                sublist.due_date
+                                              )
+                                            : "Due Date"}
+                                        </span>
+                                      ) : (
+                                        <span
+                                          style={{
+                                            color: "#767676",
+                                            fontSize: 14,
+                                            boxShadow:
+                                              "rgb(0 0 0 / 17%) 1px 1px 1px 1px",
+                                            backgroundColor: "#245272",
+                                            width: 174,
+                                            borderRadius: 4,
+                                            paddingLeft: 6,
+                                            marginLeft: 4,
+                                            cursor: "pointer",
+                                          }}
+                                          onClick={(e) => {
+                                            e.stopPropagation();
+                                          }}
+                                        >
+                                          <FaRegCalendarAlt style={{}} />{" "}
+                                          {sublist.due_date
+                                            ? ShowFormatedDueDateOnDateField(
+                                                sublist.due_date
+                                              )
+                                            : "Due Date"}
+                                        </span>
+                                      )}
+                                      &nbsp;
+                                      {createdBy_id.toString() !== user_id &&
+                                      sublist.due_date ? (
+                                        <MdEditCalendar
+                                          title="Request to change Due Date"
+                                          className="cursor-pointer m-1"
+                                          onClick={(e) => {
+                                            e.stopPropagation();
+                                            handleDueDateClickSubDateRequestSubtaskChild(
+                                              sublist.id,
+                                              sublist.due_date
+                                            );
+                                          }}
+                                        />
+                                      ) : (
+                                        <></>
+                                      )}
+                                      &nbsp; &nbsp; &nbsp;
+                                      <div
+                                        className={
+                                          sublist.status.status_name.length > 8
+                                            ? "col-md-4"
+                                            : "col-md-2"
+                                        }
+                                        onClick={(e) => {
+                                          if (!sublist.due_date) {
+                                            toast.error(
+                                              "Please add a due date before proceeding."
+                                            );
+                                            return;
+                                          }
+                                          e.stopPropagation();
+
+                                          openModalSubCheckChild(
+                                            sublist.id,
+                                            sublist.status.status_name
+                                          );
+                                        }}
+                                        style={{
+                                          textAlign: "center",
+                                          cursor: "pointer",
+                                          fontSize: 12,
+                                          borderRadius: 20,
+                                          boxShadow:
+                                            "2px 2px 5px rgba(0, 0, 0, 0.2)",
+                                          width: 80,
+                                          color: "white",
+                                          padding: "1px",
+                                          backgroundColor: `${sublist.status.color}`,
+                                        }}
+                                      >
+                                        {sublist.status.status_name}
+                                      </div>
+                                    </div>
+                                    <div className="flex gap-2 flex-wrap">
+                                      <div
+                                        className="cursor-pointer "
+                                        onClick={() => {
+                                          handleIconClickSubTaskAssignChild(
+                                            sublist.id,
+                                            sublist.assign_to,
+                                            sublist.due_date
+                                          );
+                                          console.log(
+                                            "assign",
+                                            sublist.assign_to
+                                          );
+                                        }}
+                                      >
+                                        {" "}
+                                        <i
+                                          class="fa fa-user-plus mr-2"
+
+                                          //  onClick={handleIconClickSubTaskAssignChild(sublist.id)}
+                                        >
+                                          {" "}
+                                        </i>
+                                        Assign to : {"  "}
+                                      </div>
+
+
+
+                                      <div
+                                        className=""
+                                        style={{
+                                          overflowWrap: "break-word",
+                                          maxWidth: "350px",
+                                        }}
+                                      >
+                                        {/* {sublist.assign_to} */}
+                                        {sublist.assign_to.length > 0
+                                          ? sublist.assign_to.map(
+                                              (user, index) => (
+                                                <span key={index}>
+                                                  {" "}
+                                                  {user.email}
+                                                  {index <
+                                                    sublist.assign_to.length -
+                                                      1 && ","}{" "}
+                                                  {/* Add comma if not the last element */}
+                                                </span>
+                                              )
+                                            )
+                                          : "Not Assigned"}
+                                      </div>
+                                      <div className="flex justify-end w-full">
+
+                                      <FaTrashAlt
+                                        className="text-red-400"
+                                        title="Delete"
+                                        onClick={(event) =>
+                                          openModalDeleteTaskCheckListSubtaskChild(
+                                            sublist.id,
+                                            event
+                                          )
+                                        }
+                                        />
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                               
+                              ))}
+                              <div className="">
+                                {createdBy_id.toString() === user_id || //task created by
+                                isTaskAssignedTo ? ( //taskassgnee
+                                  <div className="flex justify-between items-center">
+                                    <div className="flex items-center gap-2 w-full">
+                                      <FaPlusCircle
+                                        style={{
+                                          color: "#cdcdcd",
+                                          marginRight: 4,
+                                        }}
+                                      />
+                                      <input
+                                        spellcheck="true"
+                                        type="text"
+                                        className="px-2 outline-none border-b border-gray-400 bg-transparent w-full mr-2"
+                                        onChange={(e) =>
+                                          handleInputChange(
+                                            subIndex,
+                                            e.target.value
+                                          )
+                                        }
+                                        value={newSubtasksChild[subIndex]}
+                                        placeholder="Add Task"
+                                        title="Add Subtask Task"
+                                      />
+                                    </div>
+                                    <button
+                                      className="bg-white text-black px-2 shadow-custom-all-sides rounded-md"
+                                      onClick={() =>
+                                        Add_Checklist_SubtaskChild(
+                                          subCheck.id,
+                                          subIndex
+                                        )
+                                      }
+                                    >
+                                      Add
+                                    </button>
+                                  </div>
+                                ) : (
+                                  <>
+                                    <FaPlusCircle
+                                      style={{
+                                        color: "#cdcdcd",
+                                        marginRight: 4,
+                                      }}
+                                    />
+                                    <input
+                                      spellcheck="true"
+                                      type="text"
+                                      className="rounded-md px-2 outline-none bg-transparent border-b border-gray-400 w-96"
+                                      onChange={(e) =>
+                                        handleInputChange(
+                                          subIndex,
+                                          e.target.value
+                                        )
+                                      }
+                                      value={newSubtasksChild[subIndex]}
+                                      placeholder="Add Task"
+                                      style={{
+                                        backgroundColor:
+                                          "rgb(82 129 161 / 38%)",
+                                        color: "white",
+                                        marginRight: 4,
+                                      }}
+                                      title="Add Subtask Task"
+                                    />
+                                    <button>Add</button>
+                                  </>
+                                )}
+                              </div>
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    ))}
+                      {isModalOpenDeleteTaskCheckListSubtaskChild &&
+          <DeleteTaskModal title={"Do you want to Delete Task?"} handleDeleteTask={() => handleDeleteTaskCheckListSubtaskChild()} onclose={closeModalDeleteTaskCheckListSubtaskChild} />
+        
+        }
+
+                    {isModalOpenSubCheckChild && (
+                      <div className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-30 backdrop-blur-sm z-50  ">
+                        <div
+                          style={{ background: themeColor }}
+                          className=" md:w-auto w-full  p-4 md:px-10  flex flex-col rounded-md overflow-auto max-h-[100%]"
+                        >
+                          <div>
+                            <h4 className="font-medium border-b-2 border-white">
+                              Update Task Status{" "}
+                            </h4>
+                            <Select
+                              className="w-72 my-2 rounded-md p-1 text-black"
+                              value={newStatusSubCheckChild}
+                              onChange={handleStatusChangeSubCheckChild}
+                              options={statusOptionsSubChild}
+                              styles={{
+                                menuPortal: (base) => ({
+                                  ...base,
+                                  zIndex: 9999,
+                                }),
+                                menu: (provided) => ({
+                                  ...provided,
+                                  zIndex: 9999,
+                                }),
+
+                                placeholder: (baseStyles, state) => ({
+                                  ...baseStyles,
+                                  color: "black",
+                                }),
+                                clearIndicator: (baseStyles) => ({
+                                  ...baseStyles,
+                                  color: "red",
+                                }),
+                                dropdownIndicator: (baseStyles) => ({
+                                  ...baseStyles,
+                                  color: "black",
+                                }),
+                                control: (baseStyles) => ({
+                                  ...baseStyles,
+                                  borderColor: "darkblue",
+                                }),
+                                option: (baseStyles) => ({
+                                  ...baseStyles,
+                                  color: "black",
+                                }),
+                              }}
+                              menuPortalTarget={document.body}
+                            />
+                            <div className="flex justify-end gap-2">
+                              <button
+                                className="bg-white text-black px-4 rounded-full shadow-custom-all-sides"
+                                onClick={(e) => {
+                                  e.preventDefault();
+                                  console.log(
+                                    "Clicked editedSubTaskIdChild:",
+                                    editedSubTaskIdChild
+                                  );
+
+                                  Update_SubTask_StatusChild(
+                                    editedSubTaskIdChild,
+                                    subchecklistid,
+                                    "details"
+                                  );
+                                }}
+                              >
+                                Save
+                              </button>
+
+                              <button
+                                className="bg-red-400 text-black px-4 rounded-full shadow-custom-all-sides"
+                                style={{ color: "#fff" }}
+                                onClick={closeModalSubCheckChild}
+                              >
+                                Cancel
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    )}
+
+                    {isModalOpenSubTaskAssignChild && (
+                      <div className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-30 backdrop-blur-sm z-50  ">
+                        <div
+                          style={{ background: themeColor }}
+                          className=" md:w-auto w-full  p-4 md:px-10  flex flex-col rounded-md overflow-auto max-h-[100%]"
+                        >
+                          <div>
+                            <h5 className="font-medium border-b-2 border-white">
+                              Select Email{" "}
+                            </h5>
+
+                            <Select
+                              className="w-72 my-2 rounded-md p-1 text-black"
+                              isMulti
+                              options={optionsSubTaskAssignChild}
+                              value={selectedEmailSubTaskAssignChild}
+                              onChange={
+                                handleDropdownItemClickSubTaskAssignChild
+                              }
+                              isSearchable={true}
+                              menuPortalTarget={document.body}
+                              menuPosition="fixed"
+                              styles={{
+                                menuPortal: (base) => ({
+                                  ...base,
+                                  zIndex: 9999,
+                                }),
+                                menu: (provided) => ({
+                                  ...provided,
+                                  zIndex: 9999,
+                                }),
+
+                                placeholder: (baseStyles, state) => ({
+                                  ...baseStyles,
+                                  color: "black",
+                                }),
+                                clearIndicator: (baseStyles) => ({
+                                  ...baseStyles,
+                                  color: "red",
+                                }),
+                                dropdownIndicator: (baseStyles) => ({
+                                  ...baseStyles,
+                                  color: "black",
+                                }),
+                                control: (baseStyles) => ({
+                                  ...baseStyles,
+                                  borderColor: "darkblue",
+                                }),
+                                option: (baseStyles) => ({
+                                  ...baseStyles,
+                                  color: "black",
+                                }),
+                                multiValueRemove: (baseStyles, state) => ({
+                                  ...baseStyles,
+                                  color: state.isFocused ? "red" : "gray",
+                                  backgroundColor: state.isFocused
+                                    ? "black"
+                                    : "lightgreen",
+                                }),
+                              }}
+                            />
+
+                            <div className="flex gap-2 justify-end">
+                              <button
+                                type="button"
+                                className="bg-white text-black px-4 rounded-full shadow-custom-all-sides"
+                                onClick={handleConfirmClickSubTaskAssignChild}
+                                disabled={!selectedEmailSubTaskAssignChild}
+                              >
+                                Confirm
+                              </button>
+                              <button
+                                type="button"
+                                className="bg-red-400 text-white px-4 rounded-full shadow-custom-all-sides"
+                                onClick={closeModalSubTaskAssignChild}
+                              >
+                                Cancel
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Select Request Due Date Subtask Child */}
+                    {isModalOpenSubDateRequestSubtaskChild && (
+                      <div className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-30 backdrop-blur-sm z-50  ">
+                        <div
+                          style={{ background: themeColor }}
+                          className=" md:w-auto w-full  p-4 md:px-10  flex flex-col rounded-md overflow-auto max-h-[100%]"
+                        >
+                          <div>
+                            <h5 className="font-medium border-b-2 border-white">
+                              Select Request Due Date
+                            </h5>
+
+                            <DatePicker
+                              selected={subTaskDueDateRequestSubtaskChild}
+                              className="w-72 my-2 rounded-md p-1 text-black"
+                              onChange={(date) =>
+                                setSubTaskDueDateRequestSubtaskChild(date)
+                              }
+                              showTimeSelect
+                              dateFormat="dd/MM/yyyy h:mm aa"
+                              timeIntervals={5}
+                              ref={datePickerRefSubDateRequestSubtaskChild}
+                              minDate={new Date()}
+                              // minTime={currentTime}
+                              // maxTime={maxTime}
+                              filterTime={filterTime}
+                              placeholderText="Select Date and Time of Child task"
+                            />
+
+                            <div className="flex gap-2 justify-end">
+                              <button
+                                type="button"
+                                className="bg-white text-black px-4 rounded-full shadow-custom-all-sides"
+                                onClick={() => {
+                                  handleDateChangeSubDateRequestSubtaskChild(
+                                    subTaskIdForDueDateRequestSubtaskChild,
+                                    subTaskDueDateRequestSubtaskChild
+                                  );
+                                  handleModalCloseSubDateRequestSubtaskChild();
+                                  datePickerRefSubDateRequestSubtaskChild.current.setOpen(
+                                    false
+                                  );
+                                }}
+                              >
+                                Save
+                              </button>
+                              <button
+                                type="button"
+                                className="bg-red-400 text-white px-4 rounded-full shadow-custom-all-sides"
+                                onClick={
+                                  handleModalCloseSubDateRequestSubtaskChild
+                                }
+                              >
+                                Close
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    )}
+
+                    {isModalOpenSubDateChild && (
+                      <div className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-30 backdrop-blur-sm z-50  ">
+                        <div
+                          style={{ background: themeColor }}
+                          className=" md:w-auto w-full  p-4 md:px-10  flex flex-col rounded-md overflow-auto max-h-[100%]"
+                        >
+                          <div>
+                            <h5 className="font-medium border-b-2 border-white">
+                              Select Due Date
+                            </h5>
+
+                            <DatePicker
+                              className="w-72 my-2 rounded-md p-1 text-black"
+                              selected={subTaskDueDateChild}
+                              onChange={(date) => setSubTaskDueDateChild(date)}
+                              showTimeSelect
+                              dateFormat="dd/MM/yyyy h:mm aa"
+                              ref={datePickerRefSubDateChild}
+                              // minDate={currentDate}
+                              minDate={new Date()}
+                              filterTime={filterTime}
+                              placeholderText="Select Date and Time"
+                            />
+
+                            <div className="flex gap-2 justify-end">
+                              <button
+                                type="button"
+                                className="bg-white text-black px-4 rounded-full shadow-custom-all-sides"
+                                onClick={() => {
+                                  handleDateChangeSubDateChild(
+                                    deleteId,
+                                    subTaskDueDateChild
+                                  );
+                                  handleModalCloseSubDateChild();
+                                  datePickerRefSubDateChild.current.setOpen(
+                                    false
+                                  );
+                                }}
+                              >
+                                Save
+                              </button>
+                              <button
+                                type="button"
+                                className="bg-red-400 text-white px-4 rounded-full shadow-custom-all-sides"
+                                onClick={handleModalCloseSubDateChild}
+                              >
+                                Close
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    )}
+
+                    {isModalOpenDeleteTaskCheckListSubtask && (
+                      <DeleteTaskModal
+                        title={"Do you want to Delete Subtask ?"}
+                        onclose={closeModalDeleteTaskCheckListSubtask}
+                        handleDeleteTask={() =>
+                          handleDeleteTaskCheckListSubtask()
+                        }
+                      />
+                    )}
+
+                    {isModalOpenSubCheck && (
+                      <div className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-30 backdrop-blur-sm z-50  ">
+                        <div
+                          style={{ background: themeColor }}
+                          className=" md:w-auto w-full  p-4 md:px-10  flex flex-col rounded-md overflow-auto max-h-[100%]"
+                        >
+                          <div>
+                            <h4 className="font-medium border-b-2 border-white">
+                              Update Sub Task Status{" "}
+                            </h4>
+                            <Select
+                              className="w-72 my-2"
+                              value={newStatusSubCheck}
+                              onChange={handleStatusChangeSubCheck}
+                              options={statusOptionsSub}
+                              styles={{
+                                menuPortal: (base) => ({
+                                  ...base,
+                                  zIndex: 9999,
+                                }),
+                                menu: (provided) => ({
+                                  ...provided,
+                                  zIndex: 9999,
+                                }),
+
+                                placeholder: (baseStyles, state) => ({
+                                  ...baseStyles,
+                                  color: "black",
+                                }),
+                                clearIndicator: (baseStyles) => ({
+                                  ...baseStyles,
+                                  color: "red",
+                                }),
+                                dropdownIndicator: (baseStyles) => ({
+                                  ...baseStyles,
+                                  color: "black",
+                                }),
+                                control: (baseStyles) => ({
+                                  ...baseStyles,
+                                  borderColor: "darkblue",
+                                }),
+                                option: (baseStyles) => ({
+                                  ...baseStyles,
+                                  color: "black",
+                                }),
+                              }}
+                              menuPortalTarget={document.body}
+                            />
+                            <div className="flex gap-2 justify-end">
+                              <button
+                                className="bg-white text-black px-4 rounded-full shadow-custom-all-sides"
+                                onClick={(e) => {
+                                  e.preventDefault();
+                                  console.log(
+                                    "Clicked editedSubTaskId:",
+                                    editedSubTaskId
+                                  );
+
+                                  Update_SubTask_Status(
+                                    editedSubTaskId,
+                                    subchecklistid,
+                                    "details"
+                                  );
+                                }}
+                              >
+                                Save
+                              </button>
+
+                              <button
+                                className="bg-red-400 text-white px-4 rounded-full shadow-custom-all-sides"
+                                onClick={closeModalSubCheck}
+                              >
+                                Cancel
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    )}
+
+                    {isModalOpenSubTaskAssign && (
+                      <div className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-30 backdrop-blur-sm z-50  ">
+                        <div
+                          style={{ background: themeColor }}
+                          className=" md:w-auto w-full  p-4 md:px-10  flex flex-col rounded-md overflow-auto max-h-[100%]"
+                        >
+                          <div>
+                            <h5 className="font-medium border-b-2 border-white">
+                              Select Sub Task Email{" "}
+                            </h5>
+
+                            <div className="my-2">
+                              {/* Use react-select to display the user emails */}
+                              <Select
+                                className="w-72"
+                                isMulti
+                                options={optionsSubTaskAssign}
+                                value={selectedEmailSubTaskAssign}
+                                onChange={handleDropdownItemClickSubTaskAssign}
+                                isSearchable={true}
+                                menuPortalTarget={document.body}
+                                menuPosition="fixed"
+                                styles={{
+                                  menuPortal: (base) => ({
+                                    ...base,
+                                    zIndex: 9999,
+                                  }),
+                                  menu: (provided) => ({
+                                    ...provided,
+                                    zIndex: 9999,
+                                  }),
+
+                                  placeholder: (baseStyles, state) => ({
+                                    ...baseStyles,
+                                    color: "black",
+                                  }),
+                                  clearIndicator: (baseStyles) => ({
+                                    ...baseStyles,
+                                    color: "red",
+                                  }),
+                                  dropdownIndicator: (baseStyles) => ({
+                                    ...baseStyles,
+                                    color: "black",
+                                  }),
+                                  control: (baseStyles) => ({
+                                    ...baseStyles,
+                                    borderColor: "darkblue",
+                                  }),
+                                  option: (baseStyles) => ({
+                                    ...baseStyles,
+                                    color: "black",
+                                  }),
+                                  multiValueRemove: (baseStyles, state) => ({
+                                    ...baseStyles,
+                                    color: state.isFocused ? "red" : "gray",
+                                    backgroundColor: state.isFocused
+                                      ? "black"
+                                      : "lightgreen",
+                                  }),
+                                }}
+                              />
+                            </div>
+                            <div className="flex justify-end gap-2">
+                              <button
+                                type="button"
+                                className="bg-white text-black px-4 rounded-full shadow-custom-all-sides"
+                                onClick={handleConfirmClickSubTaskAssign}
+                                disabled={!selectedEmailSubTaskAssign}
+                              >
+                                Confirm
+                              </button>
+                              <button
+                                type="button"
+                                className="bg-red-400 text-white px-4 rounded-full shadow-custom-all-sides"
+                                onClick={closeModalSubTaskAssign}
+                              >
+                                Cancel
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                    {isModalOpenSubDate && (
+                      <div className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-30 backdrop-blur-sm z-50  ">
+                        <div
+                          style={{ background: themeColor }}
+                          className=" md:w-auto w-full  p-4 md:px-10  flex flex-col rounded-md overflow-auto max-h-[100%]"
+                        >
+                          <div>
+                            <h5 className="border-b-2 border-white my-2 ">
+                              Select Sub Task Due Date
+                            </h5>
+
+                            <div
+                              className=""
+                              // style={{ textAlign: "center" }}
+                            >
+                              <DatePicker
+                                selected={subTaskDueDate}
+                                onChange={(date) => setSubTaskDueDate(date)}
+                                showTimeSelect
+                                dateFormat="dd/MM/yyyy h:mm aa"
+                                ref={datePickerRefSubDate}
+                                timeIntervals={5}
+                                minDate={new Date()}
+                                filterTime={filterTime}
+                                placeholderText="Select Date and Time"
+                                className="p-2 rounded-md w-72 text-black"
+                              />
+                            </div>
+                            <div className="flex justify-end gap-2 my-2">
+                              <button
+                                type="button"
+                                className="bg-white text-black  px-2 rounded-full shadow-custom-all-sides"
+                                onClick={() => {
+                                  handleDateChangeSubDate(
+                                    deleteId,
+                                    subTaskDueDate
+                                  );
+                                  handleModalCloseSubDate();
+                                  datePickerRefSubDate.current.setOpen(false);
+                                }}
+                              >
+                                Save
+                              </button>
+                              <button
+                                type="button"
+                                className="bg-red-400 text-white px-2 rounded-full shadow-custom-all-sides"
+                                onClick={handleModalCloseSubDate}
+                              >
+                                Close
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                    {isModalOpenSubDateRequestSubtask && (
+                      <div className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-30 backdrop-blur-sm z-50  ">
+                        <div
+                          style={{ background: themeColor }}
+                          className=" md:w-auto w-full  p-4 md:px-10  flex flex-col rounded-md overflow-auto max-h-[100%]"
+                        >
+                          <div>
+                            <h5 className="border-b-2 border-white">
+                              Select Sub Task Request Due Date{" "}
+                            </h5>
+
+                            <div className="my-2 w-full">
+                              <DatePicker
+                                selected={subTaskDueDateRequestSubtask}
+                                onChange={(date) =>
+                                  setSubTaskDueDateRequestSubtask(date)
+                                }
+                                className="p-2 rounded-md w-72 text-black"
+                                showTimeSelect
+                                dateFormat="dd/MM/yyyy h:mm aa"
+                                timeIntervals={5}
+                                ref={datePickerRefSubDateRequestSubtask}
+                                minDate={new Date()}
+                                // minTime={currentTime}
+                                // maxTime={maxTime}
+                                filterTime={filterTime}
+                                placeholderText="Select Date and Time Request"
+                              />
+                            </div>
+                            <div className="flex justify-end gap-2 my-2">
+                              <button
+                                type="button"
+                                className="bg-white text-black  px-2 rounded-full shadow-custom-all-sides"
+                                onClick={() => {
+                                  handleDateChangeSubDateRequestSubtask(
+                                    subTaskIdForDueDateRequestSubtask,
+                                    subTaskDueDateRequestSubtask
+                                  );
+                                  setIsModalOpenSubDateRequestSubtask(false);
+                                  datePickerRefSubDateRequestSubtask.current.setOpen(
+                                    false
+                                  );
+                                }}
+                              >
+                                Save
+                              </button>
+                              <button
+                                type="button"
+                                className="bg-red-400 text-white px-2 rounded-full shadow-custom-all-sides"
+                                onClick={() =>
+                                  setIsModalOpenSubDateRequestSubtask(false)
+                                }
+                              >
+                                Close
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                    <div className="flex justify-between my-2">
+                      {createdBy_id.toString() === user_id || //task created by
+                      isTaskAssignedTo ? ( //taskassgnee
+                        <>
+                          <div className="flex items-center gap-2 w-full ">
+                            <FaPlusCircle
+                              style={{ color: "#cdcdcd", marginRight: 4 }}
+                            />
+                            <input
+                              spellcheck="true"
+                              type="text"
+                              className="w-full bg-transparent mr-4 outline-none border-b border-gray-400"
+                              // onKeyPress={Add_Checklist_Subtask}
+                              onChange={(e) => {
+                                setNewSubtasks(e.target.value);
+                              }}
+                              value={newSubtasks}
+                              placeholder="Add New Subtask "
+                              title="Add New Subtask"
+                            />
+                          </div>
+                          <button
+                            className="bg-white text-black px-2 rounded-md shadow-custom-all-sides"
+                            onClick={() => Add_Checklist_Subtask()}
+                          >
+                            Add
+                          </button>
+                        </>
+                      ) : (
+                        <>
+                          <FaPlusCircle
+                            style={{ color: "#cdcdcd", marginRight: 4 }}
+                          />
+                          <input
+                            spellcheck="true"
+                            type="text"
+                            className="taskInput"
+                            // onKeyPress={Add_Checklist_Subtask}
+                            onChange={(e) => {
+                              setNewSubtasks(e.target.value);
+                            }}
+                            value={newSubtasks}
+                            placeholder="Add New Subtask "
+                            style={{
+                              backgroundColor: "#133953",
+                              color: "white",
+                              marginRight: 4,
+                            }}
+                            title="Add New Subtask"
+                          />
+                          <button
+                            // className={`pr-2 pl-2 ${
+                            //   isDisabledSub ? "button-disabled" : ""
+                            // }`}
+                            style={{ color: "#fff" }}
+                          >
+                            Add
+                          </button>
+                        </>
+                      )}
+                    </div>
+                  </div>
+                  <div className="">
+                
+                  <div
+                    className="border-b-2 border-white "
+                    
+                  >
+                    <span>Attachment</span>
+                  </div>
+                
+                
+                {/* {fileName && */}
+                {files.map((file, index) => (
+                  <div key={index} className="flex justify-between my-2">
+                  
+
+                    <div >
+                      {file.attachment && file.attachment.includes("/")
+                        ? file.attachment.split("/")[3]
+                        : file.name}
+                    </div>
+                    <div className="flex gap-2">
+                      <FaDownload
+                        className="mr-3 cursor-pointer"
+                        onClick={() =>
+                          handleOnDownload(`https://vibecopilot.ai/api/media/${file.attachment}`)
+                        }
+                        title="Download Attachments"
+                      />
+                      {/* {file.created_by.toString() === user_id.toString() ?<> */}
+                      <FaTrashAlt
+                      className="cursor-pointer"
+                        onClick={() =>
+                          handleRemoveFile(file.id ? file.id : "No", taskid)
+                        }
+                        title="Delete"
+                      />
+                      {/* </>:<></>} */}
+                    </div>
+                  </div>
+                ))}
+
+                <div
+                  className="flex items-center my-2 gap-2"
+                 
+                >
+                  <FaSearchPlus
+                    className="col-md-1 mt-1"
+                    onClick={handleIconClicks}
+                  />
+                  <div className="cursor-pointer" style={{ color: "#cdcdcd" }}
+                   onClick={handleIconClicks}
+                  >
+                    {" "}
+                    Add Attachment{" "}
+                  </div>
+
+                  <input
+                    type="file"
+                    ref={fileInput}
+                    style={{ display: "none" }}
+                    placeholder="select file"
+                    onChange={(event) => handleFileChange(taskid, event)}
+                    multiple
+                  />
+                </div>
+              </div>
                 </div>
 
                 {isChatVisible && (
@@ -4109,7 +6477,6 @@ const TaskManagement = () => {
                 )}
               </div>
             </div>
-            {/* </Modal> */}
           </div>
         </div>
       )}

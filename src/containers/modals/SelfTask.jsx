@@ -152,109 +152,7 @@ function TaskSelf({ onClose }) {
 
   const [loading, setLoading] = useState(false);
 
-  // const createTask = () => {
-
-  //   if (isCreatingTask) {
-  //     return; // If the task is already being created, do nothing
-  //   }
-  //   setLoading(true);
-
-  //   if (!selectedOption) {
-
-  //     if (!task_topic) {
-  //       //alert('Please fill in all the fields before creating the task.');
-  //       return;
-  //     };
-  //     const user_id = localStorage.getItem('user_id');
-
-  //     setShowVerifiedButton("none");
-  //     setShowVerifiedLoader("block");
-
-  //     const formData = new FormData();
-  //     formData.append('task_topic', task_topic);
-  //     formData.append('due_date', formatDate(due_date));
-  //     formData.append('created_by', user_id);
-  //     formData.append('task_description', task_description);
-  //     formData.append('urgent_status', checked === 0 ? false : true);
-  //     attachments.forEach((file, index) => {
-  //       formData.append(`attachments`, file);
-  //     });
-
-  //     formData.append('assign_to', user_id);
-
-  //     setIsCreatingTask(true);
-  //     postDataToAPI(AddBoardChecklistTask, formData)
-  //       .then(response => {
-  //         if (response.success) {
-
-  //           setLoading(false);
-  //           onClose();
-  //           window.location.reload();
-  //         } else {
-  //           setLoading(false);
-  //           console.log("unsuccess");
-  //         }
-  //       })
-  //       .catch(error => {
-  //         setLoading(false);
-  //         //alert('Please check your internet and try again!');
-
-  //       })
-  //       .finally(() => {
-  //         setLoading(false);
-  //         setIsCreatingTask(false);
-  //       });
-
-  //   } else {
-
-  //     const idList = selectedOption.map((email) => parseInt(email.value));
-
-  //     if (!task_topic) {
-  //       //alert('Please fill in all the fields before creating the task.');
-  //       return;
-  //     };
-  //     const user_id = localStorage.getItem('user_id');
-
-  //     setLoading(true);
-  //     const formData = new FormData();
-  //     formData.append('task_topic', task_topic);
-  //     formData.append('due_date', formatDate(due_date));
-  //     formData.append('created_by', user_id);
-  //     formData.append('task_description', task_description);
-  //     formData.append('urgent_status', checked === 0 ? false : true);
-  //     attachments.forEach((file, index) => {
-  //       formData.append(`attachments`, file);
-  //     });
-  //     idList.forEach((id) => {
-  //       formData.append('assign_to', id);
-  //     });
-  //     setIsCreatingTask(true);
-  //     postDataToAPI(AddBoardChecklistTask, formData)
-  //       .then(response => {
-  //         if (response.success) {
-  //           setLoading(false);
-
-  //           onClose();
-
-  //           window.location.reload();
-
-  //         } else {
-  //           setLoading(false);
-  //           console.log("unsuccess");
-  //         }
-  //       })
-  //       .catch(error => {
-  //         setLoading(false);
-  //         //alert('Please check your internet and try again!');
-
-  //       })
-  //       .finally(() => {
-  //         setIsCreatingTask(false);
-  //         setLoading(false);
-  //       });
-  //   }
-
-  // }
+  
 
   const [selectedDateRepeat, setSelectedDateRepeat] = useState(null);
   const [selectedToDateRepeat, setSelectedToDateRepeat] = useState(null);
@@ -656,7 +554,7 @@ function TaskSelf({ onClose }) {
       <div className="  fixed inset-0 flex justify-center items-center bg-black bg-opacity-30 backdrop-blur-sm z-50 p-10 ">
         <div
           style={{ background: themeColor }}
-          className=" md:w-auto w-full  p-4 md:px-10  flex flex-col rounded-md  overflow-auto max-h-[100%]"
+          className=" md:w-auto w-full  p-4 md:px-10  flex flex-col rounded-md  overflow-auto max-h-[100%] hide-scrollbar "
         >
           <button
             className="place-self-end fixed p-1 rounded-full z-30  bg-white"

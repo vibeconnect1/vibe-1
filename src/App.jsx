@@ -131,7 +131,7 @@ import AddChecklist from "./pages/SubPages/AddChecklist.jsx";
 import EditChecklist from "./pages/SubPages/EditChecklist.jsx";
 import EditStocks from "./pages/SubPages/EditStocks.jsx";
 
-import DocumentPro from "./pages/DocumentPro.jsx";
+import DocumentPro from "./pages/DocumentsPro/DocumentPro.jsx";
 import AddProjectTask from "./pages/SubPages/AddProjectTask.jsx";
 import UserSetup from "./pages/Setup/UserSetup.jsx";
 import UserSetupDetails from "./pages/SubPages/details/UserSetupDetails.jsx";
@@ -508,6 +508,7 @@ import InventoryDetails from "./pages/SubPages/details/InventoryDetails.jsx";
 import PPMTask from "./pages/SubPages/PPMTask.jsx";
 import PPMChecklistDetails from "./pages/SubPages/details/PPMChecklistDetails.jsx";
 import AssetWidgets from "./pages/SubPages/AssetWidgets.jsx";
+import DocumentMain from "./pages/DocumentsPro/DocumentMain.jsx";
 
 function App() {
   const themeColor = useSelector((state) => state.theme.color);
@@ -1765,11 +1766,11 @@ function App() {
 
           {/* document */}
           <Route
-            path="/admin/documents"
+            path="/documents"
             element={
-              <ProtectedAdminRoutes>
-                <DocumentPro />
-              </ProtectedAdminRoutes>
+              <ProtectedRoute>
+                <DocumentMain />
+              </ProtectedRoute>
             }
           />
           {/* Employee project */}
@@ -2990,7 +2991,7 @@ function App() {
           />
 
           {/* admin booking & req */}
-
+<Route path="/admin/booking-request" element={<Navigate to="/admin/booking-request/hotel-request" replace />}  />
           <Route
             path="/admin/booking-request/hotel-request"
             element={

@@ -336,6 +336,13 @@ const Asset = () => {
     console.log("Filtered Results:", filteredResults);
   };
 
+  const handleFilterReset = () => {
+    setSelectedBuilding('');
+    setSelectedFloor('');
+    setSelectedUnit('');
+    setFilteredData(assets);
+  };
+
   const handleBuildingChange = async (e) => {
     const buildingId = e.target.value;
     setSelectedBuilding(buildingId);
@@ -361,22 +368,7 @@ const Asset = () => {
     setSelectedUnit(unitId);
   };
 
-  const handleFileChange = (event) => {
-    const file = event.target.files[0];
-    const reader = new FileReader();
-    reader.onload = (e) => {
-      const contents = e.target.result;
-      parse(contents, {
-        header: true,
-        complete: (result) => {
-          setAssets(result.data); // Update assets state with parsed data
-          setFilteredData(result.data); // Update filtered data state with parsed data
-        },
-      });
-    };
-
-    reader.readAsText(file);
-  };
+ 
   const defaultImage = { index: 0, src: "" };
   let selectedImageSrc = defaultImage.src;
   let selectedImageIndex = defaultImage.index;
@@ -439,6 +431,7 @@ const Asset = () => {
           <div className="flex flex-col md:flex-row mt-1 items-center justify-center gap-2">
             <select
               name="building_name"
+              value={selectedBuilding}
               id="building_name"
               onChange={handleBuildingChange}
               className="border p-1 px-4 max-w-44 w-44 border-gray-500 rounded-md"
@@ -453,6 +446,7 @@ const Asset = () => {
 
             <select
               onChange={handleFloorChange}
+              value={selectedFloor}
               name="floor_name"
               className="border p-1 px-4 max-w-44 w-44 border-gray-500 rounded-md"
             >
@@ -464,6 +458,7 @@ const Asset = () => {
               ))}
             </select>
             <select
+            value={selectedUnit}
               onChange={handleUnitChange}
               name="unit_name"
               className="border p-1 px-4 max-w-44 w-44 border-gray-500 rounded-md"
@@ -480,6 +475,12 @@ const Asset = () => {
               onClick={handleFilterApply}
             >
               Apply
+            </button>
+            <button
+              className="bg-red-400 p-1 px-4 text-white rounded-md"
+              onClick={handleFilterReset}
+            >
+              Reset
             </button>
           </div>
         )}
@@ -542,18 +543,7 @@ const Asset = () => {
               Filter
             </button>
 
-            {/* <Link
-                  to={"/assets/add-asset"}
-                  className="bg-black  text-sm rounded-lg flex justify-center font-semibold items-center gap-2 text-white py-2 px-4 border-2 border-black hover:bg-white hover:text-black transition-all duration-300 "
-                >
-                  <IoAddCircleOutline size={20} />
-                  Add
-                </Link> */}
-
-            {/* <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-                  <input type="file"  className="opacity-0 w-fit" onChange={handleFileChange} />
-                  Import
-                </button> */}
+           
             <button
               className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
               onClick={()=> setUploadModal(true)}
