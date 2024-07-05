@@ -82,7 +82,7 @@ const TicketDetails = () => {
   const ticketDetails = [
     { title: "Site Owner  :", description: ticketinfo.responsible_person },
     { title: "Ticket No  :", description: ticketinfo.ticket_number },
-    { title: "Title  :", description: ticketinfo.heading },
+    // { title: "Title  :", description: ticketinfo.heading },
     { title: "Status  :", description: ticketinfo.issue_status },
     { title: "Site  :", description: ticketinfo.site_name },
     { title: "Issue Type  :", description: ticketinfo.issue_type },
@@ -93,7 +93,8 @@ const TicketDetails = () => {
     { title: "Priority  :", description: ticketinfo.priority },
     { title: "Floor Name  :", description: ticketinfo.floor_name },
     { title: "Sub category  :", description: ticketinfo.sub_category },
-    { title: "Related To  :", description: ticketinfo.issue_related_to },
+    // { title: "Related To  :", description: ticketinfo.issue_related_to },
+    { title: "Related To  :", description: ticketinfo.issue_type_id },
     { title: "Unit  :", description: ticketinfo.unit },
     { title: "Total time  :", description: getTimeAgo(ticketinfo.created_at) },
 
@@ -152,7 +153,7 @@ const TicketDetails = () => {
           </Link>
         </div>
         <div className="">
-          <Detail details={ticketDetails} heading={"Ticket Details"} />
+          <Detail details={ticketDetails} heading={"Ticket Details"} title={ticketinfo.heading} />
         </div>
         <div className="flex flex-col  flex-wrap gap-2">
           <h2

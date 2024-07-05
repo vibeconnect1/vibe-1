@@ -8,7 +8,7 @@ const ProtectedAdminRoutes = ({children}) => {
     const user = getItemInLocalStorage("USERTYPE")
     if (!token || user !== "pms_admin") {
       toast.error('Not Authorized', );
-      return <Navigate to={'/login'} />;
+      return <Navigate to={'/mytickets'} />;
     }
   
     return <>{children}</>;
