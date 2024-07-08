@@ -13,6 +13,7 @@ import { BsThreeDots } from 'react-icons/bs';
 import image from "/profile.png";
 import ProfileGrow from './ProfileGrow';
 import ProfileCatchUp from './ProfileCatchup';
+import { getItemInLocalStorage } from '../../utils/localStorage';
 function Profile() {
     const [page, setPage] = useState("grow");
     const employee = {
@@ -29,6 +30,10 @@ function Profile() {
     const [modal, showModal] = useState(false);
     const [isOpen, setIsOpen] = useState(false);
     const dropdownRef = useRef(null);
+    const firstName = getItemInLocalStorage("Name")
+    const lastName = getItemInLocalStorage("LASTNAME")
+    const user = getItemInLocalStorage("user")
+
     const toggleDropdown = () => {
         setIsOpen(!isOpen);
     };
@@ -61,13 +66,13 @@ function Profile() {
                         </div>
                     </div>
                     <div className='flex justify-end mt-3 mx-5'>
-                        <Link to={`/admin/communication-edit-profile`} >
+                        <Link to={`/admin/edit-profile`} >
                           <BiEdit size={25}/>
                         </Link>
                     </div>
                     <div className='flex md:flex-row flex-col gap-3 ml-6'>
-                        <h2 className="text-xl font-semibold">{employee.fullName}</h2>
-                        <p className="text-gray-600 mt-1">{employee.email}</p>
+                        <h2 className="text-xl font-semibold">{firstName} {lastName}</h2>
+                        <p className="text-gray-600 mt-1">{user.email}</p>
                         <p className="text-gray-600 mt-1">{employee.phone}</p>
                     </div>
                     <div className="my-4 ml-6 ">

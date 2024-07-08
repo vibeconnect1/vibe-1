@@ -8,6 +8,7 @@ import Navbar from '../../components/Navbar';
 import * as XLSX from "xlsx";
 import { BsEye } from 'react-icons/bs';
 import { DNA } from 'react-loader-spinner';
+import { useSelector } from 'react-redux';
 const ServicesTask = () => {
     const [routines, setRoutines]= useState([])
     const [filter, setFilter] = useState(false);
@@ -72,6 +73,7 @@ const ServicesTask = () => {
         },  
         
       ];
+      const themeColor = useSelector((state)=> state.theme.color)
 
       useEffect(() => {
         try {
@@ -157,7 +159,7 @@ const ServicesTask = () => {
           </button>
         </div>
       )}
-      <div className="flex flex-wrap justify-between items-center my-5 ">
+      <div className="flex flex-wrap justify-between items-center my-2 ">
         <input
           type="text"
           placeholder="Search By name"
@@ -166,34 +168,14 @@ const ServicesTask = () => {
           onChange={handleRoutineSearch}
         />
         <div className="flex flex-wrap gap-2">
+        
           {/* <button
-      className="text-lg font-semibold border-2 border-black px-4 p-1 flex gap-2 items-center rounded-md"
-      onClick={() => setOmitColumn(!omitColumn)}
-    >
-      <IoFilterOutline />
-      Filter Columns
-    </button> */}
-          {/* <button
-            className="text-lg font-semibold border-2 border-black px-4 p-1 flex gap-2 items-center rounded-md"
-            onClick={() => setFilter(!filter)}
-          >
-            <BiFilterAlt />
-            Filter
-          </button> */}
-
-          {/* <Link
-            to={"/services/add-service-ppm"}
-            className="bg-black  rounded-lg flex font-semibold  items-center gap-2 text-white p-2 "
-          >
-            <IoAddCircleOutline size={20} />
-            Add
-          </Link> */}
-          <button
             className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
             onClick={exportToExcel}
+style={{background: themeColor}}
           >
             Export
-          </button>
+          </button> */}
           {/* <button
     className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
     onClick={handleDownloadQRCode}

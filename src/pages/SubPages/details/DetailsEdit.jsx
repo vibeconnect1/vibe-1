@@ -22,6 +22,7 @@ const DetailsEdit = () => {
   const [assignedUser, setAssignedUser] = useState();
   const [categ, setCateg] = useState([]);
   const [units, setUnits] = useState([]);
+  const [feat, setFeat] = useState("")
   const [formData, setFormData] = useState({
     category_type_id: "",
     // sub_category: "",
@@ -47,6 +48,12 @@ const DetailsEdit = () => {
     territory_manager_id:""
   });
   console.log(formData);
+  const getAllowedFeatures = () => {
+    const storedFeatures = getItemInLocalStorage("FEATURES");
+    if (storedFeatures) {
+      setFeat(storedFeatures.map(feature => feature.feature_name));
+    }
+  };
 
   const categories = getItemInLocalStorage("categories");
   // console.log(categories , "Catss")
@@ -69,6 +76,7 @@ const DetailsEdit = () => {
           priority: response.data.priority,
           text: response.data.text,
           issue_status_id: response.data.issue_status_id,
+          territory_manager_id: response.data.territory_manager_id,
           // status: response.data.status,
           // category_type_id: response.data.category_type_id,
           // sub_category_id: response.data.sub_category_id,
@@ -80,6 +88,7 @@ const DetailsEdit = () => {
           corrective_action: response.data.corrective_action,
           comment: response.data.comment,
           docs: response.data.documents,
+          
         });
         console.log("check",response.data)
         setTicketInfo(response.data);
@@ -153,6 +162,7 @@ const DetailsEdit = () => {
           complaint_type: formData.issue_type,
           priority: formData.priority,
           assigned_to: formData.assigned_to_id,
+          territory_manager_id: formData.territory_manager_id,
           root_cause: formData.root_cause,
           impact: formData.impact,
           corrective_action: formData.corrective_action,
@@ -229,10 +239,10 @@ const DetailsEdit = () => {
     { title: "Site Owner  :", description: ticketinfo.responsible_person },
     { title: "Ticket No.:", description: ticketinfo.ticket_number || "" },
 
-    {
-      title: "Title :",
-      description: <p>{formData.heading}</p>,
-    },
+    // {
+    //   title: "Title :",
+    //   description: <p>{formData.heading}</p>,
+    // },
 
     { title: "Site  :", description: ticketinfo.site_name },
     { title: "Building Name  :", description: ticketinfo.building_name },
@@ -443,7 +453,7 @@ const themeColor = useSelector((state)=> state.theme.color)
     <div className="grid ">
       <div className="flex flex-col justify-around gap-10 mb-10 my-2 ">
         <div className="">
-          <Detail details={ticketDetails} heading={"Edit Ticket Details"} />
+          <Detail details={ticketDetails} heading={"Edit Ticket Details"} title={formData.heading} />
         </div>
 
         <div className="flex flex-col  flex-wrap gap-2">

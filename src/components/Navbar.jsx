@@ -1,16 +1,18 @@
 import React, { useEffect, useState } from "react";
 import { HiMenuAlt3 } from "react-icons/hi";
-import { useNavigate, NavLink } from "react-router-dom";
+import { useNavigate, NavLink, Link } from "react-router-dom";
 import { menus } from "../utils/menus";
 import { PiFiles, PiSignOutBold } from "react-icons/pi";
 import { getItemInLocalStorage } from "../utils/localStorage";
 import { FaMoneyBillTrendUp } from "react-icons/fa6";
+import image from "/profile.png";
 import {
   BsBroadcast,
   BsBuilding,
   BsFileRuled,
   BsMailboxFlag,
   BsPass,
+  BsPersonCircle,
   BsTicketPerforated,
 } from "react-icons/bs";
 import {
@@ -57,7 +59,7 @@ import {
   FaUser,
   FaUserFriends,
 } from "react-icons/fa";
-import { IoIosPeople } from "react-icons/io";
+import { IoIosPeople, IoMdSettings } from "react-icons/io";
 import { useSelector } from "react-redux";
 import { ImFileText2 } from "react-icons/im";
 import { FcMoneyTransfer } from "react-icons/fc";
@@ -113,6 +115,8 @@ const Navbar = () => {
     }
   };
 
+  const firstName = getItemInLocalStorage("Name")
+  const lastName = getItemInLocalStorage("LASTNAME")
   return (
     <section className="flex gap-6 sticky top-0 left-0 bottom-0 h-screen z-10">
       <div
@@ -136,6 +140,38 @@ const Navbar = () => {
           {/* admin */}
           {user === "pms_admin" && (
             <>
+            {/* <Link  className=" text-white" >
+          
+        </Link> */}
+              <NavLink
+                to={`/admin/profile`}
+                className={({ isActive }) =>
+                  ` ${
+                    isActive
+                      ? `text-black bg-white flex p-2  gap-3.5 rounded-md group items-center  font-medium ${fontSize}`
+                      : ` group flex items-center  gap-3.5 font-medium p-2 hover:bg-gray-800 rounded-md ${fontSize}`
+                  }`
+                }
+              >
+                <div>
+                  {React.createElement(BsPersonCircle , { size: "20" })}
+                  {/* <img src={image} width={100} height={100} alt="forum-profile" /> */}
+                </div>
+                <h2
+                  className={`whitespace-pre duration-300 ${
+                    !open && "opacity-0 translate-x-28 overflow-hidden"
+                  }`}
+                >
+                  {firstName} {lastName}
+                </h2>
+                <h2
+                  className={`${
+                    open && "hidden"
+                  } absolute left-48 bg-white font-semibold whitespace-pre text-gray-900 rounded-md drop-shadow-lg px-0 py-0 w-0 overflow-hidden group-hover:px-2 group-hover:py-1 group-hover:left-14 group-hover:duration-300 group-hover:w-fit  `}
+                >
+                  {firstName} {lastName}
+                </h2>
+              </NavLink>
               <NavLink
                 to={"/dashboard"}
                 className={({ isActive }) =>
@@ -2103,7 +2139,7 @@ const Navbar = () => {
           <div className="border border-white" />
           <div className=" ">
             <NavLink
-              to={"/profile"}
+              to={"/settings"}
               className={({ isActive }) =>
                 ` ${
                   isActive
@@ -2112,20 +2148,20 @@ const Navbar = () => {
                 }`
               }
             >
-              <div>{React.createElement(HiMiniUser, { size: "20" })}</div>
+              <div>{React.createElement(IoMdSettings , { size: "20" })}</div>
               <h2
                 className={`whitespace-pre duration-300 ${
                   !open && "opacity-0 translate-x-28 overflow-hidden"
                 }`}
               >
-                Profile
+                Settings
               </h2>
               <h2
                 className={`${
                   open && "hidden"
                 } absolute left-48 bg-white font-semibold whitespace-pre text-gray-900 rounded-md drop-shadow-lg px-0 py-0 w-0 overflow-hidden group-hover:px-2 group-hover:py-1 group-hover:left-14 group-hover:duration-300 group-hover:w-fit  `}
               >
-                Profile
+                Settings
               </h2>
             </NavLink>
             <button

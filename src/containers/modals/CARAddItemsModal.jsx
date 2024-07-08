@@ -54,6 +54,7 @@ const handleCARReq = async()=>{
     } catch (error) {
         console.log(error)
         toast.error("Something Went Wrong")
+        toast.dismiss()
     }
 }
 

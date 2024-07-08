@@ -5,6 +5,7 @@ import { IoMdAdd } from "react-icons/io";
 import Table from "../components/table/Table";
 import { Link } from "react-router-dom";
 import { BsEye } from "react-icons/bs";
+import { useSelector } from "react-redux";
 
 function GRN() {
   const [filter, setFilter] = useState(false);
@@ -221,11 +222,11 @@ function GRN() {
       action: <BsEye />,
     },
   ];
-
+  const themeColor = useSelector((state) => state.theme.color);
   return (
     <section className="flex">
       {/* <Navbar /> */}
-      <div className="w-full mx-3 flex flex-col overflow-hidden">
+      <div className="w-full  flex flex-col overflow-hidden">
         <div>
           {filter && (
             <div className='className="flex flex-col md:flex-row  items-center justify-center gap-2'>
@@ -247,30 +248,33 @@ function GRN() {
                   className="border-2 p-2 w-70 border-gray-300 rounded-lg mx-2"
                 />
 
-                <button className="bg-black p-1 px-5 py-2 text-white rounded-md">
+                <button className="bg-black p-1 px-5 py-2 text-white rounded-md" style={{background: themeColor}}>
                   Apply
                 </button>
               </div>
             </div>
           )}
-          <div className="flex  md:flex-row gap-2 justify-between w-full my-5">
+          <div className="flex  md:flex-row gap-2 justify-between w-full my-2">
             <div>
               <input
                 type="text"
                 placeholder="search"
-                className="border-2 p-2  border-gray-300 rounded-lg mx-2"
+                className="border-2 p-2  border-gray-300 rounded-lg  w-96"
               />
             </div>
             <div className="flex flex-col sm:flex-row md:justify-between  gap-2 ">
-              <Link to="/admin/add-grn" className=" font-semibold border-2 border-black px-4 p-1 flex gap-2 items-center rounded-md">
-                 
-                  <IoMdAdd /> Add
-                
+              <Link
+                to="/admin/add-grn"
+                style={{background: themeColor}}
+                className=" font-semibold text-white px-4 p-1 flex gap-2 items-center rounded-md"
+              >
+                <IoMdAdd /> Add
               </Link>
 
               <button
-                className=" font-semibold border-2 border-black px-4 p-1 flex gap-2 items-center rounded-md"
+                className=" font-semibold text-white px-4 p-1 flex gap-2 items-center rounded-md"
                 onClick={() => setFilter(!filter)}
+                style={{background: themeColor}}
               >
                 <BiFilterAlt />
                 Filter

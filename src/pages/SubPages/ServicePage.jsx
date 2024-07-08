@@ -9,6 +9,7 @@ import Services from '../Services';
 import Navbar from '../../components/Navbar';
 import * as XLSX from "xlsx";
 import { DNA } from 'react-loader-spinner';
+import { useSelector } from 'react-redux';
 
 const ServicePage = () => {
     const [searchText, setSearchText] = useState("");
@@ -116,13 +117,14 @@ const ServicePage = () => {
         link.download = fileName;
         link.click();
       };
+      const themeColor = useSelector((state)=> state.theme.color)
   return (
  <section className="flex "> 
        <Navbar /> 
       <div className="p-4 overflow-hidden w-full my-2 flex mx-3 flex-col">
         
         <Services />
-        <div className='my-2'>
+        <div >
 
         
             {/* {filter && (
@@ -154,7 +156,7 @@ const ServicePage = () => {
               </div>
             )} */}
             </div>
-            <div className="flex flex-wrap justify-between items-center my-5 ">
+            <div className="flex flex-wrap justify-between items-center my-2 ">
               <input
                 type="text"
                 placeholder="Search By Service name"
@@ -181,13 +183,15 @@ const ServicePage = () => {
                 <Link
                   to={"/services/add-service"}
                   className="bg-black  rounded-lg flex font-semibold  items-center gap-2 text-white p-2 "
+                  style={{background: themeColor}}
                 >
                   <IoAddCircleOutline size={20} />
                   Add
                 </Link>
                 <button
-                  className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                  className="bg-blue-500 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded"
                   onClick={exportToExcel}
+                  style={{background: themeColor}}
                 >
                   Export
                 </button>

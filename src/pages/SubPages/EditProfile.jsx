@@ -108,14 +108,14 @@ function EditProfile() {
                 <div className='grid grid-cols mx-5 gap-5 my-5'>
                   <div className="flex flex-col ">
                       <label htmlFor="" className="font-semibold my-2">
-                        Bio Pic
+                        Bio 
                         </label>
                         <textarea
                           name=""
                           id=""
                           cols="5"
                           rows="3"
-                          placeholder="Bio Pic"
+                          placeholder="Bio"
                           className="border p-1 px-4 border-gray-500 rounded-md"
                         />
                     </div>
@@ -123,7 +123,7 @@ function EditProfile() {
             </div>
             </div>
             <div className='flex justify-center mb-10 gap-2'>
-                <button className='bg-black text-white p-2 px-4 rounded-md font-medium'>Edit</button>
+                <button className='bg-black text-white p-2 px-4 rounded-md font-medium'>Save</button>
             </div>
         </div>
     </section>

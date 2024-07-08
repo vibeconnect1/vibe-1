@@ -330,6 +330,12 @@ export const postTicketAddItems = async (data) =>
       token: token,
     },
   });
+// export const PostItemsApproval = async (data) =>
+//   axiosInstance.post("/pms/admin/complaint_items.json", data, {
+//     params: {
+//       token: token,
+//     },
+//   });
 export const getInventory = async () =>
   axiosInstance.get("/items.json", {
     params: {
@@ -647,6 +653,38 @@ export const getVibeUsers = async (vibeUserId) => {
     return response.data;
   } catch (error) {
     console.error("Error fetching calendar events:", error);
+    throw error;
+  }
+};
+export const getProjectUsers = async (vibeUserId,vibeOrgId) => {
+  try {
+    const response = await vibeAuth.get(
+      `/api/employee/get-users/?user_id=${vibeUserId}&org_id=${vibeOrgId}&os:false`,
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching project users events:", error);
+    throw error;
+  }
+};
+export const getOutsideUsers = async (vibeUserId) => {
+  try {
+    const response = await vibeAuth.get(
+      `/api/employee/get_outsiders/?user_id=${vibeUserId}`,
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching outside users events:", error);
     throw error;
   }
 };
@@ -1315,6 +1353,91 @@ export const deleteVibeTaskAttachment = async (attachmentId, taskId) => {
     return response.data;
   } catch (error) {
     console.error("Error posting Attachments :", error);
+    throw error;
+  }
+};
+export const postNewProjectBoard = async (data) => {
+  try {
+    const response = await vibeAuth.post(
+      `/api/employee/add-board/`,
+     data,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error posting new board :", error);
+    throw error;
+  }
+};
+export const getVibeSocialData = async (userId) => {
+  try {
+    const response = await vibeAuth.get(
+      `/api/employee/social-media/get-auth-info/?user_id=${userId}`,
+    
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error getting social data :", error);
+    throw error;
+  }
+};
+export const getGmailAuthenticate = async (platform) => {
+  try {
+    const response = await vibeAuth.get(
+      `/api/employee/social-media/gmail/get-auth/?platform=${platform}`,
+    
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error getting gmail data :", error);
+    throw error;
+  }
+};
+export const updateLoginGmailStatus = async (data) => {
+  try {
+    const response = await vibeAuth.put(
+      `/api/employee/social-media/gmail/update-status-login/`,
+    data,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error getting gmail data :", error);
+    throw error;
+  }
+};
+export const addGmailAuthenticate = async (data) => {
+  try {
+    const response = await vibeAuth.post(
+      `/api/employee/social-media/gmail/create-auth/`,
+    data,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error adding gmail data :", error);
     throw error;
   }
 };

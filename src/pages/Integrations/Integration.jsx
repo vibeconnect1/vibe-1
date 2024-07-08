@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Navbar from "../../components/Navbar";
 import { getItemInLocalStorage } from "../../utils/localStorage";
-import { API_URL, getVibeBackground } from "../../api";
+import { API_URL, getVibeBackground, getVibeSocialData } from "../../api";
 import {
   FaCheck,
   FaFacebook,
@@ -12,6 +12,7 @@ import {
 import gmail from "/gmail.png";
 import outlook from "/outlook.png";
 import FacebookModal from "../../containers/modals/IntegrationModal/FacebookModal";
+import { Link } from "react-router-dom";
 
 const Integration = () => {
   const [socialMediaData, setSocialMediaData] = useState([]);
@@ -23,7 +24,7 @@ const Integration = () => {
   const [selectedImage, setSelectedImage] = useState(defaultImage);
   const [selectedIndex, setSelectedIndex] = useState(null);
   const [accounts, setAccounts] = useState(null);
-
+  const user_id = getItemInLocalStorage("VIBEUSERID");
   const Get_Background = async () => {
     try {
       const user_id = getItemInLocalStorage("VIBEUSERID");
@@ -54,7 +55,28 @@ const Integration = () => {
   };
   useEffect(() => {
     Get_Background();
+    GetAuth()
   }, []);
+
+  const GetAuth = async () => {
+    try {
+     
+
+      const response = await getVibeSocialData(user_id);
+
+      if (response.success) {
+        console.log("success");
+        console.log(response.data);
+        setSocialMediaData(response.data);
+
+        // setProjectList(response.data.data.Boards);
+      } else {
+        console.log("Something went wrong");
+      }
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
 
   const onOpenFacebook = () => {
     setIsFacebookOpen(true);
@@ -67,6 +89,7 @@ const Integration = () => {
     const socialMedia = socialMediaData.find(
       (item) => item.platform === platform
     );
+  
     return socialMedia && socialMedia.status_login;
   };
 
@@ -107,7 +130,7 @@ const Integration = () => {
       client_id:
         "339274559462-6r06f0d9aqubhnhqmvrkjaqs8nikiidd.apps.googleusercontent.com",
       // local host
-      redirect_uri: "http://app.vibecopilot.ai/employee/gmail",
+      redirect_uri: "http://localhost:5173/gmail",
       response_type: "token",
 
       scope:
@@ -156,7 +179,7 @@ const Integration = () => {
                 <FaFacebook style={{ color: "#fff", fontSize: 40 }} />
               </center>
             </div>
-            <div className="flex flex-col">
+            <div className="flex flex-col gap-1">
               <span className="flex flex-col">
                 <b>Facebook</b>
               </span>
@@ -193,7 +216,7 @@ const Integration = () => {
             </div>
 
             {/* facebook modal */}
-            <FacebookModal handleDivClick={handleDivClick} isFacebookOpen={isFacebookOpen} isLoggedIn={isLoggedIn} onCloseFacebook={onCloseFacebook}  />
+            {/* <FacebookModal handleDivClick={handleDivClick} isFacebookOpen={isFacebookOpen} isLoggedIn={isLoggedIn} onCloseFacebook={onCloseFacebook}  /> */}
           </div>
           {/* insta */}
           <div className="w-full flex flex-col gap-2">
@@ -209,7 +232,7 @@ const Integration = () => {
                 <FaInstagram style={{ color: "#fff", fontSize: 40 }} />
               </center>
             </div>
-            <div className="flex flex-col">
+            <div className="flex flex-col gap-1">
               <span className="" style={{ color: "#000" }}>
                 <b>Instagram</b>
               </span>
@@ -351,28 +374,30 @@ const Integration = () => {
                 <img style={{ width: "52px" }} src={gmail} />
               </center>
             </div>
-            <div className="flex flex-col">
+            <div className="flex flex-col gap-1">
               <span className="" style={{ color: "#000" }}>
                 <b>Gmail</b>
               </span>
 
-              <button
-                className="font-medium shadow-custom-all-sides p-1 px-8 rounded-md bg-white"
-                onClick={signIn}
-                disabled={isInstalled("Gmail")}
-              >
-                {isInstalled("Gmail") ? (
-                  <div className="flex items-center justify-center gap-2">
+              {isInstalled("Gmail") ? (
+             
+                  <Link to={"/gmail"} className="flex items-center font-medium justify-center shadow-custom-all-sides bg-white p-1 px-8 rounded-md gap-2">
                     <FaCheck
                       className=""
                       style={{
                         fontSize: 14,
                         color: isInstalled("Gmail") ? "#0a6f4c" : "#132A3A",
                       }}
-                    />
-                    Installed
-                  </div>
+                      />
+                    Open
+                  </Link>
+                  
                 ) : (
+                  <button
+                  className="font-medium shadow-custom-all-sides p-1 px-8 rounded-md bg-white"
+                  onClick={signIn}
+                  disabled={isInstalled("Gmail")}
+                >
                   <div className="flex gap-2 justify-center items-center">
                     <FaPlus
                       className=""
@@ -383,8 +408,8 @@ const Integration = () => {
                     />
                     Install
                   </div>
+                  </button>
                 )}
-              </button>
             </div>
           </div>
           <div className="w-full flex flex-col gap-2">
@@ -398,7 +423,7 @@ const Integration = () => {
                 <FaTelegramPlane style={{ color: "#fff", fontSize: 40 }} />
               </center>
             </div>
-            <div className="flex flex-col">
+            <div className="flex flex-col gap-1">
               <span className="" style={{ color: "#000" }}>
                 <b>Telegram</b>
               </span>
@@ -524,7 +549,7 @@ const Integration = () => {
                 <img style={{ width: "40px" }} src={outlook} />
               </center>
             </div>
-            <div className="flex flex-col">
+            <div className="flex flex-col gap-1">
               <span className="" style={{ color: "#000" }}>
                 <b>Outlook</b>
               </span>

@@ -1,6 +1,10 @@
 import React, { useEffect, useState } from "react";
 import Detail from "../../../containers/Detail";
-import { editComplaintsDetails, getCARItems, getComplaintsDetails } from "../../../api";
+import {
+  editComplaintsDetails,
+  getCARItems,
+  getComplaintsDetails,
+} from "../../../api";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import moment from "moment";
 import { BiEdit } from "react-icons/bi";
@@ -12,16 +16,18 @@ import { useSelector } from "react-redux";
 import CARAddItemsModal from "../../../containers/modals/CARAddItemsModal";
 import Table from "../../../components/table/Table";
 import { getItemInLocalStorage } from "../../../utils/localStorage";
-
+import ApprovalModal from "../../../containers/modals/ApprovalModal";
 
 const TicketDetails = () => {
   const navigate = useNavigate();
-  const siteId = getItemInLocalStorage("SITEID")
+  const siteId = getItemInLocalStorage("SITEID");
+  const userId = getItemInLocalStorage("UserId");
   const { id } = useParams();
+  const [approval, setApproval] = useState(false)
   const [ticketinfo, setTicketInfo] = useState([]);
   const [showModal, setShowModal] = useState(false);
-  const [items, setItems] = useState([])
-  const [feat, setFeat] = useState("")
+  const [items, setItems] = useState([]);
+  const [feat, setFeat] = useState("");
   const [formData, setFormData] = useState({
     comment: "",
     of_phase: "pms",
@@ -33,7 +39,7 @@ const TicketDetails = () => {
   const getAllowedFeatures = () => {
     const storedFeatures = getItemInLocalStorage("FEATURES");
     if (storedFeatures) {
-      setFeat(storedFeatures.map(feature => feature.feature_name));
+      setFeat(storedFeatures.map((feature) => feature.feature_name));
     }
   };
 
@@ -43,15 +49,13 @@ const TicketDetails = () => {
       // console.log(response.data);
       setTicketInfo(response.data);
     };
-    const fetchCARItems = async()=>{
-      const itemsResp = await getCARItems(id)
-      setItems(itemsResp.data)
-      
-      
-    }
+    const fetchCARItems = async () => {
+      const itemsResp = await getCARItems(id);
+      setItems(itemsResp.data);
+    };
     fetchDetails();
-    fetchCARItems()
-    getAllowedFeatures()
+    fetchCARItems();
+    getAllowedFeatures();
   }, [showModal]);
 
   const getTimeAgo = (timestamp) => {
@@ -126,7 +130,7 @@ const TicketDetails = () => {
   const ItemColumn = [
     { name: "Name", selector: (row) => row.item_name, sortable: true },
     { name: "Rate", selector: (row) => row.rate, sortable: true },
-  ]
+  ];
   const domainPrefix = "https://admin.vibecopilot.ai";
 
   console.log(ticketinfo);
@@ -134,16 +138,20 @@ const TicketDetails = () => {
   const logs = [{ title: "logs", description: " " }];
   return (
     <div className="">
-      {showModal && <CARAddItemsModal onclose={()=>setShowModal(false)}/> }
+      {showModal && <CARAddItemsModal onclose={() => setShowModal(false)} />}
+        {approval && <ApprovalModal onclose={()=> setApproval(false)} issueStatusId={ticketinfo.issue_status_id} />}
+
       <div className="flex flex-col justify-around">
         <div className="flex justify-end m-1 gap-2">
-        {feat.includes('items') && <button
-            onClick={() => setShowModal(true)}
-            className="border-2 border-black  flex gap-2 p-1 rounded-md items-center px-4"
-          >
-            <MdAddCircleOutline />
-            Add Items
-          </button>}
+          {feat.includes("items") && (
+            <button
+              onClick={() => setShowModal(true)}
+              className="border-2 border-black  flex gap-2 p-1 rounded-md items-center px-4"
+            >
+              <MdAddCircleOutline />
+              Add Items
+            </button>
+          )}
           <Link
             to={`/edit/${id}`}
             className="border-2 border-black flex gap-2 p-1 rounded-md items-center px-4 "
@@ -153,7 +161,11 @@ const TicketDetails = () => {
           </Link>
         </div>
         <div className="">
-          <Detail details={ticketDetails} heading={"Ticket Details"} title={ticketinfo.heading} />
+          <Detail
+            details={ticketDetails}
+            heading={"Ticket Details"}
+            title={ticketinfo.heading}
+          />
         </div>
         <div className="flex flex-col  flex-wrap gap-2">
           <h2
@@ -203,10 +215,27 @@ const TicketDetails = () => {
         </div>
         {/* <div className="border " /> */}
 
-        {feat.includes('items') && <div className="m-2">
-          <h2 className="font-medium my-2">Approval Requests</h2>
-          <Table columns={ItemColumn} data={items}  />
-        </div>}
+        {feat.includes("items") && (
+          <div className="">
+            {ticketinfo.territory_manager_id === userId && (
+              <div className="flex justify-end mx-2 mt-2">
+                <button
+                  className="p-1 px-4 rounded-md text-white"
+                  style={{ background: themeColor }}
+                  onClick={()=> setApproval(true)}
+                >
+                  Approve
+                </button>
+              </div>
+            )}
+          </div>
+        )}
+        {feat.includes("items") && (
+          <div className="m-2">
+            <h2 className="font-medium ">Approval Requests</h2>
+            <Table columns={ItemColumn} data={items} />
+          </div>
+        )}
         <h2
           style={{ background: themeColor }}
           className="text-center   text-white font-semibold my-5 text-lg p-2 px-4 "

@@ -71,13 +71,13 @@ function User() {
       <div className=" flex justify-center w-full">
         <div className="flex flex-col justify-center  min-h-screen  mx-10 w-full">
           <div className="bg-gray-200 p-4 flex flex-col w-full">
-            <p className="">
+            {/* <p className="">
               <span className="font-medium">Name : </span>
               <span className="text-lg">
                 {" "}
                 {user} {userLastName}
               </span>
-            </p>
+            </p> */}
 
             <div className="w-full max-w-md">
               <div className="mt-4">

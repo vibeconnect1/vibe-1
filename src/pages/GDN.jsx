@@ -12,10 +12,10 @@ function GDN() {
       {/* <Navbar /> */}
       <div className="w-full flex mx-3 flex-col overflow-hidden">
         <div className="flex justify-center my-2">
-          <div className="flex flex-row gap-5 text-sm font-semibold p-1 rounded-full bg-gray-400">
+          <div className="flex flex-row gap-5 text-sm font-semibold p-1 rounded-full bg-gray-100">
             <h2
               className={`p-1 ${
-                page === "gdnDetails" && "bg-white text-blue-500"
+                page === "gdnDetails" && "bg-white text-blue-500 shadow-custom-all-sides"
               } rounded-full px-4 cursor-pointer`}
               onClick={() => setPage("gdnDetails")}
             >
@@ -23,7 +23,7 @@ function GDN() {
             </h2>
             <h2
               className={`p-1 ${
-                page === "gdnPending" && "bg-white text-blue-500"
+                page === "gdnPending" && "bg-white text-blue-500 shadow-custom-all-sides"
               } rounded-full px-4 cursor-pointer`}
               onClick={() => setPage("gdnPending")}
             >

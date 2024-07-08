@@ -60,6 +60,7 @@ const RoutineTask = () => {
         </div>
       ),
     },
+    { name: "ID", selector: (row) => row.id, sortable: true },
     { name: "Asset Name", selector: (row) => row.asset_name, sortable: true },
     {
       name: "Checklist",

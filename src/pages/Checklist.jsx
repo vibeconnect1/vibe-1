@@ -10,12 +10,13 @@ import Navbar from "../components/Navbar";
 import { getItemInLocalStorage } from "../utils/localStorage";
 import { DNA } from "react-loader-spinner";
 import * as XLSX from "xlsx";
+import { useSelector } from "react-redux";
 
 const Checklist = () => {
   const [checklists, setChecklists] = useState([]);
   const [filteredData, setFilteredData] = useState([])
   const [searchText, setSearchText] = useState("")
-
+const themeColor =useSelector((state)=> state.theme.color)
   useEffect(() => {
     const fetchChecklist = async () => {
      try {
@@ -179,18 +180,20 @@ const Checklist = () => {
             value={searchText}
             onChange={handleSearch}
         />
-        <div className="md:flex grid grid-cols-2 sm:flex-row my-2 flex-col gap-2">
+        <div className="md:flex grid grid-cols-2 sm:flex-row  flex-col gap-2">
           <Link
             to={"/admin/add-checklist"}
-            className="bg-black  text-sm rounded-lg flex justify-center font-semibold items-center gap-2 text-white py-2 px-4 border-2 border-black hover:bg-white hover:text-black transition-all duration-300 "
-          >
+            className="bg-black  text-sm rounded-lg flex justify-center font-semibold items-center gap-2 text-white py-2 px-4 transition-all duration-300 "
+            style={{ background: themeColor }}
+        >
             <IoAddCircleOutline size={20} />
             Add
           </Link>
 
           <button
-            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+            className="bg-blue-500 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded"
             onClick={exportToExcel}
+            style={{ background: themeColor }}
           >
             Export
           </button>

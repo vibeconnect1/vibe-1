@@ -193,7 +193,7 @@ useEffect(() => {
                 </button>
               </div>
             )} */}
-        <div className="flex flex-wrap justify-between items-center my-5 ">
+        <div className="flex flex-wrap justify-between items-center my-2 ">
           <input
             type="text"
             placeholder="Search By name"

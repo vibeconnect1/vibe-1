@@ -471,8 +471,9 @@ const Asset = () => {
               ))}
             </select>
             <button
-              className="bg-black p-1 px-4 text-white rounded-md"
+              className=" p-1 px-4 text-white rounded-md"
               onClick={handleFilterApply}
+              style={{background: themeColor}}
             >
               Apply
             </button>
@@ -536,8 +537,9 @@ const Asset = () => {
             </div>
 
             <button
-              className=" font-semibold border-2 border-black px-4 p-1 flex gap-2 items-center justify-center rounded-md"
+              className=" font-semibold text-white px-4 p-1 flex gap-2 items-center justify-center rounded-md"
               onClick={() => setFilter(!filter)}
+              style={{ background: themeColor }}
             >
               <BiFilterAlt />
               Filter
@@ -545,17 +547,18 @@ const Asset = () => {
 
            
             <button
-              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+              className="bg-blue-500 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded"
               onClick={()=> setUploadModal(true)}
+              style={{ background: themeColor }}
             >
               Import
             </button>
-            <button
+            {/* <button
               className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
               onClick={exportToExcel}
             >
               Export
-            </button>
+            </button> */}
             {/* <button
             className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
             onClick={handleDownloadQRCode}

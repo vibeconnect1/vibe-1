@@ -8,6 +8,7 @@ import { Link } from "react-router-dom";
 import { IoAddCircleOutline } from "react-icons/io5";
 import * as XLSX from "xlsx";
 import { DNA } from "react-loader-spinner";
+import { useSelector } from "react-redux";
 const ServiceChecklist = () => {
   const [searchChecklistText, setSearchChecklistCheck] = useState("");
   const [filteredChecklistData, setFilteredChecklistData] = useState([]);
@@ -124,6 +125,8 @@ const ServiceChecklist = () => {
     link.download = fileName;
     link.click();
   };
+
+  const themeColor = useSelector((state)=> state.theme.color)
   return (
     <section className="flex ">
       <Navbar />
@@ -162,7 +165,7 @@ const ServiceChecklist = () => {
             </button>
           </div>
         )} */}
-        <div className="flex flex-wrap justify-between items-center my-5 ">
+        <div className="flex flex-wrap justify-between items-center my-2 ">
           <input
             type="text"
             placeholder="Search By name"
@@ -189,13 +192,15 @@ const ServiceChecklist = () => {
             <Link
               to={"/services/add-service-checklist"}
               className="bg-black  rounded-lg flex font-semibold  items-center gap-2 text-white p-2 "
+              style={{background: themeColor}}
             >
               <IoAddCircleOutline size={20} />
               Add
             </Link>
             <button
-              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+              className="bg-blue-500 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded"
               onClick={exportToExcel}
+              style={{background: themeColor}}
             >
               Export
             </button>

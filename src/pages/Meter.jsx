@@ -13,6 +13,7 @@ import AMC from "./SubPages/AMC";
 import Table from "../components/table/Table";
 import AssetNav from "../components/navbars/AssetNav";
 import { DNA } from "react-loader-spinner";
+import { useSelector } from "react-redux";
 
 // import jsPDF from "jspdf";
 // import QRCode from "qrcode.react";
@@ -30,7 +31,7 @@ const Meter = () => {
   const [selectedUnit, setSelectedUnit] = useState("");
   const [page, setPage] = useState("assets");
   const [assets, setAssets] = useState([]);
-
+const themeColor =useSelector((state)=> state.theme.color)
   const dateFormat = (dateString) => {
     const date = new Date(dateString);
     return date.toLocaleString(); // Adjust the format as needed
@@ -481,25 +482,19 @@ useEffect(() => {
                 onChange={handleSearch}
               />
               <div className="md:flex grid grid-cols-2 sm:flex-row my-2 flex-col gap-2">
-                {/* <button
-              className="md:text-lg text-sm font-semibold border-2 border-black px-4 p-1 flex gap-2 items-center rounded-md"
-              onClick={() => setOmitColumn(!omitColumn)}
-            >
-              <IoFilterOutline />
-              Filter Columns
-            </button> */}
-
                 <button
-                  className=" font-semibold border-2 border-black px-4 p-1 flex gap-2 items-center rounded-md"
+                  className=" font-semibold text-white  px-4 p-1 flex gap-2 items-center rounded-md"
                   onClick={() => setFilter(!filter)}
+                  style={{ background: themeColor }}
                 >
                   <BiFilterAlt />
                   Filter
                 </button>
 
                 <Link
+                style={{ background: themeColor }}
                   to={"/assets/add-asset"}
-                  className="bg-black  text-sm rounded-lg flex justify-center font-semibold items-center gap-2 text-white py-2 px-4 border-2 border-black hover:bg-white hover:text-black transition-all duration-300 "
+                  className="  text-sm rounded-lg flex justify-center font-semibold items-center gap-2 text-white py-2 px-4  transition-all duration-300 "
                 >
                   <IoAddCircleOutline size={20} />
                   Add
@@ -510,12 +505,12 @@ useEffect(() => {
                 >
                   Import
                 </button> */}
-                <button
+                {/* <button
                   className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
                   onClick={exportToExcel}
                 >
                   Export
-                </button>
+                </button> */}
                 {/* <button
             className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
             onClick={handleDownloadQRCode}

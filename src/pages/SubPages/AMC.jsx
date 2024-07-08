@@ -10,11 +10,12 @@ import Navbar from "../../components/Navbar";
 import AssetNav from "../../components/navbars/AssetNav";
 import { DNA } from "react-loader-spinner";
 import * as XLSX from "xlsx";
+import { useSelector } from "react-redux";
 const AMC = () => {
   const [searchText, setSearchText] = useState("");
   const [amc, setAmc] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
-
+const themeColor = useSelector((state)=> state.theme.color)
   useEffect(() => {
     const fetchAmc = async () => {
       const AMCResponse = await getAMC();
@@ -152,8 +153,9 @@ const AMC = () => {
           />
           <div className="md:flex grid grid-cols-2 sm:flex-row my-2 flex-col gap-2">
             <button
-              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+              className="bg-blue-500 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded"
               onClick={exportToExcel}
+              style={{ background: themeColor }}
             >
               Export
             </button>

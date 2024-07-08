@@ -578,7 +578,7 @@ function App() {
           />
 
           <Route
-            path="/profile"
+            path="/settings"
             element={
               <ProtectedRoute>
                 {" "}
@@ -867,7 +867,7 @@ function App() {
             }
           />
           <Route
-            path="/admin/communication-profile"
+            path="/admin/profile"
             element={
               <ProtectedAdminRoutes>
                 <Profile />
@@ -875,7 +875,7 @@ function App() {
             }
           />
           <Route
-            path="/admin/communication-edit-profile"
+            path="/admin/edit-profile"
             element={
               <ProtectedAdminRoutes>
                 <EditProfile />

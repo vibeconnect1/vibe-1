@@ -13,6 +13,7 @@ import GRN from "./GRN";
 import GDN from "./GDN";
 import { BsEye } from "react-icons/bs";
 import * as XLSX from "xlsx";
+import { useSelector } from "react-redux";
 
 const Inventory = () => {
   const [stocks, setStocks] = useState([]);
@@ -146,7 +147,7 @@ const Inventory = () => {
     link.download = fileName;
     link.click();
   };
-
+const themeColor = useSelector((state)=> state.theme.color)
   return (
     <section
       className="flex"
@@ -208,19 +209,19 @@ const Inventory = () => {
               />
               <div className="md:flex grid grid-cols-2 sm:flex-row my-2 flex-col gap-2">
                 <Link
+                style={{ background: themeColor }}
                   to={"/admin/add-stock"}
-                  className="bg-black  text-sm rounded-lg flex justify-center font-semibold items-center gap-2 text-white py-2 px-4 border-2 border-black hover:bg-white hover:text-black transition-all duration-300 "
+                  className="bg-black  text-sm rounded-lg flex justify-center font-semibold items-center gap-2 text-white py-2 px-4  transition-all duration-300 "
                 >
                   <IoAddCircleOutline size={20} />
                   Add
                 </Link>
-
-                <button
+                {/* <button
                   className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
                   onClick={exportToExcel}
                 >
                   Export
-                </button>
+                </button> */}
                 {/* <button
       className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
       onClick={handleDownloadQRCode}
