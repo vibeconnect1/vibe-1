@@ -1,13 +1,16 @@
 import React, { useState } from "react";
+import toast from "react-hot-toast";
 import { ThreeDots } from "react-loader-spinner";
 import { useSelector } from "react-redux";
 
-const GmailComposeModal = ({ toError, subjectError, onCloseCompose }) => {
+const GmailComposeModal = ({  onCloseCompose }) => {
   const themeColor = useSelector((state) => state.theme.color);
   const [subject, setSubject] = useState("");
   const [message, setMessage] = useState("");
   const [to, setTo] = useState("");
-
+  const [toError, setToError] = useState("");
+  const [subjectError, setSubjectError] = useState("");
+  const [isSending, setIsSending] = useState(false);
   const sendEmail = (e) => {
     e.preventDefault();
     const emailInfo = {
@@ -21,10 +24,41 @@ const GmailComposeModal = ({ toError, subjectError, onCloseCompose }) => {
       // Call the sendMessage function with emailInfo and message
       sendMessage(emailInfo, message, composeTidy);
       // setIsSending(false);
+      toast.success("Message Sent Successfully")
       onCloseCompose();
     }
 
     //   onCloseCompose()
+  };
+
+  const validateTo = (value) => {
+    if (!value) {
+      setToError("To is required");
+      return false;
+    } else if (!/\S+@\S+\.\S+/.test(value)) {
+      setToError("Email address is invalid");
+      return false;
+    } else {
+      setToError("");
+      return true;
+    }
+  };
+
+  const validateSubject = (value) => {
+    if (!value) {
+      setSubjectError("Subject is required");
+      return false;
+    } else {
+      setSubjectError("");
+      return true;
+    }
+  };
+
+  const composeTidy = () => {
+    
+    setTo("");
+    setSubject("");
+    setMessage("");
   };
 
   const sendMessage = (headersObj, messageText, callback) => {
@@ -97,7 +131,7 @@ const GmailComposeModal = ({ toError, subjectError, onCloseCompose }) => {
               }}
               onBlur={() => validateTo(to)}
             />
-            {toError && <div style={{ color: "red" }}>{toError}</div>}
+            {toError && <div  className="bg-black px-2 rounded-full text-red-400 w-fit bg-opacity-30">{toError}</div>}
 
             <input
               type="text"
@@ -113,7 +147,7 @@ const GmailComposeModal = ({ toError, subjectError, onCloseCompose }) => {
               onBlur={() => validateSubject(subject)}
               required
             />
-            {subjectError && <div style={{ color: "red" }}>{subjectError}</div>}
+            {subjectError && <div className="bg-black px-2 rounded-full text-red-400 w-fit bg-opacity-30">{subjectError}</div>}
 
             <textarea
               className="rounded-md p-1 px-2 outline-none "

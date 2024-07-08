@@ -9,6 +9,8 @@ import { BiEdit } from "react-icons/bi";
 import { TiTick } from "react-icons/ti";
 import { IoClose } from "react-icons/io5";
 import Table from "../../components/table/Table";
+import Navbar from "../../components/Navbar";
+import Passes from "../Passes";
 
 const GVehicles = () => {
   const [selectedStatus, setSelectedStatus] = useState("all");
@@ -144,8 +146,9 @@ const GVehicles = () => {
 
   return (
     <section className="flex">
-
+<Navbar/>
       <div className=" w-full flex mx-3 flex-col overflow-hidden">
+        <Passes/>
         <div className="flex md:flex-row flex-col gap-5 justify-between mt-10 my-2">
           <div className="sm:flex grid grid-cols-2 items-center justify-center  gap-4 border border-gray-300 rounded-md px-3 p-2 w-auto">
             <div className="flex items-center gap-2">

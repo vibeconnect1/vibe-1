@@ -3,6 +3,8 @@ import DataTable from "react-data-table-component";
 import { IoAddCircleOutline } from "react-icons/io5";
 import MaterialsModal from "../containers/modals/MaterialsModal";
 import Navbar from "../components/Navbar";
+import Passes from "./Passes";
+import Table from "../components/table/Table";
 
 const Materials = () => {
   const [searchText, setSearchText] = useState("");
@@ -77,6 +79,7 @@ const Materials = () => {
     <section className="flex">
        <Navbar />
       <div className="w-full overflow-hidden flex mx-3 flex-col">
+        <Passes/>
         <div className="flex justify-between items-center">
           <input
             type="text"
@@ -96,16 +99,10 @@ const Materials = () => {
             </button>
           </div>
         </div>
-        <DataTable
+        <Table
           columns={column}
           data={filteredData}
-          customStyles={customStyle}
-          fixedHeader
-          fixedHeaderScrollHeight="500px"
-          pagination
-          selectableRowsHighlight
-          highlightOnHover
-          omitColumn={column}
+         
         />
       </div>
       {modal && <MaterialsModal onclose={()=> showModal(false)} />}

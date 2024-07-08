@@ -104,7 +104,15 @@ const Suppliers = () => {
     // },
     {
       name: "Status",
-      selector: (row) => row.active,
+      selector: (row) => row.active?  <p className="bg-green-400 px-4 w-fit text-white rounded-full">
+
+      Active
+    </p> 
+    :
+     <p className="bg-red-400 px-4 w-fit text-white rounded-full">
+
+       Inactive
+     </p>,
       sortable: true,
     },
   ];

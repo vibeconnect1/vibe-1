@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import InwardsTable from "./InwardTable";
 import OutwardsTable from "./OurwardTable";
+import Navbar from "../../components/Navbar";
+import Passes from "../Passes";
 // import InwardsTable from './InwardsTable';
 // import OutwardsTable from './OutwardsTable';
 //import Navbar from '../../components/Navbar'
@@ -11,7 +13,9 @@ const GoodsInOut = () => {
   return (
     <div className="visitors-page">
       <section className="flex">
+        <Navbar/>
         <div className=" w-full flex mx-3 flex-col overflow-hidden">
+          <Passes/>
           <div className="flex md:justify-center  my-2">
             <div className="md:flex md:flex-row flex-col gap-5 text-lg font-semibold p-1 md:rounded-full md:w-auto w-full rounded-sm bg-gray-400">
               <div className="flex w-full space-x-4 justify-center">

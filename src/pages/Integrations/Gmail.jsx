@@ -28,8 +28,7 @@ const Gmail = () => {
   const [message, setMessage] = useState("");
   const [subject, setSubject] = useState("");
   const [to, setTo] = useState("");
-  const [toError, setToError] = useState("");
-  const [subjectError, setSubjectError] = useState("");
+  const [searchTerm, setSearchTerm] = useState("");
   const [selectedIndex, setSelectedIndex] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const currentURL = window.location.href;
@@ -355,6 +354,7 @@ const Gmail = () => {
   const onCloseCompose = () => {
     setIsGmailCompose(false);
   };
+  console.log(selectedTab)
 
   return (
     <section
@@ -363,7 +363,7 @@ const Gmail = () => {
         background: `url(${selectedImage})no-repeat center center / cover`,
       }}
     >
-      {isGmailCompose && <GmailComposeModal onCloseCompose={onCloseCompose} subjectError={subjectError} toError={toError} />}
+      {isGmailCompose && <GmailComposeModal onCloseCompose={onCloseCompose}   />}
       <Navbar />
       <div className="p-4 w-full my-2 flex md:mx-2 overflow-hidden flex-col">
         <div className="">
@@ -409,8 +409,8 @@ const Gmail = () => {
                   type="search"
                   spellCheck="true"
                   placeholder="Search  "
-                  // value={searchTerm}
-                  // onChange={(e) => handleFilterChange("search", e.target.value)}
+                  value={searchTerm}
+                  onChange={(e) => handleFilterChange("search", e.target.value)}
                 />
               </div>
               <div>

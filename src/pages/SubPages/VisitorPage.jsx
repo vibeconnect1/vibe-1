@@ -2,10 +2,13 @@ import React, { useState } from "react";
 //import Navbar from '../../components/Navbar'
 import { PiPlusCircle } from "react-icons/pi";
 import { Link } from "react-router-dom";
+import Passes from "../Passes";
+import Navbar from "../../components/Navbar";
+import { useSelector } from "react-redux";
 
 const VisitorPage = () => {
   const [page, setPage] = useState("Visitor In");
-
+  const themeColor = useSelector((state)=> state.theme.color)
   const [selectedVisitor, setSelectedVisitor] = useState(null);
 
   const handleClick = (visitorType) => {
@@ -14,7 +17,9 @@ const VisitorPage = () => {
   return (
     <div className="visitors-page">
       <section className="flex">
-        <div className=" w-full flex mx-3 flex-col overflow-hidden">
+        <Navbar/>
+        <div className=" w-full flex mx-3  flex-col overflow-hidden">
+          <Passes/>
           <div className="flex md:justify-center  my-2">
             <div className="md:flex md:flex-row flex-col gap-5 text-lg font-semibold p-1 md:rounded-full md:w-auto w-full rounded-sm bg-gray-400">
               <div className="flex w-full space-x-4 justify-center">
@@ -48,8 +53,9 @@ const VisitorPage = () => {
           <div className="flex justify-end">
             <Link
               to={"/admin/add-new-visitor"}
-              style={{ width: "200px", height: "50px" }}
-              className="border-2 font-semibold hover:bg-black hover:text-white duration-150 transition-all border-black p-2 rounded-md text-black cursor-pointer text-center flex items-center gap-2 justify-center"
+              style={{background: themeColor}}
+              className=" font-semibold  hover:text-white duration-150 transition-all p-2 rounded-md text-white cursor-pointer text-center flex items-center gap-2 justify-center"
+
             >
               <PiPlusCircle size={20} />
               Add New Visitor
@@ -92,7 +98,7 @@ const VisitorPage = () => {
           {page === "Visitor Out" && (
             <div>
               <select
-                style={{ width: "1000px" }}
+               
                 className="border p-2 rounded-md border-black"
               >
                 <option>Select Person to meet</option>
@@ -128,7 +134,6 @@ const VisitorPage = () => {
               <input
                 type="text"
                 placeholder="Search Number"
-                style={{ width: "1000px" }}
                 className="border p-2 rounded-md border-black"
               />
             </div>

@@ -8,10 +8,11 @@ import "react-datepicker/dist/react-datepicker.css";
 import wave from "/wave.png";
 import HighchartsComponent from "../components/HighCharts";
 import TicketDashboard from "./SubPages/TicketDashboard";
+import CommunicationDashboard from "./SubPages/CommunicationDashboard";
 const Dashboard = () => {
   const themeColor = useSelector((state) => state.theme.color);
   const vibeUserId = getItemInLocalStorage("VIBEUSERID");
-
+const [feat, setFeat] = useState("")
   console.log(vibeUserId);
   const contentRef = useRef(null);
 
@@ -24,9 +25,16 @@ const Dashboard = () => {
         console.log(error);
       }
     };
-   
+    getAllowedFeatures();
     fetchCalendar();
   }, []);
+
+  const getAllowedFeatures = () => {
+    const storedFeatures = getItemInLocalStorage("FEATURES");
+    if (storedFeatures) {
+      setFeat(storedFeatures.map((feature) => feature.feature_name));
+    }
+  };
 
   const toggleFullScreen = () => {
     const element = contentRef.current;
@@ -77,6 +85,12 @@ const Dashboard = () => {
         <div className="w-full flex mx-3 flex-col p-2 mb-10 ">
           <HighchartsComponent />
         </div>
+        {feat.includes("communication") && (
+        <div className="w-full flex mx-3 flex-col p-2 mb-10 ">
+          <h2 className="border-b-2 border-black font-medium">Communication</h2>
+          <CommunicationDashboard />
+        </div>
+        )}
       </div>
     </section>
   );

@@ -1,7 +1,9 @@
 import React from 'react'
 import Highcharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
+import { useSelector } from 'react-redux';
 function CommunicationDashboard() {
+  const themeColor = useSelector((state)=> state.theme.color)
     const engagementOptions = {
         chart: {
           type: 'column',  // Changed to 'column'
@@ -21,6 +23,7 @@ function CommunicationDashboard() {
           {
             name: 'Engagement',
             data: [75, 150, 300],
+            color: themeColor,
           },
         ],
     };
@@ -43,6 +46,7 @@ function CommunicationDashboard() {
           {
             name: 'Participation',
             data: [120, 35],
+            color: themeColor,
           },
         ],
       };

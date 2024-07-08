@@ -53,10 +53,10 @@ function Profile() {
         <Navbar/>
         <div className='w-full flex mx-3 flex-col overflow-hidden'>
             <div className='flex justify-center mt-5'>
-                <div className='border-2 border-grey-200 rounded-md md:w-3/5'>
+                <div className='border-2 border-gray-200  rounded-md md:w-3/5'>
                     <div className='relative'>
                         <div>
-                            <img src={interview} className=" w-full h-56" alt="" />
+                            <img src={interview} className="rounded-md w-full h-56" alt="" />
                         </div>
                         <div className='absolute -bottom-8 left-6'>
                             <img src={pic1} className="w-24 h-24 rounded-full" alt="" />
@@ -70,19 +70,19 @@ function Profile() {
                           <BiEdit size={25}/>
                         </Link>
                     </div>
-                    <div className='flex md:flex-row flex-col gap-3 ml-6'>
+                    <div className='flex md:flex-row flex-col items-center gap-3 ml-6'>
                         <h2 className="text-xl font-semibold">{firstName} {lastName}</h2>
                         <p className="text-gray-600 mt-1">{user.email}</p>
-                        <p className="text-gray-600 mt-1">{employee.phone}</p>
+                        {/* <p className="text-gray-600 mt-1">{employee.phone}</p> */}
                     </div>
                     <div className="my-4 ml-6 ">
                         <h3 className="text-lg font-semibold">Profile Information</h3>
                         <div className="mt-2">
-                            <p><span className="font-semibold">Department:</span> {employee.department}</p>
-                            <p><span className="font-semibold">Position:</span> {employee.position}</p>
-                            <p><span className="font-semibold">Manager:</span> {employee.manager}</p>
-                            <p><span className="font-semibold">Connection:</span> {employee.connection}</p>
-                            <p className="mt-2"><span className="font-semibold">About Me:</span> {employee.bio}</p>
+                            <p className='grid grid-cols-3'><span className="font-semibold">Department :</span> <span>{employee.department}</span></p>
+                            <p className='grid grid-cols-3'><span className="font-semibold">Position :</span> <span>{employee.position}</span></p>
+                            <p className='grid grid-cols-3'><span className="font-semibold">Manager :</span> <span>{employee.manager}</span></p>
+                            <p className='grid grid-cols-3'><span className="font-semibold">Connection :</span> <span>{employee.connection}</span></p>
+                            <p className="mt-2 grid"><span className="font-semibold">About Me:</span> {employee.bio}</p>
                         </div>
                     </div>
                 </div>

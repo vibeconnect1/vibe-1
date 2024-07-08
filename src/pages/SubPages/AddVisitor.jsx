@@ -7,10 +7,11 @@ import { FaCheck } from 'react-icons/fa';
 import { BiEdit } from "react-icons/bi";
 import DataTable from "react-data-table-component";
 import { BsEye } from "react-icons/bs";
+import { useSelector } from "react-redux";
 
 const AddVisitor = () => {
   const [selectedStatus, setSelectedStatus] = useState("all");
-
+const themeColor = useSelector((state)=> state.theme.color)
   const columns = [
     {
       name: "Action",
@@ -220,6 +221,7 @@ const AddVisitor = () => {
           </div>
           <Link
             to={"/admin/create-visitor"}
+            style={{background: themeColor}}
             className="border-2 font-semibold hover:bg-black hover:text-white duration-150 transition-all border-black p-2 rounded-md text-black cursor-pointer text-center flex items-center  gap-2 justify-center"
           >
             <PiPlusCircle size={20} />

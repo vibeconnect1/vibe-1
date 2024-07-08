@@ -4,6 +4,7 @@ import { FaQrcode, FaRegFileAlt } from "react-icons/fa";
 import { Link, useParams } from "react-router-dom";
 import toast from "react-hot-toast";
 import { getVendorsDetails } from "../../../api";
+import Navbar from "../../../components/Navbar";
 
 const SupplierDetails = () => {
   const { id } = useParams();
@@ -30,8 +31,9 @@ const SupplierDetails = () => {
   const domainPrefix = "https://admin.vibecopilot.ai";
 
   return (
-    <section>
-      <div className="m-2">
+    <section className="flex  ">
+      <Navbar />
+      <div className="w-full mx-3 mb-5 flex  flex-col overflow-hidden">
         <div className="border-2 flex flex-col my-5 p-4 gap-4 rounded-md border-gray-400">
           <div className=" flex sm:flex-row flex-col gap-5 justify-between ">
             <div className="flex items-center gap-2 "></div>
@@ -97,6 +99,20 @@ const SupplierDetails = () => {
               <div className="grid grid-cols-2 items-center">
                 <p>GST Number : </p>
                 <p className="text-sm font-normal">{Details.gstin_number}</p>
+              </div>
+              <div className="grid grid-cols-2 items-center">
+                <p>Status : </p>
+                <p className="text-sm font-normal ">{Details.active ? 
+                <p className="bg-green-400 px-4 w-fit text-white rounded-full">
+
+                  Active
+                </p> 
+                :
+                 <p className="bg-red-400 px-4 w-fit text-white rounded-full">
+
+                   Inactive
+                 </p>
+                 }</p>
               </div>
             </div>
           </div>

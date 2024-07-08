@@ -511,6 +511,11 @@ import AssetWidgets from "./pages/SubPages/AssetWidgets.jsx";
 import DocumentMain from "./pages/DocumentsPro/DocumentMain.jsx";
 import Integration from "./pages/Integrations/Integration.jsx";
 import Gmail from "./pages/Integrations/Gmail.jsx";
+import VisitorPage from "./pages/SubPages/VisitorPage.jsx";
+import RVehicles from "./pages/SubPages/RVehicles.jsx";
+import GVehicles from "./pages/SubPages/GVehicles.jsx";
+import Staff from "./pages/SubPages/Staff.jsx";
+import GoodsInOut from "./pages/SubPages/GoodsInOut.jsx";
 
 function App() {
   const themeColor = useSelector((state) => state.theme.color);
@@ -765,7 +770,7 @@ function App() {
           <Route path="/business/add-business" element={<AddBusiness />} />
           <Route path="/business/setup-category" element={<BusinessSetup />} />
           {/* materials */}
-          <Route path="/materials" element={<Materials />} />
+          
           {/* booking */}
           <Route path="/bookings" element={<Booking />} />
           <Route
@@ -875,6 +880,14 @@ function App() {
             }
           />
           <Route
+            path="/profile"
+            element={
+              <ProtectedRoute>
+                <Profile />
+              </ProtectedRoute>
+            }
+          />
+          <Route
             path="/admin/edit-profile"
             element={
               <ProtectedAdminRoutes>
@@ -902,9 +915,9 @@ function App() {
           <Route
             path="/communication/event/event-details/:id"
             element={
-              <ProtectedAdminRoutes>
+              <ProtectedRoute>
                 <EventDetails />
-              </ProtectedAdminRoutes>
+              </ProtectedRoute>
             }
           />
           <Route
@@ -2018,11 +2031,52 @@ function App() {
           />
 
           {/* admin passess */}
+          <Route path="/admin/passes" element={<Navigate to="/admin/passes/visitors" replace />}  />
           <Route
-            path="/admin/passes"
+            path="/admin/passes/visitors"
             element={
               <ProtectedAdminRoutes>
-                <Passes />
+                <VisitorPage />
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/passes/registered-vehicles"
+            element={
+              <ProtectedAdminRoutes>
+                <RVehicles />
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/passes/guest-vehicles"
+            element={
+              <ProtectedAdminRoutes>
+                <GVehicles />
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/passes/staff"
+            element={
+              <ProtectedAdminRoutes>
+                <Staff />
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/passes/materials"
+            element={
+              <ProtectedAdminRoutes>
+                <Materials />
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/passes/goods-in-out"
+            element={
+              <ProtectedAdminRoutes>
+                <GoodsInOut />
               </ProtectedAdminRoutes>
             }
           />

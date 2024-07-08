@@ -5,6 +5,8 @@ import toast from "react-hot-toast";
 import FileInputBox from "../../containers/Inputs/FileInputBox";
 import { getItemInLocalStorage } from "../../utils/localStorage";
 import { useSelector } from "react-redux";
+import { Switch } from "../../Buttons";
+import Navbar from "../../components/Navbar";
 
 const EditSuppliers = () => {
   const siteId = getItemInLocalStorage("SITEID");
@@ -13,7 +15,6 @@ const EditSuppliers = () => {
     company_name: "",
     mobile: "",
     email: "",
-
     secondary_mobile: "",
     secondary_email: "",
     gstin_number: "",
@@ -33,6 +34,7 @@ const EditSuppliers = () => {
     attachments: [],
     vtype: "",
     notes: "",
+    active: true
   });
 
   const handleChange = (e) => {
@@ -63,6 +65,7 @@ const EditSuppliers = () => {
     sendData.append("vendor[city]", formData.city);
     sendData.append("vendor[pincode]", formData.pincode);
     sendData.append("vendor[account_name]", formData.account_name);
+    sendData.append("vendor[active]", formData.active);
     sendData.append("vendor[account_number]", formData.account_number);
     sendData.append("vendor[bank_branch_name]", formData.bank_branch_name);
     sendData.append("vendor[ifsc_code]", formData.ifsc_code);
@@ -110,8 +113,9 @@ const EditSuppliers = () => {
   };
   const themeColor = useSelector((state)=> state.theme.color)
   return (
-    <section>
-      <div className="m-2">
+    <section className="flex  ">
+      <Navbar />
+      <div className="w-full mx-3 mb-5 flex  flex-col overflow-hidden">
         <h2 style={{background: themeColor}} className="text-center text-xl font-bold p-2 bg- rounded-full text-white">
           Edit Supplier
         </h2>
@@ -170,6 +174,7 @@ const EditSuppliers = () => {
                 type="text"
                 name="secondary_mobile"
                 value={formData.secondary_mobile}
+                onChange={handleChange}
                 id=""
                 placeholder="Secondary Email"
                 className="border p-1 px-4 border-gray-500 rounded-md"
@@ -269,6 +274,19 @@ const EditSuppliers = () => {
                 placeholder="Enter GST Number"
               />
             </div>
+            <div className="flex gap-4 items-center">
+                  <p>Inactive</p>
+                  <Switch
+                    checked={formData.active}
+                    onChange={() =>
+                      setFormData((prevState) => ({
+                        ...prevState,
+                        active: !prevState.active,
+                      }))
+                    }
+                  />
+                  <p>Active</p>
+                </div>
           </div>
           <div>
           <h2 className="border-b text-center text-xl my-5 border-black mb-6 font-semibold">

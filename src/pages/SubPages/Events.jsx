@@ -92,54 +92,10 @@ const Events = () => {
     setFilteredData(filteredResults);
   };
 
-  const customStyle = {
-    headRow: {
-      style: {
-        backgroundColor: "black",
-        color: "white",
-        fontSize: "14px",
-      },
-    },
-  };
+
   return (
     <div className=" ">
-      {filter && (
-        <div className="flex items-center justify-center gap-2">
-          <select className="border p-1 px-4 border-gray-500 rounded-md">
-            <option value="">Select Unit</option>
-            <option value="unit1">Unit 1</option>
-            <option value="unit2">Unit 2</option>
-          </select>
-
-          <div className="flex gap-4 items-center  ">
-            <div className="flex gap-2 items-center">
-              <label htmlFor="">From:</label>
-              <input
-                type="date"
-                name=""
-                id=""
-                className="border border-black rounded-md px-4"
-              />
-            </div>
-            <div className="flex gap-2 items-center">
-              <label htmlFor="">To:</label>
-              <input
-                type="date"
-                name=""
-                id=""
-                className="border border-black rounded-md px-4"
-              />
-            </div>
-          </div>
-          <select className="border p-1 px-4 border-gray-500 rounded-md">
-            <option value="">Select Status</option>
-            <option value="unit1">Published</option>
-            <option value="unit2">Disabled</option>
-            <option value="unit2">Rejected</option>
-          </select>
-          <button className="bg-black p-2 text-white rounded-md">Apply</button>
-        </div>
-      )}
+     
       <div className="flex justify-between gap-2 items-center my-2 sm:flex-row flex-col ">
         <input
           type="text"
@@ -149,12 +105,7 @@ const Events = () => {
           onChange={handleSearch}
         />
         <div className="flex gap-2">
-          <button
-            className="text-lg font-semibold border-2 border-black px-4 p-1 rounded-md"
-            onClick={() => setFilter(!filter)}
-          >
-            Filter
-          </button>
+          
           {user === "pms_admin" && (
             <Link
             style={{background: themeColor}}
