@@ -1,13 +1,65 @@
 import React, { useState } from "react";
 import ToggleSwitch from "../../../Buttons/ToggleSwitch";
 import { BiEdit } from "react-icons/bi";
+import { FaTrash } from "react-icons/fa";
+import { useSelector } from "react-redux";
 
-// import TicketSetupPage from "../SubPages/TicketSetupPage";
-// import TicketEscalationSetup from "../SubPages/TicketEscalationSetup";
-// import TicketCostApprovalSetup from "../SubPages/TicketCostApprovalSetup";
+import Table from "../../../components/table/Table";
 
 const TicketCostApprovalSetup = () => {
   const [page, setPage] = useState("FM");
+  const themeColor = useSelector((state) => state.theme.color);
+  const [selectedOption, setSelectedOption] = useState('');
+
+  const handleChange = (event) => {
+    setSelectedOption(event.target.value);
+  };
+  const columns = [
+  
+    {
+      name: "Cost Range",
+      selector: (row) => row.cost,
+      sortable: true,
+    },
+    {
+      name: "Levels",
+      selector: (row) => row.Levels,
+      sortable: true,
+    },
+    {
+      name: "Approvers",
+      selector: (row) => row.Approvers,
+      sortable: true,
+    },
+  ]
+  const data = [
+    {
+      cost:"500-600",
+      Levels:"L1",
+      Approvers:"Deepak Gupta",
+    },
+    {
+      cost:"500-600",
+      Levels:"L2",
+      Approvers:"Deepak Gupta",
+    },
+    {
+      cost:"500-600",
+      Levels:"L3",
+      Approvers:"Deepak Gupta",
+    },
+    {
+      cost:"500-600",
+      Levels:"L4",
+      Approvers:"Deepak Gupta",
+    },
+    {
+      cost:"500-600",
+      Levels:"L5",
+      Approvers:"Deepak Gupta",
+    }
+
+  ]
   return (
     <div className=" w-full my-2 flex  overflow-hidden flex-col">
       <div className="flex gap-5 justify-center">
@@ -43,14 +95,47 @@ const TicketCostApprovalSetup = () => {
       <div>
         {page === "FM" && (
           <div className="ml-2 mt-2 mx-2">
-            <select
-              name=""
-              id=""
-              className="border p-2 rounded-md border-black w-60 h-10 absolute right-0"
-            ></select>
+             <div className="flex mt-5">
+             <select
+        name="condition"
+        id="condition"
+        className="border p-2 rounded-md border-black w-64 h-10"
+        value={selectedOption}
+        onChange={handleChange}
+      >
+        <option value="">Select Unit</option>
+        <option value="between">Between</option>
+        <option value="greaterThan">Greater than</option>
+        <option value="greaterThanEqual">Greater than Equal</option>
+      </select>
 
-            <div className=" flex justify-center items-center">
-              <div className=" gap-50 mt-1 ml-10 mb-5">
+      {selectedOption === 'between' && (
+        <div className="flex gap-2">
+          <input
+            type="text"
+            className="border p-2 rounded-md border-black w-64 ml-4 h-10 "
+            placeholder="Enter cost"
+          />
+          <input
+            type="text"
+            className="border p-2 rounded-md border-black w-64 ml-4 h-10 "
+            placeholder="Enter cost"
+          />
+        </div>
+      )}
+
+      {(selectedOption === 'greaterThan' || selectedOption === 'greaterThanEqual') && (
+        <div>
+          <input
+            type="text"
+            className="border p-2 rounded-md border-black w-64 ml-4 h-10 "
+            placeholder="Enter cost"
+          />
+        </div>
+      )}
+
+           
+              <div className=" gap-50 w-2/3  ml-10 mb-5">
                 <table class="w-full border-collapse">
                   <thead>
                     <tr>
@@ -64,157 +149,138 @@ const TicketCostApprovalSetup = () => {
                   </thead>
                   <tbody>
                     <tr>
-                      <td class="border border-gray-300 px-4 py-2">E1</td>
-                      <td class="border border-gray-300 px-4 py-2">
+                      <td class="border border-gray-300 px-4 py-2 text-center">L1</td>
+                      <td class="border border-gray-300 px-4 py-2 text-center">
                         <select
                           name=""
                           id=""
-                          className="border p-2 rounded-md border-black w-48"
-                        ></select>
+                          className="border p-2 rounded-md border-black w-full"
+                        ><option value="">Select Users</option>
+                        <option value="">Mittu</option>
+                        <option value="">Panda</option></select>
                       </td>
                     </tr>
                     <tr>
-                      <td class="border border-gray-300 px-4 py-2">E2</td>
-                      <td class="border border-gray-300 px-4 py-2">
-                        <select
+                      <td class="border border-gray-300 px-4 py-2 text-center">L2</td>
+                      <td class="border border-gray-300 px-4 py-2 text-center">
+                      <select
                           name=""
                           id=""
-                          className="border p-2 rounded-md border-black w-48"
-                        ></select>
+                          className="border p-2 rounded-md border-black w-full"
+                        ><option value="">Select Users</option>
+                        <option value="">Mittu</option>
+                        <option value="">Panda</option></select>
                       </td>
                     </tr>
                     <tr>
-                      <td class="border border-gray-300 px-4 py-2">E3</td>
-                      <td class="border border-gray-300 px-4 py-2">
-                        <select
+                      <td class="border border-gray-300 px-4 py-2 text-center">L3</td>
+                      <td class="border border-gray-300 px-4 py-2 text-center">
+                      <select
                           name=""
                           id=""
-                          className="border p-2 rounded-md border-black w-48"
-                        ></select>
+                          className="border p-2 rounded-md border-black w-full"
+                        ><option value="">Select Users</option>
+                        <option value="">Mittu</option>
+                        <option value="">Panda</option></select>
                       </td>
                     </tr>
                     <tr>
-                      <td class="border border-gray-300 px-4 py-2">E4</td>
-                      <td class="border border-gray-300 px-4 py-2">
-                        <select
+                      <td class="border border-gray-300 px-4 py-2 text-center">L4</td>
+                      <td class="border border-gray-300 px-4 py-2 text-center">
+                      <select
                           name=""
                           id=""
-                          className="border p-2 rounded-md border-black w-48"
-                        ></select>
+                          className="border p-2 rounded-md border-black w-full"
+                        ><option value="">Select Users</option>
+                        <option value="">Mittu</option>
+                        <option value="">Panda</option></select>
                       </td>
                     </tr>
                     <tr>
-                      <td class="border border-gray-300 px-4 py-2">E5</td>
-                      <td class="border border-gray-300 px-4 py-2">
-                        <select
+                      <td class="border border-gray-300 px-4 py-2 text-center">L5</td>
+                      <td class="border border-gray-300 px-4 py-2 text-center">
+                      <select
                           name=""
                           id=""
-                          className="border p-2 rounded-md border-black w-48"
-                        ></select>
+                          className="border p-2 rounded-md border-black w-full"
+                        ><option value="">Select Users</option>
+                        <option value="">Mittu</option>
+                        <option value="">Panda</option></select>
                       </td>
                     </tr>
                   </tbody>
                 </table>
                 <hr />
                 &nbsp;
+                <div className="flex justify-center">
                 <button
-                  className="border-2 font-semibold hover:bg-black hover:text-white transition-all border-black p-2 rounded-md text-black cursor-pointer text-center flex items-center gap-2 justify-center"
-                  style={{ height: "1cm" }}
+                  className="border-2 font-semibold hover:bg-black hover:text-white transition-all border-black p-2 rounded-md text-white cursor-pointer text-center flex items-center gap-2 justify-center"
+                  style={{ background:themeColor }}
                 >
                   Submit
-                </button>
+                </button></div>
               </div>
             </div>
-            <div className="flex gap-7 ml-10">
-              <label htmlFor="" className="font-semibold">
-                Filter
-              </label>
-              <select
-                name=""
-                id=""
-                className="border p-2 rounded-md border-black w-48"
-              ></select>
-              <button
-                className="border-2 font-semibold hover:bg-green-500 hover:text-white transition-all border-green-500 p-2 rounded-md text-green-500 cursor-pointer text-center flex items-center gap-2 justify-center"
-                style={{ height: "1cm" }}
-              >
-                Apply
-              </button>
-              <button
-                className="border-2 font-semibold hover:bg-blue-500 hover:text-white transition-all border-blue-500 p-2 rounded-md text-blue-500 cursor-pointer text-center flex items-center gap-2 justify-center"
-                style={{ height: "1cm" }}
-              >
-                Reset
-              </button>
-            </div>
+           
             <div className="ml-10 mt-3 mb-8 mr-12">
               <p className="font-semibold">Rule 1</p>
-              <div className="flex justify-end gap-x-60 mb-1">
-                <BiEdit />
+              <div className="flex justify-end gap-x-60 mb-2">
+                <FaTrash/>
               </div>
 
-              <table class="w-full border-collapse table-center">
-                <thead>
-                  <tr>
-                    <th class="border border-gray-300 bg-gray-100 px-4 py-2">
-                      Cost Ranges
-                    </th>
-                    <th class="border border-gray-300 bg-gray-100 px-4 py-2">
-                      Levels
-                    </th>
-                    <th class="border border-gray-300 bg-gray-100 px-4 py-2">
-                      Approvers
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td
-                      class="border border-gray-300 px-4 py-2 text-center"
-                      rowspan="5"
-                    >
-                      500-600
-                    </td>
-                    <td class="border border-gray-300 px-4 py-2">E1</td>
-                    <td class="border border-gray-300 px-4 py-2">
-                      Deepak Gupta
-                    </td>
-                  </tr>
-                  <tr>
-                    {/* <td class="border border-gray-300 px-4 py-2"></td> */}
-                    <td class="border border-gray-300 px-4 py-2">E2</td>
-                    <td class="border border-gray-300 px-4 py-2"></td>
-                  </tr>
-                  <tr>
-                    {/* <td class="border border-gray-300 px-4 py-2"></td> */}
-                    <td class="border border-gray-300 px-4 py-2">E3</td>
-                    <td class="border border-gray-300 px-4 py-2"></td>
-                  </tr>
-                  <tr>
-                    {/* <td class="border border-gray-300 px-4 py-2"></td> */}
-                    <td class="border border-gray-300 px-4 py-2">E4</td>
-                    <td class="border border-gray-300 px-4 py-2"></td>
-                  </tr>
-                  <tr>
-                    {/* <td class="border border-gray-300 px-4 py-2"></td> */}
-                    <td class="border border-gray-300 px-4 py-2">E5</td>
-                    <td class="border border-gray-300 px-4 py-2"></td>
-                  </tr>
-                </tbody>
-              </table>
+              <Table
+          responsive
+          //   selectableRows
+          columns={columns}
+          data={data}
+          isPagination={true}
+        />
             </div>
           </div>
         )}
         {page === "Project" && (
           <div className="ml-2 mt-2">
+            <div className="flex mt-5">
             <select
-              name=""
-              id=""
-              className="border p-2 rounded-md border-black w-60 h-10 absolute right-0"
-            ></select>
+        name="condition"
+        id="condition"
+        className="border p-2 rounded-md border-black w-64 h-10"
+        value={selectedOption}
+        onChange={handleChange}
+      >
+        <option value="">Select Unit</option>
+        <option value="between">Between</option>
+        <option value="greaterThan">Greater than</option>
+        <option value="greaterThanEqual">Greater than Equal</option>
+      </select>
 
-            <div className=" flex justify-center items-center mt-5 ml-10">
-              <div className=" gap-50 mt-1 ml-10 mb-5">
+      {selectedOption === 'between' && (
+        <div className="flex gap-2">
+          <input
+            type="text"
+            className="border p-2 rounded-md border-black w-64 ml-4 h-10 "
+            placeholder="Enter cost"
+          />
+          <input
+            type="text"
+            className="border p-2 rounded-md border-black w-64 ml-4 h-10 "
+            placeholder="Enter cost"
+          />
+        </div>
+      )}
+
+      {(selectedOption === 'greaterThan' || selectedOption === 'greaterThanEqual') && (
+        <div>
+          <input
+            type="text"
+            className="border p-2 rounded-md border-black w-64 ml-4 h-10 "
+            placeholder="Enter cost"
+          />
+        </div>
+      )}
+
+           
+              <div className=" gap-50 w-2/3  ml-10 mb-5">
                 <table class="w-full border-collapse">
                   <thead>
                     <tr>
@@ -228,65 +294,76 @@ const TicketCostApprovalSetup = () => {
                   </thead>
                   <tbody>
                     <tr>
-                      <td class="border border-gray-300 px-4 py-2">E1</td>
-                      <td class="border border-gray-300 px-4 py-2">
+                      <td class="border border-gray-300 px-4 py-2 text-center">L1</td>
+                      <td class="border border-gray-300 px-4 py-2 text-center">
                         <select
                           name=""
                           id=""
-                          className="border p-2 rounded-md border-black w-48"
-                        ></select>
+                          className="border p-2 rounded-md border-black w-full"
+                        ><option value="">Select Users</option>
+                        <option value="">Mittu</option>
+                        <option value="">Panda</option></select>
                       </td>
                     </tr>
                     <tr>
-                      <td class="border border-gray-300 px-4 py-2">E2</td>
-                      <td class="border border-gray-300 px-4 py-2">
-                        <select
+                      <td class="border border-gray-300 px-4 py-2 text-center">L2</td>
+                      <td class="border border-gray-300 px-4 py-2 text-center">
+                      <select
                           name=""
                           id=""
-                          className="border p-2 rounded-md border-black w-48"
-                        ></select>
+                          className="border p-2 rounded-md border-black w-full"
+                        ><option value="">Select Users</option>
+                        <option value="">Mittu</option>
+                        <option value="">Panda</option></select>
                       </td>
                     </tr>
                     <tr>
-                      <td class="border border-gray-300 px-4 py-2">E3</td>
-                      <td class="border border-gray-300 px-4 py-2">
-                        <select
+                      <td class="border border-gray-300 px-4 py-2 text-center">L3</td>
+                      <td class="border border-gray-300 px-4 py-2 text-center">
+                      <select
                           name=""
                           id=""
-                          className="border p-2 rounded-md border-black w-48"
-                        ></select>
+                          className="border p-2 rounded-md border-black w-full"
+                        ><option value="">Select Users</option>
+                        <option value="">Mittu</option>
+                        <option value="">Panda</option></select>
                       </td>
                     </tr>
                     <tr>
-                      <td class="border border-gray-300 px-4 py-2">E4</td>
-                      <td class="border border-gray-300 px-4 py-2">
-                        <select
+                      <td class="border border-gray-300 px-4 py-2 text-center">L4</td>
+                      <td class="border border-gray-300 px-4 py-2 text-center">
+                      <select
                           name=""
                           id=""
-                          className="border p-2 rounded-md border-black w-48"
-                        ></select>
+                          className="border p-2 rounded-md border-black w-full"
+                        ><option value="">Select Users</option>
+                        <option value="">Mittu</option>
+                        <option value="">Panda</option></select>
                       </td>
                     </tr>
                     <tr>
-                      <td class="border border-gray-300 px-4 py-2">E5</td>
-                      <td class="border border-gray-300 px-4 py-2">
-                        <select
+                      <td class="border border-gray-300 px-4 py-2 text-center">L5</td>
+                      <td class="border border-gray-300 px-4 py-2 text-center">
+                      <select
                           name=""
                           id=""
-                          className="border p-2 rounded-md border-black w-48"
-                        ></select>
+                          className="border p-2 rounded-md border-black w-full"
+                        ><option value="">Select Users</option>
+                        <option value="">Mittu</option>
+                        <option value="">Panda</option></select>
                       </td>
                     </tr>
                   </tbody>
                 </table>
                 <hr />
                 &nbsp;
+                <div className="flex justify-center">
                 <button
-                  className="border-2 font-semibold hover:bg-black hover:text-white transition-all border-black p-2 rounded-md text-black cursor-pointer text-center flex items-center gap-2 justify-center"
-                  style={{ height: "1cm" }}
+                  className="border-2 font-semibold hover:bg-black hover:text-white transition-all border-black p-2 rounded-md text-white cursor-pointer text-center flex items-center gap-2 justify-center"
+                  style={{ background:themeColor}}
                 >
                   Submit
-                </button>
+                </button></div>
               </div>
             </div>
             {/* <div className="flex gap-7 ml-10">

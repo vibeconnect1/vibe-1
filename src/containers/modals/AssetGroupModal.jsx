@@ -3,18 +3,20 @@ import ModalWrapper from "./ModalWrapper";
 import { useDispatch } from "react-redux";
 import { addGroup } from "../../features/group/groupSlice";
 import { postAssetGroups } from "../../api";
+import { getItemInLocalStorage } from "../../utils/localStorage";
 
 const AssetGroupModal = ({ onclose }) => {
   const [groupName, setGroupName] = useState("");
   const [description, setDescription] = useState("");
   const [groupFor, setGroupFor] = useState("asset");
-
+const siteId = getItemInLocalStorage("SITEID")
   const dispatch = useDispatch();
   const createGroup = async () => {
     try {
       const addGroup = await postAssetGroups({
         name: groupName,
         description: description,
+        company_id: siteId,
         group_for: "asset"
       });
   console.log(addGroup)
@@ -30,6 +32,7 @@ const AssetGroupModal = ({ onclose }) => {
       const addStockGroup = await postAssetGroups({
         name: groupName,
         description: description,
+        company_id: siteId,
         group_for: "item"
       });
   console.log(addStockGroup)

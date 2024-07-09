@@ -55,10 +55,7 @@ const TicketSetup = () => {
     {page === "Setup" &&  <TicketSetupPage/>}
     {page === "Escalation Setup" &&  <TicketEscalationSetup/>}
     {page === "Cost Approval" &&  <TicketCostApprovalSetup/>}
-      {/* {page === "Permit Activity" &&  <PermitActivityTable/>}
-      {page === "Permit Sub Activity" &&  <PermitSubActivityTable/>}
-      {page === "Permit Hazard Category" &&  <PermitHazardCategoryTable/>}
-      {page === "Permit Risk" &&  <PermitRiskTable/>} */}
+      
     </div>
   </div>
   </div>

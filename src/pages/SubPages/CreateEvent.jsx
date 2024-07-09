@@ -25,7 +25,7 @@ const CreateEvent = () => {
     description: "",
     start_date_time: "",
     end_date_time: "",
-    user_ids: [],
+    user_ids: "",
     event_image: [],
   });
   console.log(formData);
@@ -89,13 +89,14 @@ const CreateEvent = () => {
         formatDateTime(formData.end_date_time)
       );
       formDataSend.append("event[venue]", formData.venue);
+      formDataSend.append("event[user_ids]", formData.user_ids);
 
-      formData.user_ids.forEach((user_id) => {
-        formDataSend.append("event[user_ids][]", user_id);
-      });
+      // formData.user_ids.forEach((user_id) => {
+      //   formDataSend.append("event[user_ids]", user_id);
+      // });
 
       formData.event_image.forEach((file) => {
-        formDataSend.append("event_image[]", file);
+        formDataSend.append("attachfiles[]", file);
       });
 
       const response = await postEvents(formDataSend);
@@ -113,7 +114,9 @@ const CreateEvent = () => {
     const selectedIds = selectedOptions
       ? selectedOptions.map((option) => option.value)
       : [];
-    setFormData({ ...formData, user_ids: selectedIds });
+      const userIdsString = selectedIds.join(',');
+
+    setFormData({ ...formData, user_ids: userIdsString });
   };
 
   const handleFileAttachment = (event) => {

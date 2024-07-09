@@ -24,6 +24,7 @@ const Ticket = () => {
   const [ticketTypeCounts, setTicketTypeCounts] = useState({});
   const [ticketStatusCounts, setTicketStatusCounts] = useState({});
   const allTicketTypes = ["Complaint", "Request", "Suggestion"];
+  const [filterSearch, setFilter] = useState([])
   const [complaints, setComplaints] = useState([]);
   const perPage = 10;
   const [totalRows, setTotalRows] = useState(0);
@@ -138,7 +139,7 @@ const Ticket = () => {
         const response = await getAdminPerPageComplaints(page, perPage);
         console.log("Resp", response);
        
-        const complaints = response?.data?.complaints || []; // Handle undefined or empty complaints array
+        const complaints = response?.data?.complaints || []; 
         setFilteredData(complaints);
         setComplaints(complaints);
         setTotalRows(complaints.length);
@@ -165,6 +166,7 @@ const Ticket = () => {
   }, [currentPage]);
   const [ticketTypes, setTicketsTypes] = useState({});
   const [statusData, setStatusData] = useState({});
+
   useEffect(() => {
     const fetchTicketInfo = async () => {
       try {
@@ -176,6 +178,18 @@ const Ticket = () => {
         console.log(error);
       }
     };
+
+    const filterSearchStatus = async()=>{
+      try {
+        const searchAllTickets = await getAdminComplaints()
+     const searchResp = searchAllTickets?.data?.complaints
+     setFilter(searchResp)
+     console.log(searchResp)
+      } catch (error) {
+        console.log(error)
+      }
+    }
+    filterSearchStatus()
     fetchTicketInfo();
   }, []);
 
@@ -193,7 +207,7 @@ const Ticket = () => {
     setCurrentPage(page);
   };
 
-  const handleSearch = (e) => {
+  const handleSearch = async(e) => {
     const searchValue = e.target.value;
     setSearchText(searchValue);
 
@@ -201,8 +215,8 @@ const Ticket = () => {
       // If search input is empty, reset to show all data
       setFilteredData(complaints);
     } else {
-      // Filter the data based on search input and selected status
-      const filteredResults = complaints.filter(
+     
+      const filteredResults = filterSearch.filter(
         (item) =>
           ((selectedStatus === "all" ||
             item.issue_status.toLowerCase() === selectedStatus.toLowerCase()) &&
@@ -230,7 +244,7 @@ const Ticket = () => {
     if (status === "all") {
       setFilteredData(complaints);
     } else {
-      const filteredResults = complaints.filter(
+      const filteredResults = filterSearch.filter(
         (item) => item.issue_status.toLowerCase() === status.toLowerCase()
       );
 
@@ -240,7 +254,7 @@ const Ticket = () => {
 
   const [exportAllTickets, setExportAllTickets] = useState([]);
   const getAllTickets = async () => {
-    const allTicketResp = await getComplaints();
+    const allTicketResp = await getAdminComplaints();
     console.log(allTicketResp);
     setExportAllTickets(allTicketResp.data.complaints);
     return allTicketResp.data.complaints;
@@ -316,6 +330,7 @@ const Ticket = () => {
     }
     return color;
   };
+  
   return (
     <section className="flex">
       <Navbar />

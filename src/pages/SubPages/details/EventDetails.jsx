@@ -3,12 +3,18 @@ import { BiCalendarExclamation, BiLike } from "react-icons/bi";
 import { BsClock } from "react-icons/bs";
 import wave from "/wave.png";
 import { HiLocationMarker } from "react-icons/hi";
-import { getEventsDetails } from "../../../api";
+import { domainPrefix, getEventsDetails } from "../../../api";
 import { useParams } from "react-router-dom";
+import { FaRegFileAlt } from "react-icons/fa";
+import { useSelector } from "react-redux";
 
 const EventDetails = () => {
   const [eventDetails, setEventDetails] = useState([]);
   const { id } = useParams();
+  const formattedDate = (dateString)=>{
+    const date = new Date(dateString)
+    return date.toLocaleString()
+  }
   useEffect(() => {
     const fetchEventDetails = async () => {
       try {
@@ -22,19 +28,44 @@ const EventDetails = () => {
     fetchEventDetails();
   }, [id]);
 
+  const isImage = (filePath) => {
+    const imageExtensions = ["jpg", "jpeg", "png", "gif", "bmp", "svg"];
+    const extension = filePath.split(".").pop().split("?")[0].toLowerCase();
+    return imageExtensions.includes(extension);
+  };
+  const getFileName = (filePath) => {
+    return filePath.split("/").pop().split("?")[0];
+  };
+
+  const themeColor = useSelector((state)=> state.theme.color)
   return (
     <section>
       <div className="m-2">
-        <h2 className="text-center text-xl font-bold p-2 bg-black rounded-full text-white">
+        <h2 style={{background: themeColor}} className="text-center text-xl font-bold p-2 bg-black rounded-full text-white">
           Event Details
         </h2>
         <div className="my-2 mb-10 border-2 p-2 rounded-md border-gray-400">
           <div className="my-5 flex flex-col sm:grid gap-2 grid-cols-12  border-2 sm:mx-5 p-2 rounded-md border-gray-400">
-            <img
-              src={wave}
-              alt="wave"
-              className="rounded-md col-span-6 sm:max-h-[25rem] w-full "
-            />
+          {eventDetails.event_image && eventDetails.event_image.length > 0 && (
+            <div className="rounded-md col-span-6 sm:max-h-[28rem] w-full">
+           {isImage(domainPrefix +eventDetails.event_image[0].document) ? (
+              <img
+                src={domainPrefix + eventDetails.event_image[0].document}
+                alt="event image"
+                className="rounded-md col-span-6 sm:max-h-[28rem] w-full cursor-pointer"
+                onClick={() => window.open(domainPrefix + eventDetails.event_image[0].document, "_blank")}
+                />
+              ): ( <a
+                href={domainPrefix + eventDetails.event_image[0].document}
+                target="_blank"
+                rel="noopener noreferrer"
+                className=" hover:text-blue-400 transition-all duration-300  text-center flex flex-col items-center"
+              >
+                <FaRegFileAlt size={50} />
+                {getFileName(eventDetails.event_image[0].document)}
+              </a>)}
+              </div>
+            )}
             <div className="col-span-6 py-2 px-4 rounded-md bg-gray-100">
               <h1 className="text-2xl font-semibold text-center">
                 {eventDetails.event_name}
@@ -49,13 +80,13 @@ const EventDetails = () => {
                     <p className="flex gap-1 items-center font-medium">
                       <BiCalendarExclamation /> Start Date & Time:
                     </p>
-                    <p>{eventDetails.start_date_time}</p>
+                    <p>{formattedDate(eventDetails.start_date_time)}</p>
                   </div>
                   <div className="grid grid-cols-2">
                     <p className="flex gap-1 items-center font-medium">
                       <BiCalendarExclamation /> End Date & Time:
                     </p>
-                    <p>{eventDetails.end_date_time}</p>
+                    <p>{formattedDate(eventDetails.end_date_time)}</p>
                   </div>
                  
                   <p className="flex gap-1 items-center font-medium">
@@ -76,12 +107,8 @@ const EventDetails = () => {
                 {eventDetails.discription}
               </p>
             </div>
-            <div>
-              <h1 className="text-xl font-semibold">Attachments</h1>
-              <div className="border-dotted border-2 rounded-md border-gray-400 p-2">
-                
-              </div>
-            </div>
+           
+            
             <div>
               <div>
                 <h1 className="text-xl font-semibold">Shared With (Member)</h1>

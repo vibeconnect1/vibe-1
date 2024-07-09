@@ -22,15 +22,18 @@ const Events = () => {
     setUser(userType);
     const fetchEvents = async () => {
       const eventsResponse = await getEvents();
+      const sortedEvents = eventsResponse.data.sort((a,b)=> {
+        return new Date(b.created_at) - new Date(a.created_at)
+      })
       console.log(eventsResponse);
-      setEvents(eventsResponse.data);
-      setFilteredData(eventsResponse.data);
+      setEvents(sortedEvents);
+      setFilteredData(sortedEvents);
     };
     fetchEvents();
   }, []);
   const dateFormat = (dateString) => {
     const date = new Date(dateString);
-    return date.toLocaleString();
+    return date.toLocaleDateString();
   };
 
   const column = [

@@ -4,7 +4,7 @@ import vibeAuth from "./vibeAuth";
 export const API_URL = "https://vibecopilot.ai";
 export const vibeMedia = "https://vibecopilot.ai/api/media";
 const token = getItemInLocalStorage("TOKEN");
-
+export const domainPrefix = "https://admin.vibecopilot.ai";
 export const login = async (data) => axiosInstance.post("/login.json", data);
 
 export const getLogin = async () => axiosInstance.get("/login.json");

@@ -8,7 +8,15 @@ import { PiPlusCircle } from "react-icons/pi";
 
 // import { BsEye } from "react-icons/bs";
 import { BiEdit } from "react-icons/bi";
-const TicketCategoryPage = () =>{
+import FileInputBox from '../../../containers/Inputs/FileInputBox';
+import { FaTrash } from 'react-icons/fa';
+const TicketCategoryPage = ({handleToggleCategoryPage}) =>{
+  const [isChecked, setIsChecked] = useState(false);
+
+  const handleCheckboxChange = () => {
+    setIsChecked(!isChecked);
+  };
+
   const [faqs, setFaqs] = useState([{ question: '', answer: '' }]);
   const themeColor = useSelector((state) => state.theme.color);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -23,6 +31,10 @@ const TicketCategoryPage = () =>{
           <button onClick={openModal}>
             <BiEdit size={15} />
           </button>
+          <button onClick={openModal}>
+            <FaTrash size={15} />
+          </button>
+
           {isModalOpen && (
   <div className="fixed inset-0 flex items-center justify-center z-50">
     <div className="fixed inset-0 bg-black bg-opacity-50" onClick={closeModal}></div>
@@ -230,34 +242,61 @@ const TicketCategoryPage = () =>{
   return (
     <div className="p-6">
       {/* <h1 className="text-2xl font-bold mb-4">Dynamic FAQ Form</h1> */}
-      <div className="grid grid-cols-4 gap-4 mb-6">
+      <div className="grid grid-cols-3 gap-4 mb-6">
         <div className="form-group">
           <label className="block mb-2">Enter Category</label>
-          <input type="text" className="border p-2 w-full" />
+          <input type="text" className="border p-2 w-full" placeholder='Enter Category'/>
         </div>
         <div className="form-group">
           <label className="block mb-2">Select Engineer</label>
           <select className="border p-2 w-full">
-            <option value="engineer1">Engineer 1</option>
-            <option value="engineer2">Engineer 2</option>
+            <option value="engineer1">Ashish</option>
+            <option value="engineer2">Akhil</option>
             {/* Add more options as needed */}
           </select>
         </div>
         <div className="form-group">
           <label className="block mb-2">Response Time (min)</label>
-          <input type="number" className="border p-2 w-full" />
+          <input type="number" className="border p-2 w-full" placeholder='Response Time'/>
         </div>
-        <div className="form-group">
-          {/* <label className="block mb-2">Response Time (min)</label> */}
-          <input type="file" className="border p-2 w-full" />
-        </div>
+       
         <div className="form-group">
           <label className="block mb-2">Enable Sites</label>
-          <input type="text" className="border p-2 w-full" />
+          <select type="text" className="border p-2 w-full" placeholder='Enable Sites' 
+          >
+            <option value="">vibe site 1</option>
+            <option value="">vibe site 2</option>
+          </select>
         </div>
+        {isChecked && (
+           <div className="form-group">
+            <label className="block mb-2">Enter  Vendor Email</label>
+        <input
+          type="text"
+          className="border border-gray-300 p-2 rounded w-full"
+          placeholder="Enter some text"
+        /></div>
+      )}
       </div>
-
-      <h2 className="text-xl font-semibold mb-4">FAQs</h2>
+      <div className="flex items-center mb-4">
+        <input
+          id="toggleInput"
+          type="checkbox"
+          className="mr-2"
+          checked={isChecked}
+          onChange={handleCheckboxChange}
+        />
+        <label htmlFor="toggleInput" className="text-gray-700">
+          Vendor Email
+        </label>
+      </div>
+     
+      <div className="form-group  ">
+          {/* <label className="block mb-2">Response Time (min)</label> */}
+          {/* <input type="file" className="border p-2 w-full" /> */}
+        <FileInputBox/>
+        </div>
+      <h2 className="text-xl mt-2 font-semibold mb-4">FAQs</h2>
       <div>
         {faqs.map((faq, index) => (
           <div key={index} className="mb-4">
@@ -266,6 +305,7 @@ const TicketCategoryPage = () =>{
               rows="3"
               className="border p-2 w-full mb-2"
               value={faq.question}
+              placeholder='Question'
               onChange={(e) => handleFaqChange(index, 'question', e.target.value)}
             ></textarea>
             <label className="block mb-2">Answer</label>
@@ -273,11 +313,13 @@ const TicketCategoryPage = () =>{
               rows="3"
               className="border p-2 w-full mb-2"
               value={faq.answer}
+              placeholder='Answer'
               onChange={(e) => handleFaqChange(index, 'answer', e.target.value)}
             ></textarea>
             <button
               className="bg-red-500 text-white px-4 py-2"
               onClick={() => deleteFaq(index)}
+              
             >
               Delete
             </button>
@@ -287,21 +329,18 @@ const TicketCategoryPage = () =>{
 
       <button
         className="bg-blue-500 text-white px-4 py-2"
+        style={{background:themeColor}}
         onClick={addFaq}
       >
         Add Question/Answer
       </button>
-      <div>
-      <span className="flex justify-center mb-2 gap-4">
-            <Link
-              to={"/admin/add-rvehicles"}
-              className="border-2 font-semibold hover:bg-black hover:text-white transition-all border-black p-2 rounded-md text-black cursor-pointer text-center flex items-center gap-2 justify-center"
-              style={{ height: "1cm" }}
-            >
-              <PiPlusCircle size={20} />
-              Add
-            </Link>
-            </span></div>
+     
+      <div className="flex justify-center mb-2 gap-4">
+           <button                   className=" font-semibold hover:bg-black hover:text-white transition-all  p-2 px-4 rounded-md text-white cursor-pointer text-center flex items-center gap-2 justify-center"
+ style={{background:themeColor}}>Add</button>
+  <button style={{ background:themeColor }} onClick={handleToggleCategoryPage} className="  px-4 py-2 bg-blue-500 text-white rounded-md">Cancel</button>
+            </div>
+
       {/* <Table
           responsive
           //   selectableRows

@@ -13,9 +13,11 @@ import gmail from "/gmail.png";
 import outlook from "/outlook.png";
 import FacebookModal from "../../containers/modals/IntegrationModal/FacebookModal";
 import { Link } from "react-router-dom";
+import Gmail from "./Gmail";
 
 const Integration = () => {
   const [socialMediaData, setSocialMediaData] = useState([]);
+  const [screen, setScreen] = useState("")
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isFacebookOpen, setIsFacebookOpen] = useState(false);
   const defaultImage = { index: 0, src: "" };
@@ -55,13 +57,11 @@ const Integration = () => {
   };
   useEffect(() => {
     Get_Background();
-    GetAuth()
+    GetAuth();
   }, []);
 
   const GetAuth = async () => {
     try {
-     
-
       const response = await getVibeSocialData(user_id);
 
       if (response.success) {
@@ -89,7 +89,7 @@ const Integration = () => {
     const socialMedia = socialMediaData.find(
       (item) => item.platform === platform
     );
-  
+
     return socialMedia && socialMedia.status_login;
   };
 
@@ -150,15 +150,16 @@ const Integration = () => {
 
     document.body.appendChild(form);
     form.submit();
+    setScreen("gmail")
   };
 
   const handleDivClick = async () => {
     const data = await fetchData();
     if (data) {
-        setAccounts(data);
-        gotoFacebookPage();
+      setAccounts(data);
+      gotoFacebookPage();
     }
-};
+  };
 
   return (
     <section
@@ -168,11 +169,58 @@ const Integration = () => {
       }}
     >
       <Navbar />
-      <div className="p-4 w-full my-2 flex md:mx-2 overflow-hidden flex-col">
-        <div className="flex flex-col md:flex-row items-center bg-black p-2 bg-opacity-30 rounded-md shadow-custom-all-sides backdrop-blur-sm justify-around gap-2">
+      <div className="p-4 w-full  flex md:mx-2 overflow-hidden ">
+        <div className="flex flex-col max-w-28  items-center max-h-screen overflow-scroll hide-scrollbar mb-10 bg-black p-2 bg-opacity-30 rounded-md shadow-custom-all-sides backdrop-blur-sm justify-around gap-4">
           <div className="w-full flex flex-col gap-2">
+          <div className="w-full flex flex-col gap-2">
+            <div className="p-4 rounded-md bg-white">
+              <center>
+                <img  src={gmail} />
+              </center>
+            </div>
+            <div className="flex flex-col gap-1">
+              <span className="" style={{ color: "#000" }}>
+                <p className="font-medium text-white text-sm">Gmail</p>
+              </span>
+
+              {isInstalled("Gmail") ? (
+                <button
+                  // to={"/gmail"}
+                  onClick={()=> setScreen("gmail")}
+                  className="flex items-center font-medium justify-center shadow-custom-all-sides bg-white p-1 px-8 rounded-md gap-2"
+                >
+                  <FaCheck
+                    className=""
+                    style={{
+                      fontSize: 14,
+                      color: isInstalled("Gmail") ? "#0a6f4c" : "#132A3A",
+                    }}
+                  />
+                  Open
+                </button>
+              ) : (
+                <button
+                  className="font-medium shadow-custom-all-sides p-1 px-8 rounded-md bg-white"
+                  onClick={signIn}
+                  disabled={isInstalled("Gmail")}
+                >
+                  <div className="flex gap-2 justify-center items-center">
+                    <FaPlus
+                      className=""
+                      style={{
+                        fontSize: 14,
+                        color: isInstalled("Gmail") ? "#0a6f4c" : "#132A3A",
+                      }}
+                    />
+                    Install
+                  </div>
+                </button>
+              )}
+            </div>
+          </div>
+          <div className="border border-white w-full opacity-40" />
             <div
-              className="p-5 px-10 rounded-md"
+              className="py-4 rounded-md"
               style={{ backgroundColor: "#4267b2" }}
             >
               <center>
@@ -181,7 +229,7 @@ const Integration = () => {
             </div>
             <div className="flex flex-col gap-1">
               <span className="flex flex-col">
-                <b>Facebook</b>
+                <p className="font-medium text-white text-sm">Facebook</p>
               </span>
 
               <button
@@ -219,9 +267,10 @@ const Integration = () => {
             {/* <FacebookModal handleDivClick={handleDivClick} isFacebookOpen={isFacebookOpen} isLoggedIn={isLoggedIn} onCloseFacebook={onCloseFacebook}  /> */}
           </div>
           {/* insta */}
+          <div className="border border-white w-full opacity-40" />
           <div className="w-full flex flex-col gap-2">
             <div
-              className="p-5 px-10 rounded-md"
+              className="py-4 rounded-md"
               style={{
                 backgroundImage:
                   "linear-gradient(to top right,#ffd600, #ff1600, #cb00b8 )",
@@ -234,7 +283,7 @@ const Integration = () => {
             </div>
             <div className="flex flex-col gap-1">
               <span className="" style={{ color: "#000" }}>
-                <b>Instagram</b>
+                <p className="font-medium text-white text-sm">Instagram</p>
               </span>
 
               <button
@@ -368,64 +417,22 @@ const Integration = () => {
                             </Modal> */}
           </div>
           {/* gmail */}
-          <div className="w-full flex flex-col gap-2">
-            <div className="p-5 px-10 rounded-md bg-white">
-              <center>
-                <img style={{ width: "52px" }} src={gmail} />
-              </center>
-            </div>
-            <div className="flex flex-col gap-1">
-              <span className="" style={{ color: "#000" }}>
-                <b>Gmail</b>
-              </span>
-
-              {isInstalled("Gmail") ? (
-             
-                  <Link to={"/gmail"} className="flex items-center font-medium justify-center shadow-custom-all-sides bg-white p-1 px-8 rounded-md gap-2">
-                    <FaCheck
-                      className=""
-                      style={{
-                        fontSize: 14,
-                        color: isInstalled("Gmail") ? "#0a6f4c" : "#132A3A",
-                      }}
-                      />
-                    Open
-                  </Link>
-                  
-                ) : (
-                  <button
-                  className="font-medium shadow-custom-all-sides p-1 px-8 rounded-md bg-white"
-                  onClick={signIn}
-                  disabled={isInstalled("Gmail")}
-                >
-                  <div className="flex gap-2 justify-center items-center">
-                    <FaPlus
-                      className=""
-                      style={{
-                        fontSize: 14,
-                        color: isInstalled("Gmail") ? "#0a6f4c" : "#132A3A",
-                      }}
-                    />
-                    Install
-                  </div>
-                  </button>
-                )}
-            </div>
-          </div>
+          <div className="border border-white w-full opacity-40" />
+          
           <div className="w-full flex flex-col gap-2">
             <div
-              className="p-5 px-10 rounded-md"
+              className="py-4 rounded-md"
               style={{
                 backgroundColor: "#32a9dd",
               }}
             >
               <center>
-                <FaTelegramPlane style={{ color: "#fff", fontSize: 40 }} />
+                <FaTelegramPlane style={{ color: "#fff", fontSize: 35 }} />
               </center>
             </div>
             <div className="flex flex-col gap-1">
               <span className="" style={{ color: "#000" }}>
-                <b>Telegram</b>
+                <p className="font-medium text-white text-sm">Telegram</p>
               </span>
 
               <button
@@ -536,22 +543,22 @@ const Integration = () => {
                                 
                             </Modal> */}
           </div>
-
+          <div className="border border-white w-full opacity-40" />
           <div className="w-full flex flex-col gap-2">
             <div
-              className=" p-5 px-10"
+              className=" "
               style={{
                 backgroundColor: "#F5F5F5",
                 borderRadius: 8,
               }}
             >
               <center>
-                <img style={{ width: "40px" }} src={outlook} />
+                <img className="w-20" src={outlook} />
               </center>
             </div>
             <div className="flex flex-col gap-1">
               <span className="" style={{ color: "#000" }}>
-                <b>Outlook</b>
+                <p className="font-medium text-white text-sm">Outlook</p>
               </span>
 
               <button
@@ -586,6 +593,9 @@ const Integration = () => {
             </div>
           </div>
         </div>
+       
+          {screen === "gmail" && <Gmail/>}
+        
       </div>
     </section>
   );

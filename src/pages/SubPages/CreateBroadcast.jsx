@@ -18,7 +18,7 @@ const CreateBroadcast = () => {
     notice_title: "",
     notice_discription: "",
     expiry_date: "",
-    user_ids: [],
+    user_ids: "",
     notice_image: [],
   });
   console.log(formData);
@@ -55,7 +55,8 @@ const CreateBroadcast = () => {
     const selectedIds = selectedOptions
       ? selectedOptions.map((option) => option.value)
       : [];
-    setFormData({ ...formData, user_ids: selectedIds });
+      const userIdsString = selectedIds.join(',');
+    setFormData({ ...formData, user_ids: userIdsString });
   };
 
   const handleCreateBroadCast = async () => {
@@ -73,12 +74,11 @@ const CreateBroadcast = () => {
         formData.notice_discription
       );
       formDataSend.append("notice[expiry_date]", formData.expiry_date);
+      formDataSend.append("notice[user_ids]", formData.user_ids);
 
-      formData.user_ids.forEach((user_id) => {
-        formDataSend.append("notice[user_ids][]", user_id);
-      });
+      
       formData.notice_image.forEach((file) => {
-        formDataSend.append("notice_image[]", file);
+        formDataSend.append("attachfiles[]", file);
       });
 
       const response = await postBroadCast(formDataSend);
@@ -108,11 +108,11 @@ const CreateBroadcast = () => {
         >
           Create Broadcast
         </h2>
-        <div className="mx-20 my-5 mb-10 border  p-5 px-10 rounded-lg shadow-xl">
+        <div className="md:mx-20 my-5 mb-10 md:border md:p-5 md:px-10 rounded-lg md:shadow-xl">
           <h2 className="border-b text-center text-xl border-black mb-6 font-bold">
             Communication Info
           </h2>
-          <div className="flex flex-col gap-4 mx-20">
+          <div className="flex flex-col gap-4 md:mx-20">
             <div className="flex flex-col">
               <label htmlFor="" className="font-semibold">
                 Title :
@@ -141,7 +141,7 @@ const CreateBroadcast = () => {
                 className="border px-2 p-1 rounded-md border-gray-400 placeholder:text-sm"
               />
             </div>
-            <div className="flex justify-between">
+            <div className="flex justify-between md:flex-row flex-col gap-2">
               <div className="flex flex-col">
                 <p className="font-medium">Expire On</p>
                 <ReactDatePicker
@@ -152,7 +152,7 @@ const CreateBroadcast = () => {
                   placeholderText="Select Date & Time"
                   ref={datePickerRef}
                   minDate={currentDate}
-                  className="border border-black p-1 rounded-md"
+                  className="border border-black w-full p-1 rounded-md"
                 />
               </div>
               <div className="flex gap-2 items-center">

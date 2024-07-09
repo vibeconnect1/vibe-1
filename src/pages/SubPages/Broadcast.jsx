@@ -20,15 +20,18 @@ const Broadcast = () => {
     setUser(userType);
     const fetchBroadCast = async () => {
       const broadcastResp = await getBroadCast();
-      setFilteredData(broadcastResp.data);
-      setBroadcast(broadcastResp.data);
+      const sortedBroadcast = broadcastResp.data.sort((a, b)=> {
+        return new Date(b.created_at) - new Date(a.created_at)
+      })
+      setFilteredData(sortedBroadcast);
+      setBroadcast(sortedBroadcast);
       console.log(broadcastResp);
     };
     fetchBroadCast();
   }, []);
   const dateFormat = (dateString) => {
     const date = new Date(dateString);
-    return date.toLocaleString();
+    return date.toLocaleDateString()
   };
 
   const column = [
