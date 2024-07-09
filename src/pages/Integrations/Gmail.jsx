@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Navbar from "../../components/Navbar";
 import {
   addGmailAuthenticate,
@@ -18,7 +18,8 @@ import {
 } from "react-icons/fa";
 import { useSelector } from "react-redux";
 import GmailComposeModal from "../../containers/modals/IntegrationModal/GmailComposeModal";
-
+import DatePicker from "react-datepicker";
+import Select from "react-select";
 const Gmail = () => {
   const themeColor = useSelector((state)=> state.theme.color)
   const user_id = getItemInLocalStorage("VIBEUSERID");
@@ -39,6 +40,87 @@ const Gmail = () => {
   const [filteredMessages, setFilteredMessages] = useState(messages);
   const [showPopup, setShowPopup] = useState(false);
   const [isGmailCompose, setIsGmailCompose] = useState(false);
+  const [taskTitle, setTaskTitle] = useState(""); // State for task title
+  const [due_date, setDueDate] = useState(new Date());
+  const [task_description, setTaskDescription] = useState("");
+  const [eventDescription, setEventDescription] = useState("");
+  const [meetingTitle, setMeetingTitle] = useState("");
+  const [meetingDate, setMeetingDate] = useState("");
+  const [meetingDescription, setMeetingDescription] = useState("");
+  const [meetingStartTime, setMeetingStartTime] = useState("");
+  const [meetingEndTime, setMeetingEndTime] = useState("");
+  const [meetingLink, setMeetingLink] = useState("");
+  const [eventTitle, setEventTitle] = useState("");
+  const [activeButton, setActiveButton] = useState("task");
+  const [attachments, setAttachment] = useState([]);
+  const [eventAttachment, setEventAttachment] = useState([]);
+  const [emails, setEmails] = useState([]);
+  const fileInputRef = useRef(null);
+  const handleFileAttachment = (event) => {
+    const selectedFiles = event.target.files;
+    const newAttachments = Array.from(selectedFiles);
+    setAttachment(newAttachments);
+  };
+
+  const handleEventFileAttachment = (event) => {
+    const selectedFiles = event.target.files;
+    const newAttachments = Array.from(selectedFiles);
+    setEventAttachment(newAttachments);
+  };
+  var handleChangeSelect = (selectedOption) => {
+    console.log(selectedOption);
+    setSelectedOption(selectedOption);
+  };
+
+  const handleSaveTask = () => {
+    if (!taskTitle) {
+      //alert('Please fill in all the fields before creating the task.');
+      return;
+    }
+    const user_id = localStorage.getItem("user_id");
+
+    const formData = new FormData();
+    formData.append("task_topic", taskTitle);
+    formData.append("due_date", formatDate(due_date));
+    formData.append("created_by", user_id);
+    formData.append("user_id", user_id);
+    formData.append("task_description", task_description);
+
+    attachments.forEach((file, index) => {
+      // formData.append(`attachments${index}`, file); // Append each file individually with a unique key
+      formData.append("attachments", file);
+    });
+    if (selectedOption) {
+      const idList = selectedOption.map((email) => parseInt(email.value));
+      idList.forEach((id) => {
+        formData.append("assign_to", id);
+      });
+    }
+
+    setIsCreatingTask(true);
+    postDataToAPI(AddBoardChecklistTask, formData)
+      .then((response) => {
+        if (response.success) {
+          //alert("Task Created !")
+
+          //   onClose();
+          window.location.reload();
+        } else {
+          console.log("unsuccess");
+        }
+      })
+      .catch((error) => {
+        //alert('Please check your internet and try again!');
+      })
+      .finally(() => {
+        setIsCreatingTask(false);
+      });
+  };
+  const handleButtonToggle = (type) => {
+    setActiveButton(type);
+  };
+
+
   useEffect(() => {
     setFilteredMessages(messages);
   }, [messages]);
@@ -356,6 +438,30 @@ const Gmail = () => {
   };
   console.log(selectedTab)
 
+  const handleAddClick = (id) => {
+    const selected = messages.find((message) => message.id === id);
+    if (selected) {
+      const taskTitle =
+        selected.payload.headers.find((header) => header.name === "Subject")
+          ?.value || "No Subject";
+      const taskDescription = selected.snippet || "No Snippet";
+      setTaskTitle(taskTitle);
+      setTaskDescription(taskDescription);
+      setEventTitle(taskTitle);
+      setEventDescription(taskDescription);
+      setMeetingTitle(taskTitle);
+      setMeetingDescription(taskDescription);
+      setShowPopup(!showPopup);
+    } else {
+     
+    }
+  };
+
+  const closePopup = () => {
+    setShowPopup(false);
+    setSelectedMessage(null); // Reset the selected message
+  };
+
   return (
     <section
       className="flex"
@@ -537,10 +643,112 @@ const Gmail = () => {
                   </div>
                 )}
 
-                {showPopup && (
-                  <div className="popup">
-                    <div className="popup-content ">
-                      <div style={{ display: "flex" }}>
+                
+
+                {selectedTab === "Sent" && (
+                  <div
+                  className="flex flex-col gap-2 rounded-md mb-4"
+                  style={{
+                    
+                    overflowY: "scroll",
+                    overflowX: "hidden",
+                  }}
+                  >
+                    {filteredMessages.map((messageInfo) => {
+                      const result = {
+                        Date: "",
+                        To: "",
+                        Subject: "",
+                      };
+                      messageInfo.payload.headers.forEach((header) => {
+                        if (header.name === "Date") {
+                          // result.Date = header.value;
+                          const date = new Date(header.value);
+                          const options = {
+                            year: "numeric",
+                            month: "long",
+                            day: "numeric",
+                            hour: "numeric",
+                            minute: "numeric",
+                          };
+                          result.Date = date.toLocaleString(undefined, options);
+                        } else if (header.name === "To") {
+                          result.From = header.value;
+                        } else if (header.name === "Subject") {
+                          result.Subject = header.value;
+                        }
+                      });
+
+                      return (
+                        <div
+                        className="bg-white p-2 "
+                        style={{
+                          borderRadius: 5,
+                          boxShadow: " 2px 2px #55555515",
+                        }}
+                          key={messageInfo.id}
+                        >
+                          <div className="flex justify-between">
+                            <div
+                              className="font-medium"
+                              
+                            >
+                              <p>{result.From} </p>
+                            </div>
+                            <div className="col-md-4">
+                              <span style={{ fontSize: 14 }}>
+                                {result.Date}
+                              </span>
+                            </div>
+                            <div className="flex gap-2 items-center">
+                              {" "}
+                              <FaCalendarAlt
+                                className="pull-right"
+                                style={{ marginRight: "8px" }}
+                              />
+                              <FaTasks className="pull-right" />{" "}
+                            </div>
+                          </div>
+                          <div style={{ fontWeight: 500 }}>
+                            {result.Subject}{" "}
+                          </div>
+                          <div style={{ color: "#6d6d6d" }}>
+                            <a
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              style={{ color: "#6d6d6d" }}
+                              href={`https://mail.google.com/mail/u/0/#inbox/${messageInfo.id}`}
+                            >
+                              {messageInfo.snippet}
+                            </a>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                )}
+              </>
+            )}
+
+            <div className="flex justify-end">
+              <div
+                onClick={logout}
+                style={{ cursor: "pointer" }}
+                className=" right-5 bottom-10 flex items-center gap-2 bg-white p-1 px-4 rounded-md shadow-custom-all-sides font-medium "
+              >
+                <FaSignOutAlt /> Logout
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      {showPopup && (
+                  <div className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-30 backdrop-blur-sm z-50 p-10">
+                  <div
+                    style={{ background: themeColor }}
+                    className="md:w-auto w-full p-4  flex flex-col rounded-md overflow-auto max-h-[100%] hide-scrollbar"
+                  >
+                    <div className="">
                         <div className="button-container">
                           <button
                             className={`toggle-button ${
@@ -567,7 +775,7 @@ const Gmail = () => {
                             Meeting
                           </button>
                         </div>
-                        <img
+                        {/* <img
                           width="20px"
                           height="20px"
                           src={ClosePopUp}
@@ -579,7 +787,7 @@ const Gmail = () => {
                             marginLeft: "auto",
                           }}
                           onClick={closePopup}
-                        />
+                        /> */}
                       </div>
                       &nbsp;&nbsp;
                       {activeButton === "task" && (
@@ -644,7 +852,7 @@ const Gmail = () => {
                                   showTimeSelect
                                   dateFormat="dd/MM/yyyy h:mm aa"
                                   // className="datepickers_date"
-                                  customInput={<CustomInput />}
+                                  // customInput={<CustomInput />}
                                 />
                               </div>
 
@@ -1271,104 +1479,6 @@ const Gmail = () => {
                     </div>
                   </div>
                 )}
-
-                {selectedTab === "Sent" && (
-                  <div
-                  className="flex flex-col gap-2 rounded-md mb-4"
-                  style={{
-                    
-                    overflowY: "scroll",
-                    overflowX: "hidden",
-                  }}
-                  >
-                    {filteredMessages.map((messageInfo) => {
-                      const result = {
-                        Date: "",
-                        To: "",
-                        Subject: "",
-                      };
-                      messageInfo.payload.headers.forEach((header) => {
-                        if (header.name === "Date") {
-                          // result.Date = header.value;
-                          const date = new Date(header.value);
-                          const options = {
-                            year: "numeric",
-                            month: "long",
-                            day: "numeric",
-                            hour: "numeric",
-                            minute: "numeric",
-                          };
-                          result.Date = date.toLocaleString(undefined, options);
-                        } else if (header.name === "To") {
-                          result.From = header.value;
-                        } else if (header.name === "Subject") {
-                          result.Subject = header.value;
-                        }
-                      });
-
-                      return (
-                        <div
-                        className="bg-white p-2 "
-                        style={{
-                          borderRadius: 5,
-                          boxShadow: " 2px 2px #55555515",
-                        }}
-                          key={messageInfo.id}
-                        >
-                          <div className="flex justify-between">
-                            <div
-                              className="font-medium"
-                              
-                            >
-                              <p>{result.From} </p>
-                            </div>
-                            <div className="col-md-4">
-                              <span style={{ fontSize: 14 }}>
-                                {result.Date}
-                              </span>
-                            </div>
-                            <div className="flex gap-2 items-center">
-                              {" "}
-                              <FaCalendarAlt
-                                className="pull-right"
-                                style={{ marginRight: "8px" }}
-                              />
-                              <FaTasks className="pull-right" />{" "}
-                            </div>
-                          </div>
-                          <div style={{ fontWeight: 500 }}>
-                            {result.Subject}{" "}
-                          </div>
-                          <div style={{ color: "#6d6d6d" }}>
-                            <a
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              style={{ color: "#6d6d6d" }}
-                              href={`https://mail.google.com/mail/u/0/#inbox/${messageInfo.id}`}
-                            >
-                              {messageInfo.snippet}
-                            </a>
-                          </div>
-                        </div>
-                      );
-                    })}
-                  </div>
-                )}
-              </>
-            )}
-
-            <div className="flex justify-end">
-              <div
-                onClick={logout}
-                style={{ cursor: "pointer" }}
-                className=" right-5 bottom-10 flex items-center gap-2 bg-white p-1 px-4 rounded-md shadow-custom-all-sides font-medium "
-              >
-                <FaSignOutAlt /> Logout
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
     </section>
   );
 };

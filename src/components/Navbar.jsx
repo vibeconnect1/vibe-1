@@ -143,7 +143,7 @@ const Navbar = () => {
             {/* <Link  className=" text-white" >
           
         </Link> */}
-              <NavLink
+              {/* <NavLink
                 to={`/admin/profile`}
                 className={({ isActive }) =>
                   ` ${
@@ -155,7 +155,7 @@ const Navbar = () => {
               >
                 <div>
                   {React.createElement(BsPersonCircle , { size: "25" })}
-                  {/* <img src={image} width={100} height={100} alt="forum-profile" /> */}
+                
                 </div>
                 <h2
                   className={`whitespace-pre duration-300 ${
@@ -171,7 +171,7 @@ const Navbar = () => {
                 >
                   {firstName} {lastName}
                 </h2>
-              </NavLink>
+              </NavLink> */}
               <NavLink
                 to={"/dashboard"}
                 className={({ isActive }) =>
@@ -1417,7 +1417,7 @@ const Navbar = () => {
                 </h2>
               </NavLink> */}
               {/* {siteId === 25 ? */}
-              <NavLink
+              {/* <NavLink
                 to={`/profile`}
                 className={({ isActive }) =>
                   ` ${
@@ -1429,7 +1429,7 @@ const Navbar = () => {
               >
                 <div>
                   {React.createElement(BsPersonCircle , { size: "25" })}
-                  {/* <img src={image} width={100} height={100} alt="forum-profile" /> */}
+                 
                 </div>
                 <h2
                   className={`whitespace-pre duration-300 ${
@@ -1445,7 +1445,7 @@ const Navbar = () => {
                 >
                   {firstName} {lastName}
                 </h2>
-              </NavLink>
+              </NavLink> */}
               {feat.includes("tickets") && (
                 <NavLink
                   to={"/mytickets"}
