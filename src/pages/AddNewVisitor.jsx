@@ -1,41 +1,53 @@
 import React, { useState, useRef } from "react";
 import image from "/profile.png";
-import { FaTrash } from 'react-icons/fa';
+import { FaTrash } from "react-icons/fa";
+import { useSelector } from "react-redux";
+import { getItemInLocalStorage } from "../utils/localStorage";
+import toast from "react-hot-toast";
+import { postNewVisitor } from "../api";
 
 const AddNewVisitor = () => {
+  const siteId = getItemInLocalStorage("SITEID");
+  const userId = getItemInLocalStorage("UserId");
   const [behalf, setbehalf] = useState("Visitor");
   const inputRef = useRef(null);
   const [imageFile, setImageFile] = useState(null);
-  const [visitors, setVisitors] = useState([{ name: '', mobile: '' }]);
+  const [visitors, setVisitors] = useState([{ name: "", mobile: "" }]);
+  const [formData, setFormData] = useState({
+    visitorName: "",
+    mobile: "",
+    purpose: "",
+  });
+  console.log(formData)
 
   const handleAddVisitor = (event) => {
     event.preventDefault();
-    setVisitors([...visitors, { name: '', mobile: '' }]);
-};
+    setVisitors([...visitors, { name: "", mobile: "" }]);
+  };
 
-const handleInputChange = (index, event) => {
+  const handleInputChange = (index, event) => {
     const { name, value } = event.target;
     const newVisitors = [...visitors];
     newVisitors[index][name] = value;
     setVisitors(newVisitors);
-};
+  };
 
-const handleRemoveVisitor = (index) => {
+  const handleRemoveVisitor = (index) => {
     const newVisitors = [...visitors];
     newVisitors.splice(index, 1);
     setVisitors(newVisitors);
-};
+  };
 
   const getHeadingText = () => {
     switch (behalf) {
-      case 'Visitor':
-        return 'NEW VISITOR';
-      case 'Delivery':
-        return 'DELIVERY & SUPPORT STAFF';
-      case 'Cab':
-        return 'CAB';
+      case "Visitor":
+        return "NEW VISITOR";
+      case "Delivery":
+        return "DELIVERY & SUPPORT STAFF";
+      case "Cab":
+        return "CAB";
       default:
-        return 'CREATE VISITOR';
+        return "CREATE VISITOR";
     }
   };
 
@@ -46,39 +58,51 @@ const handleRemoveVisitor = (index) => {
   const handleImageChange = (event) => {
     setImageFile(event.target.files[0]);
   };
+  const themeColor = useSelector((state) => state.theme.color);
+
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const createNewVisitor = async () => {
+    if (
+      formData.visitorName === "" ||
+      formData.purpose === "" ||
+      formData.mobile ===""
+    ) {
+      return toast.error("All fields are Required");
+    }
+
+    const postData = new FormData();
+    postData.append("visitor[site_id]", siteId);
+    postData.append("visitor[created_by_id]", userId);
+    postData.append("visitor[name]", formData.visitorName);
+    postData.append("visitor[contact_no]", formData.mobile);
+    postData.append("visitor[purpose]", formData.purpose);
+    try {
+      const visitResp = await postNewVisitor(postData)
+      console.log(visitResp)
+    } catch (error) {
+      console.log(error)
+    }
+  };
 
   return (
-    <div className="flex justify-center items-center my-5 w-full p-4">
-      <form className="border border-gray-300 rounded-lg p-4 w-full mx-4 max-h-screen overflow-y-auto">
-        <h2 className="text-center md:text-xl font-bold p-2 bg-black rounded-full text-white">
+    <div className="flex justify-center items-center  w-full p-4">
+      <div className="md:border border-gray-300 rounded-lg md:p-4 w-full md:mx-4 ">
+        <h2
+          style={{ background: themeColor }}
+          className="text-center md:text-xl font-bold p-2 bg-black rounded-full text-white"
+        >
           {getHeadingText()}
         </h2>
         <br />
-        {/* <div className="grid grid-cols-1 md:grid-cols-4 items-center gap-5">
-          <p className="font-semibold">For :</p>
-          <div className="flex flex-col md:flex-row gap-5">
-            <p
-              className={`border-2 p-1 px-6 border-black font-medium rounded-full cursor-pointer ${behalf === "Visitor" && "bg-black text-white"}`}
-              onClick={() => setbehalf("Visitor")}
-            >
-              Visitor
-            </p>
-            <p
-              className={`border-2 p-1 px-6 border-black font-medium rounded-full cursor-pointer ${behalf === "Delivery" && "bg-black text-white"}`}
-              onClick={() => setbehalf("Delivery")}
-            >
-              Delivery
-            </p>
-            <p
-              className={`border-2 p-1 px-6 border-black font-medium rounded-full cursor-pointer ${behalf === "Cab" && "bg-black text-white"}`}
-              onClick={() => setbehalf("Cab")}
-            >
-              Cab
-            </p>
-          </div>
-        </div> */}
+
         {behalf !== "Cab" && behalf !== "Delivery" && (
-          <div onClick={handleImageClick} className="cursor-pointer flex justify-center items-center my-4">
+          <div
+            onClick={handleImageClick}
+            className="cursor-pointer flex justify-center items-center my-4"
+          >
             {imageFile ? (
               <img
                 src={URL.createObjectURL(imageFile)}
@@ -101,52 +125,59 @@ const handleRemoveVisitor = (index) => {
           </div>
         )}
 
-
-<div className="flex flex-col gap-4">
-  <div className="flex items-center">
-    <input type="radio" id="guest" name="attendance" value="guest" />
-    <label htmlFor="guest" className="font-semibold ml-2">Guest</label>
-    <div className="flex items-center ml-16">
-      &nbsp;&nbsp;&nbsp;&nbsp;
-      <input type="radio" id="once" name="frequency" value="once" />
-      <label htmlFor="once" className="font-semibold ml-2">Once</label>
-    </div>
-  </div>
-  <div className="flex items-center mt-2">
-    <input type="radio" id="staff" name="attendance" value="staff" />
-    <label htmlFor="staff" className="font-semibold ml-2">Support Staff</label>
-    <div className="flex items-center ml-6">
-      <input type="radio" id="frequently" name="frequency" value="frequently" />
-      <label htmlFor="frequently" className="font-semibold ml-2">Frequently</label>
-    </div>
-  </div>
-</div>
-
-
+        <div className="flex md:flex-row flex-col  my-5 gap-10">
+          <div className="flex gap-2 flex-col">
+            <h2 className="font-semibold">Visitor Type :</h2>
+            <div className="flex items-center gap-5">
+              <div className="flex items-center gap-2">
+                <input
+                  type="radio"
+                  id="guest"
+                  name="attendance"
+                  value="guest"
+                />
+                <label htmlFor="guest" className="font-semibold ">
+                  Guest
+                </label>
+              </div>
+              <div className="flex items-center gap-2">
+                <input
+                  type="radio"
+                  id="staff"
+                  name="attendance"
+                  value="staff"
+                />
+                <label htmlFor="staff" className="font-semibold ">
+                  Support Staff
+                </label>
+              </div>
+            </div>
+          </div>
+          <div className="flex gap-2 flex-col">
+            <h2 className="font-semibold">Visiting Frequency :</h2>
+            <div className="flex items-center gap-4 ">
+              <div className="flex items-center gap-2 ">
+                <input type="radio" id="once" name="frequency" value="once" />
+                <label htmlFor="once" className="font-semibold">
+                  Once
+                </label>
+              </div>
+              <div className="flex items-center gap-2">
+                <input
+                  type="radio"
+                  id="frequently"
+                  name="frequency"
+                  value="frequently"
+                />
+                <label htmlFor="frequently" className="font-semibold ">
+                  Frequently
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
 
         <div className="grid md:grid-cols-3 gap-5">
-          {behalf !== "Cab" && (
-            <div className="grid gap-2 items-center w-full">
-              <label htmlFor="mobileNumber" className="font-semibold">
-                Mobile Number:
-              </label>
-              <input
-                type="number"
-                id="mobileNumber"
-                className="border border-gray-400 p-2 rounded-md"
-                placeholder="Enter Mobile Number"
-              />
-            </div>
-          )}
-
-
-
-        <div className="grid gap-2 items-center w-full">
-            <label htmlFor="">Host</label>
-            <select className="border border-gray-400 p-2 rounded-md"><option value="">Select Person to meet</option>
-            <option value="">b</option></select>
-
-            </div>
           {behalf !== "Cab" && (
             <div className="grid gap-2 items-center w-full">
               <label htmlFor="visitorName" className="font-semibold">
@@ -154,12 +185,41 @@ const handleRemoveVisitor = (index) => {
               </label>
               <input
                 type="text"
+                value={formData.visitorName}
+                onChange={handleChange}
+                name="visitorName"
                 id="visitorName"
                 className="border border-gray-400 p-2 rounded-md"
                 placeholder="Enter Visitor Name"
               />
             </div>
           )}
+          {behalf !== "Cab" && (
+            <div className="grid gap-2 items-center w-full">
+              <label htmlFor="mobileNumber" className="font-semibold">
+                Mobile Number :
+              </label>
+              <input
+                type="number"
+                value={formData.mobile}
+                onChange={handleChange}
+                name="mobile"
+                id="mobileNumber"
+                className="border border-gray-400 p-2 rounded-md"
+                placeholder="Enter Mobile Number"
+              />
+            </div>
+          )}
+
+          <div className="grid gap-2 items-center w-full">
+            <label htmlFor="" className="font-medium">
+              Host :
+            </label>
+            <select className="border border-gray-400 p-2 rounded-md">
+              <option value="">Select Person to meet</option>
+              <option value="">b</option>
+            </select>
+          </div>
 
           {behalf !== "Delivery" && behalf !== "Cab" && (
             <div className="grid gap-2 items-center w-full">
@@ -244,13 +304,16 @@ const handleRemoveVisitor = (index) => {
               </label>
               <select
                 id="purpose"
+                value={formData.purpose}
+                onChange={handleChange}
+                name="purpose"
                 className="border border-gray-400 p-2 rounded-md"
               >
                 <option value="Meeting">Meeting</option>
                 <option value="Delivery">Delivery</option>
                 <option value="Personal">Personal</option>
                 <option value="Fitout Staff">Fitout Staff</option>
-                <option value="other">Other</option>
+                <option value="Other">Other</option>
               </select>
             </div>
           )}
@@ -289,55 +352,67 @@ const handleRemoveVisitor = (index) => {
             </div>
           )}
 
+          {visitors.map((visitor, index) => (
+            <div key={index}>
+              <div className="grid gap-2 items-center w-full">
+                <label htmlFor="" className="font-semibold">
+                  Name:
+                </label>
+                <input
+                  type="text"
+                  placeholder="Name"
+                  name="name"
+                  className="border border-gray-400 p-2 rounded-md"
+                  value={visitor.name}
+                  onChange={(event) => handleInputChange(index, event)}
+                />
+              </div>
+              &nbsp;&nbsp;
+              <div className="grid gap-2 items-center w-full">
+                <label htmlFor="" className="font-semibold">
+                  Mobile:
+                </label>
+                <input
+                  type="text"
+                  placeholder="Mobile Number"
+                  name="mobile"
+                  className="border border-gray-400 p-2 rounded-md"
+                  value={visitor.mobile}
+                  onChange={(event) => handleInputChange(index, event)}
+                />
+                <button onClick={() => handleRemoveVisitor(index)}>
+                  <FaTrash />
+                </button>
+                &nbsp;
+              </div>
+            </div>
+          ))}
 
-
-{visitors.map((visitor, index) => (
-                <div key={index}>
-                     <div className="grid gap-2 items-center w-full">
-                    <label htmlFor="" className="font-semibold">Name:</label>
-                    <input 
-                        type="text"
-                        placeholder="Name"
-                        name="name"
-                        className="border border-gray-400 p-2 rounded-md"
-                        value={visitor.name}
-                        onChange={(event) => handleInputChange(index, event)}
-                    />
-                    </div>
-                    &nbsp;&nbsp;
-                    <div className="grid gap-2 items-center w-full">
-                    <label htmlFor="" className="font-semibold">Mobile:</label>
-                    <input
-                        type="text"
-                        placeholder="Mobile Number"
-                        name="mobile"
-                        className="border border-gray-400 p-2 rounded-md"
-                        value={visitor.mobile}
-                        onChange={(event) => handleInputChange(index, event)}
-                    />
-                    <button onClick={() => handleRemoveVisitor(index)}><FaTrash /></button>&nbsp;
-                    </div>
-                </div>
-            ))}
-
-<span>
-            <input type="checkbox" />&nbsp;<label htmlFor="">Skip Host Approval</label>&nbsp;&nbsp;&nbsp;
-            <input type="checkbox" />&nbsp;&nbsp;<label htmlFor="">Goods Inwards</label></span>
+          <span>
+            <input type="checkbox" />
+            &nbsp;<label htmlFor="">Skip Host Approval</label>&nbsp;&nbsp;&nbsp;
+            <input type="checkbox" />
+            &nbsp;&nbsp;<label htmlFor="">Goods Inwards</label>
+          </span>
         </div>
         <div>
-
-            <button onClick={handleAddVisitor} className="bg-black text-white hover:bg-gray-700 font-semibold py-2 px-4 rounded">Add Additional Visitor</button>
+          <button
+            onClick={handleAddVisitor}
+            className="bg-black text-white hover:bg-gray-700 font-semibold py-2 px-4 rounded"
+          >
+            Add Additional Visitor
+          </button>
         </div>
 
         <div className="flex gap-5 justify-center items-center my-4">
           <button
-            type="submit"
+            onClick={createNewVisitor}
             className="bg-black text-white hover:bg-gray-700 font-semibold py-2 px-4 rounded"
           >
             CREATE
           </button>
         </div>
-      </form>
+      </div>
     </div>
   );
 };

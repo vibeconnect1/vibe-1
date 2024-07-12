@@ -413,10 +413,6 @@ export const getRoutineTaskDetails = async (assetId, activityId) =>
     }
   );
 
-  
-
-
-
 export const getAssetPPMActivityDetails = async (assetId) =>
   axiosInstance.get(
     `/submissions.json?q[asset_id_eq]=${assetId}&q[checklist_ctype_eq]=ppm`,
@@ -449,6 +445,12 @@ export const getAssetReadingDetails = async (assetId) =>
 
 export const getSetupUsers = async () =>
   axiosInstance.get("/users.json", {
+    params: {
+      token: token,
+    },
+  });
+export const postNewVisitor = async (data) =>
+  axiosInstance.post("/visitors.json", data, {
     params: {
       token: token,
     },
@@ -617,6 +619,27 @@ export const getServicesRoutineDetails = async (id) =>
     },
   });
 
+// setup
+export const getBuildings = async () =>
+  axiosInstance.get(`/buildings.json`, {
+    params: {
+      token: token,
+    },
+  });
+
+export const getSites = async () =>
+  axiosInstance.get(`/sites.json`, {
+    params: {
+      token: token,
+    },
+  });
+export const getSiteDetails = async (id) =>
+  axiosInstance.get(`/sites/${id}.json`, {
+    params: {
+      token: token,
+    },
+  });
+
 // vibe
 
 export const vibeLogin = async (data) => vibeAuth.post("/api/login/", data);
@@ -656,7 +679,7 @@ export const getVibeUsers = async (vibeUserId) => {
     throw error;
   }
 };
-export const getProjectUsers = async (vibeUserId,vibeOrgId) => {
+export const getProjectUsers = async (vibeUserId, vibeOrgId) => {
   try {
     const response = await vibeAuth.get(
       `/api/employee/get-users/?user_id=${vibeUserId}&org_id=${vibeOrgId}&os:false`,
@@ -1186,11 +1209,14 @@ export const postVibeChecklist = async (data) => {
     throw error;
   }
 };
-export const deleteVibeTaskChecklist = async (taskDeleteIDCheckList, user_id) => {
+export const deleteVibeTaskChecklist = async (
+  taskDeleteIDCheckList,
+  user_id
+) => {
   try {
     const response = await vibeAuth.delete(
       `/api/employee/task/checklist/trash/?checklist_id=${taskDeleteIDCheckList}&user_id=${user_id}`,
-      
+
       {
         headers: {
           "Content-Type": "multipart/form-data",
@@ -1254,11 +1280,11 @@ export const createVibeChecklistSubTask = async (data) => {
     throw error;
   }
 };
-export const deleteVibeSubTask = async (taskId,userId) => {
+export const deleteVibeSubTask = async (taskId, userId) => {
   try {
     const response = await vibeAuth.delete(
       `/api/employee/task/checklist/task/trash/?task_id=${taskId}&user_id=${userId}`,
-     
+
       {
         headers: {
           "Content-Type": "multipart/form-data",
@@ -1275,7 +1301,7 @@ export const createVibeChildSubTask = async (data) => {
   try {
     const response = await vibeAuth.post(
       `/api/employee/subtask/child/create/`,
-     data,
+      data,
       {
         headers: {
           "Content-Type": "multipart/form-data",
@@ -1292,7 +1318,7 @@ export const updateSubTaskChild = async (data) => {
   try {
     const response = await vibeAuth.put(
       `/api/employee/subtask/child/update/`,
-     data,
+      data,
       {
         headers: {
           "Content-Type": "multipart/form-data",
@@ -1305,11 +1331,11 @@ export const updateSubTaskChild = async (data) => {
     throw error;
   }
 };
-export const deleteTaskChecklistSubTaskChild = async (taskChildId,userId) => {
+export const deleteTaskChecklistSubTaskChild = async (taskChildId, userId) => {
   try {
     const response = await vibeAuth.delete(
       `/api/employee/subtask/child/delete/?task_child_id=${taskChildId}&user_id=${userId}`,
-     
+
       {
         headers: {
           "Content-Type": "multipart/form-data",
@@ -1326,7 +1352,7 @@ export const addVibeTaskAttachment = async (data) => {
   try {
     const response = await vibeAuth.post(
       `/api/employee/task/add-attachment/`,
-     data,
+      data,
       {
         headers: {
           "Content-Type": "multipart/form-data",
@@ -1343,7 +1369,7 @@ export const deleteVibeTaskAttachment = async (attachmentId, taskId) => {
   try {
     const response = await vibeAuth.delete(
       `/api/employee/task/delete-attachment/?attachment_id=${attachmentId}&task_id=${taskId}`,
-     
+
       {
         headers: {
           "Content-Type": "multipart/form-data",
@@ -1358,15 +1384,11 @@ export const deleteVibeTaskAttachment = async (attachmentId, taskId) => {
 };
 export const postNewProjectBoard = async (data) => {
   try {
-    const response = await vibeAuth.post(
-      `/api/employee/add-board/`,
-     data,
-      {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      }
-    );
+    const response = await vibeAuth.post(`/api/employee/add-board/`, data, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
     return response.data;
   } catch (error) {
     console.error("Error posting new board :", error);
@@ -1377,7 +1399,7 @@ export const getVibeSocialData = async (userId) => {
   try {
     const response = await vibeAuth.get(
       `/api/employee/social-media/get-auth-info/?user_id=${userId}`,
-    
+
       {
         headers: {
           "Content-Type": "multipart/form-data",
@@ -1394,7 +1416,7 @@ export const getGmailAuthenticate = async (platform) => {
   try {
     const response = await vibeAuth.get(
       `/api/employee/social-media/gmail/get-auth/?platform=${platform}`,
-    
+
       {
         headers: {
           "Content-Type": "multipart/form-data",
@@ -1411,7 +1433,7 @@ export const updateLoginGmailStatus = async (data) => {
   try {
     const response = await vibeAuth.put(
       `/api/employee/social-media/gmail/update-status-login/`,
-    data,
+      data,
       {
         headers: {
           "Content-Type": "multipart/form-data",
@@ -1428,7 +1450,7 @@ export const addGmailAuthenticate = async (data) => {
   try {
     const response = await vibeAuth.post(
       `/api/employee/social-media/gmail/create-auth/`,
-    data,
+      data,
       {
         headers: {
           "Content-Type": "multipart/form-data",
@@ -1438,6 +1460,72 @@ export const addGmailAuthenticate = async (data) => {
     return response.data;
   } catch (error) {
     console.error("Error adding gmail data :", error);
+    throw error;
+  }
+};
+export const getVibeUserBoard = async (userId) => {
+  try {
+    const response = await vibeAuth.get(
+      `/api/employee/get-user-board/?user_id=${userId}`,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error adding gmail data :", error);
+    throw error;
+  }
+};
+export const deleteVibeUserBoard = async (boardId) => {
+  try {
+    const response = await vibeAuth.delete(
+      `/api/employee/delete-board?board_id=${boardId}`,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error deleting board :", error);
+    throw error;
+  }
+};
+export const updateVibeBoardDate = async (data) => {
+  try {
+    const response = await vibeAuth.put(
+      `/api/employee/board/update_date/`,
+      data,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error updating board date :", error);
+    throw error;
+  }
+};
+export const getVibeBoardTemplate = async () => {
+  try {
+    const response = await vibeAuth.get(
+      `/api/employee/get-template/`,
+
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error Getting project template :", error);
     throw error;
   }
 };

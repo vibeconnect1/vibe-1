@@ -1,9 +1,11 @@
 import React from 'react';
+import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 
 function Polls() {
+  const themeColor = useSelector((state)=> state.theme.color)
   return (
-    <div className='mt-10'>
+    <div className='my-2'>
       <div className="flex justify-between md:flex-row flex-col mb-4">
         <input
           type="text"
@@ -12,7 +14,8 @@ function Polls() {
         />
         <Link
           to={`/admin/create-polls`}
-          className="font-semibold border-2 border-black px-4 py-2 flex gap-2 items-center rounded-md"
+          style={{background: themeColor}}
+          className="font-semibold text-white px-4 py-1 flex gap-2 items-center rounded-md"
         >
           Create Polls
         </Link>

@@ -17,6 +17,8 @@ import {
   postNewProjectBoard,
 } from "../api";
 import CustomBoardCreate from "./SubPages/Projectmanagement/BoardCreation";
+import ProjectBoard from "./SubPages/Projectmanagement/ProjectBoard";
+import ProjectBoardTemplate from "./SubPages/Projectmanagement/ProjectBoardTemplate";
 
 const ProjectManagement = () => {
   const currentDate = new Date();
@@ -181,8 +183,8 @@ const ProjectManagement = () => {
       const boardResp = await postNewProjectBoard(formData);
       if (boardResp.success) {
         console.log("success");
-        setboard_id_for_Temp(response.data.id);
-        console.log(response.data.id);
+        setboard_id_for_Temp(boardResp.data.id);
+        console.log(boardResp.data.id);
 
         setIsTemplateModalOpen(true);
       } else {
@@ -238,7 +240,11 @@ const ProjectManagement = () => {
                 todayDate={todayDate}
               />
             )}
+            {isTemplateModalOpen && (
+              <ProjectBoardTemplate isOpen={isTemplateModalOpen} closeProjectModal={closeProjectModal} />
+            )}
           </div>
+          <ProjectBoard />
         </section>
       </div>
     </section>

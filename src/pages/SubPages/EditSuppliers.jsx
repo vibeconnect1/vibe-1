@@ -47,6 +47,12 @@ const EditSuppliers = () => {
     if (!formData.company_name || !formData.vendor_name) {
       return toast.error("All fields are Required!");
     }
+    if (formData.email &&!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+      return toast.error("Invalid email address!");
+    }
+    if (formData.secondary_email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.secondary_email)) {
+      return toast.error("Invalid Secondary Email!");
+    }
 
     const sendData = new FormData();
     sendData.append("vendor[site_id]", siteId);
@@ -164,6 +170,12 @@ const EditSuppliers = () => {
                 onChange={handleChange}
                 placeholder="Phone"
                 className="border p-1 px-4 border-gray-500 rounded-md"
+                pattern="[0-9]*"
+                onKeyDown={(e) => {
+                  if (!/[0-9]/.test(e.key) && e.key !== "Backspace" && e.key !== "ArrowLeft" && e.key !== "ArrowRight") {
+                    e.preventDefault();
+                  }
+                }}
               />
             </div>
             <div className="flex flex-col gap-2">
@@ -176,8 +188,14 @@ const EditSuppliers = () => {
                 value={formData.secondary_mobile}
                 onChange={handleChange}
                 id=""
-                placeholder="Secondary Email"
+                placeholder="Secondary Phone"
                 className="border p-1 px-4 border-gray-500 rounded-md"
+                pattern="[0-9]*"
+                onKeyDown={(e) => {
+                  if (!/[0-9]/.test(e.key) && e.key !== "Backspace" && e.key !== "ArrowLeft" && e.key !== "ArrowRight") {
+                    e.preventDefault();
+                  }
+                }}
               />
             </div>
             <div className="flex flex-col gap-2">
@@ -200,7 +218,7 @@ const EditSuppliers = () => {
               </label>
               <input
                 type="text"
-                name=""
+                name="secondary_email"
                 value={formData.secondary_email}
                 onChange={handleChange}
                 id=""
@@ -386,6 +404,12 @@ const EditSuppliers = () => {
                 id=""
                 placeholder="Enter Pincode"
                 className="border p-1 px-4 border-gray-500 rounded-md"
+                pattern="[0-9]*"
+                onKeyDown={(e) => {
+                  if (!/[0-9]/.test(e.key) && e.key !== "Backspace" && e.key !== "ArrowLeft" && e.key !== "ArrowRight") {
+                    e.preventDefault();
+                  }
+                }}
               />
             </div>
             <div className="flex flex-col gap-2">
@@ -433,6 +457,12 @@ const EditSuppliers = () => {
                 onChange={handleChange}
                 placeholder="Enter Account Number"
                 className="border p-1 px-4 border-gray-500 rounded-md"
+                pattern="[0-9]*"
+                onKeyDown={(e) => {
+                  if (!/[0-9]/.test(e.key) && e.key !== "Backspace" && e.key !== "ArrowLeft" && e.key !== "ArrowRight") {
+                    e.preventDefault();
+                  }
+                }}
               />
             </div>
             <div className="flex flex-col gap-2">

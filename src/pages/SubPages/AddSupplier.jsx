@@ -31,7 +31,7 @@ const AddSupplier = () => {
     district: "",
     attachments: [],
     vtype: "",
-    
+
     // firstanme: "abc",
     // lastname: "wer",
   });
@@ -47,13 +47,32 @@ const AddSupplier = () => {
   };
 
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+  
+    
+  };
+
+  const isValidURL = (url) => {
+    try {
+      new URL(url);
+      return true;
+    } catch (error) {
+      return false;
+    }
   };
   const navigate = useNavigate();
   const handleSubmit = async () => {
     if (!formData.company_name || !formData.vendor_name) {
       return toast.error("All fields are Required!");
     }
+    if (formData.email &&!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+      return toast.error("Invalid email address!");
+    }
+    if (formData.secondary_email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.secondary_email)) {
+      return toast.error("Invalid Secondary Email!");
+    }
+  
 
     const sendData = new FormData();
     sendData.append("vendor[site_id]", siteId);
@@ -75,7 +94,7 @@ const AddSupplier = () => {
     sendData.append("vendor[account_number]", formData.account_number);
     sendData.append("vendor[bank_branch_name]", formData.bank_branch_name);
     sendData.append("vendor[ifsc_code]", formData.ifsc_code);
-    
+
     sendData.append("vendor[website_url]", formData.website_url);
     sendData.append("vendor[district]", formData.district);
     formData.attachments.forEach((file, index) => {
@@ -150,6 +169,12 @@ const AddSupplier = () => {
                 onChange={handleChange}
                 placeholder="Phone"
                 className="border p-1 px-4 border-gray-500 rounded-md"
+                pattern="[0-9]*"
+                onKeyDown={(e) => {
+                  if (!/[0-9]/.test(e.key) && e.key !== "Backspace" && e.key !== "ArrowLeft" && e.key !== "ArrowRight") {
+                    e.preventDefault();
+                  }
+                }}
               />
             </div>
             <div className="flex flex-col gap-2">
@@ -163,8 +188,14 @@ const AddSupplier = () => {
                 id=""
                 value={formData.secondary_mobile}
                 onChange={handleChange}
-                placeholder="Secondary Email"
+                placeholder="Secondary Phone"
                 className="border p-1 px-4 border-gray-500 rounded-md"
+                pattern="[0-9]*"
+                onKeyDown={(e) => {
+                  if (!/[0-9]/.test(e.key) && e.key !== "Backspace" && e.key !== "ArrowLeft" && e.key !== "ArrowRight") {
+                    e.preventDefault();
+                  }
+                }}
               />
             </div>
             <div className="flex flex-col gap-2">
@@ -172,7 +203,7 @@ const AddSupplier = () => {
                 Primary Email :
               </label>
               <input
-                type="text"
+                type="email"
                 name="email"
                 value={formData.email}
                 onChange={handleChange}
@@ -348,6 +379,12 @@ const AddSupplier = () => {
                 id=""
                 placeholder="Enter Pincode"
                 className="border p-1 px-4 border-gray-500 rounded-md"
+                pattern="[0-9]*"
+                onKeyDown={(e) => {
+                  if (!/[0-9]/.test(e.key) && e.key !== "Backspace" && e.key !== "ArrowLeft" && e.key !== "ArrowRight") {
+                    e.preventDefault();
+                  }
+                }}
               />
             </div>
             <div className="flex flex-col gap-2">
@@ -395,6 +432,12 @@ const AddSupplier = () => {
                 onChange={handleChange}
                 placeholder="Enter Account Number"
                 className="border p-1 px-4 border-gray-500 rounded-md"
+                pattern="[0-9]*"
+                onKeyDown={(e) => {
+                  if (!/[0-9]/.test(e.key) && e.key !== "Backspace" && e.key !== "ArrowLeft" && e.key !== "ArrowRight") {
+                    e.preventDefault();
+                  }
+                }}
               />
             </div>
             <div className="flex flex-col gap-2">

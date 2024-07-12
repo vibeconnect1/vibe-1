@@ -102,7 +102,7 @@ const Events = () => {
       <div className="flex justify-between gap-2 items-center my-2 sm:flex-row flex-col ">
         <input
           type="text"
-          placeholder="Search By title"
+          placeholder="Search by title"
           className="border-2 p-2 sm:w-96 border-gray-300 rounded-lg"
           value={searchText}
           onChange={handleSearch}

@@ -1,5 +1,6 @@
 import React, { useState, useRef } from "react";
 import image from "/profile.png";
+import { useSelector } from "react-redux";
 
 const CreateVisitor = () => {
   const [behalf, setbehalf] = useState("Visitor");
@@ -27,11 +28,11 @@ const CreateVisitor = () => {
   const handleImageChange = (event) => {
     setImageFile(event.target.files[0]);
   };
-
+const themeColor = useSelector((state)=> state.theme.color)
   return (
     <div className="flex justify-center items-center my-5 w-full p-4 ">
       <form className="border border-gray-300 rounded-lg p-4 w-full mx-4">
-        <h2 className="text-center md:text-xl font-bold p-2 bg-black rounded-full text-white">
+        <h2 style={{background:themeColor}} className="text-center md:text-xl font-bold p-2 bg-black rounded-full text-white">
           {getHeadingText()}
         </h2>
         <br />

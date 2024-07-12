@@ -6,6 +6,8 @@ import { Link } from "react-router-dom";
 import Modal from "../containers/modals/Modal";
 import { getAttendance } from "../api";
 import Table from "../components/table/Table";
+import { useSelector } from "react-redux";
+import * as XLSX from "xlsx";
 const Attendance = () => {
   const [modal, setModal] = useState(false);
   const [attendanceData, setAttendanceData] = useState([]);
@@ -69,21 +71,37 @@ const Attendance = () => {
   ];
  
 
-  const customStyle = {
-    headRow: {
-      style: {
-        backgroundColor: "black",
-        color: "white",
-
-        fontSize: "14px",
-      },
-    },
-  };
+  
   document.title = `Attendance - Vibe Connect`;
+  const themeColor = useSelector((state)=> state.theme.color)
+
+  const exportAllToExcel = async () => {
+    
+    const mappedData = attendanceData.map((attend) => ({
+      Name: attend.attendance_of_name,
+Date: dateFormat(attend.created_at),
+"Punch In" : timeFormat(attend.punched_in_at),
+ "Punch Out" :attend.punched_out_at ? timeFormat(attend.punched_out_at) : "-",
+"Total Hours Worked":attend.punched_out_at ? TotalHours(attend.punched_in_at, attend.punched_out_at) : "-"
+
+    }));
+    const fileType =
+      "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8";
+    const fileName = "attendance_data.xlsx";
+    const ws = XLSX.utils.json_to_sheet(mappedData);
+    const wb = { Sheets: { data: ws }, SheetNames: ["data"] };
+    const excelBuffer = XLSX.write(wb, { bookType: "xlsx", type: "array" });
+    const data = new Blob([excelBuffer], { type: fileType });
+    const url = URL.createObjectURL(data);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = fileName;
+    link.click();
+  };
   return (
     <section className="flex ">
       <Navbar />
-      <div className="w-full flex mx-3 flex-col overflow-hidden">
+      <div className="w-full flex md:mx-3 flex-col overflow-hidden">
         {/* <div className="flex  justify-start gap-4 my-5  ">
           <div className="shadow-xl rounded-full border-4 border-gray-400 w-52  px-6 flex flex-col items-center">
             <p className="font-semibold text-lg">Total Employees</p>
@@ -108,11 +126,13 @@ const Attendance = () => {
             <input
               type="text"
               placeholder="Search By Name"
-              className="border-2 p-2 w-96 border-gray-300 rounded-lg"
+              className="border-2 p-2 md:w-96 border-gray-300 rounded-lg"
             />
             <button
               className="bg-black w-20 rounded-lg text-white p-2 my-5"
-              onClick={() => setModal(true)}
+              // onClick={() => setModal(true)}
+              onClick={ exportAllToExcel}
+              style={{background:themeColor}}
             >
               Export
             </button>
@@ -121,7 +141,7 @@ const Attendance = () => {
          <Table  columns={column} data={attendanceData}/>
         </div>
       </div>
-      {modal && <Modal onclose={() => setModal(false)} />}
+      {/* {modal && <Modal onclose={() => setModal(false)} />} */}
     </section>
   );
 };

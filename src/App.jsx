@@ -516,6 +516,7 @@ import RVehicles from "./pages/SubPages/RVehicles.jsx";
 import GVehicles from "./pages/SubPages/GVehicles.jsx";
 import Staff from "./pages/SubPages/Staff.jsx";
 import GoodsInOut from "./pages/SubPages/GoodsInOut.jsx";
+import SiteDetails from "./pages/Setup/AccountSetup/SiteDetails.jsx";
 
 function App() {
   const themeColor = useSelector((state) => state.theme.color);
@@ -601,24 +602,101 @@ function App() {
             }
           />
           {/* setup */}
-          <Route path="/setup" element={<Setup />} />
-          <Route path="/setup/account" element={<Account />} />
+          <Route path="/setup" element={
+            <ProtectedAdminRoutes>
+              <Setup />
+            </ProtectedAdminRoutes>
+            } />
+          <Route path="/setup/account" element={
+            <ProtectedAdminRoutes>
+              <Account />
+            </ProtectedAdminRoutes>
+            } />
           <Route
             path="/setup/account/organisation"
-            element={<Organisation />}
+            element={
+              <ProtectedAdminRoutes>
+
+                <Organisation />
+              </ProtectedAdminRoutes>
+          }
           />
-          <Route path="/setup/account/company" element={<Company />} />
-          <Route path="/setup/account/country" element={<Country />} />
-          <Route path="/setup/account/region" element={<Region />} />
-          <Route path="/setup/account/zone" element={<Zone />} />
-          <Route path="/setup/account/site" element={<Site />} />
-          <Route path="/setup/account/entity" element={<Entity />} />
-          <Route path="/setup/account/building" element={<Building />} />
-          <Route path="/setup/account/wing" element={<Wing />} />
-          <Route path="/setup/account/area" element={<Area />} />
-          <Route path="/setup/account/floor" element={<Floor />} />
-          <Route path="/setup/account/unit" element={<Unit />} />
-          <Route path="/setup/account/room" element={<Room />} />
+          <Route path="/setup/account/company" element={
+            <ProtectedAdminRoutes>
+
+              <Company />
+            </ProtectedAdminRoutes>
+            } />
+          <Route path="/setup/account/country" element={
+            <ProtectedAdminRoutes>
+
+              <Country />
+            </ProtectedAdminRoutes>
+            } />
+          <Route path="/setup/account/region" element={
+            <ProtectedAdminRoutes>
+
+              <Region />
+            </ProtectedAdminRoutes>
+            } />
+          <Route path="/setup/account/zone" element={
+            <ProtectedAdminRoutes>
+
+              <Zone />
+            </ProtectedAdminRoutes>
+            } />
+          <Route path="/setup/account/site" element={
+            <ProtectedAdminRoutes>
+              <Site />
+            </ProtectedAdminRoutes>
+            } />
+          <Route path="/setup/account/site/site-details/:id" element={
+            <ProtectedAdminRoutes>
+              <SiteDetails />
+            </ProtectedAdminRoutes>
+            } />
+          <Route path="/setup/account/entity" element={
+            <ProtectedAdminRoutes>
+
+            <Entity />
+            </ProtectedAdminRoutes>
+            } />
+          <Route path="/setup/account/building" element={
+            <ProtectedAdminRoutes>
+
+              <Building />
+            </ProtectedAdminRoutes>
+            } />
+          <Route path="/setup/account/wing" element={
+            <ProtectedAdminRoutes>
+
+              <Wing />
+            </ProtectedAdminRoutes>
+            } />
+          <Route path="/setup/account/area" element={
+            <ProtectedAdminRoutes>
+
+              <Area />
+            </ProtectedAdminRoutes>
+            } />
+          <Route path="/setup/account/floor" element={
+            <ProtectedAdminRoutes>
+
+              <Floor />
+            </ProtectedAdminRoutes>
+            } />
+          <Route path="/setup/account/unit" element={
+            <ProtectedAdminRoutes>
+
+              <Unit />
+            </ProtectedAdminRoutes>
+            } />
+          <Route path="/setup/account/room" element={
+            <ProtectedAdminRoutes>
+
+              <Room />
+            </ProtectedAdminRoutes>
+            } />
           <Route
             path="/setup/User-role"
             element={

@@ -97,6 +97,8 @@ const Login = () => {
 
       const userType = response.data.user.user_type;
       setItemInLocalStorage("USERTYPE", userType);
+      const CompanyId = response.data.user.company_id;
+      setItemInLocalStorage("COMPANYID", CompanyId);
       // console.log(userType)
 
       const statuses = response.data.statuses;

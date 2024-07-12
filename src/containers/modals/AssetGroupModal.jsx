@@ -9,14 +9,14 @@ const AssetGroupModal = ({ onclose }) => {
   const [groupName, setGroupName] = useState("");
   const [description, setDescription] = useState("");
   const [groupFor, setGroupFor] = useState("asset");
-const siteId = getItemInLocalStorage("SITEID")
+const companyId = getItemInLocalStorage("COMPANYID")
   const dispatch = useDispatch();
   const createGroup = async () => {
     try {
       const addGroup = await postAssetGroups({
         name: groupName,
         description: description,
-        company_id: siteId,
+        company_id: companyId,
         group_for: "asset"
       });
   console.log(addGroup)
@@ -32,7 +32,7 @@ const siteId = getItemInLocalStorage("SITEID")
       const addStockGroup = await postAssetGroups({
         name: groupName,
         description: description,
-        company_id: siteId,
+        company_id: companyId,
         group_for: "item"
       });
   console.log(addStockGroup)

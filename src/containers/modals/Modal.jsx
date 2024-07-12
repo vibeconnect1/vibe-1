@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { AiOutlineClose } from "react-icons/ai";
 import Selector from "../Selector";
 import * as XLSX from "xlsx";
+import { useSelector } from "react-redux";
 
 const Modal = ({ onclose }) => {
   const [date, setDate] = useState(new Date());
@@ -37,13 +38,14 @@ const Modal = ({ onclose }) => {
 
     onclose();
   };
+  const themeColor = useSelector((state)=> state.theme.color)
   return (
-    <div className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-30 backdrop-blur-sm">
-      <div className="bg-white mt-10  p-4 px-8 flex flex-col rounded-md gap-5">
+    <div className="fixed inset-0 flex justify-center items-center z-50 bg-black bg-opacity-30 backdrop-blur-sm">
+      <div className="bg-white mt-10   p-4 px-8 flex flex-col rounded-md gap-5">
         <button className="place-self-end" onClick={onclose}>
           <AiOutlineClose />
         </button>
-        <h1 className="text-center font-bold text-white bg-black p-2 rounded-md">
+        <h1 style={{background:themeColor}} className="text-center font-bold text-white  p-2 rounded-md">
           Export Attendance
         </h1>
         <div>
@@ -87,7 +89,8 @@ const Modal = ({ onclose }) => {
         <div className="flex justify-center">
           <button
             onClick={handleExport}
-            className="bg-black font-semibold mt-10 text-white p-2 rounded-md max-w-sm"
+            className=" font-semibold mt-10 text-white p-2 rounded-md max-w-sm"
+            style={{background: themeColor}}
           >
             Export
           </button>

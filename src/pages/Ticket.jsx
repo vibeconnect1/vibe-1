@@ -363,8 +363,8 @@ const Ticket = () => {
           
         </div>
 
-        <div className="flex sm:flex-row flex-col gap-2 my-5">
-          <div className="sm:flex grid grid-cols-2 items-center justify-center  gap-2 border border-gray-300 rounded-md px-3 p-2 w-auto">
+        <div className="flex sm:flex-row flex-col justify-between gap-2 my-5">
+          <div className="md:flex justify-between grid grid-cols-2 items-center  gap-2 border border-gray-300 rounded-md px-3 p-2 w-auto">
             <div className="flex items-center gap-2">
               <input
                 type="radio"
@@ -426,31 +426,34 @@ const Ticket = () => {
               </label>
             </div>
           </div>
-          <Link
-            to={"/tickets/create-ticket"}
-            className="border-2 font-semibold hover:bg-black hover:text-white duration-300 transition-all border-black p-2 rounded-md text-black cursor-pointer text-center flex items-center w-44 gap-2 justify-center"
-            // onClick={() => setShowCountry(!showCountry)}
-          >
-            <PiPlusCircle size={20} />
-            Add
-          </Link>
-          <div className="flex gap-2">
+          
+          <div className="flex lg:flex-row flex-col gap-2">
             <input
               type="text"
               placeholder="Search by Title, Ticket number, Category, Ticket type, Priority or Unit "
-              className="border border-gray-400 w-96 placeholder:text-xs rounded-lg p-2"
+              className="border border-gray-400 md:w-96 placeholder:text-xs rounded-lg p-2"
               value={searchText}
               onChange={handleSearch}
             />
            
-          </div>
+          <Link
+            to={"/tickets/create-ticket"}
+            style={{background: themeColor}}
+            className=" font-semibold  text-white duration-300 transition-all  p-2 rounded-md  cursor-pointer text-center flex items-center gap-2 justify-center"
+            // onClick={() => setShowCountry(!showCountry)}
+            >
+            <PiPlusCircle size={20} />
+            Add
+          </Link>
           
           <button
             className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
             onClick={exportAllToExcel}
-          >
+            style={{background: themeColor}}
+            >
             Export 
           </button>
+            </div>
         </div>
 
         {complaints.length === 0 ? (

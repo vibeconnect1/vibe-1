@@ -1,19 +1,84 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import Select from "react-select";
 import countryList from "react-select-country-list";
 import Account from "./Account";
-import { PiPlusCircle } from "react-icons/pi";
-import Switch from "../../Buttons/Switch";
+import Table from "../../components/table/Table";
+import { getSites } from "../../api";
+import { BiEdit } from "react-icons/bi";
+import { BsEye } from "react-icons/bs";
+import { Link } from "react-router-dom";
+import EditSite from "../Setup/AccountSetup/EditSite";
 
 const Site = () => {
+  const [site, setSite] = useState([]);
+  const [showEditModal, setShowEditModal] = useState(false)
+  useEffect(() => {
+    const fetchSite = async () => {
+      try {
+        const siteResp = await getSites();
+        setSite(siteResp.data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchSite();
+  }, []);
+  const siteColumn = [
+    {
+      name: "Company",
+      selector: (row) => row.company_name,
+      sortable: true,
+    },
+    {
+      name: "Site",
+      selector: (row) => row.name,
+      sortable: true,
+    },
+    {
+      name: "Region",
+      selector: (row) => row.region,
+      sortable: true,
+    },
+    {
+      name: "Feature",
+      selector: (row) =>
+        row.feature.map((feat) => feat.feature_name).join(", "),
+      sortable: true,
+      width: "300px", // Adjust the width as needed
+      cell: (row) => (
+        <div
+          style={{
+            whiteSpace: "nowrap",
+            overflow: "hidden",
+            textOverflow: "ellipsis",
+          }}
+        >
+          {row.feature.map((feat) => feat.feature_name).join(", ")}
+        </div>
+      ),
+    },
+    {
+      name: "Action",
+      cell: (row) => (
+        <div className="flex items-center gap-4">
+          <Link to={`/setup/account/site/site-details/${row.id}`}>
+            <BsEye size={15} />
+          </Link>
+          <button onClick={()=> setShowEditModal(true)} >
+            <BiEdit size={15} />
+          </button>
+          {showEditModal && <EditSite onclose={()=> setShowEditModal(false)} id={row.id} />}
+        </div>
+      ),
+    },
+  ];
+
   return (
     <div className="w-full mt-1">
       <Account />
       <div className="flex flex-col mx-10 my-10 gap-2">
-     
-
-        <div className="flex justify-center items-center ">
-          {/* {showCountry && selectedCountries.length > 0 && ( */}
+        {/* <div className="flex justify-center items-center ">
+         
           <div className="mt-4 w-screen">
             <table className="border-collapse w-full ">
               <thead>
@@ -71,9 +136,11 @@ const Site = () => {
               
             </table>
           </div>
-          {/* )} */}
-        </div>
+          
+        </div> */}
+        <Table columns={siteColumn} data={site} />
       </div>
+      
     </div>
   );
 };

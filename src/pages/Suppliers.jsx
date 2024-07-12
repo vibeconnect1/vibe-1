@@ -19,14 +19,17 @@ const Suppliers = () => {
   const [suppliers, setSuppliers] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
   const [selectedRows, setSelectedRows] = useState([]);
-  const themeColor = useSelector((state)=> state.theme.color)
+  const themeColor = useSelector((state) => state.theme.color);
 
   useEffect(() => {
     const fetchVendor = async () => {
       try {
         const vendorResponse = await getVendors();
-        setFilteredData(vendorResponse.data);
-        setSuppliers(vendorResponse.data);
+        const sortedVendor = vendorResponse.data.sort((a, b) => {
+          return new Date(b.created_at) - new Date(a.created_at);
+        });
+        setFilteredData(sortedVendor);
+        setSuppliers(sortedVendor);
         console.log(vendorResponse);
       } catch (error) {
         console.log(error);
@@ -49,7 +52,7 @@ const Suppliers = () => {
         </div>
       ),
     },
-    { name: "ID", selector: (row) => row.id, sortable: true },
+    // { name: "ID", selector: (row) => row.id, sortable: true },
     {
       name: "Vendor Name",
       selector: (row) => row.vendor_name,
@@ -104,15 +107,16 @@ const Suppliers = () => {
     // },
     {
       name: "Status",
-      selector: (row) => row.active?  <p className="bg-green-400 px-4 w-fit text-white rounded-full">
-
-      Active
-    </p> 
-    :
-     <p className="bg-red-400 px-4 w-fit text-white rounded-full">
-
-       Inactive
-     </p>,
+      selector: (row) =>
+        row.active ? (
+          <p className="bg-green-400 px-4 w-fit text-white rounded-full">
+            Active
+          </p>
+        ) : (
+          <p className="bg-red-400 px-4 w-fit text-white rounded-full">
+            Inactive
+          </p>
+        ),
       sortable: true,
     },
   ];
@@ -151,10 +155,33 @@ const Suppliers = () => {
   };
 
   const exportToExcel = () => {
+    const mappedData = filteredData.map((supplier) => ({
+    "Company Name": supplier.company_name,
+    "Vendor Name": supplier.vendor_name,
+    "Primary Phone": supplier.mobile,
+    "Secondary Phone": supplier.secondary_mobile,
+    "Primary Email": supplier.email,
+    "Secondary Phone": supplier.secondary_email,
+    "Secondary Phone": supplier.secondary_email,
+    "PAN": supplier.pan_number,
+    "Website" : supplier.website_url,
+    "GST Number" : supplier.gstin_number,
+    "Status": supplier.active? "Active" :"Inactive",
+    "Address" : (supplier.address, supplier.address2),
+    "District": supplier.district,
+    "City": supplier.city,
+    "State": supplier.state,
+    "Pin code": supplier.pincode,
+    "Country": supplier.country,
+    "Bank Account Name": supplier.account_name,
+    "Bank Account Number": supplier.account_number,
+    "Bank & Branch": supplier.bank_branch_name,
+    "IFSC": supplier.ifsc_code,
+    }))
     const fileType =
       "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8";
     const fileName = "supplier_data.xlsx";
-    const ws = XLSX.utils.json_to_sheet(filteredData);
+    const ws = XLSX.utils.json_to_sheet(mappedData);
     const wb = { Sheets: { data: ws }, SheetNames: ["data"] };
     const excelBuffer = XLSX.write(wb, { bookType: "xlsx", type: "array" });
     const data = new Blob([excelBuffer], { type: fileType });
@@ -168,6 +195,8 @@ const Suppliers = () => {
   const handleRowSelected = (state) => {
     setSelectedRows(state.selectedRows);
   };
+
+  document.title = `Supplier - Vibe Connect`;
 
   return (
     <section className="flex  ">
@@ -184,14 +213,15 @@ const Suppliers = () => {
           <div className="flex flex-wrap gap-2">
             <Link
               to={"/suppliers/add-supplier"}
-              style={{background: themeColor}}
+              style={{ background: themeColor }}
               className=" rounded-lg flex font-semibold  items-center gap-2 text-white p-2 "
             >
               <IoAddCircleOutline size={20} />
               Add
             </Link>
             <button
-              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+              style={{ background: themeColor }}
+              className=" text-white font-bold py-2 px-4 rounded"
               onClick={exportToExcel}
             >
               Export

@@ -130,7 +130,8 @@ const Integration = () => {
       client_id:
         "339274559462-6r06f0d9aqubhnhqmvrkjaqs8nikiidd.apps.googleusercontent.com",
       // local host
-      redirect_uri: "http://localhost:5173/gmail",
+      redirect_uri: "http://localhost:5173/integration",
+      // redirect_uri: "https://app.vibecopilot.ai/integration",
       response_type: "token",
 
       scope:

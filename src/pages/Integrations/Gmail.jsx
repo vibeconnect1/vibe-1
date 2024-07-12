@@ -589,10 +589,10 @@ const Gmail = () => {
     >
       {isGmailCompose && <GmailComposeModal onCloseCompose={onCloseCompose} />}
       {/* <Navbar /> */}
-      <div className=" w-full  flex md:mx-2 overflow-hidden flex-col">
+      <div className=" w-full  flex md:mx-2 overflow-hidden   flex-col">
         <div className="">
           <div
-            className={`flex justify-between rounded-md bg-black bg-opacity-30 backdrop-blur-sm p-2  shadow-custom-all-sides my-1`}
+            className={`flex justify-between rounded-md bg-black bg-opacity-30 backdrop-blur-sm p-2 shadow-custom-all-sides my-1`}
           >
             <div className={`flex gap-4 `}>
               <h5
@@ -616,7 +616,8 @@ const Gmail = () => {
                 <FaPaperPlane /> Sent
               </h5>
             </div>
-            <div className="flex justify-end">
+            
+            <div className="flex justify-end gap-4">
               <button
                 className="flex items-center gap-2 bg-white font-medium shadow-custom-all-sides rounded-md p-1 px-4"
                 onClick={() => setIsGmailCompose(true)}
@@ -624,10 +625,18 @@ const Gmail = () => {
                 <FaPen className="mr-2" />
                 Compose
               </button>
+         
+              <div
+                onClick={logout}
+                style={{ cursor: "pointer" }}
+                className=" right-5 bottom-10 flex items-center gap-2 bg-white p-1 px-4 rounded-md shadow-custom-all-sides font-medium "
+              >
+                <FaSignOutAlt /> Logout
+              </div>
             </div>
           </div>
           <div className="border-b-2 border-white" />
-          <div className="bg-black bg-opacity-30 backdrop-blur-sm p-2 rounded-md shadow-custom-all-sides my-1">
+          <div className="bg-black bg-opacity-30 backdrop-blur-sm p-2 rounded-md shadow-custom-all-sides my-1 max-h-screen overflow-scroll">
             <div className="flex items-center md:flex-row flex-col justify-between">
               <div className="my-2 w-full mr-4 ">
                 <input
@@ -839,15 +848,7 @@ const Gmail = () => {
               </>
             )}
 
-            <div className="flex justify-end">
-              <div
-                onClick={logout}
-                style={{ cursor: "pointer" }}
-                className=" right-5 bottom-10 flex items-center gap-2 bg-white p-1 px-4 rounded-md shadow-custom-all-sides font-medium "
-              >
-                <FaSignOutAlt /> Logout
-              </div>
-            </div>
+           
           </div>
         </div>
       </div>

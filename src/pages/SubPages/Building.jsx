@@ -1,7 +1,12 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Account from "./Account";
 import { PiPlusCircle } from "react-icons/pi";
 import Switch from "../../Buttons/Switch";
+import Table from "../../components/table/Table";
+import { BsEye } from "react-icons/bs";
+import { BiEdit } from "react-icons/bi";
+import { Link } from "react-router-dom";
+import { getBuildings } from "../../api";
 
 const Building = () => {
   const [site, setSite] = useState("");
@@ -9,7 +14,37 @@ const Building = () => {
   const [showFields, setShowFields] = useState(false);
   const [showRows, setShowRows] = useState(false);
   const [submittedData, setSubmittedData] = useState([]);
-
+  const [buildings, setBuildings] = useState([]);
+  const buildingColumns = [
+    {
+      name: "Site",
+      selector: (row) => row.ticket_number,
+      sortable: true,
+    },
+    {
+      name: "Building ",
+      selector: (row) => row.name,
+      sortable: true,
+    },
+    {
+      name: "FLoors ",
+      selector: (row) => row.wing,
+      sortable: true,
+    },
+    {
+      name: "Action",
+      cell: (row) => (
+        <div className="flex items-center gap-4">
+          <Link>
+            <BsEye size={15} />
+          </Link>
+          <Link>
+            <BiEdit size={15} />
+          </Link>
+        </div>
+      ),
+    },
+  ];
   const handleSubmit = (e) => {
     e.preventDefault();
 
@@ -41,6 +76,15 @@ const Building = () => {
     setBuilding(e.target.value);
   };
 
+  useEffect(() => {
+    const fetchBuildings = async () => {
+      const buildingResp = await getBuildings();
+      setBuildings(buildingResp.data);
+      console.log(buildingResp);
+    };
+    fetchBuildings();
+  }, []);
+
   return (
     <div className="w-full mt-1">
       <Account />
@@ -71,14 +115,14 @@ const Building = () => {
               />
             </div>
             <div className="flex my-2 gap-4">
-              <div className="flex  gap-2">
+              {/* <div className="flex  gap-2">
                 <input type="checkbox" name="wing" id="wing" />
                 <label htmlFor="wing">Wing</label>
-              </div>
-              <div className="flex  gap-2">
+              </div> */}
+              {/* <div className="flex  gap-2">
                 <input type="checkbox" name="area" id="area" />
                 <label htmlFor="area">Area</label>
-              </div>
+              </div> */}
               <div className="flex  gap-2">
                 <input type="checkbox" name="floor" id="floor" />
                 <label htmlFor="floor">Floor</label>
@@ -97,7 +141,7 @@ const Building = () => {
           </div>
         )}
 
-        <div className="flex justify-center items-center">
+        {/* <div className="flex justify-center items-center">
           <div className="mt-4 w-screen">
             <table className="border-collapse w-full">
               <thead>
@@ -152,7 +196,7 @@ const Building = () => {
                       </td>
                       <td className="text-center p-2">
                         {" "}
-                       <Switch/>
+                        <Switch />
                       </td>
                     </tr>
                   ))}
@@ -160,7 +204,8 @@ const Building = () => {
               )}
             </table>
           </div>
-        </div>
+        </div> */}
+        <Table columns={buildingColumns} data={buildings} />
       </div>
     </div>
   );
