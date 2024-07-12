@@ -1,83 +1,52 @@
 import React, { useEffect, useState } from "react";
-import ModalWrapper from "../../../containers/modals/ModalWrapper";
-import { BiEdit, BiSolidEdit } from "react-icons/bi";
-import { EditSiteDetails, getCompanies, getSiteDetails } from "../../../api";
-import { id } from "date-fns/locale";
-import { AiOutlineClose } from "react-icons/ai";
-import { Switch } from "../../../Buttons";
-import Select from "react-select";
-import { useNavigate, useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { features } from "../../../utils/features";
+import { Switch } from "../../../Buttons";
+import { getAllFeature, getCompanies, postSite } from "../../../api";
+import Select from "react-select";
 import toast from "react-hot-toast";
-const EditSite = () => {
-  const { id } = useParams();
-  const [selectedOption, setSelectedOption] = useState([]);
-  const [companies, setCompanies] = useState([]);
-  const [feats, setFeats] = useState(
-    features.map((feature) => ({
-      value: feature,
-      label: feature,
-    }))
-  );
+import { useNavigate } from "react-router-dom";
+import { features } from "../../../utils/features";
+const AddSite = () => {
   const themeColor = useSelector((state) => state.theme.color);
+  const [selectedOption, setSelectedOption] = useState([]);
+  const [companies, setCompanies] = useState([])
+  const [feats, setFeats] = useState(features);
   const [formData, setFormData] = useState({
     companyId: "",
     siteName: "",
     region: "",
     active: true,
+    
   });
-  useEffect(() => {
-    const fetchSiteDetails = async () => {
-      try {
-        const siteDetailsResp = await getSiteDetails(id);
-        console.log(siteDetailsResp.data);
-        const formattedSelectedFeatures = siteDetailsResp.data.feature.map(
-          (feature) => ({
-            value: feature.feature_name,
-            label: feature.feature_name,
-          })
-        );
-
-        setSelectedOption(formattedSelectedFeatures);
-        setFormData({
-          ...formData,
-          siteName: siteDetailsResp.data.name,
-          region: siteDetailsResp.data.region,
-
-          active: siteDetailsResp.data.region,
-        });
-      } catch (error) {
-        console.log(error);
-      }
-    };
-
-   
-    const fetchCompanies = async () => {
-      try {
-        const companyResp = await getCompanies();
-        console.log(companyResp);
-        setCompanies(companyResp.data);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    fetchCompanies();
-    fetchSiteDetails();
-  }, [id]);
-  const handleChangeSelectMeeting = (selectedOption) => {
-    console.log(selectedOption);
-    setSelectedOption(selectedOption);
-    setFormData({ ...formData, features: selectedOption });
-    setFeats(selectedOption);
-  };
-  console.log(formData);
+  console.log(formData)
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const navigate = useNavigate()
-  const handleEditSite = async () => {
+  var handleChangeSelectMeeting = (selectedOption) => {
+    console.log(selectedOption);
+    setSelectedOption(selectedOption);
+  };
+  useEffect(() => {
+    const formattedFeatures = features.map((feature) => ({
+        value: feature,
+        label: feature,
+      }));
+      setFeats(formattedFeatures);
+    const fetchCompanies = async()=>{
+        try {
+            const companyResp = await getCompanies()
+            console.log(companyResp)
+            setCompanies(companyResp.data)
+        } catch (error) {
+            console.log(error)
+        }
+    }
+    fetchCompanies()
+    // fetchAllFeatures();
+  }, []);
+const navigate = useNavigate()
+  const handleCreateSite = async () => {
     if (
       formData.companyId === "" ||
       formData.siteName === "" ||
@@ -94,18 +63,14 @@ const EditSite = () => {
     const allowedFeat = featureList.join(",");
     sendData.append("features[]", featureList);
     try {
-      const resp = await EditSiteDetails(id,sendData);
-      console.log(resp.data.id);
-      toast.success("Site edited successfully")
-      navigate(`/setup/account/site/site-details/${id}`)
+      const resp = await postSite(sendData);
+      console.log(resp);
+      toast.success("Site created successfully")
+      navigate("/setup/account/site")
     } catch (error) {
       console.log(error);
     }
   };
-
-
-
-
 
   return (
     <div className="md:px-4 w-full my-2 flex md:mx-2 overflow-hidden flex-col">
@@ -113,7 +78,7 @@ const EditSite = () => {
         style={{ background: themeColor }}
         className="text-center text-xl font-bold p-2 rounded-full text-white"
       >
-        Edit Site
+        Create New Site
       </h2>
       <div className="md:mx-16 my-5 mb-10  p-5 px-10 rounded-lg sm:shadow-custom-all-sides">
         <div className="flex sm:flex-row flex-col justify-around items-center">
@@ -124,16 +89,17 @@ const EditSite = () => {
               </label>
               <select
                 className="border p-1 px-4 border-gray-500 rounded-md"
-                onChange={handleChange}
-                value={formData.companyId}
+                  onChange={handleChange}
+                  value={formData.companyId}
                 name="companyId"
               >
                 <option value="">Select Company</option>
                 {companies?.map((company) => (
-                  <option key={company.id} value={company.id}>
-                    {company.name}
-                  </option>
-                ))}
+                    <option key={company.id} value={company.id}>
+                      {company.name}
+                    </option>
+                  ))}
+                  <option value="29">company 1</option>
               </select>
             </div>
             <div className="flex flex-col">
@@ -168,7 +134,6 @@ const EditSite = () => {
               isMulti
               onChange={handleChangeSelectMeeting}
               options={feats}
-              value={selectedOption}
               noOptionsMessage={() => "No Feature available..."}
               className="rounded-md"
               // maxMenuHeight={90}
@@ -217,9 +182,9 @@ const EditSite = () => {
           <button
             className="font-medium p-1 px-2 text-white rounded-md"
             style={{ background: themeColor }}
-            onClick={handleEditSite}
+            onClick={handleCreateSite}
           >
-           Save
+            Create Site
           </button>
         </div>
       </div>
@@ -227,4 +192,4 @@ const EditSite = () => {
   );
 };
 
-export default EditSite;
+export default AddSite;

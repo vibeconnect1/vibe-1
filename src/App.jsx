@@ -517,6 +517,8 @@ import GVehicles from "./pages/SubPages/GVehicles.jsx";
 import Staff from "./pages/SubPages/Staff.jsx";
 import GoodsInOut from "./pages/SubPages/GoodsInOut.jsx";
 import SiteDetails from "./pages/Setup/AccountSetup/SiteDetails.jsx";
+import AddSite from "./pages/Setup/AccountSetup/AddSite.jsx";
+import EditSite from "./pages/Setup/AccountSetup/EditSite.jsx";
 
 function App() {
   const themeColor = useSelector((state) => state.theme.color);
@@ -607,6 +609,7 @@ function App() {
               <Setup />
             </ProtectedAdminRoutes>
             } />
+
           <Route path="/setup/account" element={
             <ProtectedAdminRoutes>
               <Account />
@@ -621,6 +624,7 @@ function App() {
               </ProtectedAdminRoutes>
           }
           />
+          
           <Route path="/setup/account/company" element={
             <ProtectedAdminRoutes>
 
@@ -650,9 +654,19 @@ function App() {
               <Site />
             </ProtectedAdminRoutes>
             } />
+          <Route path="/setup/account/site/create-new-site" element={
+            <ProtectedAdminRoutes>
+              <AddSite />
+            </ProtectedAdminRoutes>
+            } />
           <Route path="/setup/account/site/site-details/:id" element={
             <ProtectedAdminRoutes>
               <SiteDetails />
+            </ProtectedAdminRoutes>
+            } />
+          <Route path="/setup/account/site/edit-site/:id" element={
+            <ProtectedAdminRoutes>
+              <EditSite />
             </ProtectedAdminRoutes>
             } />
           <Route path="/setup/account/entity" element={

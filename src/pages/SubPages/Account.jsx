@@ -12,8 +12,8 @@ const Account = () => {
         <div className="w-full mx-2 ">
         <ul
         style={{background: themeColor}}
-        className="p-2 bg-black rounded-xl flex max-w-screen w-full  items-center text-white text-md text-center justify-around flex-wrap gap-2 ">
-            <NavLink to={"/setup"}
+        className="p-2 bg-black rounded-xl flex max-w-screen w-full  items-center text-white text-md text-center   gap-2 ">
+            {/* <NavLink to={"/setup"}
             
             className={({ isActive }) =>
                 ` ${
@@ -24,8 +24,11 @@ const Account = () => {
               }
              >
               <IoMdArrowBack/>
-            </NavLink>
-            <NavLink to={"/setup/account/organisation"}
+
+              
+            </NavLink> */}
+              <div className="flex justify-center w-full gap-4">
+            {/* <NavLink to={"/setup/account/organisation"}
             
             className={({ isActive }) =>
                 ` ${
@@ -36,8 +39,8 @@ const Account = () => {
               }
              >
               Organization
-            </NavLink>
-          <NavLink to={"/setup/account/company"} className={({ isActive }) =>
+            </NavLink> */}
+          {/* <NavLink to={"/setup/account/company"} className={({ isActive }) =>
                 ` ${
                   isActive
                     ? "text-black bg-white p-2 font-medium rounded-md  items-center text-sm "
@@ -78,14 +81,14 @@ const Account = () => {
                     ? "text-black bg-white p-2 font-medium rounded-md  items-center text-sm "
                     : "  items-center text-sm  font-medium p-2 hover:bg-white hover:text-black rounded-md "
                 }`
-              }>Entity</NavLink>
-          <NavLink to={"/setup/account/building"} className={({ isActive }) =>
+              }>Entity</NavLink> */}
+          {/* <NavLink to={"/setup/account/building"} className={({ isActive }) =>
                 ` ${
                   isActive
                     ? "text-black bg-white p-2 font-medium rounded-md  items-center text-sm "
                     : "  items-center text-sm  font-medium p-2 hover:bg-white hover:text-black rounded-md "
                 }`
-              }>Building</NavLink>
+              }>Building</NavLink> */}
           {/* <NavLink to={"/setup/account/wing"} className={({ isActive }) =>
                 ` ${
                   isActive
@@ -114,13 +117,14 @@ const Account = () => {
                     : "  items-center text-sm  font-medium p-2 hover:bg-white hover:text-black rounded-md "
                 }`
               }>Unit</NavLink>
-          <NavLink to={"/setup/account/room"} className={({ isActive }) =>
+          {/* <NavLink to={"/setup/account/room"} className={({ isActive }) =>
                 ` ${
                   isActive
                     ? "text-black bg-white p-2 font-medium rounded-md  items-center text-sm "
                     : "  items-center text-sm  font-medium p-2 hover:bg-white hover:text-black rounded-md "
                 }`
-              }>Room</NavLink>
+              }>Room</NavLink> */}
+              </div>
           </ul>
         </div>
       </div>

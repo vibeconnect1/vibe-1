@@ -5,7 +5,7 @@ import { getSiteDetails } from "../../../api";
 
 const SiteDetails = () => {
   const { id } = useParams();
-  const [details, setDetails] = useState({});
+  const [details, setDetails] = useState({ feature: [] });
 
   useEffect(() => {
     const fetchSiteDetails = async () => {
@@ -18,7 +18,7 @@ const SiteDetails = () => {
       }
     };
     fetchSiteDetails();
-  }, []);
+  }, [id]);
   const capitalizeFirstLetter = (str) => {
     return str.replace(/\b\w/g, (char) => char.toUpperCase());
   };

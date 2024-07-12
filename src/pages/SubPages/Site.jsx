@@ -8,10 +8,11 @@ import { BiEdit } from "react-icons/bi";
 import { BsEye } from "react-icons/bs";
 import { Link } from "react-router-dom";
 import EditSite from "../Setup/AccountSetup/EditSite";
+import { useSelector } from "react-redux";
 
 const Site = () => {
   const [site, setSite] = useState([]);
-  const [showEditModal, setShowEditModal] = useState(false)
+  const [showEditModal, setShowEditModal] = useState(false);
   useEffect(() => {
     const fetchSite = async () => {
       try {
@@ -64,19 +65,24 @@ const Site = () => {
           <Link to={`/setup/account/site/site-details/${row.id}`}>
             <BsEye size={15} />
           </Link>
-          <button onClick={()=> setShowEditModal(true)} >
+          <Link to={`/setup/account/site/edit-site/${row.id}`}>
             <BiEdit size={15} />
-          </button>
-          {showEditModal && <EditSite onclose={()=> setShowEditModal(false)} id={row.id} />}
+          </Link>
+          {/* {showEditModal && (
+            <EditSite onclose={() => setShowEditModal(false)} id={row.id} />
+          )} */}
         </div>
       ),
     },
   ];
-
+const themeColor = useSelector((state)=> state.theme.color)
   return (
     <div className="w-full mt-1">
       <Account />
       <div className="flex flex-col mx-10 my-10 gap-2">
+        <div className="flex justify-end w-full  ">
+          <Link to={"/setup/account/site/create-new-site"} style={{background:themeColor}} className="text-white p-1 rounded-md px-2 font-medium">Create New Site</Link>
+        </div>
         {/* <div className="flex justify-center items-center ">
          
           <div className="mt-4 w-screen">
@@ -140,7 +146,6 @@ const Site = () => {
         </div> */}
         <Table columns={siteColumn} data={site} />
       </div>
-      
     </div>
   );
 };

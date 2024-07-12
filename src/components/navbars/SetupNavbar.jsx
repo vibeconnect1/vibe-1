@@ -1,8 +1,10 @@
 import React from 'react'
 import { useSelector } from 'react-redux';
 import { Link } from "react-router-dom";
+import { getItemInLocalStorage } from '../../utils/localStorage';
 const SetupNavbar = () => {
   const themeColor = useSelector((state)=> state.theme.color)
+  const siteId = getItemInLocalStorage("SITEID")
   return (
     <div className="flex mt-1">
     <div>
@@ -10,7 +12,7 @@ const SetupNavbar = () => {
       <ul
       style={{background: themeColor}}
       className="p-4 rounded-xl mx-2 md:flex grid grid-cols-2 max-w-screen items-center text-white text-sm text-center justify-center flex-wrap gap-2 ">
-        <Link to={"/setup/account/organisation"} className="hover:bg-white hover:text-black p-2 rounded-lg ">
+        <Link to={"/setup/account/building"} className="hover:bg-white hover:text-black p-2 rounded-lg ">
           Account
         </Link>
     

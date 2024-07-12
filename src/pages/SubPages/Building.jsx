@@ -6,19 +6,22 @@ import Table from "../../components/table/Table";
 import { BsEye } from "react-icons/bs";
 import { BiEdit } from "react-icons/bi";
 import { Link } from "react-router-dom";
-import { getBuildings } from "../../api";
+import { getBuildings, getSites, postBuilding } from "../../api";
+import { useSelector } from "react-redux";
+import toast from "react-hot-toast";
 
 const Building = () => {
-  const [site, setSite] = useState("");
+  const [siteId, setSiteId] = useState("");
   const [building, setBuilding] = useState("");
   const [showFields, setShowFields] = useState(false);
-  const [showRows, setShowRows] = useState(false);
+const [added, setAdded] = useState(false)
   const [submittedData, setSubmittedData] = useState([]);
+  const [sites, setSites] = useState([]);
   const [buildings, setBuildings] = useState([]);
   const buildingColumns = [
     {
       name: "Site",
-      selector: (row) => row.ticket_number,
+      selector: (row) => row.site_name,
       sortable: true,
     },
     {
@@ -27,8 +30,8 @@ const Building = () => {
       sortable: true,
     },
     {
-      name: "FLoors ",
-      selector: (row) => row.wing,
+      name: "No. of Floors ",
+      selector: (row) => row.floor_no,
       sortable: true,
     },
     {
@@ -45,31 +48,30 @@ const Building = () => {
       ),
     },
   ];
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!site || !building) {
-      return;
+    if (siteId === "" || building === "") {
+      toast.error("All fields are required");
     }
-
-    const newData = {
-      site: site,
-      building: building,
-      wing: true,
-      area: true,
-      floor: true,
-      room: true,
-      status: "Active",
-    };
-    setSubmittedData((prevData) => [...prevData, newData]);
-
-    setSite("");
-    setBuilding("");
-    setShowRows(true);
+    const formData = new FormData();
+    formData.append("building[name]", building);
+    formData.append("building[site_id]", siteId);
+    try {
+      const buildResp = await postBuilding(formData);
+      console.log(buildResp);
+      setAdded(true)
+      setShowFields(false)
+      setSiteId("")
+      setBuilding("")
+      toast.success("Building Added Successfully")
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const handleSiteChange = (e) => {
-    setSite(e.target.value);
+    setSiteId(e.target.value);
   };
 
   const handleBuildingChange = (e) => {
@@ -82,47 +84,76 @@ const Building = () => {
       setBuildings(buildingResp.data);
       console.log(buildingResp);
     };
+    const fetchSite = async () => {
+      const siteResp = await getSites();
+      setSites(siteResp.data);
+      console.log(siteResp.data);
+    };
     fetchBuildings();
-  }, []);
-
+    fetchSite();
+  }, [added]);
+  const themeColor = useSelector((state) => state.theme.color);
   return (
     <div className="w-full mt-1">
       <Account />
       <div className="flex flex-col mx-10 my-10 gap-2">
-        <h2
-          className="border-2 font-semibold hover:bg-black hover:text-white duration-150 transition-all border-black p-2 rounded-md text-black cursor-pointer text-center flex items-center w-44 gap-2"
-          onClick={() => setShowFields(!showFields)}
-        >
-          <PiPlusCircle size={20} />
-          Add Building
-        </h2>
+        <div className="flex justify-end w-full">
+          <h2
+            className="font-semibold  hover:text-white duration-150 transition-all  p-2 rounded-md text-white cursor-pointer text-center flex items-center  gap-2"
+            onClick={() => setShowFields(!showFields)}
+            style={{ background: themeColor }}
+          >
+            <PiPlusCircle size={20} />
+            Add Building
+          </h2>
+        </div>
         {showFields && (
           <div>
-            <div className="flex gap-3">
-              <input
-                type="text"
-                placeholder="Enter Site"
-                className="border border-gray-500 rounded-md mt-5 p-2"
-                value={site}
+            <div className="flex md:flex-row flex-col justify-center gap-3">
+              <select
+                name="siteId"
+                id=""
+                value={siteId}
                 onChange={handleSiteChange}
-              />
+                className="border border-gray-500 rounded-md  p-2"
+              >
+                <option value={""}>Select Site</option>
+                {sites.map((site) => (
+                  <option value={site.id} key={site.id}>
+                    {site.name}
+                  </option>
+                ))}
+              </select>
               <input
                 type="text"
                 placeholder="Enter Building Name"
-                className="border border-gray-500 rounded-md mt-5 p-2"
+                className="border border-gray-500 rounded-md  p-2"
                 value={building}
                 onChange={handleBuildingChange}
               />
+              <button
+                onClick={handleSubmit}
+                style={{ background: themeColor }}
+                className="bg-blue-500 text-white py-1 px-4 rounded-md  hover:bg-blue-600"
+              >
+                Submit
+              </button>
+              <button
+                onClick={() => setShowFields(!showFields)}
+                className="bg-red-400 text-white py-1 px-4 rounded-md  "
+              >
+                Cancel
+              </button>
             </div>
-            <div className="flex my-2 gap-4">
-              {/* <div className="flex  gap-2">
+            {/* <div className="flex my-2 gap-4">
+              <div className="flex  gap-2">
                 <input type="checkbox" name="wing" id="wing" />
                 <label htmlFor="wing">Wing</label>
-              </div> */}
-              {/* <div className="flex  gap-2">
+              </div>
+              <div className="flex  gap-2">
                 <input type="checkbox" name="area" id="area" />
                 <label htmlFor="area">Area</label>
-              </div> */}
+              </div>
               <div className="flex  gap-2">
                 <input type="checkbox" name="floor" id="floor" />
                 <label htmlFor="floor">Floor</label>
@@ -131,13 +162,7 @@ const Building = () => {
                 <input type="checkbox" name="room" id="room" />
                 <label htmlFor="room">Room</label>
               </div>
-            </div>
-            <button
-              onClick={handleSubmit}
-              className="bg-blue-500 text-white py-2 px-4 rounded-md mt-4 hover:bg-blue-600"
-            >
-              Submit
-            </button>
+            </div> */}
           </div>
         )}
 

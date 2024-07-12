@@ -618,8 +618,33 @@ export const getServicesRoutineDetails = async (id) =>
       token: token,
     },
   });
+export const getExpectedVisitor = async () =>
+  axiosInstance.get(`/visitors.json`, {
+    params: {
+      token: token,
+    },
+  });
 
 // setup
+
+export const getCompanies = async () =>
+  axiosInstance.get(`/sites/company_list.json`, {
+    params: {
+      token: token,
+    },
+  });
+export const createCompany = async (data) =>
+  axiosInstance.post(`/companies.json`, data, {
+    params: {
+      token: token,
+    },
+  });
+export const getAllFeature = async () =>
+  axiosInstance.get(`/sites/all_features.json`, {
+    params: {
+      token: token,
+    },
+  });
 export const getBuildings = async () =>
   axiosInstance.get(`/buildings.json`, {
     params: {
@@ -635,6 +660,72 @@ export const getSites = async () =>
   });
 export const getSiteDetails = async (id) =>
   axiosInstance.get(`/sites/${id}.json`, {
+    params: {
+      token: token,
+    },
+  });
+export const EditSiteDetails = async (id, data) =>
+  axiosInstance.put(`/sites/${id}.json`, data, {
+    params: {
+      token: token,
+    },
+  });
+export const postSite = async (data) =>
+  axiosInstance.post(`/sites.json`, data, {
+    params: {
+      token: token,
+    },
+  });
+export const postBuilding = async (data) =>
+  axiosInstance.post(`/buildings.json`, data, {
+    params: {
+      token: token,
+    },
+  });
+export const getAllFloors = async () =>
+  axiosInstance.get(`/floors.json`, {
+    params: {
+      token: token,
+    },
+  });
+export const getFloorDetails = async (id) =>
+  axiosInstance.get(`/floors/${id}.json`, {
+    params: {
+      token: token,
+    },
+  });
+export const editFloorDetails = async (id,data) =>
+  axiosInstance.put(`/floors/${id}.json`,data, {
+    params: {
+      token: token,
+    },
+  });
+export const postNewFloor = async (data) =>
+  axiosInstance.post(`/floors.json`, data, {
+    params: {
+      token: token,
+    },
+  });
+export const getAllUnits = async () =>
+  axiosInstance.get(`/units.json`,  {
+    params: {
+      token: token,
+    },
+  });
+export const getUnitDetails = async (id) =>
+  axiosInstance.get(`/units/${id}.json`,  {
+    params: {
+      token: token,
+    },
+  });
+export const editUnitDetails = async (id, data) =>
+  axiosInstance.put(`/units/${id}.json`,data,  {
+    params: {
+      token: token,
+    },
+  });
+export const postNewUnit = async (data) =>
+  axiosInstance.post(`/units.json`,data,  {
     params: {
       token: token,
     },
