@@ -9,6 +9,11 @@ const ProjectBoardTemplate = ({
   isOpen,
   board_id_for_Temp,
   Update_board_template,
+  selectedimage,
+  setselectedimage,
+  goToProject,
+  selectedTemplateId,
+  setSelectedTemplateId 
 }) => {
   const [template, setTemplate] = useState([]);
   const themeColor = useSelector((state) => state.theme.color);
@@ -37,7 +42,16 @@ const ProjectBoardTemplate = ({
   const handleSearchChange = (event) => {
     setSearchQuery(event.target.value);
   };
-  
+
+
+  // Function to toggle the open/close state of a category menu
+  const toggleCategoryMenu = (category) => {
+    setCategoryMenuOpen((prevState) => ({
+      ...prevState,
+      [category]: !prevState[category],
+    }));
+  };
+
   return (
     <div className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-30 backdrop-blur-sm z-50 p-10">
       <div
@@ -58,7 +72,7 @@ const ProjectBoardTemplate = ({
               position: "sticky",
               top: "0",
               zIndex: "10",
-            //   backgroundColor: "#133953",
+              //   backgroundColor: "#133953",
             }}
           >
             <div
@@ -70,10 +84,7 @@ const ProjectBoardTemplate = ({
                 // backgroundColor: "#133953",
               }}
             >
-              <div
-                className="mt-2"
-                style={{  fontSize: 18, marginBottom: 20 }}
-              >
+              <div className="mt-2" style={{ fontSize: 18, marginBottom: 20 }}>
                 <b>All Templates</b>
               </div>
               <div
@@ -146,7 +157,7 @@ const ProjectBoardTemplate = ({
                                 .includes(searchQuery.toLowerCase())
                             )
                             .map((templateItem) => (
-                              <li className="nav-item" key={templateItem.id}>
+                              <li className="" key={templateItem.id}>
                                 <a
                                   onClick={() => {
                                     setSelectedTemplateId(templateItem.id);
@@ -158,7 +169,7 @@ const ProjectBoardTemplate = ({
                                   }}
                                 >
                                   <p
-                                    className="template_name mb-2 temp-category"
+                                    className="cursor-pointer my-2 temp-category"
                                     style={{
                                       fontSize: 14,
                                       color:
@@ -169,7 +180,7 @@ const ProjectBoardTemplate = ({
                                       overflow: "auto",
                                       whiteSpace: "normal",
                                       wordWrap: "break-word",
-                                      margin: "1px 0",
+                                      // margin: "1px 0",
                                       padding: "0px 2px ",
                                       borderRadius: 4,
                                     }}
@@ -194,13 +205,13 @@ const ProjectBoardTemplate = ({
             </div>
 
             <div className="" style={{ width: "76%" }}>
-              <div >
+              <div>
                 <div className="">
                   <div className="flex items-center w-full gap-2">
                     <FaSearch className="text-gray-400" />
                     <input
                       type="text"
-                      className="bg-transparent"
+                      className="bg-transparent outline-none w-full"
                       spellCheck="true"
                       value={searchQuery}
                       onChange={handleSearchChange}
@@ -208,31 +219,31 @@ const ProjectBoardTemplate = ({
                     />
                   </div>
                 </div>
-                <div
-                  className="col-md-4 ml-3 mt-2 mr-2"
-                  
-                  onClick={() => goToProject(board_id_for_Temp)}
-                >
+                <div className="flex justify-end">
                   {" "}
-                  <span>
+                  <span
+                    className="bg-white text-black flex items-center font-medium  p-1 px-2 rounded-md"
+                    onClick={() => goToProject(board_id_for_Temp)}
+                  >
                     <i className="fa fa-plus mr-1"></i>
-                    <b>Create a blank board</b>
+                    <p>Create a blank board</p>
                   </span>
                 </div>
               </div>
 
-              <div
-                style={{ display: "flex", flexDirection: "row", marginTop: 20 }}
-              >
-                <div className="col-md-8 pr-0">
+              <div className="grid grid-cols-3 gap-4 mx-2">
+                <div className="col-span-2">
                   <span style={{ fontSize: 22 }}>Team management</span>
                   <br></br>
-                  <span style={{ fontSize: 14, color: "#cdcdcd" }}>
+                  <span
+                    style={{ fontSize: 14, color: "#cdcdcd" }}
+                    className="w-40"
+                  >
                     Simple task management for teams - create, organize, and
                     track your team's tasks
                   </span>
                 </div>
-                <div className="col-md-4 mt-3 mr-0 ml-0 p-0">
+                <div className="flex justify-center ml-5">
                   <button
                     style={{
                       borderRadius: 50,
@@ -247,16 +258,23 @@ const ProjectBoardTemplate = ({
                     }}
                   >
                     <h6>
-                      <b>Use this template</b>
+                      <p className="bg-white text-black p-1 rounded-md font-medium px-2">
+                        Use this template
+                      </p>
                     </h6>
                   </button>
                 </div>
               </div>
-              <div className="image-container">
-                {/* <img
-                  src={selectedimage ? Media + "/" + selectedimage : ""}
-                  className="image"
-                /> */}
+              <div className="p-2">
+                
+                <img
+                  src={
+                    selectedimage
+                      ? "https://vibecopilot.ai/api/media" + "/" + selectedimage
+                      : ""
+                  }
+                  className="rounded-md"
+                />
               </div>
             </div>
           </div>

@@ -624,6 +624,12 @@ export const getExpectedVisitor = async () =>
       token: token,
     },
   });
+export const postLOI = async (data) =>
+  axiosInstance.post(`/loi_details.json`, data, {
+    params: {
+      token: token,
+    },
+  });
 
 // setup
 
@@ -694,8 +700,8 @@ export const getFloorDetails = async (id) =>
       token: token,
     },
   });
-export const editFloorDetails = async (id,data) =>
-  axiosInstance.put(`/floors/${id}.json`,data, {
+export const editFloorDetails = async (id, data) =>
+  axiosInstance.put(`/floors/${id}.json`, data, {
     params: {
       token: token,
     },
@@ -707,25 +713,25 @@ export const postNewFloor = async (data) =>
     },
   });
 export const getAllUnits = async () =>
-  axiosInstance.get(`/units.json`,  {
+  axiosInstance.get(`/units.json`, {
     params: {
       token: token,
     },
   });
 export const getUnitDetails = async (id) =>
-  axiosInstance.get(`/units/${id}.json`,  {
+  axiosInstance.get(`/units/${id}.json`, {
     params: {
       token: token,
     },
   });
 export const editUnitDetails = async (id, data) =>
-  axiosInstance.put(`/units/${id}.json`,data,  {
+  axiosInstance.put(`/units/${id}.json`, data, {
     params: {
       token: token,
     },
   });
 export const postNewUnit = async (data) =>
-  axiosInstance.post(`/units.json`,data,  {
+  axiosInstance.post(`/units.json`, data, {
     params: {
       token: token,
     },
@@ -1617,6 +1623,55 @@ export const getVibeBoardTemplate = async () => {
     return response.data;
   } catch (error) {
     console.error("Error Getting project template :", error);
+    throw error;
+  }
+};
+export const updateVibeBoardTemplate = async (data) => {
+  try {
+    const response = await vibeAuth.put(
+      `/api/employee/update-board-template/`,data,
+
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error updating project template :", error);
+    throw error;
+  }
+};
+export const getVibeBoardData = async (boardId, userId) => {
+  try {
+    const response = await vibeAuth.get(
+      `/api/employee/custom_board/get-tasks/?board_id=${boardId}&user_id=${userId}`,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error getting project data :", error);
+    throw error;
+  }
+};
+export const getVibeBoardUser = async ( userId,orgId,boardId) => {
+  try {
+    const response = await vibeAuth.get(
+      `/api/employee/get-board-users/?user_id=${userId}&org_id=${orgId}&board_id=${boardId}`,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error getting project data :", error);
     throw error;
   }
 };

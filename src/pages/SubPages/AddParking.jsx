@@ -2,12 +2,14 @@ import React, { useEffect, useState } from "react";
 import Select from "react-select";
 import { getAssignedTo } from "../../api";
 import { useSelector } from "react-redux";
+import { getItemInLocalStorage } from "../../utils/localStorage";
 const AddParking = () => {
   const [behalf, setBehalf] = useState("self")
   const[users, setUsers] = useState([])
   const [formData, setFormData] = useState({
     on_behalf:""
   })
+  const buildings = getItemInLocalStorage("Building")
   useEffect(() => {
     const fetchAssignedTo = async () => {
       try {
@@ -80,8 +82,9 @@ const AddParking = () => {
               <p className="font-semibold">Select Tower :</p>
               <select className="border p-1 px-4 border-gray-500 rounded-md">
                 <option value="">Select Tower</option>
-                <option value="user1">Tower 1</option>
-                <option value="User2">Tower 2</option>
+                {buildings.map((build)=>(
+                  <option value={build.id} key={build.id}>{build.name}</option>
+                ))}
               </select>
             </div>
             {/* <div className="grid grid-cols-2 items-center "> */}

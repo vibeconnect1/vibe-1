@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Navbar from "../components/Navbar";
 import { PiPlusCircle } from "react-icons/pi";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import DataTable from "react-data-table-component";
 import { BiEdit } from "react-icons/bi";
 import { BsEye } from "react-icons/bs";
@@ -15,6 +15,7 @@ import {
   getProjectUsers,
   getVibeBackground,
   postNewProjectBoard,
+  updateVibeBoardTemplate,
 } from "../api";
 import CustomBoardCreate from "./SubPages/Projectmanagement/BoardCreation";
 import ProjectBoard from "./SubPages/Projectmanagement/ProjectBoard";
@@ -29,6 +30,7 @@ const ProjectManagement = () => {
   const themeColor = useSelector((state) => state.theme.color);
   const [isModalOpen, setIsModalAddProjectOpen] = useState(false);
   const defaultImage = { index: 0, src: "" };
+  const [selectedTemplateimage, setselectedTemplateimage] = useState(null);
   let selectedImageSrc = defaultImage.src;
   let selectedImageIndex = defaultImage.index;
   const [selectedImage, setSelectedImage] = useState(defaultImage);
@@ -39,6 +41,8 @@ const ProjectManagement = () => {
   const [selectedOptionOutsider, setSelectedOptionOutsider] = useState("");
   const [board_id_for_Temp, setboard_id_for_Temp] = useState("");
   const [isTemplateModalOpen, setIsTemplateModalOpen] = useState(false);
+  const [selectedTemplateId, setSelectedTemplateId] = useState(null);
+ 
   var count = 0;
   const user_id = getItemInLocalStorage("VIBEUSERID");
   useEffect(() => {
@@ -198,6 +202,33 @@ const ProjectManagement = () => {
     setDueDate(e.target.value);
     console.log(e.target.value);
   };
+  const [isEditingDate, setIsEditingDate] = useState(false);
+const navigate = useNavigate()
+  const goToProject = (id) => {
+    // if (!isEditingDate) {
+      navigate(`/admin/project-management/customBoard/${id}`);
+    // }
+    
+  };
+
+  const Update_board_template = async () => {
+    
+
+    const formData = new FormData();
+    formData.append("board_id", board_id_for_Temp);
+    formData.append("template_id", selectedTemplateId);
+
+    try {
+      const response = await updateVibeBoardTemplate(formData);
+      console.log(response);
+      if (response.success) {
+        console.log("Success");
+        goToProject(board_id_for_Temp);
+      } else {
+        console.log("unable to update");
+      }
+    } catch (error) {}
+  };
   return (
     <section
       className="flex"
@@ -207,11 +238,11 @@ const ProjectManagement = () => {
     >
       <Navbar />
       <div className="w-full flex mx-3 flex-col p-2 mb-10 ">
-        {/* <div className=" overflow-x-auto">
+        <div className=" overflow-x-auto">
         <Boards />
-        </div> */}
+        </div>
 
-        <section className="my-2">
+        {/* <section className="my-2">
           <div>
             <div className="flex justify-end">
               <div
@@ -241,11 +272,21 @@ const ProjectManagement = () => {
               />
             )}
             {isTemplateModalOpen && (
-              <ProjectBoardTemplate isOpen={isTemplateModalOpen} closeProjectModal={closeProjectModal} />
+              <ProjectBoardTemplate
+                isOpen={isTemplateModalOpen}
+                closeProjectModal={closeProjectModal}
+                selectedimage={selectedTemplateimage}
+                setselectedimage={setselectedTemplateimage}
+                selectedTemplateId={selectedTemplateId}
+                setSelectedTemplateId={setSelectedTemplateId}
+                board_id_for_Temp={board_id_for_Temp}
+                goToProject={goToProject}
+                Update_board_template={Update_board_template}
+              />
             )}
           </div>
           <ProjectBoard />
-        </section>
+        </section> */}
       </div>
     </section>
   );

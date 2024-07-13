@@ -9,6 +9,7 @@ import {
 import { FaPencilAlt, FaTrashAlt } from "react-icons/fa";
 import BoardDeleteModal from "../../../containers/modals/BoardDeleteModal";
 import BoardDueDateModal from "../../../containers/modals/BoardDueDateModal";
+import { useNavigate } from "react-router-dom";
 
 const ProjectBoard = () => {
   const [isLoadingProjectList, setIsLoadingProjectList] = useState(true);
@@ -150,7 +151,7 @@ const ProjectBoard = () => {
       console.log(response);
       if (response.success) {
         console.log("Success");
-        //  goToProject(board_id_for_Temp);
+         goToProject(board_id_for_Temp);
         GetBoards();
         setEditingProjectId(null);
         closeProjectDateModal();
@@ -161,7 +162,13 @@ const ProjectBoard = () => {
         console.log(error)
     }
   };
-
+  const navigate = useNavigate()
+  const goToProject = (id) => {
+    // if (!isEditingDate) {
+      navigate(`/admin/project-management/customBoard/?id=${id}`);
+    // }
+    
+  };
 
   return (
     <div>

@@ -12,7 +12,7 @@ const SetupNavbar = () => {
       <ul
       style={{background: themeColor}}
       className="p-4 rounded-xl mx-2 md:flex grid grid-cols-2 max-w-screen items-center text-white text-sm text-center justify-center flex-wrap gap-2 ">
-        <Link to={"/setup/account/building"} className="hover:bg-white hover:text-black p-2 rounded-lg ">
+        <Link to={"/setup/account/floor"} className="hover:bg-white hover:text-black p-2 rounded-lg ">
           Account
         </Link>
     

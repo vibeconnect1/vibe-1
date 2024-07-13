@@ -60,7 +60,11 @@ const CustomBoardCreate = ({
         <div style={{ color: "#fff" }} className="">
           <div style={{ display: "flex" }}>
             {" "}
-            {boardName ? <h4> {boardName}</h4> : <h4 className="font-medium text-lg"> New board name</h4>}
+            {boardName ? (
+              <h4> {boardName}</h4>
+            ) : (
+              <h4 className="font-medium text-lg">New board name</h4>
+            )}
           </div>
           <div className="">
             <input
@@ -77,14 +81,8 @@ const CustomBoardCreate = ({
               value={boardName}
               onChange={(e) => setBoardName(e.target.value)}
             />
-            <div
-              className="flex flex-col gap-1 my-2"
-             
-            >
-              <h2 className="font-medium">
-
-              Set Project Timeline :{" "}
-              </h2>
+            <div className="flex flex-col gap-1 my-2">
+              <h2 className="font-medium">Set Project Timeline : </h2>
               <input
                 min={todayDate}
                 type="date"
@@ -175,10 +173,7 @@ const CustomBoardCreate = ({
             )}
           </div>
 
-          <div
-           className="flex justify-center w-full my-4"
-          >
-            
+          <div className="flex justify-center w-full my-4">
             <button
               className="w-full p-1 shadow-custom-all-sides rounded-md font-medium bg-black bg-opacity-30"
               onClick={createBoard}

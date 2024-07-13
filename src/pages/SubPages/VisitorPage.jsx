@@ -20,7 +20,7 @@ const [visitor, setVisitor] = useState([])
   useEffect(()=>{
     const fetchExpectedVisitor = async()=>{
       const visitorResp = await getExpectedVisitor()
-      setVisitor(visitorResp)
+      setVisitor(visitorResp.data)
       console.log(visitorResp)
     }
     fetchExpectedVisitor()
@@ -152,47 +152,47 @@ const [visitor, setVisitor] = useState([])
             </div>
           )}
           {page === "Visitor Out" && (
-            <div>
-              <select className="border p-2 rounded-md border-black">
-                <option>Select Person to meet</option>
-                <option>Kunal</option>
-              </select>
-              <br />
-              <div className="text-center">
-                <span
-                  className={`cursor-pointer hover:underline ${
-                    selectedVisitor === "expected"
-                      ? "text-blue-600 underline"
-                      : ""
-                  } text-center`}
-                  onClick={() => handleClick("expected")}
-                >
-                  <span>Expected visitor</span>
-                </span>
-                <span
-                  className={`cursor-pointer hover:underline ${
-                    selectedVisitor === "unexpected"
-                      ? "text-blue-600 underline"
-                      : ""
-                  } text-center`}
-                  onClick={() => handleClick("unexpected")}
-                >
-                  &nbsp; <span>Unexpected visitor</span>
-                </span>
-              </div>
+            <div className="grid md:grid-cols-3 gap-2 items-center">
+            <select className="border p-2 rounded-md border-black">
+              <option>Select Person to meet</option>
+              <option>abc</option>
+            </select>
+
+            <div className="border md:flex-row flex-col flex p-2 rounded-md text-center border-black">
+              <span
+                className={` md:border-r px-2 border-black cursor-pointer hover:underline ${
+                  selectedVisitor === "expected"
+                    ? "text-blue-600 underline"
+                    : ""
+                } text-center`}
+                onClick={() => handleClick("expected")}
+              >
+                <span>Expected visitor</span>
+              </span>
+              <span
+                className={`cursor-pointer hover:underline ${
+                  selectedVisitor === "unexpected"
+                    ? "text-blue-600 underline"
+                    : ""
+                } text-center`}
+                onClick={() => handleClick("unexpected")}
+              >
+                &nbsp; <span>Unexpected visitor</span>
+              </span>
             </div>
+          </div>
           )}
           {page === "History" && (
             <div>
               <input
                 type="text"
-                placeholder="Search Number"
-                className="border p-2 rounded-md border-black"
+                placeholder="Search using Guest's Name or Pass Number"
+                className="border p-2 rounded-md border-black w-96"
               />
             </div>
           )}
 
-          {/* {selectedVisitor === "expected" && <Table columns={VisitorColumns} data={} /> } */}
+          {/* {selectedVisitor === "expected" && <Table columns={VisitorColumns} data={visitor} /> } */}
         </div>
       </section>
     </div>

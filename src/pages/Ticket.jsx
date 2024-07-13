@@ -463,7 +463,7 @@ const Ticket = () => {
            
             <DataTable
               responsive
-              selectableRows
+              // selectableRows
               columns={columns}
               data={filteredData}
               customStyles={customStyle}

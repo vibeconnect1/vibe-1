@@ -519,6 +519,8 @@ import GoodsInOut from "./pages/SubPages/GoodsInOut.jsx";
 import SiteDetails from "./pages/Setup/AccountSetup/SiteDetails.jsx";
 import AddSite from "./pages/Setup/AccountSetup/AddSite.jsx";
 import EditSite from "./pages/Setup/AccountSetup/EditSite.jsx";
+import ProjectCustomBoard from "./pages/SubPages/Projectmanagement/ProjectCustomBoard.jsx";
+import DashboardBeta from "./pages/DashboardBeta.jsx";
 
 function App() {
   const themeColor = useSelector((state) => state.theme.color);
@@ -1808,6 +1810,14 @@ function App() {
             element={
               <ProtectedAdminRoutes>
                 <CreateProject />
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/project-management/customBoard"
+            element={
+              <ProtectedAdminRoutes>
+                <ProjectCustomBoard />
               </ProtectedAdminRoutes>
             }
           />
@@ -4744,6 +4754,14 @@ function App() {
             element={
               <ProtectedRoute>
                 <Gmail/>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/reports"
+            element={
+              <ProtectedRoute>
+                <DashboardBeta/>
               </ProtectedRoute>
             }
           />

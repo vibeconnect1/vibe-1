@@ -1,10 +1,10 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import image from "/profile.png";
 import { FaTrash } from "react-icons/fa";
 import { useSelector } from "react-redux";
 import { getItemInLocalStorage } from "../utils/localStorage";
 import toast from "react-hot-toast";
-import { postNewVisitor } from "../api";
+import { getSetupUsers, postNewVisitor } from "../api";
 
 const AddNewVisitor = () => {
   const siteId = getItemInLocalStorage("SITEID");
@@ -13,13 +13,66 @@ const AddNewVisitor = () => {
   const inputRef = useRef(null);
   const [imageFile, setImageFile] = useState(null);
   const [visitors, setVisitors] = useState([{ name: "", mobile: "" }]);
+  const [selectedFrequency, setSelectedFrequency] = useState("once");
+  const [selectedVisitorType, setSelectedVisitorType] = useState("guest");
+  const [hosts, setHosts] = useState([]);
+  const [passStartDate, setPassStartDate] = useState("");
+  const [passEndDate, setPassEndDate] = useState("");
   const [formData, setFormData] = useState({
     visitorName: "",
     mobile: "",
     purpose: "",
+    
   });
-  console.log(formData)
+  console.log(formData);
+  const handleFrequencyChange = (e) => {
+    setSelectedFrequency(e.target.value);
+  };
+  const handleVisitorTypeChange = (e) => {
+    setSelectedVisitorType(e.target.value);
+  };
 
+  const currentDates = new Date();
+  const year = currentDates.getFullYear();
+  const month = String(currentDates.getMonth() + 1).padStart(2, "0");
+  const day = String(currentDates.getDate()).padStart(2, "0");
+  const todayDate = `${year}-${month}-${day}`;
+  const [selectedWeekdays, setSelectedWeekdays] = useState([]);
+  const [weekdaysMap, setWeekdaysMap] = useState([
+    { day: "Mon", index: 0, isActive: false },
+    { day: "Tue", index: 1, isActive: false },
+    { day: "Wed", index: 2, isActive: false },
+    { day: "Thu", index: 3, isActive: false },
+    { day: "Fri", index: 4, isActive: false },
+    { day: "Sat", index: 5, isActive: false },
+    { day: "Sun", index: 6, isActive: false },
+  ]);
+  console.log(selectedWeekdays);
+
+  const handleWeekdaySelection = (weekday) => {
+    console.log(`Selected day: ${weekday}`);
+    // Find the index of the selected day
+    const index = weekdaysMap.find((dayObj) => dayObj.day === weekday)?.index;
+
+    if (index !== undefined) {
+      // Toggle the isActive status of the selected day
+      const updatedWeekdaysMap = weekdaysMap.map((dayObj) =>
+        dayObj.index === index
+          ? { ...dayObj, isActive: !dayObj.isActive }
+          : dayObj
+      );
+
+      // Update the weekdaysMap with the modified isActive status
+      setWeekdaysMap(updatedWeekdaysMap);
+
+      // Update the selected weekdays list
+      setSelectedWeekdays((prevSelectedWeekdays) =>
+        prevSelectedWeekdays.includes(index)
+          ? prevSelectedWeekdays.filter((day) => day !== index)
+          : [...prevSelectedWeekdays, index]
+      );
+    }
+  };
   const handleAddVisitor = (event) => {
     event.preventDefault();
     setVisitors([...visitors, { name: "", mobile: "" }]);
@@ -68,7 +121,7 @@ const AddNewVisitor = () => {
     if (
       formData.visitorName === "" ||
       formData.purpose === "" ||
-      formData.mobile ===""
+      formData.mobile === ""
     ) {
       return toast.error("All fields are Required");
     }
@@ -79,13 +132,23 @@ const AddNewVisitor = () => {
     postData.append("visitor[name]", formData.visitorName);
     postData.append("visitor[contact_no]", formData.mobile);
     postData.append("visitor[purpose]", formData.purpose);
+    postData.append("visitor[start_pass]", passStartDate);
+    postData.append("visitor[end_pass]", passEndDate);
     try {
-      const visitResp = await postNewVisitor(postData)
-      console.log(visitResp)
+      const visitResp = await postNewVisitor(postData);
+      console.log(visitResp);
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
   };
+  useEffect(() => {
+    const fetchUsers = async () => {
+      const usersResp = await getSetupUsers();
+      setHosts(usersResp.data);
+      console.log(usersResp);
+    };
+    fetchUsers();
+  }, []);
 
   return (
     <div className="flex justify-center items-center  w-full p-4">
@@ -135,6 +198,8 @@ const AddNewVisitor = () => {
                   id="guest"
                   name="attendance"
                   value="guest"
+                  checked={selectedVisitorType === "guest"}
+                  onChange={handleVisitorTypeChange}
                 />
                 <label htmlFor="guest" className="font-semibold ">
                   Guest
@@ -146,6 +211,8 @@ const AddNewVisitor = () => {
                   id="staff"
                   name="attendance"
                   value="staff"
+                  checked={selectedVisitorType === "staff"}
+                  onChange={handleVisitorTypeChange}
                 />
                 <label htmlFor="staff" className="font-semibold ">
                   Support Staff
@@ -157,7 +224,14 @@ const AddNewVisitor = () => {
             <h2 className="font-semibold">Visiting Frequency :</h2>
             <div className="flex items-center gap-4 ">
               <div className="flex items-center gap-2 ">
-                <input type="radio" id="once" name="frequency" value="once" />
+                <input
+                  type="radio"
+                  id="once"
+                  name="frequency"
+                  value="once"
+                  checked={selectedFrequency === "once"}
+                  onChange={handleFrequencyChange}
+                />
                 <label htmlFor="once" className="font-semibold">
                   Once
                 </label>
@@ -168,6 +242,8 @@ const AddNewVisitor = () => {
                   id="frequently"
                   name="frequency"
                   value="frequently"
+                  checked={selectedFrequency === "frequently"}
+                  onChange={handleFrequencyChange}
                 />
                 <label htmlFor="frequently" className="font-semibold ">
                   Frequently
@@ -178,6 +254,19 @@ const AddNewVisitor = () => {
         </div>
 
         <div className="grid md:grid-cols-3 gap-5">
+          {selectedVisitorType === "staff" && (
+            <div className="grid gap-2 items-center w-full">
+              <label htmlFor="" className="font-medium">
+                Support Category :
+              </label>
+              <select className="border border-gray-400 p-2 rounded-md">
+                <option value="">Select Support Staff Category</option>
+                <option value="">Test Category</option>
+                <option value="">Test Category - 2</option>
+                <option value="">Test Category - 3</option>
+              </select>
+            </div>
+          )}
           {behalf !== "Cab" && (
             <div className="grid gap-2 items-center w-full">
               <label htmlFor="visitorName" className="font-semibold">
@@ -217,7 +306,11 @@ const AddNewVisitor = () => {
             </label>
             <select className="border border-gray-400 p-2 rounded-md">
               <option value="">Select Person to meet</option>
-              <option value="">b</option>
+              {hosts.map((host) => (
+                <option value={host.id} key={host.id}>
+                  {host.firstname} {host.lastname}
+                </option>
+              ))}
             </select>
           </div>
 
@@ -309,6 +402,7 @@ const AddNewVisitor = () => {
                 name="purpose"
                 className="border border-gray-400 p-2 rounded-md"
               >
+                <option value="">Select Purpose</option>
                 <option value="Meeting">Meeting</option>
                 <option value="Delivery">Delivery</option>
                 <option value="Personal">Personal</option>
@@ -351,7 +445,17 @@ const AddNewVisitor = () => {
               </select>
             </div>
           )}
-
+          <span>
+            <input type="checkbox" />
+            &nbsp;<label htmlFor="">Skip Host Approval</label>&nbsp;&nbsp;&nbsp;
+            <input type="checkbox" />
+            &nbsp;&nbsp;<label htmlFor="">Goods Inwards</label>
+          </span>
+        </div>
+        <h2 className="font-medium border-b-2 mt-5 border-black">
+          Additional Visitor
+        </h2>
+        <div className="grid grid-cols-3 gap-3 mt-5">
           {visitors.map((visitor, index) => (
             <div key={index}>
               <div className="grid gap-2 items-center w-full">
@@ -388,21 +492,63 @@ const AddNewVisitor = () => {
             </div>
           ))}
 
-          <span>
-            <input type="checkbox" />
-            &nbsp;<label htmlFor="">Skip Host Approval</label>&nbsp;&nbsp;&nbsp;
-            <input type="checkbox" />
-            &nbsp;&nbsp;<label htmlFor="">Goods Inwards</label>
-          </span>
+          <div>
+            <button
+              onClick={handleAddVisitor}
+              className="bg-black text-white hover:bg-gray-700 font-semibold py-2 px-4 rounded"
+            >
+              Add Additional Visitor
+            </button>
+          </div>
         </div>
-        <div>
-          <button
-            onClick={handleAddVisitor}
-            className="bg-black text-white hover:bg-gray-700 font-semibold py-2 px-4 rounded"
-          >
-            Add Additional Visitor
-          </button>
-        </div>
+        {selectedFrequency === "frequently" && (
+          <div className="flex flex-col gap-2 my-2">
+            <div className="grid md:grid-cols-3 gap-4 ">
+              <div className="flex flex-col">
+                <p className="font-medium"> Pass Valid From :</p>
+                <input
+                  type="date"
+                  min={todayDate}
+                  value={passStartDate}
+                  onChange={(event) => setPassStartDate(event.target.value)}
+                  className="border border-gray-400 p-2 rounded-md placeholder:text-sm w-full"
+                />
+              </div>
+              <div className="flex flex-col">
+                <p className="font-medium">Pass Valid To :</p>
+                <input
+                  type="date"
+                  min={todayDate}
+                  value={passEndDate}
+                  onChange={(event) => setPassEndDate(event.target.value)}
+                  className="border border-gray-400 p-2 rounded-md placeholder:text-sm w-full"
+                />
+              </div>
+            </div>
+            <p className="font-medium">Select Working Days :</p>
+
+            <div className="flex gap-4 ">
+              {weekdaysMap.map((weekdayObj) => (
+                <button
+                  key={weekdayObj.day}
+                  className={` rounded-md p-2 px-4 shadow-custom-all-sides font-medium ${
+                    selectedWeekdays?.includes(weekdayObj.index)
+                      ? // &&
+                        // weekdayObj.isActive
+                        "bg-green-400 text-white "
+                      : ""
+                  }`}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    handleWeekdaySelection(weekdayObj.day);
+                  }}
+                >
+                  <a>{weekdayObj.day}</a>
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
 
         <div className="flex gap-5 justify-center items-center my-4">
           <button
