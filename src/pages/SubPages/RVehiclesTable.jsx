@@ -256,7 +256,7 @@ const RVehiclesTable = () => {
               <PiPlusCircle size={20} />
               Add
             </Link>
-            <button
+            {/* <button
               className="border-2 font-semibold hover:bg-black hover:text-white transition-all border-black p-2 rounded-md text-black cursor-pointer text-center flex items-center gap-2 justify-center"
               style={{ height: "1cm" }}
             >
@@ -291,7 +291,7 @@ const RVehiclesTable = () => {
               style={{ height: "1cm" }}
             >
               Out
-            </button>
+            </button> */}
           </span>
         </div>
         <Table

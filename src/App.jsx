@@ -521,6 +521,8 @@ import AddSite from "./pages/Setup/AccountSetup/AddSite.jsx";
 import EditSite from "./pages/Setup/AccountSetup/EditSite.jsx";
 import ProjectCustomBoard from "./pages/SubPages/Projectmanagement/ProjectCustomBoard.jsx";
 import DashboardBeta from "./pages/DashboardBeta.jsx";
+import Patrolling from "./pages/SubPages/Patrolling.jsx";
+import AssetUtilities from "./pages/SubPages/AssetUtilities.jsx";
 
 function App() {
   const themeColor = useSelector((state) => state.theme.color);
@@ -791,6 +793,14 @@ function App() {
             element={
               <ProtectedAdminRoutes>
                 <AssetAmcDetails />
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="assets/asset-utilities"
+            element={
+              <ProtectedAdminRoutes>
+                <AssetUtilities />
               </ProtectedAdminRoutes>
             }
           />
@@ -2267,6 +2277,14 @@ function App() {
             element={
               <ProtectedAdminRoutes>
                 <MaterialDetails />
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/passes/patrolling"
+            element={
+              <ProtectedAdminRoutes>
+                <Patrolling />
               </ProtectedAdminRoutes>
             }
           />
