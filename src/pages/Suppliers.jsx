@@ -161,8 +161,8 @@ const Suppliers = () => {
     "Primary Phone": supplier.mobile,
     "Secondary Phone": supplier.secondary_mobile,
     "Primary Email": supplier.email,
-    "Secondary Phone": supplier.secondary_email,
-    "Secondary Phone": supplier.secondary_email,
+    "Secondary Email": supplier.secondary_email,
+    
     "PAN": supplier.pan_number,
     "Website" : supplier.website_url,
     "GST Number" : supplier.gstin_number,

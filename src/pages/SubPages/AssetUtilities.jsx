@@ -315,13 +315,13 @@ const AssetUtilities = () => {
     // },
 
     {
-      name: "Transaction Date",
+      name: " Date",
       selector: (row) => row.transactionDate,
       sortable: true,
     },
 
     {
-      name: "Transaction Id",
+      name: " Id",
       selector: (row) => row.transactionId,
       sortable: true,
     },
@@ -572,7 +572,7 @@ const AssetUtilities = () => {
   const EvData = [
     {
       id: 1,
-      transactionDate: "Streamland Media Inda Pvt. Ltd.",
+      transactionDate: "28/06/2024",
       transactionId: "1b1b593a52829233480e",
       name: "EV",
       site: "Nyati",

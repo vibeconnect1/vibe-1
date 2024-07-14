@@ -1675,3 +1675,19 @@ export const getVibeBoardUser = async ( userId,orgId,boardId) => {
     throw error;
   }
 };
+export const getVibeCalenderEventsNew = async ( userId) => {
+  try {
+    const response = await vibeAuth.get(
+      `/api/employee/calender/get-calender_events/?user_id=${userId}`,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error getting new events data :", error);
+    throw error;
+  }
+};

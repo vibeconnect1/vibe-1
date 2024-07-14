@@ -138,7 +138,6 @@ const Calender = () => {
     { day: "Sat", index: 5, isActive: false },
     { day: "Sun", index: 6, isActive: false },
   ]);
-  
 
   const handleWeekdaySelection = (weekday) => {
     console.log(`Selected day: ${weekday}`);
@@ -174,7 +173,7 @@ const Calender = () => {
         .filter((event) => validCategories.includes(event.category))
         .map((event) => {
           const start =
-            event.category === "Task" ? event.due_date : event.from_date;
+            event.category === "Task" ? event.due_date : event.from_datetime;
           const end = incrementDate(event.to_date);
           const category = event.category;
           const start_time = event.from_time;
@@ -224,6 +223,7 @@ const Calender = () => {
 
       setEvents(formattedEvents);
       console.log(formattedEvents);
+      console.log(calendarDataResponse);
     };
     fetchCalenderData();
   }, [popupDate]);
@@ -306,17 +306,17 @@ const Calender = () => {
       console.log(selectedItem.extendedProps.sub_category);
       console.log(subcategory);
       // console.log(microevents);
-    //   setMicroTitle(selectedItem.title);
-    //   setMicroDescription(selectedItem.description);
-    //   setMicroStartTime(selectedItem.start);
-    //   setMicroEndTime(selectedItem.end);
-    //   setMicroInvites(selectedItem.participant_to_emails);
+      //   setMicroTitle(selectedItem.title);
+      //   setMicroDescription(selectedItem.description);
+      //   setMicroStartTime(selectedItem.start);
+      //   setMicroEndTime(selectedItem.end);
+      //   setMicroInvites(selectedItem.participant_to_emails);
 
-    //   setGmailTitle(selectedItem.title);
-    //   setGmailDescription(selectedItem.description);
-    //   setGmailStartTime(selectedItem.start);
-    //   setGmailEndTime(selectedItem.end);
-    //   setGmailInvites(selectedItem.participant_to_emails);
+      //   setGmailTitle(selectedItem.title);
+      //   setGmailDescription(selectedItem.description);
+      //   setGmailStartTime(selectedItem.start);
+      //   setGmailEndTime(selectedItem.end);
+      //   setGmailInvites(selectedItem.participant_to_emails);
     }
   }, [selectedItem]);
 
@@ -429,7 +429,7 @@ const Calender = () => {
   };
 
   const handleCheckboxChange = (event) => {
-    console.log("checkbox")
+    console.log("checkbox");
     const updatedSelectedCategories = {
       ...selectedCategories,
       [event.target.name]: event.target.checked,
@@ -442,12 +442,12 @@ const Calender = () => {
 
     setAreCheckboxesChecked(anyCheckboxChecked);
     setSelectedCategories(updatedSelectedCategories);
-    console.log("event",selectedCategories.Event)
-    console.log("task",selectedCategories.Task)
-    console.log("outlook",selectedCategories.Outlook)
-    console.log("meeting",selectedCategories.Meeting)
-    console.log("gmail",selectedCategories.Gmail)
-    console.log("checkbox end")
+    console.log("event", selectedCategories.Event);
+    console.log("task", selectedCategories.Task);
+    console.log("outlook", selectedCategories.Outlook);
+    console.log("meeting", selectedCategories.Meeting);
+    console.log("gmail", selectedCategories.Gmail);
+    console.log("checkbox end");
   };
   const themeColor = useSelector((state) => state.theme.color);
 
@@ -497,10 +497,10 @@ const Calender = () => {
     const selectedFiles = event.target.files;
     const newAttachments = Array.from(selectedFiles);
     setAttachment(newAttachments);
-    console.log("testing attachment")
-    console.log(newAttachments)
-    console.log(selectedFiles)
-    console.log(event)
+    console.log("testing attachment");
+    console.log(newAttachments);
+    console.log(selectedFiles);
+    console.log(event);
     setFileUpload(true);
   };
 
@@ -552,9 +552,9 @@ const Calender = () => {
     formData.append("created_by", user_id);
     formData.append("user_id", user_id);
     formData.append("task_description", task_description);
-console.log(attachments)
+    console.log(attachments);
     attachments.forEach((file, index) => {
-      console.log(file)
+      console.log(file);
       formData.append("attachments", file);
     });
     const idList = selectedOption.map((email) => parseInt(email.value));
@@ -563,7 +563,9 @@ console.log(attachments)
     });
 
     for (let pair of formData.entries()) {
-      console.log(`${pair[0]}: ${pair[1] instanceof File ? pair[1].name : pair[1]}`);
+      console.log(
+        `${pair[0]}: ${pair[1] instanceof File ? pair[1].name : pair[1]}`
+      );
     }
 
     try {
@@ -1091,7 +1093,14 @@ console.log(attachments)
         setSelectedItem(false);
       });
   };
-
+  
+  const getInitialStartDate = () => {
+    const today = new Date();
+    const pastDate = new Date(today.setDate(today.getDate() - 30));
+    return pastDate.toISOString().split('T')[0]; // Format as YYYY-MM-DD
+  };
+  const [startDate, setStartDate] = useState(getInitialStartDate()); // 30 days before today's date
+  const [endDate, setEndDate] = useState(new Date().toISOString().split('T')[0]); // Current date in YYYY-MM-DD format
   return (
     <section className="flex">
       <Navbar />
@@ -1137,6 +1146,7 @@ console.log(attachments)
             initialDate={selectedDate}
             datesSet={handleViewChange}
             events={areCheckboxesChecked ? filteredEvents : events}
+            // events={areCheckboxesChecked ? filteredEvents : (startDate && endDate ? filteredEvents1 : events)}
             eventBackgroundColor={(events) =>
               events.extendedProps.category === "Task" ? "red" : "green"
             }
@@ -2172,108 +2182,106 @@ console.log(attachments)
                 </div>
               </div>
             )}
-            
-          {activeButton === "event" && ( <div
-             
-            >
+            {activeButton === "event" && (
               <div>
-                <div className="">
-                  <div>
-                    <label className="text-white font-medium">
-                      Event Topic
-                    </label>
-                    <br />
-                    <input
-                      value={editableTitle}
-                      onChange={(e) => setEditableTitle(e.target.value)}
-                      className="border-gray-400 border w-full p-1 rounded-md"
-                      type="text"
-                      spellCheck="true"
-                      placeholder="Enter Event Topic "
-                    />
-                  </div>
-
-                  <div className="my-1">
-                    <label className="text-white"> Date</label>
-                    <br />
-                    <div className="flex gap-2 items-center">
-                      <input
-                        type="date"
-                        value={editableStart}
-                        onChange={(e) => setEditableStart(e.target.value)}
-                        min={today}
-                        className="border-gray-400 border w-full p-1 rounded-md"
-                      ></input>
-                      <input
-                        type="date"
-                        // style={{ width: "50%", marginLeft: "10px" }}
-                        value={editableEnd}
-                        onChange={(e) => setEditableEnd(e.target.value)}
-                        min={today}
-                        className="border-gray-400 border w-full p-1 rounded-md"
-                      ></input>
-                    </div>
-                  </div>
-                  <div className="my-1">
-                    <label className="font-medium text-white"> Time</label>
-                    <br />
-                    <div style={{ display: "flex" }}>
-                      <input
-                        type="time"
-                        style={{ width: "50%" }}
-                        value={editableStartTime}
-                        onChange={(e) => setEditableStartTime(e.target.value)}
-                        className="border-gray-400 border w-full p-1 rounded-md"
-                      ></input>
-                      <input
-                        type="time"
-                        style={{ width: "50%", marginLeft: "10px" }}
-                        value={editableEndTime}
-                        onChange={(e) => setEditableEndTime(e.target.value)}
-                        className="border-gray-400 border w-full p-1 rounded-md"
-                      ></input>
-                    </div>
-                  </div>
+                <div>
                   <div className="">
-                    <label className="font-medium text-white">
-                      Event Description
-                    </label>
-                    <br />
-                    <textarea
-                      // style={{
-                      //   resize: "none",
-                      //   height: "40px",
-                      //   paddingTop: "8px",
-                      // }}
-                      className="border-gray-400 border w-full p-1 rounded-md"
-                      type="text"
-                      value={editableDescription}
-                      onChange={(e) => setEditableDescription(e.target.value)}
-                      spellCheck="true"
-                    />
-                  </div>
+                    <div>
+                      <label className="text-white font-medium">
+                        Event Topic
+                      </label>
+                      <br />
+                      <input
+                        value={editableTitle}
+                        onChange={(e) => setEditableTitle(e.target.value)}
+                        className="border-gray-400 border w-full p-1 rounded-md"
+                        type="text"
+                        spellCheck="true"
+                        placeholder="Enter Event Topic "
+                      />
+                    </div>
 
-                  <div className="flex flex-col w-full gap-2 justify-between ">
-                    {/* <label style={{ marginTop: "10px", marginBottom: "0rem" }}>
+                    <div className="my-1">
+                      <label className="text-white"> Date</label>
+                      <br />
+                      <div className="flex gap-2 items-center">
+                        <input
+                          type="date"
+                          value={editableStart}
+                          onChange={(e) => setEditableStart(e.target.value)}
+                          min={today}
+                          className="border-gray-400 border w-full p-1 rounded-md"
+                        ></input>
+                        <input
+                          type="date"
+                          // style={{ width: "50%", marginLeft: "10px" }}
+                          value={editableEnd}
+                          onChange={(e) => setEditableEnd(e.target.value)}
+                          min={today}
+                          className="border-gray-400 border w-full p-1 rounded-md"
+                        ></input>
+                      </div>
+                    </div>
+                    <div className="my-1">
+                      <label className="font-medium text-white"> Time</label>
+                      <br />
+                      <div style={{ display: "flex" }}>
+                        <input
+                          type="time"
+                          style={{ width: "50%" }}
+                          value={editableStartTime}
+                          onChange={(e) => setEditableStartTime(e.target.value)}
+                          className="border-gray-400 border w-full p-1 rounded-md"
+                        ></input>
+                        <input
+                          type="time"
+                          style={{ width: "50%", marginLeft: "10px" }}
+                          value={editableEndTime}
+                          onChange={(e) => setEditableEndTime(e.target.value)}
+                          className="border-gray-400 border w-full p-1 rounded-md"
+                        ></input>
+                      </div>
+                    </div>
+                    <div className="">
+                      <label className="font-medium text-white">
+                        Event Description
+                      </label>
+                      <br />
+                      <textarea
+                        // style={{
+                        //   resize: "none",
+                        //   height: "40px",
+                        //   paddingTop: "8px",
+                        // }}
+                        className="border-gray-400 border w-full p-1 rounded-md"
+                        type="text"
+                        value={editableDescription}
+                        onChange={(e) => setEditableDescription(e.target.value)}
+                        spellCheck="true"
+                      />
+                    </div>
+
+                    <div className="flex flex-col w-full gap-2 justify-between ">
+                      {/* <label style={{ marginTop: "10px", marginBottom: "0rem" }}>
                       Attachment
                     </label>
                     <br /> */}
-                    <input
-                      // style={{
-                      //   border: "#929090 dotted 2px",
-                      //   height: "55px",
-                      //   color: "black",
-                      //   padding: "10px",
-                      // }}
-                      value={eventAttachment}
-                      //onChange={(e) => setEventAttachment(e.target.value)}
-                      onChange={handleEventFileAttachment}
-                      ref={fileInputRef}
-                      type="file"
-                      multiple
-                    />
-                  </div>
-                  {/* <div class="col-md-6"> */}
+                      <input
+                        // style={{
+                        //   border: "#929090 dotted 2px",
+                        //   height: "55px",
+                        //   color: "black",
+                        //   padding: "10px",
+                        // }}
+                        value={eventAttachment}
+                        //onChange={(e) => setEventAttachment(e.target.value)}
+                        onChange={handleEventFileAttachment}
+                        ref={fileInputRef}
+                        type="file"
+                        multiple
+                      />
+                    </div>
+                    {/* <div class="col-md-6"> */}
                     {/* <label style={{ marginTop: "10px", marginBottom: "0rem" }}>
                       Guests
                     </label>
@@ -2312,129 +2320,64 @@ console.log(attachments)
                       }}
                       menuPosition={"fixed"}
                     />
-                  {/* </div> */}
-                  <div className="flex justify-end gap-4 my-2 ">
-                    <button
-                      className="bg-white font-medium rounded-full p-1 px-4 "
-                      onClick={handleUpdateEvent}
-                    >
-                      Update
-                    </button>
+                    {/* </div> */}
+                    <div className="flex justify-end gap-4 my-2 ">
+                      <button
+                        className="bg-white font-medium rounded-full p-1 px-4 "
+                        onClick={handleUpdateEvent}
+                      >
+                        Update
+                      </button>
 
-                    <button
-                      className="bg-red-400 text-white font-medium rounded-full p-1 px-4 "
-                      onClick={() => handleDeleteTask(user_id, category, id)}
-                    >
-                      Delete
-                    </button>
+                      <button
+                        className="bg-red-400 text-white font-medium rounded-full p-1 px-4 "
+                        onClick={() => handleDeleteTask(user_id, category, id)}
+                      >
+                        Delete
+                      </button>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>)}
-           {activeButton === "meeting" &&( <div
-              className={`content ${
-                activeButton === "meeting" ? "active" : ""
-              }`}
-            >
-              <div className="" >
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="" >
-                   <label className="text-white font-medium ">
-                     Meeting Topic
-                   </label>
-                   <br />
-                   <input
-                     value={editableTitle}
-                     onChange={(e) => setEditableTitle(e.target.value)}
-                     style={{
-                       borderRadius: 4,
-                       border: "#747272 solid 1px",
-                       height: 40,
-                       fontSize: 14,
-                       paddingLeft: 10,
-                       color: "#000",
-                       width: "100%",
-                     }}
-                     type="text"
-                     spellcheck="true"
-                   />
-                 </div>
-                  
-                  <div >
-                    <label className="text-white font-medium">
-                      {" "}
-                      Date
-                    </label>
-                    <br />
-                    <input
-                      type="date"
-                      value={editableStart}
-                      min={today}
-                      onChange={(e) => setEditableStart(e.target.value)}
-                      style={{
-                        borderRadius: 4,
-                        border: "#747272 solid 1px",
-                        height: 40,
-                        fontSize: 16,
-                        paddingLeft: 10,
-                        color: "#000",
-                        width: "100%",
-                        resize: "none",
-                      }}
-                    ></input>
-                  </div> 
-
-                  <div class="col-md-6 " style={{ marginBottom: "0rem" }}>
-                    <label className="font-medium text-white">
-                      Meeting Description
-                    </label>
-                    <br />
-                    <textarea
-                      value={editableDescription}
-                      onChange={(e) => setEditableDescription(e.target.value)}
-                      style={{
-                        borderRadius: 4,
-                        border: "#747272 solid 1px",
-                        height: 40,
-                        fontSize: 14,
-                        paddingLeft: 10,
-                        color: "#000",
-                        width: "100%",
-                        resize: "none",
-                        paddingTop: "8px",
-                      }}
-                      type="text"
-                      spellcheck="true"
-                    />
-                  </div>
-                  <div
-                    class="col-md-6  "
-                    style={{ marginBottom: "0rem", maxWidth: "100%" }}
-                  >
-                    <label className="font-medium text-white">
-                      Time
-                    </label>
-                    <br />
-                    <div style={{ display: "flex" }}>
+            )}
+            {activeButton === "meeting" && (
+              <div
+                className={`content ${
+                  activeButton === "meeting" ? "active" : ""
+                }`}
+              >
+                <div className="">
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="">
+                      <label className="text-white font-medium ">
+                        Meeting Topic
+                      </label>
+                      <br />
                       <input
-                        type="time"
-                        value={editableStartTime}
-                        onChange={(e) => setEditableStartTime(e.target.value)}
+                        value={editableTitle}
+                        onChange={(e) => setEditableTitle(e.target.value)}
                         style={{
                           borderRadius: 4,
                           border: "#747272 solid 1px",
                           height: 40,
-                          fontSize: 16,
+                          fontSize: 14,
                           paddingLeft: 10,
                           color: "#000",
-                          width: "50%",
-                          resize: "none",
+                          width: "100%",
                         }}
-                      ></input>
+                        type="text"
+                        spellcheck="true"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="text-white font-medium"> Date</label>
+                      <br />
                       <input
-                        type="time"
-                        value={editableEndTime}
-                        onChange={(e) => setEditableEndTime(e.target.value)}
+                        type="date"
+                        value={editableStart}
+                        min={today}
+                        onChange={(e) => setEditableStart(e.target.value)}
                         style={{
                           borderRadius: 4,
                           border: "#747272 solid 1px",
@@ -2442,16 +2385,78 @@ console.log(attachments)
                           fontSize: 16,
                           paddingLeft: 10,
                           color: "#000",
-                          width: "50%",
+                          width: "100%",
                           resize: "none",
-                          marginLeft: "10px",
                         }}
                       ></input>
                     </div>
+
+                    <div class="col-md-6 " style={{ marginBottom: "0rem" }}>
+                      <label className="font-medium text-white">
+                        Meeting Description
+                      </label>
+                      <br />
+                      <textarea
+                        value={editableDescription}
+                        onChange={(e) => setEditableDescription(e.target.value)}
+                        style={{
+                          borderRadius: 4,
+                          border: "#747272 solid 1px",
+                          height: 40,
+                          fontSize: 14,
+                          paddingLeft: 10,
+                          color: "#000",
+                          width: "100%",
+                          resize: "none",
+                          paddingTop: "8px",
+                        }}
+                        type="text"
+                        spellcheck="true"
+                      />
+                    </div>
+                    <div
+                      class="col-md-6  "
+                      style={{ marginBottom: "0rem", maxWidth: "100%" }}
+                    >
+                      <label className="font-medium text-white">Time</label>
+                      <br />
+                      <div style={{ display: "flex" }}>
+                        <input
+                          type="time"
+                          value={editableStartTime}
+                          onChange={(e) => setEditableStartTime(e.target.value)}
+                          style={{
+                            borderRadius: 4,
+                            border: "#747272 solid 1px",
+                            height: 40,
+                            fontSize: 16,
+                            paddingLeft: 10,
+                            color: "#000",
+                            width: "50%",
+                            resize: "none",
+                          }}
+                        ></input>
+                        <input
+                          type="time"
+                          value={editableEndTime}
+                          onChange={(e) => setEditableEndTime(e.target.value)}
+                          style={{
+                            borderRadius: 4,
+                            border: "#747272 solid 1px",
+                            height: 40,
+                            fontSize: 16,
+                            paddingLeft: 10,
+                            color: "#000",
+                            width: "50%",
+                            resize: "none",
+                            marginLeft: "10px",
+                          }}
+                        ></input>
+                      </div>
                     </div>
                   </div>
                   {/* Meeting Link */}
-                  <div >
+                  <div>
                     <label className="text-white font-medium">
                       Meeting Link
                     </label>
@@ -2475,9 +2480,7 @@ console.log(attachments)
                   </div>
                   {/* Invites */}
                   <div class="col-md-12 p-0">
-                    <label className="font-medium text-white">
-                      Invites
-                    </label>
+                    <label className="font-medium text-white">Invites</label>
                     <br />
                     <Select
                       isMulti
@@ -2515,31 +2518,24 @@ console.log(attachments)
                     />
                   </div>
 
-                  <div
-                    className="flex justify-end gap-4 my-2"
-                   
-                  >
-                    
-                      <button
-                       className="bg-white font-medium rounded-full p-1 px-4 "
-                        onClick={handleUpdateMeeting}
-                      >
-                        Update
-                      </button>
-                   
+                  <div className="flex justify-end gap-4 my-2">
+                    <button
+                      className="bg-white font-medium rounded-full p-1 px-4 "
+                      onClick={handleUpdateMeeting}
+                    >
+                      Update
+                    </button>
 
-                   
-                      <button
-                        className="bg-red-400 text-white font-medium rounded-full p-1 px-4 "
-                        onClick={() => handleDeleteTask(user_id, category, id)}
-                      >
-                        Delete
-                      </button>
-                    
+                    <button
+                      className="bg-red-400 text-white font-medium rounded-full p-1 px-4 "
+                      onClick={() => handleDeleteTask(user_id, category, id)}
+                    >
+                      Delete
+                    </button>
                   </div>
-                
+                </div>
               </div>
-            </div>)}
+            )}
             <div
               className={`content ${
                 activeButton === "outlook" ? "active" : ""
