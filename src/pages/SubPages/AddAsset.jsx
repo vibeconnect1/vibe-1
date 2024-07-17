@@ -49,11 +49,9 @@ const AddAsset = () => {
       // fetchParentAsset(assetGroupResponse.data.asset_group_id_eq);
       // console.log(assetGroupResponse)
     };
-   
 
     fetchVendors();
     fetchAssetGroups();
-   
   }, []);
 
   const handleChange = async (e) => {
@@ -123,7 +121,7 @@ const AddAsset = () => {
       const groupId = Number(e.target.value);
       console.log("groupId:" + groupId);
       await fetchSubGroups(groupId);
-      await fetchParentAsset(groupId)
+      await fetchParentAsset(groupId);
       setFormData({
         ...formData,
         asset_group_id: groupId,
@@ -172,19 +170,55 @@ const AddAsset = () => {
   const navigate = useNavigate();
 
   const handleSubmit = async () => {
+    // if (formData.warranty_start >= formData.warranty_expiry) {
+    //   toast.error("Warranty Start Date must be before Expiry Date.");
+    //   return;
+    // }
 
-    if (formData.warranty_start >= formData.warranty_expiry) {
+    // if (formData.warranty_start < formData.purchased_on || formData.installation < formData.purchased_on) {
+    //   toast.error(
+    //     "Warranty Start Date and Commissioning Date must be after or equal to Purchase Date."
+    //   );
+    //   return;
+    // }
+
+    if (
+      formData.name === "" ||
+      formData.building_id === "" ||
+      formData.floor_id === "" ||
+      formData.unit_id === ""
+    ) {
+      return toast.error("All fields are required");
+    }
+
+    if (
+      formData.warranty_start &&
+      formData.warranty_expiry &&
+      formData.warranty_start >= formData.warranty_expiry
+    ) {
       toast.error("Warranty Start Date must be before Expiry Date.");
       return;
     }
-  
-    if (formData.warranty_start < formData.purchased_on || formData.installation < formData.purchased_on) {
+
+    if (
+      formData.warranty_start &&
+      formData.purchased_on &&
+      formData.warranty_start < formData.purchased_on
+    ) {
       toast.error(
         "Warranty Start Date and Commissioning Date must be after or equal to Purchase Date."
       );
       return;
     }
 
+    if (
+      formData.installation &&
+      formData.purchased_on &&
+      formData.installation < formData.purchased_on
+    ) {
+      toast.error("Installation Date must be after or equal to Purchase Date.");
+      return;
+    }
 
     try {
       toast.loading("Creating Asset Please Wait!");
@@ -204,8 +238,14 @@ const AddAsset = () => {
         "site_asset[asset_group_id]",
         formData.asset_group_id
       );
-      formDataSend.append("site_asset[asset_sub_group_id]", formData.asset_sub_group_id);
-      formDataSend.append("site_asset[parent_asset_id]", formData.parent_asset_id);
+      formDataSend.append(
+        "site_asset[asset_sub_group_id]",
+        formData.asset_sub_group_id
+      );
+      formDataSend.append(
+        "site_asset[parent_asset_id]",
+        formData.parent_asset_id
+      );
       formDataSend.append("site_asset[installation]", formData.installation);
       formDataSend.append(
         "site_asset[warranty_expiry]",
@@ -217,11 +257,10 @@ const AddAsset = () => {
       formDataSend.append("site_asset[breakdown]", formData.breakdown);
       formDataSend.append("site_asset[is_meter]", formData.is_meter);
       formDataSend.append("site_asset[asset_type]", formData.asset_type);
-     
+
       formDataSend.append("site_asset[vendor_id]", formData.vendor_id);
-      
+
       formData.invoice.forEach((file, index) => {
-       
         formDataSend.append(`purchase_invoices[]`, file);
       });
       formData.insurance.forEach((file, index) => {
@@ -557,21 +596,7 @@ const AddAsset = () => {
                     </div>
                   </>
                 )}
-                {/* {formData.is_meter && meterType === "parent" && (
-                  <div className="flex flex-col">
-                    <select
-                      className="border p-1 px-4 border-gray-500 rounded-md"
-                      name="applicable_meter_category"
-                      value={formData.applicable_meter_category}
-                      onChange={handleChange}
-                    >
-                      <option value="">Select Asset </option>
-                      <option value="meter 1">Asswt 1</option>
-                      <option value="meter 2">Asset 2</option>
-                      <option value="meter 2">Asset 3</option>
-                    </select>
-                  </div>
-                )} */}
+
                 {formData.is_meter && meterType === "sub" && (
                   <select
                     className="border p-1 px-4 border-gray-500 rounded-md"
@@ -580,15 +605,15 @@ const AddAsset = () => {
                     value={formData.parent_asset_id}
                   >
                     <option value="">Select Parent Asset </option>
-                    {parentAsset.map((parent)=>(
-                      
-                      <option value={parent.id} key={parent.id}>{parent.name}</option>
+                    {parentAsset.map((parent) => (
+                      <option value={parent.id} key={parent.id}>
+                        {parent.name}
+                      </option>
                     ))}
                   </select>
                 )}
               </div>
             </div>
-           
           </div>
           <div className="my-5">
             <p className="border-b border-black font-semibold">

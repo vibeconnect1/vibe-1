@@ -553,13 +553,13 @@ const Asset = () => {
             >
               Import
             </button>
-            <Link
+            {/* <Link
             to={"/assets/asset-utilities"}
               className="bg-blue-500 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded"
               style={{ background: themeColor }}
             >
               Utilities
-            </Link>
+            </Link> */}
             {/* <button
               className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
               onClick={exportToExcel}
