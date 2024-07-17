@@ -35,7 +35,7 @@ const AddAsset = () => {
   const [assetGroups, setAssetGroup] = useState([]);
   const [assetSubGoups, setAssetSubGroups] = useState([]);
   const [parentAsset, setParentAsset] = useState([]);
-  console.log(formData.asset_sub_group_id);
+  console.log(formData);
   const themeColor = useSelector((state) => state.theme.color);
   useEffect(() => {
     const fetchVendors = async () => {
@@ -56,6 +56,7 @@ const AddAsset = () => {
 
   const handleChange = async (e) => {
     async function fetchFloor(floorID) {
+      console.log(floorID)
       try {
         const build = await getFloors(floorID);
         setFloors(build.data.map((item) => ({ name: item.name, id: item.id })));

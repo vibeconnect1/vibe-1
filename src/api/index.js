@@ -141,8 +141,8 @@ export const getUnits = async (floor_id) =>
     },
   });
 
-export const getFloors = async (data) =>
-  axiosInstance.get(`/floors.json`, {
+export const getFloors = async (buildId) =>
+  axiosInstance.get(`/floors.json?q[building_id_eq]=${buildId}`, {
     params: {
       token: token,
     },
