@@ -624,6 +624,18 @@ export const getExpectedVisitor = async () =>
       token: token,
     },
   });
+export const getVisitorDetails = async (id) =>
+  axiosInstance.get(`/visitors/${id}.json`, {
+    params: {
+      token: token,
+    },
+  });
+export const editVisitorDetails = async (id, data) =>
+  axiosInstance.put(`/visitors/${id}.json`, data, {
+    params: {
+      token: token,
+    },
+  });
 export const postLOI = async (data) =>
   axiosInstance.post(`/loi_details.json`, data, {
     params: {
@@ -1629,7 +1641,8 @@ export const getVibeBoardTemplate = async () => {
 export const updateVibeBoardTemplate = async (data) => {
   try {
     const response = await vibeAuth.put(
-      `/api/employee/update-board-template/`,data,
+      `/api/employee/update-board-template/`,
+      data,
 
       {
         headers: {
@@ -1659,7 +1672,7 @@ export const getVibeBoardData = async (boardId, userId) => {
     throw error;
   }
 };
-export const getVibeBoardUser = async ( userId,orgId,boardId) => {
+export const getVibeBoardUser = async (userId, orgId, boardId) => {
   try {
     const response = await vibeAuth.get(
       `/api/employee/get-board-users/?user_id=${userId}&org_id=${orgId}&board_id=${boardId}`,
@@ -1675,7 +1688,7 @@ export const getVibeBoardUser = async ( userId,orgId,boardId) => {
     throw error;
   }
 };
-export const getVibeCalenderEventsNew = async ( userId) => {
+export const getVibeCalenderEventsNew = async (userId) => {
   try {
     const response = await vibeAuth.get(
       `/api/employee/calender/get-calender_events/?user_id=${userId}`,

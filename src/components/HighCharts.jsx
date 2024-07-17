@@ -4,6 +4,7 @@ import HighchartsReact from "highcharts-react-official";
 import { getTicketDashboard } from "../api";
 import { useSelector } from "react-redux";
 import { CirclesWithBar, DNA, ThreeDots } from "react-loader-spinner";
+
 // import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 const TicketHighCharts = () => {
   const [categoryData, setCategoryData] = useState({});

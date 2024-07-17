@@ -2,11 +2,18 @@ import React, { useState, useRef, useEffect } from "react";
 import image from "/profile.png";
 import { FaTrash } from "react-icons/fa";
 import { useSelector } from "react-redux";
-import { getItemInLocalStorage } from "../utils/localStorage";
-import toast from "react-hot-toast";
-import { getSetupUsers, postNewVisitor } from "../api";
 
-const AddNewVisitor = () => {
+import toast from "react-hot-toast";
+import {
+  editVisitorDetails,
+  getSetupUsers,
+  getVisitorDetails,
+  postNewVisitor,
+} from "../../api";
+import { getItemInLocalStorage } from "../../utils/localStorage";
+import { useParams } from "react-router-dom";
+
+const EditVisitor = () => {
   const siteId = getItemInLocalStorage("SITEID");
   const userId = getItemInLocalStorage("UserId");
   const [behalf, setbehalf] = useState("Visitor");
@@ -22,8 +29,37 @@ const AddNewVisitor = () => {
     visitorName: "",
     mobile: "",
     purpose: "",
-    
   });
+
+  const { id } = useParams();
+  useEffect(() => {
+    const fetchVisitorDetails = async () => {
+      try {
+        const detailsResp = await getVisitorDetails(id);
+        const editDetail = detailsResp.data;
+        
+        console.log(editDetail);
+        setFormData({
+          ...formData,
+          visitorName: editDetail.name,
+          mobile: editDetail.contact_no,
+          purpose: editDetail.purpose,
+        });
+        if (editDetail.extra_visitors) {
+          setVisitors(
+            editDetail.extra_visitors.map((visitor) => ({
+              name: visitor.name,
+              mobile: visitor.contact_no,
+            }))
+          );
+        }
+        console.log(detailsResp.data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchVisitorDetails();
+  }, [id]);
   console.log(formData);
   const handleFrequencyChange = (e) => {
     setSelectedFrequency(e.target.value);
@@ -91,19 +127,6 @@ const AddNewVisitor = () => {
     setVisitors(newVisitors);
   };
 
-  const getHeadingText = () => {
-    switch (behalf) {
-      case "Visitor":
-        return "NEW VISITOR";
-      case "Delivery":
-        return "DELIVERY & SUPPORT STAFF";
-      case "Cab":
-        return "CAB";
-      default:
-        return "CREATE VISITOR";
-    }
-  };
-
   const handleImageClick = () => {
     inputRef.current.click();
   };
@@ -117,7 +140,7 @@ const AddNewVisitor = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const createNewVisitor = async () => {
+  const handleEditVisitor = async () => {
     if (
       formData.visitorName === "" ||
       formData.purpose === "" ||
@@ -135,11 +158,17 @@ const AddNewVisitor = () => {
     postData.append("visitor[start_pass]", passStartDate);
     postData.append("visitor[end_pass]", passEndDate);
     visitors.forEach((extraVisitor, index) => {
-      postData.append(`visitor[extra_visitors_attributes][${index}][name]`, extraVisitor.name);
-      postData.append(`visitor[extra_visitors_attributes][${index}][contact_no]`, extraVisitor.mobile);
+      postData.append(
+        `visitor[extra_visitors_attributes][${index}][name]`,
+        extraVisitor.name
+      );
+      postData.append(
+        `visitor[extra_visitors_attributes][${index}][contact_no]`,
+        extraVisitor.mobile
+      );
     });
     try {
-      const visitResp = await postNewVisitor(postData);
+      const visitResp = await editVisitorDetails(id, postData);
       console.log(visitResp);
     } catch (error) {
       console.log(error);
@@ -161,36 +190,34 @@ const AddNewVisitor = () => {
           style={{ background: themeColor }}
           className="text-center md:text-xl font-bold p-2 bg-black rounded-full text-white"
         >
-          {getHeadingText()}
+          Edit visitor
         </h2>
         <br />
 
-        {behalf !== "Cab" && behalf !== "Delivery" && (
-          <div
-            onClick={handleImageClick}
-            className="cursor-pointer flex justify-center items-center my-4"
-          >
-            {imageFile ? (
-              <img
-                src={URL.createObjectURL(imageFile)}
-                alt="Uploaded"
-                className="border-4 border-gray-300 rounded-full w-40 h-40 object-cover"
-              />
-            ) : (
-              <img
-                src={image}
-                alt="Default"
-                className="border-4 border-gray-300 rounded-full w-40 h-40 object-cover"
-              />
-            )}
-            <input
-              type="file"
-              ref={inputRef}
-              onChange={handleImageChange}
-              style={{ display: "none" }}
+        <div
+          onClick={handleImageClick}
+          className="cursor-pointer flex justify-center items-center my-4"
+        >
+          {imageFile ? (
+            <img
+              src={URL.createObjectURL(imageFile)}
+              alt="Uploaded"
+              className="border-4 border-gray-300 rounded-full w-40 h-40 object-cover"
             />
-          </div>
-        )}
+          ) : (
+            <img
+              src={image}
+              alt="Default"
+              className="border-4 border-gray-300 rounded-full w-40 h-40 object-cover"
+            />
+          )}
+          <input
+            type="file"
+            ref={inputRef}
+            onChange={handleImageChange}
+            style={{ display: "none" }}
+          />
+        </div>
 
         <div className="flex md:flex-row flex-col  my-5 gap-10">
           <div className="flex gap-2 flex-col">
@@ -271,38 +298,36 @@ const AddNewVisitor = () => {
               </select>
             </div>
           )}
-          {behalf !== "Cab" && (
-            <div className="grid gap-2 items-center w-full">
-              <label htmlFor="visitorName" className="font-semibold">
-                Visitor Name:
-              </label>
-              <input
-                type="text"
-                value={formData.visitorName}
-                onChange={handleChange}
-                name="visitorName"
-                id="visitorName"
-                className="border border-gray-400 p-2 rounded-md"
-                placeholder="Enter Visitor Name"
-              />
-            </div>
-          )}
-          {behalf !== "Cab" && (
-            <div className="grid gap-2 items-center w-full">
-              <label htmlFor="mobileNumber" className="font-semibold">
-                Mobile Number :
-              </label>
-              <input
-                type="number"
-                value={formData.mobile}
-                onChange={handleChange}
-                name="mobile"
-                id="mobileNumber"
-                className="border border-gray-400 p-2 rounded-md"
-                placeholder="Enter Mobile Number"
-              />
-            </div>
-          )}
+
+          <div className="grid gap-2 items-center w-full">
+            <label htmlFor="visitorName" className="font-semibold">
+              Visitor Name:
+            </label>
+            <input
+              type="text"
+              value={formData.visitorName}
+              onChange={handleChange}
+              name="visitorName"
+              id="visitorName"
+              className="border border-gray-400 p-2 rounded-md"
+              placeholder="Enter Visitor Name"
+            />
+          </div>
+
+          <div className="grid gap-2 items-center w-full">
+            <label htmlFor="mobileNumber" className="font-semibold">
+              Mobile Number :
+            </label>
+            <input
+              type="number"
+              value={formData.mobile}
+              onChange={handleChange}
+              name="mobile"
+              id="mobileNumber"
+              className="border border-gray-400 p-2 rounded-md"
+              placeholder="Enter Mobile Number"
+            />
+          </div>
 
           <div className="grid gap-2 items-center w-full">
             <label htmlFor="" className="font-medium">
@@ -318,33 +343,29 @@ const AddNewVisitor = () => {
             </select>
           </div>
 
-          {behalf !== "Delivery" && behalf !== "Cab" && (
-            <div className="grid gap-2 items-center w-full">
-              <label htmlFor="additionalVisitor" className="font-semibold">
-                Pass Number
-              </label>
-              <input
-                type="number"
-                id="additionalVisitor"
-                className="border border-gray-400 p-2 rounded-md"
-                placeholder="Enter Pass number"
-              />
-            </div>
-          )}
+          <div className="grid gap-2 items-center w-full">
+            <label htmlFor="additionalVisitor" className="font-semibold">
+              Pass Number
+            </label>
+            <input
+              type="number"
+              id="additionalVisitor"
+              className="border border-gray-400 p-2 rounded-md"
+              placeholder="Enter Pass number"
+            />
+          </div>
 
-          {behalf !== "Delivery" && behalf !== "Cab" && (
-            <div className="grid gap-2 items-center w-full">
-              <label htmlFor="comingFrom" className="font-semibold">
-                Coming from:
-              </label>
-              <input
-                type="text"
-                id="comingFrom"
-                className="border border-gray-400 p-2 rounded-md"
-                placeholder="Enter Origin"
-              />
-            </div>
-          )}
+          <div className="grid gap-2 items-center w-full">
+            <label htmlFor="comingFrom" className="font-semibold">
+              Coming from:
+            </label>
+            <input
+              type="text"
+              id="comingFrom"
+              className="border border-gray-400 p-2 rounded-md"
+              placeholder="Enter Origin"
+            />
+          </div>
 
           <div className="grid gap-2 items-center w-full">
             <label htmlFor="vehicleNumber" className="font-semibold">
@@ -358,19 +379,17 @@ const AddNewVisitor = () => {
             />
           </div>
 
-          {behalf !== "Visitor" && behalf !== "Cab" && (
-            <div className="grid gap-2 items-center w-full">
-              <label htmlFor="notes" className="font-semibold">
-                Notes:
-              </label>
-              <input
-                type="text"
-                id="notes"
-                className="border border-gray-400 p-2 rounded-md"
-                placeholder="Enter Notes"
-              />
-            </div>
-          )}
+          <div className="grid gap-2 items-center w-full">
+            <label htmlFor="notes" className="font-semibold">
+              Notes:
+            </label>
+            <input
+              type="text"
+              id="notes"
+              className="border border-gray-400 p-2 rounded-md"
+              placeholder="Enter Notes"
+            />
+          </div>
 
           <div className="grid gap-2 items-center w-full">
             <label htmlFor="expectedDate" className="font-semibold">
@@ -394,44 +413,25 @@ const AddNewVisitor = () => {
             />
           </div>
 
-          {behalf !== "Delivery" && behalf !== "Cab" && (
-            <div className="grid gap-2 items-center w-full">
-              <label htmlFor="purpose" className="font-semibold">
-                Visit Purpose:
-              </label>
-              <select
-                id="purpose"
-                value={formData.purpose}
-                onChange={handleChange}
-                name="purpose"
-                className="border border-gray-400 p-2 rounded-md"
-              >
-                <option value="">Select Purpose</option>
-                <option value="Meeting">Meeting</option>
-                <option value="Delivery">Delivery</option>
-                <option value="Personal">Personal</option>
-                <option value="Fitout Staff">Fitout Staff</option>
-                <option value="Other">Other</option>
-              </select>
-            </div>
-          )}
-
-          {behalf !== "Visitor" && behalf !== "Cab" && (
-            <div className="grid gap-2 items-center w-full">
-              <label htmlFor="purpose" className="font-semibold">
-                Category
-              </label>
-              <select
-                id="category"
-                className="border border-gray-400 p-2 rounded-md"
-              >
-                <option value="Courier">Courier</option>
-                <option value="R&M">R&M</option>
-                <option value="Bank Services">Bank Services</option>
-                <option value="Delivery">Delivery</option>
-              </select>
-            </div>
-          )}
+          <div className="grid gap-2 items-center w-full">
+            <label htmlFor="purpose" className="font-semibold">
+              Visit Purpose:
+            </label>
+            <select
+              id="purpose"
+              value={formData.purpose}
+              onChange={handleChange}
+              name="purpose"
+              className="border border-gray-400 p-2 rounded-md"
+            >
+              <option value="">Select Purpose</option>
+              <option value="Meeting">Meeting</option>
+              <option value="Delivery">Delivery</option>
+              <option value="Personal">Personal</option>
+              <option value="Fitout Staff">Fitout Staff</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
 
           {behalf !== "Delivery" && behalf !== "Visitor" && (
             <div className="grid gap-2 items-center w-full">
@@ -472,7 +472,7 @@ const AddNewVisitor = () => {
                   name="name"
                   className="border border-gray-400 p-2 rounded-md"
                   value={visitor.name}
-                  onChange={(event) => handleInputChange(index,  event)}
+                  onChange={(event) => handleInputChange(index, event)}
                 />
               </div>
               &nbsp;&nbsp;
@@ -556,10 +556,10 @@ const AddNewVisitor = () => {
 
         <div className="flex gap-5 justify-center items-center my-4 mb-10">
           <button
-            onClick={createNewVisitor}
+            onClick={handleEditVisitor}
             className="bg-black text-white hover:bg-gray-700 font-semibold py-2 px-4 rounded"
           >
-            CREATE
+            Save
           </button>
         </div>
       </div>
@@ -567,4 +567,4 @@ const AddNewVisitor = () => {
   );
 };
 
-export default AddNewVisitor;
+export default EditVisitor;

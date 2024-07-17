@@ -523,6 +523,8 @@ import ProjectCustomBoard from "./pages/SubPages/Projectmanagement/ProjectCustom
 import DashboardBeta from "./pages/DashboardBeta.jsx";
 import Patrolling from "./pages/SubPages/Patrolling.jsx";
 import AssetUtilities from "./pages/SubPages/AssetUtilities.jsx";
+import VisitorDetails from "./pages/SubPages/details/VisitorDetails.jsx";
+import EditVisitor from "./pages/SubPages/EditVisitor.jsx";
 
 function App() {
   const themeColor = useSelector((state) => state.theme.color);
@@ -2145,10 +2147,26 @@ function App() {
           {/* admin passess */}
           <Route path="/admin/passes" element={<Navigate to="/admin/passes/visitors" replace />}  />
           <Route
+            path="/admin/passes/visitors/visitor-details/:id"
+            element={
+              <ProtectedAdminRoutes>
+                <VisitorDetails />
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
             path="/admin/passes/visitors"
             element={
               <ProtectedAdminRoutes>
                 <VisitorPage />
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/passes/visitors/edit-visitor/:id"
+            element={
+              <ProtectedAdminRoutes>
+                <EditVisitor />
               </ProtectedAdminRoutes>
             }
           />

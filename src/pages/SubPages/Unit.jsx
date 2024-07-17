@@ -5,7 +5,13 @@ import Switch from "../../Buttons/Switch";
 import { Link } from "react-router-dom";
 import { BsEye } from "react-icons/bs";
 import { BiEdit } from "react-icons/bi";
-import { getAllFloors, getAllUnits, getBuildings, postNewUnit } from "../../api";
+import {
+  getAllFloors,
+  getAllUnits,
+  getBuildings,
+  getFloors,
+  postNewUnit,
+} from "../../api";
 import Table from "../../components/table/Table";
 import { useSelector } from "react-redux";
 import { getItemInLocalStorage } from "../../utils/localStorage";
@@ -28,25 +34,26 @@ const Unit = () => {
   const [floors, setFloors] = useState([]);
   const [unitAdded, setUnitAdded] = useState(false);
   const [editModal, setEditModal] = useState(false);
-  const [id, setId] = useState("")
+  const [id, setId] = useState("");
   useEffect(() => {
-    const fetchAllFloors = async () => {
-      try {
-        const floorsResp = await getAllFloors();
+    // const fetchAllFloors = async () => {
+    //   try {
+    //     const floorsResp = await getAllFloors();
 
-        setFloors(floorsResp.data);
-      } catch (error) {
-        console.log(error);
-      }
-    };
+    //     setFloors(floorsResp.data);
+    //   } catch (error) {
+    //     console.log(error);
+    //   }
+    // };
     const fetchBuilding = async () => {
       const buildingResp = await getBuildings();
       console.log(buildingResp);
       setBuildings(buildingResp.data);
     };
     fetchBuilding();
-    fetchAllFloors();
+    // fetchAllFloors();
   }, []);
+
   useEffect(() => {
     const fetchAllUnits = async () => {
       const unitsResp = await getAllUnits();
@@ -57,6 +64,22 @@ const Unit = () => {
     };
     fetchAllUnits();
   }, [unitAdded]);
+
+  const handleBuildingChange = async (e) => {
+    async function fetchFloor(floorID) {
+      try {
+        const build = await getFloors(floorID);
+        setFloors(build.data.map((item) => ({ name: item.name, id: item.id })));
+      } catch (e) {
+        console.log(e);
+      }
+    }
+    if (e.target.type === "select-one" && e.target.name === "building") {
+      const BuildID = Number(e.target.value);
+      await fetchFloor(BuildID);
+      setBuilding(BuildID);
+    }
+  };
 
   const handleEditClick = (id) => {
     setEditModal(true);
@@ -87,8 +110,7 @@ const Unit = () => {
       name: "Action",
       cell: (row) => (
         <div className="flex items-center gap-4">
-         
-         <button onClick={()=>handleEditClick(row.id)}>
+          <button onClick={() => handleEditClick(row.id)}>
             <BiEdit size={15} />
           </button>
         </div>
@@ -102,17 +124,17 @@ const Unit = () => {
     if (!building || !floor || !unit) {
       return;
     }
-    const formData = new FormData()
-    formData.append("unit[site_id]", siteId)
-    formData.append("unit[building_id]", building)
-    formData.append("unit[floor_id]", floor)
-    formData.append("unit[name]", unit)
+    const formData = new FormData();
+    formData.append("unit[site_id]", siteId);
+    formData.append("unit[building_id]", building);
+    formData.append("unit[floor_id]", floor);
+    formData.append("unit[name]", unit);
     try {
-      const resp = postNewUnit(formData)
-      toast.success("Unit created successfully")
-      setUnitAdded(true)
+      const resp = postNewUnit(formData);
+      setUnitAdded(true);
+      toast.success("Unit created successfully");
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
   };
 
@@ -120,9 +142,9 @@ const Unit = () => {
     setWing(e.target.value);
   };
 
-  const handleBuildingChange = (e) => {
-    setBuilding(e.target.value);
-  };
+  // const handleBuildingChange = (e) => {
+  //   setBuilding(e.target.value);
+  // };
 
   const handleAreaChange = (e) => {
     setArea(e.target.value);
@@ -142,36 +164,37 @@ const Unit = () => {
     <div className="flex">
       <Navbar />
       <div className=" w-full flex lg:mx-3 flex-col overflow-hidden">
-      <Account />
-      <div className="flex flex-col  m-2 gap-2">
-        <div className="flex justify-end">
-          <h2
-            className=" font-semibold  hover:text-white duration-150 transition-all  p-2 rounded-md text-white cursor-pointer text-center flex items-center  gap-2"
-            onClick={() => setShowFields(!showFields)}
-            style={{ background: themeColor }}
-          >
-            <PiPlusCircle size={20} />
-            Add Unit
-          </h2>
-        </div>
-        {showFields && (
-          <div>
-            <div className="flex gap-3 md:flex-row flex-col">
-              <select
-                name="building"
-                value={building}
-                onChange={(e) => setBuilding(e.target.value)}
-                id=""
-                className="border border-gray-500 rounded-md  p-2 md:w-48"
-              >
-                <option value="">Select Building</option>
-                {buildings.map((build) => (
-                  <option value={build.id} key={build.id}>
-                    {build.name}
-                  </option>
-                ))}
-              </select>
-              {/* <input
+        <Account />
+        <div className="flex flex-col  m-2 gap-2">
+          <div className="flex justify-end">
+            <h2
+              className=" font-semibold  hover:text-white duration-150 transition-all  p-2 rounded-md text-white cursor-pointer text-center flex items-center  gap-2"
+              onClick={() => setShowFields(!showFields)}
+              style={{ background: themeColor }}
+            >
+              <PiPlusCircle size={20} />
+              Add Unit
+            </h2>
+          </div>
+          {showFields && (
+            <div>
+              <div className="flex gap-3 md:flex-row flex-col">
+                <select
+                  name="building"
+                  value={building}
+                  // onChange={(e) => setBuilding(e.target.value)}
+                  onChange={handleBuildingChange}
+                  id=""
+                  className="border border-gray-500 rounded-md  p-2 md:w-48"
+                >
+                  <option value="">Select Building</option>
+                  {buildings.map((build) => (
+                    <option value={build.id} key={build.id}>
+                      {build.name}
+                    </option>
+                  ))}
+                </select>
+                {/* <input
                 type="text"
                 placeholder="Enter Wing"
                 className="border border-gray-500 rounded-md mt-5 p-2"
@@ -185,60 +208,60 @@ const Unit = () => {
                 value={area}
                 onChange={handleAreaChange}
               /> */}
-              <select
-                name="building"
-                value={floor}
-                onChange={(e) => setFloor(e.target.value)}
-                id=""
-                className="border border-gray-500 rounded-md  p-2 md:w-48"
-              >
-                <option value="">Select Floor</option>
-                {floors.map((fl) => (
-                  <option value={fl.id} key={fl.id}>
-                    {fl.name}
-                  </option>
-                ))}
-              </select>
-              {/* <input
+                <select
+                  name="building"
+                  value={floor}
+                  onChange={(e) => setFloor(e.target.value)}
+                  id=""
+                  className="border border-gray-500 rounded-md  p-2 md:w-48"
+                >
+                  <option value="">Select Floor</option>
+                  {floors.map((fl) => (
+                    <option value={fl.id} key={fl.id}>
+                      {fl.name}
+                    </option>
+                  ))}
+                </select>
+                {/* <input
                 type="text"
                 placeholder="Enter Entity"
                 className="border border-gray-500 rounded-md mt-5 p-2"
                 value={entity}
                 onChange={handleEntityChange}
               /> */}
-              <input
-                type="text"
-                placeholder="Enter Unit Name"
-                className="border border-gray-500 rounded-md  p-2"
-                value={unit}
-                onChange={handleUnitChange}
-              />
-              {/* <input
+                <input
+                  type="text"
+                  placeholder="Enter Unit Name"
+                  className="border border-gray-500 rounded-md  p-2"
+                  value={unit}
+                  onChange={handleUnitChange}
+                />
+                {/* <input
                 type="text"
                 placeholder="Enter Area(sq.Mtr)"
                 className="border border-gray-500 rounded-md mt-5 p-2"
               /> */}
-              <div className="flex gap-2">
-                <button
-                  onClick={handleSubmit}
-                  className="bg-blue-500 text-white py-2 px-4 rounded-md  hover:bg-blue-600"
-                >
-                  Submit
-                </button>
-                <button
-                  onClick={() => setShowFields(!showFields)}
-                  className="bg-red-500 text-white py-2 px-4 rounded-md  "
-                >
-                  Cancel
-                </button>
+                <div className="flex gap-2">
+                  <button
+                    onClick={handleSubmit}
+                    className="bg-blue-500 text-white py-2 px-4 rounded-md  hover:bg-blue-600"
+                  >
+                    Submit
+                  </button>
+                  <button
+                    onClick={() => setShowFields(!showFields)}
+                    className="bg-red-500 text-white py-2 px-4 rounded-md  "
+                  >
+                    Cancel
+                  </button>
+                </div>
               </div>
             </div>
-          </div>
-        )}
+          )}
 
-        <div className="flex justify-center items-center">
-          <div className=" w-screen">
-            {/* <table className="border-collapse w-full">
+          <div className="flex justify-center items-center">
+            <div className=" w-screen">
+              {/* <table className="border-collapse w-full">
               <thead>
                 <tr>
                   <th className="border-md p-2 bg-black border-r-2 text-white rounded-l-xl">
@@ -310,14 +333,16 @@ const Unit = () => {
                 </tbody>
               )}
             </table> */}
-            <div>
-              <Table columns={unitColumns} data={units} />
+              <div>
+                <Table columns={unitColumns} data={units} />
+              </div>
             </div>
           </div>
         </div>
+        {editModal && (
+          <EditUnitModal onclose={() => setEditModal(false)} id={id} />
+        )}
       </div>
-      {editModal && <EditUnitModal onclose={()=> setEditModal(false)} id={id} />}
-    </div>
     </div>
   );
 };
