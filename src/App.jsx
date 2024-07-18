@@ -525,6 +525,7 @@ import Patrolling from "./pages/SubPages/Patrolling.jsx";
 import AssetUtilities from "./pages/SubPages/AssetUtilities.jsx";
 import VisitorDetails from "./pages/SubPages/details/VisitorDetails.jsx";
 import EditVisitor from "./pages/SubPages/EditVisitor.jsx";
+import AddUser from "./pages/Setup/users/AddUser.jsx";
 
 function App() {
   const themeColor = useSelector((state) => state.theme.color);
@@ -738,6 +739,14 @@ function App() {
             element={
               <ProtectedAdminRoutes>
                 <UserSetup />
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/setup/users-setup/add-new-user"
+            element={
+              <ProtectedAdminRoutes>
+                <AddUser />
               </ProtectedAdminRoutes>
             }
           />

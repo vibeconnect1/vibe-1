@@ -449,6 +449,12 @@ export const getSetupUsers = async () =>
       token: token,
     },
   });
+export const postSetupUsers = async (data) =>
+  axiosInstance.post("/users/create.json",data, {
+    params: {
+      token: token,
+    },
+  });
 export const postNewVisitor = async (data) =>
   axiosInstance.post("/visitors.json", data, {
     params: {
@@ -744,6 +750,30 @@ export const editUnitDetails = async (id, data) =>
   });
 export const postNewUnit = async (data) =>
   axiosInstance.post(`/units.json`, data, {
+    params: {
+      token: token,
+    },
+  });
+export const getAllAddress = async () =>
+  axiosInstance.get(`/addresses.json`, {
+    params: {
+      token: token,
+    },
+  });
+export const getAddressDetails = async (id) =>
+  axiosInstance.get(`/addresses/${id}.json`, {
+    params: {
+      token: token,
+    },
+  });
+export const postAddress = async (data) =>
+  axiosInstance.post(`/addresses.json`, data, {
+    params: {
+      token: token,
+    },
+  });
+export const editAddress = async (id,data) =>
+  axiosInstance.put(`/addresses/${id}.json`, data, {
     params: {
       token: token,
     },

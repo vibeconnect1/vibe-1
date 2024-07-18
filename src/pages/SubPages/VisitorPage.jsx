@@ -9,12 +9,14 @@ import Table from "../../components/table/Table";
 import { getExpectedVisitor } from "../../api";
 import { BsEye } from "react-icons/bs";
 import { BiEdit } from "react-icons/bi";
+import Asset from "../Asset";
 
 const VisitorPage = () => {
   const [page, setPage] = useState("Visitor In");
   const themeColor = useSelector((state) => state.theme.color);
   const [selectedVisitor, setSelectedVisitor] = useState("expected");
   const [visitor, setVisitor] = useState([]);
+  const [filteredData, setFilteredData] = useState([]);
   const handleClick = (visitorType) => {
     setSelectedVisitor(visitorType);
   };
@@ -28,12 +30,17 @@ const VisitorPage = () => {
   };
   useEffect(() => {
     const fetchExpectedVisitor = async () => {
-      const visitorResp = await getExpectedVisitor();
-      const sortedVisitor = visitorResp.data.sort((a, b) => {
-        return new Date(b.created_at) - new Date(a.created_at);
-      });
-      setVisitor(sortedVisitor);
-      console.log(visitorResp);
+      try {
+        const visitorResp = await getExpectedVisitor();
+        const sortedVisitor = visitorResp.data.sort((a, b) => {
+          return new Date(b.created_at) - new Date(a.created_at);
+        });
+        setVisitor(sortedVisitor);
+        setFilteredData(sortedVisitor);
+        console.log(sortedVisitor);
+      } catch (error) {
+        console.log(error);
+      }
     };
     fetchExpectedVisitor();
   }, []);
@@ -51,8 +58,14 @@ const VisitorPage = () => {
         </div>
       ),
     },
+
     {
-      name: "Visitor Name",
+      name: "Visitor Type",
+      selector: (row) => row.visit_type,
+      sortable: true,
+    },
+    {
+      name: " Name",
       selector: (row) => row.name,
       sortable: true,
     },
@@ -61,16 +74,39 @@ const VisitorPage = () => {
       selector: (row) => row.contact_no,
       sortable: true,
     },
-    {
-      name: "OTP",
-      selector: (row) => row.otp,
-      sortable: true,
-    },
+
     {
       name: "Purpose",
       selector: (row) => row.purpose,
       sortable: true,
     },
+    {
+      name: "Coming from",
+      selector: (row) => row.coming_from,
+      sortable: true,
+    },
+    {
+      name: "Expected Date",
+      selector: (row) => row.expected_date,
+      sortable: true,
+    },
+    {
+      name: "Expected Time",
+      selector: (row) => row.expected_time,
+      sortable: true,
+    },
+    {
+      name: "Vehicle No.",
+      selector: (row) => row.vehicle_number,
+      sortable: true,
+    },
+
+    {
+      name: "Host Approval",
+      selector: (row) => (row.skip_host_approval ? "Not Required" : "Required"),
+      sortable: true,
+    },
+
     {
       name: "Pass Start",
       selector: (row) => (row.start_pass ? dateFormat(row.start_pass) : ""),
@@ -97,11 +133,25 @@ const VisitorPage = () => {
       sortable: true,
     },
     {
-      name: "Created By",
+      name: "Host",
       selector: (row) => row.created_by,
       sortable: true,
     },
   ];
+  const [searchText, setSearchText] = useState("");
+  const handleSearch = (e) => {
+    const searchValue = e.target.value;
+    setSearchText(searchValue);
+    if (searchValue.trim()=== "") {
+      setFilteredData(visitor)
+    }else{
+      const filteredResults = visitor.filter(
+        (item)=> item.name.toLowerCase().includes(searchValue.toLowerCase()) ||
+        item.vehicle_number && item.vehicle_number.toLowerCase().includes(searchValue.toLowerCase())
+      )
+      setFilteredData(filteredResults)
+    }
+  };
   return (
     <div className="visitors-page">
       <section className="flex">
@@ -154,10 +204,13 @@ const VisitorPage = () => {
           </div>
           {page === "Visitor In" && (
             <div className="grid md:grid-cols-3 gap-2 items-center">
-              <select className="border p-2 rounded-md border-black">
-                <option>Select Person to meet</option>
-                <option>abc</option>
-              </select>
+              <input
+                type="text"
+                className="border border-black p-2 rounded-md placeholder:text-sm"
+                value={searchText}
+                onChange={handleSearch}
+                placeholder="Search using Visitor name, Host, vehicle number"
+              />
 
               <div className="border md:flex-row flex-col flex p-2 rounded-md text-center border-black">
                 <span
@@ -225,7 +278,7 @@ const VisitorPage = () => {
           )}
           <div className="my-4">
             {selectedVisitor === "expected" && page === "Visitor In" && (
-              <Table columns={VisitorColumns} data={visitor} />
+              <Table columns={VisitorColumns} data={filteredData} />
             )}
             {selectedVisitor === "unexpected" && (
               // <Table columns={VisitorColumns} data={visitor} />

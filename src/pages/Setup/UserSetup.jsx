@@ -19,7 +19,7 @@ const UserSetup = () => {
         const setupUsers = await getSetupUsers();
         setUsers(setupUsers.data);
         setFilteredData(setupUsers.data);
-        console.log(setupUsers.data)
+        console.log(setupUsers.data);
       } catch (error) {
         console.log(error);
       }
@@ -32,12 +32,12 @@ const UserSetup = () => {
       toast.loading(`Sending Mail to ${first} ${last}`);
       const welcomeMail = await sendMailToUsers(userId);
       console.log("mail sent", welcomeMail);
-      toast.dismiss()
+      toast.dismiss();
       toast.success("Welcome Mail Sent");
     } catch (error) {
       console.log(error);
-      toast.error("Something went wrong")
-      toast.dismiss()
+      toast.error("Something went wrong");
+      toast.dismiss();
     }
   };
 
@@ -54,8 +54,9 @@ const UserSetup = () => {
           (item.firstname &&
             item.firstname.toLowerCase().includes(searchValue.toLowerCase())) ||
           (item.lastname &&
-            item.lastname.toLowerCase().includes(searchValue.toLowerCase())) ||(item.unit_name &&
-              item.unit_name.toLowerCase().includes(searchValue.toLowerCase()))
+            item.lastname.toLowerCase().includes(searchValue.toLowerCase())) ||
+          (item.unit_name &&
+            item.unit_name.toLowerCase().includes(searchValue.toLowerCase()))
       );
       setFilteredData(filteredResults);
     }
@@ -100,7 +101,14 @@ const UserSetup = () => {
 
     {
       name: "Type",
-      selector: (row) => row.user_type === "pms_admin"? "Admin" :row.user_type === "pms_occupant_admin" ? "Unit Owner" : row.user_type === "pms_technician"? "Technician": row.user_type  ,
+      selector: (row) =>
+        row.user_type === "pms_admin"
+          ? "Admin"
+          : row.user_type === "pms_occupant_admin"
+          ? "Unit Owner"
+          : row.user_type === "pms_technician"
+          ? "Technician"
+          : row.user_type,
       sortable: true,
     },
     {
@@ -117,6 +125,7 @@ const UserSetup = () => {
       sortable: true,
     },
   ];
+
   return (
     <section className="flex">
       <Navbar />
@@ -129,10 +138,14 @@ const UserSetup = () => {
             value={searchText}
             onChange={handleSearch}
           />
-          {/* <button className="border-2 font-semibold hover:bg-black hover:text-white duration-300 ease-in-out transition-all border-black p-1 px-4 rounded-md text-black cursor-pointer text-center flex items-center gap-2 justify-center">
+          <Link
+            to={"/setup/users-setup/add-new-user"}
+            style={{ background: themeColor }}
+            className="font-semibold duration-300 ease-in-out transition-all  p-1 px-4 rounded-md text-white cursor-pointer text-center flex items-center gap-2 justify-center"
+          >
             <PiPlusCircle size={20} />
             Add User
-          </button> */}
+          </Link>
         </div>
         <Table columns={userColumn} data={filteredData} />
       </div>

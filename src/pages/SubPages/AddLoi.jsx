@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import FileInputBox from "../../containers/Inputs/FileInputBox";
-import { getVendors } from "../../api";
+import { getAllAddress, getInventory, getVendors, postLOI } from "../../api";
 import toast from "react-hot-toast";
 import { getItemInLocalStorage } from "../../utils/localStorage";
 
@@ -9,6 +9,8 @@ const AddLoi = () => {
   const [scheduleFor, setScheduleFor] = useState("PO");
   const themeColor = useSelector((state) => state.theme.color);
   const [showEntityList, setShowEntityList] = useState(false);
+  const [addresses, setAddresses] = useState([]);
+  const [stocks, setStocks] = useState([])
   const [activities, setActivities] = useState([
     {
       inventory: "",
@@ -116,17 +118,42 @@ const AddLoi = () => {
 
   useEffect(() => {
     const fetchVendors = async () => {
-      const vendorResp = await getVendors();
-      setVendors(vendorResp.data);
+      try {
+        const vendorResp = await getVendors();
+        setVendors(vendorResp.data);
+      } catch (error) {
+        console.log(error);
+      }
     };
+    const fetchAllAddress = async () => {
+      try {
+        const addressResp = await getAllAddress();
+        setAddresses(addressResp.data);
+        console.log(addressResp);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    const fetchInventory = async()=>{
+      try {
+        const inventoryResp = await getInventory()
+        console.log(inventoryResp)
+        setStocks(inventoryResp.data)
+
+      } catch (error) {
+        console.log(error)
+      }
+    }
+    fetchAllAddress();
     fetchVendors();
+    fetchInventory()
   }, []);
 
   const handleAddActivity = () => {
     setActivities([
       ...activities,
       {
-        inventory: "",  
+        inventory: "",
         SACCode: "",
         quantity: "",
         unit: "",
@@ -144,7 +171,6 @@ const AddLoi = () => {
         Total: "",
       },
     ]);
-    
   };
 
   const handleDeleteActivity = (index) => {
@@ -158,26 +184,53 @@ const AddLoi = () => {
     if (
       formData.date === "" ||
       formData.deliveryAddress === "" ||
-      formData.billingAddress
+      formData.billingAddress === ""
     ) {
       return toast.error("Please provide the required details");
     }
-
+  
     const sendData = new FormData();
-    sendData.append("site_id", siteId);
-    sendData.append("created_by_id", userId);
-    sendData.append("loi_type", formData.type);
-    sendData.append("loi_date", formData.date);
-    sendData.append("retention", formData.retentionPercentage);
-    sendData.append("related_to", formData.relatedTo);
-    sendData.append("related_to", formData.TDS);
-    sendData.append("related_to", formData.QC);
-    sendData.append("related_to", formData.paymentTenure);
-    sendData.append("related_to", formData.vendor_id);
-    sendData.append("related_to", formData.billingAddress);
-    sendData.append("related_to", formData.deliveryAddress);
-    sendData.append("related_to", formData.terms);
+    sendData.append("loi_detail[site_id]", siteId);
+    sendData.append("loi_detail[created_by_id]", userId);
+    sendData.append("loi_detail[loi_type]", formData.type);
+    sendData.append("loi_detail[loi_date]", formData.date);
+    sendData.append("loi_detail[retention]", formData.retentionPercentage);
+    sendData.append("loi_detail[related_to]", formData.relatedTo);
+    sendData.append("loi_detail[tds]", formData.TDS);
+    sendData.append("loi_detail[qc]", formData.QC);
+    sendData.append("loi_detail[payment_tenure]", formData.paymentTenure);
+    sendData.append("loi_detail[vendor_id]", formData.vendor_id);
+    sendData.append("loi_detail[billing_address_id]", formData.billingAddress);
+    sendData.append("loi_detail[delivery_address_id]", formData.deliveryAddress);
+    sendData.append("loi_detail[terms]", formData.terms);
+  
+    activities.forEach((item, index) => {
+      sendData.append(`loi_detail[loi_items][${index}][item_id]`, item.inventory);
+      sendData.append(`loi_detail[loi_items][${index}][sac_code]`, item.SACCode);
+      sendData.append(`loi_detail[loi_items][${index}][quantity]`, item.quantity);
+      sendData.append(`loi_detail[loi_items][${index}][standard_unit_id]`, item.unit);
+      sendData.append(`loi_detail[loi_items][${index}][rate]`, item.rate);
+      sendData.append(`loi_detail[loi_items][${index}][csgt_rate]`, item.cgstRate);
+      sendData.append(`loi_detail[loi_items][${index}][csgt_amt]`, item.cgstAmount);
+      sendData.append(`loi_detail[loi_items][${index}][sgst_rate]`, item.sgstRate);
+      sendData.append(`loi_detail[loi_items][${index}][sgst_amt]`, item.sgstAmount);
+      sendData.append(`loi_detail[loi_items][${index}][igst_rate]`, item.igstRate);
+      sendData.append(`loi_detail[loi_items][${index}][igst_amt]`, item.igstAmount);
+      sendData.append(`loi_detail[loi_items][${index}][tcs_rate]`, item.TCSRate);
+      sendData.append(`loi_detail[loi_items][${index}][tcs_amt]`, item.TCSAmount);
+      sendData.append(`loi_detail[loi_items][${index}][tax_amt]`, item.TaxAmount);
+      sendData.append(`loi_detail[loi_items][${index}][amount]`, item.Amount);
+      sendData.append(`loi_detail[loi_items][${index}][total_amount]`, item.Total);
+    });
+  
+    try {
+      const resp = await postLOI(sendData);
+      console.log(resp);
+    } catch (error) {
+      console.log(error);
+    }
   };
+  
 
   return (
     <section>
@@ -231,7 +284,7 @@ const AddLoi = () => {
             </div>
           </div>
         </div>
-        <div className="md:mx-20 my-5 mb-10 sm:border border-gray-400 p-5 px-10 rounded-lg sm:shadow-xl">
+        <div className="md:mx-20 my-5 mb-10 sm:border border-gray-400 md:p-5 md:px-10 rounded-lg sm:shadow-xl">
           <div className="w-full mx-3 my-5 p-5 shadow-lg rounded-lg border border-gray-300">
             <div>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
@@ -384,12 +437,18 @@ const AddLoi = () => {
                   name="billingAddress"
                   value={formData.billingAddress}
                   onChange={handleChange}
-                  placeholder="Select Billing Address"
-                />
+                >
+                  <option value="">Select billing address</option>
+                  {addresses.map((address) => (
+                    <option value={address.id} key={address.id}>
+                      {address.address_title}
+                    </option>
+                  ))}
+                </select>
               </div>
               {scheduleFor === "PO" && (
                 <div className="col-span-1">
-                  <label className="block text-gray-700 font-bold mb-2">
+                  <label className="block text-gray-700 font-bold my-2">
                     Select Delivery Address
                   </label>
                   <select
@@ -400,7 +459,14 @@ const AddLoi = () => {
                     name="deliveryAddress"
                     value={formData.deliveryAddress}
                     onChange={handleChange}
-                  />
+                  >
+                    <option value="">Select delivery address</option>
+                    {addresses.map((address) => (
+                      <option value={address.id} key={address.id}>
+                        {address.address_title}
+                      </option>
+                    ))}
+                  </select>
                 </div>
               )}
               <div className="w-full ">
@@ -450,10 +516,9 @@ const AddLoi = () => {
                       onChange={(e) => handleInputChange(e, index)}
                     >
                       <option value="">Select Inventory</option>
-                      <option value="activity1">Inventory</option>
-                      <option value="activity2">test inventory</option>
-                      <option value="activity3">test inventory</option>
-                      <option value="activity4">Inventory</option>
+                      {stocks.map((stock)=>(
+                        <option value={stock.id} key={stock.id}>{stock.name}</option>
+                      ))}
                     </select>
                   </div>
                   <div className="col-span-1">
@@ -512,7 +577,7 @@ const AddLoi = () => {
                       <option value="Litre">Litre</option>
                       <option value="Box">Box</option>
                       <option value="Bottle">Bottle</option>
-                      <option value="Packet">Packet</option>
+                      <option value="5">Packet</option>
                       <option value="Bag">Bag</option>
                       <option value="Qty">Qty</option>
                       <option value="Meter">Meter</option>
@@ -751,7 +816,7 @@ const AddLoi = () => {
           <div className="sm:flex justify-center grid gap-2 my-5 ">
             <button
               className="bg-black text-white p-2 px-4 rounded-md font-medium"
-              //   onClick={handleSubmit}
+                onClick={handleLoiSubmit}
             >
               Submit
             </button>

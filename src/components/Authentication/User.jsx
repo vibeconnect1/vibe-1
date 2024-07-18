@@ -61,6 +61,19 @@ function User() {
       console.log(error);
     }
   };
+  const [feat, setFeat] = useState("");
+ 
+
+  const getAllowedFeatures = () => {
+    const storedFeatures = getItemInLocalStorage("FEATURES");
+    if (storedFeatures) {
+      setFeat(storedFeatures.map((feature) => feature.feature_name));
+    }
+  };
+  useEffect(() => {
+  
+    getAllowedFeatures();
+  }, []);
 
   document.title = `Profile - Vibe Connect`;
   return (
@@ -156,7 +169,7 @@ function User() {
                   ))}
                 </div>
                 {/* <FontSizeSelector /> */}
-                {/* <Background /> */}
+                {feat.includes("project_task") && (  <Background />)}
               </div>
             )}
           </div>

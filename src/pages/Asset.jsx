@@ -77,7 +77,7 @@ const Asset = () => {
 
   const dateFormat = (dateString) => {
     const date = new Date(dateString);
-    return date.toLocaleString(); // Adjust the format as needed
+    return date.toLocaleString(); 
   };
   const column = [
     {
