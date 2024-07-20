@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useCallback } from "react";
 import image from "/profile.png";
 import { FaTrash } from "react-icons/fa";
 import { useSelector } from "react-redux";
@@ -6,7 +6,7 @@ import { getItemInLocalStorage } from "../utils/localStorage";
 import toast from "react-hot-toast";
 import { getSetupUsers, postNewVisitor } from "../api";
 import { useNavigate } from "react-router-dom";
-
+import Webcam from "react-webcam";
 const AddNewVisitor = () => {
   const siteId = getItemInLocalStorage("SITEID");
   const userId = getItemInLocalStorage("UserId");
@@ -18,6 +18,15 @@ const AddNewVisitor = () => {
   const [selectedVisitorType, setSelectedVisitorType] = useState("Guest");
   const [hosts, setHosts] = useState([]);
   const [passStartDate, setPassStartDate] = useState("");
+  const [showWebcam, setShowWebcam] = useState(false);
+  const [capturedImage, setCapturedImage] = useState(null);
+  const handleOpenCamera = () => {
+    setShowWebcam(true);
+  };
+
+  const handleCloseCamera = () => {
+    setShowWebcam(false);
+  };
   const [passEndDate, setPassEndDate] = useState("");
   const [formData, setFormData] = useState({
     visitorName: "",
@@ -112,18 +121,19 @@ const AddNewVisitor = () => {
     }
   };
 
-  const handleImageClick = () => {
-    inputRef.current.click();
-  };
 
-  const handleImageChange = (event) => {
-    setImageFile(event.target.files[0]);
-  };
   const themeColor = useSelector((state) => state.theme.color);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
+  const webcamRef = useRef(null);
+  const capture = useCallback(() => {
+    const imageSrc = webcamRef.current.getScreenshot();
+    console.log(imageSrc);
+    setShowWebcam(false);
+    setCapturedImage(imageSrc);
+  }, [webcamRef]);
 
   const navigate = useNavigate();
   const createNewVisitor = async () => {
@@ -192,33 +202,36 @@ const AddNewVisitor = () => {
           {getHeadingText()}
         </h2>
         <br />
-
-        {behalf !== "Cab" && behalf !== "Delivery" && (
-          <div
-            onClick={handleImageClick}
-            className="cursor-pointer flex justify-center items-center my-4"
-          >
-            {imageFile ? (
-              <img
-                src={URL.createObjectURL(imageFile)}
-                alt="Uploaded"
-                className="border-4 border-gray-300 rounded-full w-40 h-40 object-cover"
-              />
-            ) : (
-              <img
-                src={image}
-                alt="Default"
-                className="border-4 border-gray-300 rounded-full w-40 h-40 object-cover"
-              />
-            )}
-            <input
-              type="file"
-              ref={inputRef}
-              onChange={handleImageChange}
-              style={{ display: "none" }}
+        <div className="flex justify-center">
+        {!showWebcam ? (
+        <button onClick={handleOpenCamera}>
+          <img
+            src={capturedImage || image}
+            alt="Uploaded"
+            className="border-4 border-gray-300 rounded-full w-40 h-40 object-cover"
+          />
+        </button>
+      ) : (
+        <div>
+          <div className="rounded-full">
+            <Webcam
+              audio={false}
+              ref={webcamRef}
+              screenshotFormat="image/jpeg"
+              className="rounded-full w-60 h-60 object-cover"
             />
           </div>
-        )}
+          <div className="flex gap-2 justify-end my-2 items-center">
+            <button onClick={capture} className="bg-green-400 rounded-md text-white p-1 px-4">
+              Capture
+            </button>
+            <button onClick={handleCloseCamera} className="bg-red-400 rounded-md text-white p-1 px-4">
+              Close
+            </button>
+          </div>
+        </div>
+      )}
+        </div>
 
         <div className="flex md:flex-row flex-col  my-5 gap-10">
           <div className="flex gap-2 flex-col">

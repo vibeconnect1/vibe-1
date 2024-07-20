@@ -526,6 +526,8 @@ import AssetUtilities from "./pages/SubPages/AssetUtilities.jsx";
 import VisitorDetails from "./pages/SubPages/details/VisitorDetails.jsx";
 import EditVisitor from "./pages/SubPages/EditVisitor.jsx";
 import AddUser from "./pages/Setup/users/AddUser.jsx";
+import EditContactBook from "./pages/SubPages/EditContactBook.jsx";
+import LOIProceed from "./pages/SubPages/LOIProceed.jsx";
 
 function App() {
   const themeColor = useSelector((state) => state.theme.color);
@@ -611,113 +613,152 @@ function App() {
             }
           />
           {/* setup */}
-          <Route path="/setup" element={
-            <ProtectedAdminRoutes>
-              <Setup />
-            </ProtectedAdminRoutes>
-            } />
+          <Route
+            path="/setup"
+            element={
+              <ProtectedAdminRoutes>
+                <Setup />
+              </ProtectedAdminRoutes>
+            }
+          />
 
-          <Route path="/setup/account" element={
-            <ProtectedAdminRoutes>
-              <Account />
-            </ProtectedAdminRoutes>
-            } />
+          <Route
+            path="/setup/account"
+            element={
+              <ProtectedAdminRoutes>
+                <Account />
+              </ProtectedAdminRoutes>
+            }
+          />
           <Route
             path="/setup/account/organisation"
             element={
               <ProtectedAdminRoutes>
-
                 <Organisation />
               </ProtectedAdminRoutes>
-          }
+            }
           />
-          
-          <Route path="/setup/account/company" element={
-            <ProtectedAdminRoutes>
 
-              <Company />
-            </ProtectedAdminRoutes>
-            } />
-          <Route path="/setup/account/country" element={
-            <ProtectedAdminRoutes>
-
-              <Country />
-            </ProtectedAdminRoutes>
-            } />
-          <Route path="/setup/account/region" element={
-            <ProtectedAdminRoutes>
-
-              <Region />
-            </ProtectedAdminRoutes>
-            } />
-          <Route path="/setup/account/zone" element={
-            <ProtectedAdminRoutes>
-
-              <Zone />
-            </ProtectedAdminRoutes>
-            } />
-          <Route path="/setup/account/site" element={
-            <ProtectedAdminRoutes>
-              <Site />
-            </ProtectedAdminRoutes>
-            } />
-          <Route path="/setup/account/site/create-new-site" element={
-            <ProtectedAdminRoutes>
-              <AddSite />
-            </ProtectedAdminRoutes>
-            } />
-          <Route path="/setup/account/site/site-details/:id" element={
-            <ProtectedAdminRoutes>
-              <SiteDetails />
-            </ProtectedAdminRoutes>
-            } />
-          <Route path="/setup/account/site/edit-site/:id" element={
-            <ProtectedAdminRoutes>
-              <EditSite />
-            </ProtectedAdminRoutes>
-            } />
-          <Route path="/setup/account/entity" element={
-            <ProtectedAdminRoutes>
-
-            <Entity />
-            </ProtectedAdminRoutes>
-            } />
-          <Route path="/setup/account/building" element={
-            <ProtectedAdminRoutes>
-
-              <Building />
-            </ProtectedAdminRoutes>
-            } />
-          <Route path="/setup/account/wing" element={
-            <ProtectedAdminRoutes>
-
-              <Wing />
-            </ProtectedAdminRoutes>
-            } />
-          <Route path="/setup/account/area" element={
-            <ProtectedAdminRoutes>
-
-              <Area />
-            </ProtectedAdminRoutes>
-            } />
-          <Route path="/setup/account/floor" element={
-            <ProtectedAdminRoutes>
-
-              <Floor />
-            </ProtectedAdminRoutes>
-            } />
-          <Route path="/setup/account/unit" element={
-            <ProtectedAdminRoutes>
-
-              <Unit />
-            </ProtectedAdminRoutes>
-            } />
-          <Route path="/setup/account/room" element={
-            <ProtectedAdminRoutes>
-
-              <Room />
-            </ProtectedAdminRoutes>
-            } />
+          <Route
+            path="/setup/account/company"
+            element={
+              <ProtectedAdminRoutes>
+                <Company />
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/setup/account/country"
+            element={
+              <ProtectedAdminRoutes>
+                <Country />
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/setup/account/region"
+            element={
+              <ProtectedAdminRoutes>
+                <Region />
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/setup/account/zone"
+            element={
+              <ProtectedAdminRoutes>
+                <Zone />
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/setup/account/site"
+            element={
+              <ProtectedAdminRoutes>
+                <Site />
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/setup/account/site/create-new-site"
+            element={
+              <ProtectedAdminRoutes>
+                <AddSite />
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/setup/account/site/site-details/:id"
+            element={
+              <ProtectedAdminRoutes>
+                <SiteDetails />
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/setup/account/site/edit-site/:id"
+            element={
+              <ProtectedAdminRoutes>
+                <EditSite />
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/setup/account/entity"
+            element={
+              <ProtectedAdminRoutes>
+                <Entity />
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/setup/account/building"
+            element={
+              <ProtectedAdminRoutes>
+                <Building />
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/setup/account/wing"
+            element={
+              <ProtectedAdminRoutes>
+                <Wing />
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/setup/account/area"
+            element={
+              <ProtectedAdminRoutes>
+                <Area />
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/setup/account/floor"
+            element={
+              <ProtectedAdminRoutes>
+                <Floor />
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/setup/account/unit"
+            element={
+              <ProtectedAdminRoutes>
+                <Unit />
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/setup/account/room"
+            element={
+              <ProtectedAdminRoutes>
+                <Room />
+              </ProtectedAdminRoutes>
+            }
+          />
           <Route
             path="/setup/User-role"
             element={
@@ -880,12 +921,48 @@ function App() {
             }
           />
           {/* business */}
-          <Route path="/business" element={<Business />} />
-          <Route path="/business/details/:id" element={<BusinessDetails />} />
-          <Route path="/business/add-business" element={<AddBusiness />} />
-          <Route path="/business/setup-category" element={<BusinessSetup />} />
+          <Route
+            path="/business"
+            element={
+              <ProtectedAdminRoutes>
+                <Business />
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/business/details/:id"
+            element={
+              <ProtectedAdminRoutes>
+                <BusinessDetails />
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/business/edit-contact/:id"
+            element={
+              <ProtectedAdminRoutes>
+                <EditContactBook />
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/business/add-business"
+            element={
+              <ProtectedAdminRoutes>
+                <AddBusiness />
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/business/setup-category"
+            element={
+              <ProtectedAdminRoutes>
+                <BusinessSetup />
+              </ProtectedAdminRoutes>
+            }
+          />
           {/* materials */}
-          
+
           {/* booking */}
           <Route path="/bookings" element={<Booking />} />
           <Route
@@ -1111,7 +1188,10 @@ function App() {
             element={<OutBoundDetails />}
           />
           {/* Asset */}
-          <Route path="/assets" element={<Navigate to="/assets/all-assets" replace />} />
+          <Route
+            path="/assets"
+            element={<Navigate to="/assets/all-assets" replace />}
+          />
           <Route
             path="/assets/all-assets"
             element={
@@ -1233,7 +1313,10 @@ function App() {
             }
           />
           {/*services*/}
-          <Route path="/services" element={<Navigate to="/services/soft-service" replace />} />
+          <Route
+            path="/services"
+            element={<Navigate to="/services/soft-service" replace />}
+          />
           <Route
             path="/services/soft-service"
             element={
@@ -1961,6 +2044,14 @@ function App() {
               </ProtectedAdminRoutes>
             }
           />
+            <Route
+            path="/admin/loi-proceed"
+            element={
+              <ProtectedAdminRoutes>
+                <LOIProceed/>
+              </ProtectedAdminRoutes>
+            }
+          />
           <Route
             path="/admin/PO"
             element={
@@ -2154,7 +2245,10 @@ function App() {
           />
 
           {/* admin passess */}
-          <Route path="/admin/passes" element={<Navigate to="/admin/passes/visitors" replace />}  />
+          <Route
+            path="/admin/passes"
+            element={<Navigate to="/admin/passes/visitors" replace />}
+          />
           <Route
             path="/admin/passes/visitors/visitor-details/:id"
             element={
@@ -3194,7 +3288,12 @@ function App() {
           />
 
           {/* admin booking & req */}
-<Route path="/admin/booking-request" element={<Navigate to="/admin/booking-request/hotel-request" replace />}  />
+          <Route
+            path="/admin/booking-request"
+            element={
+              <Navigate to="/admin/booking-request/hotel-request" replace />
+            }
+          />
           <Route
             path="/admin/booking-request/hotel-request"
             element={
@@ -4718,12 +4817,12 @@ function App() {
             }
           />
 
-{/*Advance Salary Module */}
-<Route
+          {/*Advance Salary Module */}
+          <Route
             path="/admin/advance-salary-request"
             element={
               <ProtectedAdminRoutes>
-                <AdvanceSalaryRequest/>
+                <AdvanceSalaryRequest />
               </ProtectedAdminRoutes>
             }
           />
@@ -4731,7 +4830,7 @@ function App() {
             path="/admin/bank-account-creation"
             element={
               <ProtectedAdminRoutes>
-                <BankAccountCreation/>
+                <BankAccountCreation />
               </ProtectedAdminRoutes>
             }
           />
@@ -4739,33 +4838,33 @@ function App() {
             path="/admin/create-bank-account"
             element={
               <ProtectedAdminRoutes>
-                <CreateBankAccount/>
+                <CreateBankAccount />
               </ProtectedAdminRoutes>
             }
           />
-          
+
           <Route
             path="/admin/bank-account-details/:id"
             element={
               <ProtectedAdminRoutes>
-                <BankAccountDetails/>
+                <BankAccountDetails />
               </ProtectedAdminRoutes>
             }
           />
           {/*Employee Advance Salary Module */}
           <Route
-           path="/employee/advance-salary"
-           element={
-             <ProtectedRoute>
-               <EmployeeAdvanceSalaryRequest/>
-             </ProtectedRoute>
-           }
-         />
+            path="/employee/advance-salary"
+            element={
+              <ProtectedRoute>
+                <EmployeeAdvanceSalaryRequest />
+              </ProtectedRoute>
+            }
+          />
           <Route
             path="/employee/bank-account-creation"
             element={
               <ProtectedRoute>
-                <EmployeeBankAccountCreation/>
+                <EmployeeBankAccountCreation />
               </ProtectedRoute>
             }
           />
@@ -4773,16 +4872,16 @@ function App() {
             path="/employee/create-bank-account"
             element={
               <ProtectedRoute>
-                <EmployeeCreateBankAccount/>
+                <EmployeeCreateBankAccount />
               </ProtectedRoute>
             }
           />
-          
+
           <Route
             path="/employee/bank-account-details/:id"
             element={
               <ProtectedRoute>
-                <EmployeeBankAccountDetails/>
+                <EmployeeBankAccountDetails />
               </ProtectedRoute>
             }
           />
@@ -4790,7 +4889,7 @@ function App() {
             path="/integration"
             element={
               <ProtectedRoute>
-                <Integration/>
+                <Integration />
               </ProtectedRoute>
             }
           />
@@ -4798,7 +4897,7 @@ function App() {
             path="/gmail"
             element={
               <ProtectedRoute>
-                <Gmail/>
+                <Gmail />
               </ProtectedRoute>
             }
           />
@@ -4806,13 +4905,10 @@ function App() {
             path="/reports"
             element={
               <ProtectedRoute>
-                <DashboardBeta/>
+                <DashboardBeta />
               </ProtectedRoute>
             }
           />
-
-
-
         </Routes>
         <Footer />
       </Router>

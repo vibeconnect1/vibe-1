@@ -54,7 +54,7 @@ import { useSelector } from "react-redux";
 import axios from "axios";
 import { getAdminPerPageComplaints } from "../../api";
 
-const Table = ({ columns, title, height, data, apiEndpoint, customStyles }) => {
+const Table = ({ columns, title, height, pagination= true, data, apiEndpoint, customStyles }) => {
   const themeColor = useSelector((state) => state.theme.color);
 
   // const [data, setData] = useState([]);
@@ -124,7 +124,7 @@ const Table = ({ columns, title, height, data, apiEndpoint, customStyles }) => {
         columns={columns}
         data={data}
         customStyles={customStyles || customStyle}
-        pagination
+        pagination={pagination}
         // paginationServer
         fixedHeader
         selectableRowsHighlight

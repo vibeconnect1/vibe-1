@@ -6,6 +6,7 @@ import { Link, useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 import Table from "../../../components/table/Table";
 import { BiEdit } from "react-icons/bi";
+import Navbar from "../../../components/Navbar";
 const VisitorDetails = () => {
   const [details, setDetails] = useState({});
   const { id } = useParams();
@@ -58,21 +59,24 @@ const VisitorDetails = () => {
     },
   ];
   return (
-    <div className="w-screen">
+    <section className="flex">
+        <Navbar />
+        <div className=" w-full flex mx-3  flex-col overflow-hidden">
       <div className="flex flex-col gap-2">
+        
+        <h2
+          style={{
+            background: themeColor,
+          }}
+          className="text-center rounded-full w-full text-white font-semibold text-lg p-2 px-4 mt-2 "
+        >
+          Visitor Details
+        </h2>
         <div className="flex justify-end mx-2 mt-1">
           <Link to={`/admin/passes/visitors/edit-visitor/${id}`} className="border-2 border-black rounded-full px-2 p-1 flex items-center gap-2">
             <BiEdit /> Edit Details
           </Link>
         </div>
-        <h2
-          style={{
-            background: themeColor,
-          }}
-          className="text-center w-full text-white font-semibold text-lg p-2 px-4 "
-        >
-          Visitor Details
-        </h2>
         <div className="flex justify-center">
           <img src={image} alt="" className="w-48 h-48" />
         </div>
@@ -173,7 +177,7 @@ const VisitorDetails = () => {
           <h2 className="font-medium border-b-2 text-lg border-black px-4 ">
             Additional Visitors Info
           </h2>
-          <div className="m-4 mx-20 ">
+          <div className="m-4  ">
             {details.extra_visitors && details.extra_visitors.length !== 0 ? (
               <Table columns={VisitorColumns} data={details.extra_visitors} />
             ) : (
@@ -183,6 +187,7 @@ const VisitorDetails = () => {
         </div>
       </div>
     </div>
+    </section>
   );
 };
 

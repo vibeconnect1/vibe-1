@@ -3,7 +3,7 @@ import image from "/profile.png";
 import Navbar from "../../components/Navbar";
 import FileInputBox from "../../containers/Inputs/FileInputBox";
 import { useSelector } from "react-redux";
-const AddBusiness = () => {
+const EditContactBook = () => {
   const [imageFile, setImageFile] = useState(null);
   const inputRef = useRef(null);
 
@@ -24,7 +24,7 @@ const AddBusiness = () => {
             style={{ background: themeColor }}
             className="text-center text-white font-semibold p-2 rounded-full text-lg "
           >
-            Add Business Contact
+            Edit Business Contact
           </h2>
           <div className="flex w-full justify-center">
             <div
@@ -221,4 +221,7 @@ const AddBusiness = () => {
   );
 };
 
-export default AddBusiness;
+
+
+
+export default EditContactBook

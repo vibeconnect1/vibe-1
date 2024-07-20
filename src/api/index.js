@@ -223,9 +223,22 @@ export const getAssetGroups = async () =>
       token: token,
     },
   });
-export const getParentAsset = async (id) =>
+export const getAssetGroupsDetails = async (id) =>
+  axiosInstance.get(`/asset_groups/${id}.json?q[group_for_eq]=asset`, {
+    params: {
+      token: token,
+    },
+  });
+export const editAssetGroupsDetails = async (id, data) =>
+  axiosInstance.put(`/asset_groups/${id}.json?q[group_for_eq]=asset`, data, {
+    params: {
+      token: token,
+    },
+  });
+export const getParentAsset = async (id, data) =>
   axiosInstance.get(
     `/site_assets.json?q[asset_type_eq]=parent&q[asset_group_id_eq]=${id}`,
+    data,
     {
       params: {
         token: token,
@@ -450,7 +463,7 @@ export const getSetupUsers = async () =>
     },
   });
 export const postSetupUsers = async (data) =>
-  axiosInstance.post("/users/create.json",data, {
+  axiosInstance.post("/users/create.json", data, {
     params: {
       token: token,
     },
@@ -648,6 +661,78 @@ export const postLOI = async (data) =>
       token: token,
     },
   });
+export const getLOI = async () =>
+  axiosInstance.get(`/loi_details.json`, {
+    params: {
+      token: token,
+    },
+  });
+export const getLOIDetails = async (id) =>
+  axiosInstance.get(`/loi_details/${id}.json`, {
+    params: {
+      token: token,
+    },
+  });
+export const getLOIItems = async () =>
+  axiosInstance.get(`/loi_items.json`, {
+    params: {
+      token: token,
+    },
+  });
+export const getLOIItemsDetails = async (id) =>
+  axiosInstance.get(`/loi_items/${id}.json`, {
+    params: {
+      token: token,
+    },
+  });
+export const postLOIItems = async (data) =>
+  axiosInstance.post(`/loi_items.json`, data, {
+    params: {
+      token: token,
+    },
+  });
+export const getStandardUnits = async () =>
+  axiosInstance.get(`/standard_units.json`, {
+    params: {
+      token: token,
+    },
+  });
+export const getContactBook = async () =>
+  axiosInstance.get(`/contact_books.json`, {
+    params: {
+      token: token,
+    },
+  });
+export const getGenericCategory = async () =>
+  axiosInstance.get(`/generic_infos.json`, {
+    params: {
+      token: token,
+    },
+  });
+export const getGenericCategoryDetails = async (id) =>
+  axiosInstance.get(`/generic_infos/${id}.json`, {
+    params: {
+      token: token,
+    },
+  });
+export const editGenericCategoryDetails = async (id, data) =>
+  axiosInstance.put(`/generic_infos/${id}.json`, data, {
+    params: {
+      token: token,
+    },
+  });
+export const postGenericCategory = async (data) =>
+  axiosInstance.post(`/generic_infos.json`, data, {
+    params: {
+      token: token,
+    },
+  });
+export const getContactBookDetails = async (id) =>
+  axiosInstance.get(`/contact_books/${id}.json`, {
+    params: {
+      token: token,
+    },
+  });
 
 // setup
 
@@ -772,7 +857,7 @@ export const postAddress = async (data) =>
       token: token,
     },
   });
-export const editAddress = async (id,data) =>
+export const editAddress = async (id, data) =>
   axiosInstance.put(`/addresses/${id}.json`, data, {
     params: {
       token: token,

@@ -9,7 +9,7 @@ const AssetGroupModal = ({ onclose }) => {
   const [groupName, setGroupName] = useState("");
   const [description, setDescription] = useState("");
   const [groupFor, setGroupFor] = useState("asset");
-const companyId = getItemInLocalStorage("COMPANYID")
+  const companyId = getItemInLocalStorage("COMPANYID");
   const dispatch = useDispatch();
   const createGroup = async () => {
     try {
@@ -17,15 +17,14 @@ const companyId = getItemInLocalStorage("COMPANYID")
         name: groupName,
         description: description,
         company_id: companyId,
-        group_for: "asset"
+        group_for: "asset",
       });
-  console.log(addGroup)
+      console.log(addGroup);
       onclose();
-      window.location.reload()
+      window.location.reload();
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
-    
   };
   const createStockGroup = async () => {
     try {
@@ -33,15 +32,14 @@ const companyId = getItemInLocalStorage("COMPANYID")
         name: groupName,
         description: description,
         company_id: companyId,
-        group_for: "item"
+        group_for: "item",
       });
-  console.log(addStockGroup)
+      console.log(addStockGroup);
       onclose();
-      window.location.reload()
+      window.location.reload();
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
-    
   };
 
   console.log(groupName);
@@ -70,87 +68,86 @@ const companyId = getItemInLocalStorage("COMPANYID")
             </p>
           </div>
         </div>
-        {groupFor ==="asset" ? 
-        <div>
-          <div className="flex flex-col gap-2">
-            <label htmlFor="" className="text-sm font-bold">
-              Asset Group Name :
-            </label>
-            <input
-              type="text"
-              name="groupName"
-              id="groupName"
-              value={groupName}
-              onChange={(e) => setGroupName(e.target.value)}
-              placeholder="Enter Group Name"
-              className="border rounded-md border-gray-500 p-1 px-2"
-            />
+        {groupFor === "asset" ? (
+          <div>
+            <div className="flex flex-col gap-2">
+              <label htmlFor="" className="text-sm font-bold">
+                Asset Group Name :
+              </label>
+              <input
+                type="text"
+                name="groupName"
+                id="groupName"
+                value={groupName}
+                onChange={(e) => setGroupName(e.target.value)}
+                placeholder="Enter Group Name"
+                className="border rounded-md border-gray-500 p-1 px-2"
+              />
+            </div>
+            <div className="flex flex-col gap-2 ">
+              <label htmlFor="" className="text-sm font-bold mt-1">
+                Description :
+              </label>
+              <textarea
+                cols="50"
+                rows="3"
+                name="description"
+                id="description"
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+                placeholder="Enter Description"
+                className="border rounded-md border-gray-500 p-1 px-2"
+              ></textarea>
+            </div>
+            <div className="flex justify-center">
+              <button
+                className="bg-black p-1 px-4 text-white rounded-md my-2 hover:bg-white hover:text-black border-2 border-black transition-all duration-300"
+                onClick={createGroup}
+              >
+                Create
+              </button>
+            </div>
           </div>
-          <div className="flex flex-col gap-2 ">
-            <label htmlFor="" className="text-sm font-bold mt-1">
-              Description :
-            </label>
-            <textarea
-              cols="50"
-              rows="3"
-              name="description"
-              id="description"
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-              placeholder="Enter Description"
-              className="border rounded-md border-gray-500 p-1 px-2"
-            ></textarea>
-            
+        ) : (
+          <div>
+            <div className="flex flex-col gap-2">
+              <label htmlFor="" className="text-sm font-bold">
+                Stock Group Name :
+              </label>
+              <input
+                type="text"
+                name="groupName"
+                id="groupName"
+                value={groupName}
+                onChange={(e) => setGroupName(e.target.value)}
+                placeholder="Enter Group Name"
+                className="border rounded-md border-gray-500 p-1 px-2"
+              />
+            </div>
+            <div className="flex flex-col gap-2">
+              <label htmlFor="" className="text-sm font-bold mt-1">
+                Description :
+              </label>
+              <textarea
+                cols="50"
+                rows="3"
+                name="description"
+                id="description"
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+                placeholder="Enter Description"
+                className="border rounded-md border-gray-500 p-1 px-2"
+              ></textarea>
+            </div>
+            <div className="flex justify-center">
+              <button
+                className="bg-black p-1 px-4 text-white rounded-md my-2 hover:bg-white hover:text-black border-2 border-black transition-all duration-300"
+                onClick={createStockGroup}
+              >
+                Create
+              </button>
+            </div>
           </div>
-          <div className="flex justify-center">
-            <button
-              className="bg-black p-1 px-4 text-white rounded-md my-2 hover:bg-white hover:text-black border-2 border-black transition-all duration-300"
-              onClick={createGroup}
-            >
-              Create
-            </button>
-          </div>
-        </div> :(
- <div>
- <div className="flex flex-col gap-2">
-   <label htmlFor="" className="text-sm font-bold">
-     Stock Group Name :
-   </label>
-   <input
-     type="text"
-     name="groupName"
-     id="groupName"
-     value={groupName}
-     onChange={(e) => setGroupName(e.target.value)}
-     placeholder="Enter Group Name"
-     className="border rounded-md border-gray-500 p-1 px-2"
-   />
- </div>
- <div className="flex flex-col gap-2">
-   <label htmlFor="" className="text-sm font-bold mt-1">
-     Description :
-   </label>
-   <textarea
-     cols="50"
-     rows="3"
-     name="description"
-     id="description"
-     value={description}
-     onChange={(e) => setDescription(e.target.value)}
-     placeholder="Enter Description"
-     className="border rounded-md border-gray-500 p-1 px-2"
-   ></textarea>
-   
- </div>
- <div className="flex justify-center">
-   <button
-     className="bg-black p-1 px-4 text-white rounded-md my-2 hover:bg-white hover:text-black border-2 border-black transition-all duration-300"
-     onClick={createStockGroup}
-   >
-     Create
-   </button>
- </div>
-</div>
         )}
       </div>
     </ModalWrapper>

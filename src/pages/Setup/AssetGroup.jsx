@@ -9,6 +9,8 @@ import { useSelector } from "react-redux";
 import { useEffect } from "react";
 import { getAssetGroups, getAssetSubGroups, getStockGroupsList, getSubGroupsList } from "../../api";
 import Table from "../../components/table/Table";
+import { BiEdit } from "react-icons/bi";
+import EditAssetGroup from "../../containers/modals/EditAssetGroup";
 
 const AssetGroup = () => {
   const [groupModal, setGroupModal] = useState(false);
@@ -18,6 +20,8 @@ const AssetGroup = () => {
   const [stockSubGroup, setStockSubGroup] = useState([])
   const [subGroup, setSubGroup] = useState([]);
   const [page,setPage] = useState("asset")
+  const [editGroup, setEditGroup] = useState(false)
+  const [assetId, setAssetId] = useState("")
   useEffect(() => {
     const fetchGroups = async () => {
       const groupResponse = await getAssetGroups();
@@ -38,6 +42,12 @@ const AssetGroup = () => {
     fetchGroups();
     fetchSubGroups();
   }, []);
+
+  const handleAssetGroupEdit = (id)=>{
+    setEditGroup(true)
+    setAssetId(id)
+  }
+
   const groupColumns = [
     {
       name: "Sr. No",
@@ -53,6 +63,19 @@ const AssetGroup = () => {
       name: "Description",
       selector: (row) => row.description,
       sortable: true,
+    },
+    {
+      name: "Action",
+      cell: (row) => (
+        <div className="flex items-center gap-4">
+          {/* <Link to={`/admin/passes/visitors/visitor-details/${row.id}`}>
+            <BsEye size={15} />
+          </Link> */}
+          <button onClick={()=>handleAssetGroupEdit(row.id)}>
+            <BiEdit size={15} />
+          </button>
+        </div>
+      ),
     },
   ];
   const stockGroupColumns = [
@@ -71,6 +94,7 @@ const AssetGroup = () => {
       selector: (row) => row.description,
       sortable: true,
     },
+   
   ];
 
   // const groupData = groups.map((group, index) => ({
@@ -191,6 +215,7 @@ const AssetGroup = () => {
       {subGroupModal && (
         <AssetSubGroupModal assetGroup={group} stockGroup={stockGroup} onclose={() => setsubGroupModal(false)} />
       )}
+      {editGroup && <EditAssetGroup id={assetId} onclose={()=> setEditGroup(false)} />}
     </section>
   );
 };

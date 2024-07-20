@@ -35,15 +35,15 @@ const SetupNavbar = () => {
         {/* <Link to={"/admin/setup-meter-type"} className="hover:bg-white hover:text-black  p-2 rounded-lg ">Meter Types</Link> */}
         {feat.includes("assets") && ( <Link to={"/setup/asset-group"}  className="hover:bg-white hover:text-black  p-2 rounded-lg ">Asset/Stock Group</Link>)}
         {/* <Link to={"/admin/checklist-group"} className="hover:bg-white hover:text-black  p-2 rounded-lg ">Checklist Group</Link> */}
-        <Link to={"/setup/ticket-setup"} className="hover:bg-white hover:text-black  p-2 rounded-lg ">Ticket</Link>
-        <Link to={"/business/setup-category"} className="hover:bg-white hover:text-black  p-2 rounded-lg ">Business Category</Link>
-        <Link to={"/facility"} className="hover:bg-white hover:text-black  p-2 rounded-lg ">Facility</Link>
-        <Link to={"/admin/invoice-approval-setup"} className="hover:bg-white hover:text-black  p-2 rounded-lg ">Invoice Approval</Link>
-        <Link to={"/admin/parking-setup"} className="hover:bg-white hover:text-black  p-2 rounded-lg ">Parking</Link>
+        {feat.includes("tickets") && (<Link to={"/setup/ticket-setup"} className="hover:bg-white hover:text-black  p-2 rounded-lg ">Ticket</Link>)}
+        {feat.includes("contacts") && ( <Link to={"/business/setup-category"} className="hover:bg-white hover:text-black  p-2 rounded-lg ">Contact Category</Link>)}
+        {feat.includes("space") && ( <Link to={"/facility"} className="hover:bg-white hover:text-black  p-2 rounded-lg ">Facility</Link>)}
+        {feat.includes("bills") && ( <Link to={"/admin/invoice-approval-setup"} className="hover:bg-white hover:text-black  p-2 rounded-lg ">Invoice Approval</Link>)}
+        {feat.includes("parking") && (  <Link to={"/admin/parking-setup"} className="hover:bg-white hover:text-black  p-2 rounded-lg ">Parking</Link>)}
         {/* <Link  to={"/admin/email-rule"} className="hover:bg-white hover:text-black  p-2 rounded-lg ">Email Rule</Link> */}
         {/* <Link to={"/admin/fm-groups-setup"}  className="hover:bg-white hover:text-black  p-2 rounded-lg ">FM Groups</Link> */}
         {/* <Link to={"/admin/master-checklist-setup"} className="hover:bg-white hover:text-black  p-2 rounded-lg ">Master Checklist</Link> */}
-        <Link to={"/admin/sac-hsn-setup"} className="hover:bg-white hover:text-black  p-2 rounded-lg ">SAC/HSN Setup</Link>
+        {feat.includes("purchase_order") && (  <Link to={"/admin/sac-hsn-setup"} className="hover:bg-white hover:text-black  p-2 rounded-lg ">SAC/HSN Setup</Link>)}
         <Link  to={"/admin/addresses-setup"} className="hover:bg-white hover:text-black  p-2 rounded-lg ">Addresses</Link>
         {/* <Link className="hover:bg-white hover:text-black  p-2 rounded-lg ">Export</Link> */}
         {/* <Link to={"/setup/insights/"} className="hover:bg-white hover:text-black  p-2 rounded-lg ">Insights</Link> */}

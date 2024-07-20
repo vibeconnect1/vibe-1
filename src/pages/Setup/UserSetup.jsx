@@ -7,6 +7,7 @@ import { Link } from "react-router-dom";
 import { BsEye } from "react-icons/bs";
 import { useSelector } from "react-redux";
 import toast from "react-hot-toast";
+import { getItemInLocalStorage } from "../../utils/localStorage";
 
 const UserSetup = () => {
   const [users, setUsers] = useState([]);
@@ -125,6 +126,7 @@ const UserSetup = () => {
       sortable: true,
     },
   ];
+  const siteId = getItemInLocalStorage("SITEID");
 
   return (
     <section className="flex">
@@ -138,14 +140,14 @@ const UserSetup = () => {
             value={searchText}
             onChange={handleSearch}
           />
-          <Link
+          {siteId === 10 && ( <Link
             to={"/setup/users-setup/add-new-user"}
             style={{ background: themeColor }}
             className="font-semibold duration-300 ease-in-out transition-all  p-1 px-4 rounded-md text-white cursor-pointer text-center flex items-center gap-2 justify-center"
           >
             <PiPlusCircle size={20} />
             Add User
-          </Link>
+          </Link>)}
         </div>
         <Table columns={userColumn} data={filteredData} />
       </div>

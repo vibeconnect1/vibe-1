@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 //import Navbar from '../../components/Navbar'
 import { PiPlusCircle } from "react-icons/pi";
 import { Link } from "react-router-dom";
@@ -9,14 +9,15 @@ import Table from "../../components/table/Table";
 import { getExpectedVisitor } from "../../api";
 import { BsEye } from "react-icons/bs";
 import { BiEdit } from "react-icons/bi";
-import Asset from "../Asset";
 
+import Webcam from 'react-webcam';
 const VisitorPage = () => {
   const [page, setPage] = useState("Visitor In");
   const themeColor = useSelector((state) => state.theme.color);
   const [selectedVisitor, setSelectedVisitor] = useState("expected");
   const [visitor, setVisitor] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
+  const webcamRef = useRef(null)
   const handleClick = (visitorType) => {
     setSelectedVisitor(visitorType);
   };
@@ -152,6 +153,9 @@ const VisitorPage = () => {
       setFilteredData(filteredResults)
     }
   };
+
+
+
   return (
     <div className="visitors-page">
       <section className="flex">

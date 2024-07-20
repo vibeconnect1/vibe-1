@@ -13,6 +13,7 @@ import {
 import { getItemInLocalStorage } from "../../utils/localStorage";
 import { useNavigate, useParams } from "react-router-dom";
 import { BiEdit } from "react-icons/bi";
+import Navbar from "../../components/Navbar";
 
 const EditVisitor = () => {
   const siteId = getItemInLocalStorage("SITEID");
@@ -246,6 +247,7 @@ const EditVisitor = () => {
       const visitResp = await editVisitorDetails(id, postData);
       console.log(visitResp);
       navigate(`/admin/passes/visitors/visitor-details/${visitResp.data.id}`);
+      toast.success("Visitor Edited Successfully")
     } catch (error) {
       console.log(error);
     }
@@ -260,6 +262,9 @@ const EditVisitor = () => {
   }, []);
 
   return (
+    <section className="flex">
+        <Navbar />
+        <div className=" w-full flex mx-3  flex-col overflow-hidden">
     <div className="flex justify-center items-center  w-full p-4">
       <div className="md:border border-gray-300 rounded-lg md:p-4 w-full md:mx-4 ">
        
@@ -670,7 +675,9 @@ const EditVisitor = () => {
           </button>
         </div>
       </div>
+      </div>
     </div>
+    </section>
   );
 };
 

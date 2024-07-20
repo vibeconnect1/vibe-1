@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { PiPlusCircle } from "react-icons/pi";
 import { Link } from "react-router-dom";
 //import Navbar from "../../../components/Navbar";
@@ -9,10 +9,33 @@ import { TiTick } from "react-icons/ti";
 import { IoClose } from "react-icons/io5";
 import { useSelector } from "react-redux";
 import Table from "../../components/table/Table";
+import { getLOI } from "../../api";
 
 const LOIPOTable = () => {
   const [selectedStatus, setSelectedStatus] = useState("all");
   const themeColor = useSelector((state) => state.theme.color);
+  const [loi, setLoi] = useState([]);
+  
+
+  useEffect(() => {
+    const fetchLoi = async () => {
+      try {
+        const loiResp = await getLOI();
+        const sortedLoi = loiResp.data.sort((a, b) => {
+          return new Date(b.created_at) - new Date(a.created_at);
+        });
+        setLoi(sortedLoi);
+       
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchLoi();
+  }, []);
+  const dateString = (dateString) => {
+    const date = new Date(dateString);
+    return date.toLocaleDateString();
+  };
 
   const columns = [
     {
@@ -30,7 +53,7 @@ const LOIPOTable = () => {
     },
     {
       name: "LOI No.",
-      selector: (row) => row.loino,
+      selector: (row) => row.id,
       sortable: true,
     },
 
@@ -42,86 +65,31 @@ const LOIPOTable = () => {
 
     {
       name: "Created By",
-      selector: (row) => row.create,
+      selector: (row) =>
+        `${row.created_by_name.firstname} ${row.created_by_name.lastname}`,
       sortable: true,
     },
 
     {
       name: "Created On",
-      selector: (row) => row.createon,
+      selector: (row) => dateString(row.created_at),
       sortable: true,
     },
+    // {
+    //   name: "LOI Amount",
+    //   selector: (row) => row.loi_items.reduce((sum, item) => sum + item.total_amount, 0),
+    //   sortable: true,
+    // },
     {
       name: "LOI Amount",
-      selector: (row) => row.total,
-      sortable: true,
-    },
-
-    {
-      name: "Cancellation",
-      selector: (row) =>
-        row.status === "Upcoming" && (
-          <button className="text-red-400 font-medium">Cancel</button>
-        ),
-      sortable: true,
-    },
-    {
-      name: "Approval",
-      selector: (row) =>
-        row.status === "Upcoming" && (
-          <div className="flex justify-center gap-2">
-            <button className="text-green-400 font-medium hover:bg-green-400 hover:text-white transition-all duration-200 p-1 rounded-full">
-              <TiTick size={20} />
-            </button>
-            <button className="text-red-400 font-medium hover:bg-red-400 hover:text-white transition-all duration-200 p-1 rounded-full">
-              <IoClose size={20} />
-            </button>
-          </div>
-        ),
-      sortable: true,
-    },
-  ];
-
-  //custom style
-  const customStyle = {
-    headRow: {
-      style: {
-        backgroundColor: themeColor,
-        color: "white",
-
-        fontSize: "10px",
+      selector: (row) => {
+        
+        const totalAmount = row.loi_items
+          ? row.loi_items.reduce((sum, item) => sum + (Number(item.total_amount) || 0), 0)
+          : " ";
+          return totalAmount === 0 ? " " : totalAmount;
       },
-    },
-    headCells: {
-      style: {
-        textTransform: "upperCase",
-      },
-    },
-  };
-  const data = [
-    {
-      id: 1,
-      loino: "789",
-      active: "active",
-      create: "MP",
-      createon: "24/10/2024",
-      total: "Rs789",
-    },
-    {
-      id: 2,
-      loino: "789",
-      active: "active",
-      create: "MP",
-      createon: "24/10/2024",
-      total: "Rs789",
-    },
-    {
-      id: 3,
-      loino: "789",
-      active: "active",
-      create: "MP",
-      createon: "24/10/2024",
-      total: "Rs789",
+      sortable: true,
     },
   ];
 
@@ -138,7 +106,7 @@ const LOIPOTable = () => {
           />
           <div className="flex items-center gap-2">
             <Link
-            style={{background: themeColor}}
+              style={{ background: themeColor }}
               to={"/admin/add-loi"}
               className=" font-semibold text-white  transition-all  p-2 px-4 rounded-md  cursor-pointer text-center flex items-center gap-2 justify-center"
             >
@@ -147,7 +115,7 @@ const LOIPOTable = () => {
             </Link>
             <button
               className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-              style={{background: themeColor}}
+              style={{ background: themeColor }}
               // onClick={exportToExcel}
             >
               Export
@@ -158,7 +126,7 @@ const LOIPOTable = () => {
           responsive
           //   selectableRows
           columns={columns}
-          data={data}
+          data={loi}
           isPagination={true}
         />
       </div>
