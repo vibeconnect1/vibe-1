@@ -2,8 +2,15 @@ import React, { useEffect, useState } from "react";
 import { PiPlusCircle } from "react-icons/pi";
 import Table from "../../components/table/Table";
 import PayrollSettingDetailsList from "./PayrollSettingDetailsList";
+import { GrHelpBook } from "react-icons/gr";
 
 const VariableAllowance = () => {
+  const listItemStyle = {
+    listStyleType: "disc",
+    color: "black",
+    fontSize: "14px",
+    fontWeight: 500,
+  };
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [allowanceType, setAllowanceType] = useState("");
   const [customLabel, setCustomLabel] = useState("");
@@ -27,7 +34,7 @@ const VariableAllowance = () => {
   ];
 
   const data = [
-    { Name: "person 1", Location: "Mumbai", City: "Mumbai", State: "Maharashtra", Country: "India" },
+    { Name: "-", Location: "Commission", Comment: "All Employees	",  },
   ];
 
   const openModal = () => setModalIsOpen(true);
@@ -45,7 +52,7 @@ const VariableAllowance = () => {
   return (
     <section className="flex ml-20">
       <PayrollSettingDetailsList />
-      <div className="w-full flex m-3 flex-col overflow-hidden">
+      <div className="w-2/3 flex m-3 flex-col overflow-hidden">
         <div className="flex justify-between my-5">
           <input
             type="text"
@@ -240,6 +247,71 @@ const VariableAllowance = () => {
           </div>
         </div>
       )}
+      <div className='my-4 mx-2 w-fit'>
+        <div className="flex flex-col mt-4 mr-1 shadow-custom-all-sides bg-gray-50 rounded-md text-wrap  gap-4 my-2 py-2 pl-5 pr-2 w-[18rem]">
+        <div className="flex  gap-4 font-medium">
+        <GrHelpBook size={20} />
+          <h2>Help Center</h2></div>
+    <div className=' '>
+              {/* <p className="font-medium">Help Center</p> */}
+              <ul style={listItemStyle} className="flex flex-col gap-2">
+                <li>
+                  <ul style={listItemStyle}>
+                    <li>
+                    Variable allowances are the one which are not paid every month and tend to vary each month. These include Bonus, Incentives, and Commission and so on.         </li>
+                  </ul>
+                </li>
+                <li>
+                  <ul style={listItemStyle}>
+                    <li>
+                    You can also show the variable allowance in your CTC (Annually) for that you need enable setting in allowance setting i.e. select YES for Does this variable allowance show up in CTC structure? and Select YES for Do you want to automatically process this variable amount in the payroll process? If wish to get paid automatically in respective month automatically.        </li>
+                  </ul>
+                </li>
+                <li>
+                  <ul style={listItemStyle}>
+                    <li>
+                    Variable Allowance component can be captured in salary annexure like appointment letter and Increment letter through our letter Generation Module 
+                     {""} <a href="#" className="text-blue-400">
+                      Click Here{" "}
+                    </a> {""}
+                    to know more and  {""}
+                    <a href="#" className="text-blue-400">
+                      Click Here{" "}
+                    </a>
+                     to see recorded webinar of letter generation         </li>
+                  </ul>
+                </li>
+
+                {/* <li>
+                  <p>
+                    <a href="#" className="text-blue-400">
+                      Click Here{" "}
+                    </a>
+Created allowance can be mapped in Salary details and also configurable in CTC Template (CTC Calculator) available Payroll, which further eases your task by automatically creating a break up in salary details of the employees.               </p>
+                </li> */}
+                <li>
+                  <p>
+                    {/* <a href="#" className="text-blue-400">
+                      Click Here{" "}
+                    </a> */}
+You can select applicable compliances as per norms and there is an option to choose the applicable tax regime also.          </p>
+                </li>
+                <li>
+                  <p>
+                    {/* <a href="#" className="text-blue-400">
+                      Click Here{" "}
+                    </a> */}
+Variable allowance won’t have any relation with Attendance or Payable days of the employees.        </p>
+                </li>
+                <li>
+                  <p>
+                    {/* <a href="#" className="text-blue-400">
+                      Click Here{" "}
+                    </a> */}
+You can change allowances setting anytime but once payroll is processed won’t be deleted.        </p>
+                </li>
+              </ul>
+            </div></div></div>
     </section>
   );
 };

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import LeaveSetting from './LeaveSetting';
+import AdminHRMS from './AdminHrms';
 
 const EditTemplates = () => {
   // State variables to manage form inputs
@@ -31,10 +32,11 @@ const EditTemplates = () => {
   };
 
   return (
-    <div className='grid grid-cols-12 gap-4'>
-      <div className='col-span-12 lg:col-span-3'>
-        <LeaveSetting />
-      </div>
+    <div>
+      <AdminHRMS/>
+    
+    <div className='ml-20 grid grid-cols-12 gap-4'>
+      
       <div className="col-span-12 lg:col-span-9 mt-8 p-6 bg-white shadow-md rounded-md">
         <h2 className="text-lg font-semibold mb-4">Edit Custom Label Policy Configuration</h2>
         <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -203,7 +205,7 @@ const EditTemplates = () => {
           </div>
         </form>
       </div>
-    </div>
+    </div></div>
   );
 };
 

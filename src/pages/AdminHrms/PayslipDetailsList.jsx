@@ -23,7 +23,11 @@ const PayslipDetailsList = () => {
         <AdminHRMS/>
       <div className="w-72 h-full bg-white shadow-lg p-4 mt-9">
         <ul className="space-y-4">
+        <div className="flex justify-between">
           <li className="font-bold text-lg">Details List</li>
+          <select name="" id="" className="border p-2 border-black rounded-md"><option value="">FY 2023-2024</option>
+          <option value="">FY 2024-2025</option></select>
+          </div>
           <li>
             {/* <div
               onClick={toggleDropdown}

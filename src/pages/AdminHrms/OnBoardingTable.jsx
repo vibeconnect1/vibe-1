@@ -6,19 +6,7 @@ import { PiPlusCircle } from "react-icons/pi";
 
 const OnBoardingTable = () => {
   const columns = [
-    // {
-    //   name: "view",
-
-    //   cell: (row) => (
-    //     <div className="flex items-center gap-4">
-    //       <Link 
-    //     //   to={`/admin/edit-templates/${row.id}`}
-    //       >
-    //         <BiEdit size={15} />
-    //       </Link>
-    //     </div>
-    //   ),
-    // },
+   
     {
       name: "Employee Name",
       selector: (row) => row.Location,
@@ -49,86 +37,27 @@ const OnBoardingTable = () => {
         selector: (row) => row.Leave_Days,
         sortable: true,
       },
-    //   {
-    //     name: "Signed By Employee	",
-    //     selector: (row) => row.Comment,
-    //     sortable: true,
-    //   },
-    // {
-    //   name: "Status",
-    //   selector: (row) => row.status,
-    //   sortable: true,
-    // },
-    // {
-    //   name: "Action",
-    //   selector: (row) =>
-    //     row.status !== "Expired" && (
-    //       <button className="text-red-500">Cancel</button>
-    //     ),
-    //   sortable: true,
-    // },
-    // {
-    //     name: "Approval",
-    //     selector: (row) => (row.status === "Upcoming" && 
-    //     <div className="flex justify-center gap-2">
-    //         <button className="text-green-400 font-medium hover:bg-green-400 hover:text-white transition-all duration-200 p-1 rounded-full"><TiTick size={20} /></button>
-    //         <button className="text-red-400 font-medium hover:bg-red-400 hover:text-white transition-all duration-200 p-1 rounded-full"><IoClose size={20}  /></button>
-    //     </div>
-    //   ),
-    //     sortable: true,
-    //   },
+   
   ];
 
   const data = [
     {
       Name: "person 1",
-      Location: "Mumbai",
-      City: "Mumbai",
-      State: "Maharashtra",
-
-      Country:"India",
+      Location: "Mittu Panda",
+      City: "pending",
+      State: "abc",
+      Label:"5/5/2024",
+      Country:"yes",
 
     },
 
   ];
-//   const customStyle = {
-//     headRow: {
-//       style: {
-//         backgroundColor: "black",
-//         color: "white",
 
-//         fontSize: "10px",
-//       },
-//     },
-//     headCells: {
-//       style: {
-//         textTransform: "upperCase",
-//       },
-//     },
-//   };
   return (
     <section className="flex">
-     {/* <OrganisationSetting/> */}
-     {/* <AdminHRMS/> */}
+    
       <div className=" w-full flex m-3 flex-col overflow-hidden">
-        {/* <div className="flex  justify-start gap-4 my-5  ">
-          <div className="shadow-xl rounded-full border-4 border-gray-400 w-52  px-6 flex flex-col items-center">
-            <p className="font-semibold ">Total Alloted Slots</p>
-            <p className="text-center font-semibold ">0</p>
-          </div>
-          <div className="shadow-xl rounded-full border-4 border-green-400 w-52  px-6 flex flex-col items-center">
-            <p className="font-semibold">Four Wheelers</p>
-            <p className="text-center font-semibold  ">0</p>
-          </div>
-          <div className="shadow-xl rounded-full border-4 border-red-400 w-52  px-6 flex flex-col items-center">
-            <p className="font-semibold">2 Wheelers</p>
-            <p className="text-center font-semibold ">0</p>
-          </div>
-          <div className="shadow-xl rounded-full border-4 border-orange-400 w-52  px-6 flex flex-col items-center">
-            <p className="font-semibold">Vacant Slot</p>
-            <p className="text-center font-semibold ">0</p>
-          </div>
-        </div> */}
+       
         <div className=" flex justify-between my-5">
           <input
             type="text"
@@ -139,7 +68,7 @@ const OnBoardingTable = () => {
           />
           <div className='flex justify-end'>
       <Link
-            to={"/admin/add-employee"}
+            to={"/admin/add-employee/basics"}
             className="border-2 font-semibold hover:bg-black hover:text-white duration-150 transition-all border-black p-2 rounded-md text-black cursor-pointer text-center flex items-center  gap-2 justify-center"
           >
             <PiPlusCircle size={20} />

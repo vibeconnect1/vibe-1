@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { HiMenuAlt3 } from "react-icons/hi";
 import { HiCheck } from "react-icons/hi";
 import { FaBuilding } from "react-icons/fa";
-import { useNavigate, NavLink } from "react-router-dom";
+import { useNavigate, NavLink,useLocation } from "react-router-dom";
 import { getItemInLocalStorage } from "../../utils/localStorage";
 import { MdOutlineDashboard, MdExpandMore, MdExpandLess } from "react-icons/md";
 import { AiOutlineFieldTime } from "react-icons/ai";
@@ -11,7 +11,8 @@ import { PiSignOutBold } from "react-icons/pi";
 import {  RiFileListLine } from "react-icons/ri";
 import { FaRegCalendarTimes } from 'react-icons/fa';
 import { FaMoneyBillAlt } from 'react-icons/fa';
-
+import { MdAlarm } from 'react-icons/md';
+import { FaRegRegistered } from 'react-icons/fa';
 import {
   
   IoPeopleOutline,
@@ -80,7 +81,245 @@ const AdminHRMS = () => {
   const togglepayMenu = () => {
     setIspayOpen(!ispayOpen);
   };
-  
+  const location = useLocation();
+
+  const organizationPaths = [
+    '/admin/company-profile/basic-information',
+    '/admin/company-profile/address-information',
+    '/admin/geographical-settings',
+    '/admin/locations',
+    '/admin/department',
+    '/admin/company-holidays',
+    '/admin/employee-fields/personal-details',
+    '/admin/employee-fields/employment-details',
+    '/admin/employee-fields/other-details',
+    '/admin/employee-fields/documents',
+    '/admin/bank-accounts',
+  '/admin/add-bank-account',
+    '/admin/calendar-milestones-events',
+    '/admin/manage-admin',
+    "/admin/third-party",
+    "/admin/employee-fields/permission",
+    "/admin/employee-fields/news-feed-permission",
+    '/admin/hrms/document-letter',
+    '/admin/edit-letter-templates',
+    "/admin/document/letter-template",
+    '/admin/add-letter-template',
+    "/admin/document/old-letter-template",
+    "/admin/onboarding-setting",
+    "/admin/communication-template",
+    "/admin/edit-communication-templates/undefined",
+    "/admin/add-communication-templates",
+    "/admin/emailid-mapping",
+    "/admin/workflow-trigger",
+    '/admin/hrms/investment-setting'
+  ];
+  const rosterPaths = [
+    '/admin/hrms/roaster',
+    '/admin/hrms/roaster-shift'
+  ];
+  const leavePaths = [
+    '/admin/hrms/leave-application',
+    '/admin/hrms/leave-balance',
+    '/admin/hrms/rollover',
+    "/general-settings",
+    "/leave-categories",
+    "/templates",
+    "/templates-assignments"
+  ];
+  const payrollPaths = [
+    '/admin/hrms/run-payroll',
+    '/admin/pay-slip',
+    '/admin/hrms/loan-app',
+    '/admin/hrms/payroll-setting',
+    '/admin/NPS','/admin/Gratuity',
+    '/admin/Leave-Recovery',
+    '/admin/Notice-Recovery',
+    '/admin/Minimum-Wage',
+    '/admin/PF',
+    '/admin/daily-wage',
+    '/admin/location-master',
+    '/admin/fixed-allowance',
+    '/admin/fixed-deduction',
+    '/admin/variable-allowance',
+    '/admin/variable-deduction',
+    '/admin/other-benefit',
+    '/admin/loans',
+    '/admin/tax-setting',
+    '/admin/payslip-setting',
+    '/admin/hrms/ctc/CTC-Template',
+    '/admin/hrms/ctc/',
+    '/admin/hrms/ctc/ctc-template/General-Settings',
+    '/admin/hrms/ctc/ctc-template/Component',
+    '/admin/hrms/ctc/ctc-template/Restrictions'
+  ];
+  const employeePaths = [
+    '/admin/hrms/employee-directory',
+    '/hrms/employee-directory-Personal',
+    '/admin/hrms/employee-directory',
+    '/admin/employee-directory-Employment',
+    '/admin/employee-directory-Statutory',
+    '/admin/employee-directory/Salary',
+    '/admin/employee-directory-Tax',
+    '/admin/OtherDetails',
+    '/admin/employee-directory-Documents',
+    '/admin/employee-directory-LoansAdvances',
+    '/admin/employee-directory-Transaction',
+    '/admin/employee-directory-Change-logs',
+    "/hrms/organization-tree-setting",
+    "/admin/organisation-view2",
+    "/admin/organisation-view3",
+    "/admin/organisation-view1",
+    '/hrms/employee-transaction',
+    "/admin/ctc-basket",
+    '/hrms/investment',
+    '/admin/add-employee/',
+    '/hrms/pending-contract-renewal',
+    
+    '/hrms/separation/separation-request',
+    '/hrms/separation/separate-application/resignation',
+    '/hrms/generated-letter',
+    '/admin/add-employee/onboarding',
+    '/admin/add-employee/basics',
+    '/admin/add-employee/Employment',
+    '/admin/add-employee/Salary',
+    '/admin/add-employee/Statutory',
+    '/admin/add-employee/Policies',
+    '/admin/add-employee/Invite'
+  ];
+  const attendancePaths = [
+    '/admin/hrms/attendance-records',
+    '/admin/hrms/Regularization-Requests',
+    '/admin/hrms/Attendance-Audit',
+    '/admin/hrms/Attendance-Process',
+    "/admin/hrms/setting",
+    "/admin/attendance/Regularization-Reason",
+    "/admin/att/template",
+    "/admin/att/template-assign",
+    '/admin/hrms/Device-Request',
+    '/admin/hrms/Attendance-Validation',
+    '/admin/hrms/Attendance-Log'
+  ];
+  useEffect(() => {
+    const savedState = JSON.parse(localStorage.getItem('menuState'));
+    if (savedState) {
+      setIsOrgOpen(savedState.isOrgOpen);
+    }
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem('menuState', JSON.stringify({ isOrgOpen }));
+  }, [isOrgOpen]);
+
+  useEffect(() => {
+    const currentPath = location.pathname;
+    const isOrgPath = organizationPaths.includes(currentPath);
+    setIsOrgOpen(isOrgPath);
+    setIsRosterOpen(rosterPaths.includes(currentPath));
+    setIsLeaveOpen(leavePaths.includes(currentPath));
+    setIspayOpen(payrollPaths.includes(currentPath));
+    setIsEmpOpen(employeePaths.includes(currentPath));
+    setIsAttOpen(attendancePaths.includes(currentPath));
+  }, [location.pathname]);
+  const isActiveLink = (location, routes) => {
+    return routes.includes(location.pathname);
+  };
+  const routes = [
+    "/admin/company-profile/basic-information",
+    "/admin/company-profile/address-information",
+    "/admin/geographical-settings",
+    "/admin/locations",
+    "/admin/department",
+    "/admin/company-holidays",
+    '/admin/add-bank-account',
+    "/admin/employee-fields/personal-details",
+    "/admin/employee-fields/employment-details",
+    "/admin/employee-fields/other-details",
+    "/admin/employee-fields/documents",
+    "/admin/bank-accounts",
+    "/admin/calendar-milestones-events"
+  ];
+  const routes1 = [
+    "/admin/manage-admin",
+    "/admin/third-party",
+    "/admin/employee-fields/permission",
+    "/admin/employee-fields/news-feed-permission",
+  ]
+  const routes2 = [
+    "/admin/hrms/document-letter",
+    '/admin/add-letter-template',
+    '/admin/edit-letter-templates',
+    "/admin/document/letter-template",
+    "/admin/document/old-letter-template",
+    
+  ]
+  const routes3 = [
+    "/admin/onboarding-setting",
+    "/admin/communication-template",
+    "/admin/edit-communication-templates/undefined",
+     "/admin/add-communication-templates",
+    "/admin/emailid-mapping",
+    "/admin/workflow-trigger"
+    
+  ]
+  const routes4 = [
+    "/hrms/organization-tree-setting",
+    "/admin/organisation-view2",
+    "/admin/organisation-view3",
+    "/admin/organisation-view1"
+    
+  ]
+  const routes5 = [
+    "/hrms/employee-transaction",
+    "/admin/ctc-basket",
+   
+  ]
+  const routes6 = [
+    "/admin/hrms/setting",
+    "/admin/attendance/Regularization-Reason",
+    "/admin/att/template",
+    "/admin/att/template-assign"
+   
+  ]
+  const routes7 = [
+    "/general-settings",
+    "/leave-categories",
+    "/templates",
+    "/templates-assignments"
+   
+  ]
+  const routes8 = [
+    '/admin/hrms/payroll-setting',
+    '/admin/NPS','/admin/Gratuity',
+    '/admin/Leave-Recovery',
+    '/admin/Notice-Recovery',
+    '/admin/Minimum-Wage',
+    '/admin/PF',
+    '/admin/daily-wage',
+    '/admin/location-master',
+    '/admin/fixed-allowance',
+    '/admin/fixed-deduction',
+    '/admin/variable-allowance',
+    '/admin/variable-deduction',
+    '/admin/other-benefit',
+    '/admin/loans',
+    '/admin/tax-setting',
+    '/admin/payslip-setting'
+   
+  ]
+  const routes9=[
+    '/hrms/employee-directory-Personal',
+    '/admin/hrms/employee-directory',
+    '/admin/employee-directory-Employment',
+    '/admin/employee-directory-Statutory',
+    '/admin/employee-directory/Salary',
+    '/admin/employee-directory-Tax',
+    '/admin/OtherDetails',
+    '/admin/employee-directory-Documents',
+    '/admin/employee-directory-LoansAdvances',
+    '/admin/employee-directory-Transaction',
+    '/admin/employee-directory-Change-logs'
+  ]
   return (
     <section className="flex gap-6 fixed top-0 left-0 bottom-0 h-screen z-30">
       <div
@@ -109,7 +348,7 @@ const AdminHRMS = () => {
                   `${
                     isActive
                       ? "text-black bg-white flex p-2 gap-3.5 rounded-md group items-center text-sm font-medium"
-                      : "group flex items-center text-sm gap-3.5 font-medium p-2 hover:bg-gray-800 rounded-md"
+                      : "group flex items-center text-sm gap-3.5 font-medium p-2 "
                   }`
                 }
               >
@@ -137,7 +376,7 @@ const AdminHRMS = () => {
                   `${
                     isActive
                       ? "text-black bg-white flex p-2 gap-3.5 rounded-md group items-center text-sm font-medium"
-                      : "group flex items-center text-sm gap-3.5 font-medium p-2 hover:bg-gray-800 rounded-md"
+                      : "group flex items-center text-sm gap-3.5 font-medium p-2 "
                   }`
                 }
               >
@@ -159,170 +398,201 @@ const AdminHRMS = () => {
                   Alerts
                 </h2>
               </NavLink>
-              <div>
-                <div
-                  onClick={toggleOrgMenu}
-                  className="cursor-pointer flex items-center text-sm gap-3.5 font-medium p-2 hover:bg-gray-800 rounded-md"
-                >
-                  <div>
-                    {React.createElement(FaBuilding, { size: "20" })}
-                  </div>
-                  <h2
-                    className={`whitespace-pre duration-300 ${
-                      !open && "opacity-0 translate-x-28 overflow-hidden transition-all duration-300"
-                    }`}
-                  >
-                    Organization
-                  </h2>
-                  <div className="ml-auto">
-                    {isOrgOpen
-                      ? React.createElement(MdExpandLess, { size: "20" })
-                      : React.createElement(MdExpandMore, { size: "20" })}
-                  </div>
-                </div>
-                {isOrgOpen && (
-                  <div className="ml-4">
-                    <NavLink
-                      to="/admin/company-profile/basic-information"
-                      className={({ isActive }) =>
-                        `${
-                          isActive
-                            ? "text-black bg-white flex p-2 pl-0 gap-3.5 rounded-md group items-center text-sm font-medium"
-                            : "group flex items-center text-sm gap-3.5 font-medium p-2 hover:bg-gray-800 rounded-md"
-                        }`
-                      }
-                    >
-                      <div>
-                        {React.createElement(IoSettingsOutline, { size: "20" })}
-                      </div>
-                      <h2
-                        className={`whitespace-pre duration-100 ${
-                          !open && "opacity-0 translate-x-28 overflow-hidden"
-                        }`}
-                      >
-                        Organization Setting
-                      </h2>
-                      <h2
-                        className={`${
-                          open && "hidden"
-                        } absolute left-48 bg-white font-semibold whitespace-pre text-gray-900 rounded-md drop-shadow-lg px-0 py-0 w-0 overflow-hidden group-hover:px-2 group-hover:py-1 group-hover:left-14 group-hover:duration-100 group-hover:w-fit`}
-                      >
-                        Organization Setting
-                      </h2>
-                    </NavLink>
-                    <NavLink
-                      to="/admin/manage-admin"
-                      className={({ isActive }) =>
-                        `${
-                          isActive
-                            ? "text-black bg-white flex p-2 gap-3.5 rounded-md group items-center text-sm font-medium"
-                            : "group flex items-center text-sm gap-3.5 font-medium p-2 hover:bg-gray-800 rounded-md"
-                        }`
-                      }
-                    >
-                      <div>{React.createElement(FaUserCog, { size: "20" })}</div>
-                      <h2
-                        className={`whitespace-pre duration-200 ${
-                          !open && "opacity-0 translate-x-28 overflow-hidden"
-                        }`}
-                      >
-                        User Setting
-                      </h2>
-                      <h2
-                        className={`${
-                          open && "hidden"
-                        } absolute left-48 bg-white font-semibold whitespace-pre text-gray-900 rounded-md drop-shadow-lg px-0 py-0 w-0 overflow-hidden group-hover:px-2 group-hover:py-1 group-hover:left-14 group-hover:duration-200 group-hover:w-fit`}
-                      >
-                        User Setting
-                      </h2>
-                    </NavLink>
-                    <NavLink
-                      to="/admin/hrms/document-letter"
-                      className={({ isActive }) =>
-                        `${
-                          isActive
-                            ? "text-black bg-white flex p-2 gap-3.5 rounded-md group items-center text-sm font-medium"
-                            : "group flex items-center text-sm gap-3.5 font-medium p-2 hover:bg-gray-800 rounded-md"
-                        }`
-                      }
-                    >
-                      <div>
-                        {React.createElement(ImFileText2, { size: "20" })}
-                      </div>
-                      <h2
-                        className={`whitespace-pre duration-300 ${
-                          !open && "opacity-0 translate-x-28 overflow-hidden"
-                        }`}
-                      >
-                        Document + Letter
-                      </h2>
-                      <h2
-                        className={`${
-                          open && "hidden"
-                        } absolute left-48 bg-white font-semibold whitespace-pre text-gray-900 rounded-md drop-shadow-lg px-0 py-0 w-0 overflow-hidden group-hover:px-2 group-hover:py-1 group-hover:left-14 group-hover:duration-300 group-hover:w-fit`}
-                      >
-                        Document + Letter
-                      </h2>
-                    </NavLink>
-                    <NavLink
-                      to="/admin/onboarding-setting"
-                      className={({ isActive }) =>
-                        `${
-                          isActive
-                            ? "text-black bg-white flex p-2 gap-3.5 rounded-md group items-center text-sm font-medium"
-                            : "group flex items-center text-sm gap-3.5 font-medium p-2 hover:bg-gray-800 rounded-md"
-                        }`
-                      }
-                    >
-                      <div>
-                        {React.createElement(RiSettings3Line, { size: "20" })}
-                      </div>
-                      <h2
-                        className={`whitespace-pre duration-300 ${
-                          !open && "opacity-0 translate-x-28 overflow-hidden"
-                        }`}
-                      >
-                        HR Workflow Setting
-                      </h2>
-                      <h2
-                        className={`${
-                          open && "hidden"
-                        } absolute left-48 bg-white font-semibold whitespace-pre text-gray-900 rounded-md drop-shadow-lg px-0 py-0 w-0 overflow-hidden group-hover:px-2 group-hover:py-1 group-hover:left-14 group-hover:duration-300 group-hover:w-fit`}
-                      >
-                        HR Workflow Setting
-                      </h2>
-                    </NavLink>
-                    <NavLink
-                      to="/admin/hrms/investment-setting"
-                      className={({ isActive }) =>
-                        `${
-                          isActive
-                            ? "text-black bg-white flex p-2 gap-3.5 rounded-md group items-center text-sm font-medium"
-                            : "group flex items-center text-sm gap-3.5 font-medium p-2 hover:bg-gray-800 rounded-md"
-                        }`
-                      }
-                    >
-                      <div>
-                        {React.createElement(IoCashOutline, { size: "20" })}
-                      </div>
-                      <h2
-                        className={`whitespace-pre duration-300 ${
-                          !open && "opacity-0 translate-x-28 overflow-hidden"
-                        }`}
-                      >
-                        Investment Setting
-                      </h2>
-                      <h2
-                        className={`${
-                          open && "hidden"
-                        } absolute left-48 bg-white font-semibold whitespace-pre text-gray-900 rounded-md drop-shadow-lg px-0 py-0 w-0 overflow-hidden group-hover:px-2 group-hover:py-1 group-hover:left-14 group-hover:duration-300 group-hover:w-fit`}
-                      >
-                        Investment Setting
-                      </h2>
-                    </NavLink>
-                  </div>
-                )}
-              </div>
+        
+           
+               <div>
+      <div
+        onClick={toggleOrgMenu}
+        className="cursor-pointer flex items-center text-sm gap-3.5 font-medium p-2 "
+      >
+        <div>
+          {React.createElement(FaBuilding, { size: "20" })}
+          {/* <p>Organization</p> */}
+        </div>
+        <h2
+          className={`whitespace-pre duration-300 ${
+            !open && "opacity-0 translate-x-28 overflow-hidden"
+          }`}
+        >
+          Organization
+        </h2>
+        <div className="ml-auto">
+          {isOrgOpen
+            ? React.createElement(MdExpandLess, { size: "20" })
+            : React.createElement(MdExpandMore, { size: "20" })}
+        </div>
+      </div>
+      {isOrgOpen && (
+        <div className="">
+          {/* <NavLink
+            to="/admin/company-profile/basic-information"
+            className={({ isActive }) =>
+              `${
+                isActive
+                  ? "text-black bg-white flex p-2 pl-2 gap-3.5 rounded-md group items-center text-sm font-medium"
+                  : "group flex items-center text-sm gap-3.5 font-medium p-2 hover:bg-gray-800 rounded-md"
+              }`
+            }
+          >
+            <div>
+              {React.createElement(IoSettingsOutline, { size: "20" })}
+            </div>
+            <h2
+              className={`whitespace-pre duration-100 ${
+                !open && "opacity-0 translate-x-28 overflow-hidden"
+              }`}
+            >
+              Organization Setting
+            </h2>
+            <h2
+              className={`${
+                open && "hidden"
+              } absolute left-48 bg-white font-semibold whitespace-pre text-gray-900 rounded-md drop-shadow-lg px-0 py-0 w-0 overflow-hidden group-hover:px-2 group-hover:py-1 group-hover:left-14 group-hover:duration-100 group-hover:w-fit`}
+            >
+              Organization Setting
+            </h2>
+          </NavLink> */}
+           <NavLink
+      to="/admin/company-profile/basic-information"
+      className={() =>
+        `${
+          isActiveLink(location, routes)
+            ? "text-black bg-white flex p-2 pl-2 gap-3.5 rounded-md group items-center text-sm font-medium"
+            : "group flex items-center text-sm gap-3.5 font-medium p-2 "
+        }`
+      }
+    >
+      <div>
+        {React.createElement(IoSettingsOutline, { size: "20" })}
+      </div>
+      <h2
+        className={`whitespace-pre duration-100 ${
+          !open && "opacity-0 translate-x-28 overflow-hidden"
+        }`}
+      >
+        Organization Setting
+      </h2>
+      <h2
+        className={`${
+          open && "hidden"
+        } absolute left-48 bg-white font-semibold whitespace-pre text-gray-900 rounded-md drop-shadow-lg px-0 py-0 w-0 overflow-hidden group-hover:px-2 group-hover:py-1 group-hover:left-14 group-hover:duration-100 group-hover:w-fit`}
+      >
+        Organization Setting
+      </h2>
+    </NavLink>
+          <NavLink
+            to="/admin/manage-admin"
+            className={() =>
+              `${
+                isActiveLink(location, routes1)
+                  ? "text-black bg-white flex p-2 gap-3.5 rounded-md group items-center text-sm font-medium"
+                  : "group flex items-center text-sm gap-3.5 font-medium p-2 "
+              }`
+            }
+          >
+            <div>{React.createElement(FaUserCog, { size: "20" })}</div>
+            <h2
+              className={`whitespace-pre  duration-200 ${
+                !open && "opacity-0 translate-x-28 overflow-hidden"
+              }`}
+            >
+              User Setting
+            </h2>
+            <h2
+              className={`${
+                open && "hidden"
+              } absolute left-48 bg-white font-semibold whitespace-pre text-gray-900 rounded-md drop-shadow-lg px-0 py-0 w-0 overflow-hidden group-hover:px-2 group-hover:py-1 group-hover:left-14 group-hover:duration-200 group-hover:w-fit`}
+            >
+              User Setting
+            </h2>
+          </NavLink>
+          <NavLink
+            to="/admin/hrms/document-letter"
+            className={() =>
+              `${
+                isActiveLink(location, routes2)
+                  ? "text-black bg-white flex p-2 gap-3.5 rounded-md group items-center text-sm font-medium"
+                  : "group flex items-center text-sm gap-3.5 font-medium p-2 "
+              }`
+            }
+          >
+            <div>
+              {React.createElement(ImFileText2, { size: "20" })}
+            </div>
+            <h2
+              className={`whitespace-pre duration-300 ${
+                !open && "opacity-0 translate-x-28 overflow-hidden"
+              }`}
+            >
+              Document + Letter
+            </h2>
+            <h2
+              className={`${
+               open && "hidden"
+              } absolute left-48 bg-white font-semibold whitespace-pre text-gray-900 rounded-md drop-shadow-lg px-0 py-0 w-0 overflow-hidden group-hover:px-2 group-hover:py-1 group-hover:left-14 group-hover:duration-300 group-hover:w-fit`}
+            >
+              Document + Letter
+            </h2>
+          </NavLink>
+          <NavLink
+            to="/admin/onboarding-setting"
+            className={() =>
+              `${
+                isActiveLink(location, routes3)
+                  ? "text-black bg-white flex p-2 gap-3.5 rounded-md group items-center text-sm font-medium"
+                  : "group flex items-center text-sm gap-3.5 font-medium p-2 "
+              }`
+            }
+          >
+            <div>
+              {React.createElement(RiSettings3Line, { size: "20" })}
+            </div>
+            <h2
+              className={`whitespace-pre duration-300 ${
+                !open && "opacity-0 translate-x-28 overflow-hidden"
+              }`}
+            >
+              HR Workflow Setting
+            </h2>
+            <h2
+              className={`${
+                open && "hidden"
+              } absolute left-48 bg-white font-semibold whitespace-pre text-gray-900 rounded-md drop-shadow-lg px-0 py-0 w-0 overflow-hidden group-hover:px-2 group-hover:py-1 group-hover:left-14 group-hover:duration-300 group-hover:w-fit`}
+            >
+              HR Workflow Setting
+            </h2>
+          </NavLink>
+          <NavLink
+            to="/admin/hrms/investment-setting"
+            className={({ isActive }) =>
+              `${
+                isActive
+                  ? "text-black bg-white flex p-2 gap-3.5 rounded-md group items-center text-sm font-medium"
+                  : "group flex items-center text-sm gap-3.5 font-medium p-2 "
+              }`
+            }
+          >
+            <div>
+              {React.createElement(IoCashOutline, { size: "20" })}
+            </div>
+            <h2
+              className={`whitespace-pre duration-300 ${
+                !open && "opacity-0 translate-x-28 overflow-hidden"
+              }`}
+            >
+              Investment Setting
+            </h2>
+            <h2
+              className={`${
+                open && "hidden"
+              } absolute left-48 bg-white font-semibold whitespace-pre text-gray-900 rounded-md drop-shadow-lg px-0 py-0 w-0 overflow-hidden group-hover:px-2 group-hover:py-1 group-hover:left-14 group-hover:duration-300 group-hover:w-fit`}
+            >
+              Investment Setting
+            </h2>
+          </NavLink>
+        </div>
+      )}
+    </div>
               {/* <NavLink
                 to="/hrms/dashboard"
                 className={({ isActive }) =>
@@ -374,14 +644,14 @@ const AdminHRMS = () => {
                   </div>
                 </div>
                 {isEmpOpen && (
-                  <div className="ml-4">
+                  <div className="">
                     <NavLink
                        to="/admin/hrms/employee-directory"
                       className={({ isActive }) =>
                         `${
-                          isActive
+                          isActiveLink(location, routes9)
                             ? "text-black bg-white flex p-2 gap-3.5 rounded-md group items-center text-sm font-medium"
-                            : "group flex items-center text-sm gap-3.5 font-medium p-2 hover:bg-gray-800 rounded-md"
+                            : "group flex items-center text-sm gap-3.5 font-medium p-2 "
                         }`
                       }
                     >
@@ -405,11 +675,11 @@ const AdminHRMS = () => {
                     </NavLink>
                     <NavLink
                       to="/hrms/organization-tree-setting"
-                      className={({ isActive }) =>
+                      className={() =>
                         `${
-                          isActive
+                          isActiveLink(location, routes4)
                             ? "text-black bg-white flex p-2 gap-3.5 rounded-md group items-center text-sm font-medium"
-                            : "group flex items-center text-sm gap-3.5 font-medium p-2 hover:bg-gray-800 rounded-md"
+                            : "group flex items-center text-sm gap-3.5 font-medium p-2 "
                         }`
                       }
                     >
@@ -433,11 +703,11 @@ const AdminHRMS = () => {
                     </NavLink>
                     <NavLink
                       to="/hrms/employee-transaction"
-                      className={({ isActive }) =>
+                      className={() =>
                         `${
-                          isActive
+                          isActiveLink(location, routes5)
                             ? "text-black bg-white flex p-2 gap-3.5 rounded-md group items-center text-sm font-medium"
-                            : "group flex items-center text-sm gap-3.5 font-medium p-2 hover:bg-gray-800 rounded-md"
+                            : "group flex items-center text-sm gap-3.5 font-medium p-2 "
                         }`
                       }
                     >
@@ -465,7 +735,7 @@ const AdminHRMS = () => {
                         `${
                           isActive
                             ? "text-black bg-white flex p-2 gap-3.5 rounded-md group items-center text-sm font-medium"
-                            : "group flex items-center text-sm gap-3.5 font-medium p-2 hover:bg-gray-800 rounded-md"
+                            : "group flex items-center text-sm gap-3.5 font-medium p-2 "
                         }`
                       }
                     >
@@ -488,12 +758,12 @@ const AdminHRMS = () => {
                       </h2>
                     </NavLink>
                     <NavLink
-                      to="/hrms/onboarding"
+                      to="/admin/add-employee/"
                       className={({ isActive }) =>
                         `${
                           isActive
                             ? "text-black bg-white flex p-2 gap-3.5 rounded-md group items-center text-sm font-medium"
-                            : "group flex items-center text-sm gap-3.5 font-medium p-2 hover:bg-gray-800 rounded-md"
+                            : "group flex items-center text-sm gap-3.5 font-medium p-2 "
                         }`
                       }
                     >
@@ -521,7 +791,7 @@ const AdminHRMS = () => {
                         `${
                           isActive
                             ? "text-black bg-white flex p-2 gap-3.5 rounded-md group items-center text-sm font-medium"
-                            : "group flex items-center text-sm gap-3.5 font-medium p-2 hover:bg-gray-800 rounded-md"
+                            : "group flex items-center text-sm gap-3.5 font-medium p-2 "
                         }`
                       }
                     >
@@ -544,12 +814,12 @@ const AdminHRMS = () => {
                       </h2>
                     </NavLink>
                     <NavLink
-                      to="/hrms/separation-request"
+                      to="/hrms/separation/"
                       className={({ isActive }) =>
                         `${
                           isActive
                             ? "text-black bg-white flex p-2 gap-3.5 rounded-md group items-center text-sm font-medium"
-                            : "group flex items-center text-sm gap-3.5 font-medium p-2 hover:bg-gray-800 rounded-md"
+                            : "group flex items-center text-sm gap-3.5 font-medium p-2 "
                         }`
                       }
                     >
@@ -577,7 +847,7 @@ const AdminHRMS = () => {
                         `${
                           isActive
                             ? "text-black bg-white flex p-2 gap-3.5 rounded-md group items-center text-sm font-medium"
-                            : "group flex items-center text-sm gap-3.5 font-medium p-2 hover:bg-gray-800 rounded-md"
+                            : "group flex items-center text-sm gap-3.5 font-medium p-2 "
                         }`
                       }
                     >
@@ -662,7 +932,7 @@ const AdminHRMS = () => {
                <div>
                 <div
                   onClick={toggleAttMenu}
-                  className="cursor-pointer flex items-center text-sm gap-3.5 font-medium p-2 hover:bg-gray-800 rounded-md"
+                  className="cursor-pointer flex items-center text-sm gap-3.5 font-medium p-2 "
                 >
                   <div>
                     {React.createElement(HiCheck, { size: "20" })}
@@ -681,14 +951,14 @@ const AdminHRMS = () => {
                   </div>
                 </div>
                 {isAttOpen && (
-                  <div className="ml-4">
+                  <div className="">
                     <NavLink
                       to="/admin/hrms/attendance-records"
                       className={({ isActive }) =>
                         `${
                           isActive
                             ? "text-black bg-white flex p-2 gap-3.5 rounded-md group items-center text-sm font-medium"
-                            : "group flex items-center text-sm gap-3.5 font-medium p-2 hover:bg-gray-800 rounded-md"
+                            : "group flex items-center text-sm gap-3.5 font-medium p-2 "
                         }`
                       }
                     >
@@ -716,7 +986,7 @@ const AdminHRMS = () => {
                         `${
                           isActive
                             ? "text-black bg-white flex p-2 gap-3.5 rounded-md group items-center text-sm font-medium"
-                            : "group flex items-center text-sm gap-3.5 font-medium p-2 hover:bg-gray-800 rounded-md"
+                            : "group flex items-center text-sm gap-3.5 font-medium p-2 "
                         }`
                       }
                     >
@@ -744,7 +1014,7 @@ const AdminHRMS = () => {
                         `${
                           isActive
                             ? "text-black bg-white flex p-2 gap-3.5 rounded-md group items-center text-sm font-medium"
-                            : "group flex items-center text-sm gap-3.5 font-medium p-2 hover:bg-gray-800 rounded-md"
+                            : "group flex items-center text-sm gap-3.5 font-medium p-2 "
                         }`
                       }
                     >
@@ -770,7 +1040,7 @@ const AdminHRMS = () => {
                         `${
                           isActive
                             ? "text-black bg-white flex p-2 gap-3.5 rounded-md group items-center text-sm font-medium"
-                            : "group flex items-center text-sm gap-3.5 font-medium p-2 hover:bg-gray-800 rounded-md"
+                            : "group flex items-center text-sm gap-3.5 font-medium p-2 "
                         }`
                       }
                     >
@@ -794,11 +1064,11 @@ const AdminHRMS = () => {
                     </NavLink>
                     <NavLink
                      to="/admin/hrms/setting"
-                      className={({ isActive }) =>
+                      className={() =>
                         `${
-                          isActive
+                          isActiveLink(location, routes6)
                             ? "text-black bg-white flex p-2 gap-3.5 rounded-md group items-center text-sm font-medium"
-                            : "group flex items-center text-sm gap-3.5 font-medium p-2 hover:bg-gray-800 rounded-md"
+                            : "group flex items-center text-sm gap-3.5 font-medium p-2 "
                         }`
                       }
                     >
@@ -826,7 +1096,7 @@ const AdminHRMS = () => {
                         `${
                           isActive
                             ? "text-black bg-white flex p-2 gap-3.5 rounded-md group items-center text-sm font-medium"
-                            : "group flex items-center text-sm gap-3.5 font-medium p-2 hover:bg-gray-800 rounded-md"
+                            : "group flex items-center text-sm gap-3.5 font-medium p-2 "
                         }`
                       }
                     >
@@ -854,7 +1124,7 @@ const AdminHRMS = () => {
                         `${
                           isActive
                             ? "text-black bg-white flex p-2 gap-3.5 rounded-md group items-center text-sm font-medium"
-                            : "group flex items-center text-sm gap-3.5 font-medium p-2 hover:bg-gray-800 rounded-md"
+                            : "group flex items-center text-sm gap-3.5 font-medium p-2 "
                         }`
                       }
                     >
@@ -882,7 +1152,7 @@ const AdminHRMS = () => {
                         `${
                           isActive
                             ? "text-black bg-white flex p-2 gap-3.5 rounded-md group items-center text-sm font-medium"
-                            : "group flex items-center text-sm gap-3.5 font-medium p-2 hover:bg-gray-800 rounded-md"
+                            : "group flex items-center text-sm gap-3.5 font-medium p-2 "
                         }`
                       }
                     >
@@ -911,10 +1181,10 @@ const AdminHRMS = () => {
 
               <div
                   onClick={toggleRosterMenu}
-                  className="cursor-pointer flex items-center text-sm gap-3.5 font-medium p-2 hover:bg-gray-800 rounded-md"
+                  className="cursor-pointer flex items-center text-sm gap-3.5 font-medium p-2 "
                 >
                   <div>
-                    {React.createElement(FaFileWord, { size: "20" })}
+                    {React.createElement(FaRegRegistered, { size: "20" })}
                   </div>
                   <h2
                     className={`whitespace-pre duration-300 ${
@@ -930,19 +1200,19 @@ const AdminHRMS = () => {
                   </div>
                 </div>
                 {isRosterOpen && (
-                  <div className="ml-4">
+                  <div className="">
               <NavLink
                 to="/admin/hrms/roaster"
                 className={({ isActive }) =>
                   `${
                     isActive
                       ? "text-black bg-white flex p-2 gap-3.5 rounded-md group items-center text-sm font-medium"
-                      : "group flex items-center text-sm gap-3.5 font-medium p-2 hover:bg-gray-800 rounded-md"
+                      : "group flex items-center text-sm gap-3.5 font-medium p-2 "
                   }`
                 }
               >
                 <div>
-                  {React.createElement(FaRegFilePowerpoint, { size: "20" })}
+                  {React.createElement(AiOutlineFieldTime, { size: "20" })}
                 </div>
                 <h2
                   className={`whitespace-pre duration-300 ${
@@ -965,12 +1235,12 @@ const AdminHRMS = () => {
                   `${
                     isActive
                       ? "text-black bg-white flex p-2 gap-3.5 rounded-md group items-center text-sm font-medium"
-                      : "group flex items-center text-sm gap-3.5 font-medium p-2 hover:bg-gray-800 rounded-md"
+                      : "group flex items-center text-sm gap-3.5 font-medium p-2 "
                   }`
                 }
               >
                 <div>
-                  {React.createElement(PiSignOutBold, { size: "20" })}
+                  {React.createElement(MdAlarm, { size: "20" })}
                 </div>
                 <h2
                   className={`whitespace-pre duration-300 ${
@@ -1022,7 +1292,7 @@ const AdminHRMS = () => {
                        <div>
                 <div
                   onClick={toggleLeaveMenu}
-                  className="cursor-pointer flex items-center text-sm gap-3.5 font-medium p-2 hover:bg-gray-800 rounded-md"
+                  className="cursor-pointer flex items-center text-sm gap-3.5 font-medium p-2 "
                 >
                   <div>
                     {React.createElement(FaRegCalendarTimes, { size: "20" })}
@@ -1041,14 +1311,14 @@ const AdminHRMS = () => {
                   </div>
                 </div>
                 {isLeaveOpen && (
-                  <div className="ml-4">
+                  <div className="">
                     <NavLink
                       to="/admin/hrms/leave-application"
                       className={({ isActive }) =>
                         `${
                           isActive
                             ? "text-black bg-white flex p-2 gap-3.5 rounded-md group items-center text-sm font-medium"
-                            : "group flex items-center text-sm gap-3.5 font-medium p-2 hover:bg-gray-800 rounded-md"
+                            : "group flex items-center text-sm gap-3.5 font-medium p-2 "
                         }`
                       }
                     >
@@ -1076,7 +1346,7 @@ const AdminHRMS = () => {
                         `${
                           isActive
                             ? "text-black bg-white flex p-2 gap-3.5 rounded-md group items-center text-sm font-medium"
-                            : "group flex items-center text-sm gap-3.5 font-medium p-2 hover:bg-gray-800 rounded-md"
+                            : "group flex items-center text-sm gap-3.5 font-medium p-2 "
                         }`
                       }
                     >
@@ -1104,7 +1374,7 @@ const AdminHRMS = () => {
                         `${
                           isActive
                             ? "text-black bg-white flex p-2 gap-3.5 rounded-md group items-center text-sm font-medium"
-                            : "group flex items-center text-sm gap-3.5 font-medium p-2 hover:bg-gray-800 rounded-md"
+                            : "group flex items-center text-sm gap-3.5 font-medium p-2 "
                         }`
                       }
                     >
@@ -1126,11 +1396,11 @@ const AdminHRMS = () => {
                     </NavLink>
                     <NavLink
                       to="/general-settings"
-                      className={({ isActive }) =>
+                      className={() =>
                         `${
-                          isActive
+                          isActiveLink(location,routes7)
                             ? "text-black bg-white flex p-2 gap-3.5 rounded-md group items-center text-sm font-medium"
-                            : "group flex items-center text-sm gap-3.5 font-medium p-2 hover:bg-gray-800 rounded-md"
+                            : "group flex items-center text-sm gap-3.5 font-medium p-2 "
                         }`
                       }
                     >
@@ -1194,7 +1464,7 @@ const AdminHRMS = () => {
              <div>
                 <div
                   onClick={togglepayMenu}
-                  className="cursor-pointer flex items-center text-sm gap-3.5 font-medium p-2 hover:bg-gray-800 rounded-md"
+                  className="cursor-pointer flex items-center text-sm gap-3.5 font-medium p-2 "
                 >
                   <div>
                     {React.createElement(FaMoneyBillAlt, { size: "20" })}
@@ -1213,14 +1483,14 @@ const AdminHRMS = () => {
                   </div>
                 </div>
                 {ispayOpen && (
-                  <div className="ml-4">
+                  <div className="">
                     <NavLink
                       to="/admin/hrms/run-payroll"
                       className={({ isActive }) =>
                         `${
                           isActive
                             ? "text-black bg-white flex p-2 gap-3.5 rounded-md group items-center text-sm font-medium"
-                            : "group flex items-center text-sm gap-3.5 font-medium p-2 hover:bg-gray-800 rounded-md"
+                            : "group flex items-center text-sm gap-3.5 font-medium p-2 "
                         }`
                       }
                     >
@@ -1248,7 +1518,7 @@ const AdminHRMS = () => {
                         `${
                           isActive
                             ? "text-black bg-white flex p-2 gap-3.5 rounded-md group items-center text-sm font-medium"
-                            : "group flex items-center text-sm gap-3.5 font-medium p-2 hover:bg-gray-800 rounded-md"
+                            : "group flex items-center text-sm gap-3.5 font-medium p-2 "
                         }`
                       }
                     >
@@ -1276,7 +1546,7 @@ const AdminHRMS = () => {
                         `${
                           isActive
                             ? "text-black bg-white flex p-2 gap-3.5 rounded-md group items-center text-sm font-medium"
-                            : "group flex items-center text-sm gap-3.5 font-medium p-2 hover:bg-gray-800 rounded-md"
+                            : "group flex items-center text-sm gap-3.5 font-medium p-2 "
                         }`
                       }
                     >
@@ -1300,9 +1570,9 @@ const AdminHRMS = () => {
                      to="/admin/hrms/payroll-setting"
                       className={({ isActive }) =>
                         `${
-                          isActive
+                          isActiveLink(location, routes8)
                             ? "text-black bg-white flex p-2 gap-3.5 rounded-md group items-center text-sm font-medium"
-                            : "group flex items-center text-sm gap-3.5 font-medium p-2 hover:bg-gray-800 rounded-md"
+                            : "group flex items-center text-sm gap-3.5 font-medium p-2 "
                         }`
                       }
                     >
@@ -1325,12 +1595,12 @@ const AdminHRMS = () => {
                       </h2>
                     </NavLink>
                     <NavLink
-                       to="/admin/hrms/CTC-Template"
+                       to="/admin/hrms/ctc/"
                       className={({ isActive }) =>
                         `${
                           isActive
                             ? "text-black bg-white flex p-2 gap-3.5 rounded-md group items-center text-sm font-medium"
-                            : "group flex items-center text-sm gap-3.5 font-medium p-2 hover:bg-gray-800 rounded-md"
+                            : "group flex items-center text-sm gap-3.5 font-medium p-2 "
                         }`
                       }
                     >
@@ -1363,12 +1633,12 @@ const AdminHRMS = () => {
 
 
               <NavLink
-                to="/admin/hrms/reports"
+                to="/admin/reports/"
                 className={({ isActive }) =>
                   `${
                     isActive
                       ? "text-black bg-white flex p-2 gap-3.5 rounded-md group items-center text-sm font-medium"
-                      : "group flex items-center text-sm gap-3.5 font-medium p-2 hover:bg-gray-800 rounded-md"
+                      : "group flex items-center text-sm gap-3.5 font-medium p-2 "
                   }`
                 }
               >

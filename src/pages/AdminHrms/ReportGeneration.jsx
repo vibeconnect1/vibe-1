@@ -5,23 +5,22 @@ import { Link } from "react-router-dom";
 import Table from "../../components/table/Table";
 
 import ReportDetailsList from "./ReportDetailsList";
-
+import { useSelector } from "react-redux";
+import Select from 'react-select';
 
 const ReportGeneration = () => {
-  const columns = [
-    {
-      name: "Actions",
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const themeColor = useSelector((state) => state.theme.color);
+  const [selectedOptions, setSelectedOptions] = useState([]);
+  const handleChange = (selected) => {
+    setSelectedOptions(selected);
+  };
+  const employees = [{value:'Attendance format',label:'Attendance format'},{ value:'Attendance process',label:'Attendance process'}];
+  const employeesname = [{value:'Mittu Panda',label:'Mittu Panda'},{ value:'Akhil Nayak',label:'Akhil Nayak'}];
+  const statusopt = [{value:'Failed',label:'Failed'},{ value:'Completed',label:'Completed'}];
 
-      cell: (row) => (
-        <div className="flex items-center gap-4">
-          <Link 
-        //   to={`/admin/edit-templates/${row.id}`}
-          >
-            <FaDownload size={15} />
-          </Link>
-        </div>
-      ),
-    },
+  const columns = [
+   
     {
       name: "Report Name",
       selector: (row) => row.Location,
@@ -42,101 +41,140 @@ const ReportGeneration = () => {
       selector: (row) => row.State,
       sortable: true,
     },
-    // {
-    //     name: "Type",
-    //     selector: (row) => row.Country,
-    //     sortable: true,
-    //   },
-    // {
-    //     name: "Leave Days",
-    //     selector: (row) => row.Leave_Days,
-    //     sortable: true,
-    //   },
-    //   {
-    //     name: "Comment",
-    //     selector: (row) => row.Comment,
-    //     sortable: true,
-    //   },
+  
     {
       name: "Status",
       selector: (row) => row.status,
       sortable: true,
     },
-    // {
-    //   name: "Action",
-    //   selector: (row) =>
-    //     row.status !== "Expired" && (
-    //       <button className="text-red-500">Cancel</button>
-    //     ),
-    //   sortable: true,
-    // },
+    {
+      name: "Actions",
+
+      cell: (row) => (
+        <div className="flex items-center gap-4">
+          <Link 
+      
+          >
+            <FaDownload size={15} />
+          </Link>
+        </div>
+      ),
+    },
+   
   ];
 
   const data = [
     {
-      Name: "person 1",
-      Location: "Mumbai",
-      City: "Mumbai",
-      State: "Maharashtra",
+      Label: "July-2024",
+      Location: "Holiday-report",
+      City: "08-07-2024 - 13:08:11 IST",
+      State: "Mittu Panda",
 
-      Country:"India",
+      status:"completed",
+
+    },
+    {
+      Label: "July-2024",
+      Location: "Attendance-process",
+      City: "04-07-2024 - 10:49:20 IST",
+      State: "Mittu Panda",
+
+      status:"completed",
 
     },
 
   ];
-//   const customStyle = {
-//     headRow: {
-//       style: {
-//         backgroundColor: "black",
-//         color: "white",
 
-//         fontSize: "10px",
-//       },
-//     },
-//     headCells: {
-//       style: {
-//         textTransform: "upperCase",
-//       },
-//     },
-//   };
   return (
     <section className="flex gap-3 ml-20">
      <ReportDetailsList/>
       <div className=" w-full flex m-3 flex-col overflow-hidden">
-        {/* <div className="flex  justify-start gap-4 my-5  ">
-          <div className="shadow-xl rounded-full border-4 border-gray-400 w-52  px-6 flex flex-col items-center">
-            <p className="font-semibold ">Total Alloted Slots</p>
-            <p className="text-center font-semibold ">0</p>
-          </div>
-          <div className="shadow-xl rounded-full border-4 border-green-400 w-52  px-6 flex flex-col items-center">
-            <p className="font-semibold">Four Wheelers</p>
-            <p className="text-center font-semibold  ">0</p>
-          </div>
-          <div className="shadow-xl rounded-full border-4 border-red-400 w-52  px-6 flex flex-col items-center">
-            <p className="font-semibold">2 Wheelers</p>
-            <p className="text-center font-semibold ">0</p>
-          </div>
-          <div className="shadow-xl rounded-full border-4 border-orange-400 w-52  px-6 flex flex-col items-center">
-            <p className="font-semibold">Vacant Slot</p>
-            <p className="text-center font-semibold ">0</p>
-          </div>
-        </div> */}
-        <div className=" flex justify-between my-5">
-          <input
-            type="text"
-            placeholder="Search by name "
-            className="border border-gray-400 w-96 placeholder:text-sm rounded-lg p-2"
-            //   value={searchText}
-            //   onChange={handleSearch}
-          />
-          {/* <Link
-            to={"/templates/leave-templates"}
-            className="border-2 font-semibold hover:bg-black hover:text-white duration-150 transition-all border-black p-2 rounded-md text-black cursor-pointer text-center flex items-center  gap-2 justify-center"
+      
+      <div className=" flex justify-between my-5">
+        <p className="font-bold mb-4">Report Generation</p>
+
+        <button
+           onClick={() => setIsModalOpen(true)}
+           style={{ background: themeColor }}
+            className="bg-black text-white hover:bg-gray-700 font-semibold py-2 px-4 rounded"
           >
-            <PiPlusCircle size={20} />
-            Add
-          </Link> */}
+            Filter
+          </button>
+         
         </div>
+        {isModalOpen && (
+        <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex z-10 justify-center items-center">
+          <div className="bg-white p-5 rounded-md shadow-md w-2/3">
+            {/* <h2 className="text-xl font-semibold mb-4">Add Department</h2> */}
+            <div className="grid md:grid-cols-3 gap-5 mt-5">
+           
+            <div className="grid gap-2 items-center w-full ">
+              <label htmlFor="headOfDepartment" className="block text-sm font-medium text-gray-700">
+              Report Name
+              </label>
+              <Select
+        id="categories"
+        isMulti
+        value={selectedOptions}
+        onChange={handleChange}
+        options={employees}
+        className="basic-multi-select w-full p-2 border border-gray-300 rounded"
+        classNamePrefix="select"
+      />
+            </div>
+            <div className="grid gap-2 items-center w-full ">
+              <label htmlFor="headOfDepartment" className="block text-sm font-medium text-gray-700">
+              Generated By
+              </label>
+              <Select
+        id="categories"
+        isMulti
+        // value={selectedOptions}
+        // onChange={handleChange}
+        options={employeesname}
+        className="basic-multi-select w-full p-2 border border-gray-300 rounded"
+        classNamePrefix="select"
+      />
+            </div>
+            <div className="grid gap-2 items-center w-full ">
+              <label htmlFor="headOfDepartment" className="block text-sm font-medium text-gray-700">
+              Generated At
+              </label>
+             <input type="date" className="mt-1 block w-full border border-gray-400 p-2 rounded-md"/>
+            </div>
+            <div className="grid gap-2 items-center w-full ">
+              <label htmlFor="headOfDepartment" className="block text-sm font-medium text-gray-700">
+              Status
+              </label>
+              <Select
+        id="categories"
+        isMulti
+        // value={selectedOptions}
+        // onChange={handleChange}
+        options={statusopt}
+        className="basic-multi-select w-full p-2 border border-gray-300 rounded"
+        classNamePrefix="select"
+      />
+            </div>
+           
+           </div>
+            <div className="mt-2 flex justify-end">
+              <button
+                onClick={() => setIsModalOpen(false)}
+                className="bg-gray-300 text-gray-700 p-2 rounded-md mr-2"
+              >
+                Clear
+              </button>
+              <button
+                // onClick={handleAddDepartment}
+                className="bg-blue-500 text-white p-2 rounded-md"
+              >
+                Apply
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
         <Table columns={columns} data={data} isPagination={true} />
       </div>
     </section>

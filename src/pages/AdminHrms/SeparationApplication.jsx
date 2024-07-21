@@ -1,10 +1,14 @@
-import React from 'react';
+import React, { useState } from "react";
 import { Bar } from 'react-chartjs-2';
 import AdminHRMS from './AdminHrms';
 
 import SeparationTable from './SeparationTable';
+import SeparationDashboard from "./SeparationDashboard";
+import SeparationCompleted from "./SeparationCompleted";
 
 const SeparationApplication = () => {
+  const [page, setPage] = useState("Pending");
+
   const data = {
     labels: ['Jan24', 'Feb24', 'Mar24', 'Apr24', 'May24', 'Jun24'],
     datasets: [
@@ -31,10 +35,10 @@ const SeparationApplication = () => {
         <AdminHRMS/>
     <div className="flex flex-col w-full p-6 bg-white rounded-lg shadow-lg">
 
-      <div className="mb-4">
+      {/* <div className="mb-4">
         <h2 className="text-xl font-semibold">Separation Applications</h2>
-      </div>
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+      </div> */}
+      {/* <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
         <div className="col-span-1 md:col-span-1">
           <h3 className="text-lg font-semibold mb-2">Total Separation Requests</h3>
           <Bar data={data} options={options} />
@@ -84,9 +88,39 @@ const SeparationApplication = () => {
             </div>
           </div>
         </div>
-      </div>
+      </div> */}
+      <SeparationDashboard/>
     {/* <OnBoardingTable/> */}
+    <div className=" flex gap-2 p-2 pb-0 border-b-2 border-gray-200 w-full">
+
+  <h2
+    className={`p-1 ${
+      page === "Pending" &&
+      `bg-white font-medium text-blue-500 shadow-custom-all-sides`
+    } rounded-t-md px-4 cursor-pointer text-center transition-all duration-300 ease-linear`}
+    onClick={() => setPage("Pending")}
+  >
+    Pending Request
+  </h2>
+  <h2
+    className={`p-1 ${
+      page === "Completed" &&
+      "bg-white font-medium text-blue-500 shadow-custom-all-sides"
+    } rounded-t-md px-4 cursor-pointer transition-all duration-300 ease-linear`}
+    onClick={() => setPage("Completed")}
+  >
+    Completed Request
+  </h2>
+
+
+</div>
+{page === "Pending" && (
+  <div>
     <SeparationTable/>
+  </div>
+)}
+{page === "Completed" && <SeparationCompleted/>}
+    
     </div></div>
   );
 };

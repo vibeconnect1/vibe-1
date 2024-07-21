@@ -1,12 +1,32 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from 'react';
 import { NavLink } from "react-router-dom";
 import { ImFileText2 } from "react-icons/im";
 import { FiChevronDown, FiChevronUp } from "react-icons/fi"; // Import the necessary icons
 import AdminHRMS from "./AdminHrms";
 
+
 const OrganisationSetting = () => {
-  const [open, setOpen] = useState(true);
-  const [dropdownOpen, setDropdownOpen] = useState(true);
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [open, setOpen] = useState(true); // Assuming open state is managed elsewhere or can be derived
+
+  useEffect(() => {
+    // Use effect to check if dropdown should be open based on current path
+    const currentPath = window.location.pathname;
+    setDropdownOpen(
+      currentPath === '/admin/company-profile/basic-information' ||
+      currentPath === '/admin/company-profile/address-information'
+    );
+  }, []);
+  useEffect(() => {
+    // Use effect to check if dropdown should be open based on current path
+    const currentPath = window.location.pathname;
+    setDropdownOpen1(
+      currentPath === '/admin/employee-fields/personal-details' ||
+      currentPath === '/admin/employee-fields/employment-details' ||
+       currentPath === '/admin/employee-fields/documents' ||
+       currentPath === '/admin/employee-fields/other-details'
+    );
+  }, []);
 
   const toggleDropdown = () => {
     setDropdownOpen(!dropdownOpen);
@@ -22,6 +42,7 @@ const OrganisationSetting = () => {
     <div className="flex">
         <AdminHRMS/>
       <div className="w-72 h-full bg-white shadow-lg p-4 mt-9">
+        
         <ul className="space-y-4">
           <li className="font-bold text-lg">Details List</li>
           <li>
@@ -315,7 +336,27 @@ const OrganisationSetting = () => {
                         !open && "opacity-0 translate-x-28 overflow-hidden"
                       }`}
                     >
-                      Address Information
+                      Employment Details
+                    </h2>
+                  </NavLink>
+                </li>
+                <li>
+                  <NavLink
+                    to="/admin/employee-fields/other-details"
+                    className={({ isActive }) =>
+                      `${
+                        isActive
+                          ? "text-white bg-blue-500 flex p-2 gap-3.5 rounded-md group items-center text-sm font-medium"
+                          : "group flex items-center text-sm gap-3.5 font-medium p-2 hover:bg-gray-100 rounded-md"
+                      }`
+                    }
+                  >
+                    <h2
+                      className={`whitespace-pre duration-300 ${
+                        !open && "opacity-0 translate-x-28 overflow-hidden"
+                      }`}
+                    >
+                      Other Information
                     </h2>
                   </NavLink>
                 </li>

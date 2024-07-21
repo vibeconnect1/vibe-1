@@ -138,6 +138,8 @@ const LeaveBalance = () => {
       placeholder="Enter employee name"
     >
       {/* Options should be provided here */}
+      <option value="">Mittu Panda</option>
+      <option value="">Akhil Nayak</option>
     </select>
   </div>
   <div className="col-span-1">

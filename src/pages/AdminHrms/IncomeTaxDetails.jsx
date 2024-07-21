@@ -5,8 +5,15 @@ import { PiPlusCircle } from "react-icons/pi";
 import Table from "../../components/table/Table";
 import { BiEdit } from "react-icons/bi";
 import ReportDetailsList from "./ReportDetailsList";
+import { GrHelpBook } from "react-icons/gr";
 
 const IncomeTaxReport = () => {
+  const listItemStyle = {
+    listStyleType: "disc",
+    color: "black",
+    fontSize: "14px",
+    fontWeight: 500,
+  };
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [period, setPeriod] = useState("");
   const [includeEmployees, setIncludeEmployees] = useState("All");
@@ -58,24 +65,20 @@ const IncomeTaxReport = () => {
       selector: (row) => row.Country,
       sortable: true,
     },
-    {
-      name: "Status",
-      selector: (row) => row.status,
-      sortable: true,
-    },
+    
   ];
-
-  const columns1 = [
+  const data1 = [
     {
-      name: "view",
-      cell: (row) => (
-        <div className="flex items-center gap-4">
-          <button onClick={() => openModal()} className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-lg">
-            Generate
-          </button>
-        </div>
-      ),
+      Label: "June-2024",
+      Location: "1",
+      City: "5656",
+      State: "-",
+      Country: "-",
     },
+    // Add more data as needed
+  ];
+  const columns1 = [
+  
     {
       name: "Sr. No",
       selector: (row) => row.Location,
@@ -86,12 +89,22 @@ const IncomeTaxReport = () => {
       selector: (row) => row.Label,
       sortable: true,
     },
+    {
+      name: "view",
+      cell: (row) => (
+        <div className="flex items-center gap-4">
+          <button onClick={() => openModal()} className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-lg">
+            Generate
+          </button>
+        </div>
+      ),
+    },
   ];
 
   const data = [
     {
-      Name: "person 1",
-      Location: "Mumbai",
+      Label: "Income Tax Monthly Report",
+      Location: "1",
       City: "Mumbai",
       State: "Maharashtra",
       Country: "India",
@@ -184,12 +197,8 @@ const IncomeTaxReport = () => {
 
       <ReportDetailsList />
       <div className="w-full flex m-3 flex-col overflow-hidden">
-        <div className="flex justify-between my-5">
-          <input
-            type="text"
-            placeholder="Search by name"
-            className="border border-gray-400 w-96 placeholder:text-sm rounded-lg p-2"
-          />
+        <div className="flex justify-end my-5">
+          
           <Link
             to={"/admin/hrms/add-challan"}
             className="border-2 font-semibold hover:bg-black hover:text-white duration-150 transition-all border-black p-2 rounded-md text-black cursor-pointer text-center flex items-center  gap-2 justify-center"
@@ -198,10 +207,60 @@ const IncomeTaxReport = () => {
             Add
           </Link>
         </div>
-
-        <Table columns={columns} data={data} isPagination={true} />
+        <p className="mb-2">Income Tax Challans</p>
+        <Table columns={columns} data={data1} isPagination={true} />
+        <p className="mb-2">Income Tax Reports</p>
         <Table columns={columns1} data={data} isPagination={true} />
       </div>
+      <div className='my-4 mx-2 w-fit'>
+        <div className="flex flex-col  shadow-custom-all-sides bg-gray-50 rounded-md text-wrap  gap-4 my-2 py-2 pl-5 pr-2 w-[18rem]">
+        <div className="flex  gap-2 font-medium">
+        <GrHelpBook size={20} />
+          <h2>Help Center</h2></div>
+    <div className=' '>
+              {/* <p className="font-medium">Help Center</p> */}
+              <ul style={listItemStyle} className="flex flex-col gap-2">
+                <li>
+                  <ul style={listItemStyle}>
+                    <li>
+                    Income Tax Challans: You can conveniently update your monthly TDS paid challan here and allocate it to your employees as well.     </li>
+                  </ul>
+                </li>
+                <li>
+                  <ul style={listItemStyle}>
+                    <li>
+                    Income Tax Monthly Report: This your monthly TDS deducted report with bifurcation of Tax Amount, Cess & Surcharge.    </li>
+                  </ul>
+                </li>
+                <li>
+                  <ul style={listItemStyle}>
+                    <li>
+                    Annexure I: This document contains Quarterly TDS data, generating the necessary information for filing returns in the Income Tax department's tool called RPU.   </li>
+                  </ul>
+                </li>
+                <li>
+                  <ul style={listItemStyle}>
+                    <li>
+                    Annexure II: This document contains Annual TDS data, generating the necessary information for filing returns in the Income Tax department's tool called RPU.   </li>
+                  </ul>
+                </li>
+               
+                {/* <li>
+                  <p>
+                    <a href="#" className="text-blue-400">
+                      Click Here{" "}
+                    </a>
+These allowance can be with or without linked with attendance or Payable days          </p>
+                </li>
+                <li>
+                  <p>
+                    <a href="#" className="text-blue-400">
+                      Click Here{" "}
+                    </a>
+You can change allowances setting anytime but once payroll is processed won’t be deleted.        </p>
+                </li> */}
+              </ul>
+            </div></div></div>
     </section>
   );
 };

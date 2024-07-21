@@ -3,22 +3,23 @@ import { PiPlusCircle } from "react-icons/pi";
 import { Link } from "react-router-dom";
 import { BsEye } from "react-icons/bs";
 import Table from "../../components/table/Table";
-import AdminHRMS from "./AdminHrms";
+import HRMSAlert from "./HRMSAlert";
 
 const AlertTasks = () => {
   const [filteredData, setFilteredData] = useState([]);
-  const columns = [
-    {
-      name: "view",
+  const [showModal, setShowModal] = useState(false);
 
-      cell: (row) => (
-        <div className="flex items-center gap-4">
-          <Link to={`/admin/hrms-tasks-details/${row.id}`}>
-            <BsEye size={15} />
-          </Link>
-        </div>
-      ),
-    },
+  const columns = [
+    // {
+    //   name: "view",
+    //   cell: (row) => (
+    //     <div className="flex items-center gap-4">
+    //       <Link to={`/admin/hrms-tasks-details/${row.id}`}>
+    //         <BsEye size={15} />
+    //       </Link>
+    //     </div>
+    //   ),
+    // },
     {
       name: "Employee Name",
       selector: (row) => row.Name,
@@ -40,81 +41,38 @@ const AlertTasks = () => {
       sortable: true,
     },
     {
-        name: "Due Date",
-        selector: (row) => row.date,
-        sortable: true,
-      },
+      name: "Due Date",
+      selector: (row) => row.date,
+      sortable: true,
+    },
     {
       name: "Status",
       selector: (row) => row.status,
       sortable: true,
     },
-    // {
-    //   name: "Action",
-    //   selector: (row) =>
-    //     row.status !== "Expired" && (
-    //       <button className="text-red-500">Cancel</button>
-    //     ),
-    //   sortable: true,
-    // },
   ];
 
   const data = [
     {
-      Name: "person 1",
+      Name: "Mittu",
       label: 1,
-      type: "09:30 AM",
-      to: "11:30 AM",
-      date:"23/10/2024",
+      type: "abc",
+      to: "Employee1",
+      date: "23/10/2024",
       status: "Upcoming",
     },
-    {
-        Name: "person 1",
-        label: 1,
-        type: "09:30 AM",
-        to: "11:30 AM",
-        date:"23/10/2024",
-        status: "Upcoming",
-    },
   ];
-//   const customStyle = {
-//     headRow: {
-//       style: {
-//         backgroundColor: "black",
-//         color: "white",
 
-//         fontSize: "10px",
-//       },
-//     },
-//     headCells: {
-//       style: {
-//         textTransform: "upperCase",
-//       },
-//     },
-//   };
+  const handleOpenModal = () => setShowModal(true);
+  const handleCloseModal = () => setShowModal(false);
+
   return (
-    <section className="flex">
-      {/* <AdminHRMS/> */}
-      <div className=" w-full flex m-3 flex-col overflow-hidden">
-        {/* <div className="flex  justify-start gap-4 my-5  ">
-          <div className="shadow-xl rounded-full border-4 border-gray-400 w-52  px-6 flex flex-col items-center">
-            <p className="font-semibold ">Total Alloted Slots</p>
-            <p className="text-center font-semibold ">0</p>
-          </div>
-          <div className="shadow-xl rounded-full border-4 border-green-400 w-52  px-6 flex flex-col items-center">
-            <p className="font-semibold">Four Wheelers</p>
-            <p className="text-center font-semibold  ">0</p>
-          </div>
-          <div className="shadow-xl rounded-full border-4 border-red-400 w-52  px-6 flex flex-col items-center">
-            <p className="font-semibold">2 Wheelers</p>
-            <p className="text-center font-semibold ">0</p>
-          </div>
-          <div className="shadow-xl rounded-full border-4 border-orange-400 w-52  px-6 flex flex-col items-center">
-            <p className="font-semibold">Vacant Slot</p>
-            <p className="text-center font-semibold ">0</p>
-          </div>
-        </div> */}
-        <div className=" flex justify-between my-5">
+    <div className="mt-5">
+      <HRMSAlert/>
+   
+    <section className="flex ml-20 mt-5 mr-1">
+      <div className="w-full flex m-3 flex-col overflow-hidden">
+        <div className="flex justify-between my-5">
           <input
             type="text"
             placeholder="Search by name "
@@ -122,17 +80,94 @@ const AlertTasks = () => {
             //   value={searchText}
             //   onChange={handleSearch}
           />
-          {/* <Link
-            to={"/admin/book-parking"}
-            className="border-2 font-semibold hover:bg-black hover:text-white duration-150 transition-all border-black p-2 rounded-md text-black cursor-pointer text-center flex items-center  gap-2 justify-center"
-          >
-            <PiPlusCircle size={20} />
-            Book
-          </Link> */}
+          <button className="px-4 py-2 bg-blue-600 text-white rounded-md" onClick={handleOpenModal}>
+           Filter
+          </button>
         </div>
         <Table columns={columns} data={data} isPagination={true} />
+
+        {showModal && (
+          <div className="fixed inset-0 flex items-center justify-center bg-gray-500 bg-opacity-75 z-50">
+            <div className="bg-white rounded-lg shadow-lg p-6 w-1/2">
+              <h2 className="text-xl mb-4">Add New Task</h2>
+              <form>
+              <div className="grid md:grid-cols-3 gap-5 mt-5">
+              <div className="grid gap-2 items-center w-full">
+               
+                  <label className="block text-sm font-medium text-gray-700">Category</label>
+                  <select
+                    // type="text"
+                    className="border border-gray-400 p-2 rounded-md"
+                  />
+                </div>
+                <div className="grid gap-2 items-center w-full">
+               
+                  <label className="block text-sm font-medium text-gray-700">Status</label>
+                  <select
+                    // type="text"
+                    className="border border-gray-400 p-2 rounded-md"
+                  />
+                </div>
+                <div className="grid gap-2 items-center w-full">
+               
+                  <label className="block text-sm font-medium text-gray-700">Start Date</label>
+                  <input
+                    type="date"
+                    className="border border-gray-400 p-2 rounded-md"
+                  />
+                </div>
+                <div className="grid gap-2 items-center w-full">
+               
+                  <label className="block text-sm font-medium text-gray-700">End Date</label>
+                  <input
+                    type="date"
+                    className="border border-gray-400 p-2 rounded-md"
+                  />
+                </div>
+                <div className="grid gap-2 items-center w-full">
+               
+                  <label className="block text-sm font-medium text-gray-700">Employee Department</label>
+                  <select
+                    // type="date"
+                    className="border border-gray-400 p-2 rounded-md"
+                  />
+                </div>
+                <div className="grid gap-2 items-center w-full">
+               
+                  <label className="block text-sm font-medium text-gray-700">Type</label>
+                  <select
+                    // type="date"
+                    className="border border-gray-400 p-2 rounded-md"
+                  />
+                </div>
+                <div className="grid gap-2 items-center w-full">
+               
+                  <label className="block text-sm font-medium text-gray-700">Assigned to</label>
+                  <select
+                    // type="date"
+                    className="border border-gray-400 p-2 rounded-md"
+                  />
+                </div>
+               </div>
+                <div className="flex justify-end">
+                  <button
+                    type="button"
+                    className="px-4 py-2 bg-gray-600 text-white rounded-md mr-2"
+                    onClick={handleCloseModal}
+                  >
+                    Cancel
+                  </button>
+                  <button type="submit" className="px-4 py-2 bg-blue-600 text-white rounded-md">
+                    Save
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        )}
       </div>
     </section>
+    </div>
   );
 };
 

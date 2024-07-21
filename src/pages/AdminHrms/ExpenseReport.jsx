@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import Table from "../../components/table/Table";
 import ReportDetailsList from "./ReportDetailsList";
+import { GrHelpBook } from "react-icons/gr";
 
 const ExpenseReport = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -8,7 +9,12 @@ const ExpenseReport = () => {
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [employeeType, setEmployeeType] = useState("all");
-
+  const listItemStyle = {
+    listStyleType: "disc",
+    color: "black",
+    fontSize: "14px",
+    fontWeight: 500,
+  };
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
 
@@ -22,6 +28,17 @@ const ExpenseReport = () => {
   };
 
   const columns1 = [
+   
+    {
+      name: "Sr. No",
+      selector: (row) => row.Location,
+      sortable: true,
+    },
+    {
+      name: "Report Name",
+      selector: (row) => row.Label,
+      sortable: true,
+    },
     {
       name: "view",
       cell: (row) => (
@@ -35,22 +52,22 @@ const ExpenseReport = () => {
         </div>
       ),
     },
-    {
-      name: "Sr. No",
-      selector: (row) => row.Location,
-      sortable: true,
-    },
-    {
-      name: "Report Name",
-      selector: (row) => row.Label,
-      sortable: true,
-    },
   ];
 
   const data = [
     {
-      Name: "person 1",
-      Location: "Mumbai",
+      Label: "Expense Line Item Applications Report",
+      Location: "1",
+      City: "Mumbai",
+      State: "Maharashtra",
+      Country: "India",
+    },
+    // Add more data as needed
+  ];
+  const data1 = [
+    {
+      Label: "Advance Expense Line Item Applications Report",
+      Location: "1",
       City: "Mumbai",
       State: "Maharashtra",
       Country: "India",
@@ -189,15 +206,57 @@ const ExpenseReport = () => {
 
       <div className="w-full flex m-3 flex-col overflow-hidden">
         <div className="flex justify-between my-5">
-          <input
-            type="text"
-            placeholder="Search by name"
-            className="border border-gray-400 w-96 placeholder:text-sm rounded-lg p-2"
-          />
+         
         </div>
-
+      <p className="mb-2">Expense</p>
         <Table columns={columns1} data={data} isPagination={true} />
+        <p className="mb-2">Advance Expense</p>
+        <Table columns={columns1} data={data1} isPagination={true} />
       </div>
+      <div className='my-4 mx-2 w-fit'>
+        <div className="flex flex-col  shadow-custom-all-sides bg-gray-50 rounded-md text-wrap  gap-4 my-2 py-2 pl-5 pr-2 w-[18rem]">
+        <div className="flex  gap-4 font-medium">
+        <GrHelpBook size={20} />
+          <h2>Help Center</h2></div>
+    <div className=' '>
+              {/* <p className="font-medium">Help Center</p> */}
+              <ul style={listItemStyle} className="flex flex-col gap-2">
+                <li>
+                  <ul style={listItemStyle}>
+                    <li>
+                    Expense Line Item Applications Report: Contains details of all expenses applied by and employee includes the Amount, status, receipt and date.     </li>
+                  </ul>
+                </li>
+                <li>
+                  <ul style={listItemStyle}>
+                    <li>
+                    Expense Process History Report: Tracks the history of submitted expense claims, including their status and approval workflow.    </li>
+                  </ul>
+                </li>
+                <li>
+                  <ul style={listItemStyle}>
+                    <li>
+                    Expense Applications Report: Lists all submitted expense applications within a designated period.  </li>
+                  </ul>
+                </li>
+                
+               
+                {/* <li>
+                  <p>
+                    <a href="#" className="text-blue-400">
+                      Click Here{" "}
+                    </a>
+These allowance can be with or without linked with attendance or Payable days          </p>
+                </li>
+                <li>
+                  <p>
+                    <a href="#" className="text-blue-400">
+                      Click Here{" "}
+                    </a>
+You can change allowances setting anytime but once payroll is processed won’t be deleted.        </p>
+                </li> */}
+              </ul>
+            </div></div></div>
     </section>
   );
 };

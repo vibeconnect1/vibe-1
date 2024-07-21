@@ -66,8 +66,8 @@ const ViewForm16 = () => {
 
   const data = [
     {
-      Name: "person 1",
-      Location: "Mumbai",
+      Label: "Mittu Panda",
+      Location: "123",
       City: "Mumbai",
       State: "Maharashtra",
 

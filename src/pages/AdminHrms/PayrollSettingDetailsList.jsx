@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import { NavLink } from "react-router-dom";
 import { ImFileText2 } from "react-icons/im";
 import { FiChevronDown, FiChevronUp } from "react-icons/fi"; // Import the necessary icons
@@ -17,11 +17,25 @@ const PayrollSettingDetailsList = () => {
   const toggleDropdown1 = () => {
     setDropdownOpen1(!dropdownOpen1);
   };
-
+  useEffect(() => {
+    // Use effect to check if dropdown should be open based on current path
+    const currentPath = window.location.pathname;
+    setDropdownOpen(
+      currentPath === '/admin/hrms/payroll-setting' ||
+      currentPath === '/admin/NPS' ||
+      currentPath === '/admin/Gratuity' ||
+      currentPath === '/admin/Leave-Recovery' ||
+      currentPath === '/admin/Notice-Recovery' ||
+      currentPath === '/admin/Minimum-Wage' ||
+      currentPath === '/admin/PF'||
+      currentPath === '/admin/daily-wage'
+    );
+  }, []);
   return (
     <div className="flex">
         <AdminHRMS/>
       <div className="w-72 h-full bg-white shadow-lg p-4 mt-9">
+        
         <ul className="space-y-4">
           <li className="font-bold text-lg">Details List</li>
           <li>

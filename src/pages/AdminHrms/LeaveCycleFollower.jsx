@@ -116,6 +116,7 @@ const LeavecycleFollower = () => {
                     </div>
                   </div>
                 </div>
+                <p className="text-red-800">Warning: Only run the rollover at the end of your annual leave cycle. Once the rollover is run, all balances are updated, and the changes cannot be reversed.</p>
               </div>
               <div className="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
                 <button

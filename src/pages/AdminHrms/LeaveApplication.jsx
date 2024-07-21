@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import AdminHRMS from "./AdminHrms";
 import LeavePendingApp from "./LeavePendingApp";
+import LeaveCompleted from "./LeaveCompleted";
 
 const LeaveApplication = () => {
   const [page, setPage] = useState("Pending");
@@ -35,16 +36,13 @@ const LeaveApplication = () => {
 
         </div>
         {page === "Pending" && (
-          <div>
+          <div className="mr-2">
             <LeavePendingApp/>
           </div>
         )}
-        {page === "Completed" && <LeavePendingApp/>}
+        {page === "Completed" && <LeaveCompleted/>}
       </div>
-      <div>
-
-
-      </div>
+      
 
     </div>
   );

@@ -4,29 +4,25 @@ import { BiEdit } from "react-icons/bi";
 import Table from "../../components/table/Table";
 import OrganisationSetting from "./OrganisationSetting";
 import HRMSHelpCenter from "./HRMSHelpCenter";
+import { useSelector } from "react-redux";
 
 const Holiday = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [data, setData] = useState([
+  const [isModalOpen1, setIsModalOpen1] = useState(false);
+
+  const themeColor = useSelector((state) => state.theme.color);
+
+  const data=[
     {
-      Name: "Holi 1",
+      Name: "Holi",
       Date: "23/10/2024",
-      type: "abc",
+      type: "Mandatory",
       apply: "all",
     },
-  ]);
+  ];
 
   const columns = [
-    {
-      name: "view",
-      cell: (row) => (
-        <div className="flex items-center gap-4">
-          <button onClick={() => openModal(row)}>
-            <BiEdit size={15} />
-          </button>
-        </div>
-      ),
-    },
+   
     {
       name: "Holiday Name",
       selector: (row) => row.Name,
@@ -47,6 +43,16 @@ const Holiday = () => {
       selector: (row) => row.apply,
       sortable: true,
     },
+    {
+      name: "Action",
+      cell: (row) => (
+        <div className="flex items-center gap-4">
+          <button  onClick={() => setIsModalOpen1(true)}>
+            <BiEdit size={15} />
+          </button>
+        </div>
+      ),
+    },
   ];
 
   const openModal = (row) => {
@@ -65,12 +71,16 @@ const Holiday = () => {
     <section className="flex ml-20">
       <OrganisationSetting />
       <div className="w-full flex m-3 flex-col overflow-hidden">
-        <div className="flex justify-between my-5">
-          <input
-            type="text"
-            placeholder="Search by name"
-            className="border border-gray-400 w-96 placeholder:text-sm rounded-lg p-2"
-          />
+        <div className="flex gap-2 justify-end my-5">
+          <select
+            type="number"
+            
+            className="border border-gray-400 w-32 placeholder:text-sm rounded-lg p-2"
+            >
+              <option value="">2024</option>
+              <option value="">2025</option>
+            </select>
+         <button style={{background:themeColor}} className="bg-black text-white hover:bg-gray-700 font-semibold py-2 px-4 rounded">Download Report</button>
           <button
             onClick={() => setIsModalOpen(true)}
             className="border-2 font-semibold hover:bg-black hover:text-white duration-150 transition-all border-black p-2 rounded-md text-black cursor-pointer text-center flex items-center gap-2 justify-center"
@@ -87,6 +97,14 @@ const Holiday = () => {
           <div className="bg-white p-6 rounded-md w-1/3">
             <h2 className="text-xl font-bold mb-4">Add Holiday</h2>
             <HolidayModal onSave={handleSave} onClose={closeModal} />
+          </div>
+        </div>
+      )}
+       {isModalOpen1 && (
+        <div className="fixed inset-0 flex items-center justify-center z-10 bg-black bg-opacity-50">
+          <div className="bg-white p-6 rounded-md w-1/3">
+            <h2 className="text-xl font-bold mb-4">Edit Holiday</h2>
+            <HolidayModal onSave={handleSave} onClose={() => setIsModalOpen1(false)} />
           </div>
         </div>
       )}

@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { NavLink } from "react-router-dom";
 import { ImFileText2 } from "react-icons/im";
 import { FiChevronDown, FiChevronUp } from "react-icons/fi"; // Import the necessary icons
 import AdminHRMS from "./AdminHrms";
+import { useNavigate,useLocation } from "react-router-dom";
 
 const WorkflowDetailsList = () => {
   const [open, setOpen] = useState(true);
@@ -17,7 +18,26 @@ const WorkflowDetailsList = () => {
   const toggleDropdown1 = () => {
     setDropdownOpen1(!dropdownOpen1);
   };
-
+  useEffect(() => {
+    // Use effect to check if dropdown should be open based on current path
+    const currentPath = window.location.pathname;
+    setDropdownOpen1(
+      currentPath === '/admin/communication-template' ||
+      currentPath === '/admin/emailid-mapping' ||
+      currentPath === "/admin/edit-communication-templates/undefined"||
+      currentPath==="/admin/add-communication-templates"
+    );
+  }, []);
+  const location = useLocation();
+  const isActiveLink = (location, routes) => {
+    return routes.includes(location.pathname);
+  };
+  const routes1 = [
+    "/admin/communication-template",
+    "/admin/edit-communication-templates/undefined",
+    "/admin/add-communication-templates"
+   
+  ]
   return (
     <div className="flex gap-8">
         <AdminHRMS/>
@@ -195,11 +215,11 @@ const WorkflowDetailsList = () => {
                 <li>
                   <NavLink
                     to="/admin/communication-template"
-                    className={({ isActive }) =>
+                    className={() =>
                       `${
-                        isActive
+                        isActiveLink(location, routes1)
                           ? "text-white bg-blue-500 flex p-2 gap-3.5 rounded-md group items-center text-sm font-medium"
-                          : "group flex items-center text-sm gap-3.5 font-medium p-2 hover:bg-gray-800 rounded-md"
+                          : "group flex items-center text-sm gap-3.5 font-medium p-2 hover:bg-gray-100 rounded-md"
                       }`
                     }
                   >
@@ -219,7 +239,7 @@ const WorkflowDetailsList = () => {
                       `${
                         isActive
                           ? "text-white bg-blue-500 flex p-2 gap-3.5 rounded-md group items-center text-sm font-medium"
-                          : "group flex items-center text-sm gap-3.5 font-medium p-2 hover:bg-gray-800 rounded-md"
+                          : "group flex items-center text-sm gap-3.5 font-medium p-2 hover:bg-gray-100 rounded-md"
                       }`
                     }
                   >

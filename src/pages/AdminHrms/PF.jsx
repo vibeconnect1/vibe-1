@@ -1,36 +1,59 @@
 import React, { useState } from 'react';
 import PayrollSettingDetailsList from './PayrollSettingDetailsList';
+import Table from "../../components/table/Table";
+import { PiPlusCircle } from 'react-icons/pi';
+import { GrHelpBook } from "react-icons/gr";
 
 const PF = () => {
   const [LIN, setLIN] = useState('');
   const [isESIC, setIsESIC] = useState(false);
-  const [isLWF, setIsLWF] = useState(false);
-  const [isPT, setIsPT] = useState(false);
-  const [payrollDay, setPayrollDay] = useState(30);
-  const [approver, setApprover] = useState('Company Admin');
-  const [attendanceCycleStart, setAttendanceCycleStart] = useState(1);
-  const [isTotalPayableDaysSame, setIsTotalPayableDaysSame] = useState(true);
-  const [isPasswordProtected, setIsPasswordProtected] = useState(false);
-  const [password, setPassword] = useState('');
-  const [lopDays, setLopDays] = useState('');
-  const [ctcComponents, setCtcComponents] = useState('');
-  const [startMonth, setStartMonth] = useState('');
+  const [modalIsOpen, setModalIsOpen] = useState(false);
+  const openModal = () => setModalIsOpen(true);
+  const closeModal = () => setModalIsOpen(false);
+  const [isEditing, setIsEditing] = useState(false);
 
+  const listItemStyle = {
+    listStyleType: "disc",
+    color: "black",
+    fontSize: "14px",
+    fontWeight: 500,
+  };
+  const data = [
+    {
+      
+      Name: "Mittu Panda",
+      applicable:"yes"
+    }]
+  const columns = [
+   
+   
+   
+    {
+      name: "Name",
+      selector: (row) => row.Name,
+      sortable: true,
+    },
+    {
+      name: "Allowances Applicable",
+      selector: (row) => row.applicable,
+      sortable: true,
+    },
+    
+  ];
   return (
     <div className='flex gap-4 ml-20'>
         <PayrollSettingDetailsList/>
 
-    <div className="max-w-3xl  p-8 bg-white shadow-md rounded-lg">
+    <div className="w-2/3 p-8 bg-white shadow-md rounded-lg">
+      {/* <h2 className="text-2xl font-bold mb-6">PF Settings</h2> */}
+      <div className='flex justify-between'>
       <h2 className="text-2xl font-bold mb-6">PF Settings</h2>
-      {/* <div className="mb-4">
-        <label className="block mb-2 font-semibold">What LIN number have you registered your Company with?</label>
-        <input 
-          type="text" 
-          value={LIN} 
-          onChange={(e) => setLIN(e.target.value)} 
-          className="w-full p-2 border border-gray-300 rounded" 
-        />
-      </div> */}
+      <button 
+        onClick={() => setIsEditing(!isEditing)} 
+        className="mb-4 px-4 py-2 bg-blue-500 text-white rounded-md"
+      >
+        {isEditing ? 'Save' : 'Edit'}
+      </button></div>
       <div className="mb-4">
         <label className="block font-semibold">Is your company elgible for Gratuity?</label>
         <div className="flex items-center">
@@ -39,14 +62,14 @@ const PF = () => {
             name="esic" 
             checked={isESIC} 
             onChange={() => setIsESIC(true)} 
-            className="mr-2" 
+            className="mr-2" disabled={!isEditing}
           /> Yes
           <input 
             type="radio" 
             name="esic" 
             checked={!isESIC} 
             onChange={() => setIsESIC(false)} 
-            className="ml-4 mr-2" 
+            className="ml-4 mr-2" disabled={!isEditing}
           /> No
         </div>
       </div>
@@ -54,176 +77,77 @@ const PF = () => {
           <label className="block text-gray-700 text-sm font-bold mb-2">
             PF Admin Charge (% rate)
           </label>
-          <p>0.5%</p>
+          <input type="text" value="0.5%"           className={`w-full px-3 py-2 border border-gray-300 rounded-md ${!isEditing ? 'bg-gray-200' : ''}`} 
+          />
         </div>
         <div className="mb-4">
           <label className="block text-gray-700 text-sm font-bold mb-2">
             PF EDLI Charge (% rate)
           </label>
-          <p>0.01%</p>
-        </div>
-      {/* <div className="mb-4">
-        <label className="block font-semibold">Is your company registered under LWF?</label>
-        <div className="flex items-center">
-          <input 
-            type="radio" 
-            name="lwf" 
-            checked={isLWF} 
-            onChange={() => setIsLWF(true)} 
-            className="mr-2" 
-          /> Yes
-          <input 
-            type="radio" 
-            name="lwf" 
-            checked={!isLWF} 
-            onChange={() => setIsLWF(false)} 
-            className="ml-4 mr-2" 
-          /> No
-        </div>
-      </div>
-      <div className="mb-4">
-        <label className="block font-semibold">Is your company registered under Professional Tax?</label>
-        <div className="flex items-center">
-          <input 
-            type="radio" 
-            name="pt" 
-            checked={isPT} 
-            onChange={() => setIsPT(true)} 
-            className="mr-2" 
-          /> Yes
-          <input 
-            type="radio" 
-            name="pt" 
-            checked={!isPT} 
-            onChange={() => setIsPT(false)} 
-            className="ml-4 mr-2" 
-          /> No
-        </div>
-      </div>
-      <div className="mb-4">
-        <label className="block mb-2 font-semibold">What day of the month do you run your payroll?</label>
-        <input 
-          type="number" 
-          value={payrollDay} 
-          onChange={(e) => setPayrollDay(e.target.value)} 
-          className="w-full p-2 border border-gray-300 rounded" 
-        />
-      </div>
-      <div className="mb-4">
-        <label className="block font-semibold">Which employee will approve each payroll run?</label>
-        <div className="flex items-center">
-          <input 
-            type="radio" 
-            name="approver" 
-            checked={approver === 'Company Admin'} 
-            onChange={() => setApprover('Company Admin')} 
-            className="mr-2" 
-          /> Company Admin
-          <input 
-            type="radio" 
-            name="approver" 
-            checked={approver === 'Another Employee'} 
-            onChange={() => setApprover('Another Employee')} 
-            className="ml-4 mr-2" 
-          /> Another Employee
-        </div>
-      </div>
-      {approver === 'Another Employee' && (
-        <div className="mb-4">
-          <label className="block mb-2 font-semibold">Select Payroll Approver</label>
-          <input 
-            type="text" 
-            className="w-full p-2 border border-gray-300 rounded" 
+          <input type="text" value="0.5%"           className={`w-full px-3 py-2 border border-gray-300 rounded-md ${!isEditing ? 'bg-gray-200' : ''}`} 
           />
         </div>
-      )}
-      <div className="mb-4">
-        <label className="block mb-2 font-semibold">On what day of the month does your attendance cycle begin?</label>
-        <input 
-          type="number" 
-          value={attendanceCycleStart} 
-          onChange={(e) => setAttendanceCycleStart(e.target.value)} 
-          className="w-full p-2 border border-gray-300 rounded" 
-        />
-      </div>
-      <div className="mb-4">
-        <label className="block font-semibold">Are the total payable days in the month the same as the number of days in the attendance cycle?</label>
-        <div className="flex items-center">
-          <input 
-            type="radio" 
-            name="payableDays" 
-            checked={isTotalPayableDaysSame} 
-            onChange={() => setIsTotalPayableDaysSame(true)} 
-            className="mr-2" 
-          /> Yes
-          <input 
-            type="radio" 
-            name="payableDays" 
-            checked={!isTotalPayableDaysSame} 
-            onChange={() => setIsTotalPayableDaysSame(false)} 
-            className="ml-4 mr-2" 
-          /> No
-        </div>
-      </div>
-      <div className="mb-4">
-        <label className="block font-semibold">Do you want to keep password for salary register or not?</label>
-        <div className="flex items-center">
-          <input 
-            type="radio" 
-            name="passwordProtected" 
-            checked={isPasswordProtected} 
-            onChange={() => setIsPasswordProtected(true)} 
-            className="mr-2" 
-          /> Yes
-          <input 
-            type="radio" 
-            name="passwordProtected" 
-            checked={!isPasswordProtected} 
-            onChange={() => setIsPasswordProtected(false)} 
-            className="ml-4 mr-2" 
-          /> No
-        </div>
-      </div>
-      {isPasswordProtected && (
-        <div className="mb-4">
-          <label className="block mb-2 font-semibold">Please enter password for salary register</label>
-          <input 
-            type="password" 
-            value={password} 
-            onChange={(e) => setPassword(e.target.value)} 
-            className="w-full p-2 border border-gray-300 rounded" 
-          />
+     <p className='font-bold mt-8 mb-4'>PF Templates</p>
+     <div className='flex justify-end mb-1'>
+     <button
+            onClick={openModal}
+            className="border-2 font-semibold hover:bg-black hover:text-white duration-150 transition-all border-black p-2 rounded-md text-black cursor-pointer text-center flex items-center gap-2 justify-center"
+          >
+            <PiPlusCircle size={20} />
+            Add Template
+          </button></div>
+        <Table columns={columns} data={data} isPagination={true} />
+        {modalIsOpen && (
+        <div className="fixed inset-0 z-50 flex items-center overflow-y-auto justify-center bg-gray-500 bg-opacity-50">
+         <div class="max-h-screen h-30 bg-white p-8 w-96 rounded-lg shadow-lg overflow-y-auto">
+            <h2 className="text-2xl font-bold mb-4">Add New PF Template</h2>
+            <form >
+              <div className="mb-4">
+                <label className="block mb-2 font-semibold">What is the label *</label>
+                <input
+                  type="text"
+                  
+                  className="w-full p-2 border border-gray-300 rounded"
+                />
+              </div>
+              <div className="mb-4">
+                <label className="block mb-2 font-semibold">What are the allowances applicable for PF deduction *
+                </label>
+                <select
+                  type="text"
+                  
+                  className="w-full p-2 border border-gray-300 rounded"
+                ><option value="">HRA</option></select>
+              </div>
+             
+              <div className="flex justify-end">
+                <button
+                  type="button"
+                  onClick={closeModal}
+                  className="border-2 font-semibold hover:bg-black hover:text-white duration-150 transition-all border-black p-2 rounded-md text-black mr-4"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="bg-blue-500 text-white font-semibold p-2 rounded-md"
+                >
+                  Save
+                </button>
+              </div>
+            </form>
+          </div>
         </div>
       )}
-      <div className="mb-4">
-        <label className="block mb-2 font-semibold">How would you like to add LOPs days while running the Payroll?</label>
-        <input 
-          type="text" 
-          value={lopDays} 
-          onChange={(e) => setLopDays(e.target.value)} 
-          className="w-full p-2 border border-gray-300 rounded" 
-        />
-      </div> */}
-      {/* <div className="mb-4">
-        <label className="block mb-2 font-semibold">What additional components do you want to show in the CTC structure?</label>
-        <input 
-          type="text" 
-          value={ctcComponents} 
-          onChange={(e) => setCtcComponents(e.target.value)} 
-          className="w-full p-2 border border-gray-300 rounded" 
-        />
-      </div>
-      <div className="mb-4">
-        <label className="block mb-2 font-semibold">Please select start month for YTD payslip</label>
-        <input 
-          type="text" 
-          value={startMonth} 
-          onChange={(e) => setStartMonth(e.target.value)} 
-          className="w-full p-2 border border-gray-300 rounded" 
-        />
-      </div> */}
-      <button className="w-full p-2 bg-blue-500 text-white font-semibold rounded">Submit</button>
-    </div> </div>
+    </div> 
+    <div className="my-4 mx-2 w-fit">
+      <div className="flex flex-col shadow-custom-all-sides bg-gray-50 rounded-md text-wrap  gap-4 my-2 py-2 pl-5 pr-2 w-[18rem]">
+        <div className="flex  gap-4 font-medium">
+        <GrHelpBook size={20} />
+        <h2>Help Center</h2>
+        </div>
+  </div></div>
+    </div>
   );
 };
 

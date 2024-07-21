@@ -529,6 +529,62 @@ import AddUser from "./pages/Setup/users/AddUser.jsx";
 import EditContactBook from "./pages/SubPages/EditContactBook.jsx";
 import LOIProceed from "./pages/SubPages/LOIProceed.jsx";
 
+// new admin hrms
+import AddGenerationLetter from "./pages/AdminHrms/AddGenerationLetter.jsx";
+import OrganisationView2 from "./pages/AdminHrms/OrganisationView2.jsx";
+import OrganisationView3 from "./pages/AdminHrms/OrganisationView3.jsx";
+import OrganisationView1 from "./pages/AdminHrms/OrganisationView1.jsx";
+import BasicLink from "./pages/AdminHrms/BasicLink.jsx";
+import AddBankAccount from "./pages/AdminHrms/AddBankAccount.jsx";
+import LeaveLink from "./pages/AdminHrms/LeaveLink.jsx";
+import AddEmployeeDirectory from "./pages/AdminHrms/AddEmployeeDirectory.jsx";
+import EditCommunicationTemplate from "./pages/AdminHrms/EditCommunicationTemplate.jsx";
+
+
+import SectionsPersonal from "./pages/AdminHrms/SectionsPersonal.jsx";
+import SectionsEmployment from "./pages/AdminHrms/SectionEmployment.jsx";
+import SectionStatutory from "./pages/AdminHrms/SectionStatutory.jsx";
+import SectionSalary from "./pages/AdminHrms/SectionSalary.jsx";
+import SectionTax from "./pages/AdminHrms/SectionTax.jsx";
+import AddNewCTC from "./pages/AdminHrms/AddNewCTC.jsx";
+import SectionDoc from "./pages/AdminHrms/SectionDoc.jsx";
+import SectionLoans from "./pages/AdminHrms/SectionLoans.jsx";
+import SectionTransaction from "./pages/AdminHrms/SectionTransaction.jsx";
+import SectionLog from "./pages/AdminHrms/SectionLog.jsx";
+import PendingRequest from "./pages/AdminHrms/PendingRequest.jsx";
+import SetupIssues from "./pages/AdminHrms/SetupIssues.jsx";
+import ProcessAlert from "./pages/AdminHrms/ProcessAlert.jsx";
+import AlertTasks from "./pages/AdminHrms/AlertTasks.jsx";
+import Deductions80C from "./pages/AdminHrms/Deductions80C.jsx";
+import OtherExemptions from "./pages/AdminHrms/OtherExemptions.jsx";
+import RentInformation from "./pages/AdminHrms/RentInformation.jsx";
+import PrerequisiteInformation from "./pages/AdminHrms/PrerequisiteInformation.jsx";
+import OtherIncomeInfo from "./pages/AdminHrms/OtherIncomeInfo.jsx";
+import HousingLoanInfo from "./pages/AdminHrms/HousingLoanInfo.jsx";
+import ViewRecords from "./pages/AdminHrms/ViewRecords.jsx";
+import OtherDetails from "./pages/AdminHrms/OtherDetails.jsx";
+import Employment from "./pages/AdminHrms/Employment.jsx";
+import Statutory from "./pages/AdminHrms/Statutory.jsx";
+import OnboardingSalary from "./pages/AdminHrms/Salary.jsx";
+import Policies from "./pages/AdminHrms/Policies.jsx";
+import Invite from "./pages/AdminHrms/Invite.jsx";
+import Resignation from "./pages/AdminHrms/Resignation.jsx";
+import EditAttendanceProcess from "./pages/AdminHrms/EditAttendanceProcess.jsx";
+import LoanAppAdd from "./pages/AdminHrms/LoanAppAdd.jsx";
+import CTCGeneralSetting from "./pages/AdminHrms/CTCGeneralSetting.jsx";
+import ComponentCTCTemplate from "./pages/AdminHrms/ComponentCTCTemplate.jsx";
+import Restrictions from "./pages/AdminHrms/Restrictions.jsx";
+import PayslipDetailsPage from "./pages/AdminHrms/PayslipDetailsPage.jsx";
+import PayslipDetails1 from "./pages/AdminHrms/PayslipDetails1.jsx";
+import PayslipDetails3 from "./pages/AdminHrms/PayslipDetails3.jsx";
+import PayslipDetails4 from "./pages/AdminHrms/PayslipDetails4.jsx";
+import AddCustomReport from "./pages/AdminHrms/AddCustomReport.jsx";
+import AddCommunicationTemplate from "./pages/AdminHrms/AddCommunicationTemplate.jsx";
+import PayslipDetails2 from "./pages/AdminHrms/PayslipDetails2.jsx";
+import EditLetterTemplate from "./pages/AdminHrms/EditLetterTemplate.jsx";
+
+// new admin hrms
+
 function App() {
   const themeColor = useSelector((state) => state.theme.color);
   document.documentElement.style.setProperty(
@@ -4909,6 +4965,608 @@ function App() {
               </ProtectedRoute>
             }
           />
+
+
+          {/* newest admin hrms */}
+          <Route path="/admin/reports/" element={<Navigate to="/admin/reports/import-export"/> }replace/>
+
+
+          <Route
+            path="/admin/reports/import-export"
+            element={
+              <ProtectedAdminRoutes>
+                <ImportExport />
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/reports/report-generation"
+            element={
+              <ProtectedAdminRoutes>
+                <ReportGeneration />
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/reports/audit-reports"
+            element={
+              <ProtectedAdminRoutes>
+                <AuditReports />
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/reports/Payroll-Reports"
+            element={
+              <ProtectedAdminRoutes>
+                <PayrollReports />
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/reports/Compliance-reports"
+            element={
+              <ProtectedAdminRoutes>
+                <ComplianceReports />
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/reports/income-tax-report"
+            element={
+              <ProtectedAdminRoutes>
+                <IncomeTaxReport />
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/reports/bank-report"
+            element={
+              <ProtectedAdminRoutes>
+                <BankReport />
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/reports/leave-report"
+            element={
+              <ProtectedAdminRoutes>
+                <LeaveReport />
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/reports/attendance-report"
+            element={
+              <ProtectedAdminRoutes>
+                <AttendanceReport />
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/reports/expense-report"
+            element={
+              <ProtectedAdminRoutes>
+                <ExpenseReport />
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/reports/form16"
+            element={
+              <ProtectedAdminRoutes>
+                <Form16 />
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/reports/custom-report"
+            element={
+              <ProtectedAdminRoutes>
+                <CustomReport />
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/reports/hr-report"
+            element={
+              <ProtectedAdminRoutes>
+                <HRReport />
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/reports/investment-report"
+            element={
+              <ProtectedAdminRoutes>
+                <InvestmentReport />
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/reports/OnBoarding"
+            element={
+              <ProtectedAdminRoutes>
+                <OnBoarding />
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/reports/OffBoarding"
+            element={
+              <ProtectedAdminRoutes>
+                <OffBoarding />
+              </ProtectedAdminRoutes>
+            }
+            />
+        <Route path="/admin/hrms/ctc/" element={<Navigate to="/admin/hrms/ctc/CTC-Template"/> } replace/>
+
+
+           <Route
+            path="/admin/hrms/ctc/CTC-Template"
+            element={
+              <ProtectedAdminRoutes>
+            <CTCTemplate/>
+              </ProtectedAdminRoutes>
+            }
+          />
+ <Route
+            path="/admin/add-employee/basics"
+            element={
+              <ProtectedAdminRoutes>
+              <AddEmployee/>
+              </ProtectedAdminRoutes>
+            }
+          />
+  <Route
+            path="/hrms/organization-tree-setting"
+            element={
+              <ProtectedAdminRoutes>
+          <OrganisationView1/>
+              </ProtectedAdminRoutes>
+            }
+          />
+   <Route path="/admin/add-employee/" element={<Navigate to="/admin/add-employee/onboarding"/> }replace/>
+
+
+           <Route
+            path="/admin/add-employee/onboarding"
+            element={
+              <ProtectedAdminRoutes>
+         <EmpOnboarding/>
+              </ProtectedAdminRoutes>
+            }
+          />
+  {/* New HRMS changes */}
+          <Route
+            path="/admin/employee-fields/other-details"
+            element={
+              <ProtectedAdminRoutes>
+               <OtherDetails/>
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/generation-letter"
+            element={
+              <ProtectedAdminRoutes>
+                <AddGenerationLetter/>
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route path="/hrms/separation/" element={<Navigate to="/hrms/separation/separation-request"/> }replace/>
+
+
+<Route
+ path="/hrms/separation/separation-request"
+ element={
+   <ProtectedAdminRoutes>
+<SeparationApplication/>
+   </ProtectedAdminRoutes>
+ }
+/>
+          <Route
+            path="/admin/organisation-view2"
+            element={
+              <ProtectedAdminRoutes>
+               <OrganisationView2/>
+              </ProtectedAdminRoutes>
+            }
+          />
+           <Route
+            path="/admin/organisation-view3"
+            element={
+              <ProtectedAdminRoutes>
+               <OrganisationView3/>
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/organisation-view1"
+            element={
+              <ProtectedAdminRoutes>
+               <OrganisationView1/>
+              </ProtectedAdminRoutes>
+            }
+          />
+           <Route
+            path="/admin/company-profile/basic-link"
+            element={
+              <ProtectedAdminRoutes>
+               <BasicLink/>
+              </ProtectedAdminRoutes>
+            }
+          />
+           <Route
+            path="/admin/add-bank-account"
+            element={
+              <ProtectedAdminRoutes>
+              <AddBankAccount/>
+              </ProtectedAdminRoutes>
+            }
+          />
+           <Route
+            path="/admin/add-employee-directory"
+            element={
+              <ProtectedAdminRoutes>
+              <AddEmployeeDirectory/>
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/leave-link"
+            element={
+              <ProtectedAdminRoutes>
+              <LeaveLink/>
+              </ProtectedAdminRoutes>
+            }
+          />
+           <Route
+            path="/admin/edit-communication-templates/:id"
+            element={
+              <ProtectedAdminRoutes>
+              <EditCommunicationTemplate/>
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/edit-employee-directory"
+            element={
+              <ProtectedAdminRoutes>
+             <SectionsPersonal/>
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/hrms/employee-directory-Personal"
+            element={
+              <ProtectedAdminRoutes>
+              <SectionsPersonal/>
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/employee-directory-Employment"
+            element={
+              <ProtectedAdminRoutes>
+             <SectionsEmployment/>
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/employee-directory-Statutory"
+            element={
+              <ProtectedAdminRoutes>
+            <SectionStatutory/>
+              </ProtectedAdminRoutes>
+            }
+          />
+       <Route path="/admin/employee-directory/" element={<Navigate to="/admin/employee-directory/Salary"/> }replace/>
+
+
+          <Route
+            path="/admin/employee-directory/Salary"
+            element={
+              <ProtectedAdminRoutes>
+            <SectionSalary/>
+              </ProtectedAdminRoutes>
+            }
+          />
+           <Route
+            path="/admin/employee-directory/add-new-ctc"
+            element={
+              <ProtectedAdminRoutes>
+          <AddNewCTC/>
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/employee-directory-Tax"
+            element={
+              <ProtectedAdminRoutes>
+           <SectionTax/>
+              </ProtectedAdminRoutes>
+            }
+          />
+           <Route
+            path="/admin/employee-directory-Documents"
+            element={
+              <ProtectedAdminRoutes>
+               <SectionDoc/>
+              </ProtectedAdminRoutes>
+            }
+          />
+           <Route
+            path="/admin/employee-directory-LoansAdvances"
+            element={
+              <ProtectedAdminRoutes>
+               <SectionLoans/>
+              </ProtectedAdminRoutes>
+            }
+          />
+           <Route
+            path="/admin/employee-directory-Transaction"
+            element={
+              <ProtectedAdminRoutes>
+               <SectionTransaction/>
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/employee-directory-Change-logs"
+            element={
+              <ProtectedAdminRoutes>
+               <SectionLog/>
+              </ProtectedAdminRoutes>
+            }
+          />
+         
+          <Route path="/admin/hrms/alerts/" element={<Navigate to="/admin/hrms/alerts/pending-request"/> }replace/>
+          <Route
+            path="/admin/hrms/alerts/pending-request"
+            element={
+              <ProtectedAdminRoutes>
+          <PendingRequest/>
+              </ProtectedAdminRoutes>
+            }
+          />
+           <Route
+            path="/admin/hrms/alerts/Setup-Issues"
+            element={
+              <ProtectedAdminRoutes>
+          <SetupIssues/>
+              </ProtectedAdminRoutes>
+            }
+          />
+           <Route
+            path="/admin/hrms/alerts/Process-Alerts"
+            element={
+              <ProtectedAdminRoutes>
+          <ProcessAlert/>
+              </ProtectedAdminRoutes>
+            }
+          />
+            <Route
+            path="/admin/hrms/alerts/tasks"
+            element={
+              <ProtectedAdminRoutes>
+          <AlertTasks/>
+              </ProtectedAdminRoutes>
+            }
+          />
+           <Route
+            path="/admin/tax-edit"
+            element={
+              <ProtectedAdminRoutes>
+          <Deductions80C/>
+              </ProtectedAdminRoutes>
+            }
+          />
+           <Route
+            path="/Other-Exemptions"
+            element={
+              <ProtectedAdminRoutes>
+          <OtherExemptions/>
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/Rent-Information"
+            element={
+              <ProtectedAdminRoutes>
+          <RentInformation/>
+              </ProtectedAdminRoutes>
+            }
+          />
+           <Route
+            path="/Prequisites Information"
+            element={
+              <ProtectedAdminRoutes>
+          <PrerequisiteInformation/>
+              </ProtectedAdminRoutes>
+            }
+          />
+           <Route
+            path="/Other-Income-Info"
+            element={
+              <ProtectedAdminRoutes>
+          <OtherIncomeInfo/>
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/Housing-Loan-Info"
+            element={
+              <ProtectedAdminRoutes>
+         <HousingLoanInfo/>
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/hrms/view-records"
+            element={
+              <ProtectedAdminRoutes>
+         <ViewRecords/>
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/add-employee/Employment"
+            element={
+              <ProtectedAdminRoutes>
+        <Employment/>
+              </ProtectedAdminRoutes>
+            }
+          />
+           <Route
+            path="/admin/add-employee/Statutory"
+            element={
+              <ProtectedAdminRoutes>
+                <Statutory/>
+              </ProtectedAdminRoutes>
+            }
+          />
+            <Route
+            path="/admin/add-employee/Salary"
+            element={
+              <ProtectedAdminRoutes>
+               <OnboardingSalary/>
+              </ProtectedAdminRoutes>
+            }
+          />
+           <Route
+            path="/admin/add-employee/Policies"
+            element={
+              <ProtectedAdminRoutes>
+               <Policies/>
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/add-employee/Invite"
+            element={
+              <ProtectedAdminRoutes>
+              <Invite/>
+              </ProtectedAdminRoutes>
+            }
+          />
+           <Route
+            path="/hrms/separation/separate-application/resignation"
+            element={
+              <ProtectedAdminRoutes>
+              <Resignation/>
+              </ProtectedAdminRoutes>
+            }
+          />
+           <Route
+            path="/admin/edit-attendance-process/:id"
+            element={
+              <ProtectedAdminRoutes>
+              <EditAttendanceProcess/>
+              </ProtectedAdminRoutes>
+            }
+          />
+           <Route
+            path="/admin/loan-app/add-loan"
+            element={
+              <ProtectedAdminRoutes>
+              <LoanAppAdd/>
+              </ProtectedAdminRoutes>
+            }
+          />
+            <Route
+            path="/admin/hrms/ctc/ctc-template/General-Settings"
+            element={
+              <ProtectedAdminRoutes>
+             <CTCGeneralSetting/>
+              </ProtectedAdminRoutes>
+            }
+          />
+            <Route
+            path="/admin/hrms/ctc/ctc-template/Component"
+            element={
+              <ProtectedAdminRoutes>
+             <ComponentCTCTemplate/>
+              </ProtectedAdminRoutes>
+            }
+          />
+           <Route
+            path="/admin/hrms/ctc/ctc-template/Restrictions"
+            element={
+              <ProtectedAdminRoutes>
+            <Restrictions/>
+              </ProtectedAdminRoutes>
+            }
+          />
+           <Route
+            path="/admin/details-payslip/:id"
+            element={
+              <ProtectedAdminRoutes>
+           <PayslipDetailsPage/>
+              </ProtectedAdminRoutes>
+            }
+          />
+           <Route
+            path="/admin/details1-payslip"
+            element={
+              <ProtectedAdminRoutes>
+           <PayslipDetails1/>
+              </ProtectedAdminRoutes>
+            }
+          />
+           <Route
+            path="/admin/details2-payslip"
+            element={
+              <ProtectedAdminRoutes>
+           <PayslipDetails2/>
+              </ProtectedAdminRoutes>
+            }
+          />
+           <Route
+            path="/admin/details3-payslip"
+            element={
+              <ProtectedAdminRoutes>
+           <PayslipDetails3/>
+              </ProtectedAdminRoutes>
+            }
+          />
+           <Route
+            path="/admin/details4-payslip"
+            element={
+              <ProtectedAdminRoutes>
+           <PayslipDetails4/>
+              </ProtectedAdminRoutes>
+            }
+          />
+           <Route
+            path="/admin/reports/add-custom-report"
+            element={
+              <ProtectedAdminRoutes>
+           <AddCustomReport/>
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/add-communication-templates"
+            element={
+              <ProtectedAdminRoutes>
+          <AddCommunicationTemplate/>
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/edit-letter-templates"
+            element={
+              <ProtectedAdminRoutes>
+         <EditLetterTemplate/>
+              </ProtectedAdminRoutes>
+            }
+          />
+         
+{/* New HRMS changes */}
+
+          {/* newest admin hrms */}
+
         </Routes>
         <Footer />
       </Router>

@@ -2,6 +2,8 @@ import React, { useState } from "react";
 
 import Table from "../../components/table/Table";
 import AdminHRMS from "./AdminHrms";
+import { Link } from "react-router-dom";
+import { PiPlusCircle } from "react-icons/pi";
 
 // import OrganisationSetting from "./OrganisationSetting";
 
@@ -50,77 +52,29 @@ const CTCTemplate = () => {
         selector: (row) => row.Leave_Days,
         sortable: true,
       },
-    //   {
-    //     name: "Comment",
-    //     selector: (row) => row.Comment,
-    //     sortable: true,
-    //   },
-    // {
-    //   name: "Status",
-    //   selector: (row) => row.status,
-    //   sortable: true,
-    // },
-    // {
-    //   name: "Action",
-    //   selector: (row) =>
-    //     row.status !== "Expired" && (
-    //       <button className="text-red-500">Cancel</button>
-    //     ),
-    //   sortable: true,
-    // },
+  
   ];
 
   const data = [
     {
-      Name: "person 1",
-      Location: "Mumbai",
-      City: "Mumbai",
-      State: "Maharashtra",
+      // Name: "person 1",
+      Location: "Template",
+      // City: "Mumbai",
+      // State: "Maharashtra",
 
-      Country:"India",
+      // Country:"India",
 
     },
 
   ];
-//   const customStyle = {
-//     headRow: {
-//       style: {
-//         backgroundColor: "black",
-//         color: "white",
 
-//         fontSize: "10px",
-//       },
-//     },
-//     headCells: {
-//       style: {
-//         textTransform: "upperCase",
-//       },
-//     },
-//   };
   return (
     <section className="flex ml-20">
-     {/* <OrganisationSetting/> */}
+    
      <AdminHRMS/>
       <div className=" w-full flex m-3 flex-col overflow-hidden">
-        {/* <div className="flex  justify-start gap-4 my-5  ">
-          <div className="shadow-xl rounded-full border-4 border-gray-400 w-52  px-6 flex flex-col items-center">
-            <p className="font-semibold ">Total Alloted Slots</p>
-            <p className="text-center font-semibold ">0</p>
-          </div>
-          <div className="shadow-xl rounded-full border-4 border-green-400 w-52  px-6 flex flex-col items-center">
-            <p className="font-semibold">Four Wheelers</p>
-            <p className="text-center font-semibold  ">0</p>
-          </div>
-          <div className="shadow-xl rounded-full border-4 border-red-400 w-52  px-6 flex flex-col items-center">
-            <p className="font-semibold">2 Wheelers</p>
-            <p className="text-center font-semibold ">0</p>
-          </div>
-          <div className="shadow-xl rounded-full border-4 border-orange-400 w-52  px-6 flex flex-col items-center">
-            <p className="font-semibold">Vacant Slot</p>
-            <p className="text-center font-semibold ">0</p>
-          </div>
-        </div> */}
-        <div className=" flex justify-between my-5">
+  
+        <div className=" flex gap-2 justify-end my-5">
           <input
             type="text"
             placeholder="Search by name "
@@ -128,13 +82,13 @@ const CTCTemplate = () => {
             //   value={searchText}
             //   onChange={handleSearch}
           />
-          {/* <Link
-            to={"/templates/leave-templates"}
+          <Link
+            to={"/admin/hrms/ctc/ctc-template/General-Settings"}
             className="border-2 font-semibold hover:bg-black hover:text-white duration-150 transition-all border-black p-2 rounded-md text-black cursor-pointer text-center flex items-center  gap-2 justify-center"
           >
             <PiPlusCircle size={20} />
-            Add
-          </Link> */}
+            CTC Template
+          </Link>
         </div>
         <Table columns={columns} data={data} isPagination={true} />
       </div>

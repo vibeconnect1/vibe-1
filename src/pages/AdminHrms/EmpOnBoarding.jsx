@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Bar } from "react-chartjs-2";
 import AdminHRMS from "./AdminHrms";
 import OnBoardingTable from "./OnBoardingTable";
@@ -6,8 +6,11 @@ import { Link } from "react-router-dom";
 import { PiPlusCircle } from "react-icons/pi";
 import Highcharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
+import OnBoardingCompleted from "./OnboardingCompleted";
 
 const EmpOnboarding = () => {
+  const [page, setPage] = useState("Pending");
+
   const data = {
     labels: ["Jan24", "Feb24", "Mar24", "Apr24", "May24", "Jun24"],
     datasets: [
@@ -122,8 +125,44 @@ const EmpOnboarding = () => {
              <HighchartsReact highcharts={Highcharts} options={optionss} />
           </div>
         </div>
+ 
+        <div className=" w-full my-2 flex  overflow-hidden flex-col">
 
-        <OnBoardingTable />
+
+
+<div className=" flex gap-2 p-2 pb-0 border-b-2 border-gray-200 w-full">
+
+  <h2
+    className={`p-1 ${
+      page === "Pending" &&
+      `bg-white font-medium text-blue-500 shadow-custom-all-sides`
+    } rounded-t-md px-4 cursor-pointer text-center transition-all duration-300 ease-linear`}
+    onClick={() => setPage("Pending")}
+  >
+    Pending New Hires
+  </h2>
+  <h2
+    className={`p-1 ${
+      page === "Completed" &&
+      "bg-white font-medium text-blue-500 shadow-custom-all-sides"
+    } rounded-t-md px-4 cursor-pointer transition-all duration-300 ease-linear`}
+    onClick={() => setPage("Completed")}
+  >
+    Completed New Hires
+  </h2>
+
+
+</div>
+{page === "Pending" && (
+  <div>
+    <OnBoardingTable />
+  </div>
+)}
+{page === "Completed" && <OnBoardingCompleted/>}
+</div>
+
+
+        
       </div>
     </div>
   );

@@ -2,8 +2,15 @@ import React, { useState } from "react";
 import { PiPlusCircle } from "react-icons/pi";
 import Table from "../../components/table/Table";
 import PayrollSettingDetailsList from "./PayrollSettingDetailsList";
+import { GrHelpBook } from "react-icons/gr";
 
 const FixedAllowance = () => {
+  const listItemStyle = {
+    listStyleType: "disc",
+    color: "black",
+    fontSize: "14px",
+    fontWeight: 500,
+  };
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [allowanceType, setAllowanceType] = useState("");
   const [customLabel, setCustomLabel] = useState("");
@@ -27,7 +34,7 @@ const FixedAllowance = () => {
   ];
 
   const data = [
-    { Name: "person 1", Location: "Mumbai", City: "Mumbai", State: "Maharashtra", Country: "India" },
+    {  Location: "Basic",  },
   ];
 
   const openModal = () => setModalIsOpen(true);
@@ -42,7 +49,7 @@ const FixedAllowance = () => {
   return (
     <section className="flex ml-20">
       <PayrollSettingDetailsList />
-      <div className="w-full flex m-3 flex-col overflow-hidden">
+      <div className="w-2/3 flex m-3 flex-col overflow-hidden">
         <div className="flex justify-between my-5">
           <input
             type="text"
@@ -62,10 +69,11 @@ const FixedAllowance = () => {
 
       {modalIsOpen && (
         <div className="fixed inset-0 z-50 flex items-center overflow-y-auto justify-center bg-gray-500 bg-opacity-50">
-         <div class="max-h-screen h-30 bg-white p-8 w-96 rounded-lg shadow-lg overflow-y-auto">
+         <div class="max-h-screen  bg-white p-8 w-2/3 rounded-lg shadow-lg overflow-y-auto">
             <h2 className="text-2xl font-bold mb-4">Add New Allowance</h2>
             <form onSubmit={handleSubmit}>
-              <div className="mb-4">
+            <div className="grid md:grid-cols-2 gap-5 mt-5">
+            <div className="grid gap-2 items-center w-full">
                 <label className="block mb-2 font-semibold">Select Allowance Type</label>
                 <input
                   type="text"
@@ -74,7 +82,7 @@ const FixedAllowance = () => {
                   className="w-full p-2 border border-gray-300 rounded"
                 />
               </div>
-              <div className="mb-4">
+              <div className="grid gap-2 items-center w-full">
                 <label className="block mb-2 font-semibold">Custom Label</label>
                 <input
                   type="text"
@@ -83,7 +91,7 @@ const FixedAllowance = () => {
                   className="w-full p-2 border border-gray-300 rounded"
                 />
               </div>
-              <div className="mb-4">
+              <div className="grid gap-2 items-center w-full">
                 <label className="block font-semibold">Do you want attendance to affect the eligibility?</label>
                 <div className="flex items-center">
                   <input
@@ -104,7 +112,7 @@ const FixedAllowance = () => {
                   No
                 </div>
               </div>
-              <div className="mb-4">
+              <div className="grid gap-2 items-center w-full">
                 <label className="block font-semibold">Does this allowance affect Provident Fund?</label>
                 <div className="flex items-center">
                   <input
@@ -125,7 +133,7 @@ const FixedAllowance = () => {
                   No
                 </div>
               </div>
-              <div className="mb-4">
+              <div className="grid gap-2 items-center w-full">
                 <label className="block font-semibold">Does this allowance affect ESIC?</label>
                 <div className="flex items-center">
                   <input
@@ -146,7 +154,7 @@ const FixedAllowance = () => {
                   No
                 </div>
               </div>
-              <div className="mb-4">
+              <div className="grid gap-2 items-center w-full">
                 <label className="block font-semibold">Does this allowance affect LWF?</label>
                 <div className="flex items-center">
                   <input
@@ -167,7 +175,7 @@ const FixedAllowance = () => {
                   No
                 </div>
               </div>
-              <div className="mb-4">
+              <div className="grid gap-2 items-center w-full">
                 <label className="block font-semibold">Does this allowance affect Professional Tax?</label>
                 <div className="flex items-center">
                   <input
@@ -188,7 +196,7 @@ const FixedAllowance = () => {
                   No
                 </div>
               </div>
-              <div className="mb-4">
+              <div className="grid gap-2 items-center w-full">
                 <label className="block font-semibold">Does this allowance affect Income Tax?</label>
                 <div className="flex items-center">
                   <input
@@ -209,7 +217,7 @@ const FixedAllowance = () => {
                   No
                 </div>
               </div>
-              <div className="mb-4">
+              <div className="grid gap-2 items-center w-full">
                 <label className="block mb-2 font-semibold">For which Tax Regimes will the Income Tax be calculated?</label>
                 <input
                   type="text"
@@ -218,7 +226,8 @@ const FixedAllowance = () => {
                   className="w-full p-2 border border-gray-300 rounded"
                 />
               </div>
-              <div className="flex justify-end">
+              </div>
+              <div className="flex mt-2 justify-end">
                 <button
                   type="button"
                   onClick={closeModal}
@@ -237,6 +246,63 @@ const FixedAllowance = () => {
           </div>
         </div>
       )}
+      <div className='my-4 mx-2 w-fit'>
+      <div className="flex flex-col mt-4 mr-2 shadow-custom-all-sides bg-gray-50 rounded-md text-wrap  gap-4 my-2 py-2 pl-5 pr-2 w-[18rem]">
+        <div className="flex  gap-4 font-medium">
+        <GrHelpBook size={20} />
+          <h2>Help Center</h2></div>
+    <div className=' '>
+              {/* <p className="font-medium">Help Center</p> */}
+              <ul style={listItemStyle} className="flex flex-col gap-2">
+                <li>
+                  <ul style={listItemStyle}>
+                    <li>
+                    You can create fixed allowances like Basic, DA and HRA and so on and configure compliances as per your company requirements.           </li>
+                  </ul>
+                </li>
+                <li>
+                  <ul style={listItemStyle}>
+                    <li>
+                    There are some pre-configured allowances like Basic, HRA, LTA, Medical and Education and Hostel as per income tax and statutory rules.                </li>
+                  </ul>
+                </li>
+                <li>
+                  <ul style={listItemStyle}>
+                    <li>
+You can add and manage third party users and invite them to join login to the Vibe Connect software. For e.g., External auditor, external consultants, etc.                    </li>
+                  </ul>
+                </li>
+
+                <li>
+                  <p>
+                    {/* <a href="#" className="text-blue-400">
+                      Click Here{" "}
+                    </a> */}
+Created allowance can be mapped in Salary details and also configurable in CTC Template (CTC Calculator) available Payroll, which further eases your task by automatically creating a break up in salary details of the employees.               </p>
+                </li>
+                <li>
+                  <p>
+                    {/* <a href="#" className="text-blue-400">
+                      Click Here{" "}
+                    </a> */}
+You can select applicable compliances as per norms and there is an option to choose the applicable tax regime also.          </p>
+                </li>
+                <li>
+                  <p>
+                    {/* <a href="#" className="text-blue-400">
+                      Click Here{" "}
+                    </a> */}
+These allowance can be with or without linked with attendance or Payable days          </p>
+                </li>
+                <li>
+                  <p>
+                    {/* <a href="#" className="text-blue-400">
+                      Click Here{" "}
+                    </a> */}
+You can change allowances setting anytime but once payroll is processed won’t be deleted.        </p>
+                </li>
+              </ul>
+            </div></div></div>
     </section>
   );
 };

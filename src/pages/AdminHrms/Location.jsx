@@ -3,6 +3,7 @@ import { PiPlusCircle } from "react-icons/pi";
 import { Link } from "react-router-dom";
 import { BsEye } from "react-icons/bs";
 import Table from "../../components/table/Table";
+import { useSelector } from "react-redux";
 
 import { BiEdit } from "react-icons/bi";
 
@@ -10,30 +11,19 @@ import OrganisationSetting from "./OrganisationSetting";
 import HRMSHelpCenter from "./HRMSHelpCenter";
 
 const Location = () => {
-  const columns = [
-    {
-      name: "view",
+  const [modalIsOpen, setModalIsOpen] = useState(false);
+  const themeColor = useSelector((state) => state.theme.color);
 
-      cell: (row) => (
-        <div className="flex items-center gap-4">
-          <Link 
-        //   to={`/admin/edit-templates/${row.id}`}
-          >
-            <BiEdit size={15} />
-          </Link>
-        </div>
-      ),
-    },
+  const openModal = () => setModalIsOpen(true);
+  const closeModal = () => setModalIsOpen(false);
+    const columns = [
+    
     {
       name: "Location",
       selector: (row) => row.Location,
       sortable: true,
     },
-    // {
-    //   name: "Leave Label",
-    //   selector: (row) => row.Label,
-    //   sortable: true,
-    // },
+    
     {
       name: "City",
       selector: (row) => row.City,
@@ -49,29 +39,19 @@ const Location = () => {
         selector: (row) => row.Country,
         sortable: true,
       },
-    // {
-    //     name: "Leave Days",
-    //     selector: (row) => row.Leave_Days,
-    //     sortable: true,
-    //   },
-    //   {
-    //     name: "Comment",
-    //     selector: (row) => row.Comment,
-    //     sortable: true,
-    //   },
-    // {
-    //   name: "Status",
-    //   selector: (row) => row.status,
-    //   sortable: true,
-    // },
-    // {
-    //   name: "Action",
-    //   selector: (row) =>
-    //     row.status !== "Expired" && (
-    //       <button className="text-red-500">Cancel</button>
-    //     ),
-    //   sortable: true,
-    // },
+      {
+        name: "Action",
+  
+        cell: (row) => (
+          <div className="flex items-center gap-4">
+            <button onClick={openModal}
+         
+            >
+              <BiEdit size={15} />
+            </button>
+          </div>
+        ),
+      },
   ];
 
   const data = [
@@ -86,44 +66,13 @@ const Location = () => {
     },
 
   ];
-//   const customStyle = {
-//     headRow: {
-//       style: {
-//         backgroundColor: "black",
-//         color: "white",
 
-//         fontSize: "10px",
-//       },
-//     },
-//     headCells: {
-//       style: {
-//         textTransform: "upperCase",
-//       },
-//     },
-//   };
   return (
     <section className="flex ml-20">
      <OrganisationSetting/>
       <div className=" w-full flex m-3 flex-col overflow-hidden">
-        {/* <div className="flex  justify-start gap-4 my-5  ">
-          <div className="shadow-xl rounded-full border-4 border-gray-400 w-52  px-6 flex flex-col items-center">
-            <p className="font-semibold ">Total Alloted Slots</p>
-            <p className="text-center font-semibold ">0</p>
-          </div>
-          <div className="shadow-xl rounded-full border-4 border-green-400 w-52  px-6 flex flex-col items-center">
-            <p className="font-semibold">Four Wheelers</p>
-            <p className="text-center font-semibold  ">0</p>
-          </div>
-          <div className="shadow-xl rounded-full border-4 border-red-400 w-52  px-6 flex flex-col items-center">
-            <p className="font-semibold">2 Wheelers</p>
-            <p className="text-center font-semibold ">0</p>
-          </div>
-          <div className="shadow-xl rounded-full border-4 border-orange-400 w-52  px-6 flex flex-col items-center">
-            <p className="font-semibold">Vacant Slot</p>
-            <p className="text-center font-semibold ">0</p>
-          </div>
-        </div> */}
-        <div className=" flex justify-between my-5">
+      
+        <div className=" flex justify-end my-5">
           <input
             type="text"
             placeholder="Search by name "
@@ -131,17 +80,39 @@ const Location = () => {
             //   value={searchText}
             //   onChange={handleSearch}
           />
-          {/* <Link
-            to={"/templates/leave-templates"}
-            className="border-2 font-semibold hover:bg-black hover:text-white duration-150 transition-all border-black p-2 rounded-md text-black cursor-pointer text-center flex items-center  gap-2 justify-center"
-          >
-            <PiPlusCircle size={20} />
-            Add
-          </Link> */}
+        
         </div>
         <Table columns={columns} data={data} isPagination={true} />
       </div>
       <HRMSHelpCenter help={"location"}/>
+      {modalIsOpen && (
+        <div className="fixed inset-0 z-50 flex items-center overflow-y-auto justify-center bg-gray-500 bg-opacity-50">
+         <div class="max-h-screen h-30 bg-white p-8 w-96 rounded-lg shadow-lg overflow-y-auto">
+            <h2 className="text-2xl font-bold mb-4">Edit Branch Location</h2>
+            <div className="grid grid-cols-1 gap-4">
+                <div className="grid gap-2">
+                  <label htmlFor="">Location</label>
+                  <input type="text" className="border p-2 border-black rounded-md"/>
+                </div>
+                <div className="grid gap-2">
+                  <label htmlFor="">City</label>
+                  <input type="text" className="border p-2 border-black rounded-md"/>
+                </div>
+                <div className="grid gap-2">
+                  <label htmlFor="">State</label>
+                  <input type="text" className="border p-2 border-black rounded-md"/>
+                </div>
+                <div className="grid gap-2">
+                  <label htmlFor="">Country</label>
+                  <input type="text" className="border p-2 border-black rounded-md"/>
+                </div>
+            </div>
+            <div className="flex mt-2 justify-center gap-2">
+              <button style={{background:themeColor}} className="bg-black text-white hover:bg-gray-700 font-semibold py-2 px-4 rounded">Update</button>
+              <button style={{background:themeColor}} className="bg-black text-white hover:bg-gray-700 font-semibold py-2 px-4 rounded" onClick={closeModal}>Close</button>
+            </div>
+            </div>
+            </div>)}
     </section>
   );
 };

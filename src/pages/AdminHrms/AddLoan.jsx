@@ -1,305 +1,221 @@
-import React, { useState } from "react";
-import AdminHRMS from "./AdminHrms";
+// src/components/LoanForm.js
+import React, { useState } from 'react';
+import { FaTrash } from 'react-icons/fa';
+import AdminHRMS from './AdminHrms';
 
 const AddLoan = () => {
-  const [formData, setFormData] = useState({
-    categoryLabel: "",
-    labelName: "",
-    termOfLoan: "",
-    modeOfDisbursement: "Off Line",
-    variableAllowance: "",
-    modeOfEMIRecovery: "Salary",
-    loanPrefix: "",
-    loanStartNumber: "",
-    loanSuffix: "",
-    interestRate: "",
-    interestCalculation: "Simple Interest(only on Principal)",
-    interestCalculationStart: "From Loan Grant Date",
-    perqsApplicable: "No",
-    maxAmount: "",
-    employeeRestrictions: "Yes",
-    applicableEmployees: "All Employees",
-  });
+  const [allowanceRequired, setAllowanceRequired] = useState(false);
+  const [perqsApplicable, setPerqsApplicable] = useState(false);
+  const [employeeRestrictions, setEmployeeRestrictions] = useState([]);
+  const [employeeCondition, setEmployeeCondition] = useState({ condition: '', value: '' });
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
+  const handleAddCondition = () => {
+    setEmployeeRestrictions([...employeeRestrictions, employeeCondition]);
+    setEmployeeCondition({ condition: '', value: '' });
+  };
+
+  const handleRemoveCondition = (index) => {
+    const newRestrictions = [...employeeRestrictions];
+    newRestrictions.splice(index, 1);
+    setEmployeeRestrictions(newRestrictions);
   };
 
   return (
-    <div className="flex gap-10 ml-20">
-      <AdminHRMS />
-      <div className="min-h-screen bg-gray-100 flex flex-col items-center justify-center">
-        <div className="bg-white p-8 rounded shadow-md w-full ">
-          <p className="font-semibold">Add New Loan or Advance</p>
-          <form className=" grid grid-cols-3 items-center gap-4">
-            <div>
-              <label className="block text-gray-700">Category Label *</label>
-              <input
-                type="text"
-                name="categoryLabel"
-                value={formData.categoryLabel}
-                onChange={handleChange}
-                className="w-full px-4 py-2 border rounded-md"
-                required
-              />
-            </div>
-
-            <div>
-              <label className="block text-gray-700">Label Name</label>
-              <input
-                type="text"
-                name="labelName"
-                value={formData.labelName}
-                onChange={handleChange}
-                className="w-full px-4 py-2 border rounded-md"
-              />
-            </div>
-
-            <div>
-              <label className="block text-gray-700">
-                Term of Loan in months *
-              </label>
-              <input
-                type="number"
-                name="termOfLoan"
-                value={formData.termOfLoan}
-                onChange={handleChange}
-                className="w-full px-4 py-2 border rounded-md"
-                required
-              />
-            </div>
-
-            <div>
-              <label className="block text-gray-700">
-                Mode of Loan Disbursement
-              </label>
-              <select
-                name="modeOfDisbursement"
-                value={formData.modeOfDisbursement}
-                onChange={handleChange}
-                className="w-full px-4 py-2 border rounded-md"
-              >
-                <option value="Off Line">Off Line</option>
-                {/* Add more options if needed */}
-              </select>
-            </div>
-
-            {formData.modeOfDisbursement === "With Salary" && (
-              <div>
-                <label className="block text-gray-700">
-                  Variable Allowance this category is linked to *
-                </label>
-                <select
-                  name="variableAllowance"
-                  value={formData.variableAllowance}
-                  onChange={handleChange}
-                  className="w-full px-4 py-2 border rounded-md"
-                >
-                  <option value="">Select Allowance</option>
-                  {/* Add options here */}
-                </select>
-              </div>
-            )}
-
-            <div>
-              <label className="block text-gray-700">
-                Mode of EMI Recovery
-              </label>
-              <select
-                name="modeOfEMIRecovery"
-                value={formData.modeOfEMIRecovery}
-                onChange={handleChange}
-                className="w-full px-4 py-2 border rounded-md"
-              >
-                <option value="Salary">Salary</option>
-                {/* Add more options if needed */}
-              </select>
-            </div>
-
-            <div>
-              <label className="block text-gray-700">
-                Loan Number Series Format *
-              </label>
-              <div className="flex space-x-2">
-                <input
-                  type="text"
-                  name="loanPrefix"
-                  placeholder="Prefix Text"
-                  value={formData.loanPrefix}
-                  onChange={handleChange}
-                  className="w-1/3 px-4 py-2 border rounded-md"
-                />
-                <input
-                  type="number"
-                  name="loanStartNumber"
-                  placeholder="Series Starting Number"
-                  value={formData.loanStartNumber}
-                  onChange={handleChange}
-                  className="w-1/3 px-4 py-2 border rounded-md"
-                />
-                <input
-                  type="text"
-                  name="loanSuffix"
-                  placeholder="Suffix Text"
-                  value={formData.loanSuffix}
-                  onChange={handleChange}
-                  className="w-1/3 px-4 py-2 border rounded-md"
-                />
-              </div>
-            </div>
-
-            <div>
-              <label className="block text-gray-700">
-                Default Annual Interest Rate *
-              </label>
-              <input
-                type="number"
-                name="interestRate"
-                value={formData.interestRate}
-                onChange={handleChange}
-                className="w-full px-4 py-2 border rounded-md"
-                required
-              />
-            </div>
-
-            <div>
-              <label className="block text-gray-700">
-                How is the interest calculated?
-              </label>
-              <select
-                name="interestCalculation"
-                value={formData.interestCalculation}
-                onChange={handleChange}
-                className="w-full px-4 py-2 border rounded-md"
-              >
-                <option value="Simple Interest(only on Principal)">
-                  Simple Interest(only on Principal)
-                </option>
-                {/* Add more options if needed */}
-              </select>
-            </div>
-
-            <div>
-              <label className="block text-gray-700">
-                When does the interest calculation begin?
-              </label>
-              <select
-                name="interestCalculationStart"
-                value={formData.interestCalculationStart}
-                onChange={handleChange}
-                className="w-full px-4 py-2 border rounded-md"
-              >
-                <option value="From Loan Grant Date">
-                  From Loan Grant Date
-                </option>
-                {/* Add more options if needed */}
-              </select>
-            </div>
-
-           
-            <div>
-              <label className="block text-gray-700">
-                Which employees is this category applicable to?
-              </label>
-              <select
-                name="applicableEmployees"
-                value={formData.applicableEmployees}
-                onChange={handleChange}
-                className="w-full px-4 py-2 border rounded-md"
-              >
-                <option value="All Employees">All Employees</option>
-                <option value="Some Employees">Some Employees</option>
-                <option value="Specific Employees">Specific Employees</option>
-              </select>
-            </div>
-            <div>
-              <label className="block text-gray-700">
-                What is the maximum amount that employee can apply?
-              </label>
-              <input
-                type="number"
-                name="maxAmount"
-                value={formData.maxAmount}
-                onChange={handleChange}
-                className="w-full px-4 py-2 border rounded-md"
-              />
-            </div>
-
-            <div>
-              <label className="block text-gray-700">
-                Can employees apply for this category?
-              </label>
-              <div className="flex space-x-4">
-                <label className="flex items-center">
-                  <input
-                    type="radio"
-                    name="employeeRestrictions"
-                    value="Yes"
-                    checked={formData.employeeRestrictions === "Yes"}
-                    onChange={handleChange}
-                    className="mr-2"
-                  />
-                  Yes
-                </label>
-                <label className="flex items-center">
-                  <input
-                    type="radio"
-                    name="employeeRestrictions"
-                    value="No"
-                    checked={formData.employeeRestrictions === "No"}
-                    onChange={handleChange}
-                    className="mr-2"
-                  />
-                  No
-                </label>
-              </div>
-            </div>
-
-            <div>
-              <label className="block text-gray-700">
-                Is this category applicable for perquisites?
-              </label>
-              <div className="flex space-x-4">
-                <label className="flex items-center">
-                  <input
-                    type="radio"
-                    name="perqsApplicable"
-                    value="Yes"
-                    checked={formData.perqsApplicable === "Yes"}
-                    onChange={handleChange}
-                    className="mr-2"
-                  />
-                  Yes
-                </label>
-                <label className="flex items-center">
-                  <input
-                    type="radio"
-                    name="perqsApplicable"
-                    value="No"
-                    checked={formData.perqsApplicable === "No"}
-                    onChange={handleChange}
-                    className="mr-2"
-                  />
-                  No
-                </label>
-              </div>
-            </div>
-
-           
-          </form>
-          </div>
-          <div className="flex my-2 flex-end">
-            <button
-              type="submit"
-              className="w-full bg-blue-500 text-white px-4 py-2 rounded-md"
-            >
-              Submit
-            </button>
+    <div className=''>
+      <AdminHRMS/>
+    
+    <div className="ml-24 mb-10">
+      <h1 className="text-2xl text-center font-bold m-1">Add New Loan or Advance</h1>
+      <p className='text-center'>You can give loans or advances for Company's Employees</p>
+      <form className="space-y-4">
+        <p className='font-bold'>General Information</p>
+<div className='flex flex-col gap-5 w-4/5'>
+        <div className='flex justify-between items-center'>
+          <label className="  font-semibold">Category Label *</label>
+          <input className="w-96 border p-2  border-black rounded-md" type="text" placeholder="Label Name" />
         </div>
-      </div>{" "}
-    </div>
+        <div className='mt-1 flex justify-between items-center'>
+          <div>
+          <label className=" font-semibold">Term of Loan in months *</label>
+          <p className="text-sm text-gray-500">Admin will be able to change the term of loan while approving the loan application</p>
+          </div>
+          <input className="w-96 border p-2  border-black rounded-md" type="number" placeholder="Term of Loan" /></div>
+       
+          <div className='flex justify-between items-center'>
+            <div>
+          <label className="font-semibold">Mode of Loan Disbursement</label>
+          <p className="text-sm text-gray-500">This field can be edited by Admin while adding/approving Loan Application</p>
+          </div>
+          <select className="w-96 border p-2  border-black rounded-md">
+            <option value="offline">Off Line</option>
+            <option value="salary">Salary</option>
+          </select> </div>
+       
+          <div className='flex justify-between items-center'>
+            <div>
+          <label className=" font-semibold">Variable Allowance this category is linked to *</label>
+          <p className="text-sm text-gray-500">This is required if loan disbursement mode with Salary in Payroll. Make sure Tax deduction is disabled in Variable allowance</p>
+          </div>
+          <select className="w-96 border p-2  border-black rounded-md">
+            <option>Select Allowance</option>
+            {/* Add your options here */}
+          </select> </div>
+       
+          <div className='flex justify-between items-center'>
+            <div>
+          <label className="font-semibold">Mode of EMI Recovery</label>
+          <p className="text-sm text-gray-500">EMI for loans with mode of payment as Salary will be deducted automatically in Payroll and will show up in Payslip</p>
+          </div>
+          <select className="w-96 border p-2  border-black rounded-md">
+            <option value="salary">Salary</option>
+          </select> </div>
+          </div>
+         
+        <div>
+          <label className="block text-sm font-medium">Please define the Loan number series format for this category *</label>
+          <div className="grid grid-cols-3 gap-4">
+            <input className="border p-2  border-black rounded-md" type="text" placeholder="Prefix Text" />
+            <input className="border p-2  border-black rounded-md" type="number" placeholder="Series Starting number" />
+            <input className="border p-2  border-black rounded-md" type="text" placeholder="Suffix Text" />
+          </div>
+        </div>
+        <div>
+          <label className=" font-bold">Interest Calculation</label>
+          <div className="mt-1">
+            <label className="">Default Annual Interest Rate *</label>
+            <input className="border p-2  border-black rounded-md" type="number" step="0.01" placeholder="Annual Interest Rate" />
+          </div>
+          <div className="mt-1">
+            <label className="">How is the interest calculated?</label>
+            <select className="border p-2  border-black rounded-md">
+              <option value="simple">Simple Interest (only on Principal)</option>
+            </select>
+          </div>
+          <div className="mt-1">
+            <label className="">When does the interest calculation begin?</label>
+            <select className="border p-2  border-black rounded-md">
+              <option value="from_grant">From Loan Grant Date</option>
+            </select>
+          </div>
+        </div>
+        <div>
+          <label className="block text-sm font-medium">Perqs Information</label>
+          <div className="flex gap-5 mt-1">
+          <p>Is this category applicable for perquisites?</p>
+
+            <label className="inline-flex items-center">
+              <input type="radio" name="perqs" value="yes" onClick={() => setPerqsApplicable(true)} />
+              <span className="ml-2">Yes</span>
+            </label>
+            <label className="inline-flex items-center ml-6">
+              <input type="radio" name="perqs" value="no" onClick={() => setPerqsApplicable(false)} />
+              <span className="ml-2">No</span>
+            </label>
+          </div>
+        </div>
+        <div>
+          <label className="font-semibold">Employee Restrictions</label>
+          <p>What is the maximum amount that employee can apply?</p>
+          {/* <div className="grid grid-cols-4 gap-4">
+          <input
+              className="border p-2  border-black rounded-md"
+              type="number"
+              placeholder="Max Amount"
+             
+            />
+            <select name="" id=""  className="border p-2  border-black rounded-md">
+              <option value="">CTC Monthly</option>
+            </select>
+            <select name="" id=""  className="border p-2  border-black rounded-md">
+              <option >Greater than</option>
+              <option >Less than</option>
+              <option >Equal to</option>
+            </select>
+           
+            <input
+              className="border p-2  border-black rounded-md"
+              type="text"
+              placeholder="Value"
+             
+            /> </div> */}
+            
+         
+          <div className="mt-2 space-y-2">
+            {employeeRestrictions.map((restriction, index) => (
+              <div key={index} className="flex justify-between items-center border p-2 rounded-md">
+                  <div className="grid grid-cols-4 gap-4">
+          <input
+              className="border p-2  border-black rounded-md"
+              type="number"
+              placeholder="Max Amount"
+             
+            />
+            <select name="" id=""  className="border p-2  border-black rounded-md">
+              <option value="">CTC Monthly</option>
+            </select>
+            <select name="" id=""  className="border p-2  border-black rounded-md">
+              <option >Greater than</option>
+              <option >Less than</option>
+              <option >Equal to</option>
+            </select>
+           
+            <input
+              className="border p-2  border-black rounded-md"
+              type="text"
+              placeholder="Value"
+             
+            /> </div>
+                <button
+                  type="button"
+                  className=""
+                  onClick={() => handleRemoveCondition(index)}
+                >
+                  <FaTrash/>
+                </button>
+              </div>
+            ))}
+          </div>
+        </div>
+        <button
+              type="button"
+              className="mt-1 px-4 py-2 bg-blue-500 text-white rounded-md"
+              onClick={handleAddCondition}
+            >
+              Add Rule
+            </button>
+        <div className=' flex gap-5'>
+          <label className="block text-sm font-medium">Can employees apply for this category?</label>
+          <div className="mt-1">
+            <label className="inline-flex items-center">
+              <input type="radio" name="apply" value="yes" />
+              <span className="ml-2">Yes</span>
+            </label>
+            <label className="inline-flex items-center ml-6">
+              <input type="radio" name="apply" value="no" />
+              <span className="ml-2">No</span>
+            </label>
+          </div>
+        </div>
+        <div className='flex gap-5'>
+          <label className="block text-sm font-medium">Which employees is this category applicable to?</label>
+          <div className="mt-1">
+            <label className="inline-flex items-center">
+              <input type="radio" name="applicable" value="all" />
+              <span className="ml-2">All Employees</span>
+            </label>
+            <label className="inline-flex items-center ml-6">
+              <input type="radio" name="applicable" value="some" />
+              <span className="ml-2">Some Employees</span>
+            </label>
+            <label className="inline-flex items-center ml-6">
+              <input type="radio" name="applicable" value="specific" />
+              <span className="ml-2">Specific Employees</span>
+            </label>
+          </div>
+        </div>
+      </form>
+    </div></div>
   );
 };
 
-export default AddLoan;
+export default AddLoan

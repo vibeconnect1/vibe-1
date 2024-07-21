@@ -3,13 +3,19 @@ import { Link } from "react-router-dom";
 import { BiEdit } from "react-icons/bi";
 import Table from "../../components/table/Table";
 import ReportDetailsList from "./ReportDetailsList";
+import { GrHelpBook } from "react-icons/gr";
 
 const InvestmentReport = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [financialYear, setFinancialYear] = useState("FY 2024-2025");
   const [status, setStatus] = useState("Approved");
   const [downloadSoftCopies, setDownloadSoftCopies] = useState(false);
-
+  const listItemStyle = {
+    listStyleType: "disc",
+    color: "black",
+    fontSize: "14px",
+    fontWeight: 500,
+  };
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
 
@@ -22,15 +28,7 @@ const InvestmentReport = () => {
   };
 
   const columns1 = [
-    {
-      name: "view",
-      cell: (row) => (
-        <div className="flex items-center gap-4">
-         <button    onClick={() => openModal()}   className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-lg"
-         >Generate</button>
-        </div>
-      ),
-    },
+   
     {
       name: "Sr. No",
       selector: (row) => row.Location,
@@ -41,12 +39,21 @@ const InvestmentReport = () => {
       selector: (row) => row.Label,
       sortable: true,
     },
+    {
+      name: "view",
+      cell: (row) => (
+        <div className="flex items-center gap-4">
+         <button    onClick={() => openModal()}   className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-lg"
+         >Generate</button>
+        </div>
+      ),
+    },
   ];
 
   const data = [
     {
-      Name: "person 1",
-      Location: "Mumbai",
+      Label: "Investment Declarations Report",
+      Location: "1",
       City: "Mumbai",
       State: "Maharashtra",
       Country: "India",
@@ -102,16 +109,17 @@ const InvestmentReport = () => {
               </div>
               <div className="mb-4">
                 <label className="flex items-center">
-                  <input
-                    type="checkbox"
-                    checked={downloadSoftCopies}
-                    onChange={(e) => setDownloadSoftCopies(e.target.checked)}
-                    className="form-checkbox h-4 w-4 text-blue-600"
-                  />
-                  <span className="ml-2">
+                 
+                  <span className="">
                     Do you want to download soft copies submitted by employees?
                   </span>
+                  <div className="flex gap-2">
+                  <input type="radio" />
+                  <label htmlFor="">Yes</label>
+                  <input type="radio" />
+                  <label htmlFor="">No</label></div>
                 </label>
+                
               </div>
               <div className="flex justify-end">
                 <button
@@ -136,15 +144,50 @@ const InvestmentReport = () => {
       <ReportDetailsList />
       <div className="w-full flex m-3 flex-col overflow-hidden">
         <div className="flex justify-between my-5">
-          <input
-            type="text"
-            placeholder="Search by name"
-            className="border border-gray-400 w-96 placeholder:text-sm rounded-lg p-2"
-          />
+         
         </div>
 
         <Table columns={columns1} data={data} isPagination={true} />
       </div>
+      <div className='my-4 mx-2 w-fit'>
+        <div className="flex flex-col  shadow-custom-all-sides bg-gray-50 rounded-md text-wrap  gap-4 my-2 py-2 pl-5 pr-2 w-[18rem]">
+        <div className="flex  gap-4 font-medium">
+        <GrHelpBook size={20} />
+          <h2>Help Center</h2></div>
+    <div className=' '>
+              {/* <p className="font-medium">Help Center</p> */}
+              <ul style={listItemStyle} className="flex flex-col gap-2">
+                <li>
+                  <ul style={listItemStyle}>
+                    <li>
+                    Investment Declarations Report: Contains employee-declared investments for tax purposes, including type, amount, and proof of investment status.     </li>
+                  </ul>
+                </li>
+                <li>
+                  <ul style={listItemStyle}>
+                    <li>
+                    Investment Summary Report: Summarizes approved employee-declared investments for tax purposes, including type, amount, and proof of investment status.    </li>
+                  </ul>
+                </li>
+               
+                
+               
+                {/* <li>
+                  <p>
+                    <a href="#" className="text-blue-400">
+                      Click Here{" "}
+                    </a>
+These allowance can be with or without linked with attendance or Payable days          </p>
+                </li>
+                <li>
+                  <p>
+                    <a href="#" className="text-blue-400">
+                      Click Here{" "}
+                    </a>
+You can change allowances setting anytime but once payroll is processed won’t be deleted.        </p>
+                </li> */}
+              </ul>
+            </div></div></div>
     </section>
   );
 };

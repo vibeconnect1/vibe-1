@@ -101,7 +101,7 @@ const ReportDetailsList = () => {
           </li>
           <li>
             <NavLink
-              to="/admin/hrms/reports"
+              to="/admin/reports/import-export"
               className={({ isActive }) =>
                 `${
                   isActive
@@ -131,7 +131,7 @@ const ReportDetailsList = () => {
           </li>
           <li>
             <NavLink
-              to="/admin/report-generation"
+              to="/admin/reports/report-generation"
               className={({ isActive }) =>
                 `${
                   isActive
@@ -161,7 +161,7 @@ const ReportDetailsList = () => {
           </li>
           <li>
             <NavLink
-              to="/admin/audit-reports"
+              to="/admin/reports/audit-reports"
               className={({ isActive }) =>
                 `${
                   isActive
@@ -191,7 +191,7 @@ const ReportDetailsList = () => {
           </li>
           <li>
             <NavLink
-              to="/admin/Payroll-Reports"
+              to="/admin/reports/Payroll-Reports"
               className={({ isActive }) =>
                 `${
                   isActive
@@ -317,7 +317,7 @@ const ReportDetailsList = () => {
           </li> */}
           <li>
             <NavLink
-              to="/admin/Compliance-reports"
+              to="/admin/reports/Compliance-reports"
               className={({ isActive }) =>
                 `${
                   isActive
@@ -347,7 +347,7 @@ const ReportDetailsList = () => {
           </li>
           <li>
             <NavLink
-              to="/admin/income-tax-report"
+              to="/admin/reports/income-tax-report"
               className={({ isActive }) =>
                 `${
                   isActive
@@ -377,7 +377,7 @@ const ReportDetailsList = () => {
           </li>
           <li>
             <NavLink
-              to="/admin/bank-report"
+              to="/admin/reports/bank-report"
               className={({ isActive }) =>
                 `${
                   isActive
@@ -407,7 +407,7 @@ const ReportDetailsList = () => {
           </li>
           <li>
             <NavLink
-              to="/admin/leave-report"
+              to="/admin/reports/leave-report"
               className={({ isActive }) =>
                 `${
                   isActive
@@ -437,7 +437,7 @@ const ReportDetailsList = () => {
           </li>
           <li>
             <NavLink
-              to="/admin/attendance-report"
+              to="/admin/reports/attendance-report"
               className={({ isActive }) =>
                 `${
                   isActive
@@ -467,7 +467,7 @@ const ReportDetailsList = () => {
           </li>
           <li>
             <NavLink
-              to="/admin/expense-report"
+              to="/admin/reports/expense-report"
               className={({ isActive }) =>
                 `${
                   isActive
@@ -497,7 +497,7 @@ const ReportDetailsList = () => {
           </li>
           <li>
             <NavLink
-              to="/admin/form16"
+              to="/admin/reports/form16"
               className={({ isActive }) =>
                 `${
                   isActive
@@ -527,7 +527,7 @@ const ReportDetailsList = () => {
           </li>
           <li>
             <NavLink
-              to="/admin/custom-report"
+              to="/admin/reports/custom-report"
               className={({ isActive }) =>
                 `${
                   isActive
@@ -557,7 +557,7 @@ const ReportDetailsList = () => {
           </li>
           <li>
             <NavLink
-              to="/admin/hr-report"
+              to="/admin/reports/hr-report"
               className={({ isActive }) =>
                 `${
                   isActive
@@ -587,7 +587,7 @@ const ReportDetailsList = () => {
           </li>
           <li>
             <NavLink
-              to="/admin/investment-report"
+              to="/admin/reports/investment-report"
               className={({ isActive }) =>
                 `${
                   isActive
@@ -617,7 +617,7 @@ const ReportDetailsList = () => {
           </li>
           <li>
             <NavLink
-              to="/admin/OnBoarding"
+              to="/admin/reports/OnBoarding"
               className={({ isActive }) =>
                 `${
                   isActive
@@ -647,7 +647,7 @@ const ReportDetailsList = () => {
           </li>
           <li>
             <NavLink
-              to="/admin/OffBoarding"
+              to="/admin/reports/OffBoarding"
               className={({ isActive }) =>
                 `${
                   isActive

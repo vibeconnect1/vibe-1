@@ -8,23 +8,18 @@ import { BiEdit } from "react-icons/bi";
 import ReportDetailsList from "./ReportDetailsList";
 // import LeaveSetting from "./LeaveSetting";
 // import ReportDetailsList from "./ReportDetailsList";
+import { GrHelpBook } from "react-icons/gr";
 
 
 const CustomReport = () => {
+  const listItemStyle = {
+    listStyleType: "disc",
+    color: "black",
+    fontSize: "14px",
+    fontWeight: 500,
+  };
   const columns = [
-    // {
-    //   name: "view",
-
-    //   cell: (row) => (
-    //     <div className="flex items-center gap-4">
-    //       <Link 
-    //     //   to={`/admin/edit-templates/${row.id}`}
-    //       >
-    //         <BiEdit size={15} />
-    //       </Link>
-    //     </div>
-    //   ),
-    // },
+   
     {
       name: "Name",
       selector: (row) => row.Location,
@@ -40,70 +35,15 @@ const CustomReport = () => {
       selector: (row) => row.City,
       sortable: true,
     },
-    // {
-    //   name: "Combined ",
-    //   selector: (row) => row.State,
-    //   sortable: true,
-    // },
-    // {
-    //     name: "Health And Education Cess",
-    //     selector: (row) => row.Country,
-    //     sortable: true,
-    //   },
-    // {
-    //     name: "Leave Days",
-    //     selector: (row) => row.Leave_Days,
-    //     sortable: true,
-    //   },
-    //   {
-    //     name: "Comment",
-    //     selector: (row) => row.Comment,
-    //     sortable: true,
-    //   },
-    {
-      name: "Status",
-      selector: (row) => row.status,
-      sortable: true,
-    },
-    // {
-    //   name: "Action",
-    //   selector: (row) =>
-    //     row.status !== "Expired" && (
-    //       <button className="text-red-500">Cancel</button>
-    //     ),
-    //   sortable: true,
-    // },
+  
+   
   ];
-  const columns1 = [
-    {
-      name: "view",
 
-      cell: (row) => (
-        <div className="flex items-center gap-4">
-          <Link 
-        //   to={`/admin/edit-templates/${row.id}`}
-          >
-            <BiEdit size={15} />
-          </Link>
-        </div>
-      ),
-    },
-    {
-      name: "Sr. No",
-      selector: (row) => row.Location,
-      sortable: true,
-    },
-    {
-      name: "Report Name",
-      selector: (row) => row.Label,
-      sortable: true,
-    },
-  ]
   const data = [
     {
-      Name: "person 1",
-      Location: "Mumbai",
-      City: "Mumbai",
+      Label: "3/3/2022",
+      Location: "Report",
+      City: "2/2/2023",
       State: "Maharashtra",
 
       Country:"India",
@@ -111,21 +51,7 @@ const CustomReport = () => {
     },
 
   ];
-//   const customStyle = {
-//     headRow: {
-//       style: {
-//         backgroundColor: "black",
-//         color: "white",
 
-//         fontSize: "10px",
-//       },
-//     },
-//     headCells: {
-//       style: {
-//         textTransform: "upperCase",
-//       },
-//     },
-//   };
 useEffect(() => {
   window.scrollTo(0, 0);
 }, []);
@@ -134,45 +60,38 @@ useEffect(() => {
      {/* <ReportDetailsList/> */}
      <ReportDetailsList/>
       <div className=" w-full flex m-3 flex-col overflow-hidden">
-        {/* <div className="flex  justify-start gap-4 my-5  ">
-          <div className="shadow-xl rounded-full border-4 border-gray-400 w-52  px-6 flex flex-col items-center">
-            <p className="font-semibold ">Total Alloted Slots</p>
-            <p className="text-center font-semibold ">0</p>
-          </div>
-          <div className="shadow-xl rounded-full border-4 border-green-400 w-52  px-6 flex flex-col items-center">
-            <p className="font-semibold">Four Wheelers</p>
-            <p className="text-center font-semibold  ">0</p>
-          </div>
-          <div className="shadow-xl rounded-full border-4 border-red-400 w-52  px-6 flex flex-col items-center">
-            <p className="font-semibold">2 Wheelers</p>
-            <p className="text-center font-semibold ">0</p>
-          </div>
-          <div className="shadow-xl rounded-full border-4 border-orange-400 w-52  px-6 flex flex-col items-center">
-            <p className="font-semibold">Vacant Slot</p>
-            <p className="text-center font-semibold ">0</p>
-          </div>
-        </div> */}
-        <div className=" flex justify-between my-5">
-          <input
-            type="text"
-            placeholder="Search by name "
-            className="border border-gray-400 w-96 placeholder:text-sm rounded-lg p-2"
-            //   value={searchText}
-            //   onChange={handleSearch}
-          />
-          {/* <Link
-            to={"/templates/leave-templates"}
+     
+        <div className=" flex justify-end my-5">
+        <Link
+            to={"/admin/reports/add-custom-report"}
             className="border-2 font-semibold hover:bg-black hover:text-white duration-150 transition-all border-black p-2 rounded-md text-black cursor-pointer text-center flex items-center  gap-2 justify-center"
           >
             <PiPlusCircle size={20} />
-            Add
-          </Link> */}
+            Add Custom Report
+          </Link>
         </div>
+        <p className="mb-2 font-bold">Custom Reports</p>
         <Table columns={columns} data={data} isPagination={true} />
-        {/* <Table columns={columns1} data={data} isPagination={true} />
-        <Table columns={columns1} data={data} isPagination={true} /> */}
+       
 
       </div>
+      <div className='my-4 mx-2 w-fit'>
+        <div className="flex flex-col  shadow-custom-all-sides bg-gray-50 rounded-md text-wrap  gap-4 my-2 py-2 pl-5 pr-2 w-[18rem]">
+        <div className="flex  gap-4 font-medium">
+        <GrHelpBook size={20} />
+          <h2>Help Center</h2></div>
+    <div className=' '>
+              {/* <p className="font-medium">Help Center</p> */}
+              <ul style={listItemStyle} className="flex flex-col gap-2">
+                <li>
+                  <ul style={listItemStyle}>
+                    <li>
+                    Allows administrators to generate customizable reports based on specific employee data criteria.    </li>
+                  </ul>
+                </li>
+               
+              </ul>
+            </div></div></div>
     </section>
   );
 };

@@ -1,8 +1,12 @@
 import React, { useState } from "react";
 import Table from "../../components/table/Table";
 import PayslipDetailsList from "./PayslipDetailsList";
+import { PiPlusCircle } from "react-icons/pi";
+import FileInputBox from "../../containers/Inputs/FileInputBox";
 
 const PayrollForm16 = () => {
+  const [showModal, setShowModal] = useState(false);
+
   const columns = [
     {
       name: "Actions",
@@ -23,114 +27,76 @@ const PayrollForm16 = () => {
       selector: (row) => row.Label,
       sortable: true,
     },
-    {
-      name: "Head Of Department",
-      selector: (row) => row.City,
-      sortable: true,
-    },
-    // {
-    //   name: "State",
-    //   selector: (row) => row.State,
-    //   sortable: true,
-    // },
-    // {
-    //     name: "Country",
-    //     selector: (row) => row.Country,
-    //     sortable: true,
-    //   },
-    // {
-    //     name: "Leave Days",
-    //     selector: (row) => row.Leave_Days,
-    //     sortable: true,
-    //   },
-    //   {
-    //     name: "Comment",
-    //     selector: (row) => row.Comment,
-    //     sortable: true,
-    //   },
-    // {
-    //   name: "Status",
-    //   selector: (row) => row.status,
-    //   sortable: true,
-    // },
-    // {
-    //   name: "Action",
-    //   selector: (row) =>
-    //     row.status !== "Expired" && (
-    //       <button className="text-red-500">Cancel</button>
-    //     ),
-    //   sortable: true,
-    // },
+    
+  
   ];
 
   const data = [
     {
-      Name: "person 1",
-      Location: "Mumbai",
-      City: "Mumbai",
-      State: "Maharashtra",
-
-      Country:"India",
+      Label: " 1",
+      Location: "2024",
+      
 
     },
 
   ];
-//   const customStyle = {
-//     headRow: {
-//       style: {
-//         backgroundColor: "black",
-//         color: "white",
 
-//         fontSize: "10px",
-//       },
-//     },
-//     headCells: {
-//       style: {
-//         textTransform: "upperCase",
-//       },
-//     },
-//   };
   return (
     <section className="flex ml-20">
      {/* <OrganisationSetting/> */}
      <PayslipDetailsList/>
       <div className=" w-full flex m-3 flex-col overflow-hidden">
-        {/* <div className="flex  justify-start gap-4 my-5  ">
-          <div className="shadow-xl rounded-full border-4 border-gray-400 w-52  px-6 flex flex-col items-center">
-            <p className="font-semibold ">Total Alloted Slots</p>
-            <p className="text-center font-semibold ">0</p>
-          </div>
-          <div className="shadow-xl rounded-full border-4 border-green-400 w-52  px-6 flex flex-col items-center">
-            <p className="font-semibold">Four Wheelers</p>
-            <p className="text-center font-semibold  ">0</p>
-          </div>
-          <div className="shadow-xl rounded-full border-4 border-red-400 w-52  px-6 flex flex-col items-center">
-            <p className="font-semibold">2 Wheelers</p>
-            <p className="text-center font-semibold ">0</p>
-          </div>
-          <div className="shadow-xl rounded-full border-4 border-orange-400 w-52  px-6 flex flex-col items-center">
-            <p className="font-semibold">Vacant Slot</p>
-            <p className="text-center font-semibold ">0</p>
-          </div>
-        </div> */}
-        <div className=" flex justify-between my-5">
-          <input
-            type="text"
-            placeholder="Search by name "
-            className="border border-gray-400 w-96 placeholder:text-sm rounded-lg p-2"
-            //   value={searchText}
-            //   onChange={handleSearch}
-          />
-          {/* <Link
-            to={"/templates/leave-templates"}
+      
+        <div className=" flex justify-end my-5">
+       
+          <button onClick={() => setShowModal(true)}
+           
             className="border-2 font-semibold hover:bg-black hover:text-white duration-150 transition-all border-black p-2 rounded-md text-black cursor-pointer text-center flex items-center  gap-2 justify-center"
           >
             <PiPlusCircle size={20} />
-            Add
-          </Link> */}
+            Bulk Upload
+          </button>
         </div>
         <Table columns={columns} data={data} isPagination={true} />
       </div>
+      {showModal && (
+        <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
+          <div className="bg-white p-4 rounded-lg w-96">
+            <h2 className="text-lg font-bold mb-4">Bulk Upload Employee Form 16 Documents</h2>
+            <div className="grid md:grid-cols-1 gap-5 mt-5">
+              <div className="grid gap-2 items-center w-full">
+                <label htmlFor="regularizationReason">Select Financial Year *</label>
+                    <select name="" id="" className="border p-2 border-black rounded-md"><option value="">2023-2024</option></select>              </div>
+              <div className="grid gap-2 items-center w-full">
+                <label htmlFor="regularizationRequestStatus">Document name format *</label>
+                <select name="" id="" className="border p-2 border-black rounded-md"><option value="">PAN</option></select>                    </div>
+              <div className="grid gap-2 items-center w-full">
+                <label htmlFor="startDate">Upload Documents *</label>
+                  <FileInputBox/>              </div>
+              <div className="grid gap-2 items-center w-full">
+                <label htmlFor="endDate">Notify Employees by Email</label>
+                <div className="flex gap-2">
+                <input type="radio" /> Yes
+                <input type="radio" /> No</div>
+              </div>
+             
+            </div>
+            <div className="flex justify-center gap-2">
+            <button
+              className="mt-4 bg-blue-500 text-white py-2 px-4 rounded-lg"
+              onClick={() => setShowModal(false)}
+            >
+              Cancel
+            </button>
+            <button
+              className="mt-4 bg-blue-500 text-white py-2 px-4 rounded-lg"
+              // onClick={() => setShowModal(false)}
+            >
+              Upload
+            </button></div>
+          </div>
+        </div>
+      )}
     </section>
   );
 };

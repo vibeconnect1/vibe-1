@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import AdminHRMS from "./AdminHrms";
 
 import PendingTable from "./PendingTable";
+import CompletedTable from "./CompletedTable";
 
 const RegularizationRequest = () => {
   const [page, setPage] = useState("Pending");
@@ -40,7 +41,7 @@ const RegularizationRequest = () => {
             <PendingTable/>
           </div>
         )}
-        {page === "Completed" && <PendingTable/>}
+        {page === "Completed" && <CompletedTable/>}
       </div>
       <div>
 

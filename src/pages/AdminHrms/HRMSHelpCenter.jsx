@@ -1,7 +1,12 @@
 import React, { useState } from "react";
+import { FaDownload } from "react-icons/fa";
 import { GrHelpBook } from "react-icons/gr";
+import { useSelector } from "react-redux";
+import { Link } from "react-router-dom";
 
-const HRMSHelpCenter = ({ help }) => {
+const HRMSHelpCenter = ({ help, showModal }) => {
+  const themeColor = useSelector((state) => state.theme.color);
+
   const page = help;
   const listItemStyle = {
     listStyleType: "disc",
@@ -50,7 +55,7 @@ const HRMSHelpCenter = ({ help }) => {
 
                 <li>
                   <p>
-                    <a href="#" className="text-blue-400">
+                    <a href="basic-link" className="text-blue-400">
                       Click Here{" "}
                     </a>
                     for more details
@@ -150,9 +155,11 @@ const HRMSHelpCenter = ({ help }) => {
                   <ul style={listItemStyle}>
                     <li>
                       Click on{" "}
-                      <a href="" className="text-blue-400">
-                        Add Department
-                      </a>{" "}
+                      
+                        <button  className="  w-24 text-white py-1 px-4 rounded-lg"
+              style={{ background: themeColor }}>
+                        Add Department</button>
+                      {" "}
                       --- Enter department name and select the head of the
                       department from the employee list.
                     </li>
@@ -211,9 +218,13 @@ const HRMSHelpCenter = ({ help }) => {
                 <li>
                   You can download the list of all the Company Holidays by
                   clicking on{" "}
-                  <a href="" className="text-blue-400">
-                    Holiday Report
-                  </a>
+                  {/* <a href="" className="text-blue-400">
+                   Holiday Report 
+                  </a> */}
+                  <button   className=" text-white py-1 px-4 rounded-lg"
+              style={{ background: themeColor }}>
+                <div className="flex  items-center gap-2"> <FaDownload size={15}/>  Holiday Report</div>
+                     </button>
                 </li>
               </ul>
             </div>{" "}
@@ -246,10 +257,10 @@ const HRMSHelpCenter = ({ help }) => {
                 <li>
                   <ul style={listItemStyle}>
                     <li>
-                      Organization module---Employee fields---{" "}
-                      <a href="" className="text-blue-400">
-                        Add Fields
-                      </a>
+                      Organization module{" "}---{">"}{" "}Employee fields{" "}---{">"}{" "}{" "}
+                      <button  onClick={showModal} className="  text-white py-1 px-4 rounded-lg"
+              style={{ background: themeColor }}>
+                        Add Fields</button>
                     </li>
                   </ul>
                 </li>
@@ -301,9 +312,11 @@ const HRMSHelpCenter = ({ help }) => {
                 <li>
                   <ul style={listItemStyle}>
                     <li>
-                      Organization---Bank Account---Click on {"    "}
-                      <a href="" className="text-blue-400">
-                        Add Fields
+                      Organization---{">"}Bank Account---{">"}Click on {"    "}
+                      <a href="add-bank-account" className="text-blue-400">
+                        <Link  to={"/admin/add-bank-account"} className=" text-white py-1 px-4 rounded-lg"
+                        style={{ background: themeColor }}>Add Fields</Link>
+                     
                       </a>
                     </li>
                   </ul>

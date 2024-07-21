@@ -1,70 +1,113 @@
 import React, { useState } from 'react';
 import PayrollSettingDetailsList from './PayrollSettingDetailsList';
+const options = [
+  { value: 'basic', label: 'Basic' },
+  { value: 'hra', label: 'HRA' },
+  { value: 'other', label: 'Other' },
+  { value: 'special', label: 'Special' },
+  { value: 'monthly-retainer-fee', label: 'Monthly Retainer Fee' },
+];
+import { GrHelpBook } from "react-icons/gr";
 
 const LeaveRecovery = () => {
   const [LIN, setLIN] = useState('');
   const [isESIC, setIsESIC] = useState(false);
-  const [isLWF, setIsLWF] = useState(false);
-  const [isPT, setIsPT] = useState(false);
-  const [payrollDay, setPayrollDay] = useState(30);
-  const [approver, setApprover] = useState('Company Admin');
-  const [attendanceCycleStart, setAttendanceCycleStart] = useState(1);
-  const [isTotalPayableDaysSame, setIsTotalPayableDaysSame] = useState(true);
-  const [isPasswordProtected, setIsPasswordProtected] = useState(false);
-  const [password, setPassword] = useState('');
-  const [lopDays, setLopDays] = useState('');
-  const [ctcComponents, setCtcComponents] = useState('');
-  const [startMonth, setStartMonth] = useState('');
+  const [isEditing, setIsEditing] = useState(false);
 
+  const listItemStyle = {
+    listStyleType: "disc",
+    color: "black",
+    fontSize: "14px",
+    fontWeight: 500,
+  };
+  const [selectedOptions, setSelectedOptions] = useState([]);
+  const [isDropdownVisible, setIsDropdownVisible] = useState(false);
+  const [isDropdownVisible1, setIsDropdownVisible1] = useState(false);
+
+  const handleSelect = (option) => {
+    if (selectedOptions.includes(option)) {
+      setSelectedOptions(selectedOptions.filter(item => item !== option));
+    } else {
+      setSelectedOptions([...selectedOptions, option]);
+    }
+  };
+  const toggleDropdown = () => {
+    setIsDropdownVisible(!isDropdownVisible);
+  };
+  const toggleDropdown1 = () => {
+    setIsDropdownVisible1(!isDropdownVisible1);
+  };
+  const handleSelectAll = () => {
+    if (selectedOptions.length === options.length) {
+      setSelectedOptions([]);
+    } else {
+      setSelectedOptions(options.map(option => option.value));
+    }
+  };
   return (
-    <div className='flex gap-4 ml-20'>
+    <div className='flex justify-between gap-4 ml-20'>
         <PayrollSettingDetailsList/>
 
-    <div className="max-w-3xl p-8 bg-white shadow-md rounded-lg">
-      <h2 className="text-2xl font-bold mb-6">Leave Recovery</h2>
-      {/* <div className="mb-4">
-        <label className="block mb-2 font-semibold">What LIN number have you registered your Company with?</label>
-        <input 
-          type="text" 
-          value={LIN} 
-          onChange={(e) => setLIN(e.target.value)} 
-          className="w-full p-2 border border-gray-300 rounded" 
-        />
-      </div> */}
-      <div className="mb-4">
-        <label className="block font-semibold">Is your company elgible for Gratuity?</label>
-        <div className="flex items-center">
-          <input 
-            type="radio" 
-            name="esic" 
-            checked={isESIC} 
-            onChange={() => setIsESIC(true)} 
-            className="mr-2" 
-          /> Yes
-          <input 
-            type="radio" 
-            name="esic" 
-            checked={!isESIC} 
-            onChange={() => setIsESIC(false)} 
-            className="ml-4 mr-2" 
-          /> No
+    <div className="w-2/3 p-8 bg-white shadow-md rounded-lg">
+      
+      <div className='flex justify-between'>
+      <h2 className="text-2xl font-bold mb-6">Leave Encashment & Recovery</h2>      <button 
+        onClick={() => setIsEditing(!isEditing)} 
+        className="mb-4 px-4 py-2 bg-blue-500 text-white rounded-md"
+      >
+        {isEditing ? 'Save' : 'Edit'}
+      </button></div>
+    <label htmlFor="">How would you like to calculate Leave Encashment?</label>
+
+    <div className="mb-4 w-64 relative">
+      <button 
+        className="p-2 border rounded w-full text-left bg-gray-200 hover:bg-gray-300"
+        onClick={toggleDropdown}
+      >
+        Click Here to Select Component
+      </button>
+      {isDropdownVisible && (
+        <div className="absolute z-10 w-full border rounded shadow p-2 mt-2 bg-white">
+          <div className="mb-2">
+            <button 
+              className={`p-2 w-full text-left ${selectedOptions.length === options.length ? 'bg-blue-500 text-white' : ''}`}
+              onClick={handleSelectAll}
+            >
+              Select all
+            </button>
+          </div>
+          {options.map(option => (
+            <div key={option.value} className="mb-2">
+              <label className="inline-flex items-center">
+                <input 
+                  type="checkbox" 
+                  className="form-checkbox h-5 w-5" 
+                  checked={selectedOptions.includes(option.value)} 
+                  onChange={() => handleSelect(option.value)} 
+                />
+                <span className="ml-2">{option.label}</span>
+              </label>
+            </div>
+          ))}
         </div>
+      )}
+    </div>
+      <div className="mb-4">
+        <label className="block text-gray-700">What is the denominator for calculating the Encashment? *</label>
+        <select
+          
+     
+          className={`w-full px-3 py-2 border border-gray-300 rounded-md ${!isEditing ? 'bg-gray-200' : ''}`} 
+          readOnly={!isEditing}
+        ><option value="">30</option></select>
       </div>
       <div className="mb-4">
-        <label className="block text-gray-700">Encashment Denominator</label>
-        <input
-          type="number"
-        //   value={encashmentDenominator}
-        //   onChange={handleEncashmentDenominatorChange}
-          className="w-full px-3 py-2 border border-gray-300 rounded-md"
-        />
-      </div>
-      <div className="mb-4">
-        <label className="block text-gray-700">Payout Month</label>
+        <label className="block text-gray-700">In which month do you wish to pay out rollover leave encashment for employees? *</label>
         <select
         //   value={payoutMonth}
         //   onChange={handlePayoutMonthChange}
-          className="w-full px-3 py-2 border border-gray-300 rounded-md"
+        className={`w-full px-3 py-2 border border-gray-300 rounded-md ${!isEditing ? 'bg-gray-200' : ''}`} 
+        readOnly={!isEditing}
         >
           <option value="January">January</option>
           <option value="February">February</option>
@@ -80,177 +123,98 @@ const LeaveRecovery = () => {
           <option value="December">December</option>
         </select>
       </div>
+      <div className='mb-4 flex flex-col'>
+      <label htmlFor=""> How would you like to calculate Leave Recovery?</label>
+      <button 
+        className="p-2 border rounded w-64 text-left bg-gray-200 hover:bg-gray-300"
+        onClick={toggleDropdown1}
+      >
+        Click Here to Select Component
+      </button></div>
+      <div className="mb-4 w-64 relative">
+      {/* <button 
+        className="p-2 border rounded w-full text-left bg-gray-200 hover:bg-gray-300"
+        onClick={toggleDropdown1}
+      >
+        Click Here to Select Component
+      </button> */}
+      {isDropdownVisible1 && (
+        <div className="absolute z-10 w-full border rounded shadow p-2 mt-2 bg-white">
+          <div className="mb-2">
+            <button 
+              className={`p-2 w-full text-left ${selectedOptions.length === options.length ? 'bg-blue-500 text-white' : ''}`}
+              onClick={handleSelectAll}
+            >
+              Select all
+            </button>
+          </div>
+          {options.map(option => (
+            <div key={option.value} className="mb-2">
+              <label className="inline-flex items-center">
+                <input 
+                  type="checkbox" 
+                  className="form-checkbox h-5 w-5" 
+                  checked={selectedOptions.includes(option.value)} 
+                  onChange={() => handleSelect(option.value)} 
+                />
+                <span className="ml-2">{option.label}</span>
+              </label>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
       <div className="mb-4">
-        <label className="block text-gray-700">Recovery Denominator</label>
+        <label className="block text-gray-700">What is the denominator for calculating the Leave Recovery? *</label>
         <input
           type="number"
         //   value={recoveryDenominator}
         //   onChange={handleRecoveryDenominatorChange}
-          className="w-full px-3 py-2 border border-gray-300 rounded-md"
+        className={`w-full px-3 py-2 border border-gray-300 rounded-md ${!isEditing ? 'bg-gray-200' : ''}`} 
+        readOnly={!isEditing}
         />
       </div>
-      {/* <div className="mb-4">
-        <label className="block font-semibold">Is your company registered under LWF?</label>
-        <div className="flex items-center">
-          <input 
-            type="radio" 
-            name="lwf" 
-            checked={isLWF} 
-            onChange={() => setIsLWF(true)} 
-            className="mr-2" 
-          /> Yes
-          <input 
-            type="radio" 
-            name="lwf" 
-            checked={!isLWF} 
-            onChange={() => setIsLWF(false)} 
-            className="ml-4 mr-2" 
-          /> No
+     
+    </div> 
+    <div className="my-4 mx-2 w-fit">
+      <div className="flex flex-col shadow-custom-all-sides bg-gray-50 rounded-md text-wrap  gap-4 my-2 py-2 pl-5 pr-2 w-[18rem]">
+        <div className="flex  gap-4 font-medium">
+        <GrHelpBook size={20} />
+        <h2>Help Center</h2>
         </div>
-      </div>
-      <div className="mb-4">
-        <label className="block font-semibold">Is your company registered under Professional Tax?</label>
-        <div className="flex items-center">
-          <input 
-            type="radio" 
-            name="pt" 
-            checked={isPT} 
-            onChange={() => setIsPT(true)} 
-            className="mr-2" 
-          /> Yes
-          <input 
-            type="radio" 
-            name="pt" 
-            checked={!isPT} 
-            onChange={() => setIsPT(false)} 
-            className="ml-4 mr-2" 
-          /> No
-        </div>
-      </div>
-      <div className="mb-4">
-        <label className="block mb-2 font-semibold">What day of the month do you run your payroll?</label>
-        <input 
-          type="number" 
-          value={payrollDay} 
-          onChange={(e) => setPayrollDay(e.target.value)} 
-          className="w-full p-2 border border-gray-300 rounded" 
-        />
-      </div>
-      <div className="mb-4">
-        <label className="block font-semibold">Which employee will approve each payroll run?</label>
-        <div className="flex items-center">
-          <input 
-            type="radio" 
-            name="approver" 
-            checked={approver === 'Company Admin'} 
-            onChange={() => setApprover('Company Admin')} 
-            className="mr-2" 
-          /> Company Admin
-          <input 
-            type="radio" 
-            name="approver" 
-            checked={approver === 'Another Employee'} 
-            onChange={() => setApprover('Another Employee')} 
-            className="ml-4 mr-2" 
-          /> Another Employee
-        </div>
-      </div>
-      {approver === 'Another Employee' && (
-        <div className="mb-4">
-          <label className="block mb-2 font-semibold">Select Payroll Approver</label>
-          <input 
-            type="text" 
-            className="w-full p-2 border border-gray-300 rounded" 
-          />
-        </div>
-      )}
-      <div className="mb-4">
-        <label className="block mb-2 font-semibold">On what day of the month does your attendance cycle begin?</label>
-        <input 
-          type="number" 
-          value={attendanceCycleStart} 
-          onChange={(e) => setAttendanceCycleStart(e.target.value)} 
-          className="w-full p-2 border border-gray-300 rounded" 
-        />
-      </div>
-      <div className="mb-4">
-        <label className="block font-semibold">Are the total payable days in the month the same as the number of days in the attendance cycle?</label>
-        <div className="flex items-center">
-          <input 
-            type="radio" 
-            name="payableDays" 
-            checked={isTotalPayableDaysSame} 
-            onChange={() => setIsTotalPayableDaysSame(true)} 
-            className="mr-2" 
-          /> Yes
-          <input 
-            type="radio" 
-            name="payableDays" 
-            checked={!isTotalPayableDaysSame} 
-            onChange={() => setIsTotalPayableDaysSame(false)} 
-            className="ml-4 mr-2" 
-          /> No
-        </div>
-      </div>
-      <div className="mb-4">
-        <label className="block font-semibold">Do you want to keep password for salary register or not?</label>
-        <div className="flex items-center">
-          <input 
-            type="radio" 
-            name="passwordProtected" 
-            checked={isPasswordProtected} 
-            onChange={() => setIsPasswordProtected(true)} 
-            className="mr-2" 
-          /> Yes
-          <input 
-            type="radio" 
-            name="passwordProtected" 
-            checked={!isPasswordProtected} 
-            onChange={() => setIsPasswordProtected(false)} 
-            className="ml-4 mr-2" 
-          /> No
-        </div>
-      </div>
-      {isPasswordProtected && (
-        <div className="mb-4">
-          <label className="block mb-2 font-semibold">Please enter password for salary register</label>
-          <input 
-            type="password" 
-            value={password} 
-            onChange={(e) => setPassword(e.target.value)} 
-            className="w-full p-2 border border-gray-300 rounded" 
-          />
-        </div>
-      )}
-      <div className="mb-4">
-        <label className="block mb-2 font-semibold">How would you like to add LOPs days while running the Payroll?</label>
-        <input 
-          type="text" 
-          value={lopDays} 
-          onChange={(e) => setLopDays(e.target.value)} 
-          className="w-full p-2 border border-gray-300 rounded" 
-        />
-      </div> */}
-      {/* <div className="mb-4">
-        <label className="block mb-2 font-semibold">What additional components do you want to show in the CTC structure?</label>
-        <input 
-          type="text" 
-          value={ctcComponents} 
-          onChange={(e) => setCtcComponents(e.target.value)} 
-          className="w-full p-2 border border-gray-300 rounded" 
-        />
-      </div>
-      <div className="mb-4">
-        <label className="block mb-2 font-semibold">Please select start month for YTD payslip</label>
-        <input 
-          type="text" 
-          value={startMonth} 
-          onChange={(e) => setStartMonth(e.target.value)} 
-          className="w-full p-2 border border-gray-300 rounded" 
-        />
-      </div> */}
-      <button className="w-full p-2 bg-blue-500 text-white font-semibold rounded">Submit</button>
-    </div> </div>
+    <div className=''>
+             
+              <ul style={listItemStyle} className="flex flex-col gap-2">
+                <li>
+                  <ul style={listItemStyle}>
+                    <li>
+                    To enable gratuity first select Gratuity in Payroll General Setting  What additional components do you want to show in the CTC structure?  </li>                </ul>
+                </li>
+                <li>
+                  <ul style={listItemStyle}>
+                    <li>
+                    Then select the require configuration as per your Company Policy                  </li>
+                  </ul>
+                </li>
+                <li>
+                  <ul style={listItemStyle}>
+                    <li>
+                   Based on configuration Gratuity will be calculated automatically for eligible employee at the time of F&F, you can view and pay the calculated value in Settlement and Recovery step while running payroll.
+                    </li>
+                  </ul>
+                </li>
+
+                {/* <li>
+                  <p>
+                    <a href="#" className="text-blue-400">
+                      Click Here{" "}
+                    </a>
+                    You can also set password for your salary register and the password will be suffix (@MMYYYY) with your entered password. E.g. If you enter password as abcd in Payroll Setting then password for salary register for month of April 2022 would be abcd@042022
+                  </p>
+                </li> */}
+              </ul>
+            </div></div></div>
+    </div>
   );
 };
 

@@ -3,21 +3,20 @@ import React, { useState } from "react";
 import Table from "../../components/table/Table";
 
 import ReportDetailsList from "./ReportDetailsList";
+import { GrHelpBook } from "react-icons/gr";
 
 const ComplianceReports = () => {
+  const listItemStyle = {
+    listStyleType: "disc",
+    color: "black",
+    fontSize: "14px",
+    fontWeight: 500,
+  };
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedRow, setSelectedRow] = useState(null);
 
   const columns = [
-    {
-      name: "view",
-      cell: (row) => (
-        <div className="flex items-center gap-4">
-          <button             className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-lg"
- onClick={openModal}>Generate</button>
-        </div>
-      ),
-    },
+   
     {
       name: "Sr. No",
       selector: (row) => row.Location,
@@ -28,12 +27,53 @@ const ComplianceReports = () => {
       selector: (row) => row.Label,
       sortable: true,
     },
+    {
+      name: "view",
+      cell: (row) => (
+        <div className="flex items-center gap-4">
+          <button             className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-lg"
+ onClick={openModal}>Generate</button>
+        </div>
+      ),
+    },
   ];
 
   const data = [
     {
-      Name: "person 1",
-      Location: "Mumbai",
+      Label: "Company Level Compliance Report",
+      Location: "1",
+      City: "Mumbai",
+      State: "Maharashtra",
+      Country: "India",
+    },
+  ];
+  const columns6 = [
+   
+    {
+      name: "Sr. No",
+      selector: (row) => row.Location,
+      sortable: true,
+    },
+    {
+      name: "Report Name",
+      selector: (row) => row.Label,
+      sortable: true,
+    },
+    {
+      name: "view",
+      cell: (row) => (
+        <div className="flex items-center gap-4">
+          <button             className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-lg"
+ onClick={openModal}>Generate</button>
+        </div>
+      ),
+    },
+  ];
+
+  const data6 = [
+    {
+      Label: "Form A (FORMAT OF EMPLOYEE REGISTER)",
+      Location: "1",
       City: "Mumbai",
       State: "Maharashtra",
       Country: "India",
@@ -41,32 +81,32 @@ const ComplianceReports = () => {
   ];
   const data1 = [
     {
-      Name: "person 1",
-      Location: "Mumbai",
+      Label: "Provident Fund Monthly Contribution New (Excel & Text File)",
+      Location: "1",
       City: "Mumbai",
       State: "Maharashtra",
       Country: "India",
     },
   ]; const data2 = [
     {
-      Name: "person 1",
-      Location: "Mumbai",
+      Label: "ESIC Monthly Contribution",
+      Location: "1",
       City: "Mumbai",
       State: "Maharashtra",
       Country: "India",
     },
   ]; const data3 = [
     {
-      Name: "person 1",
-      Location: "Mumbai",
+      Label: "Professional Tax Monthly Contribution",
+      Location: "1",
       City: "Mumbai",
       State: "Maharashtra",
       Country: "India",
     },
   ]; const data4 = [
     {
-      Name: "person 1",
-      Location: "Mumbai",
+      Label: "LWF Monthly Contribution",
+      Location: "1",
       City: "Mumbai",
       State: "Maharashtra",
       Country: "India",
@@ -87,24 +127,20 @@ const ComplianceReports = () => {
       <ReportDetailsList />
       <div className="w-full flex m-3 flex-col overflow-hidden">
         <div className="flex justify-between my-5">
-          <input
-            type="text"
-            placeholder="Search by name"
-            className="border border-gray-400 w-96 placeholder:text-sm rounded-lg p-2"
-          />
-           {/* <button
-          className="mb-3 border-2 w-20 font-semibold hover:bg-black hover:text-white duration-150 transition-all border-black p-2 rounded-md text-black cursor-pointer text-center flex items-center gap-2 justify-center"
-          onClick={() => setIsModalOpen(true)}
-        >
-          Generate
-        </button> */}
+         
         </div>
-
+            <p className="mb-2">Compliance Tracker</p>
         <Table columns={columns} data={data} isPagination={true} />
+        <p className="mb-2">Provident Fund</p>
         <Table columns={columns} data={data1} isPagination={true} />
+        <p className="mb-2">ESIC</p>
         <Table columns={columns} data={data2} isPagination={true} />
+        <p className="mb-2">Professional Tax</p>
         <Table columns={columns} data={data3} isPagination={true} />
+        <p className="mb-2">LWF</p>
         <Table columns={columns} data={data4} isPagination={true} />
+        <p className="mb-2">Shops & Establishment Act Reports</p>
+        <Table columns={columns6} data={data6} isPagination={true} />
       </div>
 
       {isModalOpen && (
@@ -224,6 +260,60 @@ const ComplianceReports = () => {
      </div>
 
       )}
+       <div className='my-4 mx-2 w-fit'>
+        <div className="flex flex-col shadow-custom-all-sides bg-gray-50 rounded-md text-wrap  gap-4 my-2 py-2 pl-5 pr-2 w-[18rem]">
+        <div className="flex  gap-4 font-medium">
+        <GrHelpBook size={20} />
+          <h2>Help Center</h2></div>
+    <div className=' '>
+              {/* <p className="font-medium">Help Center</p> */}
+              <ul style={listItemStyle} className="flex flex-col gap-2">
+                <li>
+                  <ul style={listItemStyle}>
+                    <li>
+                    PF Monthly Contribution New (Excel & Text File): Generate and upload PF ECR data, including registration for new employees to create UAN numbers. Simplify the process by directly downloading the ECR Text file for uploading on the PF Portal for generation challans.      </li>
+                  </ul>
+                </li>
+                <li>
+                  <ul style={listItemStyle}>
+                    <li>
+                    ESIC Report: ESIC monthly contribution data helpful to generate monthly ESIC Challan.    </li>
+                  </ul>
+                </li>
+                <li>
+                  <ul style={listItemStyle}>
+                    <li>
+                    Professional Tax Monthly Contribution: Monthly state wise applicable employees PT deduction report, helpful to pay challan and file returns.    </li>
+                  </ul>
+                </li>
+                <li>
+                  <ul style={listItemStyle}>
+                    <li>
+                    LWF Monthly Contribution: Monthly state wise applicable employees LWF deduction report, helpful to pay challan and file returns.   </li>
+                  </ul>
+                </li>
+                <li>
+                  <ul style={listItemStyle}>
+                    <li>
+                    Shops & Establishment Act Reports: This is the standard format for the shop and establishment report. Ensure compatibility with your location's specific format before commencing use.   </li>
+                  </ul>
+                </li>
+                {/* <li>
+                  <p>
+                    <a href="#" className="text-blue-400">
+                      Click Here{" "}
+                    </a>
+These allowance can be with or without linked with attendance or Payable days          </p>
+                </li>
+                <li>
+                  <p>
+                    <a href="#" className="text-blue-400">
+                      Click Here{" "}
+                    </a>
+You can change allowances setting anytime but once payroll is processed won’t be deleted.        </p>
+                </li> */}
+              </ul>
+            </div></div></div>
     </section>
   );
 };

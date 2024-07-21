@@ -11,7 +11,7 @@ const InvestmentApproval = () => {
 
     {
       name: "Employee Name",
-      selector: (row) => row.Location,
+      selector: (row) => row.Name,
       sortable: true,
     },
     {
@@ -44,29 +44,18 @@ const InvestmentApproval = () => {
         selector: (row) => row.Comment,
         sortable: true,
       },
-    // {
-    //   name: "Status",
-    //   selector: (row) => row.status,
-    //   sortable: true,
-    // },
-    // {
-    //   name: "Action",
-    //   selector: (row) =>
-    //     row.status !== "Expired" && (
-    //       <button className="text-red-500">Cancel</button>
-    //     ),
-    //   sortable: true,
-    // },
+   
   ];
 
   const data = [
     {
-      Name: "person 1",
-      Location: "Mumbai",
-      City: "Mumbai",
-      State: "Maharashtra",
-
-      Country:"India",
+      Name: "Mittu Panda",
+      Label: "02/04/2024",
+      City: "02/04/2024",
+      State: "abc",
+      Leave_Days:"06/07/2023",
+      Country:"active",
+      Comment:"45"
 
     },
 

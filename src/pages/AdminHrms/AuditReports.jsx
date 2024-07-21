@@ -5,21 +5,20 @@ import { BsEye } from "react-icons/bs";
 import Table from "../../components/table/Table";
 
 import ReportDetailsList from "./ReportDetailsList";
+import { GrHelpBook } from "react-icons/gr";
 
 const AuditReports = () => {
+  const listItemStyle = {
+    listStyleType: "disc",
+    color: "black",
+    fontSize: "14px",
+    fontWeight: 500,
+  };
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedRow, setSelectedRow] = useState(null);
 
   const columns = [
-    {
-      name: "Actions",
-      cell: (row) => (
-        <div className="flex items-center gap-4">
-          <button             className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-lg"
- onClick={openModal}>Generate</button>
-        </div>
-      ),
-    },
+  
     {
       name: "Sr. No",
       selector: (row) => row.Location,
@@ -30,12 +29,21 @@ const AuditReports = () => {
       selector: (row) => row.Label,
       sortable: true,
     },
+    {
+      name: "Actions",
+      cell: (row) => (
+        <div className="flex items-center gap-4">
+          <button             className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-lg"
+ onClick={openModal}>Generate</button>
+        </div>
+      ),
+    },
   ];
 
   const data = [
     {
-      Name: "person 1",
-      Location: "Mumbai",
+      Label: "UAN and ESIC IP Missing List",
+      Location: "1",
       City: "Mumbai",
       State: "Maharashtra",
       Country: "India",
@@ -57,13 +65,7 @@ const AuditReports = () => {
       <ReportDetailsList />
       <div className="w-full flex m-3 flex-col overflow-hidden">
         <div className="flex justify-between my-5">
-          <input
-            type="text"
-            placeholder="Search by name"
-            className="border border-gray-400 w-96 placeholder:text-sm rounded-lg p-2"
-            // value={searchText}
-            // onChange={handleSearch}
-          />
+        
         </div>
         <Table columns={columns} data={data} isPagination={true} />
       </div>
@@ -97,6 +99,37 @@ const AuditReports = () => {
           </div>
         </div>
       )}
+         <div className='my-4 mx-2 w-fit'>
+        <div className="flex flex-col mt-4 mr-2 shadow-custom-all-sides bg-gray-50 rounded-md text-wrap  gap-4 my-2 py-2 pl-5 pr-2 w-[18rem]">
+        <div className="flex  gap-4 font-medium">
+        <GrHelpBook size={20} />
+          <h2>Help Center</h2></div>
+    <div className=' '>
+              {/* <p className="font-medium">Help Center</p> */}
+              <ul style={listItemStyle} className="flex flex-col gap-2">
+                <li>
+                  <ul style={listItemStyle}>
+                    <li>
+                    UAN and ESIC IP Missing List: Easy way to identify employees with missing UAN (Universal Account Number) and ESIC (Employee State Insurance Corporation) IP numbers.       </li>
+                  </ul>
+                </li>
+               
+                {/* <li>
+                  <p>
+                    <a href="#" className="text-blue-400">
+                      Click Here{" "}
+                    </a>
+These allowance can be with or without linked with attendance or Payable days          </p>
+                </li>
+                <li>
+                  <p>
+                    <a href="#" className="text-blue-400">
+                      Click Here{" "}
+                    </a>
+You can change allowances setting anytime but once payroll is processed won’t be deleted.        </p>
+                </li> */}
+              </ul>
+            </div></div></div>
     </section>
   );
 };

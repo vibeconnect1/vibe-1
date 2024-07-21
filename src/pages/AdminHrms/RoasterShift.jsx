@@ -5,6 +5,7 @@ import { BsEye } from "react-icons/bs";
 import Table from "../../components/table/Table";
 import AdminHRMS from "./AdminHrms";
 import { BiEdit } from "react-icons/bi";
+import { FaTrash } from "react-icons/fa";
 
 const RosterShift = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -20,16 +21,7 @@ const RosterShift = () => {
   const [breakEndTime, setBreakEndTime] = useState('');
 
   const columns = [
-    {
-      name: "view",
-      cell: (row) => (
-        <div className="flex items-center gap-4">
-          <Link onClick={handleModalToggle1}>
-            <BiEdit size={15} />
-          </Link>
-        </div>
-      ),
-    },
+   
     {
       name: "Shift Name",
       selector: (row) => row.Location,
@@ -55,15 +47,27 @@ const RosterShift = () => {
       selector: (row) => row.Country,
       sortable: true,
     },
+    {
+      name: "view",
+      cell: (row) => (
+        <div className="flex items-center gap-4">
+          <Link onClick={handleModalToggle1}>
+            <BiEdit size={15} />
+          </Link>
+          <FaTrash size={15}/>
+        </div>
+      ),
+    },
   ];
 
   const data = [
     {
       Name: "person 1",
-      Location: "Mumbai",
-      City: "Mumbai",
-      State: "Maharashtra",
-      Country: "India",
+      Location: "Night",
+      Label: "7:00AM",
+      City: "6:00PM",
+      State:"2/2/2024",
+      Country: "NA",
     },
   ];
 

@@ -8,35 +8,26 @@ import { BiEdit } from "react-icons/bi";
 
 import OrganisationSetting from "./OrganisationSetting";
 import HRMSHelpCenter from "./HRMSHelpCenter";
+import { FaTrash } from "react-icons/fa";
 
 const BankAccount = () => {
-  const columns = [
-    {
-      name: "view",
+  const [showModal, setShowModal] = useState(false);
 
-      cell: (row) => (
-        <div className="flex items-center gap-4">
-          <Link 
-        //   to={`/admin/edit-templates/${row.id}`}
-          >
-            <BiEdit size={15} />
-          </Link>
-        </div>
-      ),
-    },
+  const columns = [
+   
     {
       name: "Bank Name",
       selector: (row) => row.Location,
       sortable: true,
     },
-    // {
-    //   name: "Leave Label",
-    //   selector: (row) => row.Label,
-    //   sortable: true,
-    // },
+    {
+      name: "Account Holder Name",
+      selector: (row) => row.Label,
+      sortable: true,
+    },
     {
       name: "Account Number	",
-      selector: (row) => row.City,
+      selector: (row) => row.num,
       sortable: true,
     },
     {
@@ -44,91 +35,43 @@ const BankAccount = () => {
         selector: (row) => row.City,
         sortable: true,
       },
-    // {
-    //   name: "State",
-    //   selector: (row) => row.State,
-    //   sortable: true,
-    // },
-    // {
-    //     name: "Country",
-    //     selector: (row) => row.Country,
-    //     sortable: true,
-    //   },
-    // {
-    //     name: "Leave Days",
-    //     selector: (row) => row.Leave_Days,
-    //     sortable: true,
-    //   },
-    //   {
-    //     name: "Comment",
-    //     selector: (row) => row.Comment,
-    //     sortable: true,
-    //   },
-    // {
-    //   name: "Status",
-    //   selector: (row) => row.status,
-    //   sortable: true,
-    // },
-    // {
-    //   name: "Action",
-    //   selector: (row) =>
-    //     row.status !== "Expired" && (
-    //       <button className="text-red-500">Cancel</button>
-    //     ),
-    //   sortable: true,
-    // },
+      {
+        name: "Actions",
+  
+        cell: (row) => (
+          <div className="flex items-center gap-4">
+            <button 
+          onClick={() => setShowModal(true)}
+            >
+              <BiEdit size={15} />
+            </button>
+            <FaTrash size={15}/>
+          </div>
+        ),
+      },
+   
+ 
   ];
 
   const data = [
     {
-      Name: "person 1",
-      Location: "Mumbai",
-      City: "Mumbai",
-      State: "Maharashtra",
+      Label: "Vibe Connect",
+      Location: "SBI",
+      City: "SBI56473890",
+      num: "56423155897",
 
       Country:"India",
 
     },
 
   ];
-//   const customStyle = {
-//     headRow: {
-//       style: {
-//         backgroundColor: "black",
-//         color: "white",
 
-//         fontSize: "10px",
-//       },
-//     },
-//     headCells: {
-//       style: {
-//         textTransform: "upperCase",
-//       },
-//     },
-//   };
   return (
     <section className="flex ml-20">
      <OrganisationSetting/>
       <div className=" w-full flex m-3 flex-col overflow-hidden">
-        {/* <div className="flex  justify-start gap-4 my-5  ">
-          <div className="shadow-xl rounded-full border-4 border-gray-400 w-52  px-6 flex flex-col items-center">
-            <p className="font-semibold ">Total Alloted Slots</p>
-            <p className="text-center font-semibold ">0</p>
-          </div>
-          <div className="shadow-xl rounded-full border-4 border-green-400 w-52  px-6 flex flex-col items-center">
-            <p className="font-semibold">Four Wheelers</p>
-            <p className="text-center font-semibold  ">0</p>
-          </div>
-          <div className="shadow-xl rounded-full border-4 border-red-400 w-52  px-6 flex flex-col items-center">
-            <p className="font-semibold">2 Wheelers</p>
-            <p className="text-center font-semibold ">0</p>
-          </div>
-          <div className="shadow-xl rounded-full border-4 border-orange-400 w-52  px-6 flex flex-col items-center">
-            <p className="font-semibold">Vacant Slot</p>
-            <p className="text-center font-semibold ">0</p>
-          </div>
-        </div> */}
-        <div className=" flex justify-between my-5">
+       
+        <div className=" flex justify-end gap-2 my-5">
           <input
             type="text"
             placeholder="Search by name "
@@ -136,14 +79,90 @@ const BankAccount = () => {
             //   value={searchText}
             //   onChange={handleSearch}
           />
-          {/* <Link
-            to={"/templates/leave-templates"}
+          <Link
+            to={"/admin/add-bank-account"}
             className="border-2 font-semibold hover:bg-black hover:text-white duration-150 transition-all border-black p-2 rounded-md text-black cursor-pointer text-center flex items-center  gap-2 justify-center"
           >
             <PiPlusCircle size={20} />
             Add
-          </Link> */}
+          </Link>
         </div>
+        {showModal && (
+        <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
+          <div className="bg-white p-4 rounded-lg w-96">
+            
+            <h1 className="text-2xl font-bold mb-4">Edit Bank Account</h1>
+            <div  className="grid md:grid-cols-1 gap-5">
+            <div className="grid gap-2 items-center w-full">
+            <label  className="font-semibold">
+              Account Holder Name:
+            </label>
+            <input
+              type="text"
+             
+              name="branchName"
+              className="border border-gray-400 p-2 rounded-md"
+              placeholder="Enter  Name"
+            
+            />
+          </div>
+          <div className="grid gap-2 items-center w-full">
+            <label  className="font-semibold">
+              Bank Name:
+            </label>
+            <input
+              type="text"
+             
+              name="branchName"
+              className="border border-gray-400 p-2 rounded-md"
+              placeholder="Enter  Name"
+            
+            />
+          </div>
+          <div className="grid gap-2 items-center w-full">
+            <label  className="font-semibold">
+             Account Number:
+            </label>
+            <input
+              type="text"
+             
+              name="branchName"
+              className="border border-gray-400 p-2 rounded-md"
+              placeholder="Enter  Name"
+            
+            />
+          </div>
+          <div className="grid gap-2 items-center w-full">
+            <label  className="font-semibold">
+            IFSC Code:
+            </label>
+            <input
+              type="text"
+             
+              name="branchName"
+              className="border border-gray-400 p-2 rounded-md"
+              placeholder="Enter  Name"
+            
+            />
+          </div>
+          </div>
+
+<div className="flex justify-center gap-2">
+<button
+              className="mt-4 ml-2 bg-blue-500 text-white py-2 px-4 rounded-md"
+              onClick={() => setShowModal(false)}
+            >
+              Update
+            </button>
+            <button
+              className="mt-4 ml-2 bg-blue-500 text-white py-2 px-4 rounded-md"
+              onClick={() => setShowModal(false)}
+            >
+              Close
+            </button>
+           </div>
+            </div></div>
+            )}
         <Table columns={columns} data={data} isPagination={true} />
       </div>
       <HRMSHelpCenter help={"bank"} />

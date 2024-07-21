@@ -3,25 +3,72 @@ import { PiPlusCircle } from "react-icons/pi";
 import { Link } from "react-router-dom";
 import { BsEye } from "react-icons/bs";
 import Table from "../../components/table/Table";
+import { useSelector } from "react-redux";
+// import { Link } from "react-router-dom";
+// import { Link } from "react-router-dom";
+
+// Modal Component
+const Modal = ({ isOpen, onClose }) => {
+  if (!isOpen) return null;
+  const [selectedEmployee, setSelectedEmployee] = useState('');
+
+  const handleChange = (event) => {
+    setSelectedEmployee(event.target.value);
+  };
+  return (
+    <div className="fixed inset-0 z-10 bg-gray-600 bg-opacity-50 flex justify-center items-center">
+      <div className="bg-white p-6 rounded-lg shadow-lg w-1/3">
+        <h2 className="text-xl font-semibold mb-4">Initiate Separation</h2>
+        <form>
+          <div className="mb-4">
+            <label className="block text-gray-700">Employee Name *</label>
+            <select
+        className="border border-gray-300 rounded-lg p-2 w-full"
+        value={selectedEmployee}
+        onChange={handleChange}
+      >
+        <option value="">Please Select Employee</option>
+        <option value="mittu-panda">Mittu Panda</option>
+        {/* Add other employee options here */}
+      </select>
+            {/* <Link 
+          to={`/admin/separate-application/resignation`}
+          >
+           Mittu Panda
+          </Link> */}
+          </div>
+          <div className="flex justify-end">
+            <button
+              type="button"
+              className="bg-red-500 text-white px-4 py-2 rounded-md mr-2"
+              onClick={onClose}
+            >
+              Cancel
+            </button>
+            {selectedEmployee === 'mittu-panda' && (
+           <Link 
+           className="bg-blue-500 text-white px-4 py-2 rounded-md mr-2"
+           to={`/hrms/separation/separate-application/resignation`}
+           >
+            Proceed
+           </Link>
+      )}
+          </div>
+        </form>
+      </div>
+    </div>
+  );
+};
 
 const SeparationTable = () => {
-  const columns = [
-    // {
-    //   name: "view",
+  const themeColor = useSelector((state) => state.theme.color);
 
-    //   cell: (row) => (
-    //     <div className="flex items-center gap-4">
-    //       <Link 
-    //     //   to={`/admin/edit-templates/${row.id}`}
-    //       >
-    //         <BiEdit size={15} />
-    //       </Link>
-    //     </div>
-    //   ),
-    // },
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isModalOpen1, setIsModalOpen1] = useState(false);
+  const columns = [
     {
       name: "Employee Name",
-      selector: (row) => row.Location,
+      selector: (row) => row.Name,
       sortable: true,
     },
     {
@@ -35,117 +82,119 @@ const SeparationTable = () => {
       sortable: true,
     },
     {
-      name: "Separation Reason	",
+      name: "Separation Reason",
       selector: (row) => row.State,
       sortable: true,
     },
     {
-        name: "Separation Status",
-        selector: (row) => row.Country,
-        sortable: true,
-      },
+      name: "Separation Status",
+      selector: (row) => row.Country,
+      sortable: true,
+    },
     {
-        name: "FnF Status		",
-        selector: (row) => row.Leave_Days,
-        sortable: true,
-      },
-    //   {
-    //     name: "Signed By Employee	",
-    //     selector: (row) => row.Comment,
-    //     sortable: true,
-    //   },
-    // {
-    //   name: "Status",
-    //   selector: (row) => row.status,
-    //   sortable: true,
-    // },
-    // {
-    //   name: "Action",
-    //   selector: (row) =>
-    //     row.status !== "Expired" && (
-    //       <button className="text-red-500">Cancel</button>
-    //     ),
-    //   sortable: true,
-    // },
-    // {
-    //     name: "Approval",
-    //     selector: (row) => (row.status === "Upcoming" && 
-    //     <div className="flex justify-center gap-2">
-    //         <button className="text-green-400 font-medium hover:bg-green-400 hover:text-white transition-all duration-200 p-1 rounded-full"><TiTick size={20} /></button>
-    //         <button className="text-red-400 font-medium hover:bg-red-400 hover:text-white transition-all duration-200 p-1 rounded-full"><IoClose size={20}  /></button>
-    //     </div>
-    //   ),
-    //     sortable: true,
-    //   },
+      name: "FnF Status",
+      selector: (row) => row.Leave_Days,
+      sortable: true,
+    },
   ];
 
   const data = [
     {
       Name: "person 1",
-      Location: "Mumbai",
-      City: "Mumbai",
-      State: "Maharashtra",
-
-      Country:"India",
-
+      Label: "2/2/2023",
+      City: "2/2/2023",
+      State: "abc",
+      Country: "pending",
     },
-
   ];
-//   const customStyle = {
-//     headRow: {
-//       style: {
-//         backgroundColor: "black",
-//         color: "white",
 
-//         fontSize: "10px",
-//       },
-//     },
-//     headCells: {
-//       style: {
-//         textTransform: "upperCase",
-//       },
-//     },
-//   };
   return (
     <section className="flex">
-     {/* <OrganisationSetting/> */}
-     {/* <AdminHRMS/> */}
-      <div className=" w-full flex m-3 flex-col overflow-hidden">
-        {/* <div className="flex  justify-start gap-4 my-5  ">
-          <div className="shadow-xl rounded-full border-4 border-gray-400 w-52  px-6 flex flex-col items-center">
-            <p className="font-semibold ">Total Alloted Slots</p>
-            <p className="text-center font-semibold ">0</p>
-          </div>
-          <div className="shadow-xl rounded-full border-4 border-green-400 w-52  px-6 flex flex-col items-center">
-            <p className="font-semibold">Four Wheelers</p>
-            <p className="text-center font-semibold  ">0</p>
-          </div>
-          <div className="shadow-xl rounded-full border-4 border-red-400 w-52  px-6 flex flex-col items-center">
-            <p className="font-semibold">2 Wheelers</p>
-            <p className="text-center font-semibold ">0</p>
-          </div>
-          <div className="shadow-xl rounded-full border-4 border-orange-400 w-52  px-6 flex flex-col items-center">
-            <p className="font-semibold">Vacant Slot</p>
-            <p className="text-center font-semibold ">0</p>
-          </div>
-        </div> */}
-        <div className=" flex justify-between my-5">
+      <div className="w-full flex m-3 flex-col overflow-hidden">
+        <div className="flex gap-2 justify-end my-5">
           <input
             type="text"
-            placeholder="Search by name "
+            placeholder="Search by name"
             className="border border-gray-400 w-96 placeholder:text-sm rounded-lg p-2"
-            //   value={searchText}
-            //   onChange={handleSearch}
           />
-          {/* <Link
-            to={"/templates/leave-templates"}
-            className="border-2 font-semibold hover:bg-black hover:text-white duration-150 transition-all border-black p-2 rounded-md text-black cursor-pointer text-center flex items-center  gap-2 justify-center"
+           <button
+           onClick={() => setIsModalOpen1(true)}
+           style={{background:themeColor}}
+            className="bg-black text-white hover:bg-gray-700 font-semibold py-2 px-4 rounded"
+          >
+            Filter
+          </button>
+          <button
+            className="border-2 font-semibold hover:bg-black hover:text-white duration-150 transition-all border-black p-2 rounded-md text-black cursor-pointer text-center flex items-center gap-2 justify-center"
+            onClick={() => setIsModalOpen(true)}
           >
             <PiPlusCircle size={20} />
-            Add
-          </Link> */}
+            Initiate Separation
+          </button>
         </div>
+        {isModalOpen1 && (
+        <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex z-10 justify-center items-center">
+          <div className="bg-white p-5 rounded-md shadow-md w-1/3">
+          {/* <h1 className="text-xl font-bold mb-4">Bulk Upload Contract Agreement Document</h1> */}
+          <div className="mb-4">
+              <label htmlFor="departmentName" className="block text-sm font-medium text-gray-700">
+              Separation Reason
+              </label>
+              <select
+                type="text"
+                id="departmentName"
+              
+                className="mt-1 block w-full border border-gray-400 p-2 rounded-md"
+                placeholder=""
+              ><option value="">Better Opportunity-compensation</option>
+              <option value="">Better Opportunity-Job Role</option></select>
+            </div>
+            <div className="mb-4">
+              <label htmlFor="headOfDepartment" className="block text-sm font-medium text-gray-700">
+              Separation Status
+              </label>
+              <select
+                type="text"
+                id="departmentName"
+              
+                className="mt-1 block w-full border border-gray-400 p-2 rounded-md"
+                placeholder=""
+              ><option value="">Level 1 Approval Pending</option>
+              <option value="">Level 2 Approval Pending</option></select>
+            </div>
+            <div className="mb-4">
+              <label htmlFor="headOfDepartment" className="block text-sm font-medium text-gray-700">
+              Branch Location
+              </label>
+              <select
+                id="headOfDepartment"
+               
+                className="mt-1 block w-full border border-gray-400 p-2 rounded-md"
+              >
+               
+              <option value="">Mumbai</option>
+              </select>
+            </div>
+           
+            <div className="flex justify-end">
+              <button
+                onClick={() => setIsModalOpen1(false)}
+                className="bg-gray-300 text-gray-700 p-2 rounded-md mr-2"
+              >
+                Clear
+              </button>
+              <button
+                // onClick={handleAddDepartment}
+                className="bg-blue-500 text-white p-2 rounded-md"
+              >
+                Apply
+              </button>
+            </div>
+          </div>
+          </div>
+            )}
         <Table columns={columns} data={data} isPagination={true} />
+        <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
       </div>
     </section>
   );

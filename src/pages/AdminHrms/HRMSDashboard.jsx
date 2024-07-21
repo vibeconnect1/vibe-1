@@ -115,7 +115,7 @@ const HRMSDashboard = () => {
             Vibe CopilotAI
           </div>
           &nbsp;
-          <div
+          {/* <div
             className="bg-blue-500 text-white border border-r-2 mr-2 rounded-full absolute right-2 "
             onClick={toggleExpand1}
             style={{ cursor: "pointer", padding: "10px", borderRadius: "50%" }}
@@ -128,7 +128,7 @@ const HRMSDashboard = () => {
             style={{ cursor: "pointer", padding: "10px", borderRadius: "50%" }}
           >
             <AiOutlineBell size={18} />
-          </div>
+          </div> */}
         </div>
 
         <div className="mt-20 overflow-y-auto absolute top-1 left-20">

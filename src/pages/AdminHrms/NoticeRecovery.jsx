@@ -1,55 +1,62 @@
 import React, { useState } from 'react';
 import PayrollSettingDetailsList from './PayrollSettingDetailsList';
-
+import { GrHelpBook } from "react-icons/gr";
+const options = [
+  { value: 'basic', label: 'Basic' },
+  { value: 'hra', label: 'HRA' },
+  { value: 'other', label: 'Other' },
+  { value: 'special', label: 'Special' },
+  { value: 'monthly-retainer-fee', label: 'Monthly Retainer Fee' },
+];
 const NoticeRecovery = () => {
   const [LIN, setLIN] = useState('');
   const [isESIC, setIsESIC] = useState(false);
   const [isLWF, setIsLWF] = useState(false);
-  const [isPT, setIsPT] = useState(false);
-  const [payrollDay, setPayrollDay] = useState(30);
-  const [approver, setApprover] = useState('Company Admin');
-  const [attendanceCycleStart, setAttendanceCycleStart] = useState(1);
-  const [isTotalPayableDaysSame, setIsTotalPayableDaysSame] = useState(true);
-  const [isPasswordProtected, setIsPasswordProtected] = useState(false);
-  const [password, setPassword] = useState('');
-  const [lopDays, setLopDays] = useState('');
-  const [ctcComponents, setCtcComponents] = useState('');
-  const [startMonth, setStartMonth] = useState('');
+  const [selectedOptions, setSelectedOptions] = useState([]);
+  const [isDropdownVisible, setIsDropdownVisible] = useState(false);
+  const [isDropdownVisible1, setIsDropdownVisible1] = useState(false);
+
+  const handleSelect = (option) => {
+    if (selectedOptions.includes(option)) {
+      setSelectedOptions(selectedOptions.filter(item => item !== option));
+    } else {
+      setSelectedOptions([...selectedOptions, option]);
+    }
+  };
+  const toggleDropdown = () => {
+    setIsDropdownVisible(!isDropdownVisible);
+  };
+ 
+  const handleSelectAll = () => {
+    if (selectedOptions.length === options.length) {
+      setSelectedOptions([]);
+    } else {
+      setSelectedOptions(options.map(option => option.value));
+    }
+  };
+  const listItemStyle = {
+    listStyleType: "disc",
+    color: "black",
+    fontSize: "14px",
+    fontWeight: 500,
+  };
+  const [isEditing, setIsEditing] = useState(false);
 
   return (
     <div className='flex gap-4 ml-20'>
         <PayrollSettingDetailsList/>
 
-    <div className="max-w-3xl  p-8 bg-white shadow-md rounded-lg">
+    <div className="w-2/3  p-8 bg-white shadow-md rounded-lg">
+      {/* <h2 className="text-2xl font-bold mb-6">Notice Period Recovery</h2> */}
+      <div className='flex justify-between'>
       <h2 className="text-2xl font-bold mb-6">Notice Period Recovery</h2>
-      {/* <div className="mb-4">
-        <label className="block mb-2 font-semibold">What LIN number have you registered your Company with?</label>
-        <input 
-          type="text" 
-          value={LIN} 
-          onChange={(e) => setLIN(e.target.value)} 
-          className="w-full p-2 border border-gray-300 rounded" 
-        />
-      </div> */}
-      <div className="mb-4">
-        <label className="block font-semibold">Is your company elgible for Gratuity?</label>
-        <div className="flex items-center">
-          <input 
-            type="radio" 
-            name="esic" 
-            checked={isESIC} 
-            onChange={() => setIsESIC(true)} 
-            className="mr-2" 
-          /> Yes
-          <input 
-            type="radio" 
-            name="esic" 
-            checked={!isESIC} 
-            onChange={() => setIsESIC(false)} 
-            className="ml-4 mr-2" 
-          /> No
-        </div>
-      </div>
+      <button 
+        onClick={() => setIsEditing(!isEditing)} 
+        className="mb-4 px-4 py-2 bg-blue-500 text-white rounded-md"
+      >
+        {isEditing ? 'Save' : 'Edit'}
+      </button></div>
+     
       <div className="mb-4">
         <label className="block font-semibold">
 Is Notice Period Recovery applicable? *?</label>
@@ -60,6 +67,7 @@ Is Notice Period Recovery applicable? *?</label>
             checked={isLWF} 
             onChange={() => setIsLWF(true)} 
             className="mr-2" 
+            disabled={!isEditing}
           /> Yes
           <input 
             type="radio" 
@@ -67,201 +75,97 @@ Is Notice Period Recovery applicable? *?</label>
             checked={!isLWF} 
             onChange={() => setIsLWF(false)} 
             className="ml-4 mr-2" 
+            disabled={!isEditing}
           /> No
 
         </div></div>
         <div className="mb-4">
         <label className="block font-semibold">
         How would you like to calculate Notice Period Recovery?</label>
-        <div className="flex items-center">
-          <input 
-            type="radio" 
-            name="lwf" 
-            checked={isLWF} 
-            onChange={() => setIsLWF(true)} 
-            className="mr-2" 
-          /> Yes
-          <input 
-            type="radio" 
-            name="lwf" 
-            checked={!isLWF} 
-            onChange={() => setIsLWF(false)} 
-            className="ml-4 mr-2" 
-          /> No
-
-        </div></div>
+        <div className="mb-4 w-64 relative">
+      <button 
+        className="p-2 border rounded w-full text-left bg-gray-200 hover:bg-gray-300"
+        onClick={toggleDropdown}
+      >
+        Click Here to Select Component
+      </button>
+      {isDropdownVisible && (
+        <div className="absolute z-10 w-full border rounded shadow p-2 mt-2 bg-white">
+          <div className="mb-2">
+            <button 
+              className={`p-2 w-full text-left ${selectedOptions.length === options.length ? 'bg-blue-500 text-white' : ''}`}
+              onClick={handleSelectAll}
+            >
+              Select all
+            </button>
+          </div>
+          {options.map(option => (
+            <div key={option.value} className="mb-2">
+              <label className="inline-flex items-center">
+                <input 
+                  type="checkbox" 
+                  className="form-checkbox h-5 w-5" 
+                  checked={selectedOptions.includes(option.value)} 
+                  onChange={() => handleSelect(option.value)} 
+                />
+                <span className="ml-2">{option.label}</span>
+              </label>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+    </div>
         <div className="mb-4">
-          <label className="block text-gray-700">Notice Recovery Denominator</label>
+          <label className="block text-gray-700">What is the denominator for calculating the Notice Recovery? *</label>
           <input
             type="number"
-            // value={noticeRecoveryDenominator}
+            value="30"
             // onChange={handleNoticeRecoveryDenominatorChange}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md"
-          />
+            className={`w-full px-3 py-2 border border-gray-300 rounded-md ${!isEditing ? 'bg-gray-200' : ''}`} 
+            />
         </div>
-      {/* <div className="mb-4">
-        <label className="block font-semibold">
-Is Notice Period Recovery applicable? *?</label>
-        <div className="flex items-center">
-          <input 
-            type="radio" 
-            name="lwf" 
-            checked={isLWF} 
-            onChange={() => setIsLWF(true)} 
-            className="mr-2" 
-          /> Yes
-          <input 
-            type="radio" 
-            name="lwf" 
-            checked={!isLWF} 
-            onChange={() => setIsLWF(false)} 
-            className="ml-4 mr-2" 
-          /> No
+    
+    </div> 
+    <div className="my-4 mx-2 w-fit">
+      <div className="flex flex-col shadow-custom-all-sides bg-gray-50 rounded-md text-wrap  gap-4 my-2 py-2 pl-5 pr-2 w-[18rem]">
+        <div className="flex  gap-4 font-medium">
+        <GrHelpBook size={20} />
+        <h2>Help Center</h2>
         </div>
-      </div>
-      <div className="mb-4">
-        <label className="block font-semibold">Is your company registered under Professional Tax?</label>
-        <div className="flex items-center">
-          <input 
-            type="radio" 
-            name="pt" 
-            checked={isPT} 
-            onChange={() => setIsPT(true)} 
-            className="mr-2" 
-          /> Yes
-          <input 
-            type="radio" 
-            name="pt" 
-            checked={!isPT} 
-            onChange={() => setIsPT(false)} 
-            className="ml-4 mr-2" 
-          /> No
-        </div>
-      </div>
-      <div className="mb-4">
-        <label className="block mb-2 font-semibold">What day of the month do you run your payroll?</label>
-        <input 
-          type="number" 
-          value={payrollDay} 
-          onChange={(e) => setPayrollDay(e.target.value)} 
-          className="w-full p-2 border border-gray-300 rounded" 
-        />
-      </div>
-      <div className="mb-4">
-        <label className="block font-semibold">Which employee will approve each payroll run?</label>
-        <div className="flex items-center">
-          <input 
-            type="radio" 
-            name="approver" 
-            checked={approver === 'Company Admin'} 
-            onChange={() => setApprover('Company Admin')} 
-            className="mr-2" 
-          /> Company Admin
-          <input 
-            type="radio" 
-            name="approver" 
-            checked={approver === 'Another Employee'} 
-            onChange={() => setApprover('Another Employee')} 
-            className="ml-4 mr-2" 
-          /> Another Employee
-        </div>
-      </div>
-      {approver === 'Another Employee' && (
-        <div className="mb-4">
-          <label className="block mb-2 font-semibold">Select Payroll Approver</label>
-          <input 
-            type="text" 
-            className="w-full p-2 border border-gray-300 rounded" 
-          />
-        </div>
-      )}
-      <div className="mb-4">
-        <label className="block mb-2 font-semibold">On what day of the month does your attendance cycle begin?</label>
-        <input 
-          type="number" 
-          value={attendanceCycleStart} 
-          onChange={(e) => setAttendanceCycleStart(e.target.value)} 
-          className="w-full p-2 border border-gray-300 rounded" 
-        />
-      </div>
-      <div className="mb-4">
-        <label className="block font-semibold">Are the total payable days in the month the same as the number of days in the attendance cycle?</label>
-        <div className="flex items-center">
-          <input 
-            type="radio" 
-            name="payableDays" 
-            checked={isTotalPayableDaysSame} 
-            onChange={() => setIsTotalPayableDaysSame(true)} 
-            className="mr-2" 
-          /> Yes
-          <input 
-            type="radio" 
-            name="payableDays" 
-            checked={!isTotalPayableDaysSame} 
-            onChange={() => setIsTotalPayableDaysSame(false)} 
-            className="ml-4 mr-2" 
-          /> No
-        </div>
-      </div>
-      <div className="mb-4">
-        <label className="block font-semibold">Do you want to keep password for salary register or not?</label>
-        <div className="flex items-center">
-          <input 
-            type="radio" 
-            name="passwordProtected" 
-            checked={isPasswordProtected} 
-            onChange={() => setIsPasswordProtected(true)} 
-            className="mr-2" 
-          /> Yes
-          <input 
-            type="radio" 
-            name="passwordProtected" 
-            checked={!isPasswordProtected} 
-            onChange={() => setIsPasswordProtected(false)} 
-            className="ml-4 mr-2" 
-          /> No
-        </div>
-      </div>
-      {isPasswordProtected && (
-        <div className="mb-4">
-          <label className="block mb-2 font-semibold">Please enter password for salary register</label>
-          <input 
-            type="password" 
-            value={password} 
-            onChange={(e) => setPassword(e.target.value)} 
-            className="w-full p-2 border border-gray-300 rounded" 
-          />
-        </div>
-      )}
-      <div className="mb-4">
-        <label className="block mb-2 font-semibold">How would you like to add LOPs days while running the Payroll?</label>
-        <input 
-          type="text" 
-          value={lopDays} 
-          onChange={(e) => setLopDays(e.target.value)} 
-          className="w-full p-2 border border-gray-300 rounded" 
-        />
-      </div> */}
-      {/* <div className="mb-4">
-        <label className="block mb-2 font-semibold">What additional components do you want to show in the CTC structure?</label>
-        <input 
-          type="text" 
-          value={ctcComponents} 
-          onChange={(e) => setCtcComponents(e.target.value)} 
-          className="w-full p-2 border border-gray-300 rounded" 
-        />
-      </div>
-      <div className="mb-4">
-        <label className="block mb-2 font-semibold">Please select start month for YTD payslip</label>
-        <input 
-          type="text" 
-          value={startMonth} 
-          onChange={(e) => setStartMonth(e.target.value)} 
-          className="w-full p-2 border border-gray-300 rounded" 
-        />
-      </div> */}
-      <button className="w-full p-2 bg-blue-500 text-white font-semibold rounded">Submit</button>
-    </div> </div>
+    <div className=' '>
+              
+              <ul style={listItemStyle} className="flex flex-col gap-2">
+                <li>
+                  <ul style={listItemStyle}>
+                    <li>
+                    If your company has a Notice Period policy where short fall in notice period need to be recovery from F&F salary then same can be configure here. </li>                </ul>
+                </li>
+                <li>
+                  <ul style={listItemStyle}>
+                    <li>
+                    You can also set how the notice period recovery has to be calculated along with the denominator for calculating this.               </li>
+                  </ul>
+                </li>
+                <li>
+                  <ul style={listItemStyle}>
+                    <li>
+                    While running Payroll you can view the calculated value in Settlement and Recovery step and confirm to considered the same in salary
+                    </li>
+                  </ul>
+                </li>
+
+                {/* <li>
+                  <p>
+                    <a href="#" className="text-blue-400">
+                      Click Here{" "}
+                    </a>
+                    You can also set password for your salary register and the password will be suffix (@MMYYYY) with your entered password. E.g. If you enter password as abcd in Payroll Setting then password for salary register for month of April 2022 would be abcd@042022
+                  </p>
+                </li> */}
+              </ul>
+            </div></div></div>
+    </div>
   );
 };
 

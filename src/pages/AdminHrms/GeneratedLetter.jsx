@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import AdminHRMS from "./AdminHrms";
 
 import LetterTable from "./LetterTable";
+import LetterTableCompleted from "./LetterTableCompleted";
 
 const GenerationLetter = () => {
   const [page, setPage] = useState("Pending");
@@ -40,7 +41,7 @@ const GenerationLetter = () => {
             <LetterTable/>
           </div>
         )}
-        {page === "Completed" && <LetterTable/>}
+        {page === "Completed" && <LetterTableCompleted/>}
       </div>
       <div>
 

@@ -2,12 +2,18 @@ import React, { useState } from "react";
 import { BiEdit } from "react-icons/bi";
 import Table from "../../components/table/Table";
 import ReportDetailsList from "./ReportDetailsList";
+import { GrHelpBook } from "react-icons/gr";
 
 const LeaveReport = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [period, setPeriod] = useState("");
   const [includeEmployees, setIncludeEmployees] = useState("All");
-
+  const listItemStyle = {
+    listStyleType: "disc",
+    color: "black",
+    fontSize: "14px",
+    fontWeight: 500,
+  };
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
 
@@ -19,6 +25,17 @@ const LeaveReport = () => {
   };
 
   const columns = [
+   
+    {
+      name: "Sr.No.",
+      selector: (row) => row.Location,
+      sortable: true,
+    },
+    {
+      name: "Reports",
+      selector: (row) => row.Label,
+      sortable: true,
+    },
     {
       name: "view",
       cell: (row) => (
@@ -28,37 +45,12 @@ const LeaveReport = () => {
         </div>
       ),
     },
-    {
-      name: "Reports.",
-      selector: (row) => row.Location,
-      sortable: true,
-    },
-    {
-      name: "Bank",
-      selector: (row) => row.Label,
-      sortable: true,
-    },
-    {
-      name: "Third Party",
-      selector: (row) => row.City,
-      sortable: true,
-    },
-    {
-      name: "Combined ",
-      selector: (row) => row.State,
-      sortable: true,
-    },
-    {
-      name: "Status",
-      selector: (row) => row.status,
-      sortable: true,
-    },
   ];
 
   const data = [
     {
-      Name: "person 1",
-      Location: "Mumbai",
+      Label: "Leave Balances Report",
+      Location: "1",
       City: "Mumbai",
       State: "Maharashtra",
       Country: "India",
@@ -152,15 +144,60 @@ const LeaveReport = () => {
       <ReportDetailsList />
       <div className="w-full flex m-3 flex-col overflow-hidden">
         <div className="flex justify-between my-5">
-          <input
-            type="text"
-            placeholder="Search by name"
-            className="border border-gray-400 w-96 placeholder:text-sm rounded-lg p-2"
-          />
+         
         </div>
-
+<p className="font-bold mb-2">Leaves</p>
         <Table columns={columns} data={data} isPagination={true} />
       </div>
+      <div className='my-4 mx-2 w-fit'>
+        <div className="flex flex-col  shadow-custom-all-sides bg-gray-50 rounded-md text-wrap  gap-4 my-2 py-2 pl-5 pr-2 w-[18rem]">
+        <div className="flex  gap-4 font-medium">
+        <GrHelpBook size={20} />
+          <h2>Help Center</h2></div>
+    <div className=' '>
+              {/* <p className="font-medium">Help Center</p> */}
+              <ul style={listItemStyle} className="flex flex-col gap-2">
+                <li>
+                  <ul style={listItemStyle}>
+                    <li>
+                    Leave Balances: Tracks opening, accrued, used, lapsed, and current balance for each leave category.     </li>
+                  </ul>
+                </li>
+                <li>
+                  <ul style={listItemStyle}>
+                    <li>
+                    Leave Applications: Follows individual leave requests with status, days, reason, dates, and approval authority.    </li>
+                  </ul>
+                </li>
+                <li>
+                  <ul style={listItemStyle}>
+                    <li>
+                    Comp Off Balances: Monitors comp off usage with details like earned, used, lapsed and remaining balance.    </li>
+                  </ul>
+                </li>
+                <li>
+                  <ul style={listItemStyle}>
+                    <li>
+                    Comp Off Applications: Similar to leave applications, it tracks comp off requests with status, applied/used days, reason, dates, and approval authority.   </li>
+                  </ul>
+                </li>
+               
+                {/* <li>
+                  <p>
+                    <a href="#" className="text-blue-400">
+                      Click Here{" "}
+                    </a>
+These allowance can be with or without linked with attendance or Payable days          </p>
+                </li>
+                <li>
+                  <p>
+                    <a href="#" className="text-blue-400">
+                      Click Here{" "}
+                    </a>
+You can change allowances setting anytime but once payroll is processed won’t be deleted.        </p>
+                </li> */}
+              </ul>
+            </div></div></div>
     </section>
   );
 };

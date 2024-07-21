@@ -25,6 +25,17 @@ const OffBoarding = () => {
   };
 
   const columns1 = [
+   
+    {
+      name: "Sr. No",
+      selector: (row) => row.Location,
+      sortable: true,
+    },
+    {
+      name: "Report Name",
+      selector: (row) => row.Label,
+      sortable: true,
+    },
     {
       name: "view",
       cell: (row) => (
@@ -38,22 +49,12 @@ const OffBoarding = () => {
         </div>
       ),
     },
-    {
-      name: "Sr. No",
-      selector: (row) => row.Location,
-      sortable: true,
-    },
-    {
-      name: "Report Name",
-      selector: (row) => row.Label,
-      sortable: true,
-    },
   ];
 
   const data = [
     {
-      Name: "person 1",
-      Location: "Mumbai",
+      Label: "Offboarding Tasks Report",
+      Location: "1",
       City: "Mumbai",
       State: "Maharashtra",
       Country: "India",
@@ -167,11 +168,7 @@ const OffBoarding = () => {
 
       <div className="w-full flex m-3 flex-col overflow-hidden">
         <div className="flex justify-between my-5">
-          <input
-            type="text"
-            placeholder="Search by name"
-            className="border border-gray-400 w-96 placeholder:text-sm rounded-lg p-2"
-          />
+       
         </div>
 
         <Table columns={columns1} data={data} isPagination={true} />
