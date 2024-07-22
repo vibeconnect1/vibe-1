@@ -540,7 +540,6 @@ import LeaveLink from "./pages/AdminHrms/LeaveLink.jsx";
 import AddEmployeeDirectory from "./pages/AdminHrms/AddEmployeeDirectory.jsx";
 import EditCommunicationTemplate from "./pages/AdminHrms/EditCommunicationTemplate.jsx";
 
-
 import SectionsPersonal from "./pages/AdminHrms/SectionsPersonal.jsx";
 import SectionsEmployment from "./pages/AdminHrms/SectionEmployment.jsx";
 import SectionStatutory from "./pages/AdminHrms/SectionStatutory.jsx";
@@ -2100,11 +2099,11 @@ function App() {
               </ProtectedAdminRoutes>
             }
           />
-            <Route
+          <Route
             path="/admin/loi-proceed"
             element={
               <ProtectedAdminRoutes>
-                <LOIProceed/>
+                <LOIProceed />
               </ProtectedAdminRoutes>
             }
           />
@@ -2732,7 +2731,7 @@ function App() {
             }
           />
           <Route
-            path="/admin/add-loi"
+            path="/admin/purchase/add-loi"
             element={
               <ProtectedAdminRoutes>
                 <AddLoi />
@@ -3108,7 +3107,7 @@ function App() {
             }
           />
           <Route
-            path="/admin/add-material-pr"
+            path="/admin/purchase/add-material-pr"
             element={
               <ProtectedAdminRoutes>
                 <AddMatertialPR />
@@ -4966,10 +4965,12 @@ function App() {
             }
           />
 
-
           {/* newest admin hrms */}
-          <Route path="/admin/reports/" element={<Navigate to="/admin/reports/import-export"/> }replace/>
-
+          <Route
+            path="/admin/reports/"
+            element={<Navigate to="/admin/reports/import-export" />}
+            replace
+          />
 
           <Route
             path="/admin/reports/import-export"
@@ -5098,51 +5099,57 @@ function App() {
                 <OffBoarding />
               </ProtectedAdminRoutes>
             }
-            />
-        <Route path="/admin/hrms/ctc/" element={<Navigate to="/admin/hrms/ctc/CTC-Template"/> } replace/>
+          />
+          <Route
+            path="/admin/hrms/ctc/"
+            element={<Navigate to="/admin/hrms/ctc/CTC-Template" />}
+            replace
+          />
 
-
-           <Route
+          <Route
             path="/admin/hrms/ctc/CTC-Template"
             element={
               <ProtectedAdminRoutes>
-            <CTCTemplate/>
+                <CTCTemplate />
               </ProtectedAdminRoutes>
             }
           />
- <Route
+          <Route
             path="/admin/add-employee/basics"
             element={
               <ProtectedAdminRoutes>
-              <AddEmployee/>
+                <AddEmployee />
               </ProtectedAdminRoutes>
             }
           />
-  <Route
+          <Route
             path="/hrms/organization-tree-setting"
             element={
               <ProtectedAdminRoutes>
-          <OrganisationView1/>
+                <OrganisationView1 />
               </ProtectedAdminRoutes>
             }
           />
-   <Route path="/admin/add-employee/" element={<Navigate to="/admin/add-employee/onboarding"/> }replace/>
+          <Route
+            path="/admin/add-employee/"
+            element={<Navigate to="/admin/add-employee/onboarding" />}
+            replace
+          />
 
-
-           <Route
+          <Route
             path="/admin/add-employee/onboarding"
             element={
               <ProtectedAdminRoutes>
-         <EmpOnboarding/>
+                <EmpOnboarding />
               </ProtectedAdminRoutes>
             }
           />
-  {/* New HRMS changes */}
+          {/* New HRMS changes */}
           <Route
             path="/admin/employee-fields/other-details"
             element={
               <ProtectedAdminRoutes>
-               <OtherDetails/>
+                <OtherDetails />
               </ProtectedAdminRoutes>
             }
           />
@@ -5150,34 +5157,37 @@ function App() {
             path="/admin/generation-letter"
             element={
               <ProtectedAdminRoutes>
-                <AddGenerationLetter/>
+                <AddGenerationLetter />
               </ProtectedAdminRoutes>
             }
           />
-          <Route path="/hrms/separation/" element={<Navigate to="/hrms/separation/separation-request"/> }replace/>
+          <Route
+            path="/hrms/separation/"
+            element={<Navigate to="/hrms/separation/separation-request" />}
+            replace
+          />
 
-
-<Route
- path="/hrms/separation/separation-request"
- element={
-   <ProtectedAdminRoutes>
-<SeparationApplication/>
-   </ProtectedAdminRoutes>
- }
-/>
+          <Route
+            path="/hrms/separation/separation-request"
+            element={
+              <ProtectedAdminRoutes>
+                <SeparationApplication />
+              </ProtectedAdminRoutes>
+            }
+          />
           <Route
             path="/admin/organisation-view2"
             element={
               <ProtectedAdminRoutes>
-               <OrganisationView2/>
+                <OrganisationView2 />
               </ProtectedAdminRoutes>
             }
           />
-           <Route
+          <Route
             path="/admin/organisation-view3"
             element={
               <ProtectedAdminRoutes>
-               <OrganisationView3/>
+                <OrganisationView3 />
               </ProtectedAdminRoutes>
             }
           />
@@ -5185,31 +5195,31 @@ function App() {
             path="/admin/organisation-view1"
             element={
               <ProtectedAdminRoutes>
-               <OrganisationView1/>
+                <OrganisationView1 />
               </ProtectedAdminRoutes>
             }
           />
-           <Route
+          <Route
             path="/admin/company-profile/basic-link"
             element={
               <ProtectedAdminRoutes>
-               <BasicLink/>
+                <BasicLink />
               </ProtectedAdminRoutes>
             }
           />
-           <Route
+          <Route
             path="/admin/add-bank-account"
             element={
               <ProtectedAdminRoutes>
-              <AddBankAccount/>
+                <AddBankAccount />
               </ProtectedAdminRoutes>
             }
           />
-           <Route
+          <Route
             path="/admin/add-employee-directory"
             element={
               <ProtectedAdminRoutes>
-              <AddEmployeeDirectory/>
+                <AddEmployeeDirectory />
               </ProtectedAdminRoutes>
             }
           />
@@ -5217,15 +5227,15 @@ function App() {
             path="/leave-link"
             element={
               <ProtectedAdminRoutes>
-              <LeaveLink/>
+                <LeaveLink />
               </ProtectedAdminRoutes>
             }
           />
-           <Route
+          <Route
             path="/admin/edit-communication-templates/:id"
             element={
               <ProtectedAdminRoutes>
-              <EditCommunicationTemplate/>
+                <EditCommunicationTemplate />
               </ProtectedAdminRoutes>
             }
           />
@@ -5233,7 +5243,7 @@ function App() {
             path="/admin/edit-employee-directory"
             element={
               <ProtectedAdminRoutes>
-             <SectionsPersonal/>
+                <SectionsPersonal />
               </ProtectedAdminRoutes>
             }
           />
@@ -5241,7 +5251,7 @@ function App() {
             path="/hrms/employee-directory-Personal"
             element={
               <ProtectedAdminRoutes>
-              <SectionsPersonal/>
+                <SectionsPersonal />
               </ProtectedAdminRoutes>
             }
           />
@@ -5249,7 +5259,7 @@ function App() {
             path="/admin/employee-directory-Employment"
             element={
               <ProtectedAdminRoutes>
-             <SectionsEmployment/>
+                <SectionsEmployment />
               </ProtectedAdminRoutes>
             }
           />
@@ -5257,26 +5267,29 @@ function App() {
             path="/admin/employee-directory-Statutory"
             element={
               <ProtectedAdminRoutes>
-            <SectionStatutory/>
+                <SectionStatutory />
               </ProtectedAdminRoutes>
             }
           />
-       <Route path="/admin/employee-directory/" element={<Navigate to="/admin/employee-directory/Salary"/> }replace/>
-
+          <Route
+            path="/admin/employee-directory/"
+            element={<Navigate to="/admin/employee-directory/Salary" />}
+            replace
+          />
 
           <Route
             path="/admin/employee-directory/Salary"
             element={
               <ProtectedAdminRoutes>
-            <SectionSalary/>
+                <SectionSalary />
               </ProtectedAdminRoutes>
             }
           />
-           <Route
+          <Route
             path="/admin/employee-directory/add-new-ctc"
             element={
               <ProtectedAdminRoutes>
-          <AddNewCTC/>
+                <AddNewCTC />
               </ProtectedAdminRoutes>
             }
           />
@@ -5284,31 +5297,31 @@ function App() {
             path="/admin/employee-directory-Tax"
             element={
               <ProtectedAdminRoutes>
-           <SectionTax/>
+                <SectionTax />
               </ProtectedAdminRoutes>
             }
           />
-           <Route
+          <Route
             path="/admin/employee-directory-Documents"
             element={
               <ProtectedAdminRoutes>
-               <SectionDoc/>
+                <SectionDoc />
               </ProtectedAdminRoutes>
             }
           />
-           <Route
+          <Route
             path="/admin/employee-directory-LoansAdvances"
             element={
               <ProtectedAdminRoutes>
-               <SectionLoans/>
+                <SectionLoans />
               </ProtectedAdminRoutes>
             }
           />
-           <Route
+          <Route
             path="/admin/employee-directory-Transaction"
             element={
               <ProtectedAdminRoutes>
-               <SectionTransaction/>
+                <SectionTransaction />
               </ProtectedAdminRoutes>
             }
           />
@@ -5316,57 +5329,61 @@ function App() {
             path="/admin/employee-directory-Change-logs"
             element={
               <ProtectedAdminRoutes>
-               <SectionLog/>
+                <SectionLog />
               </ProtectedAdminRoutes>
             }
           />
-         
-          <Route path="/admin/hrms/alerts/" element={<Navigate to="/admin/hrms/alerts/pending-request"/> }replace/>
+
+          <Route
+            path="/admin/hrms/alerts/"
+            element={<Navigate to="/admin/hrms/alerts/pending-request" />}
+            replace
+          />
           <Route
             path="/admin/hrms/alerts/pending-request"
             element={
               <ProtectedAdminRoutes>
-          <PendingRequest/>
+                <PendingRequest />
               </ProtectedAdminRoutes>
             }
           />
-           <Route
+          <Route
             path="/admin/hrms/alerts/Setup-Issues"
             element={
               <ProtectedAdminRoutes>
-          <SetupIssues/>
+                <SetupIssues />
               </ProtectedAdminRoutes>
             }
           />
-           <Route
+          <Route
             path="/admin/hrms/alerts/Process-Alerts"
             element={
               <ProtectedAdminRoutes>
-          <ProcessAlert/>
+                <ProcessAlert />
               </ProtectedAdminRoutes>
             }
           />
-            <Route
+          <Route
             path="/admin/hrms/alerts/tasks"
             element={
               <ProtectedAdminRoutes>
-          <AlertTasks/>
+                <AlertTasks />
               </ProtectedAdminRoutes>
             }
           />
-           <Route
+          <Route
             path="/admin/tax-edit"
             element={
               <ProtectedAdminRoutes>
-          <Deductions80C/>
+                <Deductions80C />
               </ProtectedAdminRoutes>
             }
           />
-           <Route
+          <Route
             path="/Other-Exemptions"
             element={
               <ProtectedAdminRoutes>
-          <OtherExemptions/>
+                <OtherExemptions />
               </ProtectedAdminRoutes>
             }
           />
@@ -5374,23 +5391,23 @@ function App() {
             path="/Rent-Information"
             element={
               <ProtectedAdminRoutes>
-          <RentInformation/>
+                <RentInformation />
               </ProtectedAdminRoutes>
             }
           />
-           <Route
+          <Route
             path="/Prequisites Information"
             element={
               <ProtectedAdminRoutes>
-          <PrerequisiteInformation/>
+                <PrerequisiteInformation />
               </ProtectedAdminRoutes>
             }
           />
-           <Route
+          <Route
             path="/Other-Income-Info"
             element={
               <ProtectedAdminRoutes>
-          <OtherIncomeInfo/>
+                <OtherIncomeInfo />
               </ProtectedAdminRoutes>
             }
           />
@@ -5398,7 +5415,7 @@ function App() {
             path="/Housing-Loan-Info"
             element={
               <ProtectedAdminRoutes>
-         <HousingLoanInfo/>
+                <HousingLoanInfo />
               </ProtectedAdminRoutes>
             }
           />
@@ -5406,7 +5423,7 @@ function App() {
             path="/admin/hrms/view-records"
             element={
               <ProtectedAdminRoutes>
-         <ViewRecords/>
+                <ViewRecords />
               </ProtectedAdminRoutes>
             }
           />
@@ -5414,31 +5431,31 @@ function App() {
             path="/admin/add-employee/Employment"
             element={
               <ProtectedAdminRoutes>
-        <Employment/>
+                <Employment />
               </ProtectedAdminRoutes>
             }
           />
-           <Route
+          <Route
             path="/admin/add-employee/Statutory"
             element={
               <ProtectedAdminRoutes>
-                <Statutory/>
+                <Statutory />
               </ProtectedAdminRoutes>
             }
           />
-            <Route
+          <Route
             path="/admin/add-employee/Salary"
             element={
               <ProtectedAdminRoutes>
-               <OnboardingSalary/>
+                <OnboardingSalary />
               </ProtectedAdminRoutes>
             }
           />
-           <Route
+          <Route
             path="/admin/add-employee/Policies"
             element={
               <ProtectedAdminRoutes>
-               <Policies/>
+                <Policies />
               </ProtectedAdminRoutes>
             }
           />
@@ -5446,103 +5463,103 @@ function App() {
             path="/admin/add-employee/Invite"
             element={
               <ProtectedAdminRoutes>
-              <Invite/>
+                <Invite />
               </ProtectedAdminRoutes>
             }
           />
-           <Route
+          <Route
             path="/hrms/separation/separate-application/resignation"
             element={
               <ProtectedAdminRoutes>
-              <Resignation/>
+                <Resignation />
               </ProtectedAdminRoutes>
             }
           />
-           <Route
+          <Route
             path="/admin/edit-attendance-process/:id"
             element={
               <ProtectedAdminRoutes>
-              <EditAttendanceProcess/>
+                <EditAttendanceProcess />
               </ProtectedAdminRoutes>
             }
           />
-           <Route
+          <Route
             path="/admin/loan-app/add-loan"
             element={
               <ProtectedAdminRoutes>
-              <LoanAppAdd/>
+                <LoanAppAdd />
               </ProtectedAdminRoutes>
             }
           />
-            <Route
+          <Route
             path="/admin/hrms/ctc/ctc-template/General-Settings"
             element={
               <ProtectedAdminRoutes>
-             <CTCGeneralSetting/>
+                <CTCGeneralSetting />
               </ProtectedAdminRoutes>
             }
           />
-            <Route
+          <Route
             path="/admin/hrms/ctc/ctc-template/Component"
             element={
               <ProtectedAdminRoutes>
-             <ComponentCTCTemplate/>
+                <ComponentCTCTemplate />
               </ProtectedAdminRoutes>
             }
           />
-           <Route
+          <Route
             path="/admin/hrms/ctc/ctc-template/Restrictions"
             element={
               <ProtectedAdminRoutes>
-            <Restrictions/>
+                <Restrictions />
               </ProtectedAdminRoutes>
             }
           />
-           <Route
+          <Route
             path="/admin/details-payslip/:id"
             element={
               <ProtectedAdminRoutes>
-           <PayslipDetailsPage/>
+                <PayslipDetailsPage />
               </ProtectedAdminRoutes>
             }
           />
-           <Route
+          <Route
             path="/admin/details1-payslip"
             element={
               <ProtectedAdminRoutes>
-           <PayslipDetails1/>
+                <PayslipDetails1 />
               </ProtectedAdminRoutes>
             }
           />
-           <Route
+          <Route
             path="/admin/details2-payslip"
             element={
               <ProtectedAdminRoutes>
-           <PayslipDetails2/>
+                <PayslipDetails2 />
               </ProtectedAdminRoutes>
             }
           />
-           <Route
+          <Route
             path="/admin/details3-payslip"
             element={
               <ProtectedAdminRoutes>
-           <PayslipDetails3/>
+                <PayslipDetails3 />
               </ProtectedAdminRoutes>
             }
           />
-           <Route
+          <Route
             path="/admin/details4-payslip"
             element={
               <ProtectedAdminRoutes>
-           <PayslipDetails4/>
+                <PayslipDetails4 />
               </ProtectedAdminRoutes>
             }
           />
-           <Route
+          <Route
             path="/admin/reports/add-custom-report"
             element={
               <ProtectedAdminRoutes>
-           <AddCustomReport/>
+                <AddCustomReport />
               </ProtectedAdminRoutes>
             }
           />
@@ -5550,7 +5567,7 @@ function App() {
             path="/admin/add-communication-templates"
             element={
               <ProtectedAdminRoutes>
-          <AddCommunicationTemplate/>
+                <AddCommunicationTemplate />
               </ProtectedAdminRoutes>
             }
           />
@@ -5558,15 +5575,14 @@ function App() {
             path="/admin/edit-letter-templates"
             element={
               <ProtectedAdminRoutes>
-         <EditLetterTemplate/>
+                <EditLetterTemplate />
               </ProtectedAdminRoutes>
             }
           />
-         
-{/* New HRMS changes */}
+
+          {/* New HRMS changes */}
 
           {/* newest admin hrms */}
-
         </Routes>
         <Footer />
       </Router>

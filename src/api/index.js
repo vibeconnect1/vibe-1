@@ -735,7 +735,6 @@ export const getContactBookDetails = async (id) =>
   });
 
 // setup
-
 export const getCompanies = async () =>
   axiosInstance.get(`/sites/company_list.json`, {
     params: {

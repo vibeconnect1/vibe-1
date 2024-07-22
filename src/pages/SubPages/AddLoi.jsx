@@ -16,6 +16,7 @@ import LOIChanges from "./LOIChanges";
 import LOIProceed from "./LOIProceed";
 import LOIPOProceed from "./LOIPOProceed";
 import { useNavigate } from "react-router-dom";
+import Navbar from "../../components/Navbar";
 const AddLoi = () => {
   const [scheduleFor, setScheduleFor] = useState("PO");
   const themeColor = useSelector((state) => state.theme.color);
@@ -44,8 +45,7 @@ const AddLoi = () => {
       Total: "",
     },
   ]);
-  const [nextId, setNextId] = useState(2);
-  const [orderType, setOrderType] = useState("PO");
+
   const [vendors, setVendors] = useState([]);
   const [formData, setFormData] = useState({
     date: "",
@@ -78,7 +78,6 @@ const AddLoi = () => {
     const updatedActivities = [...activities];
     updatedActivities[index][name] = value;
 
-    // Perform calculations for the specific activity being updated
     const activity = updatedActivities[index];
     if (name === "quantity" || name === "rate") {
       const quantity = name === "quantity" ? value : activity.quantity;
@@ -216,18 +215,18 @@ const AddLoi = () => {
     sendData.append("loi_detail[created_by_id]", userId);
     sendData.append("loi_detail[loi_type]", formData.type);
     sendData.append("loi_detail[loi_date]", formData.date);
-    sendData.append("loi_detail[retention]", formData.retentionPercentage);
+    // sendData.append("loi_detail[retention]", formData.retentionPercentage);
     sendData.append("loi_detail[related_to]", formData.relatedTo);
-    sendData.append("loi_detail[tds]", formData.TDS);
-    sendData.append("loi_detail[qc]", formData.QC);
-    sendData.append("loi_detail[payment_tenure]", formData.paymentTenure);
+    // sendData.append("loi_detail[tds]", formData.TDS);
+    // sendData.append("loi_detail[qc]", formData.QC);
+    // sendData.append("loi_detail[payment_tenure]", formData.paymentTenure);
     sendData.append("loi_detail[vendor_id]", formData.vendor_id);
     sendData.append("loi_detail[billing_address_id]", formData.billingAddress);
     sendData.append(
       "loi_detail[delivery_address_id]",
       formData.deliveryAddress
     );
-    sendData.append("loi_detail[terms]", formData.terms);
+    // sendData.append("loi_detail[terms]", formData.terms);
 
     try {
       const resp = await postLOI(sendData);
@@ -237,21 +236,21 @@ const AddLoi = () => {
         const LOIData = new FormData();
         LOIData.append("loi_item[loi_detail_id]", loiDetailId);
         LOIData.append("loi_item[item_id]", item.inventory);
-        LOIData.append("loi_item[sac_code]", item.SACCode);
+        // LOIData.append("loi_item[sac_code]", item.SACCode);
         LOIData.append("loi_item[quantity]", item.quantity);
         LOIData.append("loi_item[standard_unit_id]", item.unit);
         LOIData.append("loi_item[rate]", item.rate);
-        LOIData.append("loi_item[csgt_rate]", item.cgstRate);
-        LOIData.append("loi_item[csgt_amt]", item.cgstAmount);
-        LOIData.append("loi_item[sgst_rate]", item.sgstRate);
-        LOIData.append("loi_item[sgst_amt]", item.sgstAmount);
-        LOIData.append("loi_item[igst_rate]", item.igstRate);
-        LOIData.append("loi_item[igst_amt]", item.igstAmount);
-        LOIData.append("loi_item[tcs_rate]", item.TCSRate);
-        LOIData.append("loi_item[tcs_amt]", item.TCSAmount);
-        LOIData.append("loi_item[tax_amt]", item.TaxAmount);
+        // LOIData.append("loi_item[csgt_rate]", item.cgstRate);
+        // LOIData.append("loi_item[csgt_amt]", item.cgstAmount);
+        // LOIData.append("loi_item[sgst_rate]", item.sgstRate);
+        // LOIData.append("loi_item[sgst_amt]", item.sgstAmount);
+        // LOIData.append("loi_item[igst_rate]", item.igstRate);
+        // LOIData.append("loi_item[igst_amt]", item.igstAmount);
+        // LOIData.append("loi_item[tcs_rate]", item.TCSRate);
+        // LOIData.append("loi_item[tcs_amt]", item.TCSAmount);
+        // LOIData.append("loi_item[tax_amt]", item.TaxAmount);
         LOIData.append("loi_item[amount]", item.Amount);
-        LOIData.append("loi_item[total_amount]", item.Total);
+        // LOIData.append("loi_item[total_amount]", item.Total);
 
         const loiItemResp = await postLOIItems(LOIData);
         console.log(loiItemResp);
@@ -265,7 +264,13 @@ const AddLoi = () => {
   };
 
   return (
-    <section>
+    <section
+    className="flex"
+   
+  >
+    <Navbar />
+
+    <div className="p-4 w-full my-2 flex md:mx-2 overflow-hidden flex-col">
       <div className="m-2">
         <h2
           style={{ background: themeColor }}
@@ -354,7 +359,7 @@ const AddLoi = () => {
                     placeholder="Related To"
                   />
                 </div>
-                <div className="col-span-1">
+                {/* <div className="col-span-1">
                   <label
                     className="block text-gray-700 font-bold mb-2"
                     htmlFor="retention"
@@ -370,8 +375,8 @@ const AddLoi = () => {
                     onChange={handleChange}
                     placeholder="Retention(%)"
                   />
-                </div>
-                <div className="col-span-1">
+                </div> */}
+                {/* <div className="col-span-1">
                   <label
                     className="block text-gray-700 font-bold mb-2"
                     htmlFor="tds"
@@ -387,8 +392,8 @@ const AddLoi = () => {
                     onChange={handleChange}
                     placeholder="TDS(%)"
                   />
-                </div>
-                <div className="col-span-1">
+                </div> */}
+                {/* <div className="col-span-1">
                   <label
                     className="block text-gray-700 font-bold mb-2"
                     htmlFor="qc"
@@ -404,8 +409,8 @@ const AddLoi = () => {
                     onChange={handleChange}
                     placeholder="QC(%)"
                   />
-                </div>
-                <div className="col-span-1">
+                </div> */}
+                {/* <div className="col-span-1">
                   <label
                     className="block text-gray-700 font-bold mb-2"
                     htmlFor="payment"
@@ -421,8 +426,8 @@ const AddLoi = () => {
                     onChange={handleChange}
                     placeholder="Payment Tenure"
                   />
-                </div>
-                <div className="col-span-1">
+                </div> */}
+                {/* <div className="col-span-1">
                   <label
                     className="block text-gray-700 font-bold mb-2"
                     htmlFor="advance"
@@ -438,7 +443,7 @@ const AddLoi = () => {
                     onChange={handleChange}
                     placeholder="Advance Amount"
                   />
-                </div>
+                </div> */}
                 <div className="col-span-1">
                   <label className="block text-gray-700 font-bold mb-2">
                     Select Supplier
@@ -501,7 +506,7 @@ const AddLoi = () => {
                   </select>
                 </div>
               )}
-              <div className="w-full ">
+              {/* <div className="w-full ">
                 <label
                   className="block text-gray-700 font-bold mb-2"
                   htmlFor="terms"
@@ -518,13 +523,8 @@ const AddLoi = () => {
                   onChange={handleChange}
                   placeholder=""
                 />
-              </div>
+              </div> */}
             </div>
-            <h3 className="border-b text-center text-xl border-black mb-6 font-bold">
-              ATTACHMENTS
-            </h3>
-            {/* <input type="file" /> */}
-            <FileInputBox />
           </div>
 
           {scheduleFor === "PO" && (
@@ -556,7 +556,7 @@ const AddLoi = () => {
                         ))}
                       </select>
                     </div>
-                    <div className="col-span-1">
+                    {/* <div className="col-span-1">
                       <label
                         className="block text-gray-700 font-bold mb-2"
                         htmlFor={`sub-activity-${index}`}
@@ -571,7 +571,7 @@ const AddLoi = () => {
                         name="SACCode"
                         onChange={(e) => handleInputChange(e, index)}
                       />
-                    </div>
+                    </div> */}
                     <div className="col-span-1">
                       <label
                         className="block text-gray-700 font-bold mb-2"
@@ -611,36 +611,6 @@ const AddLoi = () => {
                             {unit.unit_name}
                           </option>
                         ))}
-                        {/* <option value="2">Ea</option>
-                        <option value="Piece">Piece</option>
-                        <option value="Kg">KG</option>
-                        <option value="Litre">Litre</option>
-                        <option value="Box">Box</option>
-                        <option value="Bottle">Bottle</option>
-                        <option value="5">Packet</option>
-                        <option value="Bag">Bag</option>
-                        <option value="Qty">Qty</option>
-                        <option value="Meter">Meter</option>
-                        <option value="Sq.Mtr">Sq.Mtr</option>
-                        <option value="Cu.Mtr">Cu.Mtr</option>
-                        <option value="Feet">Feet</option>
-                        <option value="Sq.Ft">Sq.Ft</option>
-                        <option value="Cu.Ft">Cu.Ft</option>
-                        <option value="Inches">Inches</option>
-                        <option value="Sq.Inches">Sq.Inches</option>
-                        <option value="Nos">Nos</option>
-                        <option value="Pcs">Pcs</option>
-                        <option value="Mm">Mm</option>
-                        <option value="Size">Size</option>
-                        <option value="Yards">Yards</option>
-                        <option value="Sq.Yards">Sq.Yards</option>
-                        <option value="Rs">Rs</option>
-                        <option value="Acre">Acre</option>
-                        <option value="Kilometer">Kilometer</option>
-                        <option value="Miles">Miles</option>
-                        <option value="Grams">Grams</option>
-                        <option value="Brass">Brass</option>
-                        <option value="Tonnes">Tonnes</option> */}
                       </select>
                     </div>
                     <div className="col-span-1">
@@ -660,7 +630,7 @@ const AddLoi = () => {
                         onChange={(e) => handleInputChange(e, index)}
                       />
                     </div>
-                    <div className="col-span-1">
+                    {/* <div className="col-span-1">
                       <label
                         className="block text-gray-700 font-bold mb-2"
                         htmlFor={`sub-activity-${index}`}
@@ -688,8 +658,8 @@ const AddLoi = () => {
                           onChange={(e) => handleInputChange(e, index)}
                         />
                       </div>
-                    </div>
-
+                    </div> */}
+                    {/* 
                     <div className="col-span-1">
                       <label
                         className="block text-gray-700 font-bold mb-2"
@@ -718,9 +688,9 @@ const AddLoi = () => {
                           onChange={(e) => handleInputChange(e, index)}
                         />
                       </div>
-                    </div>
+                    </div> */}
 
-                    <div className="col-span-1">
+                    {/* <div className="col-span-1">
                       <label
                         className="block text-gray-700 font-bold mb-2"
                         htmlFor={`sub-activity-${index}`}
@@ -748,9 +718,9 @@ const AddLoi = () => {
                           onChange={(e) => handleInputChange(e, index)}
                         />
                       </div>
-                    </div>
+                    </div> */}
 
-                    <div className="col-span-1">
+                    {/* <div className="col-span-1">
                       <label
                         className="block text-gray-700 font-bold mb-2"
                         htmlFor={`sub-activity-${index}`}
@@ -778,8 +748,8 @@ const AddLoi = () => {
                           onChange={(e) => handleInputChange(e, index)}
                         />
                       </div>
-                    </div>
-
+                    </div> */}
+                    {/* 
                     <div className="col-span-1">
                       <label
                         className="block text-gray-700 font-bold mb-2"
@@ -796,7 +766,7 @@ const AddLoi = () => {
                         value={activity.TaxAmount}
                         onChange={(e) => handleInputChange(e, index)}
                       />
-                    </div>
+                    </div> */}
                     <div className="col-span-1">
                       <label
                         className="block text-gray-700 font-bold mb-2"
@@ -814,7 +784,7 @@ const AddLoi = () => {
                         onChange={(e) => handleInputChange(e, index)}
                       />
                     </div>
-                    <div className="col-span-1">
+                    {/* <div className="col-span-1">
                       <label
                         className="block text-gray-700 font-bold mb-2"
                         htmlFor={`sub-activity-${index}`}
@@ -830,7 +800,7 @@ const AddLoi = () => {
                         value={activity.Total}
                         onChange={(e) => handleInputChange(e, index)}
                       />
-                    </div>
+                    </div> */}
                   </div>
 
                   <button
@@ -851,6 +821,11 @@ const AddLoi = () => {
                   Add Inventory
                 </button>
               </div>
+              <h3 className="border-b text-center text-xl border-black mb-6 font-bold">
+                ATTACHMENTS
+              </h3>
+              {/* <input type="file" /> */}
+              <FileInputBox />
               <div className="sm:flex justify-center grid gap-2 my-5 ">
                 <button
                   onClick={() => setIsModalOpen(true)}
@@ -860,7 +835,10 @@ const AddLoi = () => {
                   Preview
                 </button>
                 {isModalOpen && (
-                  <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex z-10 justify-center items-center">
+                  <div
+                    className="fixed inset-0 bg-gray-600 bg-opacity-50 flex z-10 justify-center items-center"
+                    onClick={() => setIsModalOpen(false)}
+                  >
                     <div className="bg-white p-5 max-h-[90%] overflow-y-auto hide-scrollbar  rounded-md shadow-md w-2/3">
                       <LOIPOProceed />
 
@@ -887,6 +865,7 @@ const AddLoi = () => {
           )}
           {scheduleFor === "WO" && <LOIChanges />}
         </div>
+      </div>
       </div>
     </section>
   );

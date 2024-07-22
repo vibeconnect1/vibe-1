@@ -10,6 +10,7 @@ import { IoClose } from "react-icons/io5";
 import { useSelector } from "react-redux";
 import Table from "../../components/table/Table";
 import { getLOI } from "../../api";
+import { Switch } from "antd";
 
 const LOIPOTable = () => {
   const [selectedStatus, setSelectedStatus] = useState("all");
@@ -45,9 +46,9 @@ const LOIPOTable = () => {
           <Link to={`/admin/loi-po-detail/${row.id}`}>
             <BsEye size={15} />
           </Link>
-          <Link to={`/admin/edit-Loi-po/${row.id}`}>
+          {/* <Link to={`/admin/edit-Loi-po/${row.id}`}>
             <BiEdit size={15} />
-          </Link>
+          </Link> */}
         </div>
       ),
     },
@@ -59,7 +60,7 @@ const LOIPOTable = () => {
 
     {
       name: "Active/Inactive",
-      selector: (row) => row.active,
+      selector: (row) => <Switch/>,
       sortable: true,
     },
 
@@ -93,6 +94,8 @@ const LOIPOTable = () => {
     },
   ];
 
+  document.title=`Purchase - Vibe Connect` 
+
   return (
     <section className="flex">
       <div className=" w-full flex mx-3 flex-col overflow-hidden">
@@ -107,7 +110,7 @@ const LOIPOTable = () => {
           <div className="flex items-center gap-2">
             <Link
               style={{ background: themeColor }}
-              to={"/admin/add-loi"}
+              to={"/admin/purchase/add-loi"}
               className=" font-semibold text-white  transition-all  p-2 px-4 rounded-md  cursor-pointer text-center flex items-center gap-2 justify-center"
             >
               <PiPlusCircle size={20} />

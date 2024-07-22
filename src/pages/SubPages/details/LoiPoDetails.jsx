@@ -56,29 +56,29 @@ const LOIPoDetails = () => {
   const column = [
     { name: "Sr.No", selector: (row, index) => index + 1, sortable: true },
     { name: "Item Details", selector: (row) => row.item_name, sortable: true },
-    { name: "SAC/HSN Code", selector: (row) => row.sac_code, sortable: true },
+    // { name: "SAC/HSN Code", selector: (row) => row.sac_code, sortable: true },
 
     { name: "Quantity", selector: (row) => row.quantity, sortable: true },
     { name: "Unit", selector: (row) => row.standard_unit_name, sortable: true },
     { name: "Rate", selector: (row) => row.rate, sortable: true },
-    { name: "CGST(%)", selector: (row) => row.csgt_rate, sortable: true },
-    { name: "CGST AMT", selector: (row) => row.csgt_amt, sortable: true },
-    {
-      name: "SGST(%)",
-      selector: (row) => row.sgst_rate,
-      sortable: true,
-    },
-    {
-      name: "SGST AMT",
-      selector: (row) => row.sgst_amt,
-      sortable: true,
-    },
-    { name: "IGST(%)", selector: (row) => row.igst_rate, sortable: true },
-    { name: "IGST AMT", selector: (row) => row.igst_amt, sortable: true },
-    { name: "TCS(%)", selector: (row) => row.tcs_rate, sortable: true },
-    { name: "TCS AMT", selector: (row) => row.tcs_amt, sortable: true },
+    // { name: "CGST(%)", selector: (row) => row.csgt_rate, sortable: true },
+    // { name: "CGST AMT", selector: (row) => row.csgt_amt, sortable: true },
+    // {
+    //   name: "SGST(%)",
+    //   selector: (row) => row.sgst_rate,
+    //   sortable: true,
+    // },
+    // {
+    //   name: "SGST AMT",
+    //   selector: (row) => row.sgst_amt,
+    //   sortable: true,
+    // },
+    // { name: "IGST(%)", selector: (row) => row.igst_rate, sortable: true },
+    // { name: "IGST AMT", selector: (row) => row.igst_amt, sortable: true },
+    // { name: "TCS(%)", selector: (row) => row.tcs_rate, sortable: true },
+    // { name: "TCS AMT", selector: (row) => row.tcs_amt, sortable: true },
 
-    { name: "Tax Amount", selector: (row) => row.tax_amt, sortable: true },
+    // { name: "Tax Amount", selector: (row) => row.tax_amt, sortable: true },
     {
       name: "Total Amount",
       selector: (row) => row.amount,
@@ -110,6 +110,18 @@ const LOIPoDetails = () => {
               <p className="text-sm font-normal">{details.related_to}</p>
             </div>
             <div className="grid grid-cols-2 items-center ">
+              <p>Billing Address : </p>
+              <p className="text-sm font-normal">
+                {details.billing_address_name}
+              </p>
+            </div>
+            <div className="grid grid-cols-2 items-center ">
+              <p>Delivery Address : </p>
+              <p className="text-sm font-normal">
+                {details.delivery_address_name}
+              </p>
+            </div>
+            {/* <div className="grid grid-cols-2 items-center ">
               <p>Supplier : </p>
               <p className="text-sm font-normal">{details.vendor_name}</p>
             </div>
@@ -131,16 +143,13 @@ const LOIPoDetails = () => {
             </div>
             <div className="grid grid-cols-2 items-center ">
               <p>Advance Amount : </p>
-              <p className="text-sm font-normal">
-                {" "}
-                
-              </p>
-            </div>
+              <p className="text-sm font-normal"> </p>
+            </div> */}
           </div>
           <div className="border-t border-black"></div>
           <Table columns={column} data={loiItems} pagination={false} />
 
-          <div className="my-2 md:px-2 text-sm items-center font-medium grid gap-1 ">
+          {/* <div className="my-2 md:px-2 text-sm items-center font-medium grid gap-1 ">
             <div className="flex justify-between items-center">
               <p>Net Amount(INR) :</p>
               <p className="text-sm font-medium ">{totalAmount}</p>
@@ -160,9 +169,9 @@ const LOIPoDetails = () => {
             <div className="md:flex  gap-2 items-center">
               <p>Amount In Words :</p>
               <p className="text-sm font-medium">{netAmtInWords}</p>
-            </div>
-          </div>
-          <div className="border-t py-3 border-black"></div>
+            </div> */}
+        </div>
+        {/* <div className="border-t py-3 border-black"></div>
           <div className="">
             <p className="text-sm font-bold">Notes:</p>
             <p className="bg-gray-100 p-2 rounded-md">a</p>
@@ -170,21 +179,31 @@ const LOIPoDetails = () => {
           <div className="">
             <p className="text-sm font-bold">Terms & Conditions:</p>
             <p className="bg-gray-100 p-2 rounded-md">{details.terms}</p>
-          </div>
-          <div className="border-t py-3 border-black"></div>
-          <p className="text-xg font-semibold mx-5">
-            For  
+          </div> */}
+        {/* <div className="border-t py-3 border-black"></div> */}
+        {/* <p className="text-xg font-semibold mx-5">For</p> */}
+        <div className=" py-5 mx-5 border-black">
+          <p className="text-md font-semibold border-b border-black">
+            Attachments
           </p>
-          <div className="border-t py-3 border-black">
+          <p className="text-sm"></p>
+        </div>
+        <div className=" py-3 flex flex-col items-end justify-center border-black">
+          <div className="flex flex-col justify-center">
+            {/* <p className="text-center">
+              {details.created_by_name.firstname
+                ? details.created_by_name.firstname
+                : ""}{" "}
+              {details.created_by_name.lastname
+                ? details.created_by_name.lastname
+                : ""}
+            </p> */}
             <p className="text-xg font-semibold mx-5 ">Authorised Signatory</p>
           </div>
         </div>
-
-        <div className="border-t py-5 mx-5 border-black">
-          <p className="text-md font-semibold border-b border-black">Attachments</p>
-          <p className="text-sm"></p>
-        </div>
       </div>
+
+      {/* </div> */}
     </section>
   );
 };

@@ -142,12 +142,12 @@ const LOIChanges = () => {
                   className="block text-gray-700 font-bold mb-2"
                   htmlFor={`activity-${index}`}
                 >
-                  Product Description
+                  Service Description
                 </label>
 
                 <input
                   type="text"
-                  placeholder="Product Description"
+                  placeholder="Service Description"
                   className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 />
               </div>

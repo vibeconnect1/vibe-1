@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Navbar from "../components/Navbar";
 import Table from "../components/table/Table";
 import { ImEye } from "react-icons/im";
@@ -10,13 +10,35 @@ import { PiPlusCircle } from "react-icons/pi";
 import { TiTick } from "react-icons/ti";
 import { IoClose } from "react-icons/io5";
 import { Link } from "react-router-dom";
+import { getLOI } from "../api";
+import { Switch } from "antd";
 //import Modal from "../containers/modals/Modal";
 const MaterialPR = () => {
   const themeColor = useSelector((state) => state.theme.color);
   const [isModalOpen, setIsModalOpen] = useState(false);
-
+  const [loi, setLoi] = useState([]);
   const handleButtonClick = () => {
     setIsModalOpen(!isModalOpen);
+  };
+
+  useEffect(() => {
+    const fetchLoi = async () => {
+      try {
+        const loiResp = await getLOI();
+        const sortedLoi = loiResp.data.sort((a, b) => {
+          return new Date(b.created_at) - new Date(a.created_at);
+        });
+        setLoi(sortedLoi);
+       
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchLoi();
+  }, []);
+  const dateString = (dateString) => {
+    const date = new Date(dateString);
+    return date.toLocaleDateString();
   };
 
   const closeModal = () => {
@@ -38,42 +60,38 @@ const MaterialPR = () => {
     },
 
     { name: "ID", selector: (row) => row.id, sortable: true },
-    { name: "PR No.", selector: (row) => row.pr, sortable: true },
+    { name: "PR No.", selector: (row) => row.pr_no, sortable: true },
     { name: "Ref No.", selector: (row) => row.ref, sortable: true },
-    { name: "Supplier Name", selector: (row) => row.type, sortable: true },
-    { name: "Created By", selector: (row) => row.for, sortable: true },
+    { name: "Supplier Name", selector: (row) => row.vendor_name, sortable: true },
+    {
+      name: "Created By",
+      selector: (row) =>
+        `${row.created_by_name.firstname} ${row.created_by_name.lastname}`,
+      sortable: true,
+    },
 
-    { name: "Created On", selector: (row) => row.createby, sortable: true },
+    { name: "Created On", selector: (row) => dateString(row.created_at), sortable: true },
     { name: "Last Approved By", selector: (row) => row.desg, sortable: true },
     { name: "Approved Status", selector: (row) => row.status, sortable: true },
-    { name: "PR Amount", selector: (row) => row.location, sortable: true },
-    { name: "Active/Inactive", selector: (row) => row.active, sortable: true },
-  ];
-  const data = [
     {
-      id: 1,
-      pr: "789",
-      ref: "45",
-      type: "Classic Enterprises",
-      for: "test123",
-      createby: "MP",
-      desg: "ajd",
-      status: "Draft",
-      location: "Mumbai",
-      active: <input type="checkbox" />,
-    },
-  ];
-
-  const customStyle = {
-    headRow: {
-      style: {
-        backgroundColor: themeColor,
-        color: "white",
-
-        fontSize: "14px",
+      name: "PR Amount",
+      selector: (row) => {
+        
+        const totalAmount = row.loi_items
+          ? row.loi_items.reduce((sum, item) => sum + (Number(item.total_amount) || 0), 0)
+          : " ";
+          return totalAmount === 0 ? " " : totalAmount;
       },
+      sortable: true,
     },
-  };
+    { name: "Active/Inactive", selector: (row) => 
+      <Switch/>,
+      sortable: true },
+    
+  ];
+  
+
+  
   document.title = `Permit - Vibe Connect`;
   return (
     <section className="flex ">
@@ -85,13 +103,13 @@ const MaterialPR = () => {
             <div className="flex justify-between gap-2">
               <input
                 type="text"
-                placeholder="Search By Name"
+                placeholder="Search"
                 className="border-2 p-2 w-96 border-gray-300 rounded-lg"
               />
               <Link
-                to={"/admin/add-material-pr"}
-                style={{background: themeColor}}
-                className="border-2 font-semibold  hover:text-white transition-all  p-2 rounded-md  cursor-pointer text-center flex items-center gap-2 justify-center"
+                to={"/admin/purchase/add-material-pr"}
+                style={{ background: themeColor }}
+                className=" font-semibold  hover:text-white transition-all text-white p-2 rounded-md  cursor-pointer text-center flex items-center gap-2 justify-center"
                 // style={{ height: '1cm' }}
               >
                 <PiPlusCircle size={20} />
@@ -165,15 +183,8 @@ const MaterialPR = () => {
 
           <Table
             columns={column}
-            data={data}
-            //   customStyles={customStyle}
-            responsive
-            fixedHeader
-            fixedHeaderScrollHeight="500px"
-            pagination
-            selectableRowsHighlight
-            highlightOnHover
-            omitColumn={column}
+            data={loi}
+            
           />
         </div>
       </div>
