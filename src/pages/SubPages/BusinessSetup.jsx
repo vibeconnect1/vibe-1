@@ -11,7 +11,9 @@ import { BsEye } from "react-icons/bs";
 import {
   getGenericCategory,
   getGenericCategoryDetails,
+  getGenericSubCategory,
   postGenericCategory,
+  postGenericSubCategory,
 } from "../../api";
 import ModalWrapper from "../../containers/modals/ModalWrapper";
 import { getItemInLocalStorage } from "../../utils/localStorage";
@@ -30,7 +32,7 @@ const BusinessSetup = () => {
   const [catAdded, setCatAdded] = useState(false);
   const [selectedCatId, setSelectedCatId] = useState("");
   const [subCategory, setSubCategory] = useState("");
-
+  console.log(selectedCatId);
   useEffect(() => {
     const fetchCategories = async () => {
       const categoryResp = await getGenericCategory();
@@ -40,18 +42,28 @@ const BusinessSetup = () => {
       console.log(filteredCategory);
       setCategories(filteredCategory);
 
-      const flattened = filteredCategory.flatMap((category) =>
-        category.generic_sub_infos.map((subCategory) => ({
-          categoryId: category.id,
-          categoryName: category.name,
-          subCategoryId: subCategory.id,
-          subCategoryName: subCategory.name,
-        }))
-      );
-      setSubCategories(flattened);
-      console.log(flattened);
+      // const flattened = filteredCategory.flatMap((category) =>
+      //   category.generic_sub_infos.map((subCategory) => ({
+      //     categoryId: category.id,
+      //     categoryName: category.name,
+      //     subCategoryId: subCategory.id,
+      //     subCategoryName: subCategory.name,
+      //   }))
+      // );
+      // setSubCategories(flattened);
+      // console.log(flattened);
+    };
+    const fetchGenericSubCat = async () => {
+      try {
+        const subResp = await getGenericSubCategory();
+        console.log(subResp);
+        setSubCategories(subResp.data);
+      } catch (error) {
+        console.log(error);
+      }
     };
     fetchCategories();
+    fetchGenericSubCat();
   }, [catModal, catAdded]);
   const companyID = getItemInLocalStorage("COMPANYID");
   const siteId = getItemInLocalStorage("SITEID");
@@ -74,21 +86,20 @@ const BusinessSetup = () => {
       console.log(error);
     }
   };
-  const HandleAddSubCategory = async() => {
+  const HandleAddSubCategory = async () => {
     if (!subCategory) {
       return toast.error("Please Enter a Sub Category");
     }
     const formData = new FormData();
-    formData.append("generic_info[company_id]", companyID);
-    formData.append("generic_info[site_id]", siteId);
-    formData.append("generic_info[info_type]", "contact");
-    formData.append("generic_info[generic_sub_infos_attributes]", )
+    formData.append("generic_sub_info[generic_info_id]", selectedCatId);
+    formData.append("generic_sub_info[name]", subCategory);
+
     try {
-      const res = await postGenericCategory(formData);
+      const res = await postGenericSubCategory(formData);
       setCatAdded(true);
-      setCategory("");
+      setSubCategory("");
       window.location.reload();
-      toast.success("Category Added Successfully");
+      toast.success("Sub Category Added Successfully");
     } catch (error) {
       console.log(error);
     }
@@ -114,10 +125,14 @@ const BusinessSetup = () => {
   ];
   const subColumn = [
     { name: "Sr. no.", selector: (row, index) => index + 1, sortable: true },
-    { name: "Category", selector: (row) => row.categoryId, sortable: true },
+    {
+      name: "Category",
+      selector: (row) => row.generic_info_name,
+      sortable: true,
+    },
     {
       name: "Sub Category",
-      selector: (row) => row.subCategoryName,
+      selector: (row) => row.name,
       sortable: true,
     },
     {

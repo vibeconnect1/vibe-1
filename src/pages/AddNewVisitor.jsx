@@ -121,7 +121,6 @@ const AddNewVisitor = () => {
     }
   };
 
-
   const themeColor = useSelector((state) => state.theme.color);
 
   const handleChange = (e) => {
@@ -134,7 +133,7 @@ const AddNewVisitor = () => {
     setShowWebcam(false);
     setCapturedImage(imageSrc);
   }, [webcamRef]);
-
+ 
   const navigate = useNavigate();
   const createNewVisitor = async () => {
     if (
@@ -161,6 +160,7 @@ const AddNewVisitor = () => {
     postData.append("visitor[goods_inwards]", formData.goodsInward);
     postData.append("visitor[visit_type]", selectedVisitorType);
     postData.append("visitor[frequency]", selectedFrequency);
+    const blob = await fetch(capturedImage).then((res) => res.blob());
     selectedWeekdays.forEach((day) => {
       postData.append("visitor[working_days][]", day);
     });
@@ -203,34 +203,40 @@ const AddNewVisitor = () => {
         </h2>
         <br />
         <div className="flex justify-center">
-        {!showWebcam ? (
-        <button onClick={handleOpenCamera}>
-          <img
-            src={capturedImage || image}
-            alt="Uploaded"
-            className="border-4 border-gray-300 rounded-full w-40 h-40 object-cover"
-          />
-        </button>
-      ) : (
-        <div>
-          <div className="rounded-full">
-            <Webcam
-              audio={false}
-              ref={webcamRef}
-              screenshotFormat="image/jpeg"
-              className="rounded-full w-60 h-60 object-cover"
-            />
-          </div>
-          <div className="flex gap-2 justify-end my-2 items-center">
-            <button onClick={capture} className="bg-green-400 rounded-md text-white p-1 px-4">
-              Capture
+          {!showWebcam ? (
+            <button onClick={handleOpenCamera}>
+              <img
+                src={capturedImage || image}
+                alt="Uploaded"
+                className="border-4 border-gray-300 rounded-full w-40 h-40 object-cover"
+              />
             </button>
-            <button onClick={handleCloseCamera} className="bg-red-400 rounded-md text-white p-1 px-4">
-              Close
-            </button>
-          </div>
-        </div>
-      )}
+          ) : (
+            <div>
+              <div className="rounded-full">
+                <Webcam
+                  audio={false}
+                  ref={webcamRef}
+                  screenshotFormat="image/jpeg"
+                  className="rounded-full w-60 h-60 object-cover"
+                />
+              </div>
+              <div className="flex gap-2 justify-center my-2 items-center">
+                <button
+                  onClick={capture}
+                  className="bg-green-400 rounded-md text-white p-1 px-4"
+                >
+                  Capture
+                </button>
+                <button
+                  onClick={handleCloseCamera}
+                  className="bg-red-400 rounded-md text-white p-1 px-4"
+                >
+                  Close
+                </button>
+              </div>
+            </div>
+          )}
         </div>
 
         <div className="flex md:flex-row flex-col  my-5 gap-10">

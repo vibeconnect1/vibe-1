@@ -10,6 +10,7 @@ import { FaPencilAlt, FaTrashAlt } from "react-icons/fa";
 import BoardDeleteModal from "../../../containers/modals/BoardDeleteModal";
 import BoardDueDateModal from "../../../containers/modals/BoardDueDateModal";
 import { useNavigate } from "react-router-dom";
+import { capitalize } from "../../../utils/capitalize";
 
 const ProjectBoard = () => {
   const [isLoadingProjectList, setIsLoadingProjectList] = useState(true);
@@ -31,7 +32,7 @@ const ProjectBoard = () => {
     setIsModalProjectDateOpen(false);
     setEditingProjectId(null);
     setIsEditingDate(false);
-  }; 
+  };
   var count = 0;
   const user_id = getItemInLocalStorage("VIBEUSERID");
   useEffect(() => {
@@ -127,7 +128,6 @@ const ProjectBoard = () => {
     e.stopPropagation();
     setDueDateUpdate(e.target.value);
   };
- 
 
   const handleUpdateDate = (projectId, e) => {
     e.stopPropagation();
@@ -139,7 +139,6 @@ const ProjectBoard = () => {
     // alert(projectId)
     setEditingProjectId(projectId);
     setDueDateUpdate(projectDate);
-   
 
     const formData = new FormData();
     formData.append("user_id", user_id);
@@ -151,7 +150,7 @@ const ProjectBoard = () => {
       console.log(response);
       if (response.success) {
         console.log("Success");
-         goToProject(board_id_for_Temp);
+        goToProject(board_id_for_Temp);
         GetBoards();
         setEditingProjectId(null);
         closeProjectDateModal();
@@ -159,15 +158,14 @@ const ProjectBoard = () => {
         console.log("unable to update");
       }
     } catch (error) {
-        console.log(error)
+      console.log(error);
     }
   };
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const goToProject = (id) => {
     // if (!isEditingDate) {
-      navigate(`/admin/project-management/customBoard/?id=${id}`);
+    navigate(`/admin/project-management/customBoard/?id=${id}`);
     // }
-    
   };
 
   return (
@@ -187,13 +185,12 @@ const ProjectBoard = () => {
           </center>
         </div>
       ) : projectList.length > 0 ? (
-        <>
+        <div className="grid md:grid-cols-3 gap-2">
           {projectList.map((project) => {
             console.log(project);
             return (
               <div
-                className="my-2 bg-white shadow-custom-all-sides rounded-md p-2 hover:bg-gray-100 transition-all duration-300 cursor-pointer"
-                
+                className="my-2 bg-white shadow-custom-all-sides rounded-lg p-2 hover:bg-gray-100 transition-all duration-300 cursor-pointer"
                 key={project.id}
                 onClick={() => goToProject(project.id)}
               >
@@ -205,57 +202,6 @@ const ProjectBoard = () => {
                         <div className="">
                           <b>{project.board_name}</b>{" "}
                         </div>
-
-                        {project.created_by.user_id.toString() ===
-                        user_id.toString() ? (
-                          <div
-                            className="flex text-sm gap-2 items-center "
-                            // style={{ fontSize: 14, color: "#000" }}
-                          >
-                            <p className="font-medium">Project Timeline : </p>
-                            {editingProjectId === project.id ? (
-                              <>
-                                {project.due_date}
-                              {isModalOpenProjectDate && <BoardDueDateModal closeProjectDateModal={closeProjectDateModal} dueDateUpdate={dueDateUpdate} handleDueDateChangeUpdate={handleDueDateChangeUpdate} handleUpdateDate={handleUpdateDate}  project={project}/>}
-                              </>
-                            ) : (
-                              <div className="flex gap-2 items-center">
-                                {" "}
-                                {project.due_date || (
-                                  <span style={{ color: "gray" }}>
-                                    {" "}
-                                    No Timeline
-                                  </span>
-                                )}
-                                <a
-                                  href="#"
-                                  onClick={(e) => {
-                                    // e.preventDefault();
-                                    e.stopPropagation();
-                                    handleEditDateClick(
-                                      project.id,
-                                      project.due_date,
-                                      e
-                                    );
-                                  }}
-                                  style={{ color: "gray" }}
-                                >
-                                  <FaPencilAlt style={{ marginBottom: 4 }} />
-                                </a>
-                              </div>
-                            )}
-                          </div>
-                        ) : (
-                          <>
-                            <div
-                              className="flex items-center gap-2"
-                              style={{ fontSize: 14, color: "#000" }}
-                            >
-                              <p className="font-medium">Project Timeline : </p>
-                              {project.due_date}
-                            </div>
-                          </>
-                        )}
                       </div>
                       <div
                         className="grid grid-cols-2 gap-4"
@@ -305,27 +251,99 @@ const ProjectBoard = () => {
                           })}
                         </p>
                       </div>
-                      <div className="flex md:justify-center justify-start flex-wrap mt-2 gap-2">
+                      <div className="mt-2 gap-2 text-sm">
                         {project.tasks_count.map((task_status) => (
                           <div
-                          key={task_status.status}
-                            className="text-black px-4 p-1 rounded-md shadow-custom-all-sides "
-                            style={{
-                              borderColor: task_status.color,
-                              textAlign: "center",
-                              borderWidth: "3px",
-                              borderStyle: "solid",
-                            }}
+                            key={task_status.status}
+                            className="text-black  p-1  "
+                            style={
+                              {
+                                // borderColor: task_status.color,
+                                // textAlign: "center",
+                                // borderWidth: "3px",
+                                // borderStyle: "solid",
+                              }
+                            }
                           >
-                            <p className="flex items-center">
-                              {task_status.status} {task_status.count}
-                            </p>
+                            <div className="grid grid-cols-2">
+                              <p className="font-medium text-gray-500">
+
+                              {capitalize(task_status.status)} :{" "}
+                              </p>
+                              <p className="flex items-center px-2">
+                                {task_status.count}
+                              </p>
+                            </div>
                           </div>
                         ))}
                       </div>
                       {project.created_by.user_id.toString() ===
                       user_id.toString() ? (
-                        <div className="flex justify-end">
+                        <div className="flex justify-between mt-2">
+                          {project.created_by.user_id.toString() ===
+                          user_id.toString() ? (
+                            <div
+                              className="flex text-sm gap-2 items-center "
+                              // style={{ fontSize: 14, color: "#000" }}
+                            >
+                              <p className="font-medium">Project Timeline : </p>
+                              {editingProjectId === project.id ? (
+                                <>
+                                  {project.due_date}
+                                  {isModalOpenProjectDate && (
+                                    <BoardDueDateModal
+                                      closeProjectDateModal={
+                                        closeProjectDateModal
+                                      }
+                                      dueDateUpdate={dueDateUpdate}
+                                      handleDueDateChangeUpdate={
+                                        handleDueDateChangeUpdate
+                                      }
+                                      handleUpdateDate={handleUpdateDate}
+                                      project={project}
+                                    />
+                                  )}
+                                </>
+                              ) : (
+                                <div className="flex gap-2 items-center">
+                                  {" "}
+                                  {project.due_date || (
+                                    <span style={{ color: "gray" }}>
+                                      {" "}
+                                      No Timeline
+                                    </span>
+                                  )}
+                                  <a
+                                    href="#"
+                                    onClick={(e) => {
+                                      // e.preventDefault();
+                                      e.stopPropagation();
+                                      handleEditDateClick(
+                                        project.id,
+                                        project.due_date,
+                                        e
+                                      );
+                                    }}
+                                    style={{ color: "gray" }}
+                                  >
+                                    <FaPencilAlt style={{ marginBottom: 4 }} />
+                                  </a>
+                                </div>
+                              )}
+                            </div>
+                          ) : (
+                            <>
+                              <div
+                                className="flex items-center gap-2"
+                                style={{ fontSize: 14, color: "#000" }}
+                              >
+                                <p className="font-medium">
+                                  Project Timeline :{" "}
+                                </p>
+                                {project.due_date}
+                              </div>
+                            </>
+                          )}
                           <FaTrashAlt
                             onClick={(event) => handleDelete(event, project.id)}
                             className="cursor-pointer text-red-400"
@@ -345,18 +363,23 @@ const ProjectBoard = () => {
                               }}
                             /> */}
 
-                            {isModalOpenConfirm && <BoardDeleteModal boardId={boardToDelete}  onCancel={(event, boardId) => {
-                                event.stopPropagation();
-                                setIsModalOpenConfirm(false);
-                                handleDeleteOnCancel(boardId);
-                              }} />}
+                      {isModalOpenConfirm && (
+                        <BoardDeleteModal
+                          boardId={boardToDelete}
+                          onCancel={(event, boardId) => {
+                            event.stopPropagation();
+                            setIsModalOpenConfirm(false);
+                            handleDeleteOnCancel(boardId);
+                          }}
+                        />
+                      )}
                     </div>
                   </div>
                 </div>
               </div>
             );
           })}
-        </>
+        </div>
       ) : (
         <div className="col-md-12" style={{ textAlign: "center" }}>
           <div class="m-4">

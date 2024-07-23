@@ -1,10 +1,12 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import image from "/profile.png";
 import Navbar from "../../components/Navbar";
 import FileInputBox from "../../containers/Inputs/FileInputBox";
 import { useSelector } from "react-redux";
+import { getGenericCategory } from "../../api";
 const AddBusiness = () => {
   const [imageFile, setImageFile] = useState(null);
+  const [categories, setCategories] = useState([]);
   const inputRef = useRef(null);
 
   const handleImageClick = () => {
@@ -15,6 +17,23 @@ const AddBusiness = () => {
     setImageFile(event.target.files[0]);
   };
   const themeColor = useSelector((state) => state.theme.color);
+
+  useEffect(() => {
+    const fetchContactCategory = async () => {
+      try {
+        const contactResp = await getGenericCategory();
+        const filteredCategory = contactResp.data.filter(
+          (cate) => cate.info_type === "contact"
+        );
+        console.log(filteredCategory);
+        setCategories(filteredCategory);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchContactCategory();
+  }, []);
+
   return (
     <section className="flex">
       <Navbar />
@@ -135,9 +154,12 @@ const AddBusiness = () => {
                 id=""
                 className="border p-1 px-4 border-gray-500 rounded-md"
               >
-                <option>Select Category</option>
-                <option>Finance & Accounting</option>
-                <option>IT Services</option>
+                <option value="">Select Category</option>
+                {categories.map((category) => (
+                  <option value={category.id} key={category.id}>
+                    {category.name}
+                  </option>
+                ))}
               </select>
             </div>
             <div className="flex flex-col ">

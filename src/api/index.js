@@ -727,6 +727,18 @@ export const postGenericCategory = async (data) =>
       token: token,
     },
   });
+export const postGenericSubCategory = async (data) =>
+  axiosInstance.post(`/generic_sub_infos.json`, data, {
+    params: {
+      token: token,
+    },
+  });
+export const getGenericSubCategory = async () =>
+  axiosInstance.get(`/generic_sub_infos.json`, {
+    params: {
+      token: token,
+    },
+  });
 export const getContactBookDetails = async (id) =>
   axiosInstance.get(`/contact_books/${id}.json`, {
     params: {

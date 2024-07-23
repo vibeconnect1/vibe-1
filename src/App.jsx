@@ -581,6 +581,7 @@ import AddCustomReport from "./pages/AdminHrms/AddCustomReport.jsx";
 import AddCommunicationTemplate from "./pages/AdminHrms/AddCommunicationTemplate.jsx";
 import PayslipDetails2 from "./pages/AdminHrms/PayslipDetails2.jsx";
 import EditLetterTemplate from "./pages/AdminHrms/EditLetterTemplate.jsx";
+import StandardUnit from "./pages/Setup/StandardUnitSetup/StandardUnit.jsx";
 
 // new admin hrms
 
@@ -731,6 +732,14 @@ function App() {
             element={
               <ProtectedAdminRoutes>
                 <Site />
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/setup/standard-unit"
+            element={
+              <ProtectedAdminRoutes>
+                <StandardUnit />
               </ProtectedAdminRoutes>
             }
           />
