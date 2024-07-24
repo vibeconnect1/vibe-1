@@ -8,57 +8,40 @@ import LetterOfIndent from "./LetterOfIndent";
 const Purchase = () => {
   const [page, setPage] = useState("loi");
   return (
-    <section className="flex">
-      <Navbar />
-      <div className="p-2 w-full flex  overflow-hidden flex-col">
-        <div className="flex justify-center w-full">
-          <div className="sm:flex grid grid-cols-2 sm:flex-row gap-5 font-medium p-1 sm:rounded-full rounded-md bg-gray-200">
-            <h2
-              className={`p-1 ${
-                page === "loi" &&
-                "bg-white text-blue-500 shadow-custom-all-sides"
-              } rounded-full px-4 cursor-pointer text-center transition-all duration-300 ease-linear`}
-              onClick={() => setPage("loi")}
-            >
-              LOI
-            </h2>
-            <h2
-              className={`p-1 ${
-                page === "pr" &&
-                "bg-white text-blue-500 shadow-custom-all-sides"
-              } rounded-full px-4 cursor-pointer text-center transition-all duration-300 ease-linear`}
-              onClick={() => setPage("pr")}
-            >
-              Material PR
-            </h2>
-            <h2
-              className={`p-1 ${
-                page === "po" &&
-                "bg-white text-blue-500 shadow-custom-all-sides"
-              } rounded-full px-4 cursor-pointer transition-all duration-300 ease-linear`}
-              onClick={() => setPage("po")}
-            >
-              PO
-            </h2>
-          </div>
-        </div>
-        {page === "loi" && (
-          <div className="transition-all duration-300 ease-linear">
-            <LetterOfIndent />
-          </div>
-        )}
-        {page === "pr" && (
-          <div className="transition-all duration-300 ease-linear">
-            <MaterialPR />
-          </div>
-        )}
-        {page === "po" && (
-          <div className="transition-all duration-300 ease-linear">
-            <PO />
-          </div>
-        )}
+    <div className="flex lg:flex-row flex-col gap-2 relative items-center justify-center w-full">
+      <div className="sm:flex grid grid-cols-2 flex-wrap text-sm md:text-base sm:flex-row gap-5 font-medium p-2 xl:rounded-full rounded-md opacity-90 bg-gray-200 ">
+        <NavLink
+          to={"/admin/purchase/loi"}
+          className={({ isActive }) =>
+            `  md:rounded-full px-4 cursor-pointer text-center transition-all duration-300 ease-linear ${
+              isActive && "bg-white text-blue-500 shadow-custom-all-sides"
+            }`
+          }
+        >
+          LOI
+        </NavLink>
+        <NavLink
+          to={"/admin/purchase/material-pr"}
+          className={({ isActive }) =>
+            `  md:rounded-full px-4 cursor-pointer text-center transition-all duration-300 ease-linear ${
+              isActive && "bg-white text-blue-500 shadow-custom-all-sides"
+            }`
+          }
+        >
+          Material PR
+        </NavLink>
+        <NavLink
+          to={"/admin/purchase/po"}
+          className={({ isActive }) =>
+            `  md:rounded-full px-4 cursor-pointer text-center transition-all duration-300 ease-linear ${
+              isActive && "bg-white text-blue-500 shadow-custom-all-sides"
+            }`
+          }
+        >
+          PO
+        </NavLink>
       </div>
-    </section>
+    </div>
   );
 };
 

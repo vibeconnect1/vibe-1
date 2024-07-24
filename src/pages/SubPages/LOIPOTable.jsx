@@ -11,12 +11,13 @@ import { useSelector } from "react-redux";
 import Table from "../../components/table/Table";
 import { getLOI } from "../../api";
 import { Switch } from "antd";
+import Navbar from "../../components/Navbar";
+import Purchase from "../Purchase";
 
 const LOIPOTable = () => {
   const [selectedStatus, setSelectedStatus] = useState("all");
   const themeColor = useSelector((state) => state.theme.color);
   const [loi, setLoi] = useState([]);
-  
 
   useEffect(() => {
     const fetchLoi = async () => {
@@ -26,7 +27,6 @@ const LOIPOTable = () => {
           return new Date(b.created_at) - new Date(a.created_at);
         });
         setLoi(sortedLoi);
-       
       } catch (error) {
         console.log(error);
       }
@@ -58,11 +58,11 @@ const LOIPOTable = () => {
       sortable: true,
     },
 
-    {
-      name: "Active/Inactive",
-      selector: (row) => <Switch/>,
-      sortable: true,
-    },
+    // {
+    //   name: "Active/Inactive",
+    //   selector: (row) => <Switch />,
+    //   sortable: true,
+    // },
 
     {
       name: "Created By",
@@ -84,54 +84,60 @@ const LOIPOTable = () => {
     {
       name: "LOI Amount",
       selector: (row) => {
-        
         const totalAmount = row.loi_items
-          ? row.loi_items.reduce((sum, item) => sum + (Number(item.total_amount) || 0), 0)
+          ? row.loi_items.reduce(
+              (sum, item) => sum + (Number(item.total_amount) || 0),
+              0
+            )
           : " ";
-          return totalAmount === 0 ? " " : totalAmount;
+        return totalAmount === 0 ? " " : totalAmount;
       },
       sortable: true,
     },
   ];
 
-  document.title=`Purchase - Vibe Connect` 
+  document.title = `Purchase - Vibe Connect`;
 
   return (
     <section className="flex">
-      <div className=" w-full flex mx-3 flex-col overflow-hidden">
-        <div className="flex md:flex-row flex-col gap-5 justify-between my-2">
-          <input
-            type="text"
-            placeholder="Search  "
-            className="border border-gray-400 w-96 placeholder:text-xs rounded-lg p-2"
-            //   value={searchText}
-            //   onChange={handleSearch}
-          />
-          <div className="flex items-center gap-2">
-            <Link
-              style={{ background: themeColor }}
-              to={"/admin/purchase/add-loi"}
-              className=" font-semibold text-white  transition-all  p-2 px-4 rounded-md  cursor-pointer text-center flex items-center gap-2 justify-center"
-            >
-              <PiPlusCircle size={20} />
-              Add
-            </Link>
-            <button
-              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-              style={{ background: themeColor }}
-              // onClick={exportToExcel}
-            >
-              Export
-            </button>
+      <Navbar />
+      <div className="p-4 w-full flex md:mx-2 overflow-hidden flex-col">
+        <Purchase />
+        <div className=" w-full flex mx-2 flex-col overflow-hidden">
+          <div className="flex md:flex-row flex-col gap-5 justify-between my-2">
+            <input
+              type="text"
+              placeholder="Search  "
+              className="border border-gray-400 w-96 placeholder:text-xs rounded-lg p-2"
+              //   value={searchText}
+              //   onChange={handleSearch}
+            />
+            <div className="flex items-center gap-2">
+              <Link
+                style={{ background: themeColor }}
+                to={"/admin/purchase/add-loi"}
+                className=" font-semibold text-white  transition-all  p-2 px-4 rounded-md  cursor-pointer text-center flex items-center gap-2 justify-center"
+              >
+                <PiPlusCircle size={20} />
+                Add
+              </Link>
+              <button
+                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                style={{ background: themeColor }}
+                // onClick={exportToExcel}
+              >
+                Export
+              </button>
+            </div>
           </div>
+          <Table
+            responsive
+            //   selectableRows
+            columns={columns}
+            data={loi}
+            isPagination={true}
+          />
         </div>
-        <Table
-          responsive
-          //   selectableRows
-          columns={columns}
-          data={loi}
-          isPagination={true}
-        />
       </div>
     </section>
   );

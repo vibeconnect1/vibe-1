@@ -13,32 +13,42 @@ import { getContactBook } from "../api";
 import { BsEye } from "react-icons/bs";
 
 const Business = () => {
-  const themeColor = useSelector((state)=> state.theme.color)
-  const [contacts, setContacts] = useState([])
-  useEffect(()=>{
-    const fetchContactBook = async()=>{
+  const themeColor = useSelector((state) => state.theme.color);
+  const [contacts, setContacts] = useState([]);
+  const [filteredData, setFilteredData] = useState([]);
+  const [searchText, setSearchText] = useState([]);
+  useEffect(() => {
+    const fetchContactBook = async () => {
       try {
-        const contactRes = await getContactBook()
-setContacts(contactRes.data)
+        const contactRes = await getContactBook();
+        const sortedData = contactRes.data.sort((a, b) => {
+          return new Date(b.created_at) - new Date(a.created_at);
+        });
+        setContacts(sortedData);
+        setFilteredData(sortedData);
       } catch (error) {
-        console.log(error)
+        console.log(error);
       }
-    }
-    fetchContactBook()
-  },[])
+    };
+    fetchContactBook();
+  }, []);
   const column = [
     {
       name: "Actions",
       cell: (row) => (
         <Link to={`/business/details/${row.id}`}>
-          <BsEye size={15}/>
+          <BsEye size={15} />
         </Link>
       ),
       sortable: true,
     },
 
     { name: "Company Logo", selector: (row) => row.logo, sortable: true },
-    { name: "Company Name", selector: (row) => row.company_name, sortable: true },
+    {
+      name: "Company Name",
+      selector: (row) => row.company_name,
+      sortable: true,
+    },
     { name: "Category", selector: (row) => row.category, sortable: true },
     {
       name: "Sub Category",
@@ -52,7 +62,11 @@ setContacts(contactRes.data)
     },
     { name: "Mobile", selector: (row) => row.mobile, sortable: true },
     { name: "Landline", selector: (row) => row.landline_no, sortable: true },
-    { name: "Primary Email", selector: (row) => row.primary_email, sortable: true },
+    {
+      name: "Primary Email",
+      selector: (row) => row.primary_email,
+      sortable: true,
+    },
     {
       name: "Key Offerings",
       selector: (row) => row.key_offering,
@@ -60,9 +74,24 @@ setContacts(contactRes.data)
     },
     { name: "Status", selector: (row) => row.status, sortable: true },
   ];
- 
 
-
+  const handleSearch = (e) => {
+    const searchValue = e.target.value;
+    setSearchText(searchValue);
+    if (searchValue.trim() === "") {
+      setFilteredData(contacts);
+    } else {
+      const filteredResults = contacts.filter(
+        (item) =>
+          item.company_name.toLowerCase().includes(searchValue.toLowerCase()) ||
+          (item.contact_person_name &&
+            item.contact_person_name
+              .toLowerCase()
+              .includes(searchValue.toLowerCase()))
+      );
+      setFilteredData(filteredResults);
+    }
+  };
 
   return (
     <section className="flex">
@@ -71,14 +100,16 @@ setContacts(contactRes.data)
         <div className="flex justify-between items-center">
           <input
             type="text"
-            placeholder="Search By Company Name"
-            className="border-2 p-2 w-96 border-gray-300 rounded-lg"
+            placeholder="Search by Company name"
+            className="border bg-gray-50 p-2 w-full border-gray-300 rounded-lg placeholder:text-sm"
+            onChange={handleSearch}
+            value={searchText}
           />
           <div className="flex gap-4 justify-end w-full overflow-hidden">
             <Link
               to={"/business/add-business"}
               className="bg-black w-20 rounded-lg flex items-center justify-center gap-2 text-white p-2 my-5"
-              style={{background:themeColor}}
+              style={{ background: themeColor }}
             >
               <IoAddCircleOutline />
               Add
@@ -86,11 +117,7 @@ setContacts(contactRes.data)
           </div>
         </div>
 
-        <Table
-          columns={column}
-          data={contacts}
-        
-        />
+        <Table columns={column} data={filteredData} />
       </div>
     </section>
   );

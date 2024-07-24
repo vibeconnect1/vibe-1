@@ -703,6 +703,18 @@ export const getContactBook = async () =>
       token: token,
     },
   });
+export const postContactBook = async (data) =>
+  axiosInstance.post(`/contact_books.json`, data, {
+    params: {
+      token: token,
+    },
+  });
+export const editContactBook = async (id,data) =>
+  axiosInstance.put(`/contact_books.json/${id}`, data, {
+    params: {
+      token: token,
+    },
+  });
 export const getGenericCategory = async () =>
   axiosInstance.get(`/generic_infos.json`, {
     params: {
@@ -735,6 +747,12 @@ export const postGenericSubCategory = async (data) =>
   });
 export const getGenericSubCategory = async () =>
   axiosInstance.get(`/generic_sub_infos.json`, {
+    params: {
+      token: token,
+    },
+  });
+export const getDependentGenericSubCategory = async (id) =>
+  axiosInstance.get(`/generic_sub_infos.json?generic_info_id=${id}`, {
     params: {
       token: token,
     },

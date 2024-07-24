@@ -55,6 +55,7 @@ const AddMatertialPR = () => {
     terms: "",
     advanceAmount: "",
     relatedTo: "",
+    referenceNo: "",
   });
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -199,13 +200,14 @@ const AddMatertialPR = () => {
     sendData.append("loi_detail[created_by_id]", userId);
     sendData.append("loi_detail[loi_type]", formData.type);
     sendData.append("loi_detail[loi_date]", formData.date);
-    sendData.append("loi_detail[retention]", formData.retentionPercentage);
+    sendData.append("loi_detail[retention]", formData.retention);
     sendData.append("loi_detail[related_to]", formData.relatedTo);
     sendData.append(
       "loi_detail[transportation_amount]",
       formData.transportation
     );
     sendData.append("loi_detail[tds]", formData.tds);
+    sendData.append("loi_detail[reference]", formData.referenceNo);
     sendData.append("loi_detail[qc]", formData.qc);
     sendData.append("loi_detail[payment_tenure]", formData.paymentTenure);
     sendData.append("loi_detail[vendor_id]", formData.vendorId);
@@ -216,103 +218,35 @@ const AddMatertialPR = () => {
     );
     sendData.append("loi_detail[terms]", formData.terms);
     activities.forEach((item, index) => {
+      sendData.append(`loi_detail[loi_items][][item_id]`, item.inventory);
+      sendData.append(`loi_detail[loi_items][][sac_code]`, item.SACCode);
+      sendData.append(`loi_detail[loi_items][][quantity]`, item.quantity);
       sendData.append(
-        `loi_detail[loi_items][${index}][item_id]`,
-        item.inventory
-      );
-      sendData.append(
-        `loi_detail[loi_items][${index}][sac_code]`,
-        item.SACCode
-      );
-      sendData.append(
-        `loi_detail[loi_items][${index}][quantity]`,
-        item.quantity
-      );
-      sendData.append(
-        `loi_detail[loi_items][${index}][expected_date]`,
+        `loi_detail[loi_items][][expected_date]`,
         item.expectedDate
       );
-      sendData.append(
-        `loi_detail[loi_items][${index}][standard_unit_id]`,
-        item.unit
-      );
-      sendData.append(`loi_detail[loi_items][${index}][rate]`, item.rate);
-      sendData.append(
-        `loi_detail[loi_items][${index}][csgt_rate]`,
-        item.cgstRate
-      );
-      sendData.append(
-        `loi_detail[loi_items][${index}][csgt_amt]`,
-        item.cgstAmount
-      );
-      sendData.append(
-        `loi_detail[loi_items][${index}][sgst_rate]`,
-        item.sgstRate
-      );
-      sendData.append(
-        `loi_detail[loi_items][${index}][sgst_amt]`,
-        item.sgstAmount
-      );
-      sendData.append(
-        `loi_detail[loi_items][${index}][igst_rate]`,
-        item.igstRate
-      );
-      sendData.append(
-        `loi_detail[loi_items][${index}][igst_amt]`,
-        item.igstAmount
-      );
-      sendData.append(
-        `loi_detail[loi_items][${index}][tcs_rate]`,
-        item.TCSRate
-      );
-      sendData.append(
-        `loi_detail[loi_items][${index}][tcs_amt]`,
-        item.TCSAmount
-      );
-      sendData.append(
-        `loi_detail[loi_items][${index}][tax_amt]`,
-        item.TaxAmount
-      );
-      sendData.append(`loi_detail[loi_items][${index}][amount]`, item.Amount);
-      sendData.append(
-        `loi_detail[loi_items][${index}][total_amount]`,
-        item.Total
-      );
+      sendData.append(`loi_detail[loi_items][][standard_unit_id]`, item.unit);
+      sendData.append(`loi_detail[loi_items][][rate]`, item.rate);
+      sendData.append(`loi_detail[loi_items][][csgt_rate]`, item.cgstRate);
+      sendData.append(`loi_detail[loi_items][][csgt_amt]`, item.cgstAmount);
+      sendData.append(`loi_detail[loi_items][][sgst_rate]`, item.sgstRate);
+      sendData.append(`loi_detail[loi_items][][sgst_amt]`, item.sgstAmount);
+      sendData.append(`loi_detail[loi_items][][igst_rate]`, item.igstRate);
+      sendData.append(`loi_detail[loi_items][][igst_amt]`, item.igstAmount);
+      sendData.append(`loi_detail[loi_items][][tcs_rate]`, item.TCSRate);
+      sendData.append(`loi_detail[loi_items][][tcs_amt]`, item.TCSAmount);
+      sendData.append(`loi_detail[loi_items][][tax_amt]`, item.TaxAmount);
+      sendData.append(`loi_detail[loi_items][][amount]`, item.Amount);
+      sendData.append(`loi_detail[loi_items][][total_amount]`, item.Total);
     });
 
     try {
       const resp = await postLOI(sendData);
-      // const loiDetailId = resp.data.id;
       toast.success("Purchase Requisition Created Successfully");
       console.log(resp);
     } catch (error) {
       console.log(error);
     }
-    //   for (const item of activities) {
-    //     const LOIData = new FormData();
-    //     LOIData.append("loi_item[loi_detail_id]", loiDetailId);
-    //     LOIData.append("loi_item[item_id]", item.inventory);
-    //     LOIData.append("loi_item[sac_code]", item.SACCode);
-    //     LOIData.append("loi_item[quantity]", item.quantity);
-    //     LOIData.append("loi_item[expected_date]", item.expectedDate);
-    //     LOIData.append("loi_item[standard_unit_id]", item.unit);
-    //     LOIData.append("loi_item[rate]", item.rate);
-    //     LOIData.append("loi_item[csgt_rate]", item.cgstRate);
-    //     LOIData.append("loi_item[csgt_amt]", item.cgstAmount);
-    //     LOIData.append("loi_item[sgst_rate]", item.sgstRate);
-    //     LOIData.append("loi_item[sgst_amt]", item.sgstAmount);
-    //     LOIData.append("loi_item[igst_rate]", item.igstRate);
-    //     LOIData.append("loi_item[igst_amt]", item.igstAmount);
-    //     LOIData.append("loi_item[tcs_rate]", item.TCSRate);
-    //     LOIData.append("loi_item[tcs_amt]", item.TCSAmount);
-    //     LOIData.append("loi_item[tax_amt]", item.TaxAmount);
-    //     LOIData.append("loi_item[amount]", item.Amount);
-    //     LOIData.append("loi_item[total_amount]", item.Total);
-
-    //     const loiItemResp = await postLOIItems(LOIData);
-    //     console.log(loiItemResp);
-    //   }
-    //   navigate("/admin/purchase");
   };
 
   return (
@@ -453,7 +387,7 @@ const AddMatertialPR = () => {
                       value={formData.transportation}
                       name="transportation"
                       onChange={handleChange}
-                      placeholder="Enter Amount"
+                      placeholder="Enter amount"
                       pattern="[0-9]*"
                       onKeyDown={(e) => {
                         if (
@@ -479,7 +413,7 @@ const AddMatertialPR = () => {
                       className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                       id="retention"
                       type="text"
-                      placeholder="Enter Retention Percentage"
+                      placeholder="Enter Retention percentage"
                       value={formData.retention}
                       name="retention"
                       onChange={handleChange}
@@ -508,7 +442,7 @@ const AddMatertialPR = () => {
                       className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                       id="tds"
                       type="text"
-                      placeholder="Enter TDS Percentage"
+                      placeholder="Enter TDS percentage"
                       value={formData.tds}
                       name="tds"
                       onChange={handleChange}
@@ -537,7 +471,7 @@ const AddMatertialPR = () => {
                       className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                       id="qc"
                       type="text"
-                      placeholder="Enter QC %"
+                      placeholder="Enter QC percentage"
                       value={formData.qc}
                       onChange={handleChange}
                       name="qc"
@@ -566,7 +500,7 @@ const AddMatertialPR = () => {
                       className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                       id="payment-tenure"
                       type="text"
-                      placeholder="Enter Payment Tenure"
+                      placeholder="Enter Payment tenure"
                       value={formData.paymentTenure}
                       name="paymentTenure"
                       onChange={handleChange}
@@ -595,7 +529,7 @@ const AddMatertialPR = () => {
                       className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                       id="advance-amount"
                       type="text"
-                      placeholder="Enter Amount"
+                      placeholder="Enter amount"
                       value={formData.advanceAmount}
                       name="advanceAmount"
                       onChange={handleChange}
@@ -625,10 +559,39 @@ const AddMatertialPR = () => {
                       className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                       id="related-to"
                       type="text"
-                      placeholder="Related To"
+                      placeholder="Related to"
                       value={formData.relatedTo}
                       name="relatedTo"
                       onChange={handleChange}
+                    />
+                  </div>
+                  <div className="col-span-1">
+                    <label
+                      className="block text-gray-700 font-bold mb-2"
+                      htmlFor="ref"
+                    >
+                      Reference No. <span className="text-red-500">*</span>
+                    </label>
+
+                    <input
+                      className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                      id="ref"
+                      type="text"
+                      placeholder="Enter Reference number"
+                      value={formData.referenceNo}
+                      name="referenceNo"
+                      onChange={handleChange}
+                      pattern="[0-9]*"
+                      onKeyDown={(e) => {
+                        if (
+                          !/[0-9]/.test(e.key) &&
+                          e.key !== "Backspace" &&
+                          e.key !== "ArrowLeft" &&
+                          e.key !== "ArrowRight"
+                        ) {
+                          e.preventDefault();
+                        }
+                      }}
                     />
                   </div>
                 </div>
@@ -718,7 +681,7 @@ const AddMatertialPR = () => {
                           className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                           id={`hazard-category-${index}`}
                           type="text"
-                          placeholder="Product Description"
+                          placeholder="Product description"
                           name="productDescription"
                           value={activity.productDescription}
                           onChange={(e) => handleInputChange(e, index)}
@@ -735,7 +698,7 @@ const AddMatertialPR = () => {
                           className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                           id={`risks-${index}`}
                           type="text"
-                          placeholder="Enter Quantity"
+                          placeholder="Enter quantity"
                           name="quantity"
                           value={activity.quantity}
                           onChange={(e) => handleInputChange(e, index)}

@@ -251,7 +251,7 @@ const ProjectBoard = () => {
                           })}
                         </p>
                       </div>
-                      <div className="mt-2 gap-2 text-sm">
+                      {/* <div className="mt-2 gap-2 text-sm">
                         {project.tasks_count.map((task_status) => (
                           <div
                             key={task_status.status}
@@ -276,7 +276,7 @@ const ProjectBoard = () => {
                             </div>
                           </div>
                         ))}
-                      </div>
+                      </div> */}
                       {project.created_by.user_id.toString() ===
                       user_id.toString() ? (
                         <div className="flex justify-between mt-2">

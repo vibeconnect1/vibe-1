@@ -217,9 +217,9 @@ const PO = () => {
   };
   return (
     <section className="flex">
-      {/* <Navbar /> */}
-      <div className="w-full flex mx-3 flex-col overflow-hidden">
-        {/* <Purchase/> */}
+      <Navbar />
+      <div className="w-full flex m-3 flex-col overflow-hidden">
+        <Purchase/>
         <div className="flex  justify-start gap-4 my-5 flex-shrink flex-wrap ">
           <div className="shadow-xl rounded-full border-4 border-gray-400   px-6 flex flex-col items-center">
             <p className="font-semibold md:text-lg">Total number of po</p>

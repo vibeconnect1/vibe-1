@@ -30,6 +30,7 @@ import PPMActivity from "./SubPages/PPMActivity";
 import { CirclesWithBar, DNA, ThreeDots } from "react-loader-spinner";
 import AssetNav from "../components/navbars/AssetNav";
 import ImportAssetModal from "../containers/modals/ImportAssetModal";
+import { Pagination } from "antd";
 
 // import jsPDF from "jspdf";
 // import QRCode from "qrcode.react";
@@ -51,7 +52,7 @@ const Asset = () => {
   const [selectedOptions, setSelectedOptions] = useState([]);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const dropdownRef = useRef(null);
-  const [uploadModal, setUploadModal] = useState(false)
+  const [uploadModal, setUploadModal] = useState(false);
 
   const handleCheckboxChange = (event) => {
     const value = event.target.value;
@@ -77,7 +78,7 @@ const Asset = () => {
 
   const dateFormat = (dateString) => {
     const date = new Date(dateString);
-    return date.toLocaleString(); 
+    return date.toLocaleString();
   };
   const column = [
     {
@@ -113,7 +114,6 @@ const Asset = () => {
       selector: (row) => row.oem_name,
       sortable: true,
     },
-    
 
     {
       name: "Serial Number",
@@ -126,7 +126,7 @@ const Asset = () => {
       selector: (row) => row.model_number,
       sortable: true,
     },
-    
+
     {
       name: "Group",
       selector: (row) => row.group_name,
@@ -243,8 +243,6 @@ const Asset = () => {
     }
   };
 
-  
-
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -264,31 +262,30 @@ const Asset = () => {
     fetchData();
   }, []);
 
-
   const exportToExcel = () => {
     const mappedData = filteredData.map((asset) => ({
       "Asset Name": asset.name,
       "Asset Type": asset.asset_type,
       "Serial No.": asset.serial_number,
       "Model No.": asset.model_number,
-      "Description": asset.description,
-      "Building": asset.building_name,
-      "Floor": asset.floor_name,
-      "Unit": asset.unit_name,
-      "Vendor": asset.vendor_name,
-      "Asset Group": asset.group_name, 
-      "Asset Sub Group": asset.sub_group_name, 
+      Description: asset.description,
+      Building: asset.building_name,
+      Floor: asset.floor_name,
+      Unit: asset.unit_name,
+      Vendor: asset.vendor_name,
+      "Asset Group": asset.group_name,
+      "Asset Sub Group": asset.sub_group_name,
       "Purchased On": asset.purchased_on,
       "Purchased Cost": asset.purchase_cost,
-      "Critical": asset.critical? "Yes": "No",
-      "Breakdown": asset.breakdown? "Yes": "No",
-      "Meter Configured": asset.is_meter?"Yes":"No",
+      Critical: asset.critical ? "Yes" : "No",
+      Breakdown: asset.breakdown ? "Yes" : "No",
+      "Meter Configured": asset.is_meter ? "Yes" : "No",
       "Created On": dateFormat(asset.created_at),
       "Updated On": dateFormat(asset.updated_at),
-      "Comment": asset.remarks,
-      "Installation": asset.installation,
+      Comment: asset.remarks,
+      Installation: asset.installation,
       "Warranty Start": asset.warranty_start,
-      "Warranty Expiry" : asset.warranty_expiry
+      "Warranty Expiry": asset.warranty_expiry,
     }));
     const fileType =
       "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8";
@@ -309,7 +306,6 @@ const Asset = () => {
   };
 
   const buildings = getItemInLocalStorage("Building");
-  
 
   const handleFilterApply = () => {
     let filteredResults = [...filteredData];
@@ -337,9 +333,9 @@ const Asset = () => {
   };
 
   const handleFilterReset = () => {
-    setSelectedBuilding('');
-    setSelectedFloor('');
-    setSelectedUnit('');
+    setSelectedBuilding("");
+    setSelectedFloor("");
+    setSelectedUnit("");
     setFilteredData(assets);
   };
 
@@ -368,7 +364,6 @@ const Asset = () => {
     setSelectedUnit(unitId);
   };
 
- 
   const defaultImage = { index: 0, src: "" };
   let selectedImageSrc = defaultImage.src;
   let selectedImageIndex = defaultImage.index;
@@ -413,7 +408,7 @@ const Asset = () => {
     Get_Background();
   }, []);
 
-  console.log(uploadModal)
+  console.log(uploadModal);
 
   return (
     <section
@@ -425,8 +420,7 @@ const Asset = () => {
       <Navbar />
       <div className="p-4 w-full my-2 flex md:mx-2 overflow-hidden flex-col">
         <AssetNav />
-       
-       
+
         {filter && page === "assets" && (
           <div className="flex flex-col md:flex-row mt-1 items-center justify-center gap-2">
             <select
@@ -458,7 +452,7 @@ const Asset = () => {
               ))}
             </select>
             <select
-            value={selectedUnit}
+              value={selectedUnit}
               onChange={handleUnitChange}
               name="unit_name"
               className="border p-1 px-4 max-w-44 w-44 border-gray-500 rounded-md"
@@ -473,7 +467,7 @@ const Asset = () => {
             <button
               className=" p-1 px-4 text-white rounded-md"
               onClick={handleFilterApply}
-              style={{background: themeColor}}
+              style={{ background: themeColor }}
             >
               Apply
             </button>
@@ -496,16 +490,14 @@ const Asset = () => {
             onChange={handleSearch}
           />
           <div className="md:flex grid grid-cols-2 sm:flex-row my-2 flex-col gap-2">
-           
-             <Link
-                to={"/assets/add-asset"}
-                style={{ background: themeColor }}
-                className="px-4 py-2  font-medium text-white rounded-md flex gap-2 items-center justify-center"
-              >
-                <IoAddCircleOutline/>
-                Add Asset
-                
-              </Link>
+            <Link
+              to={"/assets/add-asset"}
+              style={{ background: themeColor }}
+              className="px-4 py-2  font-medium text-white rounded-md flex gap-2 items-center justify-center"
+            >
+              <IoAddCircleOutline />
+              Add Asset
+            </Link>
             <div className="" ref={dropdownRef}>
               <button
                 onClick={() => setDropdownOpen(!dropdownOpen)}
@@ -545,10 +537,9 @@ const Asset = () => {
               Filter
             </button>
 
-           
             <button
               className="bg-blue-500 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded"
-              onClick={()=> setUploadModal(true)}
+              onClick={() => setUploadModal(true)}
               style={{ background: themeColor }}
             >
               Import
@@ -577,16 +568,28 @@ const Asset = () => {
         </div>
 
         {assets.length !== 0 ? (
-          <Table
-            selectableRows
-            columns={column.filter(
-              (col) => !selectedOptions.includes(col.name)
-            )}
-            data={filteredData}
-            fixedHeader
-            // fixedHeaderScrollHeight="450px"
-            isPagination={true}
-          />
+          <>
+            <Table
+              selectableRows
+              columns={column.filter(
+                (col) => !selectedOptions.includes(col.name)
+              )}
+              data={filteredData}
+              fixedHeader
+              // fixedHeaderScrollHeight="450px"
+              pagination={false}
+              // onChangePage={}
+            />
+            <div className="flex w-fill bg-white p-2 mb-10 justify-end">
+              <Pagination
+                simple={{
+                  readOnly: true,
+                }}
+                defaultCurrent={2}
+                total={50}
+              />
+            </div>
+          </>
         ) : (
           <div className="flex justify-center items-center h-full">
             <DNA
@@ -607,7 +610,9 @@ const Asset = () => {
         {page === "inventory" && <Inventory />}
         {page === "routine" && <RoutineTask />}
         {page === "PPM" && <PPMActivity />}
-        {uploadModal && <ImportAssetModal  onClose={() => setUploadModal(false)} />}
+        {uploadModal && (
+          <ImportAssetModal onClose={() => setUploadModal(false)} />
+        )}
       </div>
     </section>
   );

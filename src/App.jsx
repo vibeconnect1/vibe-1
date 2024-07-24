@@ -582,6 +582,7 @@ import AddCommunicationTemplate from "./pages/AdminHrms/AddCommunicationTemplate
 import PayslipDetails2 from "./pages/AdminHrms/PayslipDetails2.jsx";
 import EditLetterTemplate from "./pages/AdminHrms/EditLetterTemplate.jsx";
 import StandardUnit from "./pages/Setup/StandardUnitSetup/StandardUnit.jsx";
+import LOIPOTable from "./pages/SubPages/LOIPOTable.jsx";
 
 // new admin hrms
 
@@ -2100,11 +2101,33 @@ function App() {
             }
           />
           {/* Admin PO*/}
+
           <Route
             path="/admin/purchase"
+            element={<Navigate to={"/admin/purchase/loi"} />}
+          />
+
+          <Route
+            path="/admin/purchase/loi"
             element={
               <ProtectedAdminRoutes>
-                <Purchase />
+                <LOIPOTable />
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/purchase/material-pr"
+            element={
+              <ProtectedAdminRoutes>
+                <MaterialPR />
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/purchase/po"
+            element={
+              <ProtectedAdminRoutes>
+                <PO />
               </ProtectedAdminRoutes>
             }
           />
