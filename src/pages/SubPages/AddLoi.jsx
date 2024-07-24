@@ -153,6 +153,16 @@ const AddLoi = () => {
       return toast.error("Please provide the required details");
     }
 
+    let isValid = true;
+    activities.forEach((activity) => {
+      if (!activity.inventory) {
+        isValid = false;
+      }
+    });
+    if (!isValid) {
+      return toast.error("Inventory is required");
+    }
+
     const sendData = new FormData();
     sendData.append("loi_detail[site_id]", siteId);
     sendData.append("loi_detail[created_by_id]", userId);
@@ -167,11 +177,11 @@ const AddLoi = () => {
       formData.deliveryAddress
     );
     activities.forEach((item) => {
-      sendData.append("loi_detail[loi_item][][item_id]", item.inventory);
-      sendData.append("loi_detail[loi_item][][quantity]", item.quantity);
-      sendData.append("loi_detail[loi_item][][standard_unit_id]", item.unit);
-      sendData.append("loi_detail[loi_item][][rate]", item.rate);
-      sendData.append("loi_detail[loi_item][][amount]", item.Amount);
+      sendData.append("loi_detail[loi_items][][item_id]", item.inventory);
+      sendData.append("loi_detail[loi_items][][quantity]", item.quantity);
+      sendData.append("loi_detail[loi_items][][standard_unit_id]", item.unit);
+      sendData.append("loi_detail[loi_items][][rate]", item.rate);
+      sendData.append("loi_detail[loi_items][][amount]", item.Amount);
     });
 
     try {
@@ -187,8 +197,7 @@ const AddLoi = () => {
   return (
     <section className="flex">
       <div className="md:block hidden">
-
-      <Navbar />
+        <Navbar />
       </div>
       <div className=" w-full  flex md:mx-2 overflow-hidden flex-col">
         <div className="m-2">
@@ -363,60 +372,20 @@ const AddLoi = () => {
                     placeholder="Advance Amount"
                   />
                 </div> */}
+
                   <div className="col-span-1">
                     <label className="block text-gray-700 font-bold mb-2">
-                      Select Supplier
+                      Select Billing Address
                     </label>
                     <select
                       className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                      value={formData.vendor_id}
-                      onChange={handleChange}
-                      name="vendor_id"
-                    >
-                      <option value="">Select Supplier</option>
-                      {vendors.map((vendor) => (
-                        <option value={vendor.id} key={vendor.id}>
-                          {vendor.vendor_name}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-                </div>
-                <div className="col-span-1">
-                  <label className="block text-gray-700 font-bold mb-2">
-                    Select Billing Address
-                  </label>
-                  <select
-                    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                    id="contact-number"
-                    type="text"
-                    name="billingAddress"
-                    value={formData.billingAddress}
-                    onChange={handleChange}
-                  >
-                    <option value="">Select billing address</option>
-                    {addresses.map((address) => (
-                      <option value={address.id} key={address.id}>
-                        {address.address_title}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-                {scheduleFor === "PO" && (
-                  <div className="col-span-1">
-                    <label className="block text-gray-700 font-bold my-2">
-                      Select Delivery Address
-                    </label>
-                    <select
-                      className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                      id="site"
-                      type="Select Delivery Address"
-                      placeholder="Business Bay"
-                      name="deliveryAddress"
-                      value={formData.deliveryAddress}
+                      id="contact-number"
+                      type="text"
+                      name="billingAddress"
+                      value={formData.billingAddress}
                       onChange={handleChange}
                     >
-                      <option value="">Select delivery address</option>
+                      <option value="">Select billing address</option>
                       {addresses.map((address) => (
                         <option value={address.id} key={address.id}>
                           {address.address_title}
@@ -424,7 +393,30 @@ const AddLoi = () => {
                       ))}
                     </select>
                   </div>
-                )}
+                  {scheduleFor === "PO" && (
+                    <div className="col-span-1">
+                      <label className="block text-gray-700 font-bold my-2">
+                        Select Delivery Address
+                      </label>
+                      <select
+                        className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                        id="site"
+                        type="Select Delivery Address"
+                        placeholder="Business Bay"
+                        name="deliveryAddress"
+                        value={formData.deliveryAddress}
+                        onChange={handleChange}
+                      >
+                        <option value="">Select delivery address</option>
+                        {addresses.map((address) => (
+                          <option value={address.id} key={address.id}>
+                            {address.address_title}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                  )}
+                </div>
                 {/* <div className="w-full ">
                 <label
                   className="block text-gray-700 font-bold mb-2"
@@ -746,13 +738,13 @@ const AddLoi = () => {
                 {/* <input type="file" /> */}
                 <FileInputBox />
                 <div className="sm:flex justify-center grid gap-2 my-5 ">
-                  <button
+                  {/* <button
                     onClick={() => setIsModalOpen(true)}
                     style={{ background: themeColor }}
                     className="bg-black text-white hover:bg-gray-700 font-medium py-2 px-4 rounded"
                   >
                     Preview
-                  </button>
+                  </button> */}
                   {isModalOpen && (
                     <div
                       className="fixed inset-0 bg-gray-600 bg-opacity-50 flex z-10 justify-center items-center"

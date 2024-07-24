@@ -295,15 +295,41 @@ const EditAsset = () => {
   const navigate = useNavigate();
 
   const handleSubmit = async () => {
-    if (formData.warranty_start >= formData.warranty_expiry) {
+    if (
+      formData.name === "" ||
+      formData.building_id === "" ||
+      formData.floor_id === "" ||
+      formData.unit_id === ""
+    ) {
+      return toast.error("All fields are required");
+    }
+
+    if (
+      formData.warranty_start &&
+      formData.warranty_expiry &&
+      formData.warranty_start >= formData.warranty_expiry
+    ) {
       toast.error("Warranty Start Date must be before Expiry Date.");
       return;
     }
-  
-    if (formData.warranty_start < formData.purchased_on || formData.installation < formData.purchased_on) {
+
+    if (
+      formData.warranty_start &&
+      formData.purchased_on &&
+      formData.warranty_start < formData.purchased_on
+    ) {
       toast.error(
         "Warranty Start Date and Commissioning Date must be after or equal to Purchase Date."
       );
+      return;
+    }
+
+    if (
+      formData.installation &&
+      formData.purchased_on &&
+      formData.installation < formData.purchased_on
+    ) {
+      toast.error("Installation Date must be after or equal to Purchase Date.");
       return;
     }
     try {

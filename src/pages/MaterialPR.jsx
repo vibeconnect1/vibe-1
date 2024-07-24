@@ -29,7 +29,8 @@ const MaterialPR = () => {
         const sortedLoi = loiResp.data.sort((a, b) => {
           return new Date(b.created_at) - new Date(a.created_at);
         });
-        setLoi(sortedLoi);
+        const filteredLoi = sortedLoi.filter((loi)=> loi.loi_type === "PR")
+        setLoi(filteredLoi);
       } catch (error) {
         console.log(error);
       }
@@ -61,7 +62,7 @@ const MaterialPR = () => {
 
     { name: "ID", selector: (row) => row.id, sortable: true },
     { name: "PR No.", selector: (row) => row.pr_no, sortable: true },
-    { name: "Ref No.", selector: (row) => row.ref, sortable: true },
+    { name: "Ref No.", selector: (row) => row.reference, sortable: true },
     {
       name: "Supplier Name",
       selector: (row) => row.vendor_name,
@@ -80,7 +81,7 @@ const MaterialPR = () => {
       sortable: true,
     },
     { name: "Last Approved By", selector: (row) => row.desg, sortable: true },
-    { name: "Approved Status", selector: (row) => row.status, sortable: true },
+    { name: "Approved Status", selector: (row) => row.is_approved? "Approved": "Pending", sortable: true },
     {
       name: "PR Amount",
       selector: (row) => {

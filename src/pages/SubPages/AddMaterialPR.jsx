@@ -12,6 +12,7 @@ import {
 import { getItemInLocalStorage } from "../../utils/localStorage";
 import { useNavigate } from "react-router-dom";
 import Navbar from "../../components/Navbar";
+import toast from "react-hot-toast";
 
 const AddMatertialPR = () => {
   const themeColor = useSelector((state) => state.theme.color);
@@ -56,6 +57,7 @@ const AddMatertialPR = () => {
     advanceAmount: "",
     relatedTo: "",
     referenceNo: "",
+    approved: false,
   });
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -211,6 +213,7 @@ const AddMatertialPR = () => {
     sendData.append("loi_detail[qc]", formData.qc);
     sendData.append("loi_detail[payment_tenure]", formData.paymentTenure);
     sendData.append("loi_detail[vendor_id]", formData.vendorId);
+    sendData.append("loi_detail[is_approved]", formData.approved);
     sendData.append("loi_detail[billing_address_id]", formData.billingAddress);
     sendData.append(
       "loi_detail[delivery_address_id]",
@@ -243,6 +246,7 @@ const AddMatertialPR = () => {
     try {
       const resp = await postLOI(sendData);
       toast.success("Purchase Requisition Created Successfully");
+      navigate("/admin/purchase/material-pr")
       console.log(resp);
     } catch (error) {
       console.log(error);
@@ -593,6 +597,17 @@ const AddMatertialPR = () => {
                         }
                       }}
                     />
+                  </div>
+                  <div className="col-span-1 flex gap-2 items-center ">
+                   
+                      <input id="approved" type="checkbox"  checked={formData.approved}
+                      onChange={() =>
+                        setFormData({
+                          ...formData,
+                          approved: !formData.approved,
+                        })
+                      } className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded-sm cursor-pointer "/>
+                      <label  htmlFor="approved" class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300 cursor-pointer"> Approved</label>
                   </div>
                 </div>
                 <div className="col-span-1">

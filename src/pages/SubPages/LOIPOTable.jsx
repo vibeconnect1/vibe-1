@@ -15,7 +15,8 @@ import Navbar from "../../components/Navbar";
 import Purchase from "../Purchase";
 
 const LOIPOTable = () => {
-  const [selectedStatus, setSelectedStatus] = useState("all");
+  const [searchText, setSearchText] = useState("")
+  const [filteredData, setFilteredData] = useState([])
   const themeColor = useSelector((state) => state.theme.color);
   const [loi, setLoi] = useState([]);
 
@@ -26,7 +27,9 @@ const LOIPOTable = () => {
         const sortedLoi = loiResp.data.sort((a, b) => {
           return new Date(b.created_at) - new Date(a.created_at);
         });
-        setLoi(sortedLoi);
+        const filteredLoi = sortedLoi.filter((loi)=> loi.loi_type === "PO")
+        setLoi(filteredLoi);
+        setFilteredData(filteredLoi)
       } catch (error) {
         console.log(error);
       }
@@ -97,7 +100,13 @@ const LOIPOTable = () => {
   ];
 
   document.title = `Purchase - Vibe Connect`;
-
+const handleSearch = (e)=>{
+  const searchValue = e.target.value
+setSearchText(searchValue)
+if(searchValue.trim()=== ""){
+  setFilteredData(loi)
+}
+}
   return (
     <section className="flex">
       <Navbar />
