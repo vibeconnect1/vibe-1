@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import FileInputBox from "../../../containers/Inputs/FileInputBox";
 
-const EmployeeAddStaff = () => {
+const EmployeeEditStaff = () => {
   const themeColor = useSelector((state) => state.theme.color);
 
   const [firstName, setFirstName] = useState("");
@@ -47,7 +47,7 @@ const EmployeeAddStaff = () => {
         className="border border-gray-300 rounded-lg p-4 w-full mx-4"
       >
         <h2 className="text-center md:text-xl font-bold p-2 bg-black rounded-full mb-4 text-white" style={{ background: themeColor }}>
-          Add Staff
+          Edit Staff
         </h2>
 
         <div className="grid md:grid-cols-3 gap-5">
@@ -234,7 +234,7 @@ const EmployeeAddStaff = () => {
             </label>
             <FileInputBox/>
           </div>
-         
+
           {/* <div className="flex flex-col">
             <h3>Select Days</h3>
             <div>
@@ -324,7 +324,7 @@ const EmployeeAddStaff = () => {
         <th class="px-4 py-2">Select Days</th>
         <th class="px-4 py-2">Start Time</th>
         <th class="px-4 py-2">End Time</th>
-     
+
       </tr>
     </thead>
     <tbody>
@@ -333,42 +333,42 @@ const EmployeeAddStaff = () => {
         <td class="border px-4 py-2 text-center">Monday</td>
         <td class="border px-4 py-2 text-center"><input type="time" className="border border-gray-400 p-2 rounded-md"/></td>
         <td class="border px-4 py-2 text-center"><input type="time" className="border border-gray-400 p-2 rounded-md"/></td>
-       
+
       </tr>
       <tr>
       <td class="border px-4 py-2 text-center"><input type="checkbox"/></td>
         <td class="border px-4 py-2 text-center">Tuesday</td>
         <td class="border px-4 py-2 text-center"><input type="time" className="border border-gray-400 p-2 rounded-md"/></td>
         <td class="border px-4 py-2 text-center"><input type="time" className="border border-gray-400 p-2 rounded-md"/></td>
-       
+
       </tr>
       <tr>
       <td class="border px-4 py-2 text-center"><input type="checkbox"/></td>
         <td class="border px-4 py-2 text-center">Wednesday</td>
         <td class="border px-4 py-2 text-center"><input type="time" className="border border-gray-400 p-2 rounded-md"/></td>
         <td class="border px-4 py-2 text-center"><input type="time" className="border border-gray-400 p-2 rounded-md"/></td>
-     
+
       </tr>
       <tr>
       <td class="border px-4 py-2 text-center"><input type="checkbox"/></td>
         <td class="border px-4 py-2 text-center">Thursday</td>
         <td class="border px-4 py-2 text-center"><input type="time" className="border border-gray-400 p-2 rounded-md"/></td>
         <td class="border px-4 py-2 text-center"><input type="time" className="border border-gray-400 p-2 rounded-md"/></td>
-      
+
       </tr>
       <tr>
       <td class="border px-4 py-2 text-center"><input type="checkbox"/></td>
         <td class="border px-4 py-2 text-center">Friday</td>
         <td class="border px-4 py-2 text-center"><input type="time" className="border border-gray-400 p-2 rounded-md"/></td>
         <td class="border px-4 py-2 text-center"><input type="time" className="border border-gray-400 p-2 rounded-md"/></td>
-      
+
       </tr>
       <tr>
       <td class="border px-4 py-2 text-center"><input type="checkbox"/></td>
       <td class="border px-4 py-2 text-center">Saturday</td>
         <td class="border px-4 py-2 text-center"><input type="time" className="border border-gray-400 p-2 rounded-md"/></td>
         <td class="border px-4 py-2 text-center"><input type="time" className="border border-gray-400 p-2 rounded-md"/></td>
-        
+
 
       </tr>
       <tr>
@@ -376,13 +376,13 @@ const EmployeeAddStaff = () => {
       <td class="border px-4 py-2 text-center">Sunday</td>
         <td class="border px-4 py-2 text-center"><input type="time" className="border border-gray-400 p-2 rounded-md"/></td>
         <td class="border px-4 py-2 text-center"><input type="time" className="border border-gray-400 p-2 rounded-md"/></td>
-        
+
 
       </tr>
     </tbody>
   </table>
 </div>
-       
+
         <div className="flex gap-5 justify-center items-center my-4">
           <button
             type="submit"
@@ -396,4 +396,4 @@ const EmployeeAddStaff = () => {
   );
 };
 
-export default EmployeeAddStaff;
+export default EmployeeEditStaff;

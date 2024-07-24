@@ -1844,7 +1844,7 @@ const Navbar = () => {
                 )}
                 {feat.includes("gatepass") && (
                   <NavLink
-                    to={"/employees/passes"}
+                  to={"/employee/passes"}
                     className={({ isActive }) =>
                       ` ${
                         isActive
@@ -1854,7 +1854,7 @@ const Navbar = () => {
                     }
                   >
                     <div>
-                      {React.createElement(AiOutlineFieldTime, { size: "20" })}
+                    {React.createElement(BsPass, { size: "20" })}
                     </div>
 
                     <h2

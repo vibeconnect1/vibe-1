@@ -4,11 +4,11 @@ import image from "/profile.png"
 import { useSelector } from "react-redux";
 import Table from "../../../components/table/Table";
 
-const EmployeeGVehiclesDetails = () => {
+const EmployeeMaterialDetails = () => {
   const themeColor = useSelector((state) => state.theme.color);
   const columns = [
-   
-  
+
+
     {
       name: "Name",
       selector: (row) => row.Name,
@@ -35,63 +35,62 @@ const EmployeeGVehiclesDetails = () => {
           }}
           className="text-center w-full text-white font-semibold text-lg p-2 px-4 "
         >
-          G Vehicles Details
+          Material Details
         </h2>
-       
+
         <div className="md:grid  px-4 flex flex-col grid-cols-3 gap-5 gap-x-4">
+          {/* <div className="grid grid-cols-2 ">
+            <p className="font-semibold text-sm">ID : </p>
+            <p className="">1</p>
+          </div> */}
           <div className="grid grid-cols-2 ">
-            <p className="font-semibold text-sm">Type : </p>
-            <p className="">Guest</p>
-          </div>
-          <div className="grid grid-cols-2 ">
-            <p className="font-semibold text-sm">Name  : </p>
+            <p className="font-semibold text-sm">Person Name  : </p>
             <p className="">Rajnish Patil</p>
           </div>
           <div className="grid grid-cols-2 ">
-            <p className="font-semibold text-sm">Vehicle Number : </p>
-            <p className="">MH478</p>
+            <p className="font-semibold text-sm">Type : </p>
+            <p className="">Inward</p>
           </div>
           {/* <div className="grid grid-cols-2 ">
             <p className="font-semibold text-sm">Vehicle Type : </p>
             <p className="">Hatchback</p>
           </div> */}
           <div className="grid grid-cols-2 ">
-            <p className="font-semibold text-sm">Mobile Number: </p>
-            <p className="">845648978</p>
+            <p className="font-semibold text-sm">No. of Items: </p>
+            <p className="">Security</p>
           </div>
           {/* <div className="grid grid-cols-2 ">
             <p className="font-semibold text-sm">OTP : </p>
             <p className="">{details.otp}</p>
           </div> */}
           <div className="grid grid-cols-2 ">
-            <p className="font-semibold text-sm">Purpose : </p>
-            <p className="">Meeting</p>
+            <p className="font-semibold text-sm">Description : </p>
+            <p className="">Demo</p>
           </div>
           <div className="grid grid-cols-2 ">
-            <p className="font-semibold text-sm">"In Date : </p>
-            <p className="">4/2/2024</p>
+            <p className="font-semibold text-sm">Vehicle Number : </p>
+            <p className="">MH8789</p>
           </div>
           <div className="grid grid-cols-2 ">
-            <p className="font-semibold text-sm">In Time : </p>
-            <p className="">1:00PM</p>
+            <p className="font-semibold text-sm">Created By : </p>
+            <p className="">Vibe Connect</p>
           </div>
           <div className="grid grid-cols-2 ">
-            <p className="font-semibold text-sm">Out Date : </p>
-            <p className="">6/2/2024</p>
-          </div>
-          <div className="grid grid-cols-2 ">
-            <p className="font-semibold text-sm">Out Time : </p>
-            <p className="">2:00PM</p>
+            <p className="font-semibold text-sm">Attachments : </p>
+            <p className=""></p>
           </div>
           {/* <div className="grid grid-cols-2 ">
-            <p className="font-semibold text-sm">Staff Name : </p>
-            <p className="">Ramesh Kumar</p>
+            <p className="font-semibold text-sm">Vendor name : </p>
+            <p className="">Rakesh</p>
           </div>
           <div className="grid grid-cols-2 ">
             <p className="font-semibold text-sm">Status : </p>
+            <p className="">Rejected</p>
+          </div> */}
+          {/* <div className="grid grid-cols-2 ">
+            <p className="font-semibold text-sm">Status : </p>
             <p className="">Active</p>
           </div>
-
           
             <div className="grid grid-cols-2 ">
               <p className="font-semibold text-sm">Qr Code : </p>
@@ -99,7 +98,7 @@ const EmployeeGVehiclesDetails = () => {
                123
               </p>
             </div> */}
-         
+
             {/* <div className="grid grid-cols-2 ">
               <p className="font-semibold text-sm">Pass End Date : </p>
               <p className="">
@@ -132,7 +131,7 @@ const EmployeeGVehiclesDetails = () => {
               <p className="font-semibold text-sm">Permitted Days : </p>
               <p className="">10</p>
             </div> */}
-        
+
         </div>
         {/* <div className="my-4 ">
           <h2 className="font-medium border-b-2 text-lg border-black px-4 ">
@@ -148,4 +147,4 @@ const EmployeeGVehiclesDetails = () => {
 };
 
 
-export default EmployeeGVehiclesDetails;
+export default EmployeeMaterialDetails;

@@ -11,16 +11,16 @@ const EmployeeRVehiclesHistory = () => {
   const themeColor = useSelector((state) => state.theme.color);
 
   const columns = [
-    {
-      name: "Action",
-      cell: (row) => (
-        <div className="flex items-center gap-4">
-          <Link to={`/employee/rvehicleshistdetails/${row.id}`}>
-            <BsEye size={15} />
-          </Link>
-        </div>
-      ),
-    },
+    // {
+    //   name: "Action",
+    //   cell: (row) => (
+    //     <div className="flex items-center gap-4">
+    //       <Link to={`/employee/rvehicleshistdetails/${row.id}`}>
+    //         <BsEye size={15} />
+    //       </Link>
+    //     </div>
+    //   ),
+    // },
     {
       name: "Vehicle Number",
       selector: (row) => row.Vehicle_Number,
@@ -60,41 +60,22 @@ const EmployeeRVehiclesHistory = () => {
       },
 
 
-    {
-      name: "Cancellation",
-      selector: (row) => (row.status === "Upcoming" && <button className="text-red-400 font-medium">Cancel</button>),
-      sortable: true,
-    },
+   
   ];
 
-  //custom style
-  const customStyle = {
-    headRow: {
-      style: {
-        backgroundColor: themeColor,
-        color: "white",
 
-        fontSize: "10px",
-      },
-    },
-    headCells: {
-      style: {
-        textTransform: "upperCase",
-      },
-    },
-  };
   const data = [
     {
         id: 1,
-        Vehicle_Number: '789',
+        Vehicle_Number: '5000',
 
-    Category: 'uio',
+    Category: 'Owned',
 
-    Staff_Name: 'abc',
+    Staff_Name: 'Mittu Panda',
     in_date:"25/05/2024",
-    in_time:"25/05/2024",
+    in_time:"2:00PM",
     out_date:"25/05/2024",
-    out_time:"25/05/2024",
+    out_time:"5:00PM",
 
 
     },
@@ -102,25 +83,25 @@ const EmployeeRVehiclesHistory = () => {
         id: 2,
         Vehicle_Number: '789',
 
-    Category: 'uio',
+    Category: 'Staff',
 
-    Staff_Name: 'abc',
+    Staff_Name: 'Mittu Panda',
     in_date:"25/05/2024",
-    in_time:"25/05/2024",
+    in_time:"2:00PM",
     out_date:"25/05/2024",
-    out_time:"25/05/2024",
+    out_time:"5:00PM",
     },
     {
         id: 3,
         Vehicle_Number: '789',
 
-        Category: 'uio',
+        Category: 'Warehouse',
 
-        Staff_Name: 'abc',
+        Staff_Name: 'Mittu Panda',
         in_date:"25/05/2024",
-        in_time:"25/05/2024",
+        in_time:"2:00PM",
         out_date:"25/05/2024",
-        out_time:"25/05/2024",
+        out_time:"5:00PM",
     },
 
 
@@ -188,15 +169,17 @@ const EmployeeRVehiclesHistory = () => {
             </div>
           </div>
           <span className="flex gap-4">
-            <Link
+          <input type="text"                 className="border border-black p-2 rounded-md placeholder:text-sm"
+          placeholder="Search"        />
+            {/* <Link
                 to={"/employee/addrvehicles"}
                 className="border-2 font-semibold hover:bg-black hover:text-white transition-all border-black p-2 rounded-md text-black cursor-pointer text-center flex items-center gap-2 justify-center"
                 style={{ height: '1cm' }}
             >
                 <PiPlusCircle size={20} />
                 Add
-            </Link>
-            <button className="border-2 font-semibold hover:bg-black hover:text-white transition-all border-black p-2 rounded-md text-black cursor-pointer text-center flex items-center gap-2 justify-center" style={{ height: '1cm' }}>
+            </Link> */}
+            {/* <button className="border-2 font-semibold hover:bg-black hover:text-white transition-all border-black p-2 rounded-md text-black cursor-pointer text-center flex items-center gap-2 justify-center" style={{ height: '1cm' }}>
                 Import
             </button>
             <button className="border-2 font-semibold hover:bg-black hover:text-white transition-all border-black p-2 rounded-md text-black cursor-pointer text-center flex items-center gap-2 justify-center" style={{ height: '1cm' }}>
@@ -213,7 +196,7 @@ const EmployeeRVehiclesHistory = () => {
             </button>
             <button className="border-2 font-semibold hover:bg-black hover:text-white transition-all border-black p-2 rounded-md text-black cursor-pointer text-center flex items-center gap-2 justify-center" style={{ height: '1cm' }}>
                 Out
-            </button>
+            </button> */}
         </span>
         </div>
         <Table
@@ -221,12 +204,7 @@ const EmployeeRVehiclesHistory = () => {
           //   selectableRows
           columns={columns}
           data={data}
-          customStyles={customStyle}
-          pagination
-          fixedHeader
-          // fixedHeaderScrollHeight="450px"
-          selectableRowsHighlight
-          highlightOnHover
+        
         />
       </div>
     </section>

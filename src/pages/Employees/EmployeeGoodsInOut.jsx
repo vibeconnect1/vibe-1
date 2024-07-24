@@ -1,13 +1,8 @@
 import React, { useState } from 'react'
-
-
 import EmployeeOutwardsTable from './EmployeeSubPages/EmployeeOutwardTable';
 import EmployeeInwardsTable from './EmployeeSubPages/EmployeeInwardTable';
-//import Navbar from '../../components/Navbar'
-
-
-
-
+import Navbar from '../../components/Navbar';
+import EmployeePasses from './EmployeePasses';
 
 const EmployeeGoodsInOut = () => {
   const [page, setPage] = useState("Inwards")
@@ -16,38 +11,35 @@ const EmployeeGoodsInOut = () => {
   return (
     <div className="visitors-page">
       <section className="flex">
-
+        <Navbar/>
         <div className=" w-full flex mx-3 flex-col overflow-hidden">
-          <div className="flex md:justify-center  my-2">
-            <div className="md:flex md:flex-row flex-col gap-5 text-lg font-semibold p-1 md:rounded-full md:w-auto w-full rounded-sm bg-gray-400">
-              <div className="flex w-full space-x-4 justify-center">
-                <h2
-                  className={`p-2 ${page === "Inwards" ? "text-red-500" : "text-black"
-                    }  md:rounded-full rounded-sm px-4 cursor-pointer text-center text-sm`}
-
-                  onClick={() => setPage("Inwards")}
-                >
-                  Inwards
-                </h2>
-                <h2
-                  className={`p-2 ${page === "Outwards" ? "text-pink-500" : "text-black"
-                    }  md:rounded-full rounded-sm px-4 cursor-pointer text-center text-sm`}
-
-                  onClick={() => setPage("Outwards")}
-                >
-                  Outwards
-                </h2>
-
-
-
-              </div>
-
-
-
+          <EmployeePasses/>
+          
+  <div className="flex md:justify-center  my-2">
+          <div className="flex w-full md:flex-row flex-col space-x-4  border-b border-gray-400">
+              <h2
+                className={`p-2 ${
+                  page === "Inwards"
+                    ? "text-blue-500 font-medium  shadow-custom-all-sides"
+                    : "text-black"
+                } rounded-t-md  cursor-pointer text-center text-sm flex items-center justify-center transition-all duration-300`}
+                onClick={() => setPage("Inwards")}
+              >
+                Inwards
+              </h2>
+              <h2
+                className={`p-2 ${
+                  page === "Outwards"
+                    ? "text-blue-500 font-medium  shadow-custom-all-sides"
+                    : "text-black"
+                }  rounded-t-md  rounded-sm cursor-pointer text-center text-sm flex items-center justify-center transition-all duration-300`}
+                onClick={() => setPage("Outwards")}
+              >
+                Outwards
+              </h2>
+            
             </div>
-
           </div>
-
           {page === "Inwards" && (
             <EmployeeInwardsTable/>
           )}

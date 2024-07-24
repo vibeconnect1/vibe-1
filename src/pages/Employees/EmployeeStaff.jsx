@@ -5,6 +5,9 @@ import { Link } from "react-router-dom";
 import Table from "../../components/table/Table";
 import { useSelector } from "react-redux";
 import { BsEye } from "react-icons/bs";
+import Navbar from "../../components/Navbar";
+import EmployeePasses from "./EmployeePasses";
+import { BiEdit } from "react-icons/bi";
 
 const EmployeeStaff = () => {
   const [selectedStatus, setSelectedStatus] = useState("all");
@@ -15,18 +18,21 @@ const EmployeeStaff = () => {
       name: "Action",
       cell: (row) => (
         <div className="flex items-center gap-4">
-          <Link to={`/employee/staffdetails/${row.id}`}>
+          <Link to={`/employee/passes/staff-details/${row.id}`}>
             <BsEye size={15} />
+          </Link>
+          <Link to={`/employee/passes/staff-edit/${row.id}`}>
+            <BiEdit size={15} />
           </Link>
         </div>
       ),
     },
 
-    {
-        name: "Edit",
-        selector: (row) => row.edit,
-        sortable: true,
-      },
+    // {
+    //     name: "Edit",
+    //     selector: (row) => row.edit,
+    //     sortable: true,
+    //   },
       {
         name: "ID",
         selector: (row) => row.Id,
@@ -81,73 +87,51 @@ const EmployeeStaff = () => {
         sortable: true,
       },
 
-    {
-      name: "Cancellation",
-      selector: (row) => (row.status === "Upcoming" && <button className="text-red-400 font-medium">Cancel</button>),
-      sortable: true,
-    },
+   
   ];
 
-  //custom style
-  const customStyle = {
-    headRow: {
-      style: {
-        backgroundColor: themeColor,
-        color: "white",
 
-        fontSize: "10px",
-      },
-    },
-    headCells: {
-      style: {
-        textTransform: "upperCase",
-      },
-    },
-  };
   const data = [
     {
         id: 1,
-       edit:"ab",
-       Id:"55",
-       name:"Mi",
-       unit:"9",
-       department:"tech",
-       email:"man",
-       mobile:"456",
-       Staff_Id:"89",
-       work_type:"jkl",
-       v_name:"jk",
-       status:"Upcoming"
+      
+       Id:"36955",
+       name:"Deepak Kumar",
+       unit:"101",
+       department:"Security",
+       email:"deepak@gmail.com",
+       mobile:"9011376751",
+       Staff_Id:"1234",
+       work_type:"Driver	",
+       v_name:"Devesh",
+       status:"Approved"
     },
     {
         id: 2,
-
-        edit:"ab",
-        Id:"55",
-        name:"Mi",
-        unit:"9",
-        department:"tech",
-        email:"man",
-        mobile:"456",
-        Staff_Id:"89",
-        work_type:"jkl",
-        v_name:"jk",
-        status:"Upcoming"
+        Id:"36955",
+        name:"Raj Patil",
+        unit:"101",
+        department:"Operational",
+        email:"raj@gmail.com",
+        mobile:"9011376751",
+        Staff_Id:"1234",
+        work_type:"Driver	",
+        v_name:"Devesh",
+        status:"Approved"
     },
     {
         id: 3,
 
-       edit:"ab",
-       Id:"55",
-       name:"Mi",
-       unit:"9",
-       department:"tech",
-       email:"man",
-       mobile:"456",
-       Staff_Id:"89",
-       work_type:"jkl",
-       v_name:"jk",
-       status:"Upcoming"
+        Id:"36955",
+        name:"Akshay J",
+        unit:"101",
+        department:"Electrical dept",
+        email:"akshayk@gmail.com",
+        mobile:"9011376751",
+        Staff_Id:"1234",
+        work_type:"Driver	",
+        v_name:"Devesh",
+        status:"Rejected"
     },
 
 
@@ -156,8 +140,9 @@ const EmployeeStaff = () => {
 
   return (
     <section className="flex">
-
+      <Navbar/>
       <div className=" w-full flex mx-3 flex-col overflow-hidden">
+        <EmployeePasses/>
         <div className="flex md:flex-row flex-col gap-5 justify-between mt-10 my-2">
           <div className="sm:flex grid grid-cols-2 items-center justify-center  gap-4 border border-gray-300 rounded-md px-3 p-2 w-auto">
             <div className="flex items-center gap-2">
@@ -215,6 +200,8 @@ const EmployeeStaff = () => {
             </div>
           </div>
           <span className="flex gap-4">
+          <input type="text"                 className="border border-black p-2 rounded-md placeholder:text-sm"
+          placeholder="Search"        />
             <Link
                 to={"/employee/addstaff"}
                 className="border-2 font-semibold hover:bg-black hover:text-white transition-all border-black p-2 rounded-md text-black cursor-pointer text-center flex items-center gap-2 justify-center"
@@ -223,24 +210,7 @@ const EmployeeStaff = () => {
                 <PiPlusCircle size={20} />
                 Add
             </Link>
-            <button className="border-2 font-semibold hover:bg-black hover:text-white transition-all border-black p-2 rounded-md text-black cursor-pointer text-center flex items-center gap-2 justify-center" style={{ height: '1cm' }}>
-                Import
-            </button>
-            <button className="border-2 font-semibold hover:bg-black hover:text-white transition-all border-black p-2 rounded-md text-black cursor-pointer text-center flex items-center gap-2 justify-center" style={{ height: '1cm' }}>
-                Filter
-            </button>
-            <button className="border-2 font-semibold hover:bg-black hover:text-white transition-all border-black p-2 rounded-md text-black cursor-pointer text-center flex items-center gap-2 justify-center" style={{ height: '1cm' }}>
-                History
-            </button>
-            <button className="border-2 font-semibold hover:bg-black hover:text-white transition-all border-black p-2 rounded-md text-black cursor-pointer text-center flex items-center gap-2 justify-center" style={{ height: '1cm' }}>
-                All
-            </button>
-            <button className="border-2 font-semibold hover:bg-black hover:text-white transition-all border-black p-2 rounded-md text-black cursor-pointer text-center flex items-center gap-2 justify-center" style={{ height: '1cm' }}>
-                In
-            </button>
-            <button className="border-2 font-semibold hover:bg-black hover:text-white transition-all border-black p-2 rounded-md text-black cursor-pointer text-center flex items-center gap-2 justify-center" style={{ height: '1cm' }}>
-                Out
-            </button>
+           
         </span>
         </div>
         <Table
@@ -248,12 +218,7 @@ const EmployeeStaff = () => {
           //   selectableRows
           columns={columns}
           data={data}
-          customStyles={customStyle}
-          pagination
-          fixedHeader
-          // fixedHeaderScrollHeight="450px"
-          selectableRowsHighlight
-          highlightOnHover
+        
         />
       </div>
     </section>

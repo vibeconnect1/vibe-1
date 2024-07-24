@@ -577,10 +577,10 @@ const Asset = () => {
               data={filteredData}
               fixedHeader
               // fixedHeaderScrollHeight="450px"
-              pagination={false}
+              pagination={true}
               // onChangePage={}
             />
-            <div className="flex w-fill bg-white p-2 mb-10 justify-end">
+            {/* <div className="flex w-fill bg-white p-2 mb-10 justify-end">
               <Pagination
                 simple={{
                   readOnly: true,
@@ -588,7 +588,7 @@ const Asset = () => {
                 defaultCurrent={2}
                 total={50}
               />
-            </div>
+            </div> */}
           </>
         ) : (
           <div className="flex justify-center items-center h-full">

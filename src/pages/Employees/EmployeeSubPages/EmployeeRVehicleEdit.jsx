@@ -1,14 +1,14 @@
 import React from 'react';
 import { useSelector } from "react-redux";
 
-const EmployeeAddRVehicles = () => {
+const EmployeeRVehiclesEdit = () => {
   const themeColor = useSelector((state) => state.theme.color);
 
   return (
     <div className="flex justify-center items-center my-5 w-full p-4">
       <form className="border border-gray-300 rounded-lg p-4 w-full mx-4">
         <h2 className="text-center md:text-xl font-bold p-2 bg-black rounded-full mb-4 text-white" style={{ background: themeColor }}>
-          Add Vehicles
+          Edit R Vehicles
         </h2>
 
         <div className="grid md:grid-cols-3 gap-5">
@@ -134,4 +134,4 @@ const EmployeeAddRVehicles = () => {
   );
 };
 
-export default EmployeeAddRVehicles;
+export default EmployeeRVehiclesEdit;

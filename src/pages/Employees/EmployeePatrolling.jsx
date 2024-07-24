@@ -8,11 +8,14 @@ import { useSelector } from "react-redux";
 import { BiEdit } from "react-icons/bi";
 import { TiTick } from "react-icons/ti";
 import { IoClose } from "react-icons/io5";
+import Navbar from "../../components/Navbar";
+import EmployeePasses from "./EmployeePasses";
 
 const EmployeePatrolling = () => {
   const [selectedStatus, setSelectedStatus] = useState("all");
   const themeColor = useSelector((state) => state.theme.color);
   const [modalVisible, setModalVisible] = useState(false);
+  const [modalVisible1, setModalVisible1] = useState(false);
 
   const openModal = () => {
     setModalVisible(true);
@@ -27,9 +30,14 @@ const EmployeePatrolling = () => {
       name: "Action",
       cell: (row) => (
         <div className="flex items-center gap-4">
-          <Link to={`/employee/patrollingdetails/${row.id}`}>
+          <Link to={`/employee/passes/patrolling-details/${row.id}`}>
             <BsEye size={15} />
           </Link>
+          <button  onClick={() => {
+                      setModalVisible1(true);
+                    }}>
+            <BiEdit size={15} />
+          </button>
         </div>
       ),
     },
@@ -72,47 +80,10 @@ const EmployeePatrolling = () => {
       sortable: true,
     },
 
-    {
-      name: "Cancellation",
-      selector: (row) =>
-        row.status === "Upcoming" && (
-          <button className="text-red-400 font-medium">Cancel</button>
-        ),
-      sortable: true,
-    },
-    {
-      name: "Approval",
-      selector: (row) =>
-        row.status === "Upcoming" && (
-          <div className="flex justify-center gap-2">
-            <button className="text-green-400 font-medium hover:bg-green-400 hover:text-white transition-all duration-200 p-1 rounded-full">
-              <TiTick size={20} />
-            </button>
-            <button className="text-red-400 font-medium hover:bg-red-400 hover:text-white transition-all duration-200 p-1 rounded-full">
-              <IoClose size={20} />
-            </button>
-          </div>
-        ),
-      sortable: true,
-    },
+  
   ];
 
-  //custom style
-  const customStyle = {
-    headRow: {
-      style: {
-        backgroundColor: themeColor,
-        color: "white",
-
-        fontSize: "10px",
-      },
-    },
-    headCells: {
-      style: {
-        textTransform: "upperCase",
-      },
-    },
-  };
+ 
   const data = [
     {
       id: 1,
@@ -148,7 +119,9 @@ const EmployeePatrolling = () => {
 
   return (
     <section className="flex">
+      <Navbar/>
       <div className=" w-full flex mx-3 flex-col overflow-hidden">
+        <EmployeePasses/>
         <div className="flex md:flex-row flex-col gap-5 justify-between mt-10 my-2">
           <div className="sm:flex grid grid-cols-2 items-center justify-center  gap-4 border border-gray-300 rounded-md px-3 p-2 w-auto">
             <div className="flex items-center gap-2">
@@ -205,10 +178,12 @@ const EmployeePatrolling = () => {
             </div>
           </div>
           <span className="flex gap-4">
+          <input type="text"                 className="border w-64  border-black p-2 rounded-md placeholder:text-sm"
+          placeholder="Search"        />
             <div
               onClick={openModal}
               className="border-2 font-semibold hover:bg-black hover:text-white transition-all border-black p-2 rounded-md text-black cursor-pointer text-center flex items-center gap-2 justify-center"
-              style={{ height: "1cm" }}
+             
             >
               <PiPlusCircle size={20} />
               Add
@@ -220,7 +195,7 @@ const EmployeePatrolling = () => {
                 onClick={closeModal}
               >
                 <div
-                  className="bg-white p-6 rounded-md w-4/5 sm:w-2/3 md:w-1/2 lg:w-1/3"
+                  className="bg-white p-4 rounded-md w-4/5 sm:w-2/3 md:w-1/2 lg:w-1/3"
                   onClick={(e) => e.stopPropagation()}
                 >
                   <button
@@ -229,13 +204,13 @@ const EmployeePatrolling = () => {
                   >
                     &times;
                   </button>
-                  <div className="flex justify-center items-center my-5 w-full p-4">
-                    <form className="border border-gray-300 rounded-lg p-4 w-full mx-4">
-                      <h2 className="text-center md:text-xl font-bold p-2 bg-black rounded-full text-white">
+                  <div className="flex justify-center items-center my-5 w-full p-2">
+                    <form className="border border-gray-300 rounded-lg p-2 w-full mx-4">
+                      <h2 style={{ background: themeColor }} className="text-center md:text-xl font-bold p-2 bg-black rounded-full text-white" >
                         Add
                       </h2>
 
-                      <div className="grid grid-cols-1 gap-5">
+                      <div className="grid grid-cols-1 gap-5 mt-2">
                         <div className="grid grid-cols-2 gap-5">
                           <div className="flex flex-col">
                             <label htmlFor="building" className="font-semibold">
@@ -245,7 +220,7 @@ const EmployeePatrolling = () => {
                               name="building"
                               placeholder="Enter Building Name"
                               className="border p-2 rounded-md border-black"
-                            />
+                            ><option value="">Building1</option></select>
                           </div>
                           <div className="flex flex-col">
                             <label htmlFor="wing" className="font-semibold">
@@ -255,7 +230,7 @@ const EmployeePatrolling = () => {
                               name="wing"
                               placeholder="Enter Wing"
                               className="border p-2 rounded-md border-black"
-                            />
+                            ><option value="">Wing1</option></select>
                           </div>
                         </div>
                         <div className="grid grid-cols-2 gap-5">
@@ -266,7 +241,7 @@ const EmployeePatrolling = () => {
                             <select
                               name="floor"
                               className="border p-2 rounded-md border-black"
-                            />
+                            ><option value="">Floor1</option></select>
                           </div>
                           <div className="flex flex-col">
                             <label htmlFor="room" className="font-medium">
@@ -275,7 +250,7 @@ const EmployeePatrolling = () => {
                             <select
                               name="room"
                               className="border p-2 rounded-md border-black"
-                            />
+                            ><option value="">Room1</option></select>
                           </div>
                         </div>
                         <div className="grid grid-cols-2 gap-5">
@@ -304,7 +279,112 @@ const EmployeePatrolling = () => {
 
                       <div className="flex gap-5 justify-center items-center my-4">
                         <button
-                          type="submit"
+                          style={{ background: themeColor }}
+                          className="text-white bg-black hover:bg-white hover:text-black border-2 border-black font-semibold py-2 px-4 rounded transition-all duration-300"
+                        >
+                          Submit
+                        </button>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            )}
+            {modalVisible1 && (
+              <div
+                className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50"
+                onClick={() => {
+                  setModalVisible1(false);
+                }}
+              >
+                <div
+                  className="bg-white p-4 rounded-md w-4/5 sm:w-2/3 md:w-1/2 lg:w-1/3"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <button
+                    className="text-gray-500 float-right text-2xl leading-none font-semibold"
+                    onClick={() => {
+                      setModalVisible1(false);
+                    }}
+                  >
+                    &times;
+                  </button>
+                  <div className="flex justify-center items-center my-5 w-full p-2">
+                    <form className="border border-gray-300 rounded-lg p-2 w-full mx-4">
+                      <h2 className="text-center md:text-xl font-bold p-2 bg-black rounded-full text-white" style={{ background: themeColor }}>
+                        Edit Patrolling
+                      </h2>
+
+                      <div className="grid grid-cols-1 gap-5 mt-2">
+                        <div className="grid grid-cols-2 gap-5">
+                          <div className="flex flex-col">
+                            <label htmlFor="building" className="font-semibold">
+                              Building
+                            </label>
+                            <select
+                              name="building"
+                              placeholder="Enter Building Name"
+                              className="border p-2 rounded-md border-black"
+                            ><option value="">Building1</option></select>
+                          </div>
+                          <div className="flex flex-col">
+                            <label htmlFor="wing" className="font-semibold">
+                              Wing
+                            </label>
+                            <select
+                              name="wing"
+                              placeholder="Enter Wing"
+                              className="border p-2 rounded-md border-black"
+                            ><option value="">Wing1</option></select>
+                          </div>
+                        </div>
+                        <div className="grid grid-cols-2 gap-5">
+                          <div className="flex flex-col">
+                            <label htmlFor="floor" className="font-medium">
+                              Floor
+                            </label>
+                            <select
+                              name="floor"
+                              className="border p-2 rounded-md border-black"
+                            ><option value="">Floor1</option></select>
+                          </div>
+                          <div className="flex flex-col">
+                            <label htmlFor="room" className="font-medium">
+                              Room
+                            </label>
+                            <select
+                              name="room"
+                              className="border p-2 rounded-md border-black"
+                            ><option value="">Room1</option></select>
+                          </div>
+                        </div>
+                        <div className="grid grid-cols-2 gap-5">
+                          <div className="flex flex-col">
+                            <label htmlFor="startTime" className="font-medium">
+                              Start Time
+                            </label>
+                            <input
+                              type="time"
+                              name="startTime"
+                              className="border p-2 rounded-md border-black"
+                            />
+                          </div>
+                          <div className="flex flex-col">
+                            <label htmlFor="endTime" className="font-medium">
+                              End Time
+                            </label>
+                            <input
+                              type="time"
+                              name="endTime"
+                              className="border p-2 rounded-md border-black"
+                            />
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="flex gap-5 justify-center items-center my-4">
+                        <button
+                          style={{ background: themeColor }}
                           className="text-white bg-black hover:bg-white hover:text-black border-2 border-black font-semibold py-2 px-4 rounded transition-all duration-300"
                         >
                           Submit
@@ -316,42 +396,7 @@ const EmployeePatrolling = () => {
               </div>
             )}
 
-            <button
-              className="border-2 font-semibold hover:bg-black hover:text-white transition-all border-black p-2 rounded-md text-black cursor-pointer text-center flex items-center gap-2 justify-center"
-              style={{ height: "1cm" }}
-            >
-              Import
-            </button>
-            <button
-              className="border-2 font-semibold hover:bg-black hover:text-white transition-all border-black p-2 rounded-md text-black cursor-pointer text-center flex items-center gap-2 justify-center"
-              style={{ height: "1cm" }}
-            >
-              Filter
-            </button>
-            <button
-              className="border-2 font-semibold hover:bg-black hover:text-white transition-all border-black p-2 rounded-md text-black cursor-pointer text-center flex items-center gap-2 justify-center"
-              style={{ height: "1cm" }}
-            >
-              History
-            </button>
-            <button
-              className="border-2 font-semibold hover:bg-black hover:text-white transition-all border-black p-2 rounded-md text-black cursor-pointer text-center flex items-center gap-2 justify-center"
-              style={{ height: "1cm" }}
-            >
-              All
-            </button>
-            <button
-              className="border-2 font-semibold hover:bg-black hover:text-white transition-all border-black p-2 rounded-md text-black cursor-pointer text-center flex items-center gap-2 justify-center"
-              style={{ height: "1cm" }}
-            >
-              In
-            </button>
-            <button
-              className="border-2 font-semibold hover:bg-black hover:text-white transition-all border-black p-2 rounded-md text-black cursor-pointer text-center flex items-center gap-2 justify-center"
-              style={{ height: "1cm" }}
-            >
-              Out
-            </button>
+            
           </span>
         </div>
         <Table
@@ -359,12 +404,7 @@ const EmployeePatrolling = () => {
           //   selectableRows
           columns={columns}
           data={data}
-          customStyles={customStyle}
-          pagination
-          fixedHeader
-          // fixedHeaderScrollHeight="450px"
-          selectableRowsHighlight
-          highlightOnHover
+         
         />
       </div>
     </section>

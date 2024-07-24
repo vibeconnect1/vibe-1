@@ -583,7 +583,21 @@ import PayslipDetails2 from "./pages/AdminHrms/PayslipDetails2.jsx";
 import EditLetterTemplate from "./pages/AdminHrms/EditLetterTemplate.jsx";
 import StandardUnit from "./pages/Setup/StandardUnitSetup/StandardUnit.jsx";
 import LOIPOTable from "./pages/SubPages/LOIPOTable.jsx";
-
+import EmployeeVisitor from "./pages/Employees/EmployeeSubPages/EmployeeVisitor.jsx";
+import EmployeeVisitorDetails from "./pages/Employees/EmployeeSubPages/EmployeeVisitorDetails.jsx";
+import EmployeeVisitorEdit from "./pages/Employees/EmployeeSubPages/EmployeeVisitorEdit.jsx";
+import EmployeeRVehicles from "./pages/Employees/EmployeeSubPages/EmployeeRVehiicles.jsx";
+import EmployeeRVehiclesDetails from "./pages/Employees/EmployeeSubPages/EmployeeRVehicleDetails.jsx";
+import EmployeeRVehiclesEdit from "./pages/Employees/EmployeeSubPages/EmployeeRVehicleEdit.jsx";
+import EmployeeStaff from "./pages/Employees/EmployeeStaff.jsx";
+import EmployeeEditStaff from "./pages/Employees/EmployeeSubPages/EmployeeEditStaff.jsx";
+import EmployeeMaterials from "./pages/Employees/EmployeeMaterials.jsx";
+import EmployeeMaterialDetails from "./pages/Employees/EmployeeSubPages/EmpolyeeMaterialDetails.jsx";
+import EmployeePatrollingDetails from "./pages/Employees/EmployeeSubPages/EmployeePatrollingDetails.jsx";
+import EmployeePatrolling from "./pages/Employees/EmployeePatrolling.jsx";
+import EmployeeGoodsInOut from "./pages/Employees/EmployeeGoodsInOut.jsx";
+import EmployeeStaffDetails from "./pages/Employees/EmployeeSubPages/EmployeeStaffDetails.jsx";
+import EmployeeGVehicle from "./pages/Employees/EmployeeGVehicle.jsx"
 // new admin hrms
 
 function App() {
@@ -2531,17 +2545,17 @@ function App() {
           />
 
           {/* employee passes */}
-
+          <Route path="/employee/passes" element={<Navigate to="/employee/passes/visitors" replace />}  />
           <Route
-            path="/employees/passes"
+            path="/employee/passes/visitors"
             element={
               <ProtectedRoute>
-                <EmployeePasses />
+                <EmployeeVisitor/>
               </ProtectedRoute>
             }
           />
           <Route
-            path="/employee/addnewvisitor"
+          path="/employee/add-new-visitor"
             element={
               <ProtectedRoute>
                 <EmployeeAddVisitor />
@@ -2577,6 +2591,127 @@ function App() {
             element={
               <ProtectedRoute>
                 <EmployeeAddStaff />
+              </ProtectedRoute>
+            }
+          />
+           <Route
+            path="/employee/passes/visitors/visitor-details/:id"
+            element={
+              <ProtectedRoute>
+                <EmployeeVisitorDetails/>
+              </ProtectedRoute>
+            }
+          />
+           <Route
+            path="/employee/passes/visitors/edit-visitor/:id"
+            element={
+              <ProtectedRoute>
+                <EmployeeVisitorEdit/>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/employee/passes/registered-vehicles"
+            element={
+              <ProtectedRoute>
+                <EmployeeRVehicles/>
+              </ProtectedRoute>
+            }
+          />
+           <Route
+            path="/employee/rvehicles-details/:id"
+            element={
+              <ProtectedRoute>
+                <EmployeeRVehiclesDetails/>
+              </ProtectedRoute>
+            }
+          />
+           <Route
+            path="/employee/rvehicles-edit/:id"
+            element={
+              <ProtectedRoute>
+                <EmployeeRVehiclesEdit/>
+              </ProtectedRoute>
+            }
+          />
+           <Route
+            path="/employee/passes/guest-vehicles"
+            element={
+              <ProtectedRoute>
+                <EmployeeGVehicle/>
+              </ProtectedRoute>
+            }
+          />
+           <Route
+            path="/employee/passes/gvehicles-details/:id"
+            element={
+              <ProtectedRoute>
+              <EmployeeGVehiclesDetails/>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/employee/passes/staff"
+            element={
+              <ProtectedRoute>
+              <EmployeeStaff/>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/employee/passes/staff-edit/:id"
+            element={
+              <ProtectedRoute>
+              <EmployeeEditStaff/>
+              </ProtectedRoute>
+            }
+          />
+           <Route
+            path="/employee/passes/staff-details/:id"
+            element={
+              <ProtectedRoute>
+              <EmployeeStaffDetails
+              />
+              </ProtectedRoute>
+            }
+          />
+           <Route
+            path="/employee/passes/materials"
+            element={
+              <ProtectedRoute>
+              <EmployeeMaterials/>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/employee/passes/material-details/:id"
+            element={
+              <ProtectedRoute>
+              <EmployeeMaterialDetails/>
+              </ProtectedRoute>
+            }
+          />
+           <Route
+            path="/employee/passes/patrolling-details/:id"
+            element={
+              <ProtectedRoute>
+              <EmployeePatrollingDetails/>
+              </ProtectedRoute>
+            }
+          />
+           <Route
+            path="/employee/passes/patrolling"
+            element={
+              <ProtectedRoute>
+              <EmployeePatrolling/>
+              </ProtectedRoute>
+            }
+          />
+           <Route
+            path="/employee/passes/goods-in-out"
+            element={
+              <ProtectedRoute>
+              <EmployeeGoodsInOut/>
               </ProtectedRoute>
             }
           />
