@@ -92,6 +92,11 @@ export const colors = [
   },
 ];
 
+export const statusColors = [
+  "#ff0000", "#0000ff", "#00d8ff", "#00ff00", "#ff6f61", "#ff007f",
+  "#800080", "#ffd700", "#d8bfd8", "#8b0000", "#008000", "#0000cd"
+];
+
  
 
 

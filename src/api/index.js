@@ -82,6 +82,42 @@ export const getComplaints = async () =>
       token: token,
     },
   });
+export const getHelpDeskCategoriesSetup = async () =>
+  axiosInstance.get(`/pms/admin/helpdesk_categories.json`, {
+    params: {
+      token: token,
+    },
+  });
+export const getHelpDeskCategoriesSetupDetails = async (id) =>
+  axiosInstance.get(`/pms/admin/helpdesk_categories/${id}.json`, {
+    params: {
+      token: token,
+    },
+  });
+export const editHelpDeskCategoriesSetupDetails = async (id,data) =>
+  axiosInstance.put(`/pms/admin/helpdesk_categories/${id}.json`, data,{
+    params: {
+      token: token,
+    },
+  });
+  export const postHelpDeskCategoriesSetup = async (data) =>
+    axiosInstance.post(`/pms/admin/helpdesk_categories.json`,data, {
+      params: {
+        token: token,
+      },
+    });
+    export const getHelpDeskSubCategoriesSetup = async () =>
+      axiosInstance.get(`/pms/admin/helpdesk_categories/sub_categories.json`, {
+        params: {
+          token: token,
+        },
+      });
+    export const getHelpDeskStatusSetup = async () =>
+      axiosInstance.get(`/pms/admin/helpdesk_categories/complaint_statuses.json`, {
+        params: {
+          token: token,
+        },
+      });
 export const getAdminComplaints = async () =>
   axiosInstance.get(`/pms/admin/complaints.json`, {
     params: {
@@ -117,6 +153,7 @@ export const getComplaintsDetails = async (id) =>
   });
 
 export const fetchSubCategories = async (categoryId) =>
+
   axiosInstance.get(`/pms/admin/get_sub_categories.json`, {
     params: {
       token: token,
@@ -710,7 +747,7 @@ export const postContactBook = async (data) =>
     },
   });
 export const editContactBook = async (id,data) =>
-  axiosInstance.put(`/contact_books.json/${id}`, data, {
+  axiosInstance.put(`/contact_books/${id}.json`, data, {
     params: {
       token: token,
     },

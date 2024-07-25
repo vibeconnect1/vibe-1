@@ -8,11 +8,12 @@ import {
   getGenericCategory,
   postContactBook,
   getContactBookDetails,
-  editContactBook
+  editContactBook,
 } from "../../api";
 import toast from "react-hot-toast";
 import { getItemInLocalStorage } from "../../utils/localStorage";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import Switch from "../../Buttons/Switch";
 const EditContactBook = () => {
   const [imageFile, setImageFile] = useState(null);
   const [categories, setCategories] = useState([]);
@@ -31,7 +32,7 @@ const EditContactBook = () => {
     address: "",
     description: "",
     profile: "",
-    status:false
+    status: false,
     // attachments
   });
   console.log(formData);
@@ -45,29 +46,34 @@ const EditContactBook = () => {
     setImageFile(event.target.files[0]);
   };
   const themeColor = useSelector((state) => state.theme.color);
-const {id} = useParams()
+  const { id } = useParams();
   useEffect(() => {
-    const fetchDetails = async()=>{
-      const detailsResp = await getContactBookDetails(id)
-      const data = detailsResp.data
-      setFormData({
-        ...formData,
-        address: data.address,
-        categoryId:data.generic_info_id,
-        mobileNumber:data.mobile,
-        landLine:data.landline_no,
-        primaryEmail:data.primary_email,
-        secondaryEmail:data.secondary_email,
-        website:data.website,
-        keyOffering:data.key_offering,
-        description:data.description,
-        profile:data.profile,
-        status:data.status,
-        companyName: data.company_name,
-        contactPersonName: data.contact_person_name
-
-      })
-    }
+    const fetchDetails = async () => {
+     try {
+       const detailsResp = await getContactBookDetails(id);
+       const data = detailsResp.data;
+       setFormData({
+         ...formData,
+         address: data.address,
+         categoryId: data.generic_info_id,
+         mobileNumber: data.mobile,
+         landLine: data.landline_no,
+         primaryEmail: data.primary_email,
+         secondaryEmail: data.secondary_email,
+         website: data.website,
+         keyOffering: data.key_offering,
+         description: data.description,
+         profile: data.profile,
+         status: data.status,
+         companyName: data.company_name,
+         contactPersonName: data.contact_person_name,
+         subCategoryId: data.generic_sub_info_id
+       });
+       fetchSubCategory(data.generic_info_id)
+     } catch (error) {
+      console.log(error)
+     }
+    };
     const fetchContactCategory = async () => {
       try {
         const contactResp = await getGenericCategory();
@@ -80,11 +86,24 @@ const {id} = useParams()
         console.log(error);
       }
     };
-    fetchDetails()
+    const fetchSubCategory = async (catId) => {
+      try {
+        const subCatResp = await getDependentGenericSubCategory(catId);
+        setSubCategories(
+          subCatResp.data.map((subCat) => ({
+            name: subCat.name,
+            id: subCat.id,
+          }))
+        );
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchDetails();
     fetchContactCategory();
   }, []);
-
-const siteId = getItemInLocalStorage("SITEID")
+const navigate = useNavigate()
+  const siteId = getItemInLocalStorage("SITEID");
   const handleEditContact = async () => {
     if (formData.companyName === "") {
       return toast.error("Please Provide Company name");
@@ -103,12 +122,18 @@ const siteId = getItemInLocalStorage("SITEID")
     sendData.append("contact_book[website]", formData.website);
     sendData.append("contact_book[address]", formData.address);
     sendData.append("contact_book[generic_info_id]", formData.categoryId);
+    sendData.append(
+      "contact_book[generic_sub_info_id]",
+      formData.subCategoryId
+    );
     sendData.append("contact_book[key_offering]", formData.keyOffering);
     sendData.append("contact_book[description]", formData.description);
     sendData.append("contact_book[profile]", formData.profile);
+    sendData.append("contact_book[status]", formData.status);
     try {
-      const res = await editContactBook(id,sendData);
-      console.log(res)
+      const res = await editContactBook(id, sendData);
+     
+      navigate(`/business/details/${res.data.id}`)
     } catch (error) {
       console.log(error);
     }
@@ -145,7 +170,10 @@ const siteId = getItemInLocalStorage("SITEID")
 
   return (
     <section className="flex">
+      <div className="hidden md:block">
+
       <Navbar />
+      </div>
       <div className="w-full flex mx-3 flex-col overflow-hidden">
         <div className="flex flex-col w-full gap-4 p-4">
           <h2
@@ -326,6 +354,21 @@ const siteId = getItemInLocalStorage("SITEID")
                 className="border p-1 px-4 border-gray-500 rounded-md"
               />
             </div>
+            <div className="flex items-end">
+              <div className="flex items-center gap-2  ">
+                <p className="font-semibold my-1">Inactive</p>
+                <Switch
+                  checked={formData.status}
+                  onChange={() =>
+                    setFormData((prevState) => ({
+                      ...prevState,
+                      status: !prevState.status,
+                    }))
+                  }
+                />
+                <p className="font-semibold my-1">Active</p>
+              </div>
+            </div>
           </div>
 
           <div className="flex flex-col gap-2 ">
@@ -379,8 +422,11 @@ const siteId = getItemInLocalStorage("SITEID")
             <FileInputBox />
           </div>
           <div className="my-10 flex justify-center">
-            <button className="bg-black text-white p-2 text-lg rounded-md" onClick={handleEditContact}>
-              Submit
+            <button
+              className="bg-black text-white p-2 text-lg rounded-md"
+              onClick={handleEditContact}
+            >
+              Save
             </button>
           </div>
         </div>
@@ -389,8 +435,4 @@ const siteId = getItemInLocalStorage("SITEID")
   );
 };
 
-
-
-
-
-export default EditContactBook
+export default EditContactBook;

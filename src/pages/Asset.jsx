@@ -250,10 +250,10 @@ const Asset = () => {
         const sortedData = response.data.site_assets.sort((a, b) => {
           return new Date(b.created_at) - new Date(a.created_at);
         });
-        setFilteredData(sortedData);
+        setFilteredData(response.data.site_assets);
         // setFilteredData(response.data.site_assets);
         // setAssets(response.data.site_assets);
-        setAssets(sortedData);
+        setAssets(response.data.site_assets);
         console.log(response);
       } catch (error) {
         console.error("Error fetching data:", error);

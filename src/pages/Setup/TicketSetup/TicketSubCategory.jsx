@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 // import TicketCategorySetup from './TicketCategorySetup';
 import { useSelector } from "react-redux";
 // import Table from "../../components/table/Table";
@@ -8,6 +8,10 @@ import { PiPlusCircle } from "react-icons/pi";
 // import { BsEye } from "react-icons/bs";
 import { BiEdit } from "react-icons/bi";
 import { FaTimes } from "react-icons/fa";
+import {
+  getHelpDeskCategoriesSetup,
+  getHelpDeskSubCategoriesSetup,
+} from "../../../api";
 const TicketSubCategory = ({ handleToggleCategoryPage1 }) => {
   //   const [faqs, setFaqs] = useState([{ question: '', answer: '' }]);
   const themeColor = useSelector((state) => state.theme.color);
@@ -77,157 +81,58 @@ const TicketSubCategory = ({ handleToggleCategoryPage1 }) => {
       }));
     }
   };
-  const columns = [
-    {
-      name: "Action",
-      cell: (row) => (
-        <div className="flex items-center gap-4">
-          <button onClick={openModal1}>
-            <BiEdit size={15} />
-          </button>
-        </div>
-      ),
-    },
-    {
-      name: "Category Type",
-      selector: (row) => row.Category_Type,
-      sortable: true,
-    },
-    {
-      name: "Sub Category Type",
-      selector: (row) => row.Assignee,
-      sortable: true,
-    },
-    {
-      name: "Building",
-      selector: (row) => row.Response_Time,
-      sortable: true,
-    },
-
-    {
-      name: "Wing",
-      selector: (row) => row.Vendor_Email,
-      sortable: true,
-    },
-
-    {
-      name: "Zone",
-      selector: (row) => row.Icon,
-      sortable: true,
-    },
-    {
-      name: "Floor",
-      selector: (row) => row.Icon,
-      sortable: true,
-    },
-    {
-      name: "Room",
-      selector: (row) => row.Icon,
-      sortable: true,
-    },
-  ];
-
-  //custom style
-  const customStyle = {
-    headRow: {
-      style: {
-        backgroundColor: themeColor,
-        color: "white",
-
-        fontSize: "10px",
-      },
-    },
-    headCells: {
-      style: {
-        textTransform: "upperCase",
-      },
-    },
-  };
-
-  const data = [
-    {
-      id: 1,
-      Category_Type: "b",
-      Assignee: "j",
-    },
-  ];
-  
+  const [categories, setCategories] = useState([]);
+  const [formData, setFormData] = useState({
+    category: "id",
+    subCategory:[]
+  })
+  useEffect(() => {
+    const fetchCategory = async () => {
+      try {
+        const catResp = await getHelpDeskCategoriesSetup();
+        setCategories(catResp.data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchCategory();
+  }, []);
 
   return (
-    <div className="p-8 ">
-      {/* <h1 className="text-2xl font-bold mb-4">Dynamic FAQ Form</h1> */}
-      <div className="grid grid-cols-2 gap-4 mb-6">
-        <div className="form-group">
-          <label className="block mb-2">Category</label>
-          <select type="text" className="border p-2 w-full">
-            <option value="">HouseKeeping</option>
+    <div className=" ">
+      <div className="grid grid-cols-3 gap-2">
+        <div className="flex flex-col gap-2">
+        
+          <select type="text" className="border p-2 rounded-md">
+            <option value="">Select Category</option>
+            {categories.map((category) => (
+              <option value={category.id} key={category.id}>
+                {category.name}
+              </option>
+            ))}
           </select>
         </div>
-        <div className="form-group">
-          <label className="block mb-2">Sub Category</label>
-          <input className="border p-2 w-full"></input>
+        <div className="flex flex-col gap-2">
+          
+          <input className="border p-2 rounded-md " placeholder="Enter Sub Category" />
+        </div>
+        <div className="flex  gap-2">
+          <button
+            style={{ background: themeColor }}
+            type="submit"
+            className="px-4 py-2 bg-blue-500 text-white rounded-md"
+          >
+            Submit
+          </button>
+          <button
+            // style={{ background: themeColor }}
+            onClick={handleToggleCategoryPage1}
+            className="  px-4 py-2 bg-red-500 text-white rounded-md"
+          >
+            Cancel
+          </button>
         </div>
       </div>
-
-      <form className="">
-        {Object.keys(options).map((section) => (
-          <div key={section} className="form-section">
-            <div className="flex flex-col">
-              <span>
-                <input type="checkbox" />
-                &nbsp; &nbsp;<label htmlFor="">{section}</label>
-              </span>
-              <span>
-                {/* <div className="mr-2">Select {section}:</div> */}
-
-                <div className="">
-                  <input
-                    type="text"
-                    readOnly
-                    value={selectedOptions[section].join(", ")}
-                    onClick={() => toggleSelect(section)}
-                    className="cursor-pointer mt-2 p-2 border border-gray-300 rounded-md w-full"
-                  />
-                  &nbsp;
-                  {isOpen[section] && (
-                    <div className="  z-10  w-full rounded-md shadow-lg bg-white border border-gray-300">
-                      {options[section].map((option) => (
-                        <label key={option} className="block p-2">
-                          <input
-                            type="checkbox"
-                            value={option}
-                            checked={selectedOptions[section].includes(option)}
-                            onChange={() => handleOptionChange(section, option)}
-                            className="mr-2"
-                          />
-                          {option}
-                        </label>
-                      ))}
-                    </div>
-                  )}
-                </div>
-              </span>
-            </div>
-          </div>
-        ))}
-        <div className="flex justify-center gap-2">
-
-        <button
-          style={{ background: themeColor }}
-          type="submit"
-          className="px-4 py-2 bg-blue-500 text-white rounded-md"
-        >
-          Submit
-        </button>
-      <button
-        style={{ background: themeColor }}
-        onClick={handleToggleCategoryPage1}
-        className="  px-4 py-2 bg-blue-500 text-white rounded-md"
-        >
-        Cancel
-      </button>
-        </div>
-      </form>
 
       {isModalOpen1 && (
         <div className="fixed inset-0 flex items-center justify-center z-50">

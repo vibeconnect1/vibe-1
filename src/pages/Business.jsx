@@ -9,7 +9,7 @@ import profile from "/profile.png";
 import Switch from "../Buttons/Switch";
 import Table from "../components/table/Table";
 import { useSelector } from "react-redux";
-import { getContactBook } from "../api";
+import { editContactBook, getContactBook } from "../api";
 import { BsEye } from "react-icons/bs";
 
 const Business = () => {
@@ -17,6 +17,8 @@ const Business = () => {
   const [contacts, setContacts] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
   const [searchText, setSearchText] = useState([]);
+  const [statusChanged, setStatusChanges] = useState(false);
+
   useEffect(() => {
     const fetchContactBook = async () => {
       try {
@@ -32,6 +34,30 @@ const Business = () => {
     };
     fetchContactBook();
   }, []);
+
+  const handleStatus = async (id, newStatus) => {
+    const formData = new FormData();
+    formData.append("contact_book[status]", newStatus ? "true" : "false");
+    try {
+      const res = await editContactBook(id, formData);
+      console.log("Status updated successfully", res);
+      // Optionally update the contacts state here if needed
+    } catch (error) {
+      console.log("Error updating status:", error);
+    }
+  };
+
+  const handleSwitchChange = async (id, currentStatus) => {
+    const newStatus = !currentStatus;
+    setContacts((prevContacts) =>
+      prevContacts.map((contact) =>
+        contact.id === id ? { ...contact, status: newStatus } : contact
+      )
+    );
+    await handleStatus(id, newStatus);
+    window.location.reload()
+  };
+
   const column = [
     {
       name: "Actions",
@@ -49,10 +75,14 @@ const Business = () => {
       selector: (row) => row.company_name,
       sortable: true,
     },
-    { name: "Category", selector: (row) => row.category, sortable: true },
+    {
+      name: "Category",
+      selector: (row) => row.generic_info_name,
+      sortable: true,
+    },
     {
       name: "Sub Category",
-      selector: (row) => row.SubCategory,
+      selector: (row) => row.generic_sub_info_name,
       sortable: true,
     },
     {
@@ -72,7 +102,17 @@ const Business = () => {
       selector: (row) => row.key_offering,
       sortable: true,
     },
-    { name: "Status", selector: (row) => row.status, sortable: true },
+    {
+      name: "Status",
+      selector: (row) => (
+        <div>
+          <Switch
+            checked={row.status}
+            onChange={() => handleSwitchChange(row.id, row.status)}
+          />
+        </div>
+      ),
+    },
   ];
 
   const handleSearch = (e) => {

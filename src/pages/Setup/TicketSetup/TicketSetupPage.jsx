@@ -1,16 +1,23 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import TicketCategorySetup from "./TicketCategorySetup";
 import { useSelector } from "react-redux";
 import Table from "../../../components/table/Table";
 import { BiEdit } from "react-icons/bi";
 import { Link } from "react-router-dom";
-import { ColorPicker } from "antd";
+import { ColorPicker, Space } from "antd";
 import FileInputBox from "../../../containers/Inputs/FileInputBox";
 import { FaTrash } from "react-icons/fa";
+import { getHelpDeskStatusSetup } from "../../../api";
+import { statusColors } from "../../../utils/colors";
 
 const TicketSetupPage = () => {
   const [selectedRule, setSelectedRule] = useState("");
-
+  const [formData, setFormData] = useState({
+    status: "",
+    fixedState: "",
+    color: "",
+    order: "",
+  });
   const handleSelectChange = (event) => {
     setSelectedRule(event.target.value);
   };
@@ -21,6 +28,18 @@ const TicketSetupPage = () => {
   const themeColor = useSelector((state) => state.theme.color);
   const [color, setColor] = useState("#ffffff");
   const [showPicker, setShowPicker] = useState(false);
+  const [statuses, setStatuses] = useState([]);
+  useEffect(() => {
+    const fetchTicketStatus = async () => {
+      try {
+        const statusResp = await getHelpDeskStatusSetup();
+        setStatuses(statusResp.data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchTicketStatus();
+  }, []);
 
   const handleColorChange = (newColor) => {
     setColor(newColor.hex);
@@ -76,32 +95,37 @@ const TicketSetupPage = () => {
       ),
     },
   ];
-  const columns = [
+  const statusColumns = [
     {
       name: "Order",
-      selector: (row) => row.Order,
+      selector: (row) => row.position,
       sortable: true,
     },
     {
       name: "Status",
-      selector: (row) => row.Status,
+      selector: (row) => row.name,
       sortable: true,
     },
     {
       name: "Fixed State",
-      selector: (row) => row.Fixed,
+      selector: (row) => row.fixed_state,
       sortable: true,
     },
     {
       name: "Color",
-      selector: (row) => row.Color,
+      selector: (row) => (
+        <div
+          style={{ background: row.color_code }}
+          className={`rounded-md w-4 h-4 text-center`}
+        ></div>
+      ),
       sortable: true,
     },
-    {
-      name: "Email",
-      selector: (row) => row.Email,
-      sortable: true,
-    },
+    // {
+    //   name: "Email",
+    //   selector: (row) => row.Email,
+    //   sortable: true,
+    // },
     {
       name: "Action",
       cell: (row) => (
@@ -116,31 +140,7 @@ const TicketSetupPage = () => {
       ),
     },
   ];
-  const customStyle = {
-    headRow: {
-      style: {
-        backgroundColor: themeColor,
-        color: "white",
 
-        fontSize: "10px",
-      },
-    },
-    headCells: {
-      style: {
-        textTransform: "upperCase",
-      },
-    },
-  };
-  const data = [
-    {
-      id: 1,
-      Order: "9",
-      Status: "Pending",
-      Fixed: "closed",
-      Color: "blue",
-      Email: <input type="checkbox" />,
-    },
-  ];
   const data1 = [
     {
       id: 1,
@@ -155,6 +155,14 @@ const TicketSetupPage = () => {
       Complaint_Mode: "1 - 25 Days",
     },
   ];
+
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+  console.log(formData);
+  const handleColorClick = (color) => {
+    setFormData({ ...formData, color });
+  };
   return (
     <div className=" w-full my-2 flex  overflow-hidden flex-col">
       <div className="flex w-full">
@@ -186,7 +194,7 @@ const TicketSetupPage = () => {
           >
             Operational Days
           </h2>
-          <h2
+          {/* <h2
             className={`p-1 ${
               page === "Complaint Mode" &&
               "bg-white font-medium text-blue-500 shadow-custom-all-sides"
@@ -203,7 +211,7 @@ const TicketSetupPage = () => {
             onClick={() => setPage("Aging Rule")}
           >
             Aging Rule
-          </h2>
+          </h2> */}
         </div>
       </div>
       <div>
@@ -213,51 +221,73 @@ const TicketSetupPage = () => {
           </div>
         )}
         {page === "Status" && (
-          <div>
-            <div className="flex mt-4 mb-3 gap-5">
+          <div className="m-2">
+            <div className="grid md:grid-cols-5 gap-2 m-2">
               <input
                 type="text"
                 placeholder="Enter status"
                 className="border p-2 rounded-md border-black"
+                value={formData.status}
+                onChange={handleChange}
+                name="status"
               />
               <select
-                name=""
+                name="fixedState"
+                onChange={handleChange}
+                value={formData.fixedState}
                 id=""
-                className="border p-2 rounded-md border-black w-48"
+                className="border p-2 rounded-md border-black"
               >
                 <option value="">Select Fixed State</option>
-                <option value="">Closed</option>
-                <option value="">Open</option>
-                <option value="">Complete</option>
+                <option value="closed">Closed</option>
+                <option value="open">Open</option>
+                <option value="complete">Complete</option>
               </select>
-              <input
-                type="text"
-                placeholder="Enter Color"
+
+              {/* <select
+                value={formData.color}
+                onChange={handleColorChange}
                 className="border p-2 rounded-md border-black"
+              >
+                <option value="">Select color</option>
+                {statusColors.map((color) => (
+                  <option key={color} value={color} style={{ color: color }}>
+                    {color} <p style={{background: color}} className="w-4 h-4"></p>
+                  </option>
+                ))}
+              </select> */}
+              <ColorPicker
+                value={formData.color}
+                onChange={(color) =>
+                  setFormData({ ...formData, color: color.toHexString() })
+                }
+                size="large"
+               
               />
-              <ColorPicker />
+
               <input
                 type="number"
                 placeholder="Enter order"
                 className="border p-2 rounded-md border-black"
+                value={formData.order}
+                onChange={handleChange}
+                name="order"
               />
               <button
-                className="border-2 font-semibold hover:bg-black hover:text-white transition-all border-black p-2 rounded-md text-white cursor-pointer text-center flex items-center gap-2 justify-center"
+                className=" font-medium hover:text-white transition-all w-full p-2 rounded-md text-white cursor-pointer text-center flex items-center gap-2 justify-center"
                 style={{ background: themeColor }}
               >
                 Add
               </button>
             </div>
-            <div className="mr-4">
-              <Table
-                responsive
-                //   selectableRows
-                columns={columns}
-                data={data}
-                isPagination={true}
-              />{" "}
-            </div>
-            <div className="flex gap-10">
+            <Table
+              responsive
+              //   selectableRows
+              columns={statusColumns}
+              data={statuses}
+              isPagination={true}
+            />{" "}
+            {/* <div className="flex gap-10">
               <label className="font-semibold mt-2" htmlFor="">
                 Allow User to reopen ticket after closure
               </label>
@@ -282,7 +312,7 @@ const TicketSetupPage = () => {
               >
                 Update
               </button>
-            </div>
+            </div> */}
           </div>
         )}
         {page === "Operational Days" && (

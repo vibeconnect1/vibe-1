@@ -57,7 +57,7 @@ const AddBusiness = () => {
     };
     fetchContactCategory();
   }, []);
-const siteId = getItemInLocalStorage("SITEID")
+  const siteId = getItemInLocalStorage("SITEID");
   const handleAddContact = async () => {
     if (formData.companyName === "") {
       return toast.error("Please Provide Company name");
@@ -79,9 +79,13 @@ const siteId = getItemInLocalStorage("SITEID")
     sendData.append("contact_book[key_offering]", formData.keyOffering);
     sendData.append("contact_book[description]", formData.description);
     sendData.append("contact_book[profile]", formData.profile);
+    sendData.append(
+      "contact_book[generic_sub_info_id]",
+      formData.subCategoryId
+    );
     try {
       const res = await postContactBook(sendData);
-      console.log(res)
+      console.log(res);
     } catch (error) {
       console.log(error);
     }
@@ -352,7 +356,10 @@ const siteId = getItemInLocalStorage("SITEID")
             <FileInputBox />
           </div>
           <div className="my-10 flex justify-center">
-            <button className="bg-black text-white p-2 text-lg rounded-md" onClick={handleAddContact}>
+            <button
+              className="bg-black text-white p-2 text-lg rounded-md"
+              onClick={handleAddContact}
+            >
               Submit
             </button>
           </div>

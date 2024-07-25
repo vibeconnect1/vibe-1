@@ -15,8 +15,8 @@ import Navbar from "../../components/Navbar";
 import Purchase from "../Purchase";
 
 const LOIPOTable = () => {
-  const [searchText, setSearchText] = useState("")
-  const [filteredData, setFilteredData] = useState([])
+  const [searchText, setSearchText] = useState("");
+  const [filteredData, setFilteredData] = useState([]);
   const themeColor = useSelector((state) => state.theme.color);
   const [loi, setLoi] = useState([]);
 
@@ -27,9 +27,9 @@ const LOIPOTable = () => {
         const sortedLoi = loiResp.data.sort((a, b) => {
           return new Date(b.created_at) - new Date(a.created_at);
         });
-        const filteredLoi = sortedLoi.filter((loi)=> loi.loi_type === "PO")
+        const filteredLoi = sortedLoi.filter((loi) => loi.loi_type === "PO");
         setLoi(filteredLoi);
-        setFilteredData(filteredLoi)
+        setFilteredData(filteredLoi);
       } catch (error) {
         console.log(error);
       }
@@ -89,7 +89,7 @@ const LOIPOTable = () => {
       selector: (row) => {
         const totalAmount = row.loi_items
           ? row.loi_items.reduce(
-              (sum, item) => sum + (Number(item.total_amount) || 0),
+              (sum, item) => sum + (Number(item.amount) || 0),
               0
             )
           : " ";
@@ -100,13 +100,13 @@ const LOIPOTable = () => {
   ];
 
   document.title = `Purchase - Vibe Connect`;
-const handleSearch = (e)=>{
-  const searchValue = e.target.value
-setSearchText(searchValue)
-if(searchValue.trim()=== ""){
-  setFilteredData(loi)
-}
-}
+  const handleSearch = (e) => {
+    const searchValue = e.target.value;
+    setSearchText(searchValue);
+    if (searchValue.trim() === "") {
+      setFilteredData(loi);
+    }
+  };
   return (
     <section className="flex">
       <Navbar />

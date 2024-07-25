@@ -253,37 +253,37 @@ const MaterialPRDetails = () => {
           &nbsp;
         </div>
       </div>
-      <div className="flex gap-3 item-center justify-between my-3 mx-5 flex-wrap">
-        <div className="flex flex-col gap-1 justify-center items-center">
+      <div className="flex gap-3 item-center justify-center md:justify-between my-3 md:mx-5 flex-wrap">
+        <div className="flex flex-col gap-1 justify-center md:items-center">
           <p className="text-sm font-medium">Site Incharge Approval:</p>
-          <p className="bg-orange-400 px-2 items-center py-1 rounded-md text-white text-sm">
+          <p className="bg-orange-400 px-2 text-center  py-1 rounded-md text-white text-sm">
             Pending
           </p>
           <p className="">
             Approval Authority
           </p>
         </div>
-        <div className="flex flex-col gap-1 justify-center items-center">
+        <div className="flex flex-col gap-1 justify-center md:items-center">
           <p className="text-sm font-medium">FM Admin Head Approval:</p>
-          <p className="bg-orange-400 px-2 items-center py-1 rounded-md text-white text-sm">
+          <p className="bg-orange-400 px-2 text-center py-1 rounded-md text-white text-sm">
             Pending
           </p>
           <p className="">
             Approval Authority
           </p>
         </div>
-        <div className="flex flex-col gap-1 justify-center items-center">
+        <div className="flex flex-col gap-1 justify-center md:items-center">
           <p className="text-sm font-medium">FM HOD Approval:</p>
-          <p className="bg-orange-400 px-2 items-center py-1 rounded-md text-white text-sm">
+          <p className="bg-orange-400 px-2 items-center py-1 rounded-md text-white text-sm text-center">
             Pending
           </p>
           <p className="">
             Approval Authority
           </p>
         </div>
-        <div className="flex flex-col gap-1 justify-center items-center">
+        <div className="flex flex-col gap-1 justify-center md:items-center">
           <p className="text-sm font-medium">Site Accounts Team Approval:</p>
-          <p className="bg-orange-400 px-2 items-center py-1 rounded-md text-white text-sm">
+          <p className="bg-orange-400 px-2 items-center py-1 rounded-md text-white text-sm text-center">
             Pending
           </p>
           <p className="">
@@ -296,11 +296,11 @@ const MaterialPRDetails = () => {
         <h2 className=" text-lg border-black font-semibold text-center">
           {details.site_name}
         </h2>
-        <div className="my-5 md:px-10 text-sm items-center font-medium grid gap-4 md:grid-cols-2">
-          <div className="grid grid-cols-2 items-center">
-            <p>Phone </p>
-            <p className="text-sm font-normal ">: 5566884455</p>
-          </div>
+        <div className="my-5  text-sm items-center font-medium grid gap-4 md:grid-cols-2">
+         {details.billing_address && details.billing_address.phone_number &&( <div className="grid grid-cols-2 items-center">
+            <p>Phone :</p>
+            <p className="text-sm font-normal ">{details.billing_address.phone_number}</p>
+          </div>)}
           <div className="grid grid-cols-2 items-center">
             <p>Fax </p>
             <p className="text-sm font-normal ">: NA</p>
@@ -318,143 +318,76 @@ const MaterialPRDetails = () => {
             <p className="text-sm font-normal ">: NA</p>
           </div>
           <div className="grid grid-cols-2 items-center">
-            <p>Address</p>
-            <p className="text-sm font-normal ">
-              : Eon Kharadi Infrastructur, Near Zensar IT Park, Kharadi Pune -
-              411014
-            </p>
+            <p>Address :</p>
+            <p className="text-sm font-normal ">: NA</p>
           </div>
+          {/* <div className="grid gap-2 col-span-3 items-center">
+            <p>Address :</p>
+            {details.billing_address &&
+                details.billing_address.building_name && (
+                  <p className="text-sm font-normal bg-gray-100 p-2 rounded-md">
+                    {details.billing_address.building_name},{" "}
+                    {details.billing_address.street_name},{" "}
+                    {details.billing_address.city},{" "}
+                    {details.billing_address.state},{" "}
+                    {details.billing_address.pin_code}.
+                  </p>
+                )}
+          </div> */}
         </div>
-        <h2 className="border-t text-lg py-5 border-black font-semibold text-center">
-          Letter of Indent
+        <h2 className="border-t text-lg border-b border-black font-semibold ">
+          Material PR
         </h2>
-        <div className="my-5 md:px-10 text-sm items-center font-medium grid gap-4 md:grid-cols-2">
+        <div className="my-5  text-sm items-center font-medium grid gap-4 md:grid-cols-2">
+         
+          <div className="grid grid-cols-2 items-center">
+            <p>LOI No. :</p>
+            <p className="text-sm font-normal"> {details.id}</p>
+          </div>
+          <div className="grid grid-cols-2 items-center">
+            <p>Reference No. :</p>
+            <p className="text-sm font-normal">{details.reference}</p>
+          </div>
+          <div className="grid grid-cols-2 items-center">
+            <p>LOI Date :</p>
+            <p className="text-sm font-normal">{details.loi_date}</p>
+          </div>
           {/* <div className="grid grid-cols-2 items-center">
-                    <p>Invoice Number</p>
-                    <p className="text-sm font-normal ">: 3299/24-25</p>
-                </div>
-                <div className="grid grid-cols-2 items-center">
-                    <p>Reference No.</p>
-                    <p className="text-sm font-normal ">:</p>
-                </div>
-                <div className="grid grid-cols-2 items-center">
-                    <p>Invoice Date</p>
-                    <p className="text-sm font-normal ">: : 22-05-24</p>
-                </div>
-                <div className="grid grid-cols-2 items-center">
-                    <p>Posting Date</p>
-                    <p className="text-sm font-normal ">: 29-05-24</p>
-                </div>
-                <div className="grid grid-cols-2 items-center">
-                    <p>ID</p>
-                    <p className="text-sm font-normal ">: 3427</p>
-                </div>
-                <div className="grid grid-cols-2 items-center">
-                    <p>Retention Amount</p>
-                    <p className="text-sm font-normal ">: 0.0</p>
-                </div>
-                <div className="grid grid-cols-2 items-center">
-                    <p>Supplier Name</p>
-                    <p className="text-sm font-normal ">Supplier Name</p>
-                </div>
-                <div className="grid grid-cols-2 items-center">
-                    <p>TDS Amount</p>
-                    <p className="text-sm font-normal ">: 0.0</p>
-                </div>
-                <div className="grid grid-cols-2 items-center">
-                    <p>PO Number</p>
-                    <p className="text-sm font-normal ">: 12214</p>
-                </div>
-                <div className="grid grid-cols-2 items-center">
-                    <p>PO Reference Number</p>
-                    <p className="text-sm font-normal ">: 4500002633</p>
-                </div>
-                <div className="grid grid-cols-2 items-center">
-                    <p>QC Amount</p>
-                    <p className="text-sm font-normal ">: 0.0</p>
-                </div>
-                <div className="grid grid-cols-2 items-center">
-                    <p>GRN Amount</p>
-                    <p className="text-sm font-normal ">: 8688.58</p>
-                </div>
-                <div className="grid grid-cols-2 items-center">
-                    <p>Total Taxes</p>
-                    <p className="text-sm font-normal ">: 1563.94</p>
-                </div>
-                <div className="grid grid-cols-2 items-center">
-                    <p>PO Amount</p>
-                    <p className="text-sm font-normal ">:</p>
-                </div>
-                <div className="grid grid-cols-2 items-center">
-                    <p>Payable Amount</p>
-                    <p className="text-sm font-normal ">: 10252.52</p>
-                </div>
-                <div className="grid grid-cols-2 items-center">
-                    <p>Invoice Amount</p>
-                    <p className="text-sm font-normal ">: 10252.5</p>
-                </div>
-                <div className="grid grid-cols-2 items-center">
-                    <p>Related To</p>
-                    <p className="text-sm font-normal ">: Exhaust Fan</p>
-                </div>
-                <div className="grid grid-cols-2 items-center">
-                    <p>GRN Amount</p>
-                    <p className="text-sm font-normal ">: 10252.5</p>
-                </div>
-                <div className="grid grid-cols-2 items-center">
-                    <p>Physical Invoice sent to</p>
-                    <p className="text-sm font-normal ">:</p>
-                </div>
-                <div className="grid grid-cols-2 items-center">
-                    <p>Physical Invoice received On</p>
-                    <p className="text-sm font-normal ">:</p>
-                </div>
-                <div className="grid grid-cols-2 items-center">
-                    <p>Gross Amount</p>
-                    <p className="text-sm font-normal ">: 10252.519999999999</p>
-                </div>
-                <div className="grid grid-cols-2 items-center">
-                    <p>Notes</p>
-                    <p className="text-sm font-normal ">: 10252.519999999999</p>
-                </div> */}
-          <div className="grid grid-cols-2 items-center">
-            <p>LOI No.</p>
-            <p className="text-sm font-normal">: 1000029281</p>
-          </div>
-          <div className="grid grid-cols-2 items-center">
-            <p>Reference No.</p>
-            <p className="text-sm font-normal">: 12397</p>
-          </div>
-          <div className="grid grid-cols-2 items-center">
-            <p>LOI Date</p>
-            <p className="text-sm font-normal">: 05-06-24</p>
-          </div>
-          <div className="grid grid-cols-2 items-center">
             <p>ID</p>
             <p className="text-sm font-normal">: 6088</p>
-          </div>
-          <div className="grid grid-cols-2 items-center">
+          </div> */}
+          {/* <div className="grid grid-cols-2 items-center">
             <p>Plant Detail</p>
             <p className="text-sm font-normal">: 1050-S150-S150</p>
-          </div>
+          </div> */}
           <div className="grid grid-cols-2 items-center">
-            <p>Supplier</p>
-            <p className="text-sm font-normal">: Classic Enterprises</p>
+            <p>Supplier :</p>
+            <p className="text-sm font-normal">{details.vendor_name}</p>
+          </div>
+          {/* <div className="grid  items-center col-span-3">
+            <p>Address :</p>
+            {details.delivery_address &&
+                details.delivery_address.building_name && (
+                  <p className="text-sm font-normal bg-gray-100 rounded-md p-2">
+                    {details.delivery_address.building_name},{" "}
+                    {details.delivery_address.street_name},{" "}
+                    {details.delivery_address.city},{" "}
+                    {details.delivery_address.state},{" "}
+                    {details.delivery_address.pin_code}.
+                  </p>
+                )}
+          </div> */}
+          <div className="grid grid-cols-2 items-center">
+            <p>Phone</p>
+            <p className="text-sm font-normal">: NA</p>
           </div>
           <div className="grid grid-cols-2 items-center">
             <p>Address</p>
-            <p className="text-sm font-normal">
-              : Bollyhood Cinema,Near Nishant Wajan, Lane No. 4, Wadgaon Sheri,
-              Pune
-            </p>
-          </div>
-          <div className="grid grid-cols-2 items-center">
-            <p>Phone</p>
-            <p className="text-sm font-normal">: 9822390220</p>
+            <p className="text-sm font-normal">NA</p>
           </div>
           <div className="grid grid-cols-2 items-center">
             <p>Email</p>
-            <p className="text-sm font-normal">: classicpune1@gmail.com</p>
+            <p className="text-sm font-normal">NA</p>
           </div>
           <div className="grid grid-cols-2 items-center">
             <p>GST</p>
@@ -462,15 +395,9 @@ const MaterialPRDetails = () => {
           </div>
           <div className="grid grid-cols-2 items-center">
             <p>PAN</p>
-            <p className="text-sm font-normal">: AJMPB4588K</p>
+            <p className="text-sm font-normal">NA</p>
           </div>
-          <div className="grid grid-cols-2 items-center">
-            <p>Delivery Address</p>
-            <p className="text-sm font-normal">
-              : Viman Nagar Business Park, Panchshil Business Park Sr. No 206,
-              Hissa No-2, Viman Nagar, Pune
-            </p>
-          </div>
+         
           <div className="grid grid-cols-2 items-center">
             <p>Phone</p>
             <p className="text-sm font-normal">: NA</p>
@@ -481,28 +408,41 @@ const MaterialPRDetails = () => {
           </div>
           <div className="grid grid-cols-2 items-center">
             <p>Related To</p>
-            <p className="text-sm font-normal">: HAND WASH</p>
+            <p className="text-sm font-normal">{details.related_to}</p>
           </div>
           <div className="grid grid-cols-2 items-center">
             <p>Payment Tenure (In Days)</p>
-            <p className="text-sm font-normal">:</p>
+            <p className="text-sm font-normal">{details.payment_tenure} days</p>
           </div>
           <div className="grid grid-cols-2 items-center">
             <p>Retention (%)</p>
-            <p className="text-sm font-normal">:</p>
+            <p className="text-sm font-normal">{details.retention}%</p>
           </div>
           <div className="grid grid-cols-2 items-center">
             <p>TDS (%)</p>
-            <p className="text-sm font-normal">:</p>
+            <p className="text-sm font-normal">{details.tds}%</p>
           </div>
           <div className="grid grid-cols-2 items-center">
             <p>QC (%)</p>
-            <p className="text-sm font-normal">:</p>
+            <p className="text-sm font-normal">{details.qc}%</p>
           </div>
           <div className="grid grid-cols-2 items-center">
             <p>Advance Amount</p>
-            <p className="text-sm font-normal">:</p>
+            <p className="text-sm font-normal">{details.advance_amount}</p>
           </div>
+          <div className="grid items-center gap-2">
+              <p>Delivery Address : </p>
+              {details.delivery_address &&
+                details.delivery_address.building_name && (
+                  <p className="text-sm font-normal bg-gray-100 rounded-md p-2">
+                    {details.delivery_address.building_name},{" "}
+                    {details.delivery_address.street_name},{" "}
+                    {details.delivery_address.city},{" "}
+                    {details.delivery_address.state},{" "}
+                    {details.delivery_address.pin_code}.
+                  </p>
+                )}
+            </div>
         </div>
         <div className="border-black border-t mt-5"></div>
         <Table columns={column} data={loiItems} />

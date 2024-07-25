@@ -1,183 +1,38 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 // import TicketCategorySetup from './TicketCategorySetup';
 import { useSelector } from "react-redux";
 // import Table from "../../components/table/Table";
 import { Link } from "react-router-dom";
 import { PiPlusCircle } from "react-icons/pi";
 
-
 // import { BsEye } from "react-icons/bs";
 import { BiEdit } from "react-icons/bi";
-import FileInputBox from '../../../containers/Inputs/FileInputBox';
-import { FaTrash } from 'react-icons/fa';
-const TicketCategoryPage = ({handleToggleCategoryPage}) =>{
+import FileInputBox from "../../../containers/Inputs/FileInputBox";
+import { FaTrash } from "react-icons/fa";
+import toast from "react-hot-toast";
+import { getItemInLocalStorage } from "../../../utils/localStorage";
+import { postHelpDeskCategoriesSetup } from "../../../api";
+const TicketCategoryPage = ({ handleToggleCategoryPage, setCatAdded }) => {
   const [isChecked, setIsChecked] = useState(false);
+
+  const [formData, setFormData] = useState({
+    category: "",
+    engineer: "",
+    minTat: "",
+  });
 
   const handleCheckboxChange = () => {
     setIsChecked(!isChecked);
   };
 
-  const [faqs, setFaqs] = useState([{ question: '', answer: '' }]);
+  const [faqs, setFaqs] = useState([{ question: "", answer: "" }]);
   const themeColor = useSelector((state) => state.theme.color);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
-  const columns = [
-    {
-      name: "Action",
-      cell: (row) => (
-        <div className="flex items-center gap-4">
 
-          <button onClick={openModal}>
-            <BiEdit size={15} />
-          </button>
-          <button onClick={openModal}>
-            <FaTrash size={15} />
-          </button>
-
-          {isModalOpen && (
-  <div className="fixed inset-0 flex items-center justify-center z-50">
-    <div className="fixed inset-0 bg-black bg-opacity-50" onClick={closeModal}></div>
-    <div className="bg-white w-192 h-auto rounded-lg shadow-lg p-4 relative z-10">
-      <button
-        className="absolute top-2 right-2 text-gray-600 hover:text-gray-900"
-        onClick={closeModal}
-      >
-        &times;
-      </button>
-      <h2 className="text-xl font-semibold mb-4">Edit Category</h2>
-      <form>
-
-         <div className="grid grid-cols-4 gap-4 mb-6">
-        <div className="form-group">
-          <label className="block mb-2">Enter Category</label>
-          <input type="text" className="border p-2 w-full" />
-        </div>
-        <div className="form-group">
-          <label className="block mb-2">Select Engineer</label>
-          <select className="border p-2 w-full">
-            <option value="engineer1">Engineer 1</option>
-            <option value="engineer2">Engineer 2</option>
-            {/* Add more options as needed */}
-          </select>
-        </div>
-        <div className="form-group">
-          <label className="block mb-2">Response Time (min)</label>
-          <input type="number" className="border p-2 w-full" />
-        </div>
-        <div className="form-group">
-          {/* <label className="block mb-2">Response Time (min)</label> */}
-          <input type="file" className="border p-2 w-full" />
-        </div>
-        <div className="form-group">
-          <label className="block mb-2">Enable Sites</label>
-          <input type="text" className="border p-2 w-full" />
-        </div>
-      </div>
-
-      <h2 className="text-xl font-semibold mb-4">FAQs</h2>
-      <div>
-        {faqs.map((faq, index) => (
-          <div key={index} className="mb-4">
-            <label className="block mb-2">Question</label>
-            <textarea
-              rows="3"
-              className="border p-2 w-full mb-2"
-              value={faq.question}
-              onChange={(e) => handleFaqChange(index, 'question', e.target.value)}
-            ></textarea>
-            <label className="block mb-2">Answer</label>
-            <textarea
-              rows="3"
-              className="border p-2 w-full mb-2"
-              value={faq.answer}
-              onChange={(e) => handleFaqChange(index, 'answer', e.target.value)}
-            ></textarea>
-            <button
-              className="bg-red-500 text-white px-4 py-2"
-              onClick={() => deleteFaq(index)}
-            >
-              Delete
-            </button>
-          </div>
-        ))}
-      </div>
-
-      <button
-        className="bg-blue-500 text-white px-4 py-2"
-        onClick={addFaq}
-      >
-        Add Question/Answer
-      </button>
-
-      <div>
-      <button  className="bg-green-500 text-white px-4 py-2 mt-1"> Submit</button>
-      </div>
-      </form>
-    </div>
-  </div>
-)}
-        </div>
-      ),
-    },
-    {
-      name: "Category Type",
-      selector: (row) => row.Category_Type,
-      sortable: true,
-    },
-    {
-      name: "Assignee",
-      selector: (row) => row.Assignee,
-      sortable: true,
-    },
-    {
-      name: "Response Time (Min)",
-      selector: (row) => row.Response_Time,
-      sortable: true,
-    },
-
-    {
-      name: "Vendor Email",
-      selector: (row) => row.Vendor_Email,
-      sortable: true,
-    },
-
-    {
-      name: "Icon",
-      selector: (row) => row.Icon,
-      sortable: true,
-    },
-
-
-
-  ];
-
-  //custom style
-  const customStyle = {
-    headRow: {
-      style: {
-        backgroundColor: themeColor,
-        color: "white",
-
-        fontSize: "10px",
-      },
-    },
-    headCells: {
-      style: {
-        textTransform: "upperCase",
-      },
-    },
-  };
-
-  const data = [
-    {
-        id:1,
-        Category_Type:"b",
-        Assignee:"j",
-    }
-]
   const addFaq = () => {
-    setFaqs([...faqs, { question: '', answer: '' }]);
+    setFaqs([...faqs, { question: "", answer: "" }]);
   };
 
   const deleteFaq = (index) => {
@@ -211,11 +66,30 @@ const TicketCategoryPage = ({handleToggleCategoryPage}) =>{
   });
 
   const options = {
-    building: ['HDFC Ergo Bhandup', 'Test Building 111', 'Tower 101', 'Sarova Nirvana', 'Jeevandeep', 'Test Twin Tower', 'Decker Bldg', 'PMT Wing'],
-    wing: ['Wing 1 - HDFC Ergo Bhandup', 'Test Building 1111 - Test Building 111', 'Wing 2 - HDFC Ergo Bhandup'],
-    floor: ['Floor 1 - Area 1 - Wing 1 - HDFC Ergo Bhandup', 'Floor 2 - Area 1 - Wing 1 - HDFC Ergo Bhandup'],
-    zone: ['Area 1 - Wing 1 - HDFC Ergo Bhandup', 'Area 1 - Wing 2 - HDFC Ergo Bhandup'],
-    room: ['Room 1', 'Room 2', 'Room 3', 'Room 4'],
+    building: [
+      "HDFC Ergo Bhandup",
+      "Test Building 111",
+      "Tower 101",
+      "Sarova Nirvana",
+      "Jeevandeep",
+      "Test Twin Tower",
+      "Decker Bldg",
+      "PMT Wing",
+    ],
+    wing: [
+      "Wing 1 - HDFC Ergo Bhandup",
+      "Test Building 1111 - Test Building 111",
+      "Wing 2 - HDFC Ergo Bhandup",
+    ],
+    floor: [
+      "Floor 1 - Area 1 - Wing 1 - HDFC Ergo Bhandup",
+      "Floor 2 - Area 1 - Wing 1 - HDFC Ergo Bhandup",
+    ],
+    zone: [
+      "Area 1 - Wing 1 - HDFC Ergo Bhandup",
+      "Area 1 - Wing 2 - HDFC Ergo Bhandup",
+    ],
+    room: ["Room 1", "Room 2", "Room 3", "Room 4"],
   };
 
   const toggleSelect = (section) => {
@@ -238,37 +112,75 @@ const TicketCategoryPage = ({handleToggleCategoryPage}) =>{
       }));
     }
   };
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+  const siteId = getItemInLocalStorage("SITEID");
 
+  const handleAddCategory = async () => {
+    if (formData.category === "") {
+      return toast.error("Please provide category");
+    }
+    const sendData = new FormData();
+    sendData.append("helpdesk_category[society_id]", siteId);
+    sendData.append("helpdesk_category[of_phase]", "pms");
+    sendData.append("helpdesk_category[name]", formData.category);
+    sendData.append("helpdesk_category[tat]", formData.minTat);
+
+    try {
+      const resp = await postHelpDeskCategoriesSetup(sendData);
+      window.location.reload();
+      handleToggleCategoryPage();
+      setFormData({ ...formData, category: "", minTat: "" });
+    } catch (error) {
+      console.log(error);
+    }
+  };
   return (
-    <div className="p-6">
+    <div className="">
       {/* <h1 className="text-2xl font-bold mb-4">Dynamic FAQ Form</h1> */}
-      <div className="grid grid-cols-3 gap-4 mb-6">
-        <div className="form-group">
-          <label className="block mb-2">Enter Category</label>
-          <input type="text" className="border p-2 w-full" placeholder='Enter Category'/>
+      <div className="grid md:grid-cols-3 gap-4 ">
+        <div className="flex flex-col gap-2">
+          <label className="font-medium">Enter Category </label>
+          <input
+            type="text"
+            className="border p-2 w-full rounded-md"
+            placeholder="Enter Category"
+            value={formData.category}
+            onChange={handleChange}
+            name="category"
+          />
         </div>
-        <div className="form-group">
-          <label className="block mb-2">Select Engineer</label>
-          <select className="border p-2 w-full">
+        <div className="flex flex-col gap-2">
+          <label className="font-medium">Select Engineer</label>
+          <select className="border p-2 w-full rounded-md">
+            <option value="">Select Engineer</option>
             <option value="engineer1">Ashish</option>
             <option value="engineer2">Akhil</option>
             {/* Add more options as needed */}
           </select>
         </div>
-        <div className="form-group">
-          <label className="block mb-2">Response Time (min)</label>
-          <input type="number" className="border p-2 w-full" placeholder='Response Time'/>
+        <div className="flex flex-col gap-2">
+          <label className="font-medium">Response Time (min)</label>
+          <input
+            type="number"
+            className="border p-2 w-full rounded-md"
+            placeholder="Response Time"
+            value={formData.minTat}
+            onChange={handleChange}
+            name="minTat"
+          />
         </div>
-       
-        <div className="form-group">
+      </div>
+      {/* <div className="form-group">
           <label className="block mb-2">Enable Sites</label>
           <select type="text" className="border p-2 w-full" placeholder='Enable Sites' 
           >
             <option value="">vibe site 1</option>
             <option value="">vibe site 2</option>
           </select>
-        </div>
-        {isChecked && (
+        </div> */}
+      {/* {isChecked && (
            <div className="form-group">
             <label className="block mb-2">Enter  Vendor Email</label>
         <input
@@ -276,9 +188,9 @@ const TicketCategoryPage = ({handleToggleCategoryPage}) =>{
           className="border border-gray-300 p-2 rounded w-full"
           placeholder="Enter some text"
         /></div>
-      )}
-      </div>
-      <div className="flex items-center mb-4">
+      )} */}
+
+      {/* <div className="flex items-center mb-4">
         <input
           id="toggleInput"
           type="checkbox"
@@ -289,15 +201,15 @@ const TicketCategoryPage = ({handleToggleCategoryPage}) =>{
         <label htmlFor="toggleInput" className="text-gray-700">
           Vendor Email
         </label>
-      </div>
-     
-      <div className="form-group  ">
-          {/* <label className="block mb-2">Response Time (min)</label> */}
-          {/* <input type="file" className="border p-2 w-full" /> */}
-        <FileInputBox/>
-        </div>
-      <h2 className="text-xl mt-2 font-semibold mb-4">FAQs</h2>
-      <div>
+      </div> */}
+
+      {/* <div className="form-group  "> */}
+      {/* <label className="block mb-2">Response Time (min)</label> */}
+      {/* <input type="file" className="border p-2 w-full" /> */}
+      {/* <FileInputBox/> */}
+      {/* </div> */}
+      {/* <h2 className="text-xl mt-2 font-semibold mb-4">FAQs</h2> */}
+      {/* <div>
         {faqs.map((faq, index) => (
           <div key={index} className="mb-4">
             <label className="block mb-2">Question</label>
@@ -325,21 +237,31 @@ const TicketCategoryPage = ({handleToggleCategoryPage}) =>{
             </button>
           </div>
         ))}
-      </div>
+      </div> */}
 
-      <button
+      {/* <button
         className="bg-blue-500 text-white px-4 py-2"
         style={{background:themeColor}}
         onClick={addFaq}
       >
         Add Question/Answer
       </button>
-     
-      <div className="flex justify-center mb-2 gap-4">
-           <button                   className=" font-semibold hover:bg-black hover:text-white transition-all  p-2 px-4 rounded-md text-white cursor-pointer text-center flex items-center gap-2 justify-center"
- style={{background:themeColor}}>Add</button>
-  <button style={{ background:themeColor }} onClick={handleToggleCategoryPage} className="  px-4 py-2 bg-blue-500 text-white rounded-md">Cancel</button>
-            </div>
+      */}
+      <div className="flex justify-center my-2 gap-4">
+        <button
+          className=" font-semibold hover:bg-black hover:text-white transition-all  p-2 px-4 rounded-md text-white cursor-pointer text-center flex items-center gap-2 justify-center"
+          style={{ background: themeColor }}
+          onClick={handleAddCategory}
+        >
+          Add
+        </button>
+        <button
+          onClick={handleToggleCategoryPage}
+          className="  px-4 py-2 bg-red-500 text-white rounded-md"
+        >
+          Cancel
+        </button>
+      </div>
 
       {/* <Table
           responsive
@@ -350,6 +272,6 @@ const TicketCategoryPage = ({handleToggleCategoryPage}) =>{
         /> */}
     </div>
   );
-}
+};
 
 export default TicketCategoryPage;

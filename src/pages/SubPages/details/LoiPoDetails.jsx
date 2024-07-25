@@ -104,22 +104,36 @@ const LOIPoDetails = () => {
             </div>
           </div>
           <h2 className="border-b  text-xl border-black font-semibold"></h2>
-          <div className="my-5 md:px-10 text-sm items-center font-medium grid gap-4 md:grid-cols-2">
+          <div className="my-5 md:px-10 text-sm items-center font-medium grid gap-4 ">
             <div className="grid grid-cols-2 items-center ">
               <p>Related To : </p>
               <p className="text-sm font-normal">{details.related_to}</p>
             </div>
-            <div className="grid grid-cols-2 items-center ">
+            <div className="grid items-center gap-2">
               <p>Billing Address : </p>
-              <p className="text-sm font-normal">
-                {details.billing_address_name}
-              </p>
+              {details.billing_address &&
+                details.billing_address.building_name && (
+                  <p className="text-sm font-normal bg-gray-100 p-2 rounded-md">
+                    {details.billing_address.building_name},{" "}
+                    {details.billing_address.street_name},{" "}
+                    {details.billing_address.city},{" "}
+                    {details.billing_address.state},{" "}
+                    {details.billing_address.pin_code}.
+                  </p>
+                )}
             </div>
-            <div className="grid grid-cols-2 items-center ">
+            <div className="grid items-center gap-2">
               <p>Delivery Address : </p>
-              <p className="text-sm font-normal">
-                {details.delivery_address_name}
-              </p>
+              {details.delivery_address &&
+                details.delivery_address.building_name && (
+                  <p className="text-sm font-normal bg-gray-100 rounded-md p-2">
+                    {details.delivery_address.building_name},{" "}
+                    {details.delivery_address.street_name},{" "}
+                    {details.delivery_address.city},{" "}
+                    {details.delivery_address.state},{" "}
+                    {details.delivery_address.pin_code}.
+                  </p>
+                )}
             </div>
             {/* <div className="grid grid-cols-2 items-center ">
               <p>Supplier : </p>
