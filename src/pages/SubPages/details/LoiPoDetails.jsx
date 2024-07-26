@@ -4,6 +4,7 @@ import { getLOIDetails, getLOIItemsDetails } from "../../../api";
 import { useParams } from "react-router-dom";
 
 import numberToWordsIndian from "../../../utils/NumbersToWords";
+import { FaRegFileAlt } from "react-icons/fa";
 
 const LOIPoDetails = () => {
   const { id } = useParams();
@@ -86,6 +87,15 @@ const LOIPoDetails = () => {
     },
   ];
 
+  const isImage = (filePath) => {
+    const imageExtensions = ["jpg", "jpeg", "png", "gif", "bmp", "svg"];
+    const extension = filePath.split(".").pop().split("?")[0].toLowerCase();
+    return imageExtensions.includes(extension);
+  };
+  const getFileName = (filePath) => {
+    return filePath.split("/").pop().split("?")[0];
+  };
+  const domainPrefix = "https://admin.vibecopilot.ai";
   return (
     <section>
       <div className=" flex flex-col m-5  gap-4 rounded-md ">
@@ -163,12 +173,12 @@ const LOIPoDetails = () => {
           <div className="border-t border-black"></div>
           <Table columns={column} data={loiItems} pagination={false} />
 
-          {/* <div className="my-2 md:px-2 text-sm items-center font-medium grid gap-1 ">
+          <div className="my-2 md:px-2 text-sm items-center font-medium grid gap-1 ">
             <div className="flex justify-between items-center">
               <p>Net Amount(INR) :</p>
               <p className="text-sm font-medium ">{totalAmount}</p>
             </div>
-            <div className="flex justify-between items-center">
+            {/* <div className="flex justify-between items-center">
               <p>Gross Amount :</p>
               <p className="text-sm font-medium">{totalAmount}</p>
             </div>
@@ -179,11 +189,13 @@ const LOIPoDetails = () => {
             <div className="flex justify-between items-center">
               <p>Net Invoice Amount :</p>
               <p className="text-sm font-bold">{netAmt}</p>
-            </div>
+            </div> */}
             <div className="md:flex  gap-2 items-center">
               <p>Amount In Words :</p>
               <p className="text-sm font-medium">{netAmtInWords}</p>
-            </div> */}
+            </div>
+            
+        </div>
         </div>
         {/* <div className="border-t py-3 border-black"></div>
           <div className="">
@@ -200,7 +212,37 @@ const LOIPoDetails = () => {
           <p className="text-md font-semibold border-b border-black">
             Attachments
           </p>
-          <p className="text-sm"></p>
+          <div className="flex gap-4 flex-wrap my-4 items-center  text-center">
+            {details.loi_details_image &&
+            details.loi_details_image.length > 0 ? (
+              details.loi_details_image.map((doc, index) => (
+                <div key={doc.id} className="">
+                  {isImage(domainPrefix + doc.document) ? (
+                    <img
+                      src={domainPrefix + doc.document}
+                      alt={`Attachment ${index + 1}`}
+                      className="w-40 h-28 object-cover rounded-md"
+                      onClick={() =>
+                        window.open(domainPrefix + doc.document, "_blank")
+                      }
+                    />
+                  ) : (
+                    <a
+                      href={domainPrefix + doc.document}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className=" hover:text-blue-400 transition-all duration-300  text-center flex flex-col items-center"
+                    >
+                      <FaRegFileAlt size={50} />
+                      {getFileName(doc.document)}
+                    </a>
+                  )}
+                </div>
+              ))
+            ) : (
+              <p className="text-center w-full">No Attachments</p>
+            )}
+          </div>
         </div>
         <div className=" py-3 flex flex-col items-end justify-center border-black">
           <div className="flex flex-col justify-center">

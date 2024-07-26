@@ -124,7 +124,7 @@ const Navbar = () => {
     window.location.href = url;
   };
   return (
-    <section className="flex gap-6 sticky top-0 left-0 bottom-0 h-screen z-10">
+    <section className="flex gap-6 sticky top-0 left-0 bottom-0 h-screen z-20">
       <div
         style={{
           background: themeColor,
@@ -295,7 +295,7 @@ const Navbar = () => {
                 )}
                 {feat.includes("calendar") && (
                   <NavLink
-                    to={"/admin/calendar"}
+                    to={"/calendar"}
                     className={({ isActive }) =>
                       ` ${
                         isActive

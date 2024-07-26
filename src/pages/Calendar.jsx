@@ -8,7 +8,9 @@ import {
   CreateVibeTeamMeeting,
   CreateVibeZoomMeeting,
   UpdateVibeTask,
+  deleteVibeCalenderTask,
   getVibeCalendar,
+  getVibeCalenderEventsNew,
   getVibeUsers,
   postCalendarTask,
   postNewCalendarEvent,
@@ -36,6 +38,7 @@ import MeetingDropdownButton from "../containers/MeetingDropdown";
 import { BiRightArrow, BiRightArrowAlt } from "react-icons/bi";
 import toast from "react-hot-toast";
 import { MdOutlineContentCopy } from "react-icons/md";
+import { useNavigate } from "react-router-dom";
 const Calender = () => {
   const vibeUserId = getItemInLocalStorage("VIBEUSERID");
   const [popupDate, setPopupDate] = useState(null);
@@ -101,7 +104,7 @@ const Calender = () => {
   const [editableStartTime, setEditableStartTime] = useState("");
   const [editableEndTime, setEditableEndTime] = useState("");
   const [editableMeetingLink, setEditableMeetingLink] = useState("");
-
+  const user_id = localStorage.getItem("VIBEUSERID");
   // refs
   const dropdownRef = useRef();
   const fileInputRef = useRef(null);
@@ -167,63 +170,67 @@ const Calender = () => {
 
   useEffect(() => {
     const fetchCalenderData = async () => {
-      const calendarDataResponse = await getVibeCalendar(vibeUserId);
-      const validCategories = ["Task", "Event", "Meeting"];
-      const formattedEvents = calendarDataResponse.data
-        .filter((event) => validCategories.includes(event.category))
-        .map((event) => {
-          const start =
-            event.category === "Task" ? event.due_date : event.from_datetime;
-          const end = incrementDate(event.to_date);
-          const category = event.category;
-          const start_time = event.from_time;
-          const end_time = event.to_time;
-          const description = event.description;
-          const meeting_link = event.meet_link;
-          const id = event.id;
-          const sub_category = event.sub_category;
+      try {
+        const calendarDataResponse = await getVibeCalenderEventsNew(vibeUserId);
+        const validCategories = ["Task", "Event", "Meeting"];
+        const formattedEvents = calendarDataResponse.data
+          .filter((event) => validCategories.includes(event.category))
+          .map((event) => {
+            const start =
+              event.category === "Task" ? event.due_date : event.from_datetime;
+            const end = incrementDate(event.to_date);
+            const category = event.category;
+            const start_time = event.from_time;
+            const end_time = event.to_time;
+            const description = event.description;
+            const meeting_link = event.meet_link;
+            const id = event.id;
+            const sub_category = event.sub_category;
 
-          const assign_to_emails = Array.isArray(event.assign_to_data)
-            ? event.assign_to_data.map((assignee) => ({
-                label: assignee.email,
-                value: assignee.id,
-              }))
-            : [];
+            const assign_to_emails = Array.isArray(event.assign_to_data)
+              ? event.assign_to_data.map((assignee) => ({
+                  label: assignee.email,
+                  value: assignee.id,
+                }))
+              : [];
 
-          const guest_to_emails = Array.isArray(event.guest_data)
-            ? event.guest_data.map((guest) => ({
-                label: guest.email,
-                value: guest.id,
-              }))
-            : [];
+            const guest_to_emails = Array.isArray(event.guest_data)
+              ? event.guest_data.map((guest) => ({
+                  label: guest.email,
+                  value: guest.id,
+                }))
+              : [];
 
-          const participant_to_emails = Array.isArray(event.participant_data)
-            ? event.participant_data.map((participant) => ({
-                label: participant.email,
-                value: participant.id,
-              }))
-            : [];
+            const participant_to_emails = Array.isArray(event.participant_data)
+              ? event.participant_data.map((participant) => ({
+                  label: participant.email,
+                  value: participant.id,
+                }))
+              : [];
 
-          return {
-            title: event.title,
-            start,
-            end,
-            category,
-            sub_category,
-            id,
-            start_time,
-            end_time,
-            description,
-            assign_to_emails,
-            guest_to_emails,
-            participant_to_emails,
-            meeting_link,
-          };
-        });
+            return {
+              title: event.title,
+              start,
+              end,
+              category,
+              sub_category,
+              id,
+              start_time,
+              end_time,
+              description,
+              assign_to_emails,
+              guest_to_emails,
+              participant_to_emails,
+              meeting_link,
+            };
+          });
 
-      setEvents(formattedEvents);
-      console.log(formattedEvents);
-      console.log(calendarDataResponse);
+        setEvents(formattedEvents);
+        console.log(formattedEvents);
+        console.log(calendarDataResponse);
+      } catch (error) {
+        console.log(error);
+      }
     };
     fetchCalenderData();
   }, [popupDate]);
@@ -352,12 +359,18 @@ const Calender = () => {
     }
   };
   const [filteredEvents, setFilteredEvents] = useState([]);
-
+  useEffect(() => {
+    filterEvents();
+  }, [selectedCategories]);
   const filterEvents = () => {
-    console.log(selectedCategories);
-    const filtered = events.filter(
-      (event) => selectedCategories[event.category]
-    );
+    const filtered = events.filter((event) => {
+      // console.log(event.extendedProps.sub_category);
+      return (
+        selectedCategories[event.category] ||
+        (selectedCategories.Rescheduled &&
+          event.extendedProps.sub_category === "reschedule")
+      );
+    });
     setFilteredEvents(filtered);
   };
   const handleButtonToggle = (buttonType) => {
@@ -474,7 +487,7 @@ const Calender = () => {
       return false; // Past date
     }
   };
-
+const navigate =useNavigate()
   const CustomInput = React.forwardRef(({ value, onClick }, ref) => (
     <input
       className="datepickers"
@@ -552,7 +565,6 @@ const Calender = () => {
     formData.append("created_by", user_id);
     formData.append("user_id", user_id);
     formData.append("task_description", task_description);
-    console.log(attachments);
     attachments.forEach((file, index) => {
       console.log(file);
       formData.append("attachments", file);
@@ -561,13 +573,6 @@ const Calender = () => {
     idList.forEach((id) => {
       formData.append("assign_to", id);
     });
-
-    for (let pair of formData.entries()) {
-      console.log(
-        `${pair[0]}: ${pair[1] instanceof File ? pair[1].name : pair[1]}`
-      );
-    }
-
     try {
       toast.loading("Creating New Event Please Wait! ");
       const response = await postCalendarTask(formData);
@@ -877,7 +882,7 @@ const Calender = () => {
     const assignToIds = editableAssignTo.map(
       (assignEmails) => assignEmails.value
     );
-    const user_id = localStorage.getItem("user_id");
+
     const formData = new FormData();
     // formData.append('task_topic', editableTitle);
     // formData.append('due_date', formatDate(due_date));
@@ -1000,7 +1005,7 @@ const Calender = () => {
       );
       return;
     }
-    const user_id = localStorage.getItem("user_id");
+
     const formData = new FormData();
     formData.append("title", editableTitle);
     formData.append("from_date", editableStart);
@@ -1056,7 +1061,7 @@ const Calender = () => {
       );
       return;
     }
-    const user_id = localStorage.getItem("user_id");
+
     const formData = new FormData();
     formData.append("title", editableTitle);
     formData.append("from_date", editableStart);
@@ -1093,18 +1098,138 @@ const Calender = () => {
         setSelectedItem(false);
       });
   };
-  
+
   const getInitialStartDate = () => {
     const today = new Date();
     const pastDate = new Date(today.setDate(today.getDate() - 30));
-    return pastDate.toISOString().split('T')[0]; // Format as YYYY-MM-DD
+    return pastDate.toISOString().split("T")[0];
   };
-  const [startDate, setStartDate] = useState(getInitialStartDate()); // 30 days before today's date
-  const [endDate, setEndDate] = useState(new Date().toISOString().split('T')[0]); // Current date in YYYY-MM-DD format
+  const [startDate, setStartDate] = useState(getInitialStartDate());
+  const [endDate, setEndDate] = useState(
+    new Date().toISOString().split("T")[0]
+  );
+  const handleStartDateChange1 = (e) => {
+    const newStartDate = e.target.value;
+
+    setStartDate(newStartDate);
+  };
+  const handleEndDateChange1 = (e) => {
+    const newEndDate = e.target.value;
+    console.log(e.target.value);
+    setEndDate(newEndDate);
+  };
+  const handlePlanMyCalendarClick = () => {
+    // setIsModalOpen(true);
+    navigate("/calendar/employeeSchedule");
+  };
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (
+        isDropdownOpen &&
+        !event.target.closest("#sync-dropdown") &&
+        !event.target.closest(".fc-filterDropdown-button")
+      ) {
+        setIsDropdownOpen(false);
+      }
+    };
+
+    document.addEventListener("click", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("click", handleClickOutside);
+    };
+  }, [isDropdownOpen]);
+
+  const filteredEvents1 = events.filter((event) => {
+    const eventStart = new Date(event.start).toISOString().split("T")[0]; // Convert to YYYY-MM-DD format
+    const eventEnd = event.end; // Convert to YYYY-MM-DD format
+
+    // Include events that start or end on the endDate
+    return (
+      (eventStart >= startDate && eventStart <= endDate) ||
+      (eventEnd >= startDate && eventEnd <= endDate) ||
+      (eventStart <= startDate && eventEnd >= endDate)
+    );
+  });
+  useEffect(() => {
+    if (calendarRef.current) {
+      const calendarApi = calendarRef.current.getApi();
+      calendarApi.gotoDate(startDate); // Move to the new start date
+      calendarApi.gotoDate(endDate);
+    }
+    console.log("🚀 ~ useEffect ~ startDate:", startDate);
+    console.log("🚀 ~ useEffect ~ endDate:", endDate);
+  }, [startDate, endDate]);
+
+  const renderEventContent = (eventInfo) => {
+    const container = document.createElement("div");
+    container.className = "fc-event-main-frame";
+    container.style.display = "flex";
+    container.style.alignItems = "center";
+    container.style.justifyContent = "space-between";
+    container.style.gap = "2px";
+
+    // Add event time
+    if (!eventInfo.event.allDay) {
+      const timeEl = document.createElement("div");
+      timeEl.className = "fc-event-time";
+      timeEl.innerHTML = eventInfo.timeText;
+      container.appendChild(timeEl);
+    }
+
+    // Add event dot
+    const dotEl = document.createElement("div");
+    dotEl.className = "fc-daygrid-event-dot";
+    container.appendChild(dotEl);
+
+    // Event title
+    const titleEl = document.createElement("div");
+    titleEl.className = "fc-event-title-container";
+    const title = document.createElement("div");
+    title.className = "fc-event-title fc-sticky";
+    const fullTitle = eventInfo.event.title;
+    title.innerText =
+      fullTitle.length > 10 ? fullTitle.substring(0, 10) + "..." : fullTitle;
+    titleEl.appendChild(title);
+    container.appendChild(titleEl);
+
+    // Reschedule indicator
+    if (
+      eventInfo.event.extendedProps &&
+      eventInfo.event.extendedProps.sub_category === "reschedule"
+    ) {
+      const rescheduleButton = document.createElement("div");
+      rescheduleButton.innerHTML = "🔴"; // Red dot icon
+      rescheduleButton.className = "reschedule-button";
+      rescheduleButton.title = "Rescheduled task";
+      rescheduleButton.onclick = (e) => {
+        e.stopPropagation();
+        handleRescheduleClick(eventInfo.event);
+      };
+      container.appendChild(rescheduleButton);
+    }
+
+    // Wrap everything in a harness div
+    const harness = document.createElement("div");
+    harness.className = "fc-daygrid-event-harness";
+    harness.appendChild(container);
+
+    return { domNodes: [harness] };
+  };
+
+  const handleDeleteTask = async (user_id, category, id) => {
+    const deleteResp = await deleteVibeCalenderTask(user_id, category, id);
+
+    if (deleteResp.success) {
+      console.log("successfully delete");
+      window.location.reload();
+    }
+  };
   return (
-    <section className="flex">
+    <section className="flex relative">
       <Navbar />
-      <div className="p-4 w-full my-2 flex md:mx-2 overflow-hidden flex-col">
+      <div className="p-2 w-full flex md:mx-2 overflow-hidden flex-col">
         <button
           className="z-50 p-4 rounded-full shadow-custom-all-sides"
           style={{
@@ -1119,7 +1244,27 @@ const Calender = () => {
         >
           <FaPlus size={20} />
         </button>
-        <div className=" rounded-xl shadow-custom-all-sides">
+        <div className="shadow-custom-all-sides mb-2 rounded-xl p-2 flex items-center gap-4">
+          <label className="font-medium">
+            Start Date :&nbsp;
+            <input
+              className="border p-1 px-2 rounded-md border-gray-400"
+              type="date"
+              value={startDate}
+              onChange={handleStartDateChange1}
+            />
+          </label>
+          <label className="font-medium">
+            End Date :&nbsp;
+            <input
+              className="border p-1 px-2 rounded-md border-gray-400"
+              type="date"
+              value={endDate}
+              onChange={handleEndDateChange1}
+            />
+          </label>
+        </div>
+        <div className=" rounded-xl shadow-custom-all-sides p-2">
           <FullCalendar
             ref={calendarRef}
             plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
@@ -1127,7 +1272,7 @@ const Calender = () => {
               left: "prev",
               center: "title",
               right:
-                "next dayGridMonth,timeGridWeek,timeGridDay customDropdown",
+                "next dayGridMonth,timeGridWeek,timeGridDay customDropdown filterDropdown planMyCalendar",
             }}
             customButtons={{
               customDropdown: {
@@ -1141,12 +1286,35 @@ const Calender = () => {
                   setIsListOpen((prevState) => !prevState);
                 },
               },
+              planMyCalendar: {
+                text: `Plan My Day`,
+                click: handlePlanMyCalendarClick,
+              },
+              filterDropdown: {
+                text: "Sync ▾",
+                click: function (event) {
+                  setIsDropdownOpen((prevState) => !prevState);
+                },
+              },
+            }}
+            views={{
+              fortnightlyView: {
+                type: "dayGrid",
+                duration: { weeks: 2 },
+                buttonText: "fortnight",
+              },
             }}
             dateClick={handleDateClick}
             initialDate={selectedDate}
             datesSet={handleViewChange}
-            events={areCheckboxesChecked ? filteredEvents : events}
-            // events={areCheckboxesChecked ? filteredEvents : (startDate && endDate ? filteredEvents1 : events)}
+            // events={areCheckboxesChecked ? filteredEvents : events}
+            events={
+              areCheckboxesChecked
+                ? filteredEvents
+                : startDate && endDate
+                ? filteredEvents1
+                : events
+            }
             eventBackgroundColor={(events) =>
               events.extendedProps.category === "Task" ? "red" : "green"
             }
@@ -1164,7 +1332,56 @@ const Calender = () => {
               minute: "2-digit",
               hour12: true,
             }}
+            eventContent={renderEventContent}
+            // style={{ zIndex: 1 }}
           />
+
+          <div
+            id="sync-dropdown"
+            className=" dropdown z-20"
+            style={{
+              display: isDropdownOpen ? "block" : "none",
+              position: "absolute",
+              right: "140px",
+              top: "130px",
+            }}
+          >
+            <ul
+              className="dropdown-menu pl-1 mt-1 custom-dropdown p-2 px-4 bg-white text-black shadow-custom-all-sides"
+              style={{
+                // background: ,
+                borderRadius: 8,
+                display: "block",
+              }}
+            >
+              <li>
+                <a
+                  className="hover:text-gray-500"
+                  href="#"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    syncWithOutlook();
+                    setIsDropdownOpen(false);
+                  }}
+                >
+                  <label className="cursor-pointer">Sync Outlook</label>
+                </a>
+              </li>
+              <li>
+                <a
+                  className="hover:text-gray-500"
+                  href="#"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    syncWithGmail();
+                    setIsDropdownOpen(false);
+                  }}
+                >
+                  <label className="cursor-pointer">Sync Gmail</label>
+                </a>
+              </li>
+            </ul>
+          </div>
         </div>
         {isListOpen && (
           <div

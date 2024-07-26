@@ -49,6 +49,7 @@ const AddLoi = () => {
     deliveryAddress: "",
     terms: "",
     vendor_id: "",
+    attachments:[]
   });
   console.log("formData", formData);
   console.log("activities", activities);
@@ -80,14 +81,7 @@ const AddLoi = () => {
   };
 
   useEffect(() => {
-    const fetchVendors = async () => {
-      try {
-        const vendorResp = await getVendors();
-        setVendors(vendorResp.data);
-      } catch (error) {
-        console.log(error);
-      }
-    };
+    
     const fetchAllAddress = async () => {
       try {
         const addressResp = await getAllAddress();
@@ -107,7 +101,7 @@ const AddLoi = () => {
       }
     };
     fetchAllAddress();
-    fetchVendors();
+    
     fetchInventory();
   }, []);
 
@@ -176,6 +170,9 @@ const AddLoi = () => {
       "loi_detail[delivery_address_id]",
       formData.deliveryAddress
     );
+    formData.attachments.forEach((file)=>{
+      sendData.append("attachfiles[]", file)
+    })
     activities.forEach((item) => {
       sendData.append("loi_detail[loi_items][][item_id]", item.inventory);
       sendData.append("loi_detail[loi_items][][quantity]", item.quantity);
@@ -183,7 +180,7 @@ const AddLoi = () => {
       sendData.append("loi_detail[loi_items][][rate]", item.rate);
       sendData.append("loi_detail[loi_items][][amount]", item.Amount);
     });
-
+    
     try {
       const resp = await postLOI(sendData);
       navigate("/admin/purchase/loi");
@@ -192,6 +189,14 @@ const AddLoi = () => {
     } catch (error) {
       console.log(error);
     }
+  };
+  const handleFileChange = (files, fieldName) => {
+    
+    setFormData({
+      ...formData,
+      [fieldName]: files,
+    });
+    console.log(fieldName);
   };
 
   return (
@@ -736,7 +741,9 @@ const AddLoi = () => {
                   ATTACHMENTS
                 </h3>
                 {/* <input type="file" /> */}
-                <FileInputBox />
+                <FileInputBox  handleChange={(files) => handleFileChange(files, "attachments")}
+                fieldName={"attachments"}
+                isMulti={true} />
                 <div className="sm:flex justify-center grid gap-2 my-5 ">
                   {/* <button
                     onClick={() => setIsModalOpen(true)}

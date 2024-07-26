@@ -11,6 +11,7 @@ import {
   API_URL,
   getFloors,
   getSiteAsset,
+  getSiteSearchedAsset,
   getUnits,
   getVibeBackground,
 } from "../api";
@@ -53,7 +54,8 @@ const Asset = () => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const dropdownRef = useRef(null);
   const [uploadModal, setUploadModal] = useState(false);
-
+  const [pageNo, setPageNo] = useState(1);
+  const [total, setTotal] = useState(0);
   const handleCheckboxChange = (event) => {
     const value = event.target.value;
     setSelectedOptions((prevSelectedOptions) =>
@@ -221,46 +223,68 @@ const Asset = () => {
 
   const [filteredData, setFilteredData] = useState([]);
 
-  const handleSearch = (e) => {
+  // const handleSearch = (e) => {
+  //   const searchValue = e.target.value;
+  //   setSearchText(searchValue);
+
+  //   if (searchValue.trim() === "") {
+  //     setFilteredData(assets);
+  //   } else {
+  //     const filteredResults = assets.filter(
+  //       (item) =>
+  //         item.building_name
+  //           .toLowerCase()
+  //           .includes(searchValue.toLowerCase()) ||
+  //         item.name.toLowerCase().includes(searchValue.toLowerCase()) ||
+  //         (item.oem_name &&
+  //           item.oem_name.toLowerCase().includes(searchValue.toLowerCase())) ||
+  //         (item.unit_name &&
+  //           item.unit_name.toLowerCase().includes(searchValue.toLowerCase()))
+  //     );
+  //     setFilteredData(filteredResults);
+  //   }
+  // };
+
+  const handleSearch = async (e) => {
     const searchValue = e.target.value;
     setSearchText(searchValue);
 
-    if (searchValue.trim() === "") {
-      setFilteredData(assets);
-    } else {
-      const filteredResults = assets.filter(
-        (item) =>
-          item.building_name
-            .toLowerCase()
-            .includes(searchValue.toLowerCase()) ||
-          item.name.toLowerCase().includes(searchValue.toLowerCase()) ||
-          (item.oem_name &&
-            item.oem_name.toLowerCase().includes(searchValue.toLowerCase())) ||
-          (item.unit_name &&
-            item.unit_name.toLowerCase().includes(searchValue.toLowerCase()))
+    try {
+      const response = await getSiteSearchedAsset(
+        searchValue,
+        searchValue,
+        searchValue,
+        searchValue
       );
-      setFilteredData(filteredResults);
+
+      setFilteredData(response.data.site_assets);
+      setTotal(response.data.total_count); 
+      console.log(response);
+    } catch (error) {
+      console.error("Error fetching search data:", error);
     }
   };
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await getSiteAsset();
-        const sortedData = response.data.site_assets.sort((a, b) => {
-          return new Date(b.created_at) - new Date(a.created_at);
-        });
+        const response = await getSiteAsset(pageNo);
+
         setFilteredData(response.data.site_assets);
-        // setFilteredData(response.data.site_assets);
-        // setAssets(response.data.site_assets);
+
         setAssets(response.data.site_assets);
+        setTotal(response.data.total_count);
         console.log(response);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
     };
     fetchData();
-  }, []);
+  }, [pageNo]);
+
+  const handlePageChange = (page) => {
+    setPageNo(page);
+  };
 
   const exportToExcel = () => {
     const mappedData = filteredData.map((asset) => ({
@@ -576,19 +600,18 @@ const Asset = () => {
               )}
               data={filteredData}
               fixedHeader
-              // fixedHeaderScrollHeight="450px"
-              pagination={true}
-              // onChangePage={}
+              pagination={false}
             />
-            {/* <div className="flex w-fill bg-white p-2 mb-10 justify-end">
+            <div className="bg-white mb-10 p-2 flex justify-end">
               <Pagination
-                simple={{
-                  readOnly: true,
-                }}
-                defaultCurrent={2}
-                total={50}
+                current={pageNo}
+                total={total}
+                pageSize={10}
+                onChange={handlePageChange}
+                responsive
+               
               />
-            </div> */}
+            </div>
           </>
         ) : (
           <div className="flex justify-center items-center h-full">

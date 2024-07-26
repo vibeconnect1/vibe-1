@@ -17,12 +17,21 @@ export const getTicketDashboard = async () =>
     },
   });
 //Assets
-export const getSiteAsset = async () =>
-  axiosInstance.get("/site_assets.json", {
+export const getSiteAsset = async (page) =>
+  axiosInstance.get(`/site_assets.json?page=${page}`, {
     params: {
       token: token,
     },
   });
+export const getSiteSearchedAsset = async (oem, assetName, building, unit) =>
+  axiosInstance.get(
+    `/site_assets.json?q[oem_name_cont]=${oem}&q[name_cont]=${assetName}&q[building_name_cont]=${building}&q[unit_name_cont]=${unit}`,
+    {
+      params: {
+        token: token,
+      },
+    }
+  );
 export const getSiteAssetDetails = async (id) =>
   axiosInstance.get(`/site_assets/${id}.json`, {
     params: {
@@ -94,30 +103,30 @@ export const getHelpDeskCategoriesSetupDetails = async (id) =>
       token: token,
     },
   });
-export const editHelpDeskCategoriesSetupDetails = async (id,data) =>
-  axiosInstance.put(`/pms/admin/helpdesk_categories/${id}.json`, data,{
+export const editHelpDeskCategoriesSetupDetails = async (id, data) =>
+  axiosInstance.put(`/pms/admin/helpdesk_categories/${id}.json`, data, {
     params: {
       token: token,
     },
   });
-  export const postHelpDeskCategoriesSetup = async (data) =>
-    axiosInstance.post(`/pms/admin/helpdesk_categories.json`,data, {
-      params: {
-        token: token,
-      },
-    });
-    export const getHelpDeskSubCategoriesSetup = async () =>
-      axiosInstance.get(`/pms/admin/helpdesk_categories/sub_categories.json`, {
-        params: {
-          token: token,
-        },
-      });
-    export const getHelpDeskStatusSetup = async () =>
-      axiosInstance.get(`/pms/admin/helpdesk_categories/complaint_statuses.json`, {
-        params: {
-          token: token,
-        },
-      });
+export const postHelpDeskCategoriesSetup = async (data) =>
+  axiosInstance.post(`/pms/admin/helpdesk_categories.json`, data, {
+    params: {
+      token: token,
+    },
+  });
+export const getHelpDeskSubCategoriesSetup = async () =>
+  axiosInstance.get(`/pms/admin/helpdesk_categories/sub_categories.json`, {
+    params: {
+      token: token,
+    },
+  });
+export const getHelpDeskStatusSetup = async () =>
+  axiosInstance.get(`/pms/admin/helpdesk_categories/complaint_statuses.json`, {
+    params: {
+      token: token,
+    },
+  });
 export const getAdminComplaints = async () =>
   axiosInstance.get(`/pms/admin/complaints.json`, {
     params: {
@@ -153,7 +162,6 @@ export const getComplaintsDetails = async (id) =>
   });
 
 export const fetchSubCategories = async (categoryId) =>
-
   axiosInstance.get(`/pms/admin/get_sub_categories.json`, {
     params: {
       token: token,
@@ -704,6 +712,12 @@ export const getLOI = async () =>
       token: token,
     },
   });
+export const getServicePR = async () =>
+  axiosInstance.get(`/loi_services.json`, {
+    params: {
+      token: token,
+    },
+  });
 export const getLOIDetails = async (id) =>
   axiosInstance.get(`/loi_details/${id}.json`, {
     params: {
@@ -746,7 +760,7 @@ export const postContactBook = async (data) =>
       token: token,
     },
   });
-export const editContactBook = async (id,data) =>
+export const editContactBook = async (id, data) =>
   axiosInstance.put(`/contact_books/${id}.json`, data, {
     params: {
       token: token,
@@ -1872,7 +1886,7 @@ export const getVibeBoardUser = async (userId, orgId, boardId) => {
 export const getVibeCalenderEventsNew = async (userId) => {
   try {
     const response = await vibeAuth.get(
-      `/api/employee/calender/get-calender_events/?user_id=${userId}`,
+      `/api/employee/calender/get-events/?user_id=${userId}`,
       {
         headers: {
           "Content-Type": "multipart/form-data",
@@ -1882,6 +1896,22 @@ export const getVibeCalenderEventsNew = async (userId) => {
     return response.data;
   } catch (error) {
     console.error("Error getting new events data :", error);
+    throw error;
+  }
+};
+export const deleteVibeCalenderTask = async (userId, category, id) => {
+  try {
+    const response = await vibeAuth.delete(
+      `/api/employee/calender/delete-calender-event/?user_id=${userId}&category=${category}&id=${id}`,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error deleing task data :", error);
     throw error;
   }
 };

@@ -2745,11 +2745,11 @@ function App() {
           />
           {/* calendar */}
           <Route
-            path="/admin/calendar"
+            path="/calendar"
             element={
-              <ProtectedAdminRoutes>
+              // <ProtectedAdminRoutes>
                 <Calender />
-              </ProtectedAdminRoutes>
+              // </ProtectedAdminRoutes>
             }
           />
 

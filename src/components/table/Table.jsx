@@ -117,7 +117,7 @@ const Table = ({ columns, title, height, pagination= true, data, apiEndpoint, cu
   };
 
   return (
-    <div className="rounded-md mb-5 shadow-custom-all-sides">
+    <div className="rounded-md  shadow-custom-all-sides">
       <DataTable
         title={title}
         responsive

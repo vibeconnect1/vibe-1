@@ -112,4 +112,5 @@
 .fc-daygrid-day-number {
   /* color: #007bff; */
   font-weight: bold;
+  display: flex;
 }

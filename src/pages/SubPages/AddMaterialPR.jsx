@@ -58,6 +58,7 @@ const AddMatertialPR = () => {
     relatedTo: "",
     referenceNo: "",
     approved: false,
+    attachments:[]
   });
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -228,6 +229,9 @@ const AddMatertialPR = () => {
         `loi_detail[loi_items][][expected_date]`,
         item.expectedDate
       );
+      formData.attachments.forEach((file)=>{
+        sendData.append("attachfiles[]", file)
+      })
       sendData.append(`loi_detail[loi_items][][standard_unit_id]`, item.unit);
       sendData.append(`loi_detail[loi_items][][rate]`, item.rate);
       sendData.append(`loi_detail[loi_items][][csgt_rate]`, item.cgstRate);
@@ -251,6 +255,15 @@ const AddMatertialPR = () => {
     } catch (error) {
       console.log(error);
     }
+  };
+
+  const handleFileChange = (files, fieldName) => {
+    
+    setFormData({
+      ...formData,
+      [fieldName]: files,
+    });
+    console.log(fieldName);
   };
 
   return (
@@ -1055,7 +1068,9 @@ const AddMatertialPR = () => {
               ATTACHMENTS
             </h3>
 
-            <FileInputBox />
+            <FileInputBox  handleChange={(files) => handleFileChange(files, "attachments")}
+                fieldName={"attachments"}
+                isMulti={true} />
 
             {/* Submit button */}
             <div className="sm:flex justify-center grid gap-2 my-5 ">

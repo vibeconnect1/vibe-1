@@ -5,6 +5,7 @@ import Table from "../../../components/table/Table";
 import { getLOIDetails } from "../../../api";
 import { useParams } from "react-router-dom";
 import numberToWordsIndian from "../../../utils/NumbersToWords";
+import { FaRegFileAlt } from "react-icons/fa";
 
 const MaterialPRDetails = () => {
   const { id } = useParams();
@@ -234,6 +235,16 @@ const MaterialPRDetails = () => {
       Actions: "",
     },
   ];
+
+  const isImage = (filePath) => {
+    const imageExtensions = ["jpg", "jpeg", "png", "gif", "bmp", "svg"];
+    const extension = filePath.split(".").pop().split("?")[0].toLowerCase();
+    return imageExtensions.includes(extension);
+  };
+  const getFileName = (filePath) => {
+    return filePath.split("/").pop().split("?")[0];
+  };
+  const domainPrefix = "https://admin.vibecopilot.ai";
   return (
     <section className="mb-10">
       <div className="flex flex-col  md:justify-between my-5 w-full">
@@ -445,7 +456,7 @@ const MaterialPRDetails = () => {
             </div>
         </div>
         <div className="border-black border-t mt-5"></div>
-        <Table columns={column} data={loiItems} />
+        <Table columns={column} data={loiItems} pagination={false} />
         <div className="my-2 md:px-2 text-sm items-center font-medium grid gap-1 ">
             <div className="flex justify-between items-center">
               <p>Net Amount(INR) :</p>
@@ -480,7 +491,37 @@ const MaterialPRDetails = () => {
       
       <div className="border-t my-2 mx-5 border-black">
         <p className="text-md font-semibold">Attachments</p>
-        <p className="text-sm">No attachments</p>
+        <div className="flex gap-4 flex-wrap my-4 items-center  text-center">
+            {details.loi_details_image &&
+            details.loi_details_image.length > 0 ? (
+              details.loi_details_image.map((doc, index) => (
+                <div key={doc.id} className="">
+                  {isImage(domainPrefix + doc.document) ? (
+                    <img
+                      src={domainPrefix + doc.document}
+                      alt={`Attachment ${index + 1}`}
+                      className="w-40 h-28 object-cover rounded-md"
+                      onClick={() =>
+                        window.open(domainPrefix + doc.document, "_blank")
+                      }
+                    />
+                  ) : (
+                    <a
+                      href={domainPrefix + doc.document}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className=" hover:text-blue-400 transition-all duration-300  text-center flex flex-col items-center"
+                    >
+                      <FaRegFileAlt size={50} />
+                      {getFileName(doc.document)}
+                    </a>
+                  )}
+                </div>
+              ))
+            ) : (
+              <p className="text-center w-full">No Attachments</p>
+            )}
+          </div>
       </div>
       <div className=" flex flex-col gap-5 items-end mx-5 border-black">
         <p className="text-md font-semibold">
