@@ -9,6 +9,7 @@ import {
   postContactBook,
   getContactBookDetails,
   editContactBook,
+  domainPrefix,
 } from "../../api";
 import toast from "react-hot-toast";
 import { getItemInLocalStorage } from "../../utils/localStorage";
@@ -17,6 +18,8 @@ import Switch from "../../Buttons/Switch";
 const EditContactBook = () => {
   const [imageFile, setImageFile] = useState(null);
   const [categories, setCategories] = useState([]);
+  const [logo, setLogo] = useState("");
+  const [logoId, setLogoId] = useState(null);
   const [subCategories, setSubCategories] = useState([]);
   const [formData, setFormData] = useState({
     categoryId: "",
@@ -33,7 +36,7 @@ const EditContactBook = () => {
     description: "",
     profile: "",
     status: false,
-    // attachments
+    attachments: [],
   });
   console.log(formData);
   const inputRef = useRef(null);
@@ -43,36 +46,43 @@ const EditContactBook = () => {
   };
 
   const handleImageChange = (event) => {
-    setImageFile(event.target.files[0]);
+    const file = event.target.files[0];
+    setImageFile(file);
+    setLogo(URL.createObjectURL(file));
   };
   const themeColor = useSelector((state) => state.theme.color);
   const { id } = useParams();
   useEffect(() => {
     const fetchDetails = async () => {
-     try {
-       const detailsResp = await getContactBookDetails(id);
-       const data = detailsResp.data;
-       setFormData({
-         ...formData,
-         address: data.address,
-         categoryId: data.generic_info_id,
-         mobileNumber: data.mobile,
-         landLine: data.landline_no,
-         primaryEmail: data.primary_email,
-         secondaryEmail: data.secondary_email,
-         website: data.website,
-         keyOffering: data.key_offering,
-         description: data.description,
-         profile: data.profile,
-         status: data.status,
-         companyName: data.company_name,
-         contactPersonName: data.contact_person_name,
-         subCategoryId: data.generic_sub_info_id
-       });
-       fetchSubCategory(data.generic_info_id)
-     } catch (error) {
-      console.log(error)
-     }
+      try {
+        const detailsResp = await getContactBookDetails(id);
+        const data = detailsResp.data;
+        setFormData({
+          ...formData,
+          address: data.address,
+          categoryId: data.generic_info_id,
+          mobileNumber: data.mobile,
+          landLine: data.landline_no,
+          primaryEmail: data.primary_email,
+          secondaryEmail: data.secondary_email,
+          website: data.website,
+          keyOffering: data.key_offering,
+          description: data.description,
+          profile: data.profile,
+          status: data.status,
+          companyName: data.company_name,
+          contactPersonName: data.contact_person_name,
+          subCategoryId: data.generic_sub_info_id,
+          attachments: data.attachments || [],
+        });
+        if (data.logo && data.logo.length > 0) {
+          setLogo(`${domainPrefix}${data.logo[0].document}`);
+          setLogoId(data.logo[0].id);
+        }
+        fetchSubCategory(data.generic_info_id);
+      } catch (error) {
+        console.log(error);
+      }
     };
     const fetchContactCategory = async () => {
       try {
@@ -102,7 +112,7 @@ const EditContactBook = () => {
     fetchDetails();
     fetchContactCategory();
   }, []);
-const navigate = useNavigate()
+  const navigate = useNavigate();
   const siteId = getItemInLocalStorage("SITEID");
   const handleEditContact = async () => {
     if (formData.companyName === "") {
@@ -130,10 +140,24 @@ const navigate = useNavigate()
     sendData.append("contact_book[description]", formData.description);
     sendData.append("contact_book[profile]", formData.profile);
     sendData.append("contact_book[status]", formData.status);
+    if (imageFile) {
+      sendData.append("contact_book[logo][document]", imageFile);
+    }
+
+    if (logoId) {
+      sendData.append("contact_book[logo][id]", logoId);
+    }
+    formData.attachments.forEach((file) => {
+      sendData.append("attachfiles[]", file);
+    });
+    for (let pair of sendData.entries()) {
+      console.log(`${pair[0]}: ${pair[1]}`);
+    }
+
     try {
       const res = await editContactBook(id, sendData);
-     
-      navigate(`/business/details/${res.data.id}`)
+
+      navigate(`/business/details/${res.data.id}`);
     } catch (error) {
       console.log(error);
     }
@@ -167,47 +191,51 @@ const navigate = useNavigate()
       });
     }
   };
-
+  const handleFileChange = (files, fieldName) => {
+    setFormData({
+      ...formData,
+      [fieldName]: files,
+    });
+    console.log(fieldName);
+  };
   return (
     <section className="flex">
       <div className="hidden md:block">
-
-      <Navbar />
+        <Navbar />
       </div>
       <div className="w-full flex mx-3 flex-col overflow-hidden">
-        <div className="flex flex-col w-full gap-4 p-4">
+        <div className="flex flex-col w-full gap-4 p-2">
           <h2
             style={{ background: themeColor }}
-            className="text-center text-white font-semibold p-2 rounded-full text-lg "
+            className="text-center text-white font-semibold p-2 rounded-md text-lg "
           >
             Add Business Contact
           </h2>
-          <div className="flex w-full justify-center">
-            <div
-              onClick={handleImageClick}
-              className="cursor-pointer flex justify-center flex-col items-center my-4"
-            >
-              {imageFile ? (
-                <img
-                  src={URL.createObjectURL(imageFile)}
-                  alt="Uploaded"
-                  className="border-4 border-gray-300 rounded-full w-40 h-40 object-cover"
-                />
-              ) : (
-                <img
-                  src={image}
-                  alt="Default"
-                  className="border-4 border-gray-300 rounded-full w-40 h-40 object-cover"
-                />
-              )}
-              <input
-                type="file"
-                ref={inputRef}
-                onChange={handleImageChange}
-                style={{ display: "none" }}
+          <div
+            onClick={handleImageClick}
+            className="cursor-pointer flex justify-center flex-col items-center my-4"
+          >
+            {logo ? (
+              <img
+                src={logo}
+                alt="Uploaded"
+                className="border-4 border-gray-300 rounded-full w-40 h-40 object-cover"
               />
-              <h2 className="font-medium">Company Logo</h2>
-            </div>
+            ) : (
+              <img
+                src={image}
+                alt="Default"
+                className="border-4 border-gray-300 rounded-full w-40 h-40 object-cover"
+              />
+            )}
+            <input
+              type="file"
+              ref={inputRef}
+              accept="image/*" // Accept only images
+              onChange={handleImageChange}
+              style={{ display: "none" }}
+            />
+            <h2 className="font-medium">Company Logo</h2>
           </div>
           <div className="grid md:grid-cols-3 item-start gap-4 w-full">
             <div className="flex flex-col">
@@ -419,11 +447,15 @@ const navigate = useNavigate()
             <label htmlFor="" className="font-semibold ">
               Attachments :
             </label>
-            <FileInputBox />
+            <FileInputBox
+              handleChange={(files) => handleFileChange(files, "attachments")}
+              fieldName={"attachments"}
+              isMulti={true}
+            />
           </div>
           <div className="my-10 flex justify-center">
             <button
-              className="bg-black text-white p-2 text-lg rounded-md"
+              className="bg-black text-white p-2 text-lg rounded-md px-8 font-medium"
               onClick={handleEditContact}
             >
               Save

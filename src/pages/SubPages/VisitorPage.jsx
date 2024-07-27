@@ -135,9 +135,9 @@ const VisitorPage = () => {
     },
     {
       name: "Host",
-      selector: (row) => row.created_by,
+      selector: (row) => `${row.created_by_name.firstname} ${row.created_by_name.lastname}`,
       sortable: true,
-    },
+    }
   ];
   const [searchText, setSearchText] = useState("");
   const handleSearch = (e) => {

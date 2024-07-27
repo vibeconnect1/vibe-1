@@ -16,10 +16,11 @@ const PPMChecklistDetails = () => {
   const [update, setUpdate] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [addNewQuestion, setAddNewQuestion] = useState([
-    { name: "", type: "", options: ["", "", "", ""], _destroy: "0" },
+    { id: "", name: "", type: "", options: ["", "", "", ""], _destroy: "0" },
   ]);
 
   const handleAddQuestionFields = () => {
+  
     setAddNewQuestion([
       ...addNewQuestion,
       { name: "", type: "", options: ["", "", "", ""] },
@@ -32,10 +33,10 @@ const PPMChecklistDetails = () => {
     // setAddNewQuestion(newFields);
     setAddNewQuestion((prevQuest) => {
       const updatedQuest = [...prevQuest];
-      if (updatedQuest[index].id) {
-        updatedQuest[index]._destroy = "1";
+      if (updatedQuest.id) {
+        updatedQuest._destroy = "1";
       } else {
-        updatedQuest.splice(index, 1);
+      updatedQuest.splice(index, 1);
       }
       return updatedQuest;
     });
@@ -64,6 +65,7 @@ const PPMChecklistDetails = () => {
       setEndDate(data.end_date);
       setAddNewQuestion(
         data.questions.map((q) => ({
+          id: q.id,
           name: q.name,
           type: q.qtype,
           options: [q.option1, q.option2, q.option3, q.option4],
@@ -110,14 +112,18 @@ const PPMChecklistDetails = () => {
       if (quest.id) {
         formData.append(`question[][id]`, quest.id);
       }
-      formData.append("question[][name]", quest.name);
-      formData.append("question[][type]", quest.type);
-      quest.options.forEach((option, optIndex) => {
-        formData.append(`question[${index}][options][${optIndex}]`, option);
-      });
+      formData.append(`question[][name]`, quest.name);
+      formData.append(`question[][type]`, quest.type);
+      // quest.options.forEach((option, optIndex) => {
+      //   formData.append(`question[options][${optIndex}]`, option);
+      // });
+      formData.append(`question[][option1]`, quest.options[0] || "");
+      formData.append(`question[][option2]`, quest.options[1] || "");
+      formData.append(`question[][option3]`, quest.options[2] || "");
+      formData.append(`question[][option4]`, quest.options[3] || "");
       if (quest._destroy) {
         formData.append(
-          `visitor[extra_visitors_attributes][${index}][_destroy]`,
+          `question[][_destroy]`,
           quest._destroy
         );
       }
@@ -128,6 +134,7 @@ const PPMChecklistDetails = () => {
       const response = await editChecklist(formData, id);
       console.log(response);
       setUpdate(true);
+      setIsEditing(!isEditing);
       toast.dismiss();
       toast.success("Checklist Updated Successfully");
     } catch (error) {
@@ -366,7 +373,7 @@ const PPMChecklistDetails = () => {
                                       id={`option1_${i}`}
                                       className="border p-1 px-4 border-gray-500 rounded-md"
                                       placeholder="option 1"
-                                      value={data.options[0]}
+                                      value={data.options[0] || ""}
                                       onChange={(e) =>
                                         handleQuestionChange(
                                           i,
@@ -381,7 +388,7 @@ const PPMChecklistDetails = () => {
                                       id={`option2_${i}`}
                                       className="border p-1 px-4 border-gray-500 rounded-md"
                                       placeholder="option 2"
-                                      value={data.options[1]}
+                                      value={data.options[1] || ""}
                                       onChange={(e) =>
                                         handleQuestionChange(
                                           i,
@@ -396,7 +403,7 @@ const PPMChecklistDetails = () => {
                                       id={`option3_${i}`}
                                       className="border p-1 px-4 border-gray-500 rounded-md"
                                       placeholder="option 3"
-                                      value={data.options[2]}
+                                      value={data.options[2] || ""}
                                       onChange={(e) =>
                                         handleQuestionChange(
                                           i,
@@ -411,7 +418,7 @@ const PPMChecklistDetails = () => {
                                       id={`option4_${i}`}
                                       className="border p-1 px-4 border-gray-500 rounded-md"
                                       placeholder="option 4"
-                                      value={data.options[3]}
+                                      value={data.options[3] || ""}
                                       onChange={(e) =>
                                         handleQuestionChange(
                                           i,
@@ -429,7 +436,7 @@ const PPMChecklistDetails = () => {
                                       id={`option1_${i}`}
                                       className=" p-1 px-4  rounded-md outline-none bg-gray-100"
                                       placeholder="option 1"
-                                      value={data.options[0]}
+                                      value={data.options[0] || ""}
                                       onChange={(e) =>
                                         handleQuestionChange(
                                           i,
@@ -444,7 +451,7 @@ const PPMChecklistDetails = () => {
                                       id={`option2_${i}`}
                                       className=" p-1 px-4  rounded-md outline-none bg-gray-100"
                                       placeholder="option 2"
-                                      value={data.options[1]}
+                                      value={data.options[1] || ""}
                                       onChange={(e) =>
                                         handleQuestionChange(
                                           i,
@@ -459,7 +466,7 @@ const PPMChecklistDetails = () => {
                                       id={`option3_${i}`}
                                       className=" p-1 px-4  rounded-md outline-none bg-gray-100"
                                       placeholder="option 3"
-                                      value={data.options[2]}
+                                      value={data.options[2] || ""}
                                       onChange={(e) =>
                                         handleQuestionChange(
                                           i,
@@ -474,7 +481,7 @@ const PPMChecklistDetails = () => {
                                       id={`option4_${i}`}
                                       className=" p-1 px-4  rounded-md outline-none bg-gray-100"
                                       placeholder="option 4"
-                                      value={data.options[3]}
+                                      value={data.options[3] || ""}
                                       onChange={(e) =>
                                         handleQuestionChange(
                                           i,

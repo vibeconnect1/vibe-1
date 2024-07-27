@@ -160,7 +160,7 @@ const AddAsset = () => {
   // };
 
   const handleFileChange = (files, fieldName) => {
-    // Changed to receive 'files' directly
+    
     setFormData({
       ...formData,
       [fieldName]: files,

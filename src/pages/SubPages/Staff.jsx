@@ -14,7 +14,7 @@ import Passes from "../Passes";
 
 const Staff = () => {
   const [selectedStatus, setSelectedStatus] = useState("all");
-  const themeColor = useSelector((state)=> state.theme.color)
+  const themeColor = useSelector((state) => state.theme.color);
 
   const columns = [
     {
@@ -30,155 +30,102 @@ const Staff = () => {
         </div>
       ),
     },
-
     {
-        name: "Edit",
-        selector: (row) => row.edit,
-        sortable: true,
-      },
-      {
-        name: "ID",
-        selector: (row) => row.Id,
-        sortable: true,
-      },
-      {
-        name: "Name",
-        selector: (row) => row.name,
-        sortable: true,
-      },
-      {
-        name: "Unit",
-        selector: (row) => row.unit,
-        sortable: true,
-      },
-      {
-        name: "Department",
-        selector: (row) => row.department,
-        sortable: true,
-      },
-
-      {
-        name: "Email",
-        selector: (row) => row.email,
-        sortable: true,
-      },
-      {
-        name: "Mobile",
-        selector: (row) => row.mobile,
-        sortable: true,
-      },
-
-      {
-        name: "Staff Id",
-        selector: (row) => row.Staff_Id,
-        sortable: true,
-      },
-      {
-        name: "Work Type",
-        selector: (row) => row.work_type,
-        sortable: true,
-      },
-
-      {
-        name: "Vendor name",
-        selector: (row) => row.v_name,
-        sortable: true,
-      },
-      {
-        name: "Status",
-        selector: (row) => row.status,
-        sortable: true,
-      },
-
-
-    {
-      name: "Cancellation",
-      selector: (row) => (row.status === "Upcoming" && <button className="text-red-400 font-medium">Cancel</button>),
+      name: "ID",
+      selector: (row) => row.Id,
       sortable: true,
     },
     {
-      name: "Approval",
-      selector: (row) => (row.status === "Upcoming" && 
-      <div className="flex justify-center gap-2">
-          <button className="text-green-400 font-medium hover:bg-green-400 hover:text-white transition-all duration-200 p-1 rounded-full"><TiTick size={20} /></button>
-          <button className="text-red-400 font-medium hover:bg-red-400 hover:text-white transition-all duration-200 p-1 rounded-full"><IoClose size={20}  /></button>
-      </div>
-    ),
+      name: "Name",
+      selector: (row) => row.name,
       sortable: true,
     },
+    {
+      name: "Unit",
+      selector: (row) => row.unit,
+      sortable: true,
+    },
+    {
+      name: "Department",
+      selector: (row) => row.department,
+      sortable: true,
+    },
+
+    {
+      name: "Email",
+      selector: (row) => row.email,
+      sortable: true,
+    },
+    {
+      name: "Mobile",
+      selector: (row) => row.mobile,
+      sortable: true,
+    },
+
+    {
+      name: "Staff Id",
+      selector: (row) => row.Staff_Id,
+      sortable: true,
+    },
+    {
+      name: "Work Type",
+      selector: (row) => row.work_type,
+      sortable: true,
+    },
+
+    {
+      name: "Vendor name",
+      selector: (row) => row.v_name,
+      sortable: true,
+    },
+    {
+      name: "Status",
+      selector: (row) => row.status,
+      sortable: true,
+    },
+
+   
   ];
 
   //custom style
-  const customStyle = {
-    headRow: {
-      style: {
-        backgroundColor: themeColor,
-        color: "white",
-
-        fontSize: "10px",
-      },
-    },
-    headCells: {
-      style: {
-        textTransform: "upperCase",
-      },
-    },
-  };
   const data = [
     {
-        id: 1,
-       edit:"ab",
-       Id:"55",
-       name:"Mi",
-       unit:"9",
-       department:"tech",
-       email:"man",
-       mobile:"456",
-       Staff_Id:"89",
-       work_type:"jkl",
-       v_name:"jk",
-       status:"Upcoming"
+      id: 1,
+      edit: "ab",
+      Id: "43156",
+      name: "Raj Pawar",
+  
+      department: "Sales",
+      email: "rajpawar45@gmail.com",
+      mobile: "9984645438",
+      Staff_Id: "89",
+      work_type: "Permanent",
+      // v_name: "jk",
+      status: "Approved",
     },
     {
-        id: 2,
+      id: 2,
 
-        edit:"ab",
-        Id:"55",
-        name:"Mi",
-        unit:"9",
-        department:"tech",
-        email:"man",
-        mobile:"456",
-        Staff_Id:"89",
-        work_type:"jkl",
-        v_name:"jk",
-        status:"Upcoming"
+      edit: "ab",
+      Id: "43155",
+      name: "vijay Kantak",
+      
+      department: "Tech",
+      email: "vijay@gmail.com",
+      mobile: "7749352890",
+      Staff_Id: "60",
+      work_type: "Permanent",
+      // v_name: "jk",
+      status: "Approved",
     },
-    {
-        id: 3,
-
-       edit:"ab",
-       Id:"55",
-       name:"Mi",
-       unit:"9",
-       department:"tech",
-       email:"man",
-       mobile:"456",
-       Staff_Id:"89",
-       work_type:"jkl",
-       v_name:"jk",
-       status:"Upcoming"
-    },
-
-
-
+   
   ];
 
   return (
     <section className="flex">
-<Navbar/>
+      <Navbar />
       <div className=" w-full flex mx-3 flex-col overflow-hidden">
-        <Passes/>
+        <Passes />
         <div className="flex md:flex-row flex-col gap-5 justify-between mt-10 my-2">
           <div className="sm:flex grid grid-cols-2 items-center justify-center  gap-4 border border-gray-300 rounded-md px-3 p-2 w-auto">
             <div className="flex items-center gap-2">
@@ -200,8 +147,7 @@ const Staff = () => {
                 name="status"
                 // checked={selectedStatus === "open"}
                 checked={
-                  selectedStatus === "upcoming" ||
-                  selectedStatus === "upcoming"
+                  selectedStatus === "upcoming" || selectedStatus === "upcoming"
                 }
                 // onChange={() => handleStatusChange("open")}
               />
@@ -237,12 +183,12 @@ const Staff = () => {
           </div>
           <span className="flex gap-4">
             <Link
-                to={"/admin/add-staff"}
-                className="border-2 font-semibold hover:bg-black hover:text-white transition-all border-black p-2 rounded-md text-black cursor-pointer text-center flex items-center gap-2 justify-center"
-                style={{ height: '1cm' }}
+              to={"/admin/add-staff"}
+              className="border-2 font-semibold hover:bg-black hover:text-white transition-all border-black p-2 rounded-md text-black cursor-pointer text-center flex items-center gap-2 justify-center"
+              style={{ height: "1cm" }}
             >
-                <PiPlusCircle size={20} />
-                Add
+              <PiPlusCircle size={20} />
+              Add
             </Link>
             {/* <button className="border-2 font-semibold hover:bg-black hover:text-white transition-all border-black p-2 rounded-md text-black cursor-pointer text-center flex items-center gap-2 justify-center" style={{ height: '1cm' }}>
                 Import
@@ -262,17 +208,12 @@ const Staff = () => {
             <button className="border-2 font-semibold hover:bg-black hover:text-white transition-all border-black p-2 rounded-md text-black cursor-pointer text-center flex items-center gap-2 justify-center" style={{ height: '1cm' }}>
                 Out
             </button> */}
-        </span>
+          </span>
         </div>
-        <Table
-       
-          columns={columns}
-          data={data}
-         isPagination={true}
-        />
+        <Table columns={columns} data={data} isPagination={true} />
       </div>
     </section>
   );
 };
 
-export default Staff
+export default Staff;

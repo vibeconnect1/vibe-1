@@ -11,7 +11,7 @@ import { IoClose } from "react-icons/io5";
 import Table from "../../components/table/Table";
 import Navbar from "../../components/Navbar";
 import Passes from "../Passes";
-
+import qr from "/QR.png"
 const Patrolling = () => {
   const [selectedStatus, setSelectedStatus] = useState("all");
   const themeColor = useSelector((state) => state.theme.color);
@@ -77,7 +77,7 @@ const Patrolling = () => {
 
     {
       name: "Qr Code",
-      selector: (row) => row.Qr_Code,
+      selector: (row) => <img src={qr} alt="" width={30} />,
       sortable: true,
     },
 

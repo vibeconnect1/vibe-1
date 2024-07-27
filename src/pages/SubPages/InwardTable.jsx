@@ -83,29 +83,7 @@ const InwardsTable = () => {
       sortable: true,
     },
 
-    {
-      name: "Cancellation",
-      selector: (row) =>
-        row.status === "Upcoming" && (
-          <button className="text-red-400 font-medium">Cancel</button>
-        ),
-      sortable: true,
-    },
-    {
-      name: "Approval",
-      selector: (row) =>
-        row.status === "Upcoming" && (
-          <div className="flex justify-center gap-2">
-            <button className="text-green-400 font-medium hover:bg-green-400 hover:text-white transition-all duration-200 p-1 rounded-full">
-              <TiTick size={20} />
-            </button>
-            <button className="text-red-400 font-medium hover:bg-red-400 hover:text-white transition-all duration-200 p-1 rounded-full">
-              <IoClose size={20} />
-            </button>
-          </div>
-        ),
-      sortable: true,
-    },
+    
   ];
 
   //custom style
@@ -174,7 +152,7 @@ const InwardsTable = () => {
   return (
     <section className="flex">
       <div className=" w-full flex mx-3 flex-col overflow-hidden">
-        <div className="flex md:flex-row flex-col gap-5 justify-between mt-10 my-2">
+        <div className="flex md:flex-row flex-col gap-5 justify-between my-2">
           <div className="sm:flex grid grid-cols-2 items-center justify-center  gap-4 border border-gray-300 rounded-md px-3 p-2 w-auto">
             <div className="flex items-center gap-2">
               <input
@@ -229,14 +207,7 @@ const InwardsTable = () => {
               </label>
             </div>
           </div>
-          <span className="flex gap-4">
-            <button
-              className="border-2 font-semibold hover:bg-black hover:text-white transition-all border-black p-2 rounded-md text-black cursor-pointer text-center flex items-center gap-2 justify-center"
-              style={{ height: "1cm" }}
-            >
-              Filter
-            </button>
-          </span>
+         
         </div>
         <Table
           columns={columns}

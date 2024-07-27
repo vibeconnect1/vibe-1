@@ -10,6 +10,7 @@ import { BiEdit, BiFilter, BiFilterAlt } from "react-icons/bi";
 import {
   API_URL,
   getFloors,
+  getPerPageSiteAsset,
   getSiteAsset,
   getSiteSearchedAsset,
   getUnits,
@@ -56,6 +57,7 @@ const Asset = () => {
   const [uploadModal, setUploadModal] = useState(false);
   const [pageNo, setPageNo] = useState(1);
   const [total, setTotal] = useState(0);
+  const [perPage, setPerPage] = useState(10)
   const handleCheckboxChange = (event) => {
     const value = event.target.value;
     setSelectedOptions((prevSelectedOptions) =>
@@ -268,7 +270,7 @@ const Asset = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await getSiteAsset(pageNo);
+        const response = await getPerPageSiteAsset(pageNo, perPage);
 
         setFilteredData(response.data.site_assets);
 
@@ -280,10 +282,11 @@ const Asset = () => {
       }
     };
     fetchData();
-  }, [pageNo]);
+  }, [pageNo, perPage]);
 
-  const handlePageChange = (page) => {
+  const handlePageChange = (page, pageSize) => {
     setPageNo(page);
+    setPerPage(pageSize)
   };
 
   const exportToExcel = () => {
@@ -606,9 +609,12 @@ const Asset = () => {
               <Pagination
                 current={pageNo}
                 total={total}
-                pageSize={10}
+                pageSize={perPage}
                 onChange={handlePageChange}
                 responsive
+                showSizeChanger
+                onShowSizeChange={handlePageChange}
+                
                
               />
             </div>

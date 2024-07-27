@@ -9,7 +9,7 @@ import profile from "/profile.png";
 import Switch from "../Buttons/Switch";
 import Table from "../components/table/Table";
 import { useSelector } from "react-redux";
-import { editContactBook, getContactBook } from "../api";
+import { domainPrefix, editContactBook, getContactBook } from "../api";
 import { BsEye } from "react-icons/bs";
 
 const Business = () => {
@@ -18,7 +18,7 @@ const Business = () => {
   const [filteredData, setFilteredData] = useState([]);
   const [searchText, setSearchText] = useState([]);
   const [statusChanged, setStatusChanges] = useState(false);
-
+const [logo, setLogo] = useState("")
   useEffect(() => {
     const fetchContactBook = async () => {
       try {
@@ -28,6 +28,7 @@ const Business = () => {
         });
         setContacts(sortedData);
         setFilteredData(sortedData);
+        console.log(sortedData.map((contact)=> contact.logo))
       } catch (error) {
         console.log(error);
       }
@@ -69,7 +70,11 @@ const Business = () => {
       sortable: true,
     },
 
-    { name: "Company Logo", selector: (row) => row.logo, sortable: true },
+    {
+      name: 'Logo',
+      selector: row => row.logo,
+      cell: row => row.logo.length > 0 ? <img src={domainPrefix+row.logo[0].document} alt="logo" width={40} className="rounded-full" /> : 'No logo',
+    },
     {
       name: "Company Name",
       selector: (row) => row.company_name,

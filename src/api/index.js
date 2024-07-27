@@ -17,8 +17,14 @@ export const getTicketDashboard = async () =>
     },
   });
 //Assets
+export const getPerPageSiteAsset = async (page, perPage) =>
+  axiosInstance.get(`/site_assets.json?per_page=${perPage}&page=${page}`, {
+    params: {
+      token: token,
+    },
+  });
 export const getSiteAsset = async (page) =>
-  axiosInstance.get(`/site_assets.json?page=${page}`, {
+  axiosInstance.get(`/site_assets.json`, {
     params: {
       token: token,
     },
@@ -1912,6 +1918,39 @@ export const deleteVibeCalenderTask = async (userId, category, id) => {
     return response.data;
   } catch (error) {
     console.error("Error deleing task data :", error);
+    throw error;
+  }
+};
+export const createVibeSchedule = async (data) => {
+  try {
+    const response = await vibeAuth.post(
+      `/api/employee/work_schedule/create-schedule/`,
+      data,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error Creating Schedule :", error);
+    throw error;
+  }
+};
+export const getVibeTodaySlots = async (userId, fromDate, endDate) => {
+  try {
+    const response = await vibeAuth.get(
+      `/api/doctor/get-today-my-slots/?user_id=${userId}&from_date=${fromDate}&to_date=${endDate}`,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error getting slots :", error);
     throw error;
   }
 };

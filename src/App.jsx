@@ -598,6 +598,7 @@ import EmployeePatrolling from "./pages/Employees/EmployeePatrolling.jsx";
 import EmployeeGoodsInOut from "./pages/Employees/EmployeeGoodsInOut.jsx";
 import EmployeeStaffDetails from "./pages/Employees/EmployeeSubPages/EmployeeStaffDetails.jsx";
 import EmployeeGVehicle from "./pages/Employees/EmployeeGVehicle.jsx"
+import Schedule from "./pages/SubPages/Schedule.jsx";
 // new admin hrms
 
 function App() {
@@ -2749,6 +2750,14 @@ function App() {
             element={
               // <ProtectedAdminRoutes>
                 <Calender />
+              // </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/calendar/employeeSchedule"
+            element={
+              // <ProtectedAdminRoutes>
+                <Schedule />
               // </ProtectedAdminRoutes>
             }
           />

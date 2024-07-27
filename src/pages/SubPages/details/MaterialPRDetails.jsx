@@ -88,7 +88,7 @@ const MaterialPRDetails = () => {
       sortable: true,
     },
   ];
- 
+
   const columnDebitNote = [
     { name: "ID", selector: (row) => row.ID, sortable: true },
     { name: "Amount", selector: (row) => row.Amount, sortable: true },
@@ -248,7 +248,9 @@ const MaterialPRDetails = () => {
   return (
     <section className="mb-10">
       <div className="flex flex-col  md:justify-between my-5 w-full">
-        <h2 className="text-xl font-semibold mx-5 border-b text-center border-black">Material PR DETAILS</h2>
+        <h2 className="text-xl font-semibold mx-5 border-b text-center border-black">
+          Material PR DETAILS
+        </h2>
         <div className="flex my-2 justify-end">
           <button className="font-semibold border-2 border-black px-4 p-1 flex gap-2 items-center rounded-md">
             Clone
@@ -270,48 +272,44 @@ const MaterialPRDetails = () => {
           <p className="bg-orange-400 px-2 text-center  py-1 rounded-md text-white text-sm">
             Pending
           </p>
-          <p className="">
-            Approval Authority
-          </p>
+          <p className="">Approval Authority</p>
         </div>
         <div className="flex flex-col gap-1 justify-center md:items-center">
           <p className="text-sm font-medium">FM Admin Head Approval:</p>
           <p className="bg-orange-400 px-2 text-center py-1 rounded-md text-white text-sm">
             Pending
           </p>
-          <p className="">
-            Approval Authority
-          </p>
+          <p className="">Approval Authority</p>
         </div>
         <div className="flex flex-col gap-1 justify-center md:items-center">
           <p className="text-sm font-medium">FM HOD Approval:</p>
           <p className="bg-orange-400 px-2 items-center py-1 rounded-md text-white text-sm text-center">
             Pending
           </p>
-          <p className="">
-            Approval Authority
-          </p>
+          <p className="">Approval Authority</p>
         </div>
         <div className="flex flex-col gap-1 justify-center md:items-center">
           <p className="text-sm font-medium">Site Accounts Team Approval:</p>
           <p className="bg-orange-400 px-2 items-center py-1 rounded-md text-white text-sm text-center">
             Pending
           </p>
-          <p className="">
-            Approval Authority
-          </p>
+          <p className="">Approval Authority</p>
         </div>
       </div>
-    
+
       <div className="border-2 flex flex-col my-5 mx-3 p-4 gap-4 rounded-md border-gray-400">
         <h2 className=" text-lg border-black font-semibold text-center">
           {details.site_name}
         </h2>
         <div className="my-5  text-sm items-center font-medium grid gap-4 md:grid-cols-2">
-         {details.billing_address && details.billing_address.phone_number &&( <div className="grid grid-cols-2 items-center">
-            <p>Phone :</p>
-            <p className="text-sm font-normal ">{details.billing_address.phone_number}</p>
-          </div>)}
+          {details.billing_address && details.billing_address.phone_number && (
+            <div className="grid grid-cols-2 items-center">
+              <p>Phone :</p>
+              <p className="text-sm font-normal ">
+                {details.billing_address.phone_number}
+              </p>
+            </div>
+          )}
           <div className="grid grid-cols-2 items-center">
             <p>Fax </p>
             <p className="text-sm font-normal ">: NA</p>
@@ -350,7 +348,6 @@ const MaterialPRDetails = () => {
           Material PR
         </h2>
         <div className="my-5  text-sm items-center font-medium grid gap-4 md:grid-cols-2">
-         
           <div className="grid grid-cols-2 items-center">
             <p>LOI No. :</p>
             <p className="text-sm font-normal"> {details.id}</p>
@@ -408,7 +405,7 @@ const MaterialPRDetails = () => {
             <p>PAN</p>
             <p className="text-sm font-normal">NA</p>
           </div>
-         
+
           <div className="grid grid-cols-2 items-center">
             <p>Phone</p>
             <p className="text-sm font-normal">: NA</p>
@@ -442,42 +439,42 @@ const MaterialPRDetails = () => {
             <p className="text-sm font-normal">{details.advance_amount}</p>
           </div>
           <div className="grid items-center gap-2">
-              <p>Delivery Address : </p>
-              {details.delivery_address &&
-                details.delivery_address.building_name && (
-                  <p className="text-sm font-normal bg-gray-100 rounded-md p-2">
-                    {details.delivery_address.building_name},{" "}
-                    {details.delivery_address.street_name},{" "}
-                    {details.delivery_address.city},{" "}
-                    {details.delivery_address.state},{" "}
-                    {details.delivery_address.pin_code}.
-                  </p>
-                )}
-            </div>
+            <p>Delivery Address : </p>
+            {details.delivery_address &&
+              details.delivery_address.building_name && (
+                <p className="text-sm font-normal bg-gray-100 rounded-md p-2">
+                  {details.delivery_address.building_name},{" "}
+                  {details.delivery_address.street_name},{" "}
+                  {details.delivery_address.city},{" "}
+                  {details.delivery_address.state},{" "}
+                  {details.delivery_address.pin_code}.
+                </p>
+              )}
+          </div>
         </div>
         <div className="border-black border-t mt-5"></div>
         <Table columns={column} data={loiItems} pagination={false} />
         <div className="my-2 md:px-2 text-sm items-center font-medium grid gap-1 ">
-            <div className="flex justify-between items-center">
-              <p>Net Amount(INR) :</p>
-              <p className="text-sm font-medium ">{totalAmount}</p>
-            </div>
-            <div className="flex justify-between items-center">
-              <p>Gross Amount :</p>
-              <p className="text-sm font-medium">{totalAmount}</p>
-            </div>
-            <div className="flex justify-between items-center">
-              <p>Taxes :</p>
-              <p className="text-sm font-medium">{taxAmount}</p>
-            </div>
-            <div className="flex justify-between items-center">
-              <p>Net Invoice Amount :</p>
-              <p className="text-sm font-bold">{netAmt}</p>
-            </div>
-            <div className="md:flex  gap-2 items-center">
-              <p>Amount In Words :</p>
-              <p className="text-sm font-medium">{netAmtInWords}</p>
-            </div>
+          <div className="flex justify-between items-center">
+            <p>Net Amount(INR) :</p>
+            <p className="text-sm font-medium ">{totalAmount}</p>
+          </div>
+          <div className="flex justify-between items-center">
+            <p>Gross Amount :</p>
+            <p className="text-sm font-medium">{totalAmount}</p>
+          </div>
+          <div className="flex justify-between items-center">
+            <p>Taxes :</p>
+            <p className="text-sm font-medium">{taxAmount}</p>
+          </div>
+          <div className="flex justify-between items-center">
+            <p>Net Invoice Amount :</p>
+            <p className="text-sm font-bold">{netAmt}</p>
+          </div>
+          <div className="md:flex  gap-2 items-center">
+            <p>Amount In Words :</p>
+            <p className="text-sm font-medium">{netAmtInWords}</p>
+          </div>
         </div>
       </div>
       <div className="border-t py-5 mx-5 border-black">
@@ -488,40 +485,39 @@ const MaterialPRDetails = () => {
         <p className="text-md font-semibold">Terms & Conditions:</p>
         <p className="text-sm p-2 bg-gray-100 rounded-md">{details.terms}</p>
       </div>
-      
+
       <div className="border-t my-2 mx-5 border-black">
         <p className="text-md font-semibold">Attachments</p>
         <div className="flex gap-4 flex-wrap my-4 items-center  text-center">
-            {details.loi_details_image &&
-            details.loi_details_image.length > 0 ? (
-              details.loi_details_image.map((doc, index) => (
-                <div key={doc.id} className="">
-                  {isImage(domainPrefix + doc.document) ? (
-                    <img
-                      src={domainPrefix + doc.document}
-                      alt={`Attachment ${index + 1}`}
-                      className="w-40 h-28 object-cover rounded-md"
-                      onClick={() =>
-                        window.open(domainPrefix + doc.document, "_blank")
-                      }
-                    />
-                  ) : (
-                    <a
-                      href={domainPrefix + doc.document}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className=" hover:text-blue-400 transition-all duration-300  text-center flex flex-col items-center"
-                    >
-                      <FaRegFileAlt size={50} />
-                      {getFileName(doc.document)}
-                    </a>
-                  )}
-                </div>
-              ))
-            ) : (
-              <p className="text-center w-full">No Attachments</p>
-            )}
-          </div>
+          {details.loi_details_image && details.loi_details_image.length > 0 ? (
+            details.loi_details_image.map((doc, index) => (
+              <div key={doc.id} className="">
+                {isImage(domainPrefix + doc.document) ? (
+                  <img
+                    src={domainPrefix + doc.document}
+                    alt={`Attachment ${index + 1}`}
+                    className="w-40 h-28 object-cover rounded-md"
+                    onClick={() =>
+                      window.open(domainPrefix + doc.document, "_blank")
+                    }
+                  />
+                ) : (
+                  <a
+                    href={domainPrefix + doc.document}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className=" hover:text-blue-400 transition-all duration-300  text-center flex flex-col items-center"
+                  >
+                    <FaRegFileAlt size={50} />
+                    {getFileName(doc.document)}
+                  </a>
+                )}
+              </div>
+            ))
+          ) : (
+            <p className="text-center w-full">No Attachments</p>
+          )}
+        </div>
       </div>
       <div className=" flex flex-col gap-5 items-end mx-5 border-black">
         <p className="text-md font-semibold">

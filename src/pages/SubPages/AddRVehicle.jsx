@@ -1,14 +1,16 @@
 import React from 'react';
+import { useSelector } from 'react-redux';
 
 const AddRVehicles = () => {
+  const themeColor = useSelector((state)=> state.theme.color)
   return (
-    <div className="flex justify-center items-center my-5 w-full p-4">
+    <div className="flex justify-center items-center  w-full p-4">
       <form className="border border-gray-300 rounded-lg p-4 w-full mx-4">
-        <h2 className="text-center md:text-xl font-bold p-2 bg-black rounded-full text-white">
+        <h2 style={{background: themeColor}} className="text-center md:text-xl font-bold p-2 bg-black rounded-full text-white">
           Add Vehicles
         </h2>
 
-        <div className="grid md:grid-cols-3 gap-5">
+        <div className="grid md:grid-cols-3 gap-5 my-2">
           <div className="flex flex-col">
             <label htmlFor="slotNumber" className="font-semibold">
               Slot Number
@@ -18,7 +20,7 @@ const AddRVehicles = () => {
               id="slotNumber"
               name="slotNumber"
               placeholder="Enter Slot Number"
-              className="border p-2 rounded-md border-black"
+              className="border p-2 rounded-md border-gray-300"
             />
           </div>
           <div className="flex flex-col">
@@ -27,7 +29,9 @@ const AddRVehicles = () => {
             </label>
             <select className="mt-1 block w-full p-2 border border-gray-300 rounded-md">
               <option>Select Vehicle Category</option>
-              {/* Add options here */}
+              <option>2 Wheeler</option>
+              <option>4 Wheeler</option>
+              
             </select>
           </div>
           <div className="flex flex-col">
@@ -36,7 +40,12 @@ const AddRVehicles = () => {
             </label>
             <select className="mt-1 block w-full p-2 border border-gray-300 rounded-md">
               <option>Select Vehicle Type</option>
-              {/* Add options here */}
+              <option>SUV</option>
+              <option>Sedan</option>
+              <option>Hatchback </option>
+              <option>Bike</option>
+              <option>Truck</option>
+             
             </select>
           </div>
           <div className="flex flex-col">
@@ -48,7 +57,7 @@ const AddRVehicles = () => {
               id="stickerNumber"
               name="stickerNumber"
               placeholder="Enter Sticker Number"
-              className="border p-2 rounded-md border-black"
+              className="border p-2 rounded-md border-gray-300"
             />
           </div>
           <div className="flex flex-col">
@@ -60,7 +69,7 @@ const AddRVehicles = () => {
               id="registrationNumber"
               name="registrationNumber"
               placeholder="Enter Registration Number"
-              className="border p-2 rounded-md border-black"
+              className="border p-2 rounded-md border-gray-300"
             />
           </div>
           <div className="flex flex-col">
@@ -72,7 +81,7 @@ const AddRVehicles = () => {
               id="insuranceNumber"
               name="insuranceNumber"
               placeholder="Enter Insurance Number"
-              className="border p-2 rounded-md border-black"
+              className="border p-2 rounded-md border-gray-300"
             />
           </div>
           <div className="flex flex-col">
@@ -83,7 +92,7 @@ const AddRVehicles = () => {
               type="date"
               id="insuranceValidTill"
               name="insuranceValidTill"
-              className="border p-2 rounded-md border-black"
+              className="border p-2 rounded-md border-gray-300"
             />
           </div>
           <div className="flex flex-col">
@@ -92,7 +101,12 @@ const AddRVehicles = () => {
             </label>
             <select className="mt-1 block w-full p-2 border border-gray-300 rounded-md">
               <option>Select Category</option>
-              {/* Add options here */}
+              <option>Owned</option>
+              <option>Staff</option>
+              <option>Leased</option>
+              <option>warehouse</option>
+              <option>workshop</option>
+              
             </select>
           </div>
           <div className="flex flex-col">
@@ -104,7 +118,7 @@ const AddRVehicles = () => {
               id="vehicleNumber"
               name="vehicleNumber"
               placeholder="Enter Vehicle Number"
-              className="border p-2 rounded-md border-black"
+              className="border p-2 rounded-md border-gray-300"
             />
           </div>
           <div className="flex flex-col">

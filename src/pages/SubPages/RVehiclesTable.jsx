@@ -9,7 +9,7 @@ import { TiTick } from "react-icons/ti";
 import { IoClose } from "react-icons/io5";
 import { useSelector } from "react-redux";
 import Table from "../../components/table/Table";
-
+import qr from "/QR.png"
 const RVehiclesTable = () => {
   const [selectedStatus, setSelectedStatus] = useState("all");
   const themeColor = useSelector((state) => state.theme.color);
@@ -55,11 +55,11 @@ const RVehiclesTable = () => {
       selector: (row) => row.Sticker_Number,
       sortable: true,
     },
-    {
-      name: "Category",
-      selector: (row) => row.Category,
-      sortable: true,
-    },
+    // {
+    //   name: "Category",
+    //   selector: (row) => row.Category,
+    //   sortable: true,
+    // },
     {
       name: "Registration Number",
       selector: (row) => row.Registration_Number,
@@ -70,22 +70,22 @@ const RVehiclesTable = () => {
       selector: (row) => row.ActiveInactive,
       sortable: true,
     },
-    {
-      name: "Insurance Number",
-      selector: (row) => row.Insurance_Number,
-      sortable: true,
-    },
+    // {
+    //   name: "Insurance Number",
+    //   selector: (row) => row.Insurance_Number,
+    //   sortable: true,
+    // },
 
-    {
-      name: "Insurance Valid Till",
-      selector: (row) => row.Insurance_Valid_Till,
-      sortable: true,
-    },
-    {
-      name: "Staff Name",
-      selector: (row) => row.Staff_Name,
-      sortable: true,
-    },
+    // {
+    //   name: "Insurance Valid Till",
+    //   selector: (row) => row.Insurance_Valid_Till,
+    //   sortable: true,
+    // },
+    // {
+    //   name: "Staff Name",
+    //   selector: (row) => row.Staff_Name,
+    //   sortable: true,
+    // },
     {
       name: "Status",
       selector: (row) => row.status,
@@ -93,18 +93,18 @@ const RVehiclesTable = () => {
     },
     {
       name: "Qr Code",
-      selector: (row) => row.Qr_Code,
+      selector: (row) => <img src={qr} alt="" width={40} />,
       sortable: true,
     },
 
-    {
-      name: "Cancellation",
-      selector: (row) =>
-        row.status === "Upcoming" && (
-          <button className="text-red-400 font-medium">Cancel</button>
-        ),
-      sortable: true,
-    },
+    // {
+    //   name: "Cancellation",
+    //   selector: (row) =>
+    //     row.status === "Upcoming" && (
+    //       <button className="text-red-400 font-medium">Cancel</button>
+    //     ),
+    //   sortable: true,
+    // },
     {
       name: "Approval",
       selector: (row) =>
@@ -141,58 +141,59 @@ const RVehiclesTable = () => {
   const data = [
     {
       id: 1,
-      Vehicle_Number: "789",
-      Parking_Slot: "io",
-      Vehicle_Category: "lk",
-      Vehicle_Type: "gh",
+      Vehicle_Number: "MH02BC1215",
+      Parking_Slot: "P1",
+      Vehicle_Category: "EV",
+      Vehicle_Type: "$ Wheeler",
       Sticker_Number: "78",
-      Category: "uio",
+      // Category: "uio",
       Registration_Number: "456",
       ActiveInactive: "Active",
-      Insurance_Number: "45",
-      Insurance_Valid_Till: "23/05/2024",
-      Staff_Name: "abc",
+      // Insurance_Number: "45",
+      // Insurance_Valid_Till: "23/05/2024",
+      // Staff_Name: "abc",
       status: "Upcoming",
-      Qr_Code: "45",
+      // Qr_Code: "45",
     },
     {
       id: 2,
-      Vehicle_Number: "789",
-      Parking_Slot: "io",
-      Vehicle_Category: "lk",
-      Vehicle_Type: "gh",
+      Vehicle_Number: "MH02BC1215",
+      Parking_Slot: "P2",
+      Vehicle_Category: "EV",
+      Vehicle_Type: "$ Wheeler",
       Sticker_Number: "78",
-      Category: "uio",
+      // Category: "uio",
       Registration_Number: "456",
       ActiveInactive: "Active",
-      Insurance_Number: "45",
-      Insurance_Valid_Till: "23/05/2024",
-      Staff_Name: "abc",
-      status: "completed",
-      Qr_Code: "45",
+      // Insurance_Number: "45",
+      // Insurance_Valid_Till: "23/05/2024",
+      // Staff_Name: "abc",
+      status: "Upcoming",
+      // Qr_Code: "45",
     },
     {
       id: 3,
-      Vehicle_Number: "789",
-      Parking_Slot: "io",
-      Vehicle_Category: "lk",
-      Vehicle_Type: "gh",
+      Vehicle_Number: "MH02BC1215",
+      Parking_Slot: "P3",
+      Vehicle_Category: "EV",
+      Vehicle_Type: "$ Wheeler",
       Sticker_Number: "78",
-      Category: "uio",
+      // Category: "uio",
       Registration_Number: "456",
       ActiveInactive: "Active",
-      Insurance_Number: "45",
-      Insurance_Valid_Till: "23/05/2024",
-      Staff_Name: "abc",
+      // Insurance_Number: "45",
+      // Insurance_Valid_Till: "23/05/2024",
+      // Staff_Name: "abc",
       status: "Upcoming",
-      Qr_Code: "45",
+      // Qr_Code: "45",
     },
+   
   ];
 
   return (
     <section className="flex">
       <div className=" w-full flex mx-3 flex-col overflow-hidden">
-        <div className="flex md:flex-row flex-col gap-5 justify-between mt-10 my-2">
+        <div className="flex md:flex-row flex-col gap-5 justify-between  my-2">
           <div className="sm:flex grid grid-cols-2 items-center justify-center  gap-4 border border-gray-300 rounded-md px-3 p-2 w-auto">
             <div className="flex items-center gap-2">
               <input

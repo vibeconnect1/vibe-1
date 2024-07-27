@@ -1,6 +1,10 @@
 import React, { useState } from "react";
+import { useSelector } from "react-redux";
+import FileInputBox from "../../containers/Inputs/FileInputBox";
 
-const AddStaff = () => {
+const EmployeeAddStaff = () => {
+  const themeColor = useSelector((state) => state.theme.color);
+
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
@@ -42,12 +46,12 @@ const AddStaff = () => {
         onSubmit={handleSubmit}
         className="border border-gray-300 rounded-lg p-4 w-full mx-4"
       >
-        <h2 className="text-center md:text-xl font-bold p-2 bg-black rounded-full text-white">
+        <h2 className="text-center md:text-xl font-bold p-2 bg-black rounded-full mb-4 text-white" style={{ background: themeColor }}>
           Add Staff
         </h2>
 
         <div className="grid md:grid-cols-3 gap-5">
-          <div className="flex flex-col">
+          <div className="grid gap-2 items-center w-full">
             <label htmlFor="firstName" className="font-semibold">
               First Name
             </label>
@@ -60,7 +64,7 @@ const AddStaff = () => {
               className="border p-2 rounded-md border-black"
             />
           </div>
-          <div className="flex flex-col">
+          <div className="grid gap-2 items-center w-full">
             <label htmlFor="lastName" className="font-semibold">
               Last Name
             </label>
@@ -73,7 +77,7 @@ const AddStaff = () => {
               className="border p-2 rounded-md border-black"
             />
           </div>
-          <div className="flex flex-col">
+          <div className="grid gap-2 items-center w-full">
             <label htmlFor="email" className="font-semibold">
               Email
             </label>
@@ -86,7 +90,7 @@ const AddStaff = () => {
               className="border p-2 rounded-md border-black"
             />
           </div>
-          <div className="flex flex-col">
+          <div className="grid gap-2 items-center w-full">
             <label htmlFor="password" className="font-semibold">
               Password
             </label>
@@ -99,7 +103,7 @@ const AddStaff = () => {
               className="border p-2 rounded-md border-black"
             />
           </div>
-          <div className="flex flex-col">
+          <div className="grid gap-2 items-center w-full">
             <label htmlFor="mobile" className="font-semibold">
               Mobile
             </label>
@@ -112,7 +116,7 @@ const AddStaff = () => {
               className="border p-2 rounded-md border-black"
             />
           </div>
-          <div className="flex flex-col">
+          <div className="grid gap-2 items-center w-full">
             <label htmlFor="unit" className="font-semibold">
               Unit
             </label>
@@ -126,7 +130,7 @@ const AddStaff = () => {
               {/* Add options for units */}
             </select>
           </div>
-          <div className="flex flex-col">
+          <div className="grid gap-2 items-center w-full">
             <label htmlFor="department" className="font-semibold">
               Department
             </label>
@@ -140,7 +144,7 @@ const AddStaff = () => {
               {/* Add options for departments */}
             </select>
           </div>
-          <div className="flex flex-col">
+          <div className="grid gap-2 items-center w-full">
             <label htmlFor="workType" className="font-semibold">
               Work Type
             </label>
@@ -154,7 +158,7 @@ const AddStaff = () => {
               {/* Add options for work types */}
             </select>
           </div>
-          <div className="flex flex-col">
+          <div className="grid gap-2 items-center w-full">
             <label htmlFor="staffId" className="font-semibold">
               Staff ID
             </label>
@@ -167,7 +171,7 @@ const AddStaff = () => {
               className="border p-2 rounded-md border-black"
             />
           </div>
-          <div className="flex flex-col">
+          <div className="grid gap-2 items-center w-full">
             <label htmlFor="vendorName" className="font-semibold">
               Vendor Name
             </label>
@@ -180,7 +184,7 @@ const AddStaff = () => {
               className="border p-2 rounded-md border-black"
             />
           </div>
-          <div className="flex flex-col">
+          <div className="grid gap-2 items-center w-full">
             <label htmlFor="validFrom" className="font-semibold">
               Valid From
             </label>
@@ -192,7 +196,7 @@ const AddStaff = () => {
               className="border p-2 rounded-md border-black"
             />
           </div>
-          <div className="flex flex-col">
+          <div className="grid gap-2 items-center w-full">
             <label htmlFor="validTill" className="font-semibold">
               Valid Till
             </label>
@@ -204,7 +208,7 @@ const AddStaff = () => {
               className="border p-2 rounded-md border-black"
             />
           </div>
-          <div className="flex flex-col">
+          <div className="grid gap-2 items-center w-full">
             <label htmlFor="status" className="font-semibold">
               Status
             </label>
@@ -217,20 +221,21 @@ const AddStaff = () => {
               <option value="">Select Status</option>
               {/* Add options for status */}
             </select>
-          </div>
-          <div className="flex flex-col">
+          </div> </div>
+          <div className="grid gap-2 items-center w-full mt-2">
             <label htmlFor="" className="font-semibold">
               Profile Photo Upload
             </label>
-            <input type="file" />
+          <FileInputBox/>
           </div>
-          <div className="flex flex-col">
+          <div className="grid gap-2 items-center w-full mt-2">
             <label htmlFor="" className="font-semibold">
               Manuals Upload
             </label>
-            <input type="file" />
+            <FileInputBox/>
           </div>
-          <div className="flex flex-col">
+         
+          {/* <div className="flex flex-col">
             <h3>Select Days</h3>
             <div>
               <input type="checkbox" id="monday" name="days" value="Monday" />
@@ -275,9 +280,9 @@ const AddStaff = () => {
               <input type="checkbox" id="sunday" name="days" value="Sunday" />
               <label for="sunday">Sunday</label>
             </div>
-          </div>
+          </div> */}
 
-          <span>
+          {/* <span>
             <label htmlFor="">Start Time</label>
             <input
               type="time"
@@ -293,8 +298,8 @@ const AddStaff = () => {
               name="endTime1"
               className="border p-2 rounded-md border-black"
             />
-          </span>
-          <span>
+          </span> */}
+          {/* <span>
             <label htmlFor="">Start Time</label>
             <input
               type="time"
@@ -310,9 +315,74 @@ const AddStaff = () => {
               name="endTime1"
               className="border p-2 rounded-md border-black"
             />
-          </span>
-        </div>
+          </span> */}
+            <div  className="mt-4">
+  <table class="w-full ">
+    <thead>
+      <tr>
+      <th class="px-4 py-2"></th>
+        <th class="px-4 py-2">Select Days</th>
+        <th class="px-4 py-2">Start Time</th>
+        <th class="px-4 py-2">End Time</th>
+     
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+      <td class="border px-4 py-2 text-center"><input type="checkbox"/></td>
+        <td class="border px-4 py-2 text-center">Monday</td>
+        <td class="border px-4 py-2 text-center"><input type="time" className="border border-gray-400 p-2 rounded-md"/></td>
+        <td class="border px-4 py-2 text-center"><input type="time" className="border border-gray-400 p-2 rounded-md"/></td>
+       
+      </tr>
+      <tr>
+      <td class="border px-4 py-2 text-center"><input type="checkbox"/></td>
+        <td class="border px-4 py-2 text-center">Tuesday</td>
+        <td class="border px-4 py-2 text-center"><input type="time" className="border border-gray-400 p-2 rounded-md"/></td>
+        <td class="border px-4 py-2 text-center"><input type="time" className="border border-gray-400 p-2 rounded-md"/></td>
+       
+      </tr>
+      <tr>
+      <td class="border px-4 py-2 text-center"><input type="checkbox"/></td>
+        <td class="border px-4 py-2 text-center">Wednesday</td>
+        <td class="border px-4 py-2 text-center"><input type="time" className="border border-gray-400 p-2 rounded-md"/></td>
+        <td class="border px-4 py-2 text-center"><input type="time" className="border border-gray-400 p-2 rounded-md"/></td>
+     
+      </tr>
+      <tr>
+      <td class="border px-4 py-2 text-center"><input type="checkbox"/></td>
+        <td class="border px-4 py-2 text-center">Thursday</td>
+        <td class="border px-4 py-2 text-center"><input type="time" className="border border-gray-400 p-2 rounded-md"/></td>
+        <td class="border px-4 py-2 text-center"><input type="time" className="border border-gray-400 p-2 rounded-md"/></td>
+      
+      </tr>
+      <tr>
+      <td class="border px-4 py-2 text-center"><input type="checkbox"/></td>
+        <td class="border px-4 py-2 text-center">Friday</td>
+        <td class="border px-4 py-2 text-center"><input type="time" className="border border-gray-400 p-2 rounded-md"/></td>
+        <td class="border px-4 py-2 text-center"><input type="time" className="border border-gray-400 p-2 rounded-md"/></td>
+      
+      </tr>
+      <tr>
+      <td class="border px-4 py-2 text-center"><input type="checkbox"/></td>
+      <td class="border px-4 py-2 text-center">Saturday</td>
+        <td class="border px-4 py-2 text-center"><input type="time" className="border border-gray-400 p-2 rounded-md"/></td>
+        <td class="border px-4 py-2 text-center"><input type="time" className="border border-gray-400 p-2 rounded-md"/></td>
+        
 
+      </tr>
+      <tr>
+      <td class="border px-4 py-2 text-center"><input type="checkbox"/></td>
+      <td class="border px-4 py-2 text-center">Sunday</td>
+        <td class="border px-4 py-2 text-center"><input type="time" className="border border-gray-400 p-2 rounded-md"/></td>
+        <td class="border px-4 py-2 text-center"><input type="time" className="border border-gray-400 p-2 rounded-md"/></td>
+        
+
+      </tr>
+    </tbody>
+  </table>
+</div>
+       
         <div className="flex gap-5 justify-center items-center my-4">
           <button
             type="submit"
@@ -326,4 +396,4 @@ const AddStaff = () => {
   );
 };
 
-export default AddStaff;
+export default EmployeeAddStaff;

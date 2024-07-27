@@ -10,6 +10,7 @@ import {
 } from "../../api";
 import toast from "react-hot-toast";
 import { getItemInLocalStorage } from "../../utils/localStorage";
+import { useNavigate } from "react-router-dom";
 const AddBusiness = () => {
   const [imageFile, setImageFile] = useState(null);
   const [categories, setCategories] = useState([]);
@@ -28,7 +29,8 @@ const AddBusiness = () => {
     address: "",
     description: "",
     profile: "",
-    // attachments
+   attachments:[],
+   status: true
   });
   console.log(formData);
   const inputRef = useRef(null);
@@ -40,6 +42,7 @@ const AddBusiness = () => {
   const handleImageChange = (event) => {
     setImageFile(event.target.files[0]);
   };
+  
   const themeColor = useSelector((state) => state.theme.color);
 
   useEffect(() => {
@@ -57,6 +60,7 @@ const AddBusiness = () => {
     };
     fetchContactCategory();
   }, []);
+  const navigate = useNavigate()
   const siteId = getItemInLocalStorage("SITEID");
   const handleAddContact = async () => {
     if (formData.companyName === "") {
@@ -79,13 +83,21 @@ const AddBusiness = () => {
     sendData.append("contact_book[key_offering]", formData.keyOffering);
     sendData.append("contact_book[description]", formData.description);
     sendData.append("contact_book[profile]", formData.profile);
+    sendData.append("contact_book[status]", formData.status);
     sendData.append(
       "contact_book[generic_sub_info_id]",
       formData.subCategoryId
     );
+    if (imageFile) {
+      sendData.append("logo[]", imageFile);
+    }
+    formData.attachments.forEach((files)=>{
+      sendData.append("attachfiles[]", files)
+    })
     try {
       const res = await postContactBook(sendData);
-      console.log(res);
+      toast.success("New Contact Added Successfully")
+      navigate("/business")
     } catch (error) {
       console.log(error);
     }
@@ -118,6 +130,15 @@ const AddBusiness = () => {
         [e.target.name]: e.target.value,
       });
     }
+  };
+
+  const handleFileChange = (files, fieldName) => {
+    
+    setFormData({
+      ...formData,
+      [fieldName]: files,
+    });
+    console.log(fieldName);
   };
 
   return (
@@ -154,6 +175,7 @@ const AddBusiness = () => {
                 ref={inputRef}
                 onChange={handleImageChange}
                 style={{ display: "none" }}
+                accept="image/*"
               />
               <h2 className="font-medium">Company Logo</h2>
             </div>
@@ -196,6 +218,12 @@ const AddBusiness = () => {
                 onChange={handleChange}
                 name="mobileNumber"
                 className="border p-1 px-4 border-gray-500 rounded-md"
+                pattern="[0-9]*"
+                onKeyDown={(e) => {
+                  if (!/[0-9]/.test(e.key) && e.key !== "Backspace" && e.key !== "ArrowLeft" && e.key !== "ArrowRight") {
+                    e.preventDefault();
+                  }
+                }}
               />
             </div>
             <div className="flex flex-col ">
@@ -209,6 +237,12 @@ const AddBusiness = () => {
                 onChange={handleChange}
                 name="landLine"
                 className="border p-1 px-4 border-gray-500 rounded-md"
+                pattern="[0-9]*"
+                onKeyDown={(e) => {
+                  if (!/[0-9]/.test(e.key) && e.key !== "Backspace" && e.key !== "ArrowLeft" && e.key !== "ArrowRight") {
+                    e.preventDefault();
+                  }
+                }}
               />
             </div>
             <div className="flex flex-col ">
@@ -216,7 +250,7 @@ const AddBusiness = () => {
                 Primary Email :
               </label>
               <input
-                type="text"
+                type="email"
                 placeholder="Enter Primary Email. "
                 value={formData.primaryEmail}
                 onChange={handleChange}
@@ -316,7 +350,7 @@ const AddBusiness = () => {
               onChange={handleChange}
               // cols="45"
               rows="3"
-              className="border border-black rounded-md"
+              className="border border-black rounded-md p-2"
             />
           </div>
           <div className="grid gap-2">
@@ -331,7 +365,7 @@ const AddBusiness = () => {
                 rows="3"
                 onChange={handleChange}
                 value={formData.description}
-                className="border border-black rounded-md"
+                className="border border-black rounded-md p-2"
               />
             </div>
             <div className="flex flex-col gap-2">
@@ -345,7 +379,7 @@ const AddBusiness = () => {
                 rows="3"
                 value={formData.profile}
                 onChange={handleChange}
-                className="border border-black rounded-md"
+                className="border border-black rounded-md p-2"
               />
             </div>
           </div>
@@ -353,7 +387,9 @@ const AddBusiness = () => {
             <label htmlFor="" className="font-semibold ">
               Attachments :
             </label>
-            <FileInputBox />
+            <FileInputBox  handleChange={(files) => handleFileChange(files, "attachments")}
+                fieldName={"attachments"}
+                isMulti={true} />
           </div>
           <div className="my-10 flex justify-center">
             <button

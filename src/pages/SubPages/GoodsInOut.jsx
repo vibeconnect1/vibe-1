@@ -16,21 +16,21 @@ const GoodsInOut = () => {
         <Navbar/>
         <div className=" w-full flex mx-3 flex-col overflow-hidden">
           <Passes/>
-          <div className="flex md:justify-center  my-2">
-            <div className="md:flex md:flex-row flex-col gap-5 text-lg font-semibold p-1 md:rounded-full md:w-auto w-full rounded-sm bg-gray-400">
-              <div className="flex w-full space-x-4 justify-center">
+          <div className="flex w-full  m-2">
+            <div className="md:flex md:flex-row flex-col gap-5 text-lg font-semibold  w-full border-b">
+              <div className="flex w-full space-x-4  ">
                 <h2
                   className={`p-2 ${
-                    page === "Inwards" ? "text-red-500" : "text-black"
-                  }  md:rounded-full rounded-sm px-4 cursor-pointer text-center text-sm`}
+                    page === "Inwards" ? "text-blue-500 shadow-custom-all-sides rounded-t-md" : "text-black"
+                  }   px-4 cursor-pointer text-center text-sm`}
                   onClick={() => setPage("Inwards")}
                 >
                   Inwards
                 </h2>
                 <h2
                   className={`p-2 ${
-                    page === "Outwards" ? "text-pink-500" : "text-black"
-                  }  md:rounded-full rounded-sm px-4 cursor-pointer text-center text-sm`}
+                    page === "Outwards" ? "text-blue-500 shadow-custom-all-sides rounded-t-md" : "text-black"
+                  }  px-4 cursor-pointer text-center text-sm`}
                   onClick={() => setPage("Outwards")}
                 >
                   Outwards

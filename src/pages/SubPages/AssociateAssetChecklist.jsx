@@ -113,7 +113,7 @@ const AssociateAssetChecklist = () => {
               isMulti
               onChange={handleChangeSelect}
               options={assets}
-              noOptionsMessage={() => "No Services Available"}
+              noOptionsMessage={() => "No Assets Available"}
               //   maxMenuHeight={90}
               placeholder="Select Assets"
             />

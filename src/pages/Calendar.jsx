@@ -487,7 +487,7 @@ const Calender = () => {
       return false; // Past date
     }
   };
-const navigate =useNavigate()
+  const navigate = useNavigate();
   const CustomInput = React.forwardRef(({ value, onClick }, ref) => (
     <input
       className="datepickers"
