@@ -160,7 +160,7 @@ const VisitorDetails = () => {
           </div>
           <div className="grid grid-cols-2 ">
             <p className="font-semibold text-sm">Created By : </p>
-            <p className="">{details.created_by}</p>
+            {details.created_by_name && <p className="">{details.created_by_name.firstname} {details.created_by_name.lastname}</p>}
           </div>
           <div className="grid grid-cols-2 ">
             <p className="font-semibold text-sm">Created On : </p>

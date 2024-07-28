@@ -4,7 +4,7 @@ import { FaTrash } from "react-icons/fa";
 import { useSelector } from "react-redux";
 import { getItemInLocalStorage } from "../utils/localStorage";
 import toast from "react-hot-toast";
-import { getSetupUsers, postNewVisitor } from "../api";
+import { getSetupUsers, postNewVisitor, postVisitorOTPApi } from "../api";
 import { useNavigate } from "react-router-dom";
 import Webcam from "react-webcam";
 const AddNewVisitor = () => {
@@ -133,7 +133,11 @@ const AddNewVisitor = () => {
     setShowWebcam(false);
     setCapturedImage(imageSrc);
   }, [webcamRef]);
- 
+  const generateOtp = () => {
+    return Math.floor(100000 + Math.random() * 900000).toString();
+  };
+  
+  const otp = generateOtp();
   const navigate = useNavigate();
   const createNewVisitor = async () => {
     if (
@@ -174,8 +178,13 @@ const AddNewVisitor = () => {
         extraVisitor.mobile
       );
     });
+    const sendOTP = new FormData()
+    sendOTP.append("mobile_number", formData.mobile)
+    sendOTP.append("otp", otp)
     try {
       const visitResp = await postNewVisitor(postData);
+      const sendOtp = await postVisitorOTPApi(sendOTP)
+      console.log(sendOtp)
       console.log(visitResp);
       navigate("/admin/passes/visitors");
       toast.success("Visitor Added Successfully");

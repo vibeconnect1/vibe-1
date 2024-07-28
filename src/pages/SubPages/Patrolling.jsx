@@ -251,7 +251,7 @@ const Patrolling = () => {
                       </h2>
 
                       <div className="grid grid-cols-1 gap-2 my-3">
-                        <div className="grid grid-cols-3 gap-5">
+                        <div className="grid grid-cols-4 gap-2">
                           <div className="flex flex-col">
                             <label htmlFor="building" className="font-semibold">
                               Building :
@@ -408,7 +408,7 @@ const Patrolling = () => {
                       )}
                       <div className="flex gap-5 justify-center items-center mt-4">
                         <button
-                          
+                          onClick={closeModal}
                           className="text-white bg-black hover:bg-white hover:text-black border-2 border-black font-semibold py-1 px-4 rounded transition-all duration-300"
                         >
                           Submit

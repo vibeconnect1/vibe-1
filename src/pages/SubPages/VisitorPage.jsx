@@ -242,10 +242,13 @@ const VisitorPage = () => {
           )}
           {page === "Visitor Out" && (
             <div className="grid md:grid-cols-3 gap-2 items-center">
-              <select className="border p-2 rounded-md border-black">
-                <option>Select Person to meet</option>
-                <option>abc</option>
-              </select>
+              <input
+                type="text"
+                className="border border-black p-2 rounded-md placeholder:text-sm"
+                value={searchText}
+                onChange={handleSearch}
+                placeholder="Search using Visitor name, Host, vehicle number"
+              />
 
               <div className="border md:flex-row flex-col flex p-2 rounded-md text-center border-black">
                 <span

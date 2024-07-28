@@ -1954,3 +1954,20 @@ export const getVibeTodaySlots = async (userId, fromDate, endDate) => {
     throw error;
   }
 };
+export const postVisitorOTPApi = async (data) => {
+  try {
+    const response = await vibeAuth.post(
+      `https://vibecopilot.ai/api/send-test-otp/`,
+      data,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error getting slots :", error);
+    throw error;
+  }
+};
