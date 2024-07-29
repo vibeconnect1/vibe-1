@@ -133,10 +133,11 @@ const AddNewVisitor = () => {
     setShowWebcam(false);
     setCapturedImage(imageSrc);
   }, [webcamRef]);
+
   const generateOtp = () => {
     return Math.floor(100000 + Math.random() * 900000).toString();
   };
-  
+
   const otp = generateOtp();
   const navigate = useNavigate();
   const createNewVisitor = async () => {
@@ -164,6 +165,11 @@ const AddNewVisitor = () => {
     postData.append("visitor[goods_inwards]", formData.goodsInward);
     postData.append("visitor[visit_type]", selectedVisitorType);
     postData.append("visitor[frequency]", selectedFrequency);
+    if (capturedImage) {
+      const response = await fetch(capturedImage);
+      const blob = await response.blob();
+      postData.append("visitor_files[]", blob, "visitor_image.jpg");
+    }
     const blob = await fetch(capturedImage).then((res) => res.blob());
     selectedWeekdays.forEach((day) => {
       postData.append("visitor[working_days][]", day);
@@ -178,18 +184,21 @@ const AddNewVisitor = () => {
         extraVisitor.mobile
       );
     });
-    const sendOTP = new FormData()
-    sendOTP.append("mobile_number", formData.mobile)
-    sendOTP.append("otp", otp)
+    const sendOTP = new FormData();
+    sendOTP.append("mobile_number", formData.mobile);
+    sendOTP.append("otp", otp);
     try {
+      toast.loading("Creating new visitor Please wait!")
       const visitResp = await postNewVisitor(postData);
-      const sendOtp = await postVisitorOTPApi(sendOTP)
-      console.log(sendOtp)
+      const sendOtp = await postVisitorOTPApi(sendOTP);
+      console.log(sendOtp);
       console.log(visitResp);
       navigate("/admin/passes/visitors");
+      toast.dismiss()
       toast.success("Visitor Added Successfully");
     } catch (error) {
       console.log(error);
+      toast.dismiss()
     }
   };
   useEffect(() => {
@@ -321,9 +330,10 @@ const AddNewVisitor = () => {
               </label>
               <select className="border border-gray-400 p-2 rounded-md">
                 <option value="">Select Support Staff Category</option>
-                <option value="">Test Category</option>
-                <option value="">Test Category - 2</option>
-                <option value="">Test Category - 3</option>
+                <option value="">Maintenance Workers</option>
+                <option value="">Janitors</option>
+                <option value="">Groundskeepers</option>
+                <option value="">Security Personnel</option>
               </select>
             </div>
           )}

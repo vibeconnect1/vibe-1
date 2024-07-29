@@ -10,14 +10,14 @@ import { getExpectedVisitor } from "../../api";
 import { BsEye } from "react-icons/bs";
 import { BiEdit } from "react-icons/bi";
 
-import Webcam from 'react-webcam';
+import Webcam from "react-webcam";
 const VisitorPage = () => {
   const [page, setPage] = useState("Visitor In");
   const themeColor = useSelector((state) => state.theme.color);
   const [selectedVisitor, setSelectedVisitor] = useState("expected");
   const [visitor, setVisitor] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
-  const webcamRef = useRef(null)
+  const webcamRef = useRef(null);
   const handleClick = (visitorType) => {
     setSelectedVisitor(visitorType);
   };
@@ -120,7 +120,21 @@ const VisitorPage = () => {
     },
     {
       name: "Check In",
-      selector: (row) => (row.check_in ? dateTimeFormat(row.check_in) : ""),
+      selector: (row) =><p>
+      {row &&
+      row.visits_log &&
+      row.visits_log.length > 0 ? (
+        row.visits_log.map((visit, index) =>
+          visit.check_in ? (
+            <span key={index}>{dateTimeFormat(visit.check_in)}</span>
+          ) : (
+            <span key={index}>-</span>
+          )
+        )
+      ) : (
+        <span>-</span>
+      )}
+    </p>,
       sortable: true,
     },
     {
@@ -135,26 +149,29 @@ const VisitorPage = () => {
     },
     {
       name: "Host",
-      selector: (row) => `${row.created_by_name.firstname} ${row.created_by_name.lastname}`,
+      selector: (row) =>
+        `${row.created_by_name.firstname} ${row.created_by_name.lastname}`,
       sortable: true,
-    }
+    },
   ];
   const [searchText, setSearchText] = useState("");
   const handleSearch = (e) => {
     const searchValue = e.target.value;
     setSearchText(searchValue);
-    if (searchValue.trim()=== "") {
-      setFilteredData(visitor)
-    }else{
+    if (searchValue.trim() === "") {
+      setFilteredData(visitor);
+    } else {
       const filteredResults = visitor.filter(
-        (item)=> item.name.toLowerCase().includes(searchValue.toLowerCase()) ||
-        item.vehicle_number && item.vehicle_number.toLowerCase().includes(searchValue.toLowerCase())
-      )
-      setFilteredData(filteredResults)
+        (item) =>
+          item.name.toLowerCase().includes(searchValue.toLowerCase()) ||
+          (item.vehicle_number &&
+            item.vehicle_number
+              .toLowerCase()
+              .includes(searchValue.toLowerCase()))
+      );
+      setFilteredData(filteredResults);
     }
   };
-
-
 
   return (
     <div className="visitors-page">

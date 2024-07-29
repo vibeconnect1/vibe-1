@@ -1,14 +1,16 @@
 import React from 'react';
+import { useSelector } from 'react-redux';
 
 const EditRVehicle = () => {
+  const themeColor = useSelector((state)=> state.theme.color)
   return (
     <div className="flex justify-center items-center my-5 w-full p-4">
       <form className="border border-gray-300 rounded-lg p-4 w-full mx-4">
-        <h2 className="text-center md:text-xl font-bold p-2 bg-black rounded-full text-white">
+        <h2 style={{background: themeColor}} className="text-center md:text-xl font-bold p-2 bg-black rounded-full text-white">
           Edit Vehicle
         </h2>
 
-        <div className="grid md:grid-cols-3 gap-5">
+        <div className="grid md:grid-cols-3 gap-5 my-2">
           <div className="flex flex-col">
             <label htmlFor="slotNumber" className="font-semibold">
               Slot Number

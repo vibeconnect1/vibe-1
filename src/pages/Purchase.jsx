@@ -4,9 +4,11 @@ import MaterialPR from "./MaterialPR";
 import PO from "./PO";
 import Navbar from "../components/Navbar";
 import LetterOfIndent from "./LetterOfIndent";
+import { useSelector } from "react-redux";
 
 const Purchase = () => {
   const [page, setPage] = useState("loi");
+ 
   return (
     <div className="flex lg:flex-row flex-col gap-2 relative items-center justify-center w-full">
       <div className="sm:flex grid grid-cols-2 flex-wrap text-sm md:text-base sm:flex-row gap-5 font-medium p-2 xl:rounded-full rounded-md opacity-90 bg-gray-200 ">

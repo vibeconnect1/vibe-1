@@ -5,6 +5,7 @@ import { useSelector } from "react-redux";
 
 import toast from "react-hot-toast";
 import {
+  domainPrefix,
   editVisitorDetails,
   getSetupUsers,
   getVisitorDetails,
@@ -50,7 +51,7 @@ const EditVisitor = () => {
       try {
         const detailsResp = await getVisitorDetails(id);
         const editDetail = detailsResp.data;
-
+        setDetails(detailsResp.data);
         console.log(editDetail);
         setFormData({
           ...formData,
@@ -109,6 +110,7 @@ const EditVisitor = () => {
   const day = String(currentDates.getDate()).padStart(2, "0");
   const todayDate = `${year}-${month}-${day}`;
   const [selectedWeekdays, setSelectedWeekdays] = useState([]);
+  const [details, setDetails] = useState({});
   const [weekdaysMap, setWeekdaysMap] = useState([
     { day: "Mon", index: 0, isActive: false },
     { day: "Tue", index: 1, isActive: false },
@@ -280,7 +282,7 @@ const EditVisitor = () => {
           onClick={handleImageClick}
           className="cursor-pointer flex justify-center items-center my-4"
         >
-          {imageFile ? (
+          {/* {imageFile ? (
             <img
               src={URL.createObjectURL(imageFile)}
               alt="Uploaded"
@@ -298,7 +300,14 @@ const EditVisitor = () => {
             ref={inputRef}
             onChange={handleImageChange}
             style={{ display: "none" }}
-          />
+          /> */}
+           {details.visitor_files && details.visitor_files.length > 0 ? (
+              details.visitor_files.map((doc, index) => (  
+                <img src={domainPrefix + doc.document} alt="" className="w-48 h-48 rounded-full cursor-pointer"  onClick={() => window.open(domainPrefix + doc.document, "_blank")}/>
+               ))
+            ) : (
+            <img src={image} alt="" className="w-48 h-48" />
+          )}
         </div>
 
         <div className="flex md:flex-row flex-col  my-5 gap-10">
