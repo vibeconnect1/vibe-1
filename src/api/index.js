@@ -103,6 +103,7 @@ export const getHelpDeskCategoriesSetup = async () =>
       token: token,
     },
   });
+
 export const getHelpDeskCategoriesSetupDetails = async (id) =>
   axiosInstance.get(`/pms/admin/helpdesk_categories/${id}.json`, {
     params: {
@@ -121,14 +122,38 @@ export const postHelpDeskCategoriesSetup = async (data) =>
       token: token,
     },
   });
+export const postHelpDeskSubCategoriesSetup = async (data) =>
+  axiosInstance.post(`/pms/admin/create_helpdesk_sub_category.json`, data, {
+    params: {
+      token: token,
+    },
+  });
+export const getHelpDeskEscalationSetup = async () =>
+  axiosInstance.get(`/pms/admin/helpdesk_categories/complaint_workers.json`, {
+    params: {
+      token: token,
+    },
+  });
+export const postHelpDeskEscalationSetup = async (data) =>
+  axiosInstance.post(`pms/admin/create_complaint_worker.json`,data, {
+    params: {
+      token: token,
+    },
+  });
 export const getHelpDeskSubCategoriesSetup = async () =>
-  axiosInstance.get(`/pms/admin/helpdesk_categories/sub_categories.json`, {
+  axiosInstance.get(`/pms/admin/get_sub_categories.json`, {
     params: {
       token: token,
     },
   });
 export const getHelpDeskStatusSetup = async () =>
   axiosInstance.get(`/pms/admin/helpdesk_categories/complaint_statuses.json`, {
+    params: {
+      token: token,
+    },
+  });
+export const postHelpDeskStatusSetup = async (data) =>
+  axiosInstance.post(`/pms/admin/create_complaint_statuses.json`, data, {
     params: {
       token: token,
     },
@@ -672,6 +697,12 @@ export const getServicesPPMDetails = async (id) =>
 //
 export const getServicesRoutineList = async () =>
   axiosInstance.get(`/activities.json?q[soft_service_id_null]=0`, {
+    params: {
+      token: token,
+    },
+  });
+export const postServicePR = async (data) =>
+  axiosInstance.post(`/service_orders.json`, data, {
     params: {
       token: token,
     },
@@ -1935,6 +1966,23 @@ export const createVibeSchedule = async (data) => {
     return response.data;
   } catch (error) {
     console.error("Error Creating Schedule :", error);
+    throw error;
+  }
+};
+export const getVibeSchedule = async (userID, startDate, endDate) => {
+  try {
+    const response = await vibeAuth.get(
+      `/api/employee/work_schedule/get-schedule/?user_id=${userID}&from_date=${startDate}&to_date=${endDate}`,
+
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error getting Schedule :", error);
     throw error;
   }
 };

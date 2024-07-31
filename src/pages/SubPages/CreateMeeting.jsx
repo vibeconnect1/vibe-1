@@ -291,13 +291,12 @@ const CreateMeeting = () => {
     TeamCreateMeeting();
   };
 
-
   const handleSaveMeeting = async () => {
     const idList = selectedOption.map((email) => parseInt(email.value));
 
     if (!meetingTitle) {
       //alert('Please fill in all the fields before creating the task.');
-      toast.error("Please fill the data to Create a Meeting.")
+      toast.error("Please fill the data to Create a Meeting.");
       return;
     }
     if (meetingEndTime < meetingStartTime) {
@@ -309,7 +308,7 @@ const CreateMeeting = () => {
     }
     const user_id = localStorage.getItem("VIBEUSERID");
     // setLoadingMeet(true);
-    toast.loading("Creating Meeting Please wait!")
+    toast.loading("Creating Meeting Please wait!");
     const formData = new FormData();
     formData.append("title", meetingTitle);
     formData.append("from_date", meetingDate);
@@ -352,11 +351,10 @@ const CreateMeeting = () => {
         // setPopupDate(null);
         // setLoadingMeet(false);
       }
-
     } catch (error) {
       toast.dismiss();
-      console.log(error)
-      toast.error("Something went wrong please try again")
+      console.log(error);
+      toast.error("Something went wrong please try again");
     }
   };
 
@@ -644,9 +642,11 @@ const CreateMeeting = () => {
             )}
           </div>
           <div className="flex justify-center my-5">
-            <button onClick={handleSaveMeeting}
-            style={{background: themeColor}}
-            className="bg-black p-1 px-4 text-white rounded-md font-medium">
+            <button
+              onClick={handleSaveMeeting}
+              style={{ background: themeColor }}
+              className="bg-black p-1 px-4 text-white rounded-md font-medium"
+            >
               Submit
             </button>
           </div>

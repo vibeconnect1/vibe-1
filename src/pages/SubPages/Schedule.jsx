@@ -17,7 +17,7 @@ import { Link } from "react-router-dom";
 import Navbar from "../../components/Navbar";
 import { useSelector } from "react-redux";
 import EmployeeCreateSchedule from "./EmployeeCreateSchedule";
-import { createVibeSchedule, getVibeTodaySlots } from "../../api";
+import { createVibeSchedule, getVibeSchedule, getVibeTodaySlots } from "../../api";
 import toast from "react-hot-toast";
 
 // organization[0].name
@@ -588,7 +588,7 @@ function Schedule() {
       const response = await createVibeSchedule(formData)
       if (response.success == true) {
         console.log("success");
-        // fetchWorkingSchedule();
+        fetchWorkingSchedule();
         closeModal();
         if (response.status === 123) {
           toast.error(`${response.message}`);
@@ -605,35 +605,35 @@ function Schedule() {
   };
   // ------------------------------------------------
 
-  //   const fetchWorkingSchedule = async () => {
-  //     setIsLoading(true);
-  //     try {
-  //       const params = {
-  //         user_id: localStorage.getItem("user_id"),
-  //         from_date: startDate,
-  //         to_date: endDate,
-  //       };
+    const fetchWorkingSchedule = async () => {
+      setIsLoading(true);
+      try {
+        // const params = {
+        //   // user_id: localStorage.getItem("user_id"),
+        //   from_date: startDate,
+        //   to_date: endDate,
+        // };
 
-  //       const response = await getDataFromAPI(GetEmployeeSchedule, params);
-  //       console.log("--fetchWorkingSchedule--");
-  //       console.log(response);
+        const response = await getVibeSchedule(user_id, startDate, endDate);
+        console.log("--fetchWorkingSchedule--");
+        console.log(response);
 
-  //       if (response.success === true) {
-  //         console.log(response.work_schedules);
-  //         setRange(response.work_schedules);
+        if (response.success === true) {
+          console.log(response.work_schedules);
+          setRange(response.work_schedules);
 
-  //         setIsLoading(false);
-  //       } else {
-  //         console.log("Something went wrong");
-  //         setIsLoading(false);
-  //       }
-  //     } catch (error) {
-  //       console.error("Error:", error);
-  //       setIsLoading(false);
-  //     }
-  //   };
+          setIsLoading(false);
+        } else {
+          console.log("Something went wrong");
+          setIsLoading(false);
+        }
+      } catch (error) {
+        console.error("Error:", error);
+        setIsLoading(false);
+      }
+    };
   useEffect(() => {
-    // fetchWorkingSchedule();
+    fetchWorkingSchedule();
   }, [startDate, endDate]);
 
   const handleToDateChange = (event) => {
@@ -763,7 +763,7 @@ function Schedule() {
               <div style={{ textAlign: "center" }}>
                 <div className="m-4">
                   <center>
-                    No Schedule
+                    No Schedule For Selected Time Range
                     <br />
                   </center>
                 </div>
@@ -771,25 +771,25 @@ function Schedule() {
             ) : (
               range.map((item, index1) => (
                 <div
-                  className="m-1 p-3 mb-3 Sch-div"
+                  className="border border-gray-300 my-2 rounded-md p-2"
                   key={index1}
                   style={{ cursor: "default" }}
                 >
                   <div className="row m-1">
-                    <div className="col-md">DATE: {item.date}</div>
+                    <div className="font-medium">DATE : {item.date}</div>
                   </div>
 
                   <div className=" m-1">
-                    <div className="col-md-3">Time Slot Schedule:</div>
-                    <div className="row m-1">
+                    <div className="font-medium">Time Slot Schedule :</div>
+                    <div className="flex flex-wrap my-2">
                       {item.slots.map((slot, index2) => (
-                        <div key={index2} className="row m-1 slot-time-1">
+                        <div key={index2} className="flex gap-2">
                           <div
                             style={{ cursor: "default" }}
-                            className={`btn ${
+                            className={`mx-2 p-1 rounded-md ${
                               slot.freeze === true
                                 ? "btn-freeze"
-                                : "btn-selected"
+                                : "bg-green-500 text-white "
                             } `}
                             type="button"
                           >

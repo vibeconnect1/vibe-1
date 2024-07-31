@@ -94,6 +94,7 @@ const EditAsset = () => {
         setFormData(prevFormData => ({
           ...prevFormData,
           ...details.data,
+          breakdown: details.data.breakdown || false,
           invoice: details.data.invoice || [],
           insurance: details.data.insurance || [],
           manuals: details.data.manuals || [],

@@ -90,7 +90,7 @@ const Parkings = () => {
     <section className="flex">
       <Navbar />
       <div className=" w-full flex m-3 flex-col overflow-hidden">
-        <div className="flex  justify-start gap-4 my-5  ">
+        <div className="flex  justify-start gap-4 my-2  ">
           <div className="shadow-xl rounded-full border-4 border-gray-400 w-52  px-6 flex flex-col items-center">
             <p className="font-semibold ">Total Alloted Slots</p>
             <p className="text-center font-semibold ">0</p>

@@ -11,13 +11,17 @@ import { FaTimes } from "react-icons/fa";
 import {
   getHelpDeskCategoriesSetup,
   getHelpDeskSubCategoriesSetup,
+  postHelpDeskSubCategoriesSetup,
 } from "../../../api";
+import { IoClose } from "react-icons/io5";
+import toast from "react-hot-toast";
 const TicketSubCategory = ({ handleToggleCategoryPage1 }) => {
   //   const [faqs, setFaqs] = useState([{ question: '', answer: '' }]);
   const themeColor = useSelector((state) => state.theme.color);
   const [isModalOpen1, setIsModalOpen1] = useState(false);
   const openModal1 = () => setIsModalOpen1(true);
   const closeModal1 = () => setIsModalOpen1(false);
+  const [subCatAdded, setSubCatAdded] = useState(false)
   const [isOpen, setIsOpen] = useState({
     building: false,
     wing: false,
@@ -84,8 +88,8 @@ const TicketSubCategory = ({ handleToggleCategoryPage1 }) => {
   const [categories, setCategories] = useState([]);
   const [formData, setFormData] = useState({
     category: "id",
-    subCategory:[]
-  })
+    subCategory: [],
+  });
   useEffect(() => {
     const fetchCategory = async () => {
       try {
@@ -96,14 +100,54 @@ const TicketSubCategory = ({ handleToggleCategoryPage1 }) => {
       }
     };
     fetchCategory();
-  }, []);
+  }, [subCatAdded]);
+  const handleAddSubCat = async() => {
+    if (formData.category === "" || formData.subCategory.length === 0) {
+      return toast.error("All fields are required!");
+    }
 
+    const sendData = new FormData();
+    sendData.append(
+      "helpdesk_sub_category[helpdesk_category_id]",
+      formData.category
+    );
+    formData.subCategory.forEach((tag) => {
+      sendData.append("sub_category_tags[]", tag);
+    });
+
+    try {
+      const resp = await postHelpDeskSubCategoriesSetup(sendData)
+      console.log(resp)
+      toast.success("Sub Category Added Successfully")
+      setSubCatAdded(true)
+    } catch (error) {
+      console.log(error)
+    }finally{
+      setTimeout(() => {
+        setSubCatAdded(false)
+      }, 500);
+    }
+  };
+  const [inputValue, setInputValue] = useState("");
+
+  const AddSubCat = (e) => {
+    if (e.key === "Enter" && inputValue.trim()) {
+      setFormData((prevFormData) => ({
+        ...prevFormData,
+        subCategory: [...prevFormData.subCategory, inputValue.trim()],
+      }));
+      setInputValue("");
+    }
+  };
+  console.log(formData);
+const handleChange = (e)=>{
+  setFormData({...formData, [e.target.name]: e.target.value})
+}
   return (
     <div className=" ">
       <div className="grid grid-cols-3 gap-2">
         <div className="flex flex-col gap-2">
-        
-          <select type="text" className="border p-2 rounded-md">
+          <select type="text" className="border p-2 rounded-md" value={formData.category} onChange={handleChange} name="category">
             <option value="">Select Category</option>
             {categories.map((category) => (
               <option value={category.id} key={category.id}>
@@ -112,15 +156,20 @@ const TicketSubCategory = ({ handleToggleCategoryPage1 }) => {
             ))}
           </select>
         </div>
-        <div className="flex flex-col gap-2">
-          
-          <input className="border p-2 rounded-md " placeholder="Enter Sub Category" />
-        </div>
+        <input
+          type="text"
+          value={inputValue}
+          onChange={(e) => setInputValue(e.target.value)}
+          onKeyDown={AddSubCat}
+          placeholder="Enter Sub Category and press Enter"
+          className="border p-2 rounded-md"
+        />
         <div className="flex  gap-2">
           <button
             style={{ background: themeColor }}
             type="submit"
             className="px-4 py-2 bg-blue-500 text-white rounded-md"
+            onClick={handleAddSubCat}
           >
             Submit
           </button>
@@ -132,6 +181,31 @@ const TicketSubCategory = ({ handleToggleCategoryPage1 }) => {
             Cancel
           </button>
         </div>
+      </div>
+
+      <div className="flex flex-wrap gap-2 border border-gray-300 p-1 my-2 rounded-md">
+        {formData.subCategory.map((subCat, index) => (
+          <div
+            key={index}
+            className="flex items-center bg-green-200 rounded-md p-1 px-2 gap-2"
+          >
+            <span>{subCat}</span>
+            <button
+              type="button"
+              className="text-white bg-red-400 rounded-full"
+              onClick={() => {
+                setFormData((prevFormData) => ({
+                  ...prevFormData,
+                  subCategory: prevFormData.subCategory.filter(
+                    (_, i) => i !== index
+                  ),
+                }));
+              }}
+            >
+              <IoClose />
+            </button>
+          </div>
+        ))}
       </div>
 
       {isModalOpen1 && (

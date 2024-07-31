@@ -486,7 +486,7 @@ const LOIChanges = () => {
         >
           Preview
         </button>
-        {isModalOpen && (
+        {/* {isModalOpen && (
           <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex z-10 justify-center items-center">
             <div className="bg-white p-5 max-h-[90%] overflow-y-auto hide-scrollbar  rounded-md shadow-md w-2/3">
               <LOIProceed />
@@ -501,7 +501,7 @@ const LOIChanges = () => {
               </div>
             </div>
           </div>
-        )}
+        )} */}
         {/* <Link to="/admin/loi-proceed" style={{ background: themeColor }} className=" font-semibold border-2 border-black px-4 p-1 flex gap-2 text-white items-center rounded-md">
                    Preview
                 </Link> */}

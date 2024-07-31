@@ -1,844 +1,951 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import FileInputBox from "../../containers/Inputs/FileInputBox";
-
+import LOIChanges from "./LOIChanges";
+import ReactQuill from "react-quill";
+import Select from "react-select";
+import {
+  getAllAddress,
+  getSoftServices,
+  getVendors,
+  postServicePR,
+} from "../../api";
+import toast from "react-hot-toast";
+import { getItemInLocalStorage } from "../../utils/localStorage";
 const AddServicePR = () => {
   const themeColor = useSelector((state) => state.theme.color);
   const [showEntityList, setShowEntityList] = useState(false);
+  const [suppliers, setSuppliers] = useState([]);
+  const [BillingAddresses, setBillingAddresses] = useState([]);
+  const [description, setDescription] = useState("");
+  const [services, setServices] = useState([]);
+  const [selectedOption, setSelectedOption] = useState(null);
   const [activities, setActivities] = useState([
-    { id: 1, activity: "", subActivity: "", hazardCategory: "", risks: "" },
+    {
+      inventory: "",
+      SACCode: "",
+      quantity: "",
+      expectedDate: "",
+      UOM: "",
+      rate: "",
+      cgstRate: "",
+      cgstAmount: "",
+      sgstRate: "",
+      sgstAmount: "",
+      igstRate: "",
+      igstAmount: "",
+      TCSRate: "",
+      TCSAmount: "",
+      TaxAmount: "",
+      Amount: "",
+      Total: "",
+    },
   ]);
-  const [nextId, setNextId] = useState(2);
+  const [formData, setFormData] = useState({
+    contractorId: "",
+    date: "",
+    billingAddressId: "",
+    retentionPercentage: "",
+    reference: "",
+    tdcPercentage: "",
+    qcPercentage: "",
+    paymentTenure: "",
+    advanceAmount: "",
+    relatedTo: "",
+    approvedStatus: false,
+  });
 
-  const handleInputChange = (index, event) => {
-    const { name, value } = event.target;
-    const newActivities = [...activities];
-    newActivities[index][name] = value;
-    setActivities(newActivities);
+  const handleDescriptionChange = (value) => {
+    setDescription(value);
+  };
+  const handleInputChange = (e, index) => {
+    const { name, value } = e.target;
+    const updatedActivities = [...activities];
+    updatedActivities[index][name] = value;
+
+    // Perform calculations for the specific activity being updated
+    const activity = updatedActivities[index];
+    if (name === "quantity" || name === "rate") {
+      const quantity = name === "quantity" ? value : activity.quantity;
+      const rate = name === "rate" ? value : activity.rate;
+
+      activity.Amount = quantity * rate;
+
+      const cgstRate = parseFloat(activity.cgstRate);
+      const sgstRate = parseFloat(activity.sgstRate);
+      if (!isNaN(cgstRate)) {
+        activity.cgstAmount = (activity.Amount * cgstRate) / 100;
+      }
+      if (!isNaN(sgstRate)) {
+        activity.sgstAmount = (activity.Amount * sgstRate) / 100;
+      }
+    }
+
+    if (name === "cgstRate" || name === "sgstRate") {
+      const rateValue = parseFloat(value);
+      if (!isNaN(rateValue)) {
+        activity.cgstRate = rateValue;
+        activity.sgstRate = rateValue;
+        activity.cgstAmount = (activity.Amount * rateValue) / 100;
+        activity.sgstAmount = (activity.Amount * rateValue) / 100;
+      }
+    }
+    if (name === "igstRate") {
+      const rateValue = parseFloat(value);
+      if (!isNaN(rateValue)) {
+        activity.igstRate = rateValue;
+        activity.igstAmount = (activity.Amount * rateValue) / 100;
+      }
+    }
+    if (name === "TCSRate") {
+      const rateValue = parseFloat(value);
+      if (!isNaN(rateValue)) {
+        activity.TCSRate = rateValue;
+        activity.TCSAmount = (activity.Amount * rateValue) / 100;
+      }
+    }
+
+    activity.TaxAmount =
+      activity.cgstAmount +
+      activity.sgstAmount +
+      activity.igstAmount +
+      activity.TCSAmount;
+    activity.Total =
+      activity.Amount +
+      activity.cgstAmount +
+      activity.sgstAmount +
+      activity.igstAmount +
+      activity.TCSAmount;
+
+    setActivities(updatedActivities);
   };
 
   const handleAddActivity = () => {
     setActivities([
       ...activities,
       {
-        id: nextId,
-        activity: "",
-        subActivity: "",
-        hazardCategory: "",
-        risks: "",
+        inventory: "",
+        SACCode: "",
+        quantity: "",
+        UOM: "",
+        rate: "",
+        cgstRate: "",
+        cgstAmount: "",
+        sgstRate: "",
+        sgstAmount: "",
+        igstRate: "",
+        igstAmount: "",
+        TCSRate: "",
+        TCSAmount: "",
+        TaxAmount: "",
+        Amount: "",
+        Total: "",
       },
     ]);
-    setNextId(nextId + 1);
   };
 
-  const handleDeleteActivity = (id) => {
-    setActivities(activities.filter((activity) => activity.id !== id));
+  const handleDeleteActivity = (index) => {
+    const removeActivities = [...activities];
+    removeActivities.splice(index, 1);
+    setActivities(removeActivities);
   };
 
   const handleRadioChange = (event) => {
     setShowEntityList(event.target.value === "client");
   };
+  useEffect(() => {
+    const fetchSuppliers = async () => {
+      try {
+        const supplierResp = await getVendors();
+        setSuppliers(supplierResp.data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    const fetchBillingAddress = async () => {
+      try {
+        const addressResp = await getAllAddress();
+        setBillingAddresses(addressResp.data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    const fetchServices = async () => {
+      try {
+        const servicesResp = await getSoftServices();
+        const transformedData = servicesResp.data.map((serv) => ({
+          value: serv.id,
+          label: serv.name,
+        }));
+        console.log(transformedData);
+        setServices(transformedData);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchSuppliers();
+    fetchBillingAddress();
+    fetchServices();
+  }, []);
+
+  var handleChangeSelectMeeting = (selectedOption) => {
+    console.log(selectedOption);
+    setSelectedOption(selectedOption);
+  };
+
+  const UserId = getItemInLocalStorage("UserId");
+  const siteId = getItemInLocalStorage("SITEID");
+  const handleServicePr = async () => {
+    if (
+      formData.contractorId === "" ||
+      formData.date === "" ||
+      formData.billingAddressId === "" ||
+      formData.relatedTo === ""
+    ) {
+      return toast.error("Please Provide Required Fields!");
+    }
+
+    const sendData = new FormData();
+    sendData.append("service_order[site_id]", siteId);
+    sendData.append("service_order[vendor_id]", formData.contractorId);
+    sendData.append("service_order[service_order_date]", formData.date);
+    sendData.append(
+      "service_order[billing_address_id]",
+      formData.billingAddressId
+    );
+    sendData.append("service_order[retention]", formData.retentionPercentage);
+    sendData.append("service_order[tds]", formData.tdcPercentage);
+    sendData.append("service_order[qc]", formData.qcPercentage);
+    sendData.append("service_order[payment_tenure]", formData.paymentTenure);
+    sendData.append("service_order[advance_amount]", formData.advanceAmount);
+    sendData.append("service_order[related_to]", formData.relatedTo);
+    sendData.append("service_order[created_by_id]", UserId);
+    sendData.append("service_order[reference]", formData.reference);
+    // sendData.append("service_order[total_amount]", formData.)
+    sendData.append("service_order[approved_status]", formData.approvedStatus);
+    activities.forEach((item, index) => {
+      sendData.append(
+        `service_order[loi_services][][service_detail_id]`,
+        selectedOption.value
+      );
+      sendData.append(`service_order[loi_services][sac_code]`, item.SACCode);
+      sendData.append(`service_order[loi_services][][quantity]`, item.quantity);
+      sendData.append(
+        `service_order[loi_services][][expected_date]`,
+        item.expectedDate
+      );
+      // formData.attachments.forEach((file) => {
+      //   sendData.append("attachfiles[]", file);
+      // });
+      sendData.append(`service_order[loi_services][][uom]`, item.UOM);
+      sendData.append(`service_order[loi_services][][rate]`, item.rate);
+      sendData.append(
+        `service_order[loi_services][][csgt_rate]`,
+        item.cgstRate
+      );
+      sendData.append(
+        `service_order[loi_services][][csgt_amt]`,
+        item.cgstAmount
+      );
+      sendData.append(
+        `service_order[loi_services][][sgst_rate]`,
+        item.sgstRate
+      );
+      sendData.append(
+        `service_order[loi_services][][sgst_amt]`,
+        item.sgstAmount
+      );
+      sendData.append(
+        `service_order[loi_services][][igst_rate]`,
+        item.igstRate
+      );
+      sendData.append(
+        `service_order[loi_services][][igst_amt]`,
+        item.igstAmount
+      );
+      sendData.append(`service_order[loi_services][][tcs_rate]`, item.TCSRate);
+      sendData.append(`service_order[loi_services][][tcs_amt]`, item.TCSAmount);
+      sendData.append(`service_order[loi_services][][tax_amt]`, item.TaxAmount);
+      sendData.append(`service_order[loi_services][][amount]`, item.Amount);
+      sendData.append(
+        `service_order[loi_services][][total_amount]`,
+        item.Total
+      );
+    });
+    try {
+      const resp = await postServicePR(sendData);
+      console.log(resp);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
 
   return (
     <section>
       <div className="m-2">
-        <h2
-          style={{ background: themeColor }}
-          className="text-center text-xl font-bold p-2 rounded-full text-white"
-        >
-          New Service PR
-        </h2>
-        <div className="md:mx-20 my-5 mb-10 sm:border border-gray-400 p-5 px-10 rounded-lg sm:shadow-xl">
-          <h2 className="border-b text-center text-xl border-black mb-6 font-bold">
-          WORK ORDER DETAILS
+        <div className="lg::mx-20 my-5 mb-10 sm:border border-gray-400 p-5 lg:px-10 rounded-lg sm:shadow-xl">
+          <h2
+            style={{ background: themeColor }}
+            className="text-center text-xl font-bold p-2 rounded-full  text-white"
+          >
+            New Service PR
           </h2>
           {/* <h1 className="font-semibold">Requestor Details :</h1> */}
 
           <div className="w-full mx-3 my-5 p-5 shadow-lg rounded-lg border border-gray-300">
-            {/* Requestor details input fields */}
+            <h2 className="border-b my-2 border-black mb-6 font-bold">
+              WORK ORDER DETAILS
+            </h2>
+
             <div>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                <div className="col-span-1">
+                  <label
+                    className="block text-gray-700 font-bold mb-2"
+                    htmlFor="supplier"
+                  >
+                    Select Contractor <span className="text-red-400">*</span>
+                  </label>
+                  <select
+                    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    id="supplier"
+                    value={formData.contractorId}
+                    onChange={handleChange}
+                    name="contractorId"
+                  >
+                    <option value="">Select Contractor</option>
+                    {suppliers.map((vendor) => (
+                      <option value={vendor.id} key={vendor.id}>
+                        {vendor.company_name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
                 {/* <div className="col-span-1">
                   <label
                     className="block text-gray-700 font-bold mb-2"
-                    htmlFor="name"
+                    htmlFor="plant-detail"
                   >
-                    Name
+                    Plant Detail*
+                  </label>
+                  <select
+                    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    id="plant-detail"
+                  >
+                    <option>Select Plant Detail</option>
+                  </select>
+                </div> */}
+
+                <div className="col-span-1">
+                  <label
+                    className="block text-gray-700 font-bold mb-2"
+                    htmlFor="pr-date"
+                  >
+                    LOI Date<span className="text-red-400">*</span>
                   </label>
                   <input
                     className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                    id="name"
-                    type="text"
-                    placeholder="Abdul Ghaffar"
+                    id="pr-date"
+                    type="date"
+                    value={formData.date}
+                    onChange={handleChange}
+                    name="date"
                   />
+                </div>
+
+                <div className="col-span-1">
+                  <label
+                    className="block text-gray-700 font-bold mb-2"
+                    htmlFor="billing-address"
+                  >
+                    Billing Address<span className="text-red-400">*</span>
+                  </label>
+                  <select
+                    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    id="billing-address"
+                    value={formData.billingAddressId}
+                    name="billingAddressId"
+                    onChange={handleChange}
+                  >
+                    <option value="">Select Billing Address</option>
+                    {BillingAddresses.map((address) => (
+                      <option value={address.id} key={address.id}>
+                        {address.address_title}
+                      </option>
+                    ))}
+                  </select>
                 </div>
                 <div className="col-span-1">
                   <label
                     className="block text-gray-700 font-bold mb-2"
-                    htmlFor="contact-number"
+                    htmlFor="retention"
                   >
-                    Contact Number
+                    Retention(%)
                   </label>
                   <input
                     className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                    id="contact-number"
+                    id="retention"
                     type="text"
-                    placeholder="91 9198278675"
+                    placeholder="Enter Number"
+                    value={formData.retentionPercentage}
+                    onChange={handleChange}
+                    name="retentionPercentage"
                   />
                 </div>
+
                 <div className="col-span-1">
                   <label
                     className="block text-gray-700 font-bold mb-2"
-                    htmlFor="site"
+                    htmlFor="tds"
                   >
-                    Site
+                    TDS(%)
                   </label>
                   <input
                     className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                    id="site"
+                    id="tds"
                     type="text"
-                    placeholder="Business Bay"
+                    placeholder="Enter Number"
+                    value={formData.tdcPercentage}
+                    name="tdcPercentage"
+                    onChange={handleChange}
+                  />
+                </div>
+
+                <div className="col-span-1">
+                  <label
+                    className="block text-gray-700 font-bold mb-2"
+                    htmlFor="qc"
+                  >
+                    QC(%)
+                  </label>
+                  <input
+                    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    id="qc"
+                    type="text"
+                    placeholder="Enter Number"
+                    value={formData.qcPercentage}
+                    onChange={handleChange}
+                    name="qcPercentage"
+                  />
+                </div>
+
+                <div className="col-span-1">
+                  <label
+                    className="block text-gray-700 font-bold mb-2"
+                    htmlFor="payment-tenure"
+                  >
+                    Payment Tenure(In Days)
+                  </label>
+                  <input
+                    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    id="payment-tenure"
+                    type="text"
+                    placeholder="Enter Number"
+                    value={formData.paymentTenure}
+                    name="paymentTenure"
+                    onChange={handleChange}
+                  />
+                </div>
+
+                <div className="col-span-1">
+                  <label
+                    className="block text-gray-700 font-bold mb-2"
+                    htmlFor="advance-amount"
+                  >
+                    Advance Amount
+                  </label>
+                  <input
+                    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    id="advance-amount"
+                    type="text"
+                    placeholder="Enter Number"
+                    value={formData.advanceAmount}
+                    name="advanceAmount"
+                    onChange={handleChange}
                   />
                 </div>
               </div>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
-                <div className="col-span-1">
-                  <label
-                    className="block text-gray-700 font-bold mb-2"
-                    htmlFor="department"
-                  >
-                    Department
-                  </label>
-                  <input
-                    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                    id="department"
-                    type="text"
-                    placeholder="Department"
-                  />
-                </div>
-                <div className="col-span-1">
-                  <label
-                    className="block text-gray-700 font-bold mb-2"
-                    htmlFor="unit"
-                  >
-                    Unit
-                  </label>
-                  <input
-                    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                    id="unit"
-                    type="text"
-                    placeholder="Unit"
-                  />
-                </div> */}
-                <div className="col-span-1">
-  <label className="block text-gray-700 font-bold mb-2" htmlFor="supplier">
-  Select Contractor
-  </label>
-  <select
-    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-    id="supplier"
-  >
-    <option>Select Supplier</option>
-    {/* Add supplier options here */}
-  </select>
-</div>
-
-<div className="col-span-1">
-  <label className="block text-gray-700 font-bold mb-2" htmlFor="plant-detail">
-    Plant Detail*
-  </label>
-  <select
-    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-    id="plant-detail"
-  >
-    <option>Select Plant Detail</option>
-    {/* Add plant detail options here */}
-  </select>
-</div>
-
-<div className="col-span-1">
-  <label className="block text-gray-700 font-bold mb-2" htmlFor="pr-date">
-  Select LOI Date*
-  </label>
-  <input
-    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-    id="pr-date"
-    type="text"
-    value="11/06/2024"
-    readOnly
-  />
-</div>
-
-<div className="col-span-1">
-  <label className="block text-gray-700 font-bold mb-2" htmlFor="billing-address">
-    Billing Address*
-  </label>
-  <select
-    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-    id="billing-address"
-  >
-    <option>Select Billing Address</option>
-    {/* Add billing address options here */}
-  </select>
-</div>
-
-{/* <div className="col-span-1">
-  <label className="block text-gray-700 font-bold mb-2" htmlFor="delivery-address">
-    Delivery Address*
-  </label>
-  <select
-    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-    id="delivery-address"
-  >
-    <option>Select Delivery Address</option>
-    
-  </select>
-</div>
-<div className="col-span-1">
-  <label className="block text-gray-700 font-bold mb-2" htmlFor="transportation">
-    Transportation
-  </label>
-  <input
-    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-    id="transportation"
-    type="text"
-    placeholder="Enter Number"
-  />
-</div> */}
-
-<div className="col-span-1">
-  <label className="block text-gray-700 font-bold mb-2" htmlFor="retention">
-    Retention(%)
-  </label>
-  <input
-    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-    id="retention"
-    type="text"
-    placeholder="Enter Number"
-  />
-</div>
-
-<div className="col-span-1">
-  <label className="block text-gray-700 font-bold mb-2" htmlFor="tds">
-    TDS(%)
-  </label>
-  <input
-    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-    id="tds"
-    type="text"
-    placeholder="Enter Number"
-  />
-</div>
-
-<div className="col-span-1">
-  <label className="block text-gray-700 font-bold mb-2" htmlFor="qc">
-    QC(%)
-  </label>
-  <input
-    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-    id="qc"
-    type="text"
-    placeholder="Enter Number"
-  />
-</div>
-
-<div className="col-span-1">
-  <label className="block text-gray-700 font-bold mb-2" htmlFor="payment-tenure">
-    Payment Tenure(In Days)
-  </label>
-  <input
-    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-    id="payment-tenure"
-    type="text"
-    placeholder="Enter Number"
-  />
-</div>
-
-<div className="col-span-1">
-  <label className="block text-gray-700 font-bold mb-2" htmlFor="advance-amount">
-    Advance Amount
-  </label>
-  <input
-    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-    id="advance-amount"
-    type="text"
-    placeholder="Enter Number"
-  />
-</div>
-
-<div className="col-span-1">
-  <label className="block text-gray-700 font-bold mb-2" htmlFor="related-to">
-    Related To*
-  </label>
-  <select
-    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-    id="related-to"
-  >
-    <option>Related To</option>
-    {/* Add related to options here */}
-  </select>
-</div>
-
-{/* <div className="col-span-1">
-  <label className="block text-gray-700 font-bold mb-2" htmlFor="terms-conditions">
-    Terms & Conditions*
-  </label>
-  <textarea
-    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-    id="terms-conditions"
-    placeholder="Enter Terms & Conditions"
-  ></textarea>
-</div> */}
-
-                {/* <div className="col-span-1 flex items-end">
-      <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline w-full" type="button">
-        Submit
-      </button>
-    </div> */}
+              <div className="col-span-1">
+                <label
+                  className="block text-gray-700 font-bold mb-2"
+                  htmlFor="related-to"
+                >
+                  Related To<span className="text-red-400">*</span>
+                </label>
+                <textarea
+                  name="relatedTo"
+                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                  placeholder="Related To"
+                  value={formData.relatedTo}
+                  onChange={handleChange}
+                ></textarea>
               </div>
             </div>
           </div>
 
-          {/* <h2 className="border-b text-center text-xl border-black mb-6 font-bold">
-            BASIC DETAILS
-          </h2> */}
-
-          {/* <div className="w-full mx-3 my-5 p-5 shadow-lg rounded-lg border border-gray-300"> */}
-            {/* Basic details input fields */}
-            <div>
-              {/* <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4"> */}
-                {/* <div className="col-span-1">
-                  <label
-                    className="block text-gray-700 font-bold mb-2"
-                    htmlFor="permit-for"
-                  >
-                    Permit For*
-                  </label>
-                  <input
-                    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                    id="permit-for"
-                    type="text"
-                    placeholder="Enter Permit For"
-                  />
-                </div> */}
-                {/* <div className="col-span-1">
-                  <label
-                    className="block text-gray-700 font-bold mb-2"
-                    htmlFor="building"
-                  >
-                    Building*
-                  </label>
-                  <select
-                    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                    id="building"
-                  >
-                    <option>Select Building</option>
-                  </select>
-                </div> */}
-                {/* <div className="col-span-1">
-                  <label
-                    className="block text-gray-700 font-bold mb-2"
-                    htmlFor="wing"
-                  >
-                    Wing
-                  </label>
-                  <select
-                    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                    id="wing"
-                  >
-                    <option>Select Building First</option>
-                  </select>
-                </div> */}
-              {/* </div> */}
-              {/* <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4"> */}
-                {/* <div className="col-span-1">
-                  <label
-                    className="block text-gray-700 font-bold mb-2"
-                    htmlFor="area"
-                  >
-                    Area
-                  </label>
-                  <select
-                    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                    id="area"
-                  >
-                    <option>Select Floor First</option>
-                  </select>
-                </div> */}
-                {/* <div className="col-span-1">
-                  <label
-                    className="block text-gray-700 font-bold mb-2"
-                    htmlFor="floor"
-                  >
-                    Floor
-                  </label>
-                  <select
-                    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                    id="floor"
-                  >
-                    <option>Select Wing First</option>
-                  </select>
-                </div> */}
-                {/* <div className="col-span-1">
-                  <label
-                    className="block text-gray-700 font-bold mb-2"
-                    htmlFor="room"
-                  >
-                    Room
-                  </label>
-                  <select
-                    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                    id="room"
-                  >
-                    <option>Select Wing First</option>
-                  </select>
-                </div> */}
-              </div>
-              {/* <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4"> */}
-                {/* <div className="col-span-1"> */}
-                  {/* <label
-                    className="block text-gray-700 font-bold mb-2"
-                    htmlFor="type"
-                  >
-                    Client Specific
-                  </label> */}
-                  {/* <div className="flex items-center">
-                    <input
-                      className="mr-2 leading-tight"
-                      type="radio"
-                      id="internal"
-                      name="type"
-                      value="internal"
-                      onChange={handleRadioChange}
-                    />
-                    <label
-                      className="text-gray-700 font-bold mr-4"
-                      htmlFor="internal"
-                    >
-                      Internal
-                    </label>
-                    <input
-                      className="mr-2 leading-tight"
-                      type="radio"
-                      id="client"
-                      name="type"
-                      value="client"
-                      onChange={handleRadioChange}
-                    />
-                    <label className="text-gray-700 font-bold" htmlFor="client">
-                      Client
-                    </label>
-                  </div> */}
-                {/* </div> */}
-                {/* {showEntityList && (
-                  <div className="col-span-2 md:col-span-1">
-                    <label
-                      className="block text-gray-700 font-bold mb-2"
-                      htmlFor="entity-list"
-                    >
-                      List of Entity
-                    </label>
-                    <select
-                      className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                      id="entity-list"
-                      style={{ width: "100%" }}
-                    >
-                      <option>Select Entity</option>
-                    </select>
-                  </div>
-                )} */}
-                {/* <div className="col-span-1">
-                  <label
-                    className="block text-gray-700 font-bold mb-2"
-                    htmlFor="copy-to"
-                  >
-                    Copy To
-                  </label>
-                  <input
-                    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                    id="copy-to"
-                    type="text"
-                    placeholder="Copy To"
-                  />
-                </div> */}
-              {/* </div> */}
-            {/* </div>
-          </div> */}
-
-          {/* <h2 className="border-b text-center text-xl border-black mb-6 font-bold">
-            PERMIT DETAILS
-          </h2> */}
-
-          {/* <h3 className="font-semibold">Select Permit Type</h3> */}
-          {/* Permit details input fields */}
-          {/* <div className="w-full mx-3 my-5 p-5 shadow-lg rounded-lg border border-gray-300">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
-              <div className="col-span-1">
-                <input
-                  type="radio"
-                  id="cold-work"
-                  name="permit-type"
-                  value="Cold Work"
-                />
-                <label
-                  className="text-gray-700 font-bold ml-2"
-                  htmlFor="cold-work"
-                >
-                  Cold Work
-                </label>
-              </div>
-              <div className="col-span-1">
-                <input
-                  type="radio"
-                  id="confined-space-work"
-                  name="permit-type"
-                  value="Confined Space Work"
-                />
-                <label
-                  className="text-gray-700 font-bold ml-2"
-                  htmlFor="confined-space-work"
-                >
-                  Confined Space Work
-                </label>
-              </div>
-              <div className="col-span-1">
-                <input
-                  type="radio"
-                  id="electrical-work"
-                  name="permit-type"
-                  value="Electrical Work"
-                />
-                <label
-                  className="text-gray-700 font-bold ml-2"
-                  htmlFor="electrical-work"
-                >
-                  Electrical Work
-                </label>
-              </div>
-              <div className="col-span-1">
-                <input
-                  type="radio"
-                  id="excavation-work"
-                  name="permit-type"
-                  value="Excavation Work"
-                />
-                <label
-                  className="text-gray-700 font-bold ml-2"
-                  htmlFor="excavation-work"
-                >
-                  Excavation Work
-                </label>
-              </div>
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
-              <div className="col-span-1">
-                <input
-                  type="radio"
-                  id="height-work"
-                  name="permit-type"
-                  value="Height Work"
-                />
-                <label
-                  className="text-gray-700 font-bold ml-2"
-                  htmlFor="height-work"
-                >
-                  Height Work
-                </label>
-              </div>
-              <div className="col-span-1">
-                <input
-                  type="radio"
-                  id="hot-work"
-                  name="permit-type"
-                  value="Hot Work"
-                />
-                <label
-                  className="text-gray-700 font-bold ml-2"
-                  htmlFor="hot-work"
-                >
-                  Hot Work
-                </label>
-              </div>
-              <div className="col-span-1">
-                <input
-                  type="radio"
-                  id="radiology-work"
-                  name="permit-type"
-                  value="Radiology Work"
-                />
-                <label
-                  className="text-gray-700 font-bold ml-2"
-                  htmlFor="radiology-work"
-                >
-                  Radiology Work
-                </label>
-              </div>
-              <div className="col-span-1">
-                <input
-                  type="radio"
-                  id="loading-unloading-work"
-                  name="permit-type"
-                  value="Loading, Unloading Hazardous Material Work"
-                />
-                <label
-                  className="text-gray-700 font-bold ml-2"
-                  htmlFor="loading-unloading-work"
-                >
-                  Loading, Unloading Hazardous Material Work
-                </label>
-              </div>
-            </div>
-          </div> */}
-
-          {/* <h3 className="font-semibold">Enter Permit Description</h3> */}
+          {/* <div className="  my-5 p-5 shadow-md rounded-md border border-gray-300"> */}
 
           <div className="w-full mx-3 my-5 p-5 shadow-lg rounded-lg border border-gray-300">
-            {/* Permit details input fields */}
-            <h2 className="border-b text-center text-xl border-black mb-6 font-bold">
-             DETAILS
-          </h2>
-
-            <div className="w-full mx-3 my-5 p-5 shadow-lg rounded-lg border border-gray-300">
-              {activities.map((activity, index) => (
-                <div key={activity.id} className="mb-4">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                    <div className="col-span-1">
-                      <label
-                        className="block text-gray-700 font-bold mb-2"
-                        htmlFor={`activity-${index}`}
-                      >
-                        Select Service
-                      </label>
-                      <input
-                        className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                        id={`activity-${index}`}
-                        type="text"
-                        placeholder="Select Item Details*"
-                        name="activity"
-                        value={activity.activity}
-                        onChange={(e) => handleInputChange(index, e)}
-                      />
-                    </div>
-                    <div className="col-span-1">
-                      <label
-                        className="block text-gray-700 font-bold mb-2"
-                        htmlFor={`sub-activity-${index}`}
-                      >
-                        Product Description
-                      </label>
+            <h3 className="border-b border-black mb-6 font-bold">
+              BOQ Details
+            </h3>
+            {activities.map((activity, index) => (
+              <div key={index} className="mb-4">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                  <div className="col-span-1">
+                    <label
+                      className="block text-gray-700 font-bold mb-2"
+                      htmlFor={`activity-${index}`}
+                    >
+                      Select Service
+                    </label>
+                    <Select
+                      options={services}
+                      onChange={handleChangeSelectMeeting}
+                    />
+                  </div>
+                  <div className="col-span-1">
+                    <label
+                      className="block text-gray-700 font-bold mb-2"
+                      htmlFor={`sub-activity-${index}`}
+                    >
+                      SAC/HSN Code
+                    </label>
+                    <input
+                      type="text"
+                      id=""
+                      className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                      placeholder="SAC/HSN Code"
+                      value={activity.SACCode}
+                      name="SACCode"
+                      onChange={(e) => handleInputChange(e, index)}
+                    />
+                  </div>
+                  <div className="col-span-1">
+                    <label
+                      className="block text-gray-700 font-bold mb-2"
+                      htmlFor={`sub-activity-${index}`}
+                    >
+                      Expected Date
+                    </label>
+                    <input
+                      type="date"
+                      name="expectedDate"
+                      id=""
+                      className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                      value={activity.expectedDate}
+                      onChange={(e) => handleInputChange(e, index)}
+                    />
+                  </div>
+                  <div className="col-span-1">
+                    <label
+                      className="block text-gray-700 font-bold mb-2"
+                      htmlFor={`sub-activity-${index}`}
+                    >
+                      Quantity/Area
+                    </label>
+                    <input
+                      className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                      id={`sub-activity-${index}`}
+                      type="text"
+                      value={activity.quantity}
+                      placeholder="Quantity"
+                      name="quantity"
+                      onChange={(e) => handleInputChange(e, index)}
+                      pattern="[0-9]*"
+                      onKeyDown={(e) => {
+                        if (
+                          !/[0-9]/.test(e.key) &&
+                          e.key !== "Backspace" &&
+                          e.key !== "ArrowLeft" &&
+                          e.key !== "ArrowRight"
+                        ) {
+                          e.preventDefault();
+                        }
+                      }}
+                    />
+                  </div>
+                  <div className="col-span-1">
+                    <label
+                      className="block text-gray-700 font-bold mb-2"
+                      htmlFor={`sub-activity-${index}`}
+                    >
+                      UOM
+                    </label>
+                    <input
+                      className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                      id={`sub-activity-${index}`}
+                      type="text"
+                      value={activity.UOM}
+                      placeholder="UOM"
+                      name="UOM"
+                      onChange={(e) => handleInputChange(e, index)}
+                    />
+                  </div>
+                  <div className="col-span-1">
+                    <label
+                      className="block text-gray-700 font-bold mb-2"
+                      htmlFor={`sub-activity-${index}`}
+                    >
+                      Rate
+                    </label>
+                    <input
+                      className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                      id={`sub-activity-${index}`}
+                      type="text"
+                      placeholder="Rate"
+                      value={activity.rate}
+                      name="rate"
+                      onChange={(e) => handleInputChange(e, index)}
+                      pattern="[0-9]*"
+                      onKeyDown={(e) => {
+                        if (
+                          !/[0-9]/.test(e.key) &&
+                          e.key !== "Backspace" &&
+                          e.key !== "ArrowLeft" &&
+                          e.key !== "ArrowRight"
+                        ) {
+                          e.preventDefault();
+                        }
+                      }}
+                    />
+                  </div>
+                  <div className="col-span-1">
+                    <label
+                      className="block text-gray-700 font-bold mb-2"
+                      htmlFor={`sub-activity-${index}`}
+                    >
+                      CGST Rate
+                    </label>
+                    <div className="flex items-center gap-2">
                       <input
                         className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                         id={`sub-activity-${index}`}
                         type="text"
-                        placeholder="SAC/HSN Code"
-                        name="subActivity"
-                        value={activity.subActivity}
-                        onChange={(e) => handleInputChange(index, e)}
+                        placeholder="CGST Rate(%)"
+                        value={activity.cgstRate}
+                        name="cgstRate"
+                        onChange={(e) => handleInputChange(e, index)}
+                        pattern="[0-9]*"
+                        onKeyDown={(e) => {
+                          if (
+                            !/[0-9]/.test(e.key) &&
+                            e.key !== "Backspace" &&
+                            e.key !== "ArrowLeft" &&
+                            e.key !== "ArrowRight"
+                          ) {
+                            e.preventDefault();
+                          }
+                        }}
+                      />
+                      <input
+                        className="shadow appearance-none border rounded bg-gray-100 w-full cursor-not-allowed py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                        id={`sub-activity-${index}`}
+                        type="text"
+                        placeholder="CGST Amt"
+                        name="cgstAmount"
+                        value={activity.cgstAmount}
+                        readOnly
+                        onChange={(e) => handleInputChange(e, index)}
                       />
                     </div>
                   </div>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                    <div className="col-span-1">
-                      <label
-                        className="block text-gray-700 font-bold mb-2"
-                        htmlFor={`hazard-category-${index}`}
-                      >
-                       Quantity/Area*
-                      </label>
+
+                  <div className="col-span-1">
+                    <label
+                      className="block text-gray-700 font-bold mb-2"
+                      htmlFor={`sub-activity-${index}`}
+                    >
+                      SGST Rate
+                    </label>
+                    <div className="flex items-center gap-2">
                       <input
                         className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                        id={`hazard-category-${index}`}
+                        id={`sub-activity-${index}`}
                         type="text"
-                        placeholder="Product Description"
-                        name="hazardCategory"
-                        value={activity.hazardCategory}
-                        onChange={(e) => handleInputChange(index, e)}
+                        placeholder="SGST Rate"
+                        value={activity.sgstRate}
+                        name="sgstRate"
+                        onChange={(e) => handleInputChange(e, index)}
+                        pattern="[0-9]*"
+                        onKeyDown={(e) => {
+                          if (
+                            !/[0-9]/.test(e.key) &&
+                            e.key !== "Backspace" &&
+                            e.key !== "ArrowLeft" &&
+                            e.key !== "ArrowRight"
+                          ) {
+                            e.preventDefault();
+                          }
+                        }}
                       />
-                    </div>
-                    <div className="col-span-1">
-                      <label
-                        className="block text-gray-700 font-bold mb-2"
-                        htmlFor={`risks-${index}`}
-                      >
-                        UOM*
-                      </label>
                       <input
-                        className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                        id={`risks-${index}`}
+                        className="shadow appearance-none border rounded w-full py-2 px-3 bg-gray-100 cursor-not-allowed text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                        id={`sub-activity-${index}`}
                         type="text"
-                        placeholder="Enter Quantity"
-                        name="risks"
-                        value={activity.risks}
-                        onChange={(e) => handleInputChange(index, e)}
-                      />
-                    </div>
-                    <div className="col-span-1">
-                      <label
-                        className="block text-gray-700 font-bold mb-2"
-                        htmlFor={`risks-${index}`}
-                      >
-                        Expected Date*
-                      </label>
-                      <input
-                        className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                        id={`risks-${index}`}
-                        type="date"
-                        placeholder="Enter date"
-                        name="risks"
-                        value={activity.risks}
-                        onChange={(e) => handleInputChange(index, e)}
-                      />
-                    </div>
-                    <div className="col-span-1">
-                      <label
-                        className="block text-gray-700 font-bold mb-2"
-                        htmlFor={`risks-${index}`}
-                      >
-                        Rate*
-                      </label>
-                      <input
-                        className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                        id={`risks-${index}`}
-                        type="text"
-                        placeholder="Enter Rate"
-                        name="risks"
-                        value={activity.risks}
-                        onChange={(e) => handleInputChange(index, e)}
-                      />
-                    </div>
-                    <div className="col-span-1">
-                      <label
-                        className="block text-gray-700 font-bold mb-2"
-                        htmlFor={`risks-${index}`}
-                      >
-                        Amount
-                      </label>
-                      <input
-                        className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                        id={`risks-${index}`}
-                        type="text"
-                        placeholder="Enter Amount"
-                        name="risks"
-                        value={activity.risks}
-                        onChange={(e) => handleInputChange(index, e)}
-                      />
-                    </div>
-                    <div className="col-span-1">
-                      <label
-                        className="block text-gray-700 font-bold mb-2"
-                        htmlFor={`risks-${index}`}
-                      >
-                        Total Amount
-                      </label>
-                      <input
-                        className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                        id={`risks-${index}`}
-                        type="text"
-                        placeholder="Enter Total Amount"
-                        name="risks"
-                        value={activity.risks}
-                        onChange={(e) => handleInputChange(index, e)}
+                        placeholder="SGST Amt"
+                        value={activity.sgstAmount}
+                        name="sgstAmount"
+                        readOnly
+                        onChange={(e) => handleInputChange(e, index)}
                       />
                     </div>
                   </div>
-                  <button
-                    className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-                    type="button"
-                    onClick={() => handleDeleteActivity(activity.id)}
-                  >
-                    Delete
-                  </button>
+
+                  <div className="col-span-1">
+                    <label
+                      className="block text-gray-700 font-bold mb-2"
+                      htmlFor={`sub-activity-${index}`}
+                    >
+                      IGST Rate
+                    </label>
+                    <div className="flex items-center gap-2">
+                      <input
+                        className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700  leading-tight focus:outline-none focus:shadow-outline"
+                        id={`sub-activity-${index}`}
+                        type="text"
+                        placeholder="IGST rate(%)"
+                        value={activity.igstRate}
+                        name="igstRate"
+                        onChange={(e) => handleInputChange(e, index)}
+                      />
+                      <input
+                        className="shadow appearance-none border rounded w-full py-2 px-3 bg-gray-100 cursor-not-allowed text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                        id={`sub-activity-${index}`}
+                        type="text"
+                        placeholder="IGST Amt"
+                        value={activity.igstAmount}
+                        name="igstAmount"
+                        readOnly
+                        onChange={(e) => handleInputChange(e, index)}
+                      />
+                    </div>
+                  </div>
+
+                  <div className="col-span-1">
+                    <label
+                      className="block text-gray-700 font-bold mb-2"
+                      htmlFor={`sub-activity-${index}`}
+                    >
+                      TCS Rate
+                    </label>
+                    <div className="flex items-center gap-2">
+                      <input
+                        className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                        id={`sub-activity-${index}`}
+                        type="text"
+                        placeholder="TCS rate(%)"
+                        name="TCSRate"
+                        value={activity.TCSRate}
+                        onChange={(e) => handleInputChange(e, index)}
+                        pattern="[0-9]*"
+                        onKeyDown={(e) => {
+                          if (
+                            !/[0-9]/.test(e.key) &&
+                            e.key !== "Backspace" &&
+                            e.key !== "ArrowLeft" &&
+                            e.key !== "ArrowRight"
+                          ) {
+                            e.preventDefault();
+                          }
+                        }}
+                      />
+                      <input
+                        className="shadow appearance-none border rounded w-full py-2 px-3 bg-gray-100 cursor-not-allowed text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                        id={`sub-activity-${index}`}
+                        type="text"
+                        placeholder="TCS Amt"
+                        name="TCSAmount"
+                        value={activity.TCSAmount}
+                        readOnly
+                        onChange={(e) => handleInputChange(e, index)}
+                      />
+                    </div>
+                  </div>
+
+                  <div className="col-span-1">
+                    <label
+                      className="block text-gray-700 font-bold mb-2"
+                      htmlFor={`sub-activity-${index}`}
+                    >
+                      Tax Amount
+                    </label>
+                    <input
+                      className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                      id={`sub-activity-${index}`}
+                      type="text"
+                      placeholder="Tax Amount"
+                      name="TaxAmount"
+                      value={activity.TaxAmount}
+                      onChange={(e) => handleInputChange(e, index)}
+                      pattern="[0-9]*"
+                      onKeyDown={(e) => {
+                        if (
+                          !/[0-9]/.test(e.key) &&
+                          e.key !== "Backspace" &&
+                          e.key !== "ArrowLeft" &&
+                          e.key !== "ArrowRight"
+                        ) {
+                          e.preventDefault();
+                        }
+                      }}
+                    />
+                  </div>
+                  <div className="col-span-1">
+                    <label
+                      className="block text-gray-700 font-bold mb-2"
+                      htmlFor={`sub-activity-${index}`}
+                    >
+                      Amount
+                    </label>
+                    <input
+                      className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                      id={`sub-activity-${index}`}
+                      type="text"
+                      placeholder="Amount"
+                      value={activity.Amount}
+                      name="Amount"
+                      onChange={(e) => handleInputChange(e, index)}
+                      pattern="[0-9]*"
+                      onKeyDown={(e) => {
+                        if (
+                          !/[0-9]/.test(e.key) &&
+                          e.key !== "Backspace" &&
+                          e.key !== "ArrowLeft" &&
+                          e.key !== "ArrowRight"
+                        ) {
+                          e.preventDefault();
+                        }
+                      }}
+                    />
+                  </div>
+                  <div className="col-span-1">
+                    <label
+                      className="block text-gray-700 font-bold mb-2"
+                      htmlFor={`sub-activity-${index}`}
+                    >
+                      Total Amount
+                    </label>
+                    <input
+                      className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                      id={`sub-activity-${index}`}
+                      type="text"
+                      placeholder="Total"
+                      name="Total"
+                      value={activity.Total}
+                      onChange={(e) => handleInputChange(e, index)}
+                      pattern="[0-9]*"
+                      onKeyDown={(e) => {
+                        if (
+                          !/[0-9]/.test(e.key) &&
+                          e.key !== "Backspace" &&
+                          e.key !== "ArrowLeft" &&
+                          e.key !== "ArrowRight"
+                        ) {
+                          e.preventDefault();
+                        }
+                      }}
+                    />
+                  </div>
                 </div>
-              ))}
-              <div className="flex items-center justify-between">
+
                 <button
-                  className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                  className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
                   type="button"
-                  onClick={handleAddActivity}
+                  onClick={() => handleDeleteActivity(index)}
                 >
-                  Add Activity
+                  Delete
                 </button>
               </div>
-            </div>
-
-            <div className="w-full mx-3 my-5 p-5 shadow-lg rounded-lg border border-gray-300">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                <div className="col-span-1">
-                  <label
-                    className="block text-gray-700 font-bold mb-2"
-                    htmlFor="vendor"
-                  >
-                    Kind Attention
-                  </label>
-                  <input
-                    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                    id="vendor"
-                    type="text"
-                    placeholder=" Kind Attention"
-                  />
-                </div>
-                <div className="col-span-1">
-                  <label
-                    className="block text-gray-700 font-bold mb-2"
-                    htmlFor="expiryDateTime"
-                  >
-                    Subject
-                  </label>
-                  <input
-                    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                    id="expiryDateTime"
-                    type="text"
-                    placeholder="Subject"
-                  />
-                </div>
-              </div>
-              <div className="grid grid-cols-2 md:grid-cols-2 gap-4 mb-4">
-                <div className="col-span-1">
-                  <label
-                    className="block text-gray-700 font-bold mb-2"
-                    htmlFor="comment"
-                  >
-                    Description 
-                  </label>
-                  <textarea
-                    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                    id="comment"
-                    placeholder="Enter Description"
-                  />
-                </div>
-                <div className="col-span-1">
-                  <label
-                    className="block text-gray-700 font-bold mb-2"
-                    htmlFor="comment"
-                  >
-                    Terms & Conditions
-                  </label>
-                  <textarea
-                    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                    id="comment"
-                    placeholder="Enter Terms & Conditions"
-                  />
-                </div>
-              </div>
+            ))}
+            <div className="flex items-center justify-between">
+              <button
+                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                type="button"
+                onClick={handleAddActivity}
+              >
+                Add Items
+              </button>
             </div>
           </div>
-          {/* <button
-              className="bg-black text-white p-2 px-4 rounded-md font-medium"
-              
-            >
-              Total Amount:0
-            </button> */}
+
+          <div className="w-full mx-3 my-5 p-5 shadow-lg  rounded-lg border border-gray-300">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+              <div className="col-span-1">
+                <label
+                  className="block text-sm font-medium text-gray-700"
+                  htmlFor="kindAttention"
+                >
+                  Kind Attention
+                </label>
+                <input
+                  type="text"
+                  id="kindAttention"
+                  placeholder="kind Attention"
+                  name="kindAttention"
+                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight mt-2 focus:outline-none focus:shadow-outline"
+                />
+              </div>
+              <div className="col-span-1">
+                <label
+                  className="block text-sm font-medium text-gray-700"
+                  htmlFor="subject"
+                >
+                  Subject
+                </label>
+                <input
+                  placeholder="Subject"
+                  type="text"
+                  id="subject"
+                  name="subject"
+                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight mt-2 focus:outline-none focus:shadow-outline"
+                />
+              </div>
+            </div>
+            <div className="mb-2">
+              <label
+                className=" text-sm font-medium text-gray-700"
+                htmlFor="description"
+              >
+                Description
+              </label>
+              <ReactQuill
+                value={description}
+                onChange={handleDescriptionChange}
+                tyle={{ minHeight: "200px" }}
+                className="mt-1  w-full border-gray-300 rounded-md shadow-sm"
+              />
+            </div>
+            <div>
+              <label
+                className=" text-sm font-medium mt-14 text-gray-700"
+                htmlFor="termsConditions"
+              >
+                Terms & Conditions
+              </label>
+              <ReactQuill
+                // onChange={handleDescriptionChange}
+                className="  w-full border-gray-300 mt-2  rounded-md shadow-sm"
+              />
+            </div>
+          </div>
+          {/* </div> */}
           <h3 className="border-b text-center text-xl border-black mb-6 font-bold">
             ATTACHMENTS
           </h3>
-          {/* <input type="file" /> */}
+
           <FileInputBox />
 
-          {/* Submit button */}
           <div className="sm:flex justify-center grid gap-2 my-5 ">
             <button
               className="bg-black text-white p-2 px-4 rounded-md font-medium"
-              //   onClick={handleSubmit}
+              onClick={handleServicePr}
+              style={{ background: themeColor }}
             >
               Submit
             </button>

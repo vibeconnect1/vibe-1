@@ -420,6 +420,9 @@ const TaskManagement = () => {
     console.log(source.droppableId);
     console.log(destination.droppableId);
     setUpdateEffect(true);
+    setTimeout(() => {
+      setUpdateEffect(false);
+    }, 500);
 
     // Check if the dragged item is a column
     if (type === "COLUMN") {
@@ -553,7 +556,13 @@ const TaskManagement = () => {
       } else {
         console.log("unable to update");
       }
-    } catch (error) {}
+    } catch (error) {
+      console.log(error)
+    }finally{
+      setTimeout(() => {
+        setUpdateEffect(false);
+      }, 500);
+    }
   };
 
   const GetBoardData = async (id) => {

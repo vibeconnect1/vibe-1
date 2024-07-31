@@ -58,7 +58,7 @@ const ParkingConfigurationSetup = () => {
     <section className="flex">
       <div className="w-full flex mx-3 flex-col overflow-hidden">
         <div className="flex m-3 flex-col">
-          <div className="flex gap-2 items-center">
+          <div className="flex gap-2 items-center justify-between my-2">
             <input
               type="text"
               placeholder="Search By location"

@@ -7,17 +7,22 @@ import { Link } from "react-router-dom";
 import { ColorPicker, Space } from "antd";
 import FileInputBox from "../../../containers/Inputs/FileInputBox";
 import { FaTrash } from "react-icons/fa";
-import { getHelpDeskStatusSetup } from "../../../api";
+import { getHelpDeskStatusSetup, postHelpDeskStatusSetup } from "../../../api";
 import { statusColors } from "../../../utils/colors";
+import toast from "react-hot-toast";
+import { getItemInLocalStorage } from "../../../utils/localStorage";
 
 const TicketSetupPage = () => {
   const [selectedRule, setSelectedRule] = useState("");
+  const [statusAdded, setStatusAdded] = useState(false);
+
   const [formData, setFormData] = useState({
     status: "",
     fixedState: "",
     color: "",
     order: "",
   });
+
   const handleSelectChange = (event) => {
     setSelectedRule(event.target.value);
   };
@@ -33,13 +38,15 @@ const TicketSetupPage = () => {
     const fetchTicketStatus = async () => {
       try {
         const statusResp = await getHelpDeskStatusSetup();
-        setStatuses(statusResp.data);
+        const statusArray = Object.values(statusResp.data);
+        setStatuses(statusArray);
+        console.log(statusArray);
       } catch (error) {
         console.log(error);
       }
     };
     fetchTicketStatus();
-  }, []);
+  }, [statusAdded]);
 
   const handleColorChange = (newColor) => {
     setColor(newColor.hex);
@@ -148,14 +155,14 @@ const TicketSetupPage = () => {
       Complaint_Mode: "Phone",
     },
   ];
-  const data2 = [
-    {
-      id: 1,
-      No: "1",
-      Complaint_Mode: "1 - 25 Days",
-    },
-  ];
-
+  // const data2 = [
+  //   {
+  //     id: 1,
+  //     No: "1",
+  //     Complaint_Mode: "1 - 25 Days",
+  //   },
+  // ];
+  console.log(statusAdded);
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
@@ -163,6 +170,41 @@ const TicketSetupPage = () => {
   const handleColorClick = (color) => {
     setFormData({ ...formData, color });
   };
+  const siteID = getItemInLocalStorage("SITEID");
+  const handleAddStatus = async () => {
+    if (formData.status === "" || formData.order === "") {
+      return toast.error("Please Add Status Name & Order");
+    }
+    const postStatus = new FormData();
+    postStatus.append("complaint_status[of_phase]", "pms");
+    postStatus.append("complaint_status[society_id]", siteID);
+    postStatus.append("complaint_status[name]", formData.status);
+    postStatus.append("complaint_status[fixed_state]", formData.fixedState);
+    postStatus.append("complaint_status[color_code]", formData.color);
+    postStatus.append("complaint_status[position]", formData.order);
+
+    try {
+      const resp = await postHelpDeskStatusSetup(postStatus);
+      console.log(resp);
+      setStatusAdded(true);
+      toast.success("Status Added Successfully");
+      setFormData({
+        ...formData,
+        color: "",
+        status: "",
+        fixedState: "",
+        order: "",
+      });
+    } catch (error) {
+      console.log(error);
+      toast.error(error.response.data.error);
+    } finally {
+      setTimeout(() => {
+        setStatusAdded(false);
+      }, 500);
+    }
+  };
+
   return (
     <div className=" w-full my-2 flex  overflow-hidden flex-col">
       <div className="flex w-full">
@@ -226,7 +268,7 @@ const TicketSetupPage = () => {
               <input
                 type="text"
                 placeholder="Enter status"
-                className="border p-2 rounded-md border-black"
+                className="border p-2 rounded-md border-gray-300"
                 value={formData.status}
                 onChange={handleChange}
                 name="status"
@@ -236,7 +278,7 @@ const TicketSetupPage = () => {
                 onChange={handleChange}
                 value={formData.fixedState}
                 id=""
-                className="border p-2 rounded-md border-black"
+                className="border p-2 rounded-md border-gray-300"
               >
                 <option value="">Select Fixed State</option>
                 <option value="closed">Closed</option>
@@ -244,31 +286,18 @@ const TicketSetupPage = () => {
                 <option value="complete">Complete</option>
               </select>
 
-              {/* <select
-                value={formData.color}
-                onChange={handleColorChange}
-                className="border p-2 rounded-md border-black"
-              >
-                <option value="">Select color</option>
-                {statusColors.map((color) => (
-                  <option key={color} value={color} style={{ color: color }}>
-                    {color} <p style={{background: color}} className="w-4 h-4"></p>
-                  </option>
-                ))}
-              </select> */}
               <ColorPicker
                 value={formData.color}
                 onChange={(color) =>
                   setFormData({ ...formData, color: color.toHexString() })
                 }
                 size="large"
-               
               />
 
               <input
                 type="number"
                 placeholder="Enter order"
-                className="border p-2 rounded-md border-black"
+                className="border p-2 rounded-md border-gray-300"
                 value={formData.order}
                 onChange={handleChange}
                 name="order"
@@ -276,6 +305,7 @@ const TicketSetupPage = () => {
               <button
                 className=" font-medium hover:text-white transition-all w-full p-2 rounded-md text-white cursor-pointer text-center flex items-center gap-2 justify-center"
                 style={{ background: themeColor }}
+                onClick={handleAddStatus}
               >
                 Add
               </button>

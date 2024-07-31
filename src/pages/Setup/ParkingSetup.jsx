@@ -59,10 +59,7 @@ const ParkingSetup = () => {
       {page === "Parking Categories" && <div><ParkingCategoriesSetup/></div> }
       {page === "Parking Configurations" && <div><ParkingConfigurationSetup/></div> }
       {page === "Parking Slots" && <div><ParkingSlotSetup/></div> }
-      {/* {page === "Permit Activity" &&  <PermitActivityTable/>}
-      {page === "Permit Sub Activity" &&  <PermitSubActivityTable/>}
-      {page === "Permit Hazard Category" &&  <PermitHazardCategoryTable/>}
-      {page === "Permit Risk" &&  <PermitRiskTable/>} */}
+      
     </div>
   </div>
   )

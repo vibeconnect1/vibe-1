@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 // import TicketCategorySetup from './TicketCategorySetup';
 import { useSelector } from "react-redux";
 // import Table from "../../components/table/Table";
@@ -11,18 +11,19 @@ import FileInputBox from "../../../containers/Inputs/FileInputBox";
 import { FaTrash } from "react-icons/fa";
 import toast from "react-hot-toast";
 import { getItemInLocalStorage } from "../../../utils/localStorage";
-import { postHelpDeskCategoriesSetup } from "../../../api";
+import { getSetupUsers, postHelpDeskCategoriesSetup } from "../../../api";
 const TicketCategoryPage = ({ handleToggleCategoryPage, setCatAdded }) => {
   const [isChecked, setIsChecked] = useState(false);
-
+  const [engineers, setEngineers] = useState([]);
+  const [categoryAdded, setCategoryAdded] = useState(false)
   const [formData, setFormData] = useState({
     category: "",
-    engineer: "",
+    engineer: [],
     minTat: "",
   });
 
   const handleCheckboxChange = () => {
-    setIsChecked(!isChecked);
+    // setIsChecked(!isChecked);
   };
 
   const [faqs, setFaqs] = useState([{ question: "", answer: "" }]);
@@ -112,6 +113,7 @@ const TicketCategoryPage = ({ handleToggleCategoryPage, setCatAdded }) => {
       }));
     }
   };
+  console.log(formData)
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
@@ -126,16 +128,38 @@ const TicketCategoryPage = ({ handleToggleCategoryPage, setCatAdded }) => {
     sendData.append("helpdesk_category[of_phase]", "pms");
     sendData.append("helpdesk_category[name]", formData.category);
     sendData.append("helpdesk_category[tat]", formData.minTat);
-
+    const engineers = Array.isArray(formData.engineer) ? formData.engineer : [];
+    engineers.forEach((workerId, index) => {
+      sendData.append(`complaint_worker[assign_to][]`, workerId);
+    });
     try {
       const resp = await postHelpDeskCategoriesSetup(sendData);
-      window.location.reload();
+      setCatAdded(true)
       handleToggleCategoryPage();
-      setFormData({ ...formData, category: "", minTat: "" });
+      setFormData({ ...formData, category: "", minTat: "", engineer:[] });
     } catch (error) {
       console.log(error);
+    } finally{
+      setTimeout(() => {
+        setCatAdded(false)
+      }, 500);
     }
   };
+  useEffect(() => {
+    const fetchSetupUser = async () => {
+      try {
+        const userResp = await getSetupUsers();
+        const filteredTechnician = userResp.data.filter(
+          (tech) => tech.user_type === "pms_technician"
+        );
+
+        setEngineers(filteredTechnician);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchSetupUser();
+  }, []);
   return (
     <div className="">
       {/* <h1 className="text-2xl font-bold mb-4">Dynamic FAQ Form</h1> */}
@@ -153,11 +177,18 @@ const TicketCategoryPage = ({ handleToggleCategoryPage, setCatAdded }) => {
         </div>
         <div className="flex flex-col gap-2">
           <label className="font-medium">Select Engineer</label>
-          <select className="border p-2 w-full rounded-md">
+          <select
+            className="border p-2 w-full rounded-md"
+            value={formData.engineer || []} 
+            onChange={handleChange}
+            name="engineer"
+          >
             <option value="">Select Engineer</option>
-            <option value="engineer1">Ashish</option>
-            <option value="engineer2">Akhil</option>
-            {/* Add more options as needed */}
+            {engineers.map((engineer) => (
+              <option value={engineer.id} key={engineer.id}>
+                {engineer.firstname} {engineer.lastname}
+              </option>
+            ))}
           </select>
         </div>
         <div className="flex flex-col gap-2">

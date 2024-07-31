@@ -288,8 +288,8 @@ const EmployeeCreateSchedule = ({
                 key={index}
                 className={`rounded-md p-1 px-4 cursor-pointer shadow-custom-all-sides font-medium ${
                   selectedTimeSlots[`${slot.start} - ${slot.end}`]
-                    ? "bg-white"
-                    : "bg-green-400 text-white"
+                  ? "bg-green-400 text-white"
+                  : "bg-white"
                 }`}
                 onClick={() => handleTimeSlotSelection(slot)}
               >

@@ -11,10 +11,13 @@ import { FaAddressBook, FaTrash } from "react-icons/fa";
 import { FaTimes } from "react-icons/fa";
 import FileInputBox from "../../../containers/Inputs/FileInputBox";
 import {
+  editHelpDeskCategoriesSetupDetails,
   getHelpDeskCategoriesSetup,
   getHelpDeskCategoriesSetupDetails,
   getHelpDeskSubCategoriesSetup,
+  getSetupUsers,
 } from "../../../api";
+import { getItemInLocalStorage } from "../../../utils/localStorage";
 
 const TicketCategorySetup = () => {
   const [page, setPage] = useState("Category");
@@ -131,15 +134,17 @@ const TicketCategorySetup = () => {
     };
     const fetchSubCategory = async () => {
       try {
-        const subCatResp = getHelpDeskSubCategoriesSetup();
-        setSubCategories((await subCatResp).data);
+        const subCatResp = await getHelpDeskSubCategoriesSetup();
+        console.log("get");
+        console.log(subCatResp);
+        setSubCategories(subCatResp.data.sub_categories);
       } catch (error) {
         console.log(error);
       }
     };
     fetchCategory();
     fetchSubCategory();
-  }, []);
+  }, [catAdded]);
 
   const CatColumns = [
     {
@@ -188,17 +193,34 @@ const TicketCategorySetup = () => {
       ),
     },
   ];
+  const [engineers, setEngineers] = useState([]);
+  useEffect(() => {
+    const fetchSetupUser = async () => {
+      try {
+        const userResp = await getSetupUsers();
+        const filteredTechnician = userResp.data.filter(
+          (tech) => tech.user_type === "pms_technician"
+        );
 
+        setEngineers(filteredTechnician);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchSetupUser();
+  }, []);
   //custom style
 
   const [isModalOpen1, setIsModalOpen1] = useState(false);
-
+const [catId, setCatId] = useState(null)
   const openCatEditModal = async (id) => {
     const fetchCatDetails = await getHelpDeskCategoriesSetupDetails(id);
+    setCatId(id)
     setFormData({
       ...formData,
       category: fetchCatDetails.data.name,
       minTat: fetchCatDetails.data.tat,
+      // engineer:
     });
     setIsCatEditModalOpen(true);
   };
@@ -208,7 +230,8 @@ const TicketCategorySetup = () => {
   const subCatColumns = [
     {
       name: "Category Type",
-      selector: (row) => row.Category_Type,
+      selector: (row) => row.helpdesk_category_name
+      ,
       sortable: true,
     },
     {
@@ -260,6 +283,20 @@ const TicketCategorySetup = () => {
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
+  const siteId = getItemInLocalStorage("SITEID");
+  const handleEditCategory = async () => {
+    const sendData = new FormData();
+    sendData.append("helpdesk_category[society_id]", siteId);
+    sendData.append("helpdesk_category[of_phase]", "pms");
+    sendData.append("helpdesk_category[name]", formData.category);
+    sendData.append("helpdesk_category[tat]", formData.minTat);
+    try {
+      const resp = await editHelpDeskCategoriesSetupDetails(catId, sendData)
+      console.log(resp)
+    } catch (error) {
+      console.log(error)
+    }
+  };
   return (
     <div className=" w-full my-2 flex  overflow-hidden flex-col">
       <div className="flex w-full">
@@ -303,7 +340,7 @@ const TicketCategorySetup = () => {
                 setCatAdded={setCatAdded}
               />
             )}
-           
+
             <Table
               responsive
               //   selectableRows
@@ -434,7 +471,7 @@ const TicketCategorySetup = () => {
               className="fixed inset-0 bg-black bg-opacity-50"
               onClick={() => setIsCatEditModalOpen(false)}
             ></div>
-            <div className="bg-white w-2/3  h-96 overflow-y-auto rounded-lg shadow-lg p-4 relative z-10">
+            <div className="bg-white overflow-y-auto rounded-lg shadow-lg p-4 relative z-10">
               <button
                 className="absolute top-2 right-2 text-gray-600 hover:text-gray-900"
                 onClick={() => setIsCatEditModalOpen(false)}
@@ -442,7 +479,7 @@ const TicketCategorySetup = () => {
                 <FaTimes size={20} />
               </button>
               <h2 className=" font-semibold mb-4">Edit Category</h2>
-              <form>
+              <div>
                 <div className="grid grid-cols-3 gap-4 mb-6">
                   <div className="form-group">
                     <label className="block mb-2">Enter Category</label>
@@ -458,9 +495,12 @@ const TicketCategorySetup = () => {
                   <div className="form-group">
                     <label className="block mb-2">Select Engineer</label>
                     <select className="border p-2 w-full">
-                      <option value="engineer1">Mittu</option>
-                      <option value="engineer2">Panda</option>
-                      {/* Add more options as needed */}
+                      {engineers.map((engineer) => (
+                        <option value={engineer.id} key={engineer.id}>
+                          {engineer.firstname}
+                          {engineer.lastname}
+                        </option>
+                      ))}
                     </select>
                   </div>
                   <div className="form-group">
@@ -476,16 +516,17 @@ const TicketCategorySetup = () => {
                   </div>
                 </div>
 
-                <div>
+                <div className="flex justify-center ">
                   <button
                     style={{ background: themeColor }}
-                    className="bg-green-500 text-white px-4 py-2 mt-1"
+                    className=" text-white px-4 py-2 rounded-md "
+                    onClick={handleEditCategory}
                   >
                     {" "}
                     Submit
                   </button>
                 </div>
-              </form>
+              </div>
             </div>
           </div>
         )}
