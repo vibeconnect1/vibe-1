@@ -236,24 +236,24 @@ const CreateTicket = () => {
     try {
       toast.loading("Please wait generating ticket!");
       // const fileData = new FormData();
-    
+
       // // Append non-file fields
       // Object.keys(formData).forEach((key) => {
       //   if (key !== "documents") {
       //     fileData.append(key, formData[key]);
       //   }
       // });
-      
+
       // // Append files individually
       // formData.documents.forEach((file, index) => {
       //   fileData.append(`documents[${index}]`, file);
       // });
-  
+
       // // Log FormData content for debugging
       // for (let [key, value] of fileData.entries()) {
       //   console.log(`${key}:`, value);
       // }
-    // console.log(fileData)
+      // console.log(fileData)
       const response = await postComplaintsDetails(formData);
       // const response = await postComplaintsDetails(formData);
       console.log("Complaint submitted successfully:", response);
@@ -317,7 +317,7 @@ const CreateTicket = () => {
       footer.removeEventListener("mouseleave", handleMouseLeave);
     };
   }, []);
-const themeColor = useSelector((state)=> state.theme.color)
+  const themeColor = useSelector((state) => state.theme.color);
   return (
     <section className="min-h-screen p-4 sm:p-0 flex flex-col md:flex-row">
       <div className="fixed hidden sm:block left-0 top-0 h-full md:static md:h-auto md:flex-shrink-0">
@@ -328,35 +328,40 @@ const themeColor = useSelector((state)=> state.theme.color)
           className="border border-gray-300 rounded-lg sm:w-[60rem] p-8 flex flex-col gap-5"
           onSubmit={handleSubmit}
         >
-          <h2 style={{background: themeColor}} className="text-center text-xl font-bold p-2 bg-black rounded-full text-white">
+          <h2
+            style={{ background: themeColor }}
+            className="text-center text-xl font-bold p-2 bg-black rounded-full text-white"
+          >
             Create Ticket
           </h2>
 
           {/* Related To :*/}
-          <div className="flex flex-col gap-3 md:flex-row justify-between items-center">
-            <div className="grid grid-cols-2  items-center w-full">
-              <label htmlFor="" className="font-semibold">
-                Related To :
-              </label>
-              <select
-                id="issueType"
-                value={formData.issue_type_id}
-                name="issue_type_id"
-                
-                onChange={(e) =>
-                  setFormData({ ...formData, issue_type_id: e.target.value })
-                }
-                className="border p-1 px-4 max-w-44 w-44 border-gray-500 rounded-md"
-              >
-                <option value="">Select Area</option>
-                <option value="Apartment">Apartment</option>
-                {/* <option value="Suggestion">Shop</option> */}
-                <option value="common Area">Common Area</option>
-              </select>
-            </div>
+          <div className="grid grid-cols-2  gap-4 ">
+            {/* <div className="flex flex-col gap-3 md:flex-row justify-between items-center"> */}
+            {siteID === 25 && (
+              <div className="grid grid-cols-2  items-center w-full">
+                <label htmlFor="" className="font-semibold">
+                  Related To :
+                </label>
+                <select
+                  id="issueType"
+                  value={formData.issue_type_id}
+                  name="issue_type_id"
+                  onChange={(e) =>
+                    setFormData({ ...formData, issue_type_id: e.target.value })
+                  }
+                  className="border p-1 px-4 max-w-44 w-44 border-gray-500 rounded-md"
+                >
+                  <option value="">Select Area</option>
+                  <option value="Apartment">Apartment</option>
+                  {/* <option value="Suggestion">Shop</option> */}
+                  <option value="common Area">Common Area</option>
+                </select>
+              </div>
+            )}
 
             <div className="grid grid-cols-2  items-center w-full">
-              <label htmlFor="" className="font-semibold sm:text-center">
+              <label htmlFor="" className="font-semibold ">
                 Type of :
               </label>
               <select
@@ -374,10 +379,10 @@ const themeColor = useSelector((state)=> state.theme.color)
                 <option value="Request">Request</option>
               </select>
             </div>
-          </div>
-          <div>
-            {/* Building details */}
-            <div className="flex sm:flex-row flex-col gap-3 sm:gap-0 justify-between items-center">
+            {/* </div> */}
+            
+              {/* Building details */}
+              {/* <div className="flex sm:flex-row flex-col gap-3 sm:gap-0 justify-between items-center"> */}
               <div className="grid grid-cols-2  items-center w-full">
                 <label htmlFor="" className="font-semibold ">
                   Tower Name :
@@ -399,7 +404,7 @@ const themeColor = useSelector((state)=> state.theme.color)
               </div>
               {/* Floor Name */}
               <div className="grid grid-cols-2 items-center w-full">
-                <label htmlFor="" className="font-semibold sm:text-center">
+                <label htmlFor="" className="font-semibold">
                   Floor Name :
                 </label>
                 <select
@@ -420,10 +425,10 @@ const themeColor = useSelector((state)=> state.theme.color)
                   ))}
                 </select>
               </div>
-            </div>
-          </div>
+            
+            {/* </div> */}
 
-          <div className="flex flex-col sm:flex-row items-center gap-3 sm:gap-0 justify-between ">
+            {/* <div className="flex flex-col sm:flex-row items-center gap-3 sm:gap-0 justify-between "> */}
             <div className="grid grid-cols-2 items-center w-full">
               <label htmlFor="" className="font-semibold ">
                 Unit Name :
@@ -445,7 +450,7 @@ const themeColor = useSelector((state)=> state.theme.color)
               </select>
             </div>
             <div className="grid grid-cols-2  items-center w-full">
-              <label htmlFor="" className="font-semibold sm:text-center">
+              <label htmlFor="" className="font-semibold ">
                 Priority :
               </label>
               <select
@@ -463,9 +468,9 @@ const themeColor = useSelector((state)=> state.theme.color)
                 <option value="P5">P5</option>
               </select>
             </div>
-          </div>
+            {/* </div> */}
 
-          <div className="flex sm:grid sm:grid-cols-2 flex-col sm:flex-row items-center justify-between gap-3 sm:gap-0">
+            {/* <div className="flex sm:grid sm:grid-cols-2 flex-col sm:flex-row items-center justify-between gap-3 sm:gap-0"> */}
             <div className="grid grid-cols-2  items-center w-full">
               <label htmlFor="" className="font-semibold ">
                 Category :
@@ -491,7 +496,7 @@ const themeColor = useSelector((state)=> state.theme.color)
             </div>
 
             <div className="grid grid-cols-2  items-center w-full">
-              <label htmlFor="" className="font-semibold sm:text-center">
+              <label htmlFor="" className="font-semibold ">
                 Sub Category :
               </label>
               <select
@@ -509,11 +514,7 @@ const themeColor = useSelector((state)=> state.theme.color)
                 ))}
               </select>
             </div>
-          </div>
-          <div>
-            {/* Category, Sub Category, Assigned To, Priority */}
-            <div className="flex flex-col sm:flex-row items-center justify-between">
-              <div className="grid grid-cols-2 sm:gap-12 items-center">
+              <div className="grid grid-cols-2 ">
                 <label htmlFor="" className=" font-semibold ">
                   Assigned To :
                 </label>
@@ -533,7 +534,11 @@ const themeColor = useSelector((state)=> state.theme.color)
                   ))}
                 </select>
               </div>
-            </div>
+          </div>
+          <div>
+            {/* Category, Sub Category, Assigned To, Priority */}
+            {/* <div className="flex flex-col sm:flex-row items-center justify-between"> */}
+            {/* </div> */}
             {/* <div className="flex sm:block my-5 sm:flex-row items-center justify-center"> */}
             <div className="flex flex-col justify-around">
               <label
@@ -575,7 +580,10 @@ const themeColor = useSelector((state)=> state.theme.color)
           {/* </div> */}
 
           {/* File Input */}
-          <FileInput handleFileChange={(event) => handleFileChange(event)} multiple />
+          <FileInput
+            handleFileChange={(event) => handleFileChange(event)}
+            multiple
+          />
           {/* <input
                 type="file"
                 onChange={(event) => handleFileChange(event, "documents")}
