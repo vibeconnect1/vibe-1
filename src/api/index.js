@@ -134,8 +134,14 @@ export const getHelpDeskEscalationSetup = async () =>
       token: token,
     },
   });
+export const deleteEscalationRule = async (id) =>
+  axiosInstance.delete(`/pms/admin/delete_complaint_worker/${id}.json`, {
+    params: {
+      token: token,
+    },
+  });
 export const postHelpDeskEscalationSetup = async (data) =>
-  axiosInstance.post(`pms/admin/create_complaint_worker.json`,data, {
+  axiosInstance.post(`pms/admin/create_complaint_worker.json`, data, {
     params: {
       token: token,
     },

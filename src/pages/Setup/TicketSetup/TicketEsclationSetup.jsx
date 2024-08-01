@@ -8,6 +8,7 @@ import { FaClone, FaTrash } from "react-icons/fa";
 
 import { RiContactsBook2Line } from "react-icons/ri";
 import {
+  deleteEscalationRule,
   getHelpDeskCategoriesSetup,
   getHelpDeskEscalationSetup,
   getSetupUsers,
@@ -30,8 +31,9 @@ const TicketEscalationSetup = () => {
   const [page, setPage] = useState("Response");
   const themeColor = useSelector((state) => state.theme.color);
   const [categories, setCategories] = useState([]);
-  const [resEscalationAdded, setResEscalationAdded] = useState(false)
-  const [resolutionEscalationAdded, setResolutionEscalationAdded] = useState(false)
+  const [resEscalationAdded, setResEscalationAdded] = useState(false);
+  const [resolutionEscalationAdded, setResolutionEscalationAdded] =
+    useState(false);
   const [selectedOptions, setSelectedOptions] = useState({
     categories: [],
     escalations: {
@@ -264,7 +266,7 @@ const TicketEscalationSetup = () => {
     if (selectedOptions.categories.length === 0) {
       return toast.error("Please Provide Escalation Data");
     }
-    toast.loading("Creating Response Escalation Please wait!")
+    toast.loading("Creating Response Escalation Please wait!");
     const formData = new FormData();
     formData.append("complaint_worker[society_id]", siteId);
     formData.append("complaint_worker[esc_type]", "response");
@@ -285,9 +287,9 @@ const TicketEscalationSetup = () => {
 
     try {
       const res = await postHelpDeskEscalationSetup(formData);
-      setResEscalationAdded(true)
-      toast.dismiss()
-      toast.success("Response Escalation Created Successfully")
+      setResEscalationAdded(true);
+      toast.dismiss();
+      toast.success("Response Escalation Created Successfully");
       setSelectedOptions((prevData) => ({
         ...prevData,
         categories: [],
@@ -301,13 +303,30 @@ const TicketEscalationSetup = () => {
       }));
     } catch (error) {
       console.log(error);
-      toast.dismiss()
-    }finally{
+      toast.dismiss();
+    } finally {
       setTimeout(() => {
-        setResEscalationAdded(false)
+        setResEscalationAdded(false);
       }, 500);
     }
   };
+
+  const handleDelete= async(id)=>{
+    try {
+      toast.loading("Deleting Escalation Rule Please wait!")
+      const deleteResp = await deleteEscalationRule(id)
+      toast.dismiss()
+      setResEscalationAdded(true)
+      toast.success("Escalation Rule Deleted SuccessFully")
+    } catch (error) {
+      console.log(error)
+      toast.dismiss()
+    }finally{
+      setTimeout(()=>{
+        setResEscalationAdded(false)
+      }, 500)
+    }
+  }
   return (
     <div className="w-full my-2 flex overflow-hidden flex-col">
       <div className="flex w-full">
@@ -440,7 +459,7 @@ const TicketEscalationSetup = () => {
                 {responseEscalation.map((category, index) => (
                   <div key={index} className="category-table">
                     <div className="flex gap-2 justify-between w-full border-b border-gray-300">
-                      <p className="font-semibold ">Rule {index + 1}</p>
+                      <p className="font-semibold ">Rule {index + 1} </p>
                       <div className="flex gap-2 items-center">
                         <button onClick={openModal}>
                           <BiEdit />
@@ -448,7 +467,10 @@ const TicketEscalationSetup = () => {
                         <button onClick={openModal1}>
                           <FaClone />
                         </button>
+                        <button onClick={()=> handleDelete(category.id)}>
+
                         <FaTrash />
+                        </button>
                       </div>
                     </div>
                     <table className="table-auto w-full border-collapse border border-gray-200 my-4 rounded-md overflow-x-auto">
@@ -461,7 +483,7 @@ const TicketEscalationSetup = () => {
                             className="border border-gray-200 px-4 py-2 text-white"
                             style={{ width: "20%" }}
                           >
-                            Category Type
+                            Category
                           </th>
                           <th
                             className="border border-gray-200 px-4 py-2 text-white"
@@ -564,8 +586,10 @@ const TicketEscalationSetup = () => {
                     id="categories"
                     isMulti
                     value={selectedOptions}
-                    onChange={handleChange}
-                    options={options}
+                    onChange={(selected) =>
+                      handleChange(selected, "categories")
+                    }
+                    options={categories}
                     className="basic-multi-select w-64"
                     classNamePrefix="select"
                   />
@@ -573,7 +597,7 @@ const TicketEscalationSetup = () => {
 
                 {/* <select name="" id=""  className="border p-2 rounded-md border-black w-60 absolute right-0 "></select> */}
 
-                <div className="   w-full  mb-2">
+                <div className=" w-full  mb-2">
                   <table className="w-full border-collapse">
                     <thead>
                       <tr>
@@ -687,38 +711,38 @@ const TicketEscalationSetup = () => {
         )}
         {page === "Resolution" && (
           <div className=" mt-2">
-            <div className=" flex flex-col  my-2 mx-4 ">
+            <div className=" flex flex-col  my-2 ">
               <Select
                 isMulti
                 noOptionsMessage={() => "Categories not available..."}
-                onChange={handleChange}
+                onChange={(selected) => handleChange(selected, "categories")}
                 options={categories}
                 // classNamePrefix="select"
                 placeholder="Select Categories"
               />
               <div className=" w-full overflow-auto my-2 ">
                 <table className="border-collapse rounded-sm">
-                  <thead>
+                  <thead style={{ background: themeColor }}>
                     <tr>
-                      <th className="border border-gray-300 bg-gray-100 px-4 py-2">
+                      <th className="border border-gray-300 text-white px-4 py-2">
                         Levels
                       </th>
-                      <th className="border border-gray-300 bg-gray-100 px-4 py-2">
+                      <th className="border border-gray-300 text-white px-4 py-2">
                         Escalation To
                       </th>
-                      <th className="border border-gray-300 bg-gray-100 px-4 py-2">
+                      <th className="border border-gray-300 text-white px-4 py-2">
                         P1
                       </th>
-                      <th className="border border-gray-300 bg-gray-100 px-4 py-2">
+                      <th className="border border-gray-300 text-white px-4 py-2">
                         P2
                       </th>
-                      <th className="border border-gray-300 bg-gray-100 px-4 py-2">
+                      <th className="border border-gray-300 text-white px-4 py-2">
                         P3
                       </th>
-                      <th className="border border-gray-300 bg-gray-100 px-4 py-2">
+                      <th className="border border-gray-300 text-white px-4 py-2">
                         P4
                       </th>
-                      <th className="border border-gray-300 bg-gray-100 px-4 py-2">
+                      <th className="border border-gray-300 text-white px-4 py-2">
                         P5
                       </th>
                     </tr>
@@ -726,15 +750,22 @@ const TicketEscalationSetup = () => {
                   <tbody>
                     <tr>
                       <td className="border border-gray-300 px-4 py-2">E1</td>
-                      <td className="border border-gray-300 px-4 py-2">
-                        <select
-                          name=""
-                          id=""
-                          className="border p-2 rounded-md border-black w-48"
-                        >
-                          <option value="">Mittu</option>
-                          <option value="">Panda</option>
-                        </select>
+                      <td className="border border-gray-300 px-4 py-2 w-96">
+                        <Select
+                          // id={`select-${level}`}
+                          isMulti
+                          value={selectedOptions.escalations.E1}
+                          onChange={(selected) =>
+                            handleChange(selected, "escalations", "E1")
+                          }
+                          options={users}
+                          styles={{
+                            container: (provided) => ({
+                              ...provided,
+                              width: "15rem",
+                            }),
+                          }}
+                        />
                       </td>
                       <td className="border border-gray-300 px-4 py-2">
                         <div className="flex gap-2">
@@ -1000,14 +1031,15 @@ const TicketEscalationSetup = () => {
                     <tr>
                       <td className="border border-gray-300 px-4 py-2">E2</td>
                       <td className="border border-gray-300 px-4 py-2">
-                        <select
-                          name=""
-                          id=""
-                          className="border p-2 rounded-md border-black w-48"
-                        >
-                          <option value="">Mittu</option>
-                          <option value="">Panda</option>
-                        </select>
+                        <Select
+                          // id={`select-${level}`}
+                          isMulti
+                          value={selectedOptions.escalations.E2}
+                          onChange={(selected) =>
+                            handleChange(selected, "escalations", "E2")
+                          }
+                          options={users}
+                        />
                       </td>
                       <td className="border border-gray-300 px-4 py-2">
                         <div className="flex gap-2">
@@ -1274,14 +1306,15 @@ const TicketEscalationSetup = () => {
                     <tr>
                       <td className="border border-gray-300 px-4 py-2">E3</td>
                       <td className="border border-gray-300 px-4 py-2">
-                        <select
-                          name=""
-                          id=""
-                          className="border p-2 rounded-md border-black w-48"
-                        >
-                          <option value="">Mittu</option>
-                          <option value="">Panda</option>
-                        </select>
+                        <Select
+                          // id={`select-${level}`}
+                          isMulti
+                          value={selectedOptions.escalations.E3}
+                          onChange={(selected) =>
+                            handleChange(selected, "escalations", "E3")
+                          }
+                          options={users}
+                        />
                       </td>
 
                       <td className="border border-gray-300 px-4 py-2">
@@ -1548,14 +1581,15 @@ const TicketEscalationSetup = () => {
                     <tr>
                       <td className="border border-gray-300 px-4 py-2">E4</td>
                       <td className="border border-gray-300 px-4 py-2">
-                        <select
-                          name=""
-                          id=""
-                          className="border p-2 rounded-md border-black w-48"
-                        >
-                          <option value="">Mittu</option>
-                          <option value="">Panda</option>
-                        </select>
+                        <Select
+                          // id={`select-${level}`}
+                          isMulti
+                          value={selectedOptions.escalations.E4}
+                          onChange={(selected) =>
+                            handleChange(selected, "escalations", "E4")
+                          }
+                          options={users}
+                        />
                       </td>
 
                       <td className="border border-gray-300 px-4 py-2">
@@ -1822,15 +1856,15 @@ const TicketEscalationSetup = () => {
                     <tr>
                       <td className="border border-gray-300 px-4 py-2">E5</td>
                       <td className="border border-gray-300 px-4 py-2">
-                        <select
-                          name=""
-                          id=""
-                          className="border p-2 rounded-md border-black w-48"
-                        >
-                          {" "}
-                          <option value="">Mittu</option>
-                          <option value="">Panda</option>
-                        </select>
+                        <Select
+                          // id={`select-${level}`}
+                          isMulti
+                          value={selectedOptions.escalations.E5}
+                          onChange={(selected) =>
+                            handleChange(selected, "escalations", "E5")
+                          }
+                          options={users}
+                        />
                       </td>
 
                       <td className="border border-gray-300 px-4 py-2">
@@ -2160,14 +2194,15 @@ const TicketEscalationSetup = () => {
                               E1
                             </td>
                             <td className="border border-gray-300 px-4 py-2">
-                              <select
-                                name=""
-                                id=""
-                                className="border p-2 rounded-md border-black w-48"
-                              >
-                                <option value="">Mittu</option>
-                                <option value="">Panda</option>
-                              </select>
+                              <Select
+                                // id={`select-${level}`}
+                                isMulti
+                                value={selectedOptions}
+                                onChange={(selected) =>
+                                  handleChange(selected, "escalations", e1)
+                                }
+                                options={users}
+                              />
                             </td>
                             <td className="border border-gray-300 px-4 py-2">
                               <div className="flex gap-2">
@@ -2757,8 +2792,8 @@ const TicketEscalationSetup = () => {
                 </div>
               </div>
             )}
-            <div className="border-b " />
-            <div className="flex gap-3">
+            {/* <div className="border-b " /> */}
+            {/* <div className="flex gap-3">
               <div className="text-center mt-1">
                 <label htmlFor="" className="font-semibold">
                   Filter
@@ -2785,20 +2820,23 @@ const TicketEscalationSetup = () => {
               >
                 Reset
               </button>
-            </div>
+            </div> */}
             <div className="overflow-x-scroll w-full">
               <div>
                 {resolutionEscalation.map((category, index) => (
                   <div key={index} className="category-table">
                     <div className="flex gap-2 justify-between w-full border-b birder-gray-300">
                       <p className="font-semibold ">Rule {index + 1}</p>
-                      <div className="flex gap-2 items-center">
+                      <div className="flex gap-4 items-center px-4">
                         <button onClick={openModal}>
                           <BiEdit />
                         </button>
-                        <FaTrash />
                         <button onClick={openModal1}>
                           <FaClone />
+                        </button>
+                        <button onClick={()=>handleDelete(category.id)} className="text-red-500">
+
+                        <FaTrash />
                         </button>
                       </div>
                       {/* <MdHelp/> */}
@@ -2809,28 +2847,28 @@ const TicketEscalationSetup = () => {
                         className="bg-gray-100 rounded-md"
                       >
                         <tr>
-                          <th className="border border-gray-200 px-4 py-2 text-white">
-                            Category Type
+                          <th className="border border-gray-200 px-4 py-2 text-sm text-white">
+                            Category 
                           </th>
-                          <th className="border border-gray-200 px-4 py-2 text-white">
+                          <th className="border border-gray-200 px-4 py-2 text-sm  text-white">
                             Levels
                           </th>
-                          <th className="border border-gray-200 px-4 py-2 text-white">
+                          <th className="border border-gray-200 px-4 py-2 text-sm  text-white">
                             Escalation To
                           </th>
-                          <th className="border border-gray-200 px-4 py-2 text-white">
+                          <th className="border border-gray-200 px-4 py-2 text-sm  text-white">
                             P1
                           </th>
-                          <th className="border border-gray-200 px-4 py-2 text-white">
+                          <th className="border border-gray-200 px-4 py-2 text-sm  text-white">
                             P2
                           </th>
-                          <th className="border border-gray-200 px-4 py-2 text-white">
+                          <th className="border border-gray-200 px-4 py-2 text-sm  text-white">
                             P3
                           </th>
-                          <th className="border border-gray-200 px-4 py-2 text-white">
+                          <th className="border border-gray-200 px-4 py-2 text-sm  text-white">
                             P4
                           </th>
-                          <th className="border border-gray-200 px-4 py-2 text-white">
+                          <th className="border border-gray-200 px-4 py-2 text-sm  text-white">
                             P5
                           </th>
                         </tr>
@@ -2849,24 +2887,24 @@ const TicketEscalationSetup = () => {
                             <td className="border border-gray-200 px-4 py-2 text-center font-medium">
                               {level.name}
                             </td>
-                            <td className="border border-gray-200 px-4 py-2">
-                              {Array.isArray(level.escalate_to_users)
-                                ? level.escalate_to_users.join(" , ")
+                            <td className="border border-gray-200 px-4 py-2 font-medium text-center text-sm">
+                              {Array.isArray(level.escalate_to_users_names)
+                                ? level.escalate_to_users_names.join(" , ")
                                 : "N/A"}
                             </td>
-                            <td className="border border-gray-200 px-4 py-2 text-center text-sm">
+                            <td className="border border-gray-200 px-4 py-2 text-center text-sm font-medium">
                               {formatTime(level.p1)}
                             </td>
-                            <td className="border border-gray-200 px-4 py-2 text-center text-sm">
+                            <td className="border border-gray-200 px-4 py-2 text-center text-sm font-medium">
                               {formatTime(level.p2)}
                             </td>
-                            <td className="border border-gray-200 px-4 py-2 text-center text-sm">
+                            <td className="border border-gray-200 px-4 py-2 text-center text-sm font-medium">
                               {formatTime(level.p3)}
                             </td>
-                            <td className="border border-gray-200 px-4 py-2 text-center text-sm">
+                            <td className="border border-gray-200 px-4 py-2 text-center text-sm font-medium">
                               {formatTime(level.p4)}
                             </td>
-                            <td className="border border-gray-200 px-4 py-2 text-center text-sm">
+                            <td className="border border-gray-200 px-4 py-2 text-center text-sm font-medium">
                               {formatTime(level.p5)}
                             </td>
                           </tr>
