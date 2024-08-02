@@ -141,7 +141,26 @@ export const deleteEscalationRule = async (id) =>
     },
   });
 export const postHelpDeskEscalationSetup = async (data) =>
-  axiosInstance.post(`pms/admin/create_complaint_worker.json`, data, {
+  axiosInstance.post(`/pms/admin/create_complaint_worker.json`, data, {
+    params: {
+      token: token,
+    },
+  });
+export const deleteHelpDeskCategorySetup = async (id, data) =>
+  axiosInstance.patch(`/pms/admin/modify_helpdesk_category/${id}.json`, data, {
+    params: {
+      token: token,
+    },
+  });
+export const getGRN = async () =>
+  axiosInstance.get(`/grn_details.json`, {
+    params: {
+      token: token,
+    },
+  });
+
+export const postHelpDeskResolutionEscalationSetup = async (data) =>
+  axiosInstance.post(`/pms/admin/create_escalation.json`, data, {
     params: {
       token: token,
     },
@@ -158,6 +177,25 @@ export const getHelpDeskStatusSetup = async () =>
       token: token,
     },
   });
+export const getHelpDeskStatusDetailsSetup = async (id) =>
+  axiosInstance.get(
+    `/pms/admin/helpdesk_categories/complaint_statuses/${id}.json`,
+    {
+      params: {
+        token: token,
+      },
+    }
+  );
+export const editHelpDeskStatusDetailsSetup = async (id, data) =>
+  axiosInstance.put(
+    `/pms/admin/helpdesk_categories/complaint_statuses/${id}.json`,
+    data,
+    {
+      params: {
+        token: token,
+      },
+    }
+  );
 export const postHelpDeskStatusSetup = async (data) =>
   axiosInstance.post(`/pms/admin/create_complaint_statuses.json`, data, {
     params: {
@@ -2022,6 +2060,91 @@ export const postVisitorOTPApi = async (data) => {
     return response.data;
   } catch (error) {
     console.error("Error getting slots :", error);
+    throw error;
+  }
+};
+export const postOutlookAuth = async (data) => {
+  try {
+    const response = await vibeAuth.post(
+      `/api/employee/social-media/outlook/create-auth/`,
+      data,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error getting slots :", error);
+    throw error;
+  }
+};
+export const getDependencies = async (userId) => {
+  try {
+    const response = await vibeAuth.get(
+      `/api/v1/employee/task/get-dependencies/?user_id=${userId}`,
+
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error getting dependencies :", error);
+    throw error;
+  }
+};
+export const getVibeUserBirthday = async (userId) => {
+  try {
+    const response = await vibeAuth.get(
+      `/api/employee/calender/get-users-birthday/?user_id=${userId}`,
+
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error getting birthday :", error);
+    throw error;
+  }
+};
+export const createVibeUserBirthday = async (data) => {
+  try {
+    const response = await vibeAuth.post(
+      `/api/employee/calender/add-birthday/`,
+      data,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error Creating birthday :", error);
+    throw error;
+  }
+};
+export const deleteVibeUserBirthday = async (userId, BdId) => {
+  try {
+    const response = await vibeAuth.delete(
+      `/api/employee/calender/delete-birthday/?user_id=${userId}&birthday_id=${BdId}`,
+     
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error deleting birthday :", error);
     throw error;
   }
 };

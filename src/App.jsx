@@ -1855,11 +1855,11 @@ function App() {
           />
           {/* admin birthday */}
           <Route
-            path="/admin/birthday"
+            path="/birthday"
             element={
-              <ProtectedAdminRoutes>
+              <ProtectedRoute>
                 <Birthday />
-              </ProtectedAdminRoutes>
+              </ProtectedRoute>
             }
           />
           <Route

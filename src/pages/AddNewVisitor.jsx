@@ -7,6 +7,7 @@ import toast from "react-hot-toast";
 import { getSetupUsers, postNewVisitor, postVisitorOTPApi } from "../api";
 import { useNavigate } from "react-router-dom";
 import Webcam from "react-webcam";
+import FileInputBox from "../containers/Inputs/FileInputBox";
 const AddNewVisitor = () => {
   const siteId = getItemInLocalStorage("SITEID");
   const userId = getItemInLocalStorage("UserId");
@@ -188,17 +189,17 @@ const AddNewVisitor = () => {
     sendOTP.append("mobile_number", formData.mobile);
     sendOTP.append("otp", otp);
     try {
-      toast.loading("Creating new visitor Please wait!")
+      toast.loading("Creating new visitor Please wait!");
       const visitResp = await postNewVisitor(postData);
       const sendOtp = await postVisitorOTPApi(sendOTP);
       console.log(sendOtp);
       console.log(visitResp);
       navigate("/admin/passes/visitors");
-      toast.dismiss()
+      toast.dismiss();
       toast.success("Visitor Added Successfully");
     } catch (error) {
       console.log(error);
-      toast.dismiss()
+      toast.dismiss();
     }
   };
   useEffect(() => {
@@ -483,7 +484,6 @@ const AddNewVisitor = () => {
               </select>
             </div>
           )}
-
           <span>
             <input
               type="checkbox"
@@ -500,6 +500,7 @@ const AddNewVisitor = () => {
             &nbsp;<label htmlFor="hostApproval">Skip Host Approval</label>
             &nbsp;&nbsp;&nbsp;
             <input
+              id="goods"
               type="checkbox"
               value={formData.goodsInward}
               onChange={() =>
@@ -509,9 +510,28 @@ const AddNewVisitor = () => {
                 }))
               }
             />
-            &nbsp;&nbsp;<label htmlFor="">Goods Inwards</label>
+            &nbsp;&nbsp;<label htmlFor="goods">Goods Inwards</label>
           </span>
         </div>
+          {formData.goodsInward && (
+            <>
+            
+            <div className="grid grid-cols-3 gap-2  my-2">
+              <div className="flex flex-col gap-2">
+                <p className="font-medium">No. of Goods :</p>
+                <input type="number" name="" id=""  className="border border-gray-400 p-2 rounded-md w-full" placeholder="Enter Number " />
+              </div>
+              <div className="col-span-2 flex flex-col gap-2">
+                <p className="font-medium ">Description :</p>
+                <textarea name="" id=""   className="border border-gray-400 p-2 rounded-md w-full" rows={1} placeholder="Enter Description"></textarea>
+              </div>
+            </div>
+              <div className="flex flex-col gap-2">
+                <p className="font-medium">Attachments Related to goods </p>
+                <FileInputBox />
+              </div>
+            </>
+          )}
         <h2 className="font-medium border-b-2 mt-5 border-black">
           Additional Visitor
         </h2>

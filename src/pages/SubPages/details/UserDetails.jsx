@@ -152,28 +152,27 @@ const UserDetails = () => {
     },
   ];
   const domainPrefix = "https://admin.vibecopilot.ai";
+  
   return (
     <div className="">
       <div className="flex flex-col justify-around ">
         {ticketinfo.current_fixed_state === "complete" && (
-          <div className="flex justify-end">
-            <div className="flex justify-end mx-2">
-              <button
-                className="bg-black w-20 rounded-md mx-4 my-2 hover:bg-white hover:text-black border-2 border-black transition-all duration-300 font-medium text-white p-2 "
-                onClick={() => setModal(true)}
-              >
-                Re open
-              </button>
-            </div>
+          <div className="flex justify-end items-center gap-2 m-2">
+            <button
+              className="bg-black  rounded-md px-4  hover:bg-white  border-2  transition-all duration-300 font-medium text-white p-2 "
+              onClick={() => setModal(true)}
+              style={{background: themeColor}}
+            >
+              Re open
+            </button>
 
-            <div className="flex justify-end mx-2">
-              <button
-                className="bg-black w-20 rounded-md mx-4 my-2 hover:bg-white hover:text-black border-2 border-black transition-all duration-300 font-medium text-white p-2 "
-                onClick={() => setCloseModal(true)}
-              >
-                Close
-              </button>
-            </div>
+            <button
+              className="bg-red-400  rounded-md px-4  hover:bg-white hover:text-black border-2  transition-all duration-300 font-medium text-white p-2 "
+              onClick={() => setCloseModal(true)}
+              
+            >
+              Close
+            </button>
           </div>
         )}
         <div className="">

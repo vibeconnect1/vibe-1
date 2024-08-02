@@ -66,7 +66,11 @@ const ServicePR = () => {
     { name: "Last Approved By", selector: (row) => row.desg, sortable: true },
     { name: "Approved Status", selector: (row) => row.status, sortable: true },
     { name: "PR Amount", selector: (row) => row.total_amount, sortable: true },
-    { name: "Active/Inactive", selector: (row) => row.active, sortable: true },
+    { name: "Active/Inactive", selector: (row) =>
+      <div>
+        <input type="checkbox" name="" id="" />
+      </div>
+    },
   ];
 
   document.title = `Service PR - Vibe Connect`;

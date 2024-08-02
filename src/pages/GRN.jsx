@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Navbar from "../components/Navbar";
 import { BiFilterAlt } from "react-icons/bi";
 import { IoMdAdd } from "react-icons/io";
@@ -6,9 +6,23 @@ import Table from "../components/table/Table";
 import { Link } from "react-router-dom";
 import { BsEye } from "react-icons/bs";
 import { useSelector } from "react-redux";
+import { getGRN } from "../api";
 
 function GRN() {
   const [filter, setFilter] = useState(false);
+  const [grns, setGrns] = useState([]);
+
+  useEffect(() => {
+    const fetchGRN = async () => {
+      try {
+        const resp = await getGRN();
+        setGrns(resp.data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchGRN();
+  }, []);
   const column = [
     {
       name: "view",
@@ -27,7 +41,7 @@ function GRN() {
     { name: "Supplier", selector: (row) => row.Supplier, sortable: true },
     {
       name: "Invoice Number",
-      selector: (row) => row.InvoiceNumber,
+      selector: (row) => row.invoice_number,
       sortable: true,
     },
     {
@@ -248,7 +262,10 @@ function GRN() {
                   className="border-2 p-2 w-70 border-gray-300 rounded-lg mx-2"
                 />
 
-                <button className="bg-black p-1 px-5 py-2 text-white rounded-md" style={{background: themeColor}}>
+                <button
+                  className="bg-black p-1 px-5 py-2 text-white rounded-md"
+                  style={{ background: themeColor }}
+                >
                   Apply
                 </button>
               </div>
@@ -265,7 +282,7 @@ function GRN() {
             <div className="flex flex-col sm:flex-row md:justify-between  gap-2 ">
               <Link
                 to="/admin/add-grn"
-                style={{background: themeColor}}
+                style={{ background: themeColor }}
                 className=" font-semibold text-white px-4 p-1 flex gap-2 items-center rounded-md"
               >
                 <IoMdAdd /> Add
@@ -274,7 +291,7 @@ function GRN() {
               <button
                 className=" font-semibold text-white px-4 p-1 flex gap-2 items-center rounded-md"
                 onClick={() => setFilter(!filter)}
-                style={{background: themeColor}}
+                style={{ background: themeColor }}
               >
                 <BiFilterAlt />
                 Filter
@@ -282,7 +299,7 @@ function GRN() {
             </div>
           </div>
         </div>
-        <Table columns={column} data={data} isPagination={true} />
+        <Table columns={column} data={grns} isPagination={true} />
       </div>
     </section>
   );

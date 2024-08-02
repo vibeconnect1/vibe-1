@@ -13,6 +13,7 @@ import {
   getHelpDeskEscalationSetup,
   getSetupUsers,
   postHelpDeskEscalationSetup,
+  postHelpDeskResolutionEscalationSetup,
 } from "../../../api";
 import toast from "react-hot-toast";
 import { getItemInLocalStorage } from "../../../utils/localStorage";
@@ -44,9 +45,60 @@ const TicketEscalationSetup = () => {
       E5: [],
     },
   });
+  const [selectedResolutionOptions, setSelectedResolutionOptions] = useState({
+    escalations: {
+      E1: {
+        users: [],
+        p1: { days: "", hrs: "", min: "" },
+        p2: { days: "", hrs: "", min: "" },
+        p3: { days: "", hrs: "", min: "" },
+        p4: { days: "", hrs: "", min: "" },
+        p5: { days: "", hrs: "", min: "" },
+      },
+      E2: {
+        users: [],
+        p1: { days: "", hrs: "", min: "" },
+        p2: { days: "", hrs: "", min: "" },
+        p3: { days: "", hrs: "", min: "" },
+        p4: { days: "", hrs: "", min: "" },
+        p5: { days: "", hrs: "", min: "" },
+      },
+      E3: {
+        users: [],
+        p1: { days: "", hrs: "", min: "" },
+        p2: { days: "", hrs: "", min: "" },
+        p3: { days: "", hrs: "", min: "" },
+        p4: { days: "", hrs: "", min: "" },
+        p5: { days: "", hrs: "", min: "" },
+      },
+      E4: {
+        users: [],
+        p1: { days: "", hrs: "", min: "" },
+        p2: { days: "", hrs: "", min: "" },
+        p3: { days: "", hrs: "", min: "" },
+        p4: { days: "", hrs: "", min: "" },
+        p5: { days: "", hrs: "", min: "" },
+      },
+      E5: {
+        users: [],
+        p1: { days: "", hrs: "", min: "" },
+        p2: { days: "", hrs: "", min: "" },
+        p3: { days: "", hrs: "", min: "" },
+        p4: { days: "", hrs: "", min: "" },
+        p5: { days: "", hrs: "", min: "" },
+      },
+    },
+  });
   const [responseEscalation, setResponseEscalation] = useState([]);
   const [resolutionEscalation, setResolutionEscalation] = useState([]);
   const [users, setUsers] = useState([]);
+
+  const convertToMinutes = ({ days, hrs, min }) => {
+    const daysInMinutes = parseInt(days) * 24 * 60 || 0;
+    const hrsInMinutes = parseInt(hrs) * 60 || 0;
+    const minutes = parseInt(min) || 0;
+    return daysInMinutes + hrsInMinutes + minutes;
+  };
   useEffect(() => {
     const fetchAllCategories = async () => {
       try {
@@ -311,22 +363,162 @@ const TicketEscalationSetup = () => {
     }
   };
 
-  const handleDelete= async(id)=>{
-    try {
-      toast.loading("Deleting Escalation Rule Please wait!")
-      const deleteResp = await deleteEscalationRule(id)
-      toast.dismiss()
-      setResEscalationAdded(true)
-      toast.success("Escalation Rule Deleted SuccessFully")
-    } catch (error) {
-      console.log(error)
-      toast.dismiss()
-    }finally{
-      setTimeout(()=>{
-        setResEscalationAdded(false)
-      }, 500)
+  const handleUserChange = (selected, level) => {
+    setSelectedResolutionOptions((prev) => ({
+      ...prev,
+      escalations: {
+        ...prev.escalations,
+        [level]: {
+          ...prev.escalations[level],
+          users: selected,
+        },
+      },
+    }));
+  };
+  console.log(selectedResolutionOptions);
+
+  const handlePChange = (value, level, pField, fieldType) => {
+    setSelectedResolutionOptions((prevState) => ({
+      ...prevState,
+      escalations: {
+        ...prevState.escalations,
+        [level]: {
+          ...prevState.escalations[level],
+          [pField]: {
+            ...prevState.escalations[level][pField],
+            [fieldType]: value,
+          },
+        },
+      },
+    }));
+  };
+
+  const initialData = {
+    E1: {
+      users: [],
+      p1: { days: "", hrs: "", min: "" },
+      p2: { days: "", hrs: "", min: "" },
+      p3: { days: "", hrs: "", min: "" },
+      p4: { days: "", hrs: "", min: "" },
+      p5: { days: "", hrs: "", min: "" },
+    },
+    E2: {
+      users: [],
+      p1: { days: "", hrs: "", min: "" },
+      p2: { days: "", hrs: "", min: "" },
+      p3: { days: "", hrs: "", min: "" },
+      p4: { days: "", hrs: "", min: "" },
+      p5: { days: "", hrs: "", min: "" },
+    },
+    E3: {
+      users: [],
+      p1: { days: "", hrs: "", min: "" },
+      p2: { days: "", hrs: "", min: "" },
+      p3: { days: "", hrs: "", min: "" },
+      p4: { days: "", hrs: "", min: "" },
+      p5: { days: "", hrs: "", min: "" },
+    },
+    E4: {
+      users: [],
+      p1: { days: "", hrs: "", min: "" },
+      p2: { days: "", hrs: "", min: "" },
+      p3: { days: "", hrs: "", min: "" },
+      p4: { days: "", hrs: "", min: "" },
+      p5: { days: "", hrs: "", min: "" },
+    },
+    E5: {
+      users: [],
+      p1: { days: "", hrs: "", min: "" },
+      p2: { days: "", hrs: "", min: "" },
+      p3: { days: "", hrs: "", min: "" },
+      p4: { days: "", hrs: "", min: "" },
+      p5: { days: "", hrs: "", min: "" },
+    },
+  };
+
+  const handleSaveResolutionEscalation = async () => {
+    if (selectedOptions.categories.length === 0) {
+      return toast.error("Please Provide Escalation Data");
     }
-  }
+    toast.loading("Creating Response Escalation Please wait!");
+    const formData = new FormData();
+    formData.append("complaint_worker[society_id]", siteId);
+    formData.append("complaint_worker[esc_type]", "resolution");
+    formData.append("complaint_worker[of_phase]", "pms");
+    formData.append("complaint_worker[of_atype]", "Pms::Site");
+    selectedOptions.categories.forEach((category) => {
+      formData.append("category_ids[]", category.value);
+    });
+    // Object.entries(selectedOptions.escalations).forEach(([level, users]) => {
+    //   formData.append(`escalation_matrix[${level.toLowerCase()}][name]`, level);
+    //   users.forEach((user, index) => {
+    //     formData.append(
+    //       `escalation_matrix[${level.toLowerCase()}][escalate_to_users][]`,
+    //       user.value
+    //     );
+    //   });
+    // });
+    Object.entries(selectedResolutionOptions.escalations).forEach(
+      ([level, data]) => {
+        formData.append(
+          `escalation_matrix[${level.toLowerCase()}][name]`,
+          level
+        );
+        data.users.forEach((user) => {
+          formData.append(
+            `escalation_matrix[${level.toLowerCase()}][escalate_to_users][]`,
+            user.value
+          );
+        });
+        ["p1", "p2", "p3", "p4", "p5"].forEach((pField) => {
+          const totalMinutes = convertToMinutes(data[pField]);
+          formData.append(
+            `escalation_matrix[${level.toLowerCase()}][${pField}]`,
+            totalMinutes
+          );
+        });
+      }
+    );
+
+    try {
+      const res = await postHelpDeskResolutionEscalationSetup(formData);
+      setResEscalationAdded(true);
+      toast.dismiss();
+      toast.success("Resolution Escalation Created Successfully");
+      setSelectedOptions((prevData) => ({
+        ...prevData,
+        categories: [],
+      }));
+      setSelectedResolutionOptions((prevData) => ({
+        ...prevData,
+        escalations: initialData,
+      }));
+    } catch (error) {
+      console.log(error);
+      toast.dismiss();
+    } finally {
+      setTimeout(() => {
+        setResEscalationAdded(false);
+      }, 500);
+    }
+  };
+
+  const handleDelete = async (id) => {
+    try {
+      toast.loading("Deleting Escalation Rule Please wait!");
+      const deleteResp = await deleteEscalationRule(id);
+      toast.dismiss();
+      setResEscalationAdded(true);
+      toast.success("Escalation Rule Deleted SuccessFully");
+    } catch (error) {
+      console.log(error);
+      toast.dismiss();
+    } finally {
+      setTimeout(() => {
+        setResEscalationAdded(false);
+      }, 500);
+    }
+  };
   return (
     <div className="w-full my-2 flex overflow-hidden flex-col">
       <div className="flex w-full">
@@ -467,9 +659,8 @@ const TicketEscalationSetup = () => {
                         <button onClick={openModal1}>
                           <FaClone />
                         </button>
-                        <button onClick={()=> handleDelete(category.id)}>
-
-                        <FaTrash />
+                        <button onClick={() => handleDelete(category.id)}>
+                          <FaTrash />
                         </button>
                       </div>
                     </div>
@@ -710,17 +901,159 @@ const TicketEscalationSetup = () => {
           </div>
         )}
         {page === "Resolution" && (
-          <div className=" mt-2">
+          <div className=" m-2">
             <div className=" flex flex-col  my-2 ">
               <Select
                 isMulti
                 noOptionsMessage={() => "Categories not available..."}
                 onChange={(selected) => handleChange(selected, "categories")}
                 options={categories}
+                value={selectedOptions.categories}
                 // classNamePrefix="select"
                 placeholder="Select Categories"
               />
               <div className=" w-full overflow-auto my-2 ">
+                <table className="border-collapse rounded-sm w-full my-2 ">
+                  <thead style={{ background: themeColor }}>
+                    <tr>
+                      {[
+                        "Levels",
+                        "Escalation To",
+                        "P1",
+                        "P2",
+                        "P3",
+                        "P4",
+                        "P5",
+                      ].map((heading) => (
+                        <th
+                          key={heading}
+                          className="border border-gray-300 text-white px-4 py-2"
+                        >
+                          {heading}
+                        </th>
+                      ))}
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {["E1", "E2", "E3", "E4", "E5"].map((level) => (
+                      <tr key={level}>
+                        <td className="border border-gray-300 px-4 py-2">
+                          {level}
+                        </td>
+                        <td className="border border-gray-300 px-4 py-2 min-w-60">
+                          <Select
+                            isMulti
+                            value={
+                              selectedResolutionOptions.escalations[level].users
+                            }
+                            onChange={(selected) =>
+                              handleUserChange(selected, level)
+                            }
+                            options={users}
+                          />
+                        </td>
+                        {["p1", "p2", "p3", "p4", "p5"].map((pField) => (
+                          <td
+                            key={pField}
+                            className="border border-gray-300 px-4 py-2"
+                          >
+                            <div className="flex gap-2">
+                              <input
+                                type="text"
+                                className="w-12 h-30 border border-gray-300 rounded-sm px-2 py-1 placeholder:text-sm"
+                                placeholder="Days"
+                                value={
+                                  selectedResolutionOptions.escalations[level][
+                                    pField
+                                  ]?.days || ""
+                                }
+                                onChange={(e) =>
+                                  handlePChange(
+                                    e.target.value,
+                                    level,
+                                    pField,
+                                    "days"
+                                  )
+                                }
+                                pattern="[0-9]*"
+                                onKeyDown={(e) => {
+                                  if (
+                                    !/[0-9]/.test(e.key) &&
+                                    e.key !== "Backspace" &&
+                                    e.key !== "ArrowLeft" &&
+                                    e.key !== "ArrowRight"
+                                  ) {
+                                    e.preventDefault();
+                                  }
+                                }}
+                              />
+                              <input
+                                type="text"
+                                className="w-12 h-30 border border-gray-300 rounded-sm px-2 py-1 placeholder:text-sm"
+                                placeholder="Hrs"
+                                pattern="[0-9]*"
+                                value={
+                                  selectedResolutionOptions.escalations[level][
+                                    pField
+                                  ]?.hrs || ""
+                                }
+                                onChange={(e) =>
+                                  handlePChange(
+                                    e.target.value,
+                                    level,
+                                    pField,
+                                    "hrs"
+                                  )
+                                }
+                                onKeyDown={(e) => {
+                                  if (
+                                    !/[0-9]/.test(e.key) &&
+                                    e.key !== "Backspace" &&
+                                    e.key !== "ArrowLeft" &&
+                                    e.key !== "ArrowRight"
+                                  ) {
+                                    e.preventDefault();
+                                  }
+                                }}
+                              />
+                              <input
+                                type="text"
+                                className="w-12 h-30 border border-gray-300 rounded-sm px-2 py-1 placeholder:text-sm"
+                                placeholder="Min"
+                                pattern="[0-9]*"
+                                value={
+                                  selectedResolutionOptions.escalations[level][
+                                    pField
+                                  ]?.min || ""
+                                }
+                                onChange={(e) =>
+                                  handlePChange(
+                                    e.target.value,
+                                    level,
+                                    pField,
+                                    "min"
+                                  )
+                                }
+                                onKeyDown={(e) => {
+                                  if (
+                                    !/[0-9]/.test(e.key) &&
+                                    e.key !== "Backspace" &&
+                                    e.key !== "ArrowLeft" &&
+                                    e.key !== "ArrowRight"
+                                  ) {
+                                    e.preventDefault();
+                                  }
+                                }}
+                              />
+                            </div>
+                          </td>
+                        ))}
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+              {/* <div className=" w-full overflow-auto my-2 ">
                 <table className="border-collapse rounded-sm">
                   <thead style={{ background: themeColor }}>
                     <tr>
@@ -2131,11 +2464,12 @@ const TicketEscalationSetup = () => {
                   </tbody>
                 </table>
                 <hr />
-              </div>
+              </div> */}
               <div className="flex justify-center">
                 <button
                   className=" font-semibold hover:bg-black hover:text-white transition-all px-4 p-2 rounded-md text-white cursor-pointer text-center flex items-center gap-2 justify-center"
                   style={{ background: themeColor }}
+                  onClick={handleSaveResolutionEscalation}
                 >
                   Submit
                 </button>
@@ -2834,9 +3168,11 @@ const TicketEscalationSetup = () => {
                         <button onClick={openModal1}>
                           <FaClone />
                         </button>
-                        <button onClick={()=>handleDelete(category.id)} className="text-red-500">
-
-                        <FaTrash />
+                        <button
+                          onClick={() => handleDelete(category.id)}
+                          className="text-red-500"
+                        >
+                          <FaTrash />
                         </button>
                       </div>
                       {/* <MdHelp/> */}
@@ -2848,7 +3184,7 @@ const TicketEscalationSetup = () => {
                       >
                         <tr>
                           <th className="border border-gray-200 px-4 py-2 text-sm text-white">
-                            Category 
+                            Category
                           </th>
                           <th className="border border-gray-200 px-4 py-2 text-sm  text-white">
                             Levels

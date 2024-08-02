@@ -11,11 +11,12 @@ import { getHelpDeskStatusSetup, postHelpDeskStatusSetup } from "../../../api";
 import { statusColors } from "../../../utils/colors";
 import toast from "react-hot-toast";
 import { getItemInLocalStorage } from "../../../utils/localStorage";
+import EditStatusModal from "./EditStatusModal";
 
 const TicketSetupPage = () => {
   const [selectedRule, setSelectedRule] = useState("");
   const [statusAdded, setStatusAdded] = useState(false);
-
+const [showEditModal, setShowEditModal] = useState(false)
   const [formData, setFormData] = useState({
     status: "",
     fixedState: "",
@@ -34,6 +35,7 @@ const TicketSetupPage = () => {
   const [color, setColor] = useState("#ffffff");
   const [showPicker, setShowPicker] = useState(false);
   const [statuses, setStatuses] = useState([]);
+  const [id, setId] = useState("")
   useEffect(() => {
     const fetchTicketStatus = async () => {
       try {
@@ -102,6 +104,11 @@ const TicketSetupPage = () => {
       ),
     },
   ];
+
+  const handleEditStatusModal = (id)=>{
+setId(id)
+setShowEditModal(true)
+  }
   const statusColumns = [
     {
       name: "Order",
@@ -137,12 +144,12 @@ const TicketSetupPage = () => {
       name: "Action",
       cell: (row) => (
         <div className="flex items-center gap-4">
-          <Link>
+          <button onClick={()=>{handleEditStatusModal(row.id)}}>
             <BiEdit size={15} />
-          </Link>
-          <Link>
+          </button>
+          {/* <Link>
             <FaTrash size={15} />
-          </Link>
+          </Link> */}
         </div>
       ),
     },
@@ -182,7 +189,6 @@ const TicketSetupPage = () => {
     postStatus.append("complaint_status[fixed_state]", formData.fixedState);
     postStatus.append("complaint_status[color_code]", formData.color);
     postStatus.append("complaint_status[position]", formData.order);
-
     try {
       const resp = await postHelpDeskStatusSetup(postStatus);
       console.log(resp);
@@ -264,7 +270,7 @@ const TicketSetupPage = () => {
         )}
         {page === "Status" && (
           <div className="m-2">
-            <div className="grid md:grid-cols-5 gap-2 m-2">
+            <div className="grid md:grid-cols-5 gap-2 my-2">
               <input
                 type="text"
                 placeholder="Enter status"
@@ -346,16 +352,16 @@ const TicketSetupPage = () => {
           </div>
         )}
         {page === "Operational Days" && (
-          <div class=" w-full mr-20">
-            <button
+          <div class=" w-full  my-2">
+            {/* <button
               onClick={openModal}
               className="border-2 font-semibold mt-5 ml-10 hover:bg-black hover:text-white transition-all border-black p-2 rounded-md text-white cursor-pointer text-center flex items-center gap-2 justify-center"
               style={{ background: themeColor }}
             >
               Import
-            </button>
-            <table class="w-3/4 ml-20 ">
-              <thead>
+            </button> */}
+            <table className="w-full">
+              <thead style={{background: themeColor}} className="text-white">
                 <tr>
                   <th class="px-4 py-2"></th>
                   <th class="px-4 py-2">Operational Days</th>
@@ -373,14 +379,14 @@ const TicketSetupPage = () => {
                     <input
                       type="time"
                       value="13:45"
-                      className="border border-gray-400 p-2 rounded-md"
+                      className="border border-gray-400 p-1 w-40 rounded-md"
                     />
                   </td>
                   <td class="border px-4 py-2 text-center">
                     <input
                       type="time"
                       value="19:45"
-                      className="border border-gray-400 p-2 rounded-md"
+                      className="border border-gray-400 p-1 w-40 rounded-md"
                     />
                   </td>
                   {/* <td class="border px-4 py-2 text-center"><input type="time" className="border border-gray-400 p-2 rounded-md"/></td>
@@ -399,14 +405,14 @@ const TicketSetupPage = () => {
                     <input
                       type="time"
                       value="13:45"
-                      className="border border-gray-400 p-2 rounded-md"
+                      className="border border-gray-400 p-1 w-40 rounded-md"
                     />
                   </td>
                   <td class="border px-4 py-2 text-center">
                     <input
                       type="time"
                       value="16:45"
-                      className="border border-gray-400 p-2 rounded-md"
+                      className="border border-gray-400 p-1 w-40 rounded-md"
                     />
                   </td>
                   {/* <td class="border px-4 py-2 text-center"><input type="time" className="border border-gray-400 p-2 rounded-md"/></td> */}
@@ -424,14 +430,14 @@ const TicketSetupPage = () => {
                     <input
                       type="time"
                       value="15:45"
-                      className="border border-gray-400 p-2 rounded-md"
+                      className="border border-gray-400 p-1 w-40 rounded-md"
                     />
                   </td>
                   <td class="border px-4 py-2 text-center">
                     <input
                       type="time"
                       value="16:45"
-                      className="border border-gray-400 p-2 rounded-md"
+                      className="border border-gray-400 p-1 w-40 rounded-md"
                     />
                   </td>
                   {/* <td class="border px-4 py-2 text-center"><input type="time" className="border border-gray-400 p-2 rounded-md"/></td> */}
@@ -449,14 +455,14 @@ const TicketSetupPage = () => {
                     <input
                       type="time"
                       value="14:45"
-                      className="border border-gray-400 p-2 rounded-md"
+                      className="border border-gray-400 p-1 w-40 rounded-md"
                     />
                   </td>
                   <td class="border px-4 py-2 text-center">
                     <input
                       type="time"
                       value="06:45"
-                      className="border border-gray-400 p-2 rounded-md"
+                      className="border border-gray-400 p-1 w-40 rounded-md"
                     />
                   </td>
                   {/* <td class="border px-4 py-2 text-center"><input type="time" className="border border-gray-400 p-2 rounded-md"/></td> */}
@@ -474,14 +480,14 @@ const TicketSetupPage = () => {
                     <input
                       type="time"
                       value="09:45"
-                      className="border border-gray-400 p-2 rounded-md"
+                      className="border border-gray-400 p-1 w-40 rounded-md"
                     />
                   </td>
                   <td class="border px-4 py-2 text-center">
                     <input
                       type="time"
                       value="13:45"
-                      className="border border-gray-400 p-2 rounded-md"
+                      className="border border-gray-400 p-1 w-40 rounded-md"
                     />
                   </td>
                   {/* <td class="border px-4 py-2 text-center"><input type="time" className="border border-gray-400 p-2 rounded-md"/></td> */}
@@ -499,14 +505,14 @@ const TicketSetupPage = () => {
                     <input
                       type="time"
                       value="08:45"
-                      className="border border-gray-400 p-2 rounded-md"
+                      className="border border-gray-400 p-1 w-40 rounded-md"
                     />
                   </td>
                   <td class="border px-4 py-2 text-center">
                     <input
                       type="time"
                       value="13:45"
-                      className="border border-gray-400 p-2 rounded-md"
+                      className="border border-gray-400 p-1 w-40 rounded-md"
                     />
                   </td>
                   {/* <td class="border px-4 py-2 text-center"><input type="time" className="border border-gray-400 p-2 rounded-md"/></td> */}
@@ -525,14 +531,14 @@ const TicketSetupPage = () => {
                     <input
                       type="time"
                       value="12:45"
-                      className="border border-gray-400 p-2 rounded-md"
+                      className="border border-gray-400 p-1 w-40 rounded-md"
                     />
                   </td>
                   <td class="border px-4 py-2 text-center">
                     <input
                       type="time"
                       value="13:45"
-                      className="border border-gray-400 p-2 rounded-md"
+                      className="border border-gray-400 p-1 w-40 rounded-md"
                     />
                   </td>
                   {/* <td class="border px-4 py-2 text-center"><input type="time" className="border border-gray-400 p-2 rounded-md"/></td> */}
@@ -544,12 +550,14 @@ const TicketSetupPage = () => {
                 </tr>
               </tbody>
             </table>
+            <div className="flex justify-center my-2 mb-5">
             <button
-              className="border-2 font-semibold mt-5 mb-20 ml-10 hover:bg-black hover:text-white transition-all border-black p-2 rounded-md text-white cursor-pointer text-center flex items-center gap-2 justify-center"
+              className=" font-semibold  hover:bg-black hover:text-white transition-all border-black p-2 px-4 rounded-md text-white cursor-pointer text-center flex items-center gap-2 justify-center"
               style={{ background: themeColor }}
-            >
+              >
               Submit
             </button>
+              </div>
             {showModal && (
               <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center z-50">
                 <div className="bg-white p-5 rounded-lg w-2/3">
@@ -680,10 +688,7 @@ const TicketSetupPage = () => {
             </div>
           </div>
         )}
-        {/* {page === "Permit Activity" &&  <PermitActivityTable/>}
-      {page === "Permit Sub Activity" &&  <PermitSubActivityTable/>}
-      {page === "Permit Hazard Category" &&  <PermitHazardCategoryTable/>}
-      {page === "Permit Risk" &&  <PermitRiskTable/>} */}
+       {showEditModal && <EditStatusModal onClose={()=> setShowEditModal(false)} id={id} setStatusAdded={setStatusAdded}  />}
       </div>
     </div>
   );

@@ -53,11 +53,14 @@ const AddServicePR = () => {
     advanceAmount: "",
     relatedTo: "",
     approvedStatus: false,
+    attention: "",
+    subject: "",
+    description:"",
+    terms_and_conditions:"",
+    service_orders_attachfile:[]
   });
 
-  const handleDescriptionChange = (value) => {
-    setDescription(value);
-  };
+
   const handleInputChange = (e, index) => {
     const { name, value } = e.target;
     const updatedActivities = [...activities];
@@ -144,10 +147,31 @@ const AddServicePR = () => {
     ]);
   };
 
+  const handleFileChange = (files, fieldName) => {
+    
+    setFormData({
+      ...formData,
+      [fieldName]: files,
+    });
+    console.log(fieldName);
+  };
+
   const handleDeleteActivity = (index) => {
     const removeActivities = [...activities];
     removeActivities.splice(index, 1);
     setActivities(removeActivities);
+  };
+  const handleDescriptionChange = (value) => {
+    setFormData((prevData) => ({
+      ...prevData,
+      description: value,
+    }));
+  };
+  const handleTermsChange = (value) => {
+    setFormData((prevData) => ({
+      ...prevData,
+      terms_and_conditions: value,
+    }));
   };
 
   const handleRadioChange = (event) => {
@@ -219,56 +243,63 @@ const AddServicePR = () => {
     sendData.append("service_order[payment_tenure]", formData.paymentTenure);
     sendData.append("service_order[advance_amount]", formData.advanceAmount);
     sendData.append("service_order[related_to]", formData.relatedTo);
+    sendData.append("service_order[kind_attention]", formData.attention);
+    sendData.append("service_order[subject]", formData.subject);
+    sendData.append("service_order[description]", formData.description);
+    sendData.append("service_order[terms_and_conditions]", formData.terms_and_conditions);
+
     sendData.append("service_order[created_by_id]", UserId);
     sendData.append("service_order[reference]", formData.reference);
     // sendData.append("service_order[total_amount]", formData.)
     sendData.append("service_order[approved_status]", formData.approvedStatus);
+
+    formData.service_orders_attachfile.forEach((file)=>{
+      sendData.append("attachfiles[]", file)
+    })
     activities.forEach((item, index) => {
       sendData.append(
-        `service_order[loi_services][][service_detail_id]`,
+        `service_order[loi_service][][service_detail_id]`,
         selectedOption.value
       );
-      sendData.append(`service_order[loi_services][sac_code]`, item.SACCode);
-      sendData.append(`service_order[loi_services][][quantity]`, item.quantity);
+      sendData.append(`service_order[loi_service][][sac_code]`, item.SACCode);
+      sendData.append(`service_order[loi_service][][quantity]`, item.quantity);
       sendData.append(
-        `service_order[loi_services][][expected_date]`,
+        `service_order[loi_service][][expected_date]`,
         item.expectedDate
       );
-      // formData.attachments.forEach((file) => {
-      //   sendData.append("attachfiles[]", file);
-      // });
-      sendData.append(`service_order[loi_services][][uom]`, item.UOM);
-      sendData.append(`service_order[loi_services][][rate]`, item.rate);
+      
+      sendData.append(`service_order[loi_service][][uom]`, item.UOM);
+      sendData.append(`service_order[loi_service][][rate]`, item.rate);
       sendData.append(
-        `service_order[loi_services][][csgt_rate]`,
+        `service_order[loi_service][][csgt_rate]`,
         item.cgstRate
       );
       sendData.append(
-        `service_order[loi_services][][csgt_amt]`,
+        `service_order[loi_service][][csgt_amt]`,
         item.cgstAmount
       );
       sendData.append(
-        `service_order[loi_services][][sgst_rate]`,
+        `service_order[loi_service][][sgst_rate]`,
         item.sgstRate
       );
       sendData.append(
-        `service_order[loi_services][][sgst_amt]`,
+        `service_order[loi_service][][sgst_amt]`,
         item.sgstAmount
       );
       sendData.append(
-        `service_order[loi_services][][igst_rate]`,
+        `service_order[loi_service][][igst_rate]`,
         item.igstRate
       );
       sendData.append(
-        `service_order[loi_services][][igst_amt]`,
+        `service_order[loi_service][][igst_amt]`,
         item.igstAmount
       );
-      sendData.append(`service_order[loi_services][][tcs_rate]`, item.TCSRate);
-      sendData.append(`service_order[loi_services][][tcs_amt]`, item.TCSAmount);
-      sendData.append(`service_order[loi_services][][tax_amt]`, item.TaxAmount);
-      sendData.append(`service_order[loi_services][][amount]`, item.Amount);
+      sendData.append(`service_order[loi_service][][tcs_rate]`, item.TCSRate);
+      sendData.append(`service_order[loi_service][][tcs_amt]`, item.TCSAmount);
+      sendData.append(`service_order[loi_service][][tax_amt]`, item.TaxAmount);
+      sendData.append(`service_order[loi_service][][amount]`, item.Amount);
       sendData.append(
-        `service_order[loi_services][][total_amount]`,
+        `service_order[loi_service][][total_amount]`,
         item.Total
       );
     });
@@ -887,7 +918,9 @@ const AddServicePR = () => {
                   type="text"
                   id="kindAttention"
                   placeholder="kind Attention"
-                  name="kindAttention"
+                  value={formData.attention}
+                  name="attention"
+                  onChange={handleChange}
                   className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight mt-2 focus:outline-none focus:shadow-outline"
                 />
               </div>
@@ -902,11 +935,16 @@ const AddServicePR = () => {
                   placeholder="Subject"
                   type="text"
                   id="subject"
+                  value={formData.subject}
+                  onChange={handleChange}
                   name="subject"
                   className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight mt-2 focus:outline-none focus:shadow-outline"
                 />
               </div>
             </div>
+            <div className="flex flex-col gap-2">
+
+          
             <div className="mb-2">
               <label
                 className=" text-sm font-medium text-gray-700"
@@ -914,12 +952,13 @@ const AddServicePR = () => {
               >
                 Description
               </label>
-              <ReactQuill
-                value={description}
+              {/* <ReactQuill
+                value={formData.description}
                 onChange={handleDescriptionChange}
-                tyle={{ minHeight: "200px" }}
+                // style={{ height: '100px' }}
                 className="mt-1  w-full border-gray-300 rounded-md shadow-sm"
-              />
+              /> */}
+              <textarea name="description" onChange={handleChange} value={formData.description} id="" rows={4} className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight mt-2 focus:outline-none focus:shadow-outline"></textarea>
             </div>
             <div>
               <label
@@ -928,10 +967,13 @@ const AddServicePR = () => {
               >
                 Terms & Conditions
               </label>
-              <ReactQuill
-                // onChange={handleDescriptionChange}
+              {/* <ReactQuill
+                onChange={handleTermsChange}
+                value={formData.terms_and_conditions}
                 className="  w-full border-gray-300 mt-2  rounded-md shadow-sm"
-              />
+              /> */}
+               <textarea name="terms_and_conditions" onChange={handleChange} value={formData.terms_and_conditions} id="" rows={4} className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight mt-2 focus:outline-none focus:shadow-outline"></textarea>
+            </div>
             </div>
           </div>
           {/* </div> */}
@@ -939,7 +981,9 @@ const AddServicePR = () => {
             ATTACHMENTS
           </h3>
 
-          <FileInputBox />
+          <FileInputBox  handleChange={(files) => handleFileChange(files, "service_orders_attachfile")}
+                fieldName={"service_orders_attachfile"}
+                isMulti={true} />
 
           <div className="sm:flex justify-center grid gap-2 my-5 ">
             <button

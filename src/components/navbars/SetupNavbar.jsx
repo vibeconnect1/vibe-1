@@ -44,7 +44,7 @@ const SetupNavbar = () => {
         {/* <Link to={"/admin/fm-groups-setup"}  className="hover:bg-white hover:text-black  p-2 rounded-lg ">FM Groups</Link> */}
         {/* <Link to={"/admin/master-checklist-setup"} className="hover:bg-white hover:text-black  p-2 rounded-lg ">Master Checklist</Link> */}
         {feat.includes("purchase_order") && (  <Link to={"/admin/sac-hsn-setup"} className="hover:bg-white hover:text-black  p-2 rounded-lg ">SAC/HSN Setup</Link>)}
-        <Link  to={"/admin/addresses-setup"} className="hover:bg-white hover:text-black  p-2 rounded-lg ">Addresses</Link>
+        {feat.includes("purchase_order") && ( <Link  to={"/admin/addresses-setup"} className="hover:bg-white hover:text-black  p-2 rounded-lg ">Addresses</Link>)}
         {/* <Link className="hover:bg-white hover:text-black  p-2 rounded-lg ">Export</Link> */}
         {/* <Link to={"/setup/insights/"} className="hover:bg-white hover:text-black  p-2 rounded-lg ">Insights</Link> */}
         {/* <Link to={"/setup/permit-setup"} className="hover:bg-white hover:text-black  p-2 rounded-lg ">Permit</Link> */}

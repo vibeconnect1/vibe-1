@@ -15,13 +15,13 @@ import {
 } from "../../../api";
 import { IoClose } from "react-icons/io5";
 import toast from "react-hot-toast";
-const TicketSubCategory = ({ handleToggleCategoryPage1 }) => {
+const TicketSubCategory = ({ handleToggleCategoryPage1 , setCAtAdded }) => {
   //   const [faqs, setFaqs] = useState([{ question: '', answer: '' }]);
   const themeColor = useSelector((state) => state.theme.color);
   const [isModalOpen1, setIsModalOpen1] = useState(false);
   const openModal1 = () => setIsModalOpen1(true);
   const closeModal1 = () => setIsModalOpen1(false);
-  const [subCatAdded, setSubCatAdded] = useState(false)
+  
   const [isOpen, setIsOpen] = useState({
     building: false,
     wing: false,
@@ -87,7 +87,7 @@ const TicketSubCategory = ({ handleToggleCategoryPage1 }) => {
   };
   const [categories, setCategories] = useState([]);
   const [formData, setFormData] = useState({
-    category: "id",
+    category: "",
     subCategory: [],
   });
   useEffect(() => {
@@ -100,8 +100,8 @@ const TicketSubCategory = ({ handleToggleCategoryPage1 }) => {
       }
     };
     fetchCategory();
-  }, [subCatAdded]);
-  const handleAddSubCat = async() => {
+  }, []);
+  const handleAddSubCat = async () => {
     if (formData.category === "" || formData.subCategory.length === 0) {
       return toast.error("All fields are required!");
     }
@@ -111,20 +111,27 @@ const TicketSubCategory = ({ handleToggleCategoryPage1 }) => {
       "helpdesk_sub_category[helpdesk_category_id]",
       formData.category
     );
-    formData.subCategory.forEach((tag) => {
-      sendData.append("sub_category_tags[]", tag);
-    });
+    // formData.subCategory.forEach((tag) => {
+    //   sendData.append("sub_category_tags[]", tag);
+    // });
+    const subCategoryString = formData.subCategory.join(",");
+    sendData.append("sub_category_tags[]", subCategoryString);
 
     try {
-      const resp = await postHelpDeskSubCategoriesSetup(sendData)
-      console.log(resp)
-      toast.success("Sub Category Added Successfully")
-      setSubCatAdded(true)
+      const resp = await postHelpDeskSubCategoriesSetup(sendData);
+      console.log(resp);
+      toast.success("Sub Category Added Successfully");
+      setCAtAdded(true);
+      setFormData({
+        ...formData,
+        category:"",
+        subCategory:[]
+      })
     } catch (error) {
-      console.log(error)
-    }finally{
+      console.log(error);
+    } finally {
       setTimeout(() => {
-        setSubCatAdded(false)
+        setCAtAdded(false);
       }, 500);
     }
   };
@@ -140,14 +147,20 @@ const TicketSubCategory = ({ handleToggleCategoryPage1 }) => {
     }
   };
   console.log(formData);
-const handleChange = (e)=>{
-  setFormData({...formData, [e.target.name]: e.target.value})
-}
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
   return (
     <div className=" ">
       <div className="grid grid-cols-3 gap-2">
         <div className="flex flex-col gap-2">
-          <select type="text" className="border p-2 rounded-md" value={formData.category} onChange={handleChange} name="category">
+          <select
+            type="text"
+            className="border p-2 rounded-md"
+            value={formData.category}
+            onChange={handleChange}
+            name="category"
+          >
             <option value="">Select Category</option>
             {categories.map((category) => (
               <option value={category.id} key={category.id}>

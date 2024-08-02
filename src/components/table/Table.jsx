@@ -98,6 +98,9 @@ const Table = ({ columns, title, height, pagination= true, data, apiEndpoint, cu
     headCells: {
       style: {
         textTransform: "uppercase",
+         paddingLeft: '16px',
+        paddingRight: '16px',
+        width: "150px"
       },
     },
     // cells: {
@@ -112,6 +115,7 @@ const Table = ({ columns, title, height, pagination= true, data, apiEndpoint, cu
         whiteSpace: 'nowrap',
         fontWeight: "bold",
             fontSize: "10px",
+             width: "150px"
       },
     },
   };

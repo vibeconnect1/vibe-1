@@ -2660,7 +2660,7 @@ const TaskManagement = () => {
       return;
     }
   };
-
+  const [showTaskTitleMainDependency, setShowTaskTitleMainDependency] = useState([]);
   return (
     <section
       className="flex"
@@ -4387,6 +4387,7 @@ const TaskManagement = () => {
                       {showStatusChecklist1}{" "}
                     </p>
                   </div>
+                  <div className='font-medium text-sm mb-1'  style={{ cursor:"default"}} > Depend On : {showTaskTitleMainDependency} </div>
                   <div className="my-5">
                     <div>
                       <div className="border-b-2 border-white font-medium text-white">

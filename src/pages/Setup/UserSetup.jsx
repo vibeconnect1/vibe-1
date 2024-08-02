@@ -131,7 +131,7 @@ const UserSetup = () => {
   return (
     <section className="flex">
       <Navbar />
-      <div className="w-full flex mx-3 flex-col gap-4 overflow-hidden">
+      <div className="w-full flex mx-3 flex-col gap-4 overflow-hidden mb-5">
         <div className="mt-5 flex md:flex-row flex-col justify-between md:items-center gap-4">
           <input
             type="text"

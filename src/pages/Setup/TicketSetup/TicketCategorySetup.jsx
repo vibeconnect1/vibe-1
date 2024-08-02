@@ -11,6 +11,8 @@ import { FaAddressBook, FaTrash } from "react-icons/fa";
 import { FaTimes } from "react-icons/fa";
 import FileInputBox from "../../../containers/Inputs/FileInputBox";
 import {
+  deleteHelpDeskCategorySetup,
+ 
   editHelpDeskCategoriesSetupDetails,
   getHelpDeskCategoriesSetup,
   getHelpDeskCategoriesSetupDetails,
@@ -28,13 +30,12 @@ const TicketCategorySetup = () => {
   const [subCategories, setSubCategories] = useState([]);
   const themeColor = useSelector((state) => state.theme.color);
   const [isCatEditModalOpen, setIsCatEditModalOpen] = useState(false);
-
   const [formData, setFormData] = useState({
     category: "",
     minTat: "",
     engineer: "",
   });
-  // Function to toggle the visibility of the TicketCategoryPage component
+
   const handleToggleCategoryPage = () => {
     setShowCategoryPage((prevState) => !prevState);
   };
@@ -135,9 +136,10 @@ const TicketCategorySetup = () => {
     const fetchSubCategory = async () => {
       try {
         const subCatResp = await getHelpDeskSubCategoriesSetup();
-        console.log("get");
-        console.log(subCatResp);
-        setSubCategories(subCatResp.data.sub_categories);
+    const sortedSubCat = subCatResp.data.sub_categories.sort((a,b)=> {
+      return new Date(b.created_at) - new Date(a.created_at)
+    })
+        setSubCategories(sortedSubCat);
       } catch (error) {
         console.log(error);
       }
@@ -145,6 +147,37 @@ const TicketCategorySetup = () => {
     fetchCategory();
     fetchSubCategory();
   }, [catAdded]);
+
+  const handleCatDelete = async (id) => {
+    const formData = new FormData();
+    formData.append("helpdesk_category[active]", 0);
+    formData.append("id", id);
+    try {
+      const res = deleteHelpDeskCategorySetup(id, formData);
+      setCatAdded(true);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setTimeout(() => {
+        setCatAdded(false);
+      }, 500);
+    }
+  };
+  // const handleSubCatDelete = async (id) => {
+  //   const formData = new FormData();
+  //   formData.append("helpdesk_category[active]", 0);
+  //   formData.append("id", id);
+  //   try {
+  //     const res = deleteHelpDeskSubcategorySetup(formData);
+  //     setCatAdded(true);
+  //   } catch (error) {
+  //     console.log(error);
+  //   } finally {
+  //     setTimeout(() => {
+  //       setCatAdded(false);
+  //     }, 500);
+  //   }
+  // };
 
   const CatColumns = [
     {
@@ -186,7 +219,7 @@ const TicketCategorySetup = () => {
           <button onClick={() => openCatEditModal(row.id)}>
             <BiEdit size={15} />
           </button>
-          <button>
+          <button onClick={() => handleCatDelete(row.id)}>
             <FaTrash size={15} />
           </button>
         </div>
@@ -212,10 +245,10 @@ const TicketCategorySetup = () => {
   //custom style
 
   const [isModalOpen1, setIsModalOpen1] = useState(false);
-const [catId, setCatId] = useState(null)
+  const [catId, setCatId] = useState(null);
   const openCatEditModal = async (id) => {
     const fetchCatDetails = await getHelpDeskCategoriesSetupDetails(id);
-    setCatId(id)
+    setCatId(id);
     setFormData({
       ...formData,
       category: fetchCatDetails.data.name,
@@ -229,9 +262,13 @@ const [catId, setCatId] = useState(null)
 
   const subCatColumns = [
     {
+      name: "Sr.no.",
+      selector: (row, index) => index + 1,
+      sortable: true,
+    },
+    {
       name: "Category Type",
-      selector: (row) => row.helpdesk_category_name
-      ,
+      selector: (row) => row.helpdesk_category_name,
       sortable: true,
     },
     {
@@ -273,9 +310,9 @@ const [catId, setCatId] = useState(null)
           <button>
             <BiEdit size={15} />
           </button>
-          <button>
+          {/* <button>
             <FaTrash size={15} />
-          </button>
+          </button> */}
         </div>
       ),
     },
@@ -291,10 +328,10 @@ const [catId, setCatId] = useState(null)
     sendData.append("helpdesk_category[name]", formData.category);
     sendData.append("helpdesk_category[tat]", formData.minTat);
     try {
-      const resp = await editHelpDeskCategoriesSetupDetails(catId, sendData)
-      console.log(resp)
+      const resp = await editHelpDeskCategoriesSetupDetails(catId, sendData);
+      console.log(resp);
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
   };
   return (
@@ -364,6 +401,7 @@ const [catId, setCatId] = useState(null)
             {showSubCategoryPage && (
               <TicketSubCategory
                 handleToggleCategoryPage1={handleToggleCategoryPage1}
+                setCAtAdded={setCatAdded}
               />
             )}
             <Table

@@ -16,7 +16,7 @@ import { SendDueDateFormat } from "../../utils/dateUtils";
 import toast from "react-hot-toast";
 import { useSelector } from "react-redux";
 import { AiOutlineClose } from "react-icons/ai";
-import { getVibeUsers, postCalendarTask } from "../../api";
+import { getDependencies, getVibeUsers, postCalendarTask } from "../../api";
 
 function TaskSelf({ onClose }) {
   // const [modalTaskRepeatDaysIsOpen, setTaskRepeatDaysModalIsOpen] = useState('');
@@ -258,7 +258,47 @@ function TaskSelf({ onClose }) {
     );
   }
 
+  const [dependencyTaskTitle, setDependencyTaskTitle] = useState([]); 
+  const get_dependencies = async () => {
+    const board_id = localStorage.getItem('board_id');
+    console.log(`board id ${board_id}`)
+    const user_id = localStorage.getItem('VIBEUSERID');  
+    const org_id = localStorage.getItem('org_id');
+
+    try {
+    
+
+      const jsonData = await  getDependencies(user_id);
+
+      if (jsonData.success) {
+        const users = jsonData.data;
+        console.log('users');
+        console.log(users);
+        const assignEmails = users.map(user => ({
+          value: user.task_id,
+          label: user.task_topic,
+        }));
+
+       
+        setDependencyTaskTitle(jsonData.data);
+
+      } else {
+        console.log('Something went wrong');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  };
+  useEffect(() => {
+    
+    get_dependencies()
+  }, [setDependencyTaskTitle]);
+  const options = dependencyTaskTitle.map(task => ({
+    value: task.task_id,
+    label: task.task_topic
+  }));
   const createTask = async () => {
+    const valuesString = selectedTasks.map(task => task.value).join(',');
     console.log(taskTime);
     console.log(selectedWeekdays);
     console.log(repeatMeet);
@@ -317,7 +357,7 @@ function TaskSelf({ onClose }) {
       const mainWeek = selectedWeekdays.join(",");
       formData.append("included_weekdays", mainWeek);
       formData.append("repeat_task", repeatMeet);
-
+      formData.append('depend_on',valuesString);
       setIsCreatingTask(true);
       //   postDataToAPI(AddBoardChecklistTask, formData)
       //     .then((response) => {
@@ -542,7 +582,11 @@ function TaskSelf({ onClose }) {
       window.removeEventListener("resize", handleResize);
     };
   }, []);
-
+  const [selectedTasks, setSelectedTasks] = useState([]);
+  const handleChangeSelectTitle = (selectedOptions) => {
+    setSelectedTasks(selectedOptions);
+    console.log('Selected Tasks:', selectedOptions);
+  };
   return (
     <div>
       {modalTaskSelfIsOpen && <TaskSelf onClose={closeTaskSelf} />}
@@ -554,7 +598,7 @@ function TaskSelf({ onClose }) {
       <div className="  fixed inset-0 flex justify-center items-center bg-black bg-opacity-30 backdrop-blur-sm z-50 p-10 ">
         <div
           style={{ background: themeColor }}
-          className=" md:w-auto w-full  p-4 md:px-10  flex flex-col rounded-md  overflow-auto max-h-[100%] hide-scrollbar "
+          className=" md:w-auto w-full  p-4 md:px-10  flex flex-col rounded-md   max-h-[100%] hide-scrollbar "
         >
           <button
             className="place-self-end fixed p-1 rounded-full z-30  bg-white"
@@ -562,15 +606,16 @@ function TaskSelf({ onClose }) {
           >
             <AiOutlineClose size={20} />
           </button>
-          <div className="">
-            <div className="px-2">
-              <div>
-                <div>
+          <div className="overflow-auto hide-scrollbar mt-5">
+            <div className="px-2 hide-scrollbar">
+              <div className="hide-scrollbar">
+                <div className="hide-scrollbar" >
                   <div
                     style={{
                       overflowY: assignToOthers ? "scroll" : "scroll",
                       // , scrollbarWidth: 'thin'
                     }}
+                    className="hide-scrollbar"
                   >
                     <div
 
@@ -619,9 +664,10 @@ function TaskSelf({ onClose }) {
                               Task Topic
                             </label>
                             <label
-                              style={{ color: "#f44336", marginBottom: "0rem" }}
+                            className="text-red-500"
+                              style={{  marginBottom: "0rem" }}
                             >
-                              &nbsp; *{" "}
+                               *{" "}
                             </label>
                           </div>
                           <input
@@ -652,9 +698,10 @@ function TaskSelf({ onClose }) {
                               Due Date
                             </label>
                             <label
-                              style={{ color: "#f44336", marginBottom: "0rem" }}
+                             className="text-red-500"
+                              style={{  marginBottom: "0rem" }}
                             >
-                              &nbsp; *{" "}
+                               *{" "}
                             </label>
                           </div>
 
@@ -667,11 +714,13 @@ function TaskSelf({ onClose }) {
                             // customInput={<CustomInput />}
                             minDate={new Date()}
                             filterTime={filterTime}
-                            className="p-2 rounded-md outline-none"
+                            className="p-2 rounded-md outline-none w-full"
                             placeholderText="Select Date & Time"
                           />
                         </div>
                       </div>
+<div className="grid grid-cols-2 gap-2 items-center">
+
 
                       <div className="my-2 flex flex-col">
                         <label className="font-medium text-white ">
@@ -698,10 +747,11 @@ function TaskSelf({ onClose }) {
                         <input
                           style={{
                             border: "white dotted 2px",
-                            height: "100px",
+                            height: "75px",
                             color: "white",
-                            padding: "35px 65px",
+                          
                           }}
+                          className="rounded-md p-5 px-10"
                           ref={fileInputRef}
                           
                           type="file"
@@ -709,11 +759,49 @@ function TaskSelf({ onClose }) {
                           onChange={handleFileAttachment}
                         />
                       </div>
+                      </div>
+                      <div  class="grid grid-cols-2 items-center gap-2">
+                        <div>
 
+                       
+                  <label  className="text-white font-medium">Select Dependent Tasks :</label>
+   
+                  <Select
+                    isMulti
+                    value={selectedTasks}
+                    onChange={handleChangeSelectTitle}
+                    options={options}
+                    placeholder="Select tasks..."
+                    noOptionsMessage={() => "Tasks not available..."}
+                    styles={{
+                      placeholder: base => ({
+                        ...base,
+                        color: 'black'
+                      }),
+                      clearIndicator: base => ({
+                        ...base,
+                        color: 'red'
+                      }),
+                      dropdownIndicator: base => ({
+                        ...base,
+                        color: 'black'
+                      }),
+                      control: base => ({
+                        ...base,
+                        borderColor: 'darkblue'
+                      }),
+                      multiValueRemove: (base, { isFocused }) => ({
+                        ...base,
+                        color: isFocused ? 'red' : 'gray',
+                        backgroundColor: isFocused ? 'black' : 'lightgreen'
+                      })
+                    }}
+                    />
+                    </div>
                       {assignToOthers && (
-                        <div className="mt-2">
+                        <div className="">
                           <label className="font-medium text-white ">
-                            Assign
+                            Assign :
                           </label>
 
                           <Select
@@ -721,7 +809,7 @@ function TaskSelf({ onClose }) {
                             onChange={handleChangeSelect}
                             options={emails}
                             noOptionsMessage={() => "Email not available..."}
-                            maxMenuHeight={90}
+                            maxMenuHeight={100}
                             styles={{
                               placeholder: (baseStyles, state) => ({
                                 ...baseStyles,
@@ -751,6 +839,8 @@ function TaskSelf({ onClose }) {
                           />
                         </div>
                       )}
+                  </div>
+
 
                       {assignToOthers && (
                         <>

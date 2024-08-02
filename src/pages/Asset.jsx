@@ -98,6 +98,12 @@ const Asset = () => {
         </div>
       ),
     },
+    {
+      name: "Asset Name",
+      selector: (row) => row.name,
+      sortable: true,
+      width: "150px"
+    },
 
     {
       name: "Building",
@@ -108,11 +114,7 @@ const Asset = () => {
     { name: "Floor", selector: (row) => row.floor_name, sortable: true },
     { name: "Unit", selector: (row) => row.unit_name, sortable: true },
 
-    {
-      name: "Asset Name",
-      selector: (row) => row.name,
-      sortable: true,
-    },
+   
     {
       name: "OEM Name",
       selector: (row) => row.oem_name,

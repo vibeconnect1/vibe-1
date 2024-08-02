@@ -622,6 +622,37 @@ const Navbar = () => {
                     </h2>
                   </NavLink>
                 )}
+                {feat.includes("business_cards") && (
+                  <NavLink
+                    to={"/birthday"}
+                    className={({ isActive }) =>
+                      ` ${
+                        isActive
+                          ? "text-black bg-white flex p-2  gap-3.5 rounded-md group items-center text-sm font-medium"
+                          : " group flex items-center text-sm gap-3.5 font-medium p-2 hover:bg-gray-800 rounded-md "
+                      }`
+                    }
+                  >
+                    <div>
+                      {React.createElement(FaBirthdayCake, { size: "20" })}
+                    </div>
+
+                    <h2
+                      className={`whitespace-pre duration-300 ${
+                        !open && "opacity-0 translate-x-28 overflow-hidden"
+                      }`}
+                    >
+                      Birthday
+                    </h2>
+                    <h2
+                      className={`${
+                        open && "hidden"
+                      } absolute left-48 bg-white font-semibold whitespace-pre text-gray-900 rounded-md drop-shadow-lg px-0 py-0 w-0 overflow-hidden group-hover:px-2 group-hover:py-1 group-hover:left-14 group-hover:duration-300 group-hover:w-fit  `}
+                    >
+                      Birthday
+                    </h2>
+                  </NavLink>
+                )}
                 {feat.includes("vendors") && (
                   <NavLink
                     to={"/suppliers"}
@@ -837,37 +868,7 @@ const Navbar = () => {
                     </h2>
                   </NavLink>
                 )}
-                {feat.includes("business_cards") && (
-                  <NavLink
-                    to={"/admin/birthday"}
-                    className={({ isActive }) =>
-                      ` ${
-                        isActive
-                          ? "text-black bg-white flex p-2  gap-3.5 rounded-md group items-center text-sm font-medium"
-                          : " group flex items-center text-sm gap-3.5 font-medium p-2 hover:bg-gray-800 rounded-md "
-                      }`
-                    }
-                  >
-                    <div>
-                      {React.createElement(FaBirthdayCake, { size: "20" })}
-                    </div>
-
-                    <h2
-                      className={`whitespace-pre duration-300 ${
-                        !open && "opacity-0 translate-x-28 overflow-hidden"
-                      }`}
-                    >
-                      Birthday
-                    </h2>
-                    <h2
-                      className={`${
-                        open && "hidden"
-                      } absolute left-48 bg-white font-semibold whitespace-pre text-gray-900 rounded-md drop-shadow-lg px-0 py-0 w-0 overflow-hidden group-hover:px-2 group-hover:py-1 group-hover:left-14 group-hover:duration-300 group-hover:w-fit  `}
-                    >
-                      Birthday
-                    </h2>
-                  </NavLink>
-                )}
+                
 
                 {feat.includes("fnb") && (
                   <NavLink
@@ -1906,9 +1907,9 @@ const Navbar = () => {
                     </h2>
                   </NavLink>
                 )}
-                {feat.includes("business_cards") && (
+               {feat.includes("business_cards") && (
                   <NavLink
-                    to={"/employee/birthday"}
+                    to={"/birthday"}
                     className={({ isActive }) =>
                       ` ${
                         isActive

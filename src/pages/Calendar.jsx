@@ -14,6 +14,7 @@ import {
   getVibeUsers,
   postCalendarTask,
   postNewCalendarEvent,
+  postOutlookAuth,
 } from "../api";
 import { getItemInLocalStorage } from "../utils/localStorage";
 import "./style/Calendar.css";
@@ -1226,6 +1227,79 @@ const Calender = () => {
       window.location.reload();
     }
   };
+  const signInOutlook = async () => {
+    try {
+      const loginUrl =
+        "https://vibecopilot.ai/api/outlook-login/?from_local=true&redirect_to=calender";
+
+      window.location.href = loginUrl;
+      getQueryParam();
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+  const getQueryParam = (name) => {
+    const urlSearchParams = new URLSearchParams(window.location.search);
+    return urlSearchParams.get(name);
+  };
+  const codeParameter = getQueryParam("code");
+  const exchangeCodeForAccessToken = async (code) => {
+    console.log(code);
+    try {
+     
+      const redirectUri = "https://vibecopilot.ai/employee/calender";
+      const apiUrl = `https://vibecopilot.ai/api/get-outlook-token/?code=${code}&redirect_uri=${redirectUri}`;
+
+      const response = await fetch(apiUrl);
+
+      if (response.status === 200) {
+        const data = await response.json();
+        console.log(data.data.access_token);
+        console.log(data);
+        const accessToken = data.data.access_token;
+        console.log("Access Token:", accessToken);
+        // You can use the 'accessToken' for further requests.
+        // AddMetaAuthData()
+        AddOutlookAuthData(accessToken, "Outlook", 3, userPictureUrl);
+      } else {
+        console.error("Failed to fetch access token. Status:", response.status);
+      }
+    } catch (error) {
+      console.error("Error fetching access token:", error);
+    }
+  };
+  const AddOutlookAuthData = async (token, platform, id, userPictureUrl) => {
+    console.log(token);
+    const formData = new FormData();
+    formData.append("user_id", user_id);
+    formData.append("token", token);
+    formData.append("metaplatform", platform);
+    formData.append("outlook_id", id);
+    formData.append("profile_picture_url", userPictureUrl);
+    try {
+      const res = await  postOutlookAuth(formData);
+
+      if (res.success) {
+        console.log("Success");
+        //   window.location.href='http://localhost:3000/employee/outlook';
+        window.location.href = "https://vibecopilot.ai/employee/calender";
+      }
+    } catch (error) {
+      //toast.error('Please Check Your Internet , Try again! ', { position: "top-center", autoClose: 2000 })
+    } finally {
+    }
+  };
+  useEffect(() => {
+    if (codeParameter) {
+      // Call exchangeCodeForAccessToken if the 'code' parameter is present
+      exchangeCodeForAccessToken(codeParameter);
+    }
+  }, [codeParameter]);
+  const syncWithOutlook = () => {
+    // Add logic to sync with Outlook
+    console.log("Syncing with Outlook...");
+    signInOutlook();
+  };
   return (
     <section className="flex relative">
       <Navbar />
@@ -1279,10 +1353,10 @@ const Calender = () => {
                 text: `My Calendar`,
                 click: function (event) {
                   const rect = event.currentTarget.getBoundingClientRect();
-                  setDropdownPosition({
-                    top: rect.bottom - 0,
-                    left: rect.left - 0,
-                  });
+                  // setDropdownPosition({
+                  //   top: rect.bottom - 0,
+                  //   left: rect.left - 0,
+                  // });
                   setIsListOpen((prevState) => !prevState);
                 },
               },
@@ -1354,7 +1428,7 @@ const Calender = () => {
                 display: "block",
               }}
             >
-              <li>
+              <li className="m-2">
                 <a
                   className="hover:text-gray-500"
                   href="#"
@@ -1367,7 +1441,7 @@ const Calender = () => {
                   <label className="cursor-pointer">Sync Outlook</label>
                 </a>
               </li>
-              <li>
+              <li className="mx-2">
                 <a
                   className="hover:text-gray-500"
                   href="#"
@@ -1382,21 +1456,21 @@ const Calender = () => {
               </li>
             </ul>
           </div>
-        </div>
         {isListOpen && (
           <div
             ref={dropdownRef}
             style={{
               position: "absolute",
-              top: `${dropdownPosition.top}px`,
-              left: `${dropdownPosition.left}px`,
-              zIndex: 1000,
+              // top: `${dropdownPosition.top}px`,
+              // left: `${dropdownPosition.left}px`,
+              right: "245px",
+              top: "130px",
               // width: 150,
               // padding: "5px",
               borderRadius: 4,
               background: "white",
             }}
-            className="shadow-custom-all-sides w-auto px-4 my-1"
+            className="shadow-custom-all-sides w-auto px-4 my-1 z-20"
             aria-labelledby="dropdownMenu2"
           >
             {Object.keys(selectedCategories).map((category) => (
@@ -1416,6 +1490,7 @@ const Calender = () => {
             ))}
           </div>
         )}
+        </div>
         {/* modal */}
         {popupDate && (
           <div className="  fixed inset-0 flex justify-center items-center bg-black bg-opacity-30 backdrop-blur-sm z-50 p-10 ">

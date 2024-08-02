@@ -3,10 +3,11 @@
 import React, { useState } from 'react';
 import { IoAddCircle } from 'react-icons/io5';
 import ModalWrapper from './ModalWrapper';
+import { getItemInLocalStorage } from '../../utils/localStorage';
 
 const ImportAssetModal = ({ onClose }) => {
   const [file, setFile] = useState(null);
-
+const token = getItemInLocalStorage("TOKEN")
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -17,18 +18,17 @@ const ImportAssetModal = ({ onClose }) => {
 
     const formData = new FormData();
     formData.append('file', file);
-    formData.append('utf8', '✓');
-    formData.append('authenticity_token', 'FLtfXHPj0C0KSMMFaa8iowACNVJZP5erTte5NUQYtrwqE9FJl9zYzqK+/kda5x4NFP2RQiggWqnMuVVOhodnJQ==');
+    // formData.append('utf8', '✓');
+    // formData.append('authenticity_token', token);
 
     try {
-      const response = await fetch('http://13.215.74.38/site_assets/import', {
+      const response = await fetch(`http://admin.vibecopilot.ai/site_assets/import/?token=${token}`, {
         method: 'POST',
         body: formData,
       });
 
       if (response.ok) {
         alert('File uploaded successfully.');
-        // Handle successful upload (e.g., close the modal)
         onClose();
       } else {
         alert('File upload failed.');
@@ -77,7 +77,7 @@ const ImportAssetModal = ({ onClose }) => {
               download="assets_import.xlsx"
               target="_blank"
               className="bg-black p-1 px-4 border-2 rounded-md text-white font-medium border-black hover:bg-white hover:text-black transition-all duration-300"
-              href="/assets/assets_import.xlsx"
+              href="http://admin.vibecopilot.ai/assets/assets_import.xlsx"
             >
               Download Sample Format
             </a>
