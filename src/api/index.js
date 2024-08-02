@@ -171,6 +171,12 @@ export const getHelpDeskSubCategoriesSetup = async () =>
       token: token,
     },
   });
+export const getHelpDeskSubCategoriesSetupDetails = async (id) =>
+  axiosInstance.get(`/pms/admin/get_sub_categories/${id}.json`, {
+    params: {
+      token: token,
+    },
+  });
 export const getHelpDeskStatusSetup = async () =>
   axiosInstance.get(`/pms/admin/helpdesk_categories/complaint_statuses.json`, {
     params: {
@@ -1208,7 +1214,7 @@ export const UpdateVibeTask = async (data) => {
 export const getVibeMyBoardTask = async (userId) => {
   try {
     const response = await vibeAuth.get(
-      `/api/employee/my_board/get-task/?user_id=${userId}`,
+      `/api/v1/employee/my_board/get-task/?user_id=${userId}`,
 
       {
         headers: {
@@ -2145,6 +2151,40 @@ export const deleteVibeUserBirthday = async (userId, BdId) => {
     return response.data;
   } catch (error) {
     console.error("Error deleting birthday :", error);
+    throw error;
+  }
+};
+export const postVibeTaskComment = async (data) => {
+  try {
+    const response = await vibeAuth.post(
+      `/api/v1/employee/task/add-comment/`,
+     data,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error Creating Comment :", error);
+    throw error;
+  }
+};
+export const getVibeMainTaskDependencies = async (userId,taskId) => {
+  try {
+    const response = await vibeAuth.get(
+      `/api/v1/employee/task/get-depend_on/?user_id=${userId}&task_id=${taskId}`,
+     
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error getting dependent task :", error);
     throw error;
   }
 };

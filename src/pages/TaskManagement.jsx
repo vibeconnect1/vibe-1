@@ -43,6 +43,7 @@ import {
   getVibeActionAndChat,
   getVibeBackground,
   getVibeComments,
+  getVibeMainTaskDependencies,
   getVibeMedia,
   getVibeMyBoardTask,
   getVibeStatus,
@@ -53,6 +54,7 @@ import {
   getVibeUsers,
   postVibeChecklist,
   postVibeTaskChat,
+  postVibeTaskComment,
   requestVibeDueDate,
   updateSalesView,
   updateSubTaskChild,
@@ -557,8 +559,8 @@ const TaskManagement = () => {
         console.log("unable to update");
       }
     } catch (error) {
-      console.log(error)
-    }finally{
+      console.log(error);
+    } finally {
       setTimeout(() => {
         setUpdateEffect(false);
       }, 500);
@@ -1063,7 +1065,7 @@ const TaskManagement = () => {
       console.error("Error:", error);
     }
   };
-
+  const [currentTaskId, setCurrentTaskId] = useState(null);
   const openChatModal = (
     taskId,
     createdFirst,
@@ -1077,7 +1079,8 @@ const TaskManagement = () => {
     const targetDate = new Date(dateTimeString);
 
     // const formattedDate = targetDate.toLocaleString(); // Adjust the formatting as needed
-
+    const actualTaskId = taskId.split("_")[1];
+    setCurrentTaskId(actualTaskId);
     setCreatedFirstName(createdFirst);
     setCreatedSecondName(createdSecond);
     setCreatedDate(createdDate);
@@ -1092,6 +1095,7 @@ const TaskManagement = () => {
     console.log("oko ok koo ");
     Get_Task_Attachment(taskId.split("_")[1]);
     Get_Checklist_Task(taskId.split("_")[1]);
+    get_Maintask_data_dependencies(actualTaskId);
     Get_SubChecklist_Task(taskId.split("_")[1]);
     Get_Chat_nd_Activities(taskId.split("_")[1]);
     setTaskIdForTaskCheckList(taskId.split("_")[1]);
@@ -2329,7 +2333,6 @@ const TaskManagement = () => {
     if (!newStatusSubCheckChild.value) {
       newStatusSubCheckChild.value = taskStatus;
     }
-   
 
     const formData = new FormData();
     formData.append("user_id", user_id);
@@ -2426,6 +2429,29 @@ const TaskManagement = () => {
       );
     }
   }, [usersAssignBoardSubTaskChild]);
+
+  const send_Comment = async (comment) => {
+    setAddComent("");
+    console.log("Sending Comment:", comment);
+
+    const formData = new FormData();
+    formData.append("task_id", taskid);
+    formData.append("user_id", user_id);
+    formData.append("comment", comment);
+
+    try {
+      const res = await postVibeTaskComment(formData);
+
+      if (res.success) {
+        console.log("success");
+        GetComment(taskid);
+      }
+    } catch (error) {
+      // toast.error('Please Check Your Internet , Try again! ',{position: "top-center",autoClose: 2000})
+    } finally {
+    }
+  };
+
   const closeModalSubTaskAssignChild = () => {
     setSelectedEmailSubTaskAssignChild(null);
     setIsModalOpenSubTaskAssignChild(false);
@@ -2558,45 +2584,47 @@ const TaskManagement = () => {
 
   function openModalDeleteTaskCheckListSubtaskChild(taskChildId, event) {
     event.stopPropagation();
-    
+
     setTaskDeleteIDCheckListSubtaskChild(taskChildId);
     setIsModalOpenDeleteTaskCheckListSubtaskChild(true);
   }
   function closeModalDeleteTaskCheckListSubtaskChild() {
     setIsModalOpenDeleteTaskCheckListSubtaskChild(false);
   }
-  const handleDeleteTaskCheckListSubtaskChild = async() => {
-   
+  const handleDeleteTaskCheckListSubtaskChild = async () => {
     // deleteDataFromAPI(
     //   `${DeleteTaskCheckListSubTask_Child}?task_child_id=${taskDeleteIDCheckListSubtaskChild}&user_id=${user_id}`
     // )
     //   .then((res) => {
-      const res = await deleteTaskChecklistSubTaskChild(taskDeleteIDCheckListSubtaskChild, user_id)
-        // if (res.success) {
-        //   // window.location.reload();
-        //   toast.info("Task has been moved to Trash", {
-        //     position: "top-center",
-        //     autoClose: 2000,
-        //   });
-        //   console.log("Task deleted successfully");
-        //   
-        //   Get_SubChecklist_Task(taskid);
-        // } else {
-        //   if (res.success === false)
-        //     toast.error("Task has been Failed to delete task");
-        //   // window.location.reload();
-        //   closeModalDeleteTaskCheckListSubtaskChild();
-        //   console.error("Failed to delete task.");
-        //   Get_SubChecklist_Task(taskid);
-        // }
-        toast.success("Task Deleted Successfully");
-        setIsModalOpenDeleteTask(false);
-        closeModalDeleteTaskCheckListSubtaskChild();
-        Get_SubChecklist_Task(taskid);
-      // })
-      // .catch((error) => {
-      //   console.error("An error occurred:", error);
-      // });
+    const res = await deleteTaskChecklistSubTaskChild(
+      taskDeleteIDCheckListSubtaskChild,
+      user_id
+    );
+    // if (res.success) {
+    //   // window.location.reload();
+    //   toast.info("Task has been moved to Trash", {
+    //     position: "top-center",
+    //     autoClose: 2000,
+    //   });
+    //   console.log("Task deleted successfully");
+    //
+    //   Get_SubChecklist_Task(taskid);
+    // } else {
+    //   if (res.success === false)
+    //     toast.error("Task has been Failed to delete task");
+    //   // window.location.reload();
+    //   closeModalDeleteTaskCheckListSubtaskChild();
+    //   console.error("Failed to delete task.");
+    //   Get_SubChecklist_Task(taskid);
+    // }
+    toast.success("Task Deleted Successfully");
+    setIsModalOpenDeleteTask(false);
+    closeModalDeleteTaskCheckListSubtaskChild();
+    Get_SubChecklist_Task(taskid);
+    // })
+    // .catch((error) => {
+    //   console.error("An error occurred:", error);
+    // });
   };
   const handleOnDownload = async (downloadUrl) => {
     try {
@@ -2643,24 +2671,56 @@ const TaskManagement = () => {
     }
   };
 
-  const handleRemoveFile = async(attachment_id, task_id) => {
+  const handleRemoveFile = async (attachment_id, task_id) => {
     if (attachment_id != "No") {
-    try {
-      
-        const res = await deleteVibeTaskAttachment(attachment_id, task_id)
-          
-            setFiles(res.attachments);
-         
-    } catch (error) {
-      console.log(error)
-    }
-        
-      
+      try {
+        const res = await deleteVibeTaskAttachment(attachment_id, task_id);
+
+        setFiles(res.attachments);
+      } catch (error) {
+        console.log(error);
+      }
     } else {
       return;
     }
   };
-  const [showTaskTitleMainDependency, setShowTaskTitleMainDependency] = useState([]);
+  const [showTaskTitleMainDependency, setShowTaskTitleMainDependency] =
+    useState([]);
+  const [selectedMainTasks, setSelectedMainTasks] = useState([]);
+  const [dependencyMainTask, setDependencyMainTask] = useState([]); 
+  const get_Maintask_data_dependencies = async (currentTaskId) => {
+    try {
+      const jsonData = await getVibeMainTaskDependencies(
+        user_id,
+        currentTaskId
+      );
+
+      if (jsonData.success) {
+        const users = jsonData.data;
+        console.log("users");
+        console.log(users);
+
+        const dependencies = jsonData.data;
+        console.log("dependencies:", dependencies);
+
+        const formattedDependencies = dependencies.map((dependency) => ({
+          value: dependency.task_id,
+          label: dependency.task_topic,
+        }));
+
+        setSelectedMainTasks(formattedDependencies);
+        setDependencyMainTask(dependencies);
+
+        const assignedTopics = dependencies.map((task) => task.task_topic);
+        setShowTaskTitleMainDependency(assignedTopics.join(", "));
+        console.log("test",assignedTopics.join(", "))
+      } else {
+        console.log("Something went wrong");
+      }
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
   return (
     <section
       className="flex"
@@ -2804,7 +2864,6 @@ const TaskManagement = () => {
           </div>
           {activeView === "Kanban" && (
             <section
-           
               // scrollable-content section-table-height
               className="h-full overflow-x-auto scroll  rounded-md "
             >
@@ -3168,7 +3227,6 @@ const TaskManagement = () => {
                                 ))}
                                 {provided.placeholder}
                               </div>
-                              
 
                               {section.fixed_state === "Pending" && (
                                 <>
@@ -3269,8 +3327,6 @@ const TaskManagement = () => {
                   overflow: "auto",
                 }}
               >
-                
-
                 <hr className="m-0" />
                 <DragDropContext onDragEnd={onDragEndTask}>
                   <div
@@ -3544,7 +3600,7 @@ const TaskManagement = () => {
                               ))}
                               {provided.placeholder}
                             </div>
-                           
+
                             {section.fixed_state === "Pending" && (
                               <>
                                 {(() => {
@@ -3623,9 +3679,7 @@ const TaskManagement = () => {
         />
       )}
 
-    
       {isModalChatOpen && (
-        
         <div className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-30 backdrop-blur-sm z-50 p-10">
           <div
             style={{ background: themeColor }} // Replace with your theme color
@@ -3650,7 +3704,6 @@ const TaskManagement = () => {
                   marginRight: "1%",
                 }}
               >
-               
                 <div
                   className=" "
                   style={{
@@ -4380,14 +4433,39 @@ const TaskManagement = () => {
                   >
                     {" "}
                     <p>Assign To :</p>
-                    <p className="cols-span-4 font-normal"  style={{
-                                          overflowWrap: "break-word",
-                                          maxWidth: "350px",
-                                        }}>
+                    <p
+                      className="cols-span-4 font-normal"
+                      style={{
+                        // overflowWrap: "break-word",
+                        maxWidth: "350px",
+                      }}
+                    >
                       {showStatusChecklist1}{" "}
                     </p>
                   </div>
-                  <div className='font-medium text-sm mb-1'  style={{ cursor:"default"}} > Depend On : {showTaskTitleMainDependency} </div>
+                  <div
+                    className="font-medium grid md:grid-cols-4 text-sm"
+                    style={{ cursor: "default" }}
+                  >
+                    {" "}
+                    <p> Depend On :</p>
+                    <p
+                      className="cols-span-3 font-normal"
+                      style={{
+                        // overflowWrap: "break-word",
+                        // maxWidth: "350px",
+                      }}
+                    >
+                      {showTaskTitleMainDependency}{" "}
+                    </p>
+                  </div>
+                  {/* <div
+                    className="font-medium text-sm mb-1"
+                    style={{ cursor: "default" }}
+                  >
+                    {" "}
+                    Depend On : {showTaskTitleMainDependency}{" "}
+                  </div> */}
                   <div className="my-5">
                     <div>
                       <div className="border-b-2 border-white font-medium text-white">
@@ -4576,8 +4654,7 @@ const TaskManagement = () => {
                             )}
                           </div>
                         </div>
-                       
-      
+
                         {/* <Modal
                       isOpen={isModalOpenCheck}
                       onRequestClose={closeModalCheck}
@@ -4804,13 +4881,10 @@ const TaskManagement = () => {
                                 style={{ display: "flex" }}
                               >
                                 {createdBy_id === user_id ||
-                                subCheck.created_by.user_id ===
-                                  user_id ||
+                                subCheck.created_by.user_id === user_id ||
                                 (Array.isArray(selectedEmail) &&
                                   selectedEmail.some(
-                                    (item) =>
-                                      item.value ===
-                                      user_id
+                                    (item) => item.value === user_id
                                   )) ? (
                                   <span
                                     className="flex items-center gap-2"
@@ -4845,11 +4919,7 @@ const TaskManagement = () => {
                                       cursor: "pointer",
                                     }}
                                   >
-                                    <FaRegCalendarAlt
-                                      style={{
-                                      
-                                      }}
-                                    />{" "}
+                                    <FaRegCalendarAlt style={{}} />{" "}
                                     {subCheck.due_date
                                       ? ShowFormatedDueDateOnDateField(
                                           subCheck.due_date
@@ -4876,21 +4946,15 @@ const TaskManagement = () => {
                                 ) : (
                                   <></>
                                 )}
-                               
-                               
                                 &nbsp; &nbsp; &nbsp;
-                                {subCheck.created_by.user_id ===
-                                  user_id ||
+                                {subCheck.created_by.user_id === user_id ||
                                 createdBy_id === user_id ||
                                 subCheck.assign_to.some(
-                                  (assignee) =>
-                                    assignee.user_id === user_id
+                                  (assignee) => assignee.user_id === user_id
                                 ) ||
                                 (Array.isArray(selectedEmail) &&
                                   selectedEmail.some(
-                                    (item) =>
-                                      item.value ===
-                                      user_id
+                                    (item) => item.value === user_id
                                   )) ? (
                                   <div
                                     className={
@@ -4954,7 +5018,6 @@ const TaskManagement = () => {
                                     {subCheck.status.status_name}
                                   </div>
                                 )}
-                               
                               </div>
                               <div className="mt-1" style={{ display: "flex" }}>
                                 <>
@@ -5007,7 +5070,6 @@ const TaskManagement = () => {
                                 {subCheck.created_by.user_id.toString() ===
                                 user_id.toString() ? (
                                   <>
-                                  
                                     <FaTrashAlt
                                       title="Delete SubTask"
                                       className="mt-1 cursor-pointer "
@@ -5066,16 +5128,12 @@ const TaskManagement = () => {
                                       style={{ display: "flex" }}
                                     >
                                       {createdBy_id === user_id ||
-                                      sublist.created_by.user_id ===
-                                        user_id ||
+                                      sublist.created_by.user_id === user_id ||
                                       (Array.isArray(selectedEmail) &&
                                         selectedEmail.some(
-                                          (item) =>
-                                            item.value ===
-                                            user_id
+                                          (item) => item.value === user_id
                                         )) ? (
                                         <span
-                                          
                                           className="flex items-center gap-2 cursor-pointer "
                                           onClick={(e) => {
                                             e.stopPropagation();
@@ -5095,7 +5153,7 @@ const TaskManagement = () => {
                                         </span>
                                       ) : (
                                         <span
-                                         className="flex items-center gap-2"
+                                          className="flex items-center gap-2"
                                           onClick={(e) => {
                                             e.stopPropagation();
                                           }}
@@ -5188,8 +5246,6 @@ const TaskManagement = () => {
                                         Assign to : {"  "}
                                       </div>
 
-
-
                                       <div
                                         className=""
                                         style={{
@@ -5214,22 +5270,20 @@ const TaskManagement = () => {
                                           : "Not Assigned"}
                                       </div>
                                       <div className="flex justify-end w-full">
-
-                                      <FaTrashAlt
-                                        className="text-red-400"
-                                        title="Delete"
-                                        onClick={(event) =>
-                                          openModalDeleteTaskCheckListSubtaskChild(
-                                            sublist.id,
-                                            event
-                                          )
-                                        }
+                                        <FaTrashAlt
+                                          className="text-red-400"
+                                          title="Delete"
+                                          onClick={(event) =>
+                                            openModalDeleteTaskCheckListSubtaskChild(
+                                              sublist.id,
+                                              event
+                                            )
+                                          }
                                         />
-                                        </div>
                                       </div>
                                     </div>
                                   </div>
-                               
+                                </div>
                               ))}
                               <div className="">
                                 {createdBy_id === user_id || //task created by
@@ -5272,31 +5326,31 @@ const TaskManagement = () => {
                                 ) : (
                                   <div className="flex justify-between items-center">
                                     <div className="flex items-center gap-2 w-full">
-                                    <FaPlusCircle
-                                      style={{
-                                        color: "#cdcdcd",
-                                        marginRight: 4,
-                                      }}
-                                    />
-                                    <input
-                                      spellCheck="true"
-                                      type="text"
-                                      className="w-full px-2 outline-none bg-transparent border-b border-gray-400 mr-2"
-                                      onChange={(e) =>
-                                        handleInputChange(
-                                          subIndex,
-                                          e.target.value
-                                        )
-                                      }
-                                      value={newSubtasksChild[subIndex]}
-                                      placeholder="Add Task"
-                                      
-                                      title="Add Subtask Task"
-                                    />
+                                      <FaPlusCircle
+                                        style={{
+                                          color: "#cdcdcd",
+                                          marginRight: 4,
+                                        }}
+                                      />
+                                      <input
+                                        spellCheck="true"
+                                        type="text"
+                                        className="w-full px-2 outline-none bg-transparent border-b border-gray-400 mr-2"
+                                        onChange={(e) =>
+                                          handleInputChange(
+                                            subIndex,
+                                            e.target.value
+                                          )
+                                        }
+                                        value={newSubtasksChild[subIndex]}
+                                        placeholder="Add Task"
+                                        title="Add Subtask Task"
+                                      />
                                     </div>
-                                    <button  className="bg-white text-black px-2 shadow-custom-all-sides rounded-md">Add</button>
+                                    <button className="bg-white text-black px-2 shadow-custom-all-sides rounded-md">
+                                      Add
+                                    </button>
                                   </div>
-                                  
                                 )}
                               </div>
                             </div>
@@ -5304,10 +5358,15 @@ const TaskManagement = () => {
                         </div>
                       </div>
                     ))}
-                      {isModalOpenDeleteTaskCheckListSubtaskChild &&
-          <DeleteTaskModal title={"Do you want to Delete Task?"} handleDeleteTask={() => handleDeleteTaskCheckListSubtaskChild()} onclose={closeModalDeleteTaskCheckListSubtaskChild} />
-        
-        }
+                    {isModalOpenDeleteTaskCheckListSubtaskChild && (
+                      <DeleteTaskModal
+                        title={"Do you want to Delete Task?"}
+                        handleDeleteTask={() =>
+                          handleDeleteTaskCheckListSubtaskChild()
+                        }
+                        onclose={closeModalDeleteTaskCheckListSubtaskChild}
+                      />
+                    )}
 
                     {isModalOpenSubCheckChild && (
                       <div className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-30 backdrop-blur-sm z-50  ">
@@ -5907,102 +5966,95 @@ const TaskManagement = () => {
                         </>
                       ) : (
                         <>
-                        <div className="flex items-center gap-2 w-full ">
-                          <FaPlusCircle
-                            style={{ color: "#cdcdcd", marginRight: 4 }}
-                          />
-                          <input
-                            spellCheck="true"
-                            type="text"
-                            className="w-full bg-transparent mr-4 outline-none border-b border-gray-400"
-                            // onKeyPress={Add_Checklist_Subtask}
-                            onChange={(e) => {
-                              setNewSubtasks(e.target.value);
-                            }}
-                            value={newSubtasks}
-                            placeholder="Add New Subtask "
-                           
-                            title="Add New Subtask"
-                          />
-                          <button
-                            // className={`pr-2 pl-2 ${
-                            //   isDisabledSub ? "button-disabled" : ""
-                            // }`}
-                            style={{ color: "#fff" }}
-                          >
-                            Add
-                          </button>
+                          <div className="flex items-center gap-2 w-full ">
+                            <FaPlusCircle
+                              style={{ color: "#cdcdcd", marginRight: 4 }}
+                            />
+                            <input
+                              spellCheck="true"
+                              type="text"
+                              className="w-full bg-transparent mr-4 outline-none border-b border-gray-400"
+                              // onKeyPress={Add_Checklist_Subtask}
+                              onChange={(e) => {
+                                setNewSubtasks(e.target.value);
+                              }}
+                              value={newSubtasks}
+                              placeholder="Add New Subtask "
+                              title="Add New Subtask"
+                            />
+                            <button
+                              // className={`pr-2 pl-2 ${
+                              //   isDisabledSub ? "button-disabled" : ""
+                              // }`}
+                              style={{ color: "#fff" }}
+                            >
+                              Add
+                            </button>
                           </div>
                         </>
                       )}
                     </div>
                   </div>
                   <div className="">
-                
-                  <div
-                    className="border-b-2 border-white "
-                    
-                  >
-                    <span>Attachment</span>
-                  </div>
-                
-                
-                {/* {fileName && */}
-                {files.map((file, index) => (
-                  <div key={index} className="flex justify-between my-2">
-                  
-
-                    <div >
-                      {file.attachment && file.attachment.includes("/")
-                        ? file.attachment.split("/")[3]
-                        : file.name}
+                    <div className="border-b-2 border-white ">
+                      <span>Attachment</span>
                     </div>
-                    <div className="flex gap-2">
-                      <FaDownload
-                        className="mr-3 cursor-pointer"
-                        onClick={() =>
-                          handleOnDownload(`https://vibecopilot.ai/api/media/${file.attachment}`)
-                        }
-                        title="Download Attachments"
+
+                    {/* {fileName && */}
+                    {files.map((file, index) => (
+                      <div key={index} className="flex justify-between my-2">
+                        <div>
+                          {file.attachment && file.attachment.includes("/")
+                            ? file.attachment.split("/")[3]
+                            : file.name}
+                        </div>
+                        <div className="flex gap-2">
+                          <FaDownload
+                            className="mr-3 cursor-pointer"
+                            onClick={() =>
+                              handleOnDownload(
+                                `https://vibecopilot.ai/api/media/${file.attachment}`
+                              )
+                            }
+                            title="Download Attachments"
+                          />
+                          {/* {file.created_by.toString() === user_id.toString() ?<> */}
+                          <FaTrashAlt
+                            className="cursor-pointer"
+                            onClick={() =>
+                              handleRemoveFile(file.id ? file.id : "No", taskid)
+                            }
+                            title="Delete"
+                          />
+                          {/* </>:<></>} */}
+                        </div>
+                      </div>
+                    ))}
+
+                    <div className="flex items-center my-2 gap-2">
+                      <FaSearchPlus
+                        className="col-md-1 mt-1"
+                        onClick={handleIconClicks}
                       />
-                      {/* {file.created_by.toString() === user_id.toString() ?<> */}
-                      <FaTrashAlt
-                      className="cursor-pointer"
-                        onClick={() =>
-                          handleRemoveFile(file.id ? file.id : "No", taskid)
-                        }
-                        title="Delete"
+                      <div
+                        className="cursor-pointer"
+                        style={{ color: "#cdcdcd" }}
+                        onClick={handleIconClicks}
+                      >
+                        {" "}
+                        Add Attachment{" "}
+                      </div>
+
+                      <input
+                        type="file"
+                        ref={fileInput}
+                        style={{ display: "none" }}
+                        placeholder="select file"
+                        onChange={(event) => handleFileChange(taskid, event)}
+                        multiple
                       />
-                      {/* </>:<></>} */}
                     </div>
                   </div>
-                ))}
-
-                <div
-                  className="flex items-center my-2 gap-2"
-                 
-                >
-                  <FaSearchPlus
-                    className="col-md-1 mt-1"
-                    onClick={handleIconClicks}
-                  />
-                  <div className="cursor-pointer" style={{ color: "#cdcdcd" }}
-                   onClick={handleIconClicks}
-                  >
-                    {" "}
-                    Add Attachment{" "}
-                  </div>
-
-                  <input
-                    type="file"
-                    ref={fileInput}
-                    style={{ display: "none" }}
-                    placeholder="select file"
-                    onChange={(event) => handleFileChange(taskid, event)}
-                    multiple
-                  />
-                </div>
-              </div>
                 </div>
 
                 {isChatVisible && (

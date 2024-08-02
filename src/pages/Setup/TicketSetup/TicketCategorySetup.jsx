@@ -17,6 +17,7 @@ import {
   getHelpDeskCategoriesSetup,
   getHelpDeskCategoriesSetupDetails,
   getHelpDeskSubCategoriesSetup,
+  getHelpDeskSubCategoriesSetupDetails,
   getSetupUsers,
 } from "../../../api";
 import { getItemInLocalStorage } from "../../../utils/localStorage";
@@ -30,6 +31,7 @@ const TicketCategorySetup = () => {
   const [subCategories, setSubCategories] = useState([]);
   const themeColor = useSelector((state) => state.theme.color);
   const [isCatEditModalOpen, setIsCatEditModalOpen] = useState(false);
+  const [isSubCatEditModalOpen, setIsSubCatEditModalOpen] = useState(false);
   const [formData, setFormData] = useState({
     category: "",
     minTat: "",
@@ -246,6 +248,7 @@ const TicketCategorySetup = () => {
 
   const [isModalOpen1, setIsModalOpen1] = useState(false);
   const [catId, setCatId] = useState(null);
+const [subCatId, setSubCatId] = useState(null)
   const openCatEditModal = async (id) => {
     const fetchCatDetails = await getHelpDeskCategoriesSetupDetails(id);
     setCatId(id);
@@ -255,6 +258,18 @@ const TicketCategorySetup = () => {
       minTat: fetchCatDetails.data.tat,
       // engineer:
     });
+    setIsCatEditModalOpen(true);
+  };
+  const openSubCatEditModal = async (id) => {
+    const fetchCatDetails = await getHelpDeskSubCategoriesSetupDetails(id);
+    console.log(fetchCatDetails)
+    setSubCatId(id);
+    // setFormData({
+    //   ...formData,
+    //   category: fetchCatDetails.data.name,
+    //   minTat: fetchCatDetails.data.tat,
+      
+    // });
     setIsCatEditModalOpen(true);
   };
 
@@ -307,7 +322,7 @@ const TicketCategorySetup = () => {
       name: "Action",
       cell: (row) => (
         <div className="flex items-center gap-4">
-          <button>
+          <button onClick={()=>openSubCatEditModal(row.id)}>
             <BiEdit size={15} />
           </button>
           {/* <button>

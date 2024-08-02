@@ -1300,6 +1300,46 @@ const Calender = () => {
     console.log("Syncing with Outlook...");
     signInOutlook();
   };
+
+  const syncWithGmail = () => {
+    console.log("Syncing with Gmail...");
+    signIn();
+    // handleAuthProcess();
+  };
+
+  const signIn = () => {
+    const oauth2Endpoint = "https://accounts.google.com/o/oauth2/v2/auth";
+
+    const form = document.createElement("form");
+    form.setAttribute("method", "GET");
+    form.setAttribute("action", oauth2Endpoint);
+
+    const params = {
+      client_id:
+        "339274559462-6r06f0d9aqubhnhqmvrkjaqs8nikiidd.apps.googleusercontent.com",
+      redirect_uri: "http://localhost:5173/calendar",
+      
+      response_type: "token",
+      
+      scope:
+        "https://www.googleapis.com/auth/gmail.readonly https://www.googleapis.com/auth/gmail.send",
+      
+      include_granted_scopes: "true",
+      state: "pass-through-value",
+    };
+
+    for (const p in params) {
+      const input = document.createElement("input");
+      input.setAttribute("type", "hidden");
+      input.setAttribute("name", p);
+      input.setAttribute("value", params[p]);
+      form.appendChild(input);
+    }
+
+    document.body.appendChild(form);
+    form.submit();
+    
+  };
   return (
     <section className="flex relative">
       <Navbar />

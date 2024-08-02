@@ -14,12 +14,13 @@ import toast from "react-hot-toast";
 const AssociateAssetChecklist = () => {
   const [assets, setAssets] = useState([]);
   const [selectedOption, setSelectedOption] = useState([]);
+  const [selectedUserOption, setSelectedUserOption] = useState([]);
   const [assignedTo, setAssignedTo] = useState([]);
-  const [association, setAssociation] = useState([])
-  const [added, setAdded] = useState(false)
+  const [association, setAssociation] = useState([]);
+  const [added, setAdded] = useState(false);
   const { id } = useParams();
   const [formData, setFormData] = useState({
-    assigned_to: "",
+    assigned_to: [],
   });
 
   const column = [
@@ -30,8 +31,7 @@ const AssociateAssetChecklist = () => {
     },
     {
       name: "Assigned To",
-      selector: (row) => row.user_name
-      ,
+      selector: (row) => row.user_name,
       sortable: true,
     },
   ];
@@ -50,36 +50,53 @@ const AssociateAssetChecklist = () => {
     };
     const fetchAssignedTo = async () => {
       const assignedToList = await getAssignedTo();
-
-      setAssignedTo(assignedToList.data);
+      console.log(assignedToList.data)
+      const user = assignedToList.data.map((u) => ({
+        value: u.id,
+        label:`${ u.firstname} ${u.lastname}`,
+      }));
+      console.log(user)
+      setAssignedTo(user);
     };
 
-    const fetchAssociationList = async() =>{
-      const assoResp = await getAssociationList(id)
-      console.log(assoResp.data.associated_with)
-      setAssociation(assoResp.data.associated_with)
-    }
+    const fetchAssociationList = async () => {
+     try {
+       const assoResp = await getAssociationList(id);
+       
+       const sortedData = assoResp.data.associated_with.sort((a,b)=> {
+        return new Date(a.created_at) - new Date(b.created_at)
+       })
+       console.log(sortedData);
+       setAssociation(sortedData);
+     } catch (error) {
+      console.log(error)
+     }
+    };
 
     fetchAssetsList();
     fetchAssignedTo();
-    fetchAssociationList()
+    fetchAssociationList();
   }, [added]);
 
   var handleChangeSelect = (selectedOption) => {
     setSelectedOption(selectedOption);
   };
+  const handleUserChangeSelect = (selectedUserOption) => {
+    setSelectedUserOption(selectedUserOption);
+  };
 
   const handleChange = (e) => {
     setFormData({ ...formData, assigned_to: e.target.value });
   };
-  
+
   const handleAddAssociate = async () => {
     const payload = {
       asset_ids: selectedOption.map((option) => option.value),
+    
       activity: {
         checklist_id: id,
       },
-      assigned_to: formData.assigned_to,
+      assigned_to: selectedUserOption.map((opt)=> opt.value),
     };
     try {
       toast.loading("Associating Checklist");
@@ -89,10 +106,16 @@ const AssociateAssetChecklist = () => {
       toast.dismiss();
       // window.location.reload();
       toast.success("Checklist Associated");
-      setAdded(true)
+      setAdded(true);
+      setSelectedOption([])
+      setSelectedUserOption([])
     } catch (error) {
       console.log(error);
       toast.dismiss();
+    }finally{
+      setTimeout(() => {
+        setAdded(false)
+      }, 500);
     }
   };
   return (
@@ -118,9 +141,9 @@ const AssociateAssetChecklist = () => {
               placeholder="Select Assets"
             />
           </div>
-          <div className="flex flex-col ">
+          <div className="w-full z-20">
             {/* <label className="font-medium my-2">Assign To</label> */}
-            <select
+            {/* <select
               value={formData.assigned_to}
               onChange={handleChange}
               className="border border-gray-300 p-2 rounded-sm"
@@ -131,7 +154,14 @@ const AssociateAssetChecklist = () => {
                   {assign.firstname} {assign.lastname}
                 </option>
               ))}
-            </select>
+            </select> */}
+            <Select
+              isMulti
+              onChange={handleUserChangeSelect}
+              options={assignedTo}
+              noOptionsMessage={() => "No Users Available"}
+              placeholder="Select Users"
+            />
           </div>
           <div>
             <button
