@@ -1430,13 +1430,14 @@ const Navbar = () => {
                 </h2>
               </NavLink> */}
               {/* {siteId === 25 ? */}
-              {/* <NavLink
-                to={`/profile`}
+              <NavLink
+                // to={`/profile`}
                 className={({ isActive }) =>
                   ` ${
                     isActive
-                      ? `text-black bg-white flex p-2  gap-3.5 rounded-md group items-center  font-medium ${fontSize}`
-                      : ` group flex items-center  gap-3.5 font-medium p-2 hover:bg-gray-800 rounded-md ${fontSize}`
+                      ? `flex p-2  gap-3.5 rounded-md group items-center  font-medium ${fontSize}`
+                      : // ? `text-black bg-white flex p-2  gap-3.5 rounded-md group items-center  font-medium ${fontSize}`
+                        ` group flex items-center  gap-3.5 font-medium p-2 hover:bg-gray-800 rounded-md ${fontSize}`
                   }`
                 }
               >
@@ -1458,7 +1459,35 @@ const Navbar = () => {
                 >
                   {firstName} {lastName}
                 </h2>
-              </NavLink> */}
+              </NavLink>
+                {feat.includes("project_task") && (
+                  <NavLink
+                    to={"/Task-management"}
+                    className={({ isActive }) =>
+                      ` ${
+                        isActive
+                          ? "text-black bg-white flex p-2  gap-3.5 rounded-md group items-center text-sm font-medium"
+                          : " group flex items-center text-sm gap-3.5 font-medium p-2 hover:bg-gray-800 rounded-md "
+                      }`
+                    }
+                  >
+                    <div>{React.createElement(FaTasks, { size: "20" })}</div>
+                    <h2
+                      className={`whitespace-pre duration-300 ${
+                        !open && "opacity-0 translate-x-28 overflow-hidden"
+                      }`}
+                    >
+                      Task Management
+                    </h2>
+                    <h2
+                      className={`${
+                        open && "hidden"
+                      } absolute left-48 bg-white font-semibold whitespace-pre text-gray-900 rounded-md drop-shadow-lg px-0 py-0 w-0 overflow-hidden group-hover:px-2 group-hover:py-1 group-hover:left-14 group-hover:duration-300 group-hover:w-fit  `}
+                    >
+                      Task management
+                    </h2>
+                  </NavLink>
+                )}
               {feat.includes("tickets") && (
                 <NavLink
                   to={"/mytickets"}

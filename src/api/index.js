@@ -29,6 +29,12 @@ export const getSiteAsset = async (page) =>
       token: token,
     },
   });
+export const getMeteredSiteAsset = async () =>
+  axiosInstance.get(`/site_assets.json?q[is_meter]=true`, {
+    params: {
+      token: token,
+    },
+  });
 export const getSiteSearchedAsset = async (oem, assetName, building, unit) =>
   axiosInstance.get(
     `/site_assets.json?q[oem_name_cont]=${oem}&q[name_cont]=${assetName}&q[building_name_cont]=${building}&q[unit_name_cont]=${unit}`,
@@ -1231,7 +1237,7 @@ export const getVibeMyBoardTask = async (userId) => {
 export const updateTaskStatus = async (data) => {
   try {
     const response = await vibeAuth.put(
-      `/api/employee/update-status-task/`,
+      `/api/v1/employee/task/update-status/`,
       data,
       {
         headers: {
@@ -1282,7 +1288,7 @@ export const deleteVibeTask = async (userId, taskId) => {
 export const getVibeTaskChecklist = async (userId, taskId) => {
   try {
     const response = await vibeAuth.get(
-      `/api/employee/task/get-task_checklists/?task_id=${taskId}&user_id=${userId}`,
+      `/api/v1/employee/task/get-checklist/?task_id=${taskId}&user_id=${userId}`,
 
       {
         headers: {
@@ -1384,7 +1390,7 @@ export const updateVibeAssignedUser = async (data) => {
 export const updateVibeUserTask = async (data) => {
   try {
     const response = await vibeAuth.put(
-      `/api/employee/update-user-task/`,
+      `/api/v1/employee/task/update_task/`,
       data,
       {
         headers: {
@@ -1552,7 +1558,7 @@ export const requestVibeDueDate = async (data) => {
 export const updateVibeChecklistItems = async (data) => {
   try {
     const response = await vibeAuth.put(
-      `/api/employee/task/update-checklist-fields/`,
+      `/api/v1/employee/task/update-checklist/`,
       data,
       {
         headers: {
@@ -1586,7 +1592,8 @@ export const updateSalesView = async (data) => {
 export const postVibeChecklist = async (data) => {
   try {
     const response = await vibeAuth.post(
-      `/api/employee/task/create-task-checklist/`,
+      // `/api/employee/task/create-task-checklist/`,
+      `/api/v1/employee/task/create-checklist/`,
       data,
       {
         headers: {
@@ -1606,7 +1613,7 @@ export const deleteVibeTaskChecklist = async (
 ) => {
   try {
     const response = await vibeAuth.delete(
-      `/api/employee/task/checklist/trash/?checklist_id=${taskDeleteIDCheckList}&user_id=${user_id}`,
+      `/api/v1/employee/task/delete-checklist/?checklist_id=${taskDeleteIDCheckList}&user_id=${user_id}`,
 
       {
         headers: {
@@ -1623,7 +1630,7 @@ export const deleteVibeTaskChecklist = async (
 export const updateVibeSubTask = async (data) => {
   try {
     const response = await vibeAuth.put(
-      `/api/employee/task/sub_task/update-checklist-task/`,
+      `/api/v1/employee/task/update_task/`,
       data,
       {
         headers: {
@@ -1657,7 +1664,7 @@ export const updateVibeUserSubTask = async (data) => {
 export const createVibeChecklistSubTask = async (data) => {
   try {
     const response = await vibeAuth.post(
-      `/api/employee/task/checklist/create-task/`,
+      `/api/v1/employee/create_task/`,
       data,
       {
         headers: {
@@ -2141,7 +2148,7 @@ export const deleteVibeUserBirthday = async (userId, BdId) => {
   try {
     const response = await vibeAuth.delete(
       `/api/employee/calender/delete-birthday/?user_id=${userId}&birthday_id=${BdId}`,
-     
+
       {
         headers: {
           "Content-Type": "multipart/form-data",
@@ -2158,7 +2165,7 @@ export const postVibeTaskComment = async (data) => {
   try {
     const response = await vibeAuth.post(
       `/api/v1/employee/task/add-comment/`,
-     data,
+      data,
       {
         headers: {
           "Content-Type": "multipart/form-data",
@@ -2171,11 +2178,11 @@ export const postVibeTaskComment = async (data) => {
     throw error;
   }
 };
-export const getVibeMainTaskDependencies = async (userId,taskId) => {
+export const getVibeMainTaskDependencies = async (userId, taskId) => {
   try {
     const response = await vibeAuth.get(
       `/api/v1/employee/task/get-depend_on/?user_id=${userId}&task_id=${taskId}`,
-     
+
       {
         headers: {
           "Content-Type": "multipart/form-data",
@@ -2185,6 +2192,23 @@ export const getVibeMainTaskDependencies = async (userId,taskId) => {
     return response.data;
   } catch (error) {
     console.error("Error getting dependent task :", error);
+    throw error;
+  }
+};
+export const GetTaskBulk = async (userId, taskId) => {
+  try {
+    const response = await vibeAuth.get(
+      `/api/v1/employee/task/children/get_task_bulk/?user_id=${userId}&task_id=${taskId}`,
+
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error getting bulk task :", error);
     throw error;
   }
 };

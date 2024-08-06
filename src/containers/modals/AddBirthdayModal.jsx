@@ -123,8 +123,8 @@ const AddBirthdayModal = ({ onclose, get_user_Birthday }) => {
             </div>
           </div>
           <div className="flex flex-col">
-            <form action="" className="grid grid-cols-2 mt-2 gap-x-5 gap-y-4">
-              <div className="flex flex-col gap-2 w-full">
+            <form action="" className="grid grid-cols-2 mt-2 gap-2">
+              <div className="flex flex-col gap-1 w-full">
                 <label htmlFor="" className="text-sm font-bold text-white">
                   First Name <span className="text-red-500">*</span>
                 </label>
@@ -138,7 +138,7 @@ const AddBirthdayModal = ({ onclose, get_user_Birthday }) => {
                   className="border rounded-md border-gray-500 p-1 px-2"
                 />
               </div>
-              <div className="flex flex-col gap-2 w-full">
+              <div className="flex flex-col gap-1 w-full">
                 <label htmlFor="" className="text-sm font-bold text-white">
                   Last Name <span className="text-red-500">*</span>
                 </label>
@@ -152,7 +152,7 @@ const AddBirthdayModal = ({ onclose, get_user_Birthday }) => {
                   className="border rounded-md border-gray-500 p-1 px-2"
                 />
               </div>
-              <div className="flex flex-col gap-2">
+              <div className="flex flex-col gap-1">
                 <label htmlFor="" className="text-sm font-bold text-white">
                   Date of Birth <span className="text-red-500">*</span>
                 </label>
@@ -165,7 +165,7 @@ const AddBirthdayModal = ({ onclose, get_user_Birthday }) => {
                   className="border rounded-md border-gray-500 p-1 px-2"
                 />
               </div>
-              <div className="flex flex-col gap-2">
+              <div className="flex flex-col gap-1">
                 <label htmlFor="" className="text-sm font-bold text-white">
                   Contact No <span className="text-red-500">*</span>
                 </label>
@@ -179,7 +179,7 @@ const AddBirthdayModal = ({ onclose, get_user_Birthday }) => {
                   onChange={handleContactChange}
                 />
               </div>
-              <div className="flex flex-col gap-2 col-span-2">
+              <div className="flex flex-col gap-1 col-span-2">
                 <label htmlFor="" className="text-sm font-bold text-white">
                   Email <span className="text-red-500">*</span>
                 </label>

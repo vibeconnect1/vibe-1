@@ -6,6 +6,8 @@ import profile from "/wave.png";
 import {
   FaArrowLeft,
   FaCheck,
+  FaChevronDown,
+  FaChevronUp,
   FaComment,
   FaComments,
   FaDownload,
@@ -26,12 +28,14 @@ import {
   FaPlusCircle,
   FaRegCalendarAlt,
   FaSearchPlus,
+  FaTasks,
   FaTrashAlt,
   FaUserCog,
 } from "react-icons/fa";
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 import {
   API_URL,
+  GetTaskBulk,
   addVibeTaskAttachment,
   createVibeChecklistSubTask,
   createVibeChildSubTask,
@@ -79,12 +83,14 @@ import ReactDatePicker from "react-datepicker";
 import DatePicker from "react-datepicker";
 import {
   FormattedDateToShowProperly,
+  SendDateFormat,
   SendDueDateFormat,
 } from "../utils/dateUtils";
 import { IoSend } from "react-icons/io5";
 import useWebSocketServiceForTasks from "../components/WebSocketManagement/WebSocketServiceForTask";
 import vibeAuth from "../api/vibeAuth";
 import { MdEditCalendar } from "react-icons/md";
+import { ThreeDots } from "react-loader-spinner";
 // import TaskSelf from "./SubPages/TaskSelf";
 
 // import LinearProgress from "@material-ui/core/LinearProgress";
@@ -191,10 +197,16 @@ const TaskManagement = () => {
     setLightboxImage(null);
   };
 
-  const handleItemToggleSubTask = (index, itemId) => {
-    const newSubMenuOpen = [...subTaskMenuOpen];
-    newSubMenuOpen[index] = !newSubMenuOpen[index];
-    setSubTaskMenuOpen(newSubMenuOpen);
+  const handleItemToggleSubTask = (itemId, level) => {
+    setOpenLevels((prev) => {
+      const newState = { ...prev };
+      if (newState[itemId] === undefined) {
+        newState[itemId] = true;
+      } else {
+        newState[itemId] = !newState[itemId];
+      }
+      return newState;
+    });
   };
 
   const [isEditingDesc, setIsEditingDesc] = useState(false);
@@ -761,11 +773,6 @@ const TaskManagement = () => {
 
   const Get_Checklist_Task = async (task_id) => {
     try {
-      // const params = {
-      //   task_id: task_id,
-      //   user_id: user_id,
-      // };
-
       const data = await getVibeTaskChecklist(user_id, task_id);
 
       if (data.success) {
@@ -1084,9 +1091,7 @@ const TaskManagement = () => {
     setCreatedFirstName(createdFirst);
     setCreatedSecondName(createdSecond);
     setCreatedDate(createdDate);
-    // setdueDate(due_dte)
-    // setdueDate(targetDate)
-    // setDueDate(targetDate)
+  
     setDueDate(due_dte ? targetDate : "");
     setcreatedBy_id(created_by_id);
     // setChatsData([])
@@ -1421,7 +1426,7 @@ const TaskManagement = () => {
     // Update the selected date in the state
     // Update_Task_Duedate(user_id, taskid, date);
   };
-  const Update_Task_Duedate = async (user_id, taskid, gdueDate) => {
+  const Update_Task_Duedate = async (user_id, taskid, dueDate) => {
     if (!dueDate) {
       return;
     }
@@ -1429,7 +1434,7 @@ const TaskManagement = () => {
     const formData = new FormData();
     formData.append("user_id", user_id);
     formData.append("task_id", taskid);
-    formData.append("due_date", SendDueDateFormat(gdueDate));
+    formData.append("due_date", SendDueDateFormat(dueDate));
 
     try {
       const res = await updateVibeUserTask(formData);
@@ -1605,9 +1610,10 @@ const TaskManagement = () => {
 
     if (event.key === "Enter" || event.type === "click") {
       console.log("--------");
-      event.preventDefault(); // To prevent form submission and page reload
-      // alert(taskid);
-
+      event.preventDefault();
+      if (newItem === "") {
+        return toast.error("Enter Checklist Name");
+      }
       const formData = new FormData();
 
       formData.append("Task", taskid);
@@ -1753,20 +1759,85 @@ const TaskManagement = () => {
     }
     // }
   };
+
+  const findDueDateById = (tasks, tasks_Ids) => {
+    console.log("🚀 ~ findDueDateById ~ taskId:", tasks_Ids)
+    console.log("🚀 ~ findDueDateById ~ tasks:", tasks)
+
+    
+    for (const task of tasks) {
+      if (task.id === tasks_Ids) {
+        return task.due_date || false;
+      }
+  
+      // Recursively check all levels
+      for (let i = 2; ; i++) {
+        const levelKey = `level_${i}`;
+        if (task[levelKey] && Array.isArray(task[levelKey])) {
+          const dueDate = findDueDateById(task[levelKey], tasks_Ids);
+          if (dueDate) {
+            return dueDate;
+          }
+        } else {
+          break;
+        }
+      }
+    }
+  
+    return false;
+  };
+
+
   const [subTaskIdForDueDate, setSubTaskIdForDueDate] = useState(null);
-  const handleDueDateClickSubDate = (checksubtaskid, due_date) => {
-    console.log(checksubtaskid);
+  const handleDueDateClickSubDate = (checksubtaskid, due_date, parent_id) => {
+    console.log(
+      "🚀 ~ handleDueDateClickSubDate ~ checksubtaskid:",
+      checksubtaskid
+    );
+    console.log("🚀 ~ handleDueDateClickSubDate ~ parent_id:", parent_id);
     console.log(due_date);
-    if (due_date) {
-      const dateTimeString = due_date.split("+")[0];
-      const targetDate = new Date(dateTimeString);
-      setSubTaskIdForDueDate(checksubtaskid);
-      setSubTaskDueDate(targetDate);
-      setIsModalOpenSubDate(true);
+
+    if (parent_id === taskid) {
+      console.log("due",dueDate)
+      if (!dueDate) {
+       
+        toast.error("Please add parent due date before proceeding to.");
+        return;
+      } else {
+        setParent_dueDate(dueDate);
+
+        if (due_date) {
+          const dateTimeString = due_date.split("+")[0];
+          const targetDate = new Date(dateTimeString);
+          setSubTaskIdForDueDate(checksubtaskid);
+          setSubTaskDueDate(targetDate);
+          setIsModalOpenSubDate(true);
+        } else {
+          setSubTaskIdForDueDate(checksubtaskid);
+          setIsModalOpenSubDate(true);
+          console.error("Due date is null");
+        }
+        return;
+      }
     } else {
-      setSubTaskIdForDueDate(checksubtaskid);
-      setIsModalOpenSubDate(true);
-      console.error("Due date is null");
+      const founddueDate = findDueDateById(subTaskItems, parent_id);
+
+      if (!founddueDate) {
+        toast.error("Please add parent due date before proceeding.");
+        return;
+      }
+      setParent_dueDate(founddueDate);
+      if (due_date) {
+        const dateTimeString = due_date.split("+")[0];
+        const targetDate = new Date(dateTimeString);
+        setSubTaskIdForDueDate(checksubtaskid);
+        setSubTaskDueDate(targetDate);
+        setIsModalOpenSubDate(true);
+      } else {
+        setSubTaskIdForDueDate(checksubtaskid);
+        setIsModalOpenSubDate(true);
+        console.error("Due date is null");
+      }
     }
   };
 
@@ -1845,10 +1916,7 @@ const TaskManagement = () => {
     due_date
   ) => {
     if (!due_date) {
-      toast.warning("Please add a due date before proceeding.", {
-        position: "top-center",
-        autoClose: 5000,
-      });
+      toast.error("Please add a due date before proceeding.");
       return;
     }
     console.log(checksubtaskid);
@@ -2186,37 +2254,86 @@ const TaskManagement = () => {
   };
 
   const [newSubtasks, setNewSubtasks] = useState(Array(items.length).fill(""));
-  const Add_Checklist_Subtask = async (event) => {
-    if (!newSubtasks || newSubtasks.trim() === "") {
-      toast.error("Please Enter Subtask");
+  const Add_Checklist_Subtask = async (
+    subtaskId,
+    parentTaskId,
+    level,
+    newSubtasks
+  ) => {
+    //  setLoadingAddChildtask(true);
+    setLoadingAddChildtask((prev) => ({ ...prev, [subtaskId]: true }));
+    console.log("🚀 ~ constAdd_Checklist_Subtask= ~ newSubtasks:", newSubtasks);
+    console.log("🚀 ~ constAdd_Checklist_Subtask= ~ subtaskId:", subtaskId);
+    console.log("🚀 ~ constAdd_Subtask= ~ level:", level);
+    console.log("🚀 ~ constAdd_Subtask= ~ parentTaskId:", parentTaskId);
+
+    const newSubtaskKey = `${subtaskId}-${level - 1}`;
+    const newSubtaskValue = newSubtasks[newSubtaskKey];
+
+    // if (!newSubtaskValue || newSubtaskValue.trim() === '') {
+    //   return;
+    // }
+    if (!newSubtaskValue || newSubtaskValue.trim() === "") {
+      setLoadingAddChildtask((prev) => ({ ...prev, [subtaskId]: false }));
       return;
     }
-    // if (event.key === 'Enter'|| event.type === 'click') {
-    //   console.log("--------")
-    //   event.preventDefault();
+
     const formData = new FormData();
-    formData.append("Task", taskid);
-    formData.append("task_topic", newSubtasks);
+    formData.append("parent_task_id", subtaskId);
+    formData.append("task_topic", newSubtaskValue);
     formData.append("created_by", user_id);
     formData.append("user_id", user_id);
 
     try {
       const res = await createVibeChecklistSubTask(formData);
       if (res.success) {
-        console.log("Success");
-        Get_SubChecklist_Task(TaskIdForTaskCheckList);
-        // setSubtask([...subtask, newSubtask ])
-        // const updatedSubtasks = [...newSubtasks];
-        // // updatedSubtasks[index] = '';
-        setNewSubtasks("");
-        // Get_SubChecklist_Task(taskid);
+        // Fetch updated subtasks
+        const updatedSubtasks = await Get_SubChecklist_Tasks(currentTaskId);
+        handleItemToggleSubTask(subtaskId);
+
+        if (
+          updatedSubtasks &&
+          updatedSubtasks.level_1 &&
+          updatedSubtasks.level_1.length > 0
+        ) {
+          // Update the state with the new subtasks structure
+          setSubTaskItems(updatedSubtasks.level_1[0]);
+
+          // Flatten task topics for all levels
+          const flattenTaskTopics = (tasks) => {
+            let topics = [];
+            tasks.forEach((task) => {
+              topics.push(task.task_topic);
+              for (let key in task) {
+                if (key.startsWith("level_") && Array.isArray(task[key])) {
+                  topics = topics.concat(flattenTaskTopics(task[key]));
+                }
+              }
+            });
+            return topics;
+          };
+
+          const subItemTaskTopics = flattenTaskTopics(updatedSubtasks.level_1);
+          setSubItemTaskTopicText(subItemTaskTopics);
+        } else {
+          setSubTaskItems([]);
+          setSubItemTaskTopicText([]);
+        }
+
+        // Clear the input field
+        setNewSubtasks((prevState) => ({ ...prevState, [newSubtaskKey]: "" }));
       }
+      // setLoadingAddChildtask(false);
+      // setLoadingAddChildtask(prev => ({ ...prev, [subtaskId]: false }));
     } catch (error) {
-      setNewSubtasks("");
+      console.error("Error adding subtask:", error);
+      // Optionally, show an error message to the user
+      // setLoadingAddChildtask(false);
+      // setLoadingAddChildtask(prev => ({ ...prev, [subtaskId]: false }));
     } finally {
-      setNewSubtasks("");
+      setLoadingAddChildtask(false);
+      // setLoadingAddChildtask(prev => ({ ...prev, [subtaskId]: null }));
     }
-    // }
   };
   const [
     isModalOpenDeleteTaskCheckListSubtask,
@@ -2509,6 +2626,7 @@ const TaskManagement = () => {
   const datePickerRefSubDateChild = useRef(null);
   const [isModalOpenSubDateChild, setIsModalOpenSubDateChild] = useState(false);
   const [subTaskDueDateChild, setSubTaskDueDateChild] = useState("");
+  const [loadingAddSubtask, setLoadingAddSubtask] = useState(false);
   const handleModalCloseSubDateChild = () => {
     // GetBoardData();
     setIsModalOpenSubDateChild(false);
@@ -2519,6 +2637,67 @@ const TaskManagement = () => {
     console.log(date);
 
     Update_SubTask_DuedateChild(checksubtaskid, date);
+  };
+
+  const [newSubtasksOnlyForLevelOne, setnewSubtasksOnlyForLevelOne] =
+    useState("");
+
+  const Add_Checklist_Subtask_if_no_subtask = async (newSubtaskValue) => {
+    setLoadingAddSubtask(true);
+
+    const formData = new FormData();
+    formData.append("parent_task_id", currentTaskId);
+    formData.append("task_topic", newSubtaskValue);
+    formData.append("created_by", user_id);
+    formData.append("user_id", user_id);
+
+    try {
+      const res = await createVibeChecklistSubTask(formData);
+      if (res.success) {
+        // Fetch updated subtasks
+        const updatedSubtasks = await Get_SubChecklist_Tasks(currentTaskId);
+
+        if (
+          updatedSubtasks &&
+          updatedSubtasks.level_1 &&
+          updatedSubtasks.level_1.length > 0
+        ) {
+          // Update the state with the new subtasks structure
+          setSubTaskItems(updatedSubtasks.level_1[0]);
+
+          // Flatten task topics for all levels
+          const flattenTaskTopics = (tasks) => {
+            let topics = [];
+            tasks.forEach((task) => {
+              topics.push(task.task_topic);
+              for (let key in task) {
+                if (key.startsWith("level_") && Array.isArray(task[key])) {
+                  topics = topics.concat(flattenTaskTopics(task[key]));
+                }
+              }
+            });
+            return topics;
+          };
+
+          const subItemTaskTopics = flattenTaskTopics(updatedSubtasks.level_1);
+          setSubItemTaskTopicText(subItemTaskTopics);
+          setnewSubtasksOnlyForLevelOne("");
+        } else {
+          setSubTaskItems([]);
+          setSubItemTaskTopicText([]);
+        }
+        setNewSubtasks("");
+        // Clear the input field
+        // setNewSubtasks(prevState => ({ ...prevState, [newSubtaskKey]: '' }));
+      }
+      setLoadingAddSubtask(false);
+    } catch (error) {
+      console.error("Error adding subtask:", error);
+      // Optionally, show an error message to the user
+      setLoadingAddSubtask(false);
+    } finally {
+      setLoadingAddSubtask(false);
+    }
   };
 
   const Update_SubTask_DuedateChild = async (checksubtaskid, updatedueDate) => {
@@ -2686,8 +2865,10 @@ const TaskManagement = () => {
   };
   const [showTaskTitleMainDependency, setShowTaskTitleMainDependency] =
     useState([]);
+  const [isModalOpenSubTaskDependency, setIsModalOpenSubTaskDependency] =
+    useState(false);
   const [selectedMainTasks, setSelectedMainTasks] = useState([]);
-  const [dependencyMainTask, setDependencyMainTask] = useState([]); 
+  const [dependencyMainTask, setDependencyMainTask] = useState([]);
   const get_Maintask_data_dependencies = async (currentTaskId) => {
     try {
       const jsonData = await getVibeMainTaskDependencies(
@@ -2713,7 +2894,7 @@ const TaskManagement = () => {
 
         const assignedTopics = dependencies.map((task) => task.task_topic);
         setShowTaskTitleMainDependency(assignedTopics.join(", "));
-        console.log("test",assignedTopics.join(", "))
+        console.log("test", assignedTopics.join(", "));
       } else {
         console.log("Something went wrong");
       }
@@ -2721,6 +2902,908 @@ const TaskManagement = () => {
       console.error("Error:", error);
     }
   };
+  const [loadingAddChildtask, setLoadingAddChildtask] = useState(false);
+  useEffect(() => {
+    if (currentTaskId) {
+      Get_SubChecklist_Tasks(currentTaskId).then((data) => {
+        if (data && data.level_1 && data.level_1.length > 0) {
+          setSubTaskItems(data.level_1[0]);
+        } else {
+          setSubTaskItems([]); // Set to empty array when there are no subtasks
+        }
+      });
+    }
+  }, [currentTaskId]);
+  const Get_SubChecklist_Tasks = async (task_id) => {
+    try {
+      const response = await GetTaskBulk(user_id, task_id);
+
+      if (response.success) {
+        console.log("checklist task success");
+        console.log(response.data);
+
+        const flattenTaskTopics = (tasks) => {
+          let topics = [];
+          tasks.forEach((task) => {
+            topics.push(task.task_topic);
+            for (let key in task) {
+              if (key.startsWith("level_") && Array.isArray(task[key])) {
+                topics = topics.concat(flattenTaskTopics(task[key]));
+              }
+            }
+          });
+          return topics;
+        };
+
+        const subItemTaskTopics = flattenTaskTopics(response.data.level_1[0]);
+        console.log(subItemTaskTopics);
+        setSubItemTaskTopicText(subItemTaskTopics);
+        const findSubtaskAndUpdateDueDate = (tasks) => {
+          for (let task of tasks) {
+            if (task.id === subTaskIdForDueDate) {
+              if (task.due_date) {
+                const dateTimeString = task.due_date.split("+")[0];
+                const targetDate = new Date(dateTimeString);
+                setSubTaskDueDate(targetDate);
+              }
+              return;
+            }
+            for (let key in task) {
+              if (key.startsWith("level_") && Array.isArray(task[key])) {
+                findSubtaskAndUpdateDueDate(task[key]);
+              }
+            }
+          }
+        };
+
+        findSubtaskAndUpdateDueDate(response.data.level_1[0]);
+
+        return response.data;
+      } else {
+        console.log("Something went wrong");
+        return null;
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      return null;
+    }
+  };
+  const [openLevels, setOpenLevels] = useState({});
+
+  const renderSubtasks = (subtaskss, level) => {
+    return subtaskss.map((subCheck, subIndex) => (
+      <div
+        key={`${subCheck.id}-${level}`}
+        // className=" m-1 p-1 "
+        className=" bg-gray-600 bg-opacity-40 backdrop-blur-sm my-1 rounded-md p-1 border-dashed border border-white"
+        style={{
+          marginLeft: `${(level - 1) * 20}px`,
+        }}
+      >
+        <div
+          htmlFor={`item-${subIndex}`}
+          style={{
+            fontSize: "normal",
+            cursor: "default",
+            display: "flex",
+            justifyContent: "space-between",
+          }}
+          className="w-full"
+          onClick={(e) => {
+            e.stopPropagation();
+            handleItemToggleSubTask(subCheck.id, level);
+          }}
+        >
+          {subCheck[`level_${level + 1}`] &&
+          subCheck[`level_${level + 1}`].length > 0 ? (
+            openLevels[subCheck.id] ? (
+              <span
+                className="flex items-center justify-center rounded-full mr-2 p-1"
+                style={{
+                  backgroundColor: "#b7b7b73b",
+                  // borderRadius: "50%",
+                  height: 20,
+                  width: 20,
+                  textAlign: "center",
+                  transition: "transform 0.3s ease",
+                }}
+              >
+                {" "}
+                <FaChevronUp className="" />
+              </span>
+            ) : (
+              <span
+                className="flex items-center justify-center rounded-full mr-2 p-1"
+                style={{
+                  backgroundColor: "#b7b7b73b",
+                  // borderRadius: "50%",
+                  height: 20,
+                  width: 20,
+                  textAlign: "center",
+                  transition: "transform 0.3s ease",
+                }}
+              >
+                <FaChevronDown className=" " />
+              </span>
+            )
+          ) : (
+            ""
+          )}
+          <div className=" mb-1 w-full">
+            {editingIndexSub === `${subCheck.id}-${level}` ? (
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                }}
+              >
+                <textarea
+                  ref={inputRefItem}
+                  spellCheck="true"
+                  value={subCheck.task_topic}
+                  onChange={(e) => {
+                    const updatedText = e.target.value;
+                    subCheck.task_topic = updatedText;
+                    setSubTaskItems([...subtaskss]);
+                  }}
+                  style={{}}
+                  className="rounded-md w-full text-black p-1"
+                />
+                <span
+                  onClick={(e) => {
+                    e.preventDefault();
+                    setEditingIndexSub(null);
+                    UpdateItemSubTask(subCheck.id, subCheck.task_topic);
+                  }}
+                >
+                  <FaCheck
+                    style={{
+                      marginLeft: 10,
+                      marginRight: 10,
+                      fontSize: 14,
+                      color: "white",
+                      cursor: "pointer",
+                    }}
+                  />
+                </span>
+              </div>
+            ) : (
+              <div
+                onClick={() => setEditingIndexSub(`${subCheck.id}-${level}`)}
+                style={{ wordBreak: "break-all" }}
+                className="flex items-center"
+              >
+                {subCheck.task_topic}
+                <span
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleIconClickTextItemSub();
+                    setEditingIndexSub(`${subCheck.id}-${level}`);
+                  }}
+                >
+                  <FaPencilAlt
+                    className="FaIcon"
+                    style={{ marginLeft: 10, fontSize: 14, cursor: "pointer" }}
+                    title="Edit"
+                  />
+                </span>
+              </div>
+            )}
+            <div className="my-2 grid grid-cols-2 px-2">
+              <div className="flex gap-2 items-center" style={{ fontSize: 12 }}>
+                <b>Start Date : </b>
+                {SendDateFormat(subCheck.start_date)}
+              </div>
+              <div className="flex gap-2 items-center" style={{ fontSize: 12 }}>
+                <b>End Date : </b>
+
+                {SendDateFormat(subCheck.end_date)}
+              </div>
+            </div>
+            <div className=" flex items-center gap-4">
+              {createdBy_id === user_id ||
+              subCheck.created_by.user_id === user_id ||
+              (Array.isArray(selectedEmail) &&
+                selectedEmail.some((item) => item.value === user_id)) ? (
+                <span
+                  style={{
+                    color: "",
+                    fontSize: 14,
+                
+                    width: 190,
+                   
+                    paddingLeft: 6,
+                    marginLeft: 4,
+                    cursor: "pointer",
+                  }}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleDueDateClickSubDate(
+                      subCheck.id,
+                      subCheck.due_date,
+                      subCheck.parent
+                    );
+                  }}
+                  className="flex items-center gap-2"
+                >
+                  <FaRegCalendarAlt
+                    style={{ color: "white", }}
+                  />{" "}
+                  {subCheck.due_date
+                    ? ShowFormatedDueDateOnDateField(subCheck.due_date)
+                    : "Due Date"}
+                </span>
+              ) : (
+                <span className="text-white flex items-center gap-2 cursor-pointer px-2 text-sm  p-1 rounded-md">
+                  <FaRegCalendarAlt />
+                  {subCheck.due_date
+                    ? ShowFormatedDueDateOnDateField(subCheck.due_date)
+                    : "Due Date"}
+                </span>
+              )}
+
+              {subCheck.assign_to?.some(
+                (assignee) => assignee.user_id.toString() === user_id
+              ) ? (
+                <img
+                  title="Request to change Due Date"
+                  className="mr-2 ml-2 mt-1"
+                  src={require("../../../../Static/images/calendar_update.png")}
+                  style={{ width: 16, height: 16 }}
+                  onMouseEnter={() => setIsHoveredRequestedDateSubtask(true)}
+                  onMouseLeave={() => setIsHoveredRequestedDateSubtask(false)}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    console.log("requested");
+                    handleDueDateClickSubDateRequestSubtask(
+                      subCheck.id,
+                      subCheck.due_date
+                    );
+                  }}
+                />
+              ) : (
+                <></>
+              )}
+              {subCheck.created_by.user_id === user_id ||
+              createdBy_id === user_id ||
+              subCheck.assign_to.some(
+                (assignee) => assignee.user_id === user_id
+              ) ||
+              (Array.isArray(selectedEmail) &&
+                selectedEmail.some((item) => item.value === user_id)) ? (
+                <div
+                  className={
+                    subCheck.status.status_name.length > 8
+                      ? "col-md-4 ml-2"
+                      : "col-md-2 ml-2"
+                  }
+                  onClick={(e) => {
+                    if (!subCheck.due_date) {
+                      toast.error("Please add a due date before proceeding.");
+                      return;
+                    }
+                    e.stopPropagation();
+                    setshowStatusChecklist(false);
+                    openModalSubCheck(
+                      subCheck.id,
+                      subCheck.status.id,
+                      subCheck.status.status_name,
+                      subCheck.status.color
+                    );
+                  }}
+                  style={{
+                    textAlign: "center",
+                    cursor: "pointer",
+                    fontSize: 12,
+                    borderRadius: 20,
+                    boxShadow: "2px 2px 5px rgba(0, 0, 0, 0.2)",
+                    width: 80,
+                    color: "white",
+                    padding: "1px",
+                    backgroundColor: `${subCheck.status.color}`,
+                  }}
+                >
+                  {subCheck.status.status_name}
+                </div>
+              ) : (
+                <div
+                  className={
+                    subCheck.status.status_name.length > 8
+                      ? "col-md-4 ml-2"
+                      : "col-md-2 ml-2"
+                  }
+                  style={{
+                    textAlign: "center",
+                    cursor: "pointer",
+                    fontSize: 12,
+                    borderRadius: 20,
+                    width: 80,
+                    color: "#767676",
+                    pointerEvents: "none",
+
+                    padding: "1px",
+                    backgroundColor: "rgb(36, 82, 114)",
+                  }}
+                >
+                  {subCheck.status.status_name}
+                </div>
+              )}
+            </div>
+
+            <div
+              className="px-2 flex gap-2 items-center"
+              style={{ fontSize: 12 }}
+            >
+              <div
+                className=""
+                style={{
+                  cursor: "pointer",
+                  borderRadius: 4,
+                  color: "white",
+                  padding: "1px",
+                  height: 20,
+                  // backgroundColor: "#245272",
+                  boxShadow: "",
+                }}
+                onClick={() => {
+                  handleIconClickSubTaskAssign(
+                    subCheck.id,
+                    subCheck.assign_to,
+                    subCheck.due_date
+                  );
+                }}
+              >
+                <i
+                  className="fa fa-user-plus mr-2"
+                  style={{ color: "white" }}
+                ></i>
+                Assign to :
+              </div>
+              <div
+                className=""
+                style={{ overflowWrap: "break-word", maxWidth: "350px" }}
+              >
+                {subCheck.assign_to.length > 0
+                  ? subCheck.assign_to.map((user, index) => (
+                      <span key={index}>
+                        {user.email}
+                        {index < subCheck.assign_to.length - 1 && ", "}{" "}
+                        {/* Add comma if not the last element */}
+                      </span>
+                    ))
+                  : "Not Assigned"}
+              </div>
+            </div>
+
+            <div
+              className="p-2 flex items-center gap-2"
+              style={{ fontSize: 12 }}
+            >
+              <div
+                className="flex items-center gap-2"
+                onClick={() => {
+                  handleIconClickSubTaskDependency(
+                    subCheck.id,
+                    subCheck.depend_on,
+                    subCheck.due_date
+                  );
+                }}
+              >
+                <FaTasks style={{ color: "white" }} />
+                Dependency :
+              </div>
+              <div
+                className=""
+                style={{ overflowWrap: "break-word", maxWidth: "350px" }}
+              >
+                {subCheck.depend_on.length > 0
+                  ? subCheck.depend_on.map((user, index) => (
+                      <span key={index} style={{ color: "white" }}>
+                        {user.task_topic}
+                        {index < subCheck.depend_on.length - 1 && ", "}
+                      </span>
+                    ))
+                  : "No Dependency Task"}
+              </div>
+            </div>
+            {subCheck.created_by.user_id.toString() === user_id.toString() ? (
+              <div className="flex justify-end w-full">
+                <FaTrashAlt
+                  title="Delete SubTask"
+                  className="mx-2"
+                  onClick={(event) =>
+                    openModalDeleteTaskCheckListSubtask(subCheck.id, event)
+                  }
+                />
+              </div>
+            ) : (
+              <></>
+            )}
+          </div>
+        </div>
+        <div className="w-full mt-1">
+          {openLevels[subCheck.id] &&
+          subCheck[`level_${level + 1}`] &&
+          subCheck[`level_${level + 1}`].length > 0 ? (
+            <div className=" x-4">
+              {renderSubtasks(
+                subCheck[`level_${level + 1}`],
+                level + 1,
+                subCheck.id
+              )}
+              <div className="w-full flex gap-2 mt-2">
+                <input
+                  type="text"
+                  className="w-full bg-transparent outline-none"
+                  onChange={(e) =>
+                    setNewSubtasks((prevState) => ({
+                      ...prevState,
+                      [`${subCheck.id}-${level}`]: e.target.value,
+                    }))
+                  }
+                  value={newSubtasks[`${subCheck.id}-${level}`] || ""}
+                  placeholder={`Add New Childtask for Level ${level + 1}`}
+                  maxLength={150}
+                />
+                {loadingAddChildtask[subCheck.id] ? (
+                  <button className="pr-2 pl-2" style={{ color: "#fff" }}>
+                    <span
+                      style={{
+                        display: "flex",
+                        flexDirection: "row",
+                        justifyContent: "space-around",
+                      }}
+                    >
+                      <ThreeDots
+                        color="#fff"
+                        height={24}
+                        width={46}
+                        style={{}}
+                      />
+                    </span>
+                  </button>
+                ) : (
+                  <button
+                    className="bg-white rounded-md shadow-custom-all-sides text-black px-2"
+                    onClick={() =>
+                      Add_Checklist_Subtask(
+                        subCheck.id,
+                        subCheck.parent,
+                        level + 1,
+                        newSubtasks
+                      )
+                    }
+                  >
+                    Add
+                  </button>
+                )}
+              </div>
+            </div>
+          ) : (
+            <div className="flex items-center">
+              <input
+                type="text"
+                className="w-full bg-transparent border-b border-gray-400 outline-none"
+                onChange={(e) =>
+                  setNewSubtasks((prevState) => ({
+                    ...prevState,
+                    [`${subCheck.id}-${level}`]: e.target.value,
+                  }))
+                }
+                value={newSubtasks[`${subCheck.id}-${level}`] || ""}
+                placeholder={`Add New Childtask for Level ${level + 1}`}
+                maxLength={150}
+              />
+              {loadingAddChildtask[subCheck.id] ? (
+                <button className="pr-2 pl-2" style={{ color: "#fff" }}>
+                  <span
+                    style={{
+                      display: "flex",
+                      flexDirection: "row",
+                      justifyContent: "space-around",
+                    }}
+                  >
+                    <ThreeDots color="#fff" height={24} width={46} style={{}} />
+                  </span>
+                </button>
+              ) : (
+                <button
+                  className="bg-white rounded-md shadow-custom-all-sides text-black px-2 ml-2"
+                  onClick={() =>
+                    Add_Checklist_Subtask(
+                      subCheck.id,
+                      subCheck.parent,
+                      level + 1,
+                      newSubtasks
+                    )
+                  }
+                >
+                  Add
+                </button>
+              )}
+            </div>
+          )}
+        </div>
+
+        {/* Status SubTask */}
+        <Modal
+          isOpen={isModalOpenSubCheck}
+          onRequestClose={closeModalSubCheck}
+          // style={customStyles}
+          contentLabel="Update Task Status"
+        >
+          <h4 style={{ color: "white" }}>Update Sub Task Status </h4>
+          <Select
+            value={newStatusSubCheck}
+            onChange={handleStatusChangeSubCheck}
+            options={statusOptionsSub}
+            styles={{
+              menuPortal: (base) => ({ ...base, zIndex: 9999 }),
+              menu: (provided) => ({ ...provided, zIndex: 9999 }),
+
+              placeholder: (baseStyles, state) => ({
+                ...baseStyles,
+                color: "black",
+              }),
+              clearIndicator: (baseStyles) => ({
+                ...baseStyles,
+                color: "red",
+              }),
+              dropdownIndicator: (baseStyles) => ({
+                ...baseStyles,
+                color: "black",
+              }),
+              control: (baseStyles) => ({
+                ...baseStyles,
+                borderColor: "darkblue",
+              }),
+              option: (baseStyles) => ({
+                ...baseStyles,
+                color: "black",
+              }),
+            }}
+            menuPortalTarget={document.body}
+          />
+          <div style={{ display: "flex", justifyContent: "end" }}>
+            <button
+              className="mt-4 mr-2 p-1"
+              onClick={(e) => {
+                e.preventDefault();
+                console.log("Clicked editedSubTaskId:", editedSubTaskId);
+
+                Update_SubTask_Status(
+                  editedSubTaskId,
+                  subchecklistid,
+                  "details"
+                );
+              }}
+              style={{ color: "#fff" }}
+            >
+              Save
+            </button>
+
+            <button
+              className="mt-4 mr-2 p-1"
+              style={{ color: "#fff" }}
+              onClick={closeModalSubCheck}
+            >
+              Cancel
+            </button>
+          </div>
+        </Modal>
+        {/* Duedate SubTask */}
+        {isModalOpenSubDate && (
+          <div className="modal" style={{ display: "block", height: "450px" }}>
+            <div className="modal-dialog">
+              <div className="modal-content" style={{ background: "#133953" }}>
+                <div className="modal-header">
+                  {/* <h5 className="modal-title">Select Due Date</h5>
+                              <button type="button" className="close" onClick={handleModalClose}> */}
+                  <h5 className="modal-title">Select Sub Task Due Date</h5>
+                  <button
+                    type="button"
+                    className=" btn_clo close"
+                    onClick={handleModalCloseSubDate}
+                  >
+                    <span>&times;</span>
+                  </button>
+                </div>
+                <div className="modal-body" style={{ textAlign: "center" }}>
+                  <DatePicker
+                    selected={subTaskDueDate}
+                    onChange={(date) => setSubTaskDueDate(date)}
+                    showTimeSelect
+                    dateFormat="dd/MM/yyyy h:mm aa"
+                    ref={datePickerRefSubDate}
+                    // minDate={currentDate}
+                    timeIntervals={5}
+                    minDate={new Date()}
+                    // minTime={currentTime}
+                    // maxTime={maxTime}
+                    filterTime={filterTime}
+                    placeholderText="Select Date and Time"
+                  />
+                </div>
+                <div className="modal-footer">
+                  <button
+                    type="button"
+                    className="btn btn-primary"
+                    onClick={() => {
+                      handleDateChangeSubDate(
+                        subCheck.id,
+                        subTaskDueDate,
+                        subCheck.parent
+                      );
+                      handleModalCloseSubDate();
+                      datePickerRefSubDate.current.setOpen(false);
+                    }}
+                  >
+                    Save
+                  </button>
+                  <button
+                    type="button"
+                    className="btn btn-secondary"
+                    onClick={handleModalCloseSubDate}
+                  >
+                    Close
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+        {/* Select Assign SubTask===============  */}
+        {isModalOpenSubTaskAssign && (
+          <div
+            className="modal "
+            tabIndex="-1"
+            role="dialog"
+            style={{ display: "block", height: "auto" }}
+          >
+            <div className="modal-dialog " role="document">
+              <div
+                className="modal-content back_ground"
+                style={{ background: "#133953" }}
+              >
+                <div className="modal-header">
+                  <h5 className="modal-title">Select Sub Task Email </h5>
+                  <button
+                    type="button"
+                    className="btn_clo close"
+                    data-dismiss="modal"
+                    aria-label="Close"
+                    onClick={closeModalSubTaskAssign}
+                  >
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div className="modal-body">
+                  {/* Use react-select to display the user emails */}
+                  <Select
+                    isMulti
+                    options={optionsSubTaskAssign}
+                    value={selectedEmailSubTaskAssign}
+                    onChange={handleDropdownItemClickSubTaskAssign}
+                    isSearchable={true}
+                    menuPortalTarget={document.body}
+                    menuPosition="fixed"
+                    styles={{
+                      menuPortal: (base) => ({ ...base, zIndex: 9999 }),
+                      menu: (provided) => ({ ...provided, zIndex: 9999 }),
+
+                      placeholder: (baseStyles, state) => ({
+                        ...baseStyles,
+                        color: "black",
+                      }),
+                      clearIndicator: (baseStyles) => ({
+                        ...baseStyles,
+                        color: "red",
+                      }),
+                      dropdownIndicator: (baseStyles) => ({
+                        ...baseStyles,
+                        color: "black",
+                      }),
+                      control: (baseStyles) => ({
+                        ...baseStyles,
+                        borderColor: "darkblue",
+                      }),
+                      option: (baseStyles) => ({
+                        ...baseStyles,
+                        color: "black",
+                      }),
+                      multiValueRemove: (baseStyles, state) => ({
+                        ...baseStyles,
+                        color: state.isFocused ? "red" : "gray",
+                        backgroundColor: state.isFocused
+                          ? "black"
+                          : "lightgreen",
+                      }),
+                    }}
+                  />
+                </div>
+                <div className="modal-footer" style={{ paddingTop: 54 }}>
+                  <button
+                    type="button"
+                    className="btn btn-danger"
+                    onClick={closeModalSubTaskAssign}
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="button"
+                    className="btn btn-primary"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      setEditingIndexSub(null);
+                      handleConfirmClickSubTaskAssign(subCheck.id);
+                    }}
+                    disabled={!selectedEmailSubTaskAssign}
+                  >
+                    Confirm
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+        {/* Select Dependency SubTask===============  */}
+        {isModalOpenSubTaskDependency && (
+          <div
+            className="modal "
+            tabIndex="-1"
+            role="dialog"
+            style={{ display: "block", height: "auto" }}
+          >
+            <div className="modal-dialog " role="document">
+              <div
+                className="modal-content back_ground"
+                style={{ background: "#133953" }}
+              >
+                <div className="modal-header">
+                  <h5 className="modal-title">Select Sub Task Dependency </h5>
+                  <button
+                    type="button"
+                    className="btn_clo close"
+                    data-dismiss="modal"
+                    aria-label="Close"
+                    onClick={closeModalSubTaskDependency}
+                  >
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div className="modal-body">
+                  {/* Use react-select to display the user emails */}
+                  <Select
+                    isMulti
+                    value={selectedTasks}
+                    onChange={handleChangeSelectTitle}
+                    options={options}
+                    placeholder="Select tasks..."
+                    isSearchable={true}
+                    menuPortalTarget={document.body}
+                    menuPosition="fixed"
+                    noOptionsMessage={() => "Tasks not available..."}
+                    styles={{
+                      menuPortal: (base) => ({ ...base, zIndex: 9999 }),
+                      menu: (provided) => ({ ...provided, zIndex: 9999 }),
+                      placeholder: (base) => ({
+                        ...base,
+                        color: "black",
+                      }),
+                      clearIndicator: (base) => ({
+                        ...base,
+                        color: "red",
+                      }),
+                      dropdownIndicator: (base) => ({
+                        ...base,
+                        color: "black",
+                      }),
+                      control: (base) => ({
+                        ...base,
+                        borderColor: "darkblue",
+                      }),
+                      multiValueRemove: (base, { isFocused }) => ({
+                        ...base,
+                        color: isFocused ? "red" : "gray",
+                        backgroundColor: isFocused ? "black" : "lightgreen",
+                      }),
+                      option: (base) => ({
+                        ...base,
+                        color: "black",
+                      }),
+                    }}
+                  />
+                </div>
+                <div className="modal-footer" style={{ paddingTop: 54 }}>
+                  <button
+                    type="button"
+                    className="btn btn-danger"
+                    onClick={closeModalSubTaskDependency}
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="button"
+                    className="btn btn-primary"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      handleConfirmClickSubTaskDependency();
+                    }}
+                    disabled={!selectedTasks}
+                  >
+                    Confirm
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+        {/* Requested Due Date SubTask */}
+        {isModalOpenSubDateRequestSubtask && (
+          <div className="modal" style={{ display: "block", height: "450px" }}>
+            <div className="modal-dialog">
+              <div className="modal-content" style={{ background: "#133953" }}>
+                <div className="modal-header">
+                  {/* <h5 className="modal-title">Select Due Date</h5>
+                            <button type="button" className="close" onClick={handleModalClose}> */}
+                  <h5 className="modal-title">
+                    Select Sub Task Request Due Date{" "}
+                  </h5>
+                  <button
+                    type="button"
+                    className=" btn_clo close"
+                    onClick={handleModalCloseSubDateRequestSubtask}
+                  >
+                    <span>&times;</span>
+                  </button>
+                </div>
+                <div className="modal-body" style={{ textAlign: "center" }}>
+                  <DatePicker
+                    selected={subTaskDueDateRequestSubtask}
+                    onChange={(date) => setSubTaskDueDateRequestSubtask(date)}
+                    showTimeSelect
+                    dateFormat="dd/MM/yyyy h:mm aa"
+                    timeIntervals={5}
+                    ref={datePickerRefSubDateRequestSubtask}
+                    minDate={new Date()}
+                    // minTime={currentTime}
+                    // maxTime={maxTime}
+                    filterTime={filterTime}
+                    placeholderText="Select Date and Time Request"
+                  />
+                </div>
+                <div className="modal-footer">
+                  <button
+                    type="button"
+                    className="btn btn-primary"
+                    onClick={() => {
+                      console.log(subCheck.id);
+                      handleDateChangeSubDateRequestSubtask(
+                        subTaskIdForDueDateRequestSubtask,
+                        subTaskDueDateRequestSubtask
+                      );
+                      handleModalCloseSubDateRequestSubtask();
+                      datePickerRefSubDateRequestSubtask.current.setOpen(false);
+                    }}
+                  >
+                    Save
+                  </button>
+                  <button
+                    type="button"
+                    className="btn btn-secondary"
+                    onClick={handleModalCloseSubDateRequestSubtask}
+                  >
+                    Close
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+    ));
+  };
+
   return (
     <section
       className="flex"
@@ -4450,11 +5533,13 @@ const TaskManagement = () => {
                     {" "}
                     <p> Depend On :</p>
                     <p
-                      className="cols-span-3 font-normal"
-                      style={{
-                        // overflowWrap: "break-word",
-                        // maxWidth: "350px",
-                      }}
+                      className="cols-span-3 font-normal w-[25rem]"
+                      style={
+                        {
+                          // overflowWrap: "break-word",
+                          // maxWidth: "350px",
+                        }
+                      }
                     >
                       {showTaskTitleMainDependency}{" "}
                     </p>
@@ -4472,30 +5557,7 @@ const TaskManagement = () => {
                         Checklist
                       </div>
                     </div>
-                    {/* <Modal
-                  isOpen={isModalOpenDelete}
-                  onRequestClose={closeModalDelete}
-                  contentLabel="Modal"
-                  style={customStylesDelete}
-                >
-                  <div>
-                    <div
-                      className="col-md-12 p-1"
-                      style={{
-                        color: "white",
-                        borderRadius: 4,
-                        backgroundColor: checklistDeleteHovered
-                          ? "rgba(0, 0, 0, 0.4)"
-                          : "initial",
-                      }}
-                      onMouseEnter={handleChecklistDeleteMouseEnter}
-                      onMouseLeave={handleChecklistDeleteMouseLeave}
-                    >
-                      Delete
-                    </div>
-                  </div>
-                </Modal> */}
-                    {/* <hr style={taglineStyle}></hr> */}
+
                     {items.map((item, i) => (
                       <div
                         key={i}
@@ -4654,67 +5716,6 @@ const TaskManagement = () => {
                             )}
                           </div>
                         </div>
-
-                        {/* <Modal
-                      isOpen={isModalOpenCheck}
-                      onRequestClose={closeModalCheck}
-                      style={customStyles}
-                      contentLabel="Update Task Status CheckList"
-                    >
-                      <h4 style={{ color: "white" }}>
-                        Update Task Status CheckList
-                      </h4>
-                      <Select
-                        value={newStatusCheck}
-                        onChange={handleStatusChangeCheck}
-                        options={statusOptionsSub}
-                        styles={{
-                          menuPortal: (base) => ({ ...base, zIndex: 9999 }),
-                          menu: (provided) => ({ ...provided, zIndex: 9999 }),
-
-                          placeholder: (baseStyles, state) => ({
-                            ...baseStyles,
-                            color: "black",
-                          }),
-                          clearIndicator: (baseStyles) => ({
-                            ...baseStyles,
-                            color: "red",
-                          }),
-                          dropdownIndicator: (baseStyles) => ({
-                            ...baseStyles,
-                            color: "black",
-                          }),
-                          control: (baseStyles) => ({
-                            ...baseStyles,
-                            borderColor: "darkblue",
-                          }),
-                          option: (baseStyles) => ({
-                            ...baseStyles,
-                            color: "black",
-                          }),
-                        }}
-                        menuPortalTarget={document.body}
-                      />
-                      <div style={{ display: "flex", justifyContent: "end" }}>
-                        <button
-                          className="mt-4 mr-2 p-1"
-                          style={{ color: "#fff" }}
-                          onClick={() =>
-                            Update_CheckList_Status(item.id, checkid, "details")
-                          }
-                        >
-                          Save
-                        </button>
-
-                        <button
-                          className="mt-4 mr-2 p-1"
-                          style={{ color: "#fff" }}
-                          onClick={closeModalCheck}
-                        >
-                          Cancel
-                        </button>
-                      </div>
-                    </Modal> */}
                       </div>
                     ))}
                     {isModalOpenDeleteTaskCheckList && (
@@ -4760,604 +5761,65 @@ const TaskManagement = () => {
                         title="Note: Please set a Due Date to track the task."
                       />
                     </div>
-                    {subTaskItems.map((subCheck, subIndex) => (
-                      <div
-                        key={subIndex}
-                        className=" bg-black p-2 bg-opacity-40 backdrop-blur-sm my-1 rounded-md"
-                      >
-                        <div
-                          htmlFor={`item-${subIndex}`}
-                          style={{
-                            fontSize: "normal",
-                            cursor: "default",
-                            display: "flex",
-                            justifyContent: "space-between",
-                          }}
-                          className=""
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            handleItemToggleSubTask(subIndex, subCheck.id);
-                          }}
-                        >
-                          <div className="">
-                            {editingIndexSub === subIndex ? (
-                              <div className="flex items-center gap-2 w-full">
-                                <textarea
-                                  className="w-full rounded-md outline-none text-black p-2 pt-0"
-                                  ref={inputRefItem}
-                                  spellCheck="true"
-                                  value={subItemTaskTopicText[subIndex] || ""}
-                                  onChange={(e) => {
-                                    const updatedText = e.target.value;
-                                    const updatedArray = [
-                                      ...subItemTaskTopicText,
-                                    ];
-                                    updatedArray[subIndex] = updatedText;
-                                    setSubItemTaskTopicText(updatedArray);
-                                  }}
-                                  onKeyDown={(e) => {
-                                    if (e.key === "Enter") {
-                                      e.preventDefault();
-                                      setIsEditingSubItem(false);
-                                      UpdateItemSubTask(
-                                        subCheck.id,
-                                        subItemTaskTopicText[subIndex]
-                                      ); // Pass single value instead of array
-                                    }
-                                  }}
-                                  cols={150}
-                                  // style={{
-                                  //   background: "#132A3A",
-                                  //   border: "none",
-                                  //   width: "100%",
-                                  //   color: "white",
-                                  //   paddingLeft: 4,
-                                  //   paddingRight: 4,
-                                  //   borderRadius: 4,
-                                  // }}
-                                />
-                                <span
-                                  onClick={(e) => {
-                                    e.preventDefault();
-                                    setIsEditingSubItem(false);
-                                    UpdateItemSubTask(
-                                      subCheck.id,
-                                      subItemTaskTopicText[subIndex]
-                                    ); // Pass single value instead of array
-                                  }}
-                                >
-                                  <FaCheck
-                                    style={{
-                                      marginLeft: 10,
-                                      marginRight: 10,
-                                      fontSize: 14,
-                                      color: "white",
-                                      cursor: "pointer",
-                                    }}
-                                  />
-                                </span>
-                              </div>
-                            ) : (
-                              <div
-                                className="flex items-center"
-                                onClick={() => setEditingIndexSub(subIndex)}
-                                style={{ wordBreak: "break-all" }}
-                              >
-                                {subItemTaskTopicText[subIndex]}
-                                <span
-                                  onClick={(e) => {
-                                    e.stopPropagation();
-                                    handleIconClickTextItemSub();
-                                    setEditingIndexSub(subIndex);
-                                  }}
-                                >
-                                  <FaPencilAlt
-                                    className="FaIcon"
-                                    style={{
-                                      marginLeft: 10,
-                                      fontSize: 14,
-                                      cursor: "pointer",
-                                    }}
-                                    title="Edit"
-                                  />
-                                </span>
-                              </div>
-                            )}
 
-                            {/* <br /> */}
-                            <div className="mt-2" style={{ fontSize: 15 }}>
-                              Created by: {subCheck.created_by.firstname}{" "}
-                              {subCheck.created_by.lastname}
-                            </div>
-                            <div
-                              style={{
-                                color: "#ededed",
-                                fontSize: 14,
-                                display: "block",
-                              }}
-                            >
-                              <div
-                                className="subDateStatus"
-                                style={{ display: "flex" }}
-                              >
-                                {createdBy_id === user_id ||
-                                subCheck.created_by.user_id === user_id ||
-                                (Array.isArray(selectedEmail) &&
-                                  selectedEmail.some(
-                                    (item) => item.value === user_id
-                                  )) ? (
-                                  <span
-                                    className="flex items-center gap-2"
-                                    style={{
-                                      color: "white",
-                                      fontSize: 14,
-                                      width: 180,
-                                      cursor: "pointer",
-                                    }}
-                                    onClick={(e) => {
-                                      e.stopPropagation();
-                                      handleDueDateClickSubDate(
-                                        subCheck.id,
-                                        subCheck.due_date
-                                      );
-                                    }}
-                                  >
-                                    <FaRegCalendarAlt />{" "}
-                                    {subCheck.due_date
-                                      ? ShowFormatedDueDateOnDateField(
-                                          subCheck.due_date
-                                        )
-                                      : "Due Date"}
-                                  </span>
-                                ) : (
-                                  <span
-                                    className="flex items-center gap-2 "
-                                    style={{
-                                      color: "white",
-                                      fontSize: 14,
-                                      width: 180,
-                                      cursor: "pointer",
-                                    }}
-                                  >
-                                    <FaRegCalendarAlt style={{}} />{" "}
-                                    {subCheck.due_date
-                                      ? ShowFormatedDueDateOnDateField(
-                                          subCheck.due_date
-                                        )
-                                      : "Due Date"}
-                                  </span>
-                                )}
-                                &nbsp;
-                                {createdBy_id !== user_id &&
-                                subCheck.due_date ? (
-                                  <MdEditCalendar
-                                    title="Request to change due date"
-                                    style={{ width: 16, height: 16 }}
-                                    onClick={(e) => {
-                                      e.stopPropagation();
-                                      handleDueDateClickSubDateRequestSubtask(
-                                        subCheck.id,
-                                        subCheck.due_date
-                                      );
-                                      console.log("clicked");
-                                    }}
-                                    className="cursor-pointer "
-                                  />
-                                ) : (
-                                  <></>
-                                )}
-                                &nbsp; &nbsp; &nbsp;
-                                {subCheck.created_by.user_id === user_id ||
-                                createdBy_id === user_id ||
-                                subCheck.assign_to.some(
-                                  (assignee) => assignee.user_id === user_id
-                                ) ||
-                                (Array.isArray(selectedEmail) &&
-                                  selectedEmail.some(
-                                    (item) => item.value === user_id
-                                  )) ? (
-                                  <div
-                                    className={
-                                      subCheck.status.status_name.length > 8
-                                        ? "col-md-4"
-                                        : "col-md-2"
-                                    }
-                                    onClick={(e) => {
-                                      if (!subCheck.due_date) {
-                                        toast.error(
-                                          "Please add a due date before proceeding.",
-                                          {
-                                            position: "top-center",
-                                            autoClose: 5000,
-                                          }
-                                        );
-                                        return;
-                                      }
-                                      e.stopPropagation();
+                    {subTaskItems.length > 0 && (
+                      <>
+                        <div className="subtasks-container">
+                          {currentTaskId && renderSubtasks(subTaskItems, 1)}
+                        </div>
+                      </>
+                    )}
+                    <div className="w-full flex items-center gap-2">
+                      <input
+                        type="text"
+                        spellCheck="true"
+                        className="w-full border-b border-gray-400"
+                        onKeyPress={handleAddItem}
+                        onChange={(e) =>
+                          setnewSubtasksOnlyForLevelOne(e.target.value)
+                        }
+                        value={newSubtasksOnlyForLevelOne}
+                        placeholder="Add New Subtask"
+                        style={{
+                          backgroundColor: "rgb(82 129 161 / 0%)",
+                          color: "white",
+                          marginRight: 4,
+                        }}
+                        title="Add New Subtask"
+                        maxLength={150}
+                      />
 
-                                      openModalSubCheck(
-                                        subCheck.id,
-                                        subCheck.status.status_name
-                                      );
-                                    }}
-                                    style={{
-                                      textAlign: "center",
-                                      cursor: "pointer",
-                                      fontSize: 12,
-                                      borderRadius: 20,
-                                      boxShadow:
-                                        "2px 2px 5px rgba(0, 0, 0, 0.2)",
-                                      width: 80,
-                                      color: "white",
-                                      padding: "1px",
-                                      backgroundColor: `${subCheck.status.color}`,
-                                    }}
-                                  >
-                                    {subCheck.status.status_name}
-                                  </div>
-                                ) : (
-                                  <div
-                                    className={
-                                      subCheck.status.status_name.length > 8
-                                        ? "col-md-4"
-                                        : "col-md-2"
-                                    }
-                                    style={{
-                                      textAlign: "center",
-
-                                      fontSize: 12,
-                                      borderRadius: 20,
-                                      width: 80,
-                                      color: "#767676",
-                                      pointerEvents: "none",
-
-                                      padding: "1px",
-                                      backgroundColor: "rgb(36, 82, 114)",
-                                    }}
-                                  >
-                                    {subCheck.status.status_name}
-                                  </div>
-                                )}
-                              </div>
-                              <div className="mt-1" style={{ display: "flex" }}>
-                                <>
-                                  <div
-                                    className="flex gap-1 items-center"
-                                    style={{
-                                      textAlign: "center",
-                                      cursor: "pointer",
-
-                                      borderRadius: 4,
-                                      color: "white",
-                                      height: 20,
-                                    }}
-                                    onClick={() => {
-                                      handleIconClickSubTaskAssign(
-                                        subCheck.id,
-                                        subCheck.assign_to,
-                                        subCheck.due_date
-                                      );
-                                    }}
-                                  >
-                                    <div>
-                                      <i className="fa fa-user-plus mr-2"></i>
-                                      Assign to :
-                                    </div>
-                                  </div>
-                                  <div
-                                    className="mx-2 flex items-center"
-                                    style={{
-                                      overflowWrap: "break-word",
-                                      maxWidth: "350px",
-                                    }}
-                                  >
-                                    {subCheck.assign_to.length > 0
-                                      ? subCheck.assign_to.map(
-                                          (user, index) => (
-                                            <span key={index}>
-                                              {user.email}
-                                              {index <
-                                                subCheck.assign_to.length - 1 &&
-                                                ","}{" "}
-                                              {/* Add comma if not the last element */}
-                                            </span>
-                                          )
-                                        )
-                                      : "Not Assigned"}
-                                  </div>
-                                </>
-
-                                {subCheck.created_by.user_id.toString() ===
-                                user_id.toString() ? (
-                                  <>
-                                    <FaTrashAlt
-                                      title="Delete SubTask"
-                                      className="mt-1 cursor-pointer "
-                                      onClick={(event) =>
-                                        openModalDeleteTaskCheckListSubtask(
-                                          subCheck.id,
-                                          event
-                                        )
-                                      }
-                                    />
-                                  </>
-                                ) : (
-                                  <></>
-                                )}
-                              </div>
-                            </div>
-                          </div>
-                          {/* // ))} */}
-                          <span title="Add CheckList Subtask">
-                            {subTaskMenuOpen[subIndex] ? "▼" : "▶"}
-                            {/* {subTaskMenuOpen[subIndex] && Get_SubTask_Child(subCheck.id)} */}
+                      {loadingAddSubtask ? (
+                        <button className="pr-2 pl-2" style={{ color: "#fff" }}>
+                          <span
+                            style={{
+                              display: "flex",
+                              flexDirection: "row",
+                              justifyContent: "space-around",
+                            }}
+                          >
+                            <ThreeDots
+                              color="#fff"
+                              height={24}
+                              width={46}
+                              style={{}}
+                            />
                           </span>
-                        </div>
-                        <div className="">
-                          {subTaskMenuOpen[subIndex] && (
-                            <div className="">
-                              {/* <hr style={{ marginTop: 4, marginBottom: 6 }} /> */}
-                              {subCheck.subtaskchild_set?.map((sublist, i) => (
-                                <div
-                                  htmlFor={`item-${i}`}
-                                  className="shadow-custom-all-sides m-2 p-2 rounded-md  border-dashed border border-gray-400"
-                                  style={
-                                    {
-                                      // borderRadius: 4,
-                                      // backgroundColor: "rgb(82 129 161 / 58%)",
-                                      // boxShadow: "2px 2px 5px rgba(0, 0, 0, 0.2)",
-                                    }
-                                  }
-                                  key={subIndex}
-                                >
-                                  {sublist.task_topic}
+                        </button>
+                      ) : (
+                        <button
+                          className="bg-white text-black rounded-md px-2"
+                          onClick={() =>
+                            Add_Checklist_Subtask_if_no_subtask(
+                              newSubtasksOnlyForLevelOne
+                            )
+                          }
+                        >
+                          Add
+                        </button>
+                      )}
+                    </div>
 
-                                  <div className="mb" style={{ fontSize: 14 }}>
-                                    Created by : {sublist.created_by.firstname}{" "}
-                                    {sublist.created_by.lastname}
-                                  </div>
-                                  <div
-                                    style={{
-                                      color: "#ededed",
-                                      fontSize: 14,
-                                      display: "block",
-                                    }}
-                                  >
-                                    <div
-                                      className="subDateStatus"
-                                      style={{ display: "flex" }}
-                                    >
-                                      {createdBy_id === user_id ||
-                                      sublist.created_by.user_id === user_id ||
-                                      (Array.isArray(selectedEmail) &&
-                                        selectedEmail.some(
-                                          (item) => item.value === user_id
-                                        )) ? (
-                                        <span
-                                          className="flex items-center gap-2 cursor-pointer "
-                                          onClick={(e) => {
-                                            e.stopPropagation();
-                                            handleDueDateClickSubDateChild(
-                                              sublist.id,
-                                              sublist.due_date
-                                            );
-                                            setDeleteId(sublist.id);
-                                          }}
-                                        >
-                                          <FaRegCalendarAlt />{" "}
-                                          {sublist.due_date
-                                            ? ShowFormatedDueDateOnDateField(
-                                                sublist.due_date
-                                              )
-                                            : "Due Date"}
-                                        </span>
-                                      ) : (
-                                        <span
-                                          className="flex items-center gap-2"
-                                          onClick={(e) => {
-                                            e.stopPropagation();
-                                          }}
-                                        >
-                                          <FaRegCalendarAlt style={{}} />{" "}
-                                          {sublist.due_date
-                                            ? ShowFormatedDueDateOnDateField(
-                                                sublist.due_date
-                                              )
-                                            : "Due Date"}
-                                        </span>
-                                      )}
-                                      &nbsp;
-                                      {createdBy_id.toString() !== user_id &&
-                                      sublist.due_date ? (
-                                        <MdEditCalendar
-                                          title="Request to change Due Date"
-                                          className="cursor-pointer m-1"
-                                          onClick={(e) => {
-                                            e.stopPropagation();
-                                            handleDueDateClickSubDateRequestSubtaskChild(
-                                              sublist.id,
-                                              sublist.due_date
-                                            );
-                                          }}
-                                        />
-                                      ) : (
-                                        <></>
-                                      )}
-                                      &nbsp; &nbsp; &nbsp;
-                                      <div
-                                        className={
-                                          sublist.status.status_name.length > 8
-                                            ? "col-md-4"
-                                            : "col-md-2"
-                                        }
-                                        onClick={(e) => {
-                                          if (!sublist.due_date) {
-                                            toast.error(
-                                              "Please add a due date before proceeding."
-                                            );
-                                            return;
-                                          }
-                                          e.stopPropagation();
-
-                                          openModalSubCheckChild(
-                                            sublist.id,
-                                            sublist.status.status_name
-                                          );
-                                        }}
-                                        style={{
-                                          textAlign: "center",
-                                          cursor: "pointer",
-                                          fontSize: 12,
-                                          borderRadius: 20,
-                                          boxShadow:
-                                            "2px 2px 5px rgba(0, 0, 0, 0.2)",
-                                          width: 80,
-                                          color: "white",
-                                          padding: "1px",
-                                          backgroundColor: `${sublist.status.color}`,
-                                        }}
-                                      >
-                                        {sublist.status.status_name}
-                                      </div>
-                                    </div>
-                                    <div className="flex gap-2 flex-wrap mt-2">
-                                      <div
-                                        className="cursor-pointer "
-                                        onClick={() => {
-                                          handleIconClickSubTaskAssignChild(
-                                            sublist.id,
-                                            sublist.assign_to,
-                                            sublist.due_date
-                                          );
-                                          console.log(
-                                            "assign",
-                                            sublist.assign_to
-                                          );
-                                        }}
-                                      >
-                                        {" "}
-                                        <i
-                                          className="fa fa-user-plus mr-2"
-
-                                          //  onClick={handleIconClickSubTaskAssignChild(sublist.id)}
-                                        >
-                                          {" "}
-                                        </i>
-                                        Assign to : {"  "}
-                                      </div>
-
-                                      <div
-                                        className=""
-                                        style={{
-                                          overflowWrap: "break-word",
-                                          maxWidth: "350px",
-                                        }}
-                                      >
-                                        {/* {sublist.assign_to} */}
-                                        {sublist.assign_to.length > 0
-                                          ? sublist.assign_to.map(
-                                              (user, index) => (
-                                                <span key={index}>
-                                                  {" "}
-                                                  {user.email}
-                                                  {index <
-                                                    sublist.assign_to.length -
-                                                      1 && ","}{" "}
-                                                  {/* Add comma if not the last element */}
-                                                </span>
-                                              )
-                                            )
-                                          : "Not Assigned"}
-                                      </div>
-                                      <div className="flex justify-end w-full">
-                                        <FaTrashAlt
-                                          className="text-red-400"
-                                          title="Delete"
-                                          onClick={(event) =>
-                                            openModalDeleteTaskCheckListSubtaskChild(
-                                              sublist.id,
-                                              event
-                                            )
-                                          }
-                                        />
-                                      </div>
-                                    </div>
-                                  </div>
-                                </div>
-                              ))}
-                              <div className="">
-                                {createdBy_id === user_id || //task created by
-                                isTaskAssignedTo ? ( //taskassgnee
-                                  <div className="flex justify-between items-center">
-                                    <div className="flex items-center gap-2 w-full">
-                                      <FaPlusCircle
-                                        style={{
-                                          color: "#cdcdcd",
-                                          marginRight: 4,
-                                        }}
-                                      />
-                                      <input
-                                        spellCheck="true"
-                                        type="text"
-                                        className="px-2 outline-none border-b border-gray-400 bg-transparent w-full mr-2"
-                                        onChange={(e) =>
-                                          handleInputChange(
-                                            subIndex,
-                                            e.target.value
-                                          )
-                                        }
-                                        value={newSubtasksChild[subIndex]}
-                                        placeholder="Add Task"
-                                        title="Add Subtask Task"
-                                      />
-                                    </div>
-                                    <button
-                                      className="bg-white text-black px-2 shadow-custom-all-sides rounded-md"
-                                      onClick={() =>
-                                        Add_Checklist_SubtaskChild(
-                                          subCheck.id,
-                                          subIndex
-                                        )
-                                      }
-                                    >
-                                      Add
-                                    </button>
-                                  </div>
-                                ) : (
-                                  <div className="flex justify-between items-center">
-                                    <div className="flex items-center gap-2 w-full">
-                                      <FaPlusCircle
-                                        style={{
-                                          color: "#cdcdcd",
-                                          marginRight: 4,
-                                        }}
-                                      />
-                                      <input
-                                        spellCheck="true"
-                                        type="text"
-                                        className="w-full px-2 outline-none bg-transparent border-b border-gray-400 mr-2"
-                                        onChange={(e) =>
-                                          handleInputChange(
-                                            subIndex,
-                                            e.target.value
-                                          )
-                                        }
-                                        value={newSubtasksChild[subIndex]}
-                                        placeholder="Add Task"
-                                        title="Add Subtask Task"
-                                      />
-                                    </div>
-                                    <button className="bg-white text-black px-2 shadow-custom-all-sides rounded-md">
-                                      Add
-                                    </button>
-                                  </div>
-                                )}
-                              </div>
-                            </div>
-                          )}
-                        </div>
-                      </div>
-                    ))}
                     {isModalOpenDeleteTaskCheckListSubtaskChild && (
                       <DeleteTaskModal
                         title={"Do you want to Delete Task?"}
@@ -5367,7 +5829,6 @@ const TaskManagement = () => {
                         onclose={closeModalDeleteTaskCheckListSubtaskChild}
                       />
                     )}
-
                     {isModalOpenSubCheckChild && (
                       <div className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-30 backdrop-blur-sm z-50  ">
                         <div
@@ -5936,7 +6397,7 @@ const TaskManagement = () => {
                         </div>
                       </div>
                     )}
-                    <div className="flex justify-between my-2">
+                    {/* <div className="flex justify-between my-2">
                       {createdBy_id === user_id || //task created by
                       isTaskAssignedTo ? ( //taskassgnee
                         <>
@@ -5948,12 +6409,9 @@ const TaskManagement = () => {
                               spellCheck="true"
                               type="text"
                               className="w-full bg-transparent mr-4 outline-none border-b border-gray-400"
-                              // onKeyPress={Add_Checklist_Subtask}
-                              onChange={(e) => {
-                                setNewSubtasks(e.target.value);
-                              }}
-                              value={newSubtasks}
-                              placeholder="Add New Subtask "
+                              onChange={(e) => setnewSubtasksOnlyForLevelOne(e.target.value)}
+                              value={newSubtasksOnlyForLevelOne}
+                              placeholder="Add New Subtask"
                               title="Add New Subtask"
                             />
                           </div>
@@ -5986,14 +6444,16 @@ const TaskManagement = () => {
                               // className={`pr-2 pl-2 ${
                               //   isDisabledSub ? "button-disabled" : ""
                               // }`}
-                              style={{ color: "#fff" }}
+                              className="bg-white text-black px-2 rounded-md shadow-custom-all-sides"
+                              // style={{ color: "#fff" }}
+                              onClick={() => Add_Checklist_Subtask()}
                             >
                               Add
                             </button>
                           </div>
                         </>
                       )}
-                    </div>
+                    </div> */}
                   </div>
                   <div className="">
                     <div className="border-b-2 border-white ">

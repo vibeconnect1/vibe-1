@@ -11,8 +11,9 @@ const AssociateServiceChecklist = () => {
   const [assignedTo, setAssignedTo] = useState([]);
   const [association, setAssociation] = useState([])
   const [added, setAdded] = useState(false)
+  const [selectedUserOption, setSelectedUserOption] = useState([]);
   const [formData, setFormData] = useState({
-    assigned_to: "",
+    assigned_to: [],
   });
 
   const column = [
@@ -41,8 +42,13 @@ const AssociateServiceChecklist = () => {
     };
     const fetchAssignedTo = async () => {
       const assignedToList = await getAssignedTo();
-      console.log(assignedToList.data);
-      setAssignedTo(assignedToList.data);
+      console.log(assignedToList.data)
+      const user = assignedToList.data.map((u) => ({
+        value: u.id,
+        label:`${ u.firstname} ${u.lastname}`,
+      }));
+      console.log(user)
+      setAssignedTo(user);
     };
     const fetchAssociationList = async() =>{
       const assoResp = await getAssociationList(id)
@@ -64,6 +70,9 @@ const AssociateServiceChecklist = () => {
   const handleChange = (e) => {
     setFormData({ ...formData, assigned_to: e.target.value });
   };
+  const handleUserChangeSelect = (selectedUserOption) => {
+    setSelectedUserOption(selectedUserOption);
+  };
 
   const { id } = useParams();
   const handleAddAssociate = async () => {
@@ -72,13 +81,15 @@ const AssociateServiceChecklist = () => {
       activity: {
         checklist_id: id,
       },
-      assigned_to: formData.assigned_to,
+      assigned_to: selectedUserOption.map((opt)=> opt.value),
     };
     try {
       toast.loading("Associating Checklist");
       const resp = await postServiceAssociation(payload);
       console.log(resp);
       toast.dismiss();
+      setSelectedOption([])
+      setSelectedUserOption([])
       // window.location.reload();
       toast.success("Checklist Associated");
       setAdded(true)
@@ -113,7 +124,7 @@ const AssociateServiceChecklist = () => {
           </div>
           <div className="flex flex-col ">
             {/* <label className="font-medium my-2">Assign To</label> */}
-            <select
+            {/* <select
               value={formData.assigned_to}
               onChange={handleChange}
               className="border border-gray-300 p-2 rounded-sm"
@@ -124,7 +135,15 @@ const AssociateServiceChecklist = () => {
                   {assign.firstname} {assign.lastname}
                 </option>
               ))}
-            </select>
+                
+            </select> */}
+             <Select
+              isMulti
+              onChange={handleUserChangeSelect}
+              options={assignedTo}
+              noOptionsMessage={() => "No Users Available"}
+              placeholder="Select Users"
+            />
           </div>
           <div>
             <button

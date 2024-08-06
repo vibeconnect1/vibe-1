@@ -233,6 +233,11 @@ const CreateTicket = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+if(!formData.building_name || !formData.floor_name){
+  return toast.error("Please Select Building & Floor!")
+}
+
     try {
       toast.loading("Please wait generating ticket!");
       // const fileData = new FormData();
@@ -278,6 +283,7 @@ const CreateTicket = () => {
       navigate("/tickets");
     } catch (error) {
       console.error("Error submitting complaint:", error);
+      toast.dismiss();
     }
   };
 

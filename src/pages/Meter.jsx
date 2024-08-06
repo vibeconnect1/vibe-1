@@ -7,7 +7,7 @@ import Navbar from "../components/Navbar";
 import * as XLSX from "xlsx";
 import { columnsData } from "../utils/assetColumns";
 import { BiEdit, BiFilter, BiFilterAlt } from "react-icons/bi";
-import { API_URL, getFloors, getSiteAsset, getUnits, getVibeBackground } from "../api";
+import { API_URL, getFloors, getMeteredSiteAsset, getSiteAsset, getUnits, getVibeBackground } from "../api";
 import { getItemInLocalStorage } from "../utils/localStorage";
 import AMC from "./SubPages/AMC";
 import Table from "../components/table/Table";
@@ -212,7 +212,7 @@ const themeColor =useSelector((state)=> state.theme.color)
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await getSiteAsset();
+        const response = await getMeteredSiteAsset();
         const filteredAssets = response.data.site_assets.filter(asset => asset.is_meter);
         const sortedData = filteredAssets.sort((a, b) => {
           return new Date(b.created_at) - new Date(a.created_at);

@@ -31,7 +31,6 @@ const AddSupplier = () => {
     district: "",
     attachments: [],
     vtype: "",
-
     // firstanme: "abc",
     // lastname: "wer",
   });
