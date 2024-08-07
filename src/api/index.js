@@ -606,6 +606,30 @@ export const postNewVisitor = async (data) =>
       token: token,
     },
   });
+export const getPatrollings = async () =>
+  axiosInstance.get("/patrollings.json",  {
+    params: {
+      token: token,
+    },
+  });
+export const getPatrollingDetails = async (id) =>
+  axiosInstance.get(`/patrollings/${id}.json`,  {
+    params: {
+      token: token,
+    },
+  });
+export const editPatrollingDetails = async (id, data) =>
+  axiosInstance.put(`/patrollings/${id}.json`, data, {
+    params: {
+      token: token,
+    },
+  });
+export const postPatrolling = async (data) =>
+  axiosInstance.post("/patrollings.json", data, {
+    params: {
+      token: token,
+    },
+  });
 
 export const sendMailToUsers = async (userId) =>
   axiosInstance.get(`/users/send_welcome_email.json?id=${userId}`, {

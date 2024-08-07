@@ -1,5 +1,11 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
+import { useNavigate, useParams } from "react-router-dom";
+import { editPatrollingDetails, getFloors, getPatrollingDetails, getUnits } from "../../api";
+import { getItemInLocalStorage } from "../../utils/localStorage";
+import Navbar from "../../components/Navbar";
+import { formatTime } from "../../utils/dateUtils";
+import toast from "react-hot-toast";
 
 const EditPatrolling = () => {
   const themeColor = useSelector((state) => state.theme.color);
@@ -8,6 +14,19 @@ const EditPatrolling = () => {
     i < 10 ? `0${i}` : `${i}`
   );
   const [selectedHours, setSelectedHours] = useState([]);
+  const [floors, setFloors] = useState([]);
+  const [units, setUnits] = useState([]);
+
+  const [formData, setFormData] = useState({
+    buildingId: "",
+    floorId: "",
+    unitId: "",
+    startDate: "",
+    endDate: "",
+    startTime: "",
+    endTime: "",
+    timeInterval: "",
+  });
 
   const toggleHourSelection = (hour) => {
     setSelectedHours((prevSelectedHours) =>
@@ -16,7 +35,131 @@ const EditPatrolling = () => {
         : [...prevSelectedHours, hour]
     );
   };
+  const { id } = useParams();
+
+  useEffect(() => {
+    const fetchDetails = async () => {
+      try {
+        const res = await getPatrollingDetails(id);
+        const details = res.data;
+        console.log(details)
+        setFormData({
+          ...formData,
+          buildingId: details.building_id,
+          floorId: details.floor_id,
+          unitId: details.unit_id,
+          endDate: details.end_date,
+          endTime: formatTime(details.end_time),
+          startDate: details.start_date,
+          startTime: formatTime(details.start_time),
+          timeInterval: details.time_intervals,
+        });
+        fetchFloors(details.building_id)
+        fetchUnits(details.floor_id)
+        
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    const fetchFloors = async (buildId) => {
+      try {
+        const floorResp = await getFloors(buildId);
+        setFloors(
+          floorResp.data.map((floor) => ({ name: floor.name, id: floor.id }))
+        );
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    const fetchUnits = async (floorId) => {
+      try {
+        const unitResp = await getUnits(floorId);
+        setUnits(
+          unitResp.data.map((unit) => ({ name: unit.name, id: unit.id }))
+        );
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    
+    fetchDetails();
+  }, [id]);
+  const buildings =getItemInLocalStorage("Building")
+
+  const handleChange = async (e) => {
+    const fetchFloors = async (buildId) => {
+      try {
+        const floorResp = await getFloors(buildId);
+        setFloors(
+          floorResp.data.map((floor) => ({ name: floor.name, id: floor.id }))
+        );
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    const fetchUnits = async (floorId) => {
+      try {
+        const unitResp = await getUnits(floorId);
+        setUnits(
+          unitResp.data.map((unit) => ({ name: unit.name, id: unit.id }))
+        );
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    if (e.target.type === "select-one" && e.target.name === "buildingId") {
+      const BuildingId = Number(e.target.value);
+      await fetchFloors(BuildingId);
+      setFormData({
+        ...formData,
+        buildingId: BuildingId,
+      });
+    } else if (e.target.type === "select-one" && e.target.name === "floorId") {
+      const FloorIdNumber = Number(e.target.value);
+      await fetchUnits(FloorIdNumber);
+      setFormData({ ...formData, floorId: FloorIdNumber });
+    } else {
+      setFormData({ ...formData, [e.target.name]: e.target.value });
+    }
+  };
+const navigate = useNavigate()
+  const handlePatrollingSubmit = async () => {
+    if (!formData.buildingId || !formData.floorId) {
+      return toast.error("Please Select Building and Floor!");
+    }
+    const sendData = new FormData();
+    sendData.append("patrolling[building_id]", formData.buildingId);
+    sendData.append("patrolling[floor_id]", formData.floorId);
+    sendData.append("patrolling[unit_id]", formData.unitId);
+    sendData.append("patrolling[start_date]", formData.startDate);
+    sendData.append("patrolling[end_date]", formData.endDate);
+    sendData.append("patrolling[start_time]", formData.startTime);
+    sendData.append("patrolling[end_time]", formData.endTime);
+    sendData.append("patrolling[time_intervals]", formData.timeInterval);
+    try {
+      toast.loading("Editing Patrolling please wait!");
+      const patRes = await editPatrollingDetails(id, sendData);
+      console.log(patRes);
+      toast.dismiss();
+      toast.success("Patrolling Edited Successfully");
+     
+      
+     navigate(`/admin/passes/patrolling-details/${patRes.data.id}`)
+    } catch (error) {
+      console.log(error);
+      toast.dismiss();
+      toast.error("Something went wrong!");
+    } finally {
+      setTimeout(() => {
+        setPatrollingAdded(false);
+      }, 500);
+    }
+  };
   return (
+    <section className="flex">
+      <Navbar />
+      <div className=" w-full flex mx-3 flex-col overflow-hidden">
     <div className="flex justify-center items-center my-5 w-full ">
       <div className="border border-gray-300 rounded-lg p-4 w-full mx-4">
         <h2
@@ -33,16 +176,20 @@ const EditPatrolling = () => {
                 Building :
               </label>
               <select
-                name="building"
+                name="buildingId"
                 placeholder="Enter Building Name"
                 className="border p-1 rounded-md border-black"
+                value={formData.buildingId}
+                onChange={handleChange}
+                
               >
                 <option value="">Select Building</option>
-                <option value="">East Building</option>
-                <option value="">West Building</option>
+                {buildings.map((build)=>(
+                  <option value={build.id} key={build.id}>{build.name}</option>
+                ))}
               </select>
             </div>
-            <div className="flex flex-col">
+            {/* <div className="flex flex-col">
               <label htmlFor="wing" className="font-semibold">
                 Wing :
               </label>
@@ -55,38 +202,39 @@ const EditPatrolling = () => {
                 <option value="">Wing A</option>
                 <option value="">Wing B</option>
               </select>
-            </div>
+            </div> */}
             {/* <div className="grid grid-cols-2 gap-5"> */}
             <div className="flex flex-col">
               <label htmlFor="floor" className="font-medium">
                 Floor :
               </label>
               <select
-                name="floor"
+                name="floorId"
                 className="border p-1 rounded-md border-black"
+                onChange={handleChange}
+                value={formData.floorId}
               >
                 <option value="">Select Floor</option>
-                <option value="">Floor 1</option>
-                <option value="">Floor 2</option>
-                <option value="">Floor 3</option>
-                <option value="">Floor 4</option>
-                <option value="">Floor 5</option>
+               {floors.map((floor)=>(
+                <option value={floor.id} key={floor.id}>{floor.name}</option>
+               ))}
               </select>
             </div>
             <div className="flex flex-col">
               <label htmlFor="room" className="font-medium">
-                Room :
+                Units :
               </label>
               <select
-                name="room"
+                name="unitId"
                 className="border p-1 rounded-md border-black"
+                value={formData.unitId}
+                onChange={handleChange}
+
               >
-                <option value="">Select Room</option>
-                <option value="">Room 101</option>
-                <option value="">Room 102</option>
-                <option value="">Room 103</option>
-                <option value="">Room 104</option>
-                <option value="">Room 104</option>
+                <option value="">Select Unit</option>
+                {units.map((unit)=>(
+                  <option value={unit.id} key={unit.id}>{unit.name}</option>
+                ))}
               </select>
             </div>
             {/* </div> */}
@@ -99,8 +247,10 @@ const EditPatrolling = () => {
               </label>
               <input
                 type="date"
-                name="startTime"
+                name="startDate"
                 className="border p-1 rounded-md border-black"
+                value={formData.startDate}
+                onChange={handleChange}
               />
             </div>
             <div className="flex flex-col">
@@ -109,8 +259,10 @@ const EditPatrolling = () => {
               </label>
               <input
                 type="date"
-                name="endTime"
+                name="endDate"
                 className="border p-1 rounded-md border-black"
+                value={formData.endDate}
+                onChange={handleChange}
               />
             </div>
             <div className="flex flex-col">
@@ -121,6 +273,8 @@ const EditPatrolling = () => {
                 type="time"
                 name="startTime"
                 className="border p-1 rounded-md border-black"
+                value={formData.startTime}
+                onChange={handleChange}
               />
             </div>
             <div className="flex flex-col">
@@ -131,6 +285,8 @@ const EditPatrolling = () => {
                 type="time"
                 name="endTime"
                 className="border p-1 rounded-md border-black"
+                onChange={handleChange}
+                value={formData.endTime}
               />
             </div>
           </div>
@@ -158,9 +314,11 @@ const EditPatrolling = () => {
             <div>
               <input
                 type="text"
-                name="endTime"
+                name="timeInterval"
                 className="border p-1 rounded-md border-black my-1"
                 placeholder="Enter Interval Hour(s) "
+                value={formData.timeInterval}
+                onChange={handleChange}
               />
             </div>
           )}
@@ -186,7 +344,7 @@ const EditPatrolling = () => {
         <div className="flex gap-5 justify-center items-center mt-4">
           <button
             type="submit"
-            // onClick={onC}
+            onClick={handlePatrollingSubmit}
             className="text-white bg-black hover:bg-white hover:text-black border-2 border-black font-semibold py-1 px-4 rounded transition-all duration-300"
           >
             Submit
@@ -194,6 +352,8 @@ const EditPatrolling = () => {
         </div>
       </div>
     </div>
+    </div>
+    </section>
   );
 };
 

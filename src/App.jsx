@@ -2520,7 +2520,7 @@ function App() {
             }
           />
           <Route
-            path="/admin/patrolling-details/:id"
+            path="/admin/passes/patrolling-details/:id"
             element={
               <ProtectedAdminRoutes>
                 <PatrollingDetails />

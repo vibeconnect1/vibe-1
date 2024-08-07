@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { PiPlusCircle } from "react-icons/pi";
 import { Link } from "react-router-dom";
 //import Navbar from "../../../components/Navbar";
@@ -11,15 +11,40 @@ import { IoClose } from "react-icons/io5";
 import Table from "../../components/table/Table";
 import Navbar from "../../components/Navbar";
 import Passes from "../Passes";
-import qr from "/QR.png"
+import qr from "/QR.png";
+import { getFloors, getPatrollings, getUnits, postPatrolling } from "../../api";
+import {
+  convertToIST,
+  dateFormat,
+  SendDateFormat,
+} from "../../utils/dateUtils";
+import { getItemInLocalStorage } from "../../utils/localStorage";
+import { getUnit } from "@mui/material/styles/cssUtils";
+import toast from "react-hot-toast";
 const Patrolling = () => {
   const [selectedStatus, setSelectedStatus] = useState("all");
   const themeColor = useSelector((state) => state.theme.color);
   const [modalVisible, setModalVisible] = useState(false);
   const [interval, setInterval] = useState("hrs");
-  const hours = Array.from({ length: 24 }, (_, i) => (i < 10 ? `0${i}` : `${i}`));
+  const hours = Array.from({ length: 24 }, (_, i) =>
+    i < 10 ? `0${i}` : `${i}`
+  );
   const [selectedHours, setSelectedHours] = useState([]);
-
+  const [patrollings, setPatrollings] = useState([]);
+  const [floors, setFloors] = useState([]);
+  const [units, setUnits] = useState([]);
+  const [patrollingAdded, setPatrollingAdded] = useState(false);
+  const [filteredData, setFilteredData] = useState([]);
+  const [formData, setFormData] = useState({
+    buildingId: "",
+    floorId: "",
+    unitId: "",
+    startDate: "",
+    endDate: "",
+    startTime: "",
+    endTime: "",
+    timeInterval: "",
+  });
   const openModal = () => {
     setModalVisible(true);
   };
@@ -28,12 +53,25 @@ const Patrolling = () => {
     setModalVisible(false);
   };
 
+  useEffect(() => {
+    const fetchPatrolling = async () => {
+      try {
+        const patrollingResp = await getPatrollings();
+        setPatrollings(patrollingResp.data);
+        setFilteredData(patrollingResp.data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchPatrolling();
+  }, [patrollingAdded]);
+
   const columns = [
     {
       name: "Action",
       cell: (row) => (
         <div className="flex items-center gap-4">
-          <Link to={`/admin/patrolling-details/${row.id}`}>
+          <Link to={`/admin/passes/patrolling-details/${row.id}`}>
             <BsEye size={15} />
           </Link>
           <Link to={`/admin/edit-patrolling/${row.id}`}>
@@ -43,117 +81,62 @@ const Patrolling = () => {
       ),
     },
     {
-      name: "Location",
-      selector: (row) => row.Location,
+      name: "Building",
+      selector: (row) => row.building_name,
       sortable: true,
     },
     {
-      name: "Scheduled Time",
-      selector: (row) => row.Scheduled_Time,
+      name: "Floor",
+      selector: (row) => row.floor_name,
       sortable: true,
     },
     {
-      name: "Created On",
-      selector: (row) => row.Created_On,
+      name: "Unit",
+      selector: (row) => row.unit_name,
       sortable: true,
     },
-
     {
       name: "Start Date",
-      selector: (row) => row.Start_Date,
+      selector: (row) => row.start_date,
       sortable: true,
     },
     {
       name: "End Date",
-      selector: (row) => row.End_Date,
+      selector: (row) => row.end_date,
       sortable: true,
     },
 
     {
-      name: "Active/Inactive",
-      selector: (row) => row.ActiveInactive,
+      name: "Start Time",
+      selector: (row) => convertToIST(row.start_time),
       sortable: true,
     },
-
     {
-      name: "Qr Code",
-      selector: (row) => <img src={qr} alt="" width={30} />,
+      name: "End Time",
+      selector: (row) => convertToIST(row.end_time),
+      sortable: true,
+    },
+    {
+      name: "Created On",
+      selector: (row) => SendDateFormat(row.created_at),
       sortable: true,
     },
 
     // {
-    //   name: "Cancellation",
-    //   selector: (row) =>
-    //     row.status === "Upcoming" && (
-    //       <button className="text-red-400 font-medium">Cancel</button>
-    //     ),
+    //   name: "Active/Inactive",
+    //   selector: (row) => row.ActiveInactive,
     //   sortable: true,
     // },
+
     // {
-    //   name: "Approval",
-    //   selector: (row) =>
-    //     row.status === "Upcoming" && (
-    //       <div className="flex justify-center gap-2">
-    //         <button className="text-green-400 font-medium hover:bg-green-400 hover:text-white transition-all duration-200 p-1 rounded-full">
-    //           <TiTick size={20} />
-    //         </button>
-    //         <button className="text-red-400 font-medium hover:bg-red-400 hover:text-white transition-all duration-200 p-1 rounded-full">
-    //           <IoClose size={20} />
-    //         </button>
-    //       </div>
-    //     ),
+    //   name: "Qr Code",
+    //   selector: (row) => <img src={qr} alt="" width={30} />,
     //   sortable: true,
     // },
   ];
 
   //custom style
-  const customStyle = {
-    headRow: {
-      style: {
-        backgroundColor: themeColor,
-        color: "white",
 
-        fontSize: "10px",
-      },
-    },
-    headCells: {
-      style: {
-        textTransform: "upperCase",
-      },
-    },
-  };
-  const data = [
-    {
-      id: 1,
-      Location: "Mumbai",
-      Scheduled_Time: "9:10AM",
-      Created_On: "30/5/2024",
-      Start_Date: "30/5/2024",
-      End_Date: "30/5/2024",
-      ActiveInactive: "Active",
-      Qr_Code: "45",
-    },
-    {
-      id: 2,
-      Location: "Mumbai",
-      Scheduled_Time: "9:10AM",
-      Created_On: "30/5/2024",
-      Start_Date: "30/5/2024",
-      End_Date: "30/5/2024",
-      ActiveInactive: "Active",
-      Qr_Code: "45",
-    },
-    {
-      id: 3,
-      Location: "Mumbai",
-      Scheduled_Time: "9:10AM",
-      Created_On: "30/5/2024",
-      Start_Date: "30/5/2024",
-      End_Date: "30/5/2024",
-      ActiveInactive: "Active",
-      Qr_Code: "45",
-    },
-  ];
   const toggleHourSelection = (hour) => {
     setSelectedHours((prevSelectedHours) =>
       prevSelectedHours.includes(hour)
@@ -161,72 +144,127 @@ const Patrolling = () => {
         : [...prevSelectedHours, hour]
     );
   };
+  const buildings = getItemInLocalStorage("Building");
+
+  const handleChange = async (e) => {
+    const fetchFloors = async (buildId) => {
+      try {
+        const floorResp = await getFloors(buildId);
+        setFloors(
+          floorResp.data.map((floor) => ({ name: floor.name, id: floor.id }))
+        );
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    const fetchUnits = async (floorId) => {
+      try {
+        const unitResp = await getUnits(floorId);
+        setUnits(
+          unitResp.data.map((unit) => ({ name: unit.name, id: unit.id }))
+        );
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    if (e.target.type === "select-one" && e.target.name === "buildingId") {
+      const BuildingId = Number(e.target.value);
+      await fetchFloors(BuildingId);
+      setFormData({
+        ...formData,
+        buildingId: BuildingId,
+      });
+    } else if (e.target.type === "select-one" && e.target.name === "floorId") {
+      const FloorIdNumber = Number(e.target.value);
+      await fetchUnits(FloorIdNumber);
+      setFormData({ ...formData, floorId: FloorIdNumber });
+    } else {
+      setFormData({ ...formData, [e.target.name]: e.target.value });
+    }
+  };
+  console.log(formData);
+  const handlePatrollingSubmit = async () => {
+    if (!formData.buildingId || !formData.floorId) {
+      return toast.error("Please Select Building and Floor!");
+    }
+    const sendData = new FormData();
+    sendData.append("patrolling[building_id]", formData.buildingId);
+    sendData.append("patrolling[floor_id]", formData.floorId);
+    sendData.append("patrolling[unit_id]", formData.unitId);
+    sendData.append("patrolling[start_date]", formData.startDate);
+    sendData.append("patrolling[end_date]", formData.endDate);
+    sendData.append("patrolling[start_time]", formData.startTime);
+    sendData.append("patrolling[end_time]", formData.endTime);
+    sendData.append("patrolling[time_intervals]", formData.timeInterval);
+    try {
+      toast.loading("Creating Patrolling please wait!");
+      const patRes = await postPatrolling(sendData);
+      console.log(patRes);
+      toast.dismiss();
+      toast.success("Patrolling Created Successfully");
+      setFormData({
+        ...formData,
+        buildingId: "",
+        floorId: "",
+        unitId: "",
+        endDate: "",
+        endTime: "",
+        startDate: "",
+        startTime: "",
+        timeInterval: "",
+      });
+      closeModal();
+      setPatrollingAdded(true);
+    } catch (error) {
+      console.log(error);
+      toast.dismiss();
+      toast.error("Something went wrong!");
+    } finally {
+      setTimeout(() => {
+        setPatrollingAdded(false);
+      }, 500);
+    }
+  };
+  const [searchText, setSearchText] = useState("");
+
+  const handleSearch = (e) => {
+    const searchVale = e.target.value;
+    setSearchText(searchVale);
+    if (searchVale.trim() === "") {
+      setFilteredData(patrollings);
+    } else {
+      const filteredResults = patrollings.filter(
+        (item) =>
+          item.building_name &&
+          item.building_name.toLowerCase().includes(searchVale.toLowerCase()) ||
+          item.unit_name &&
+          item.unit_name.toLowerCase().includes(searchVale.toLowerCase())||
+          item.floor_name &&
+          item.floor_name.toLowerCase().includes(searchVale.toLowerCase())
+      );
+      setFilteredData(filteredResults);
+    }
+  };
 
   return (
     <section className="flex">
       <Navbar />
       <div className=" w-full flex mx-3 flex-col overflow-hidden">
         <Passes />
-        <div className="flex md:flex-row flex-col gap-5 justify-between mt-10 my-2">
-          <div className="sm:flex grid grid-cols-2 items-center justify-center  gap-4 border border-gray-300 rounded-md px-3 p-2 w-auto">
-            <div className="flex items-center gap-2">
-              <input
-                type="radio"
-                id="all"
-                name="status"
-                checked={selectedStatus === "all"}
-                onChange={() => handleStatusChange("all")}
-              />
-              <label htmlFor="all" className="text-sm">
-                All
-              </label>
-            </div>
-            <div className="flex items-center gap-2">
-              <input
-                type="radio"
-                id="upcoming"
-                name="status"
-                // checked={selectedStatus === "open"}
-                checked={
-                  selectedStatus === "upcoming" || selectedStatus === "upcoming"
-                }
-                // onChange={() => handleStatusChange("open")}
-              />
-              <label htmlFor="open" className="text-sm">
-                upcoming
-              </label>
-            </div>
-            <div className="flex items-center gap-2">
-              <input
-                type="radio"
-                id="completed"
-                name="status"
-                checked={selectedStatus === "completed"}
-                onChange={() => handleStatusChange("completed")}
-              />
-              <label htmlFor="completed" className="text-sm">
-                Completed
-              </label>
-            </div>
-
-            <div className="flex items-center gap-2">
-              <input
-                type="radio"
-                id="cancelled"
-                name="status"
-                checked={selectedStatus === "cancelled"}
-                //   onChange={() => handleStatusChange("cancelled")}
-              />
-              <label htmlFor="completed" className="text-sm">
-                Cancelled
-              </label>
-            </div>
-          </div>
+        <div className="flex md:flex-row flex-col gap-5 justify-between  my-2">
+          <input
+            type="search"
+            value={searchText}
+            onChange={handleSearch}
+            id=""
+            className="border border-gray-300 placeholder:text-sm w-full rounded-md p-2"
+            placeholder="Search by building, floor, unit"
+          />
           <span className="flex gap-4">
             <div
               onClick={openModal}
-              className="border-2 font-semibold hover:bg-black hover:text-white transition-all border-black p-2 rounded-md text-black cursor-pointer text-center flex items-center gap-2 justify-center"
-              style={{ height: "1cm" }}
+              className="border-2 font-semibold text-white hover:text-white transition-all p-2 rounded-md cursor-pointer text-center flex items-center gap-2 justify-center"
+              style={{ background: themeColor }}
             >
               <PiPlusCircle size={20} />
               Add
@@ -238,7 +276,7 @@ const Patrolling = () => {
                 onClick={closeModal}
               >
                 <div
-                  className="bg-white  overflow-auto max-h-[80%]  md:w-auto w-96  flex flex-col rounded-md gap-5 hide-scrollbar"
+                  className="bg-white  overflow-auto max-h-[82%]  md:w-[50%] w-96  flex flex-col rounded-md gap-5 hide-scrollbar"
                   onClick={(e) => e.stopPropagation()}
                 >
                   <div className="flex justify-center items-center my-5 w-full ">
@@ -251,22 +289,27 @@ const Patrolling = () => {
                       </h2>
 
                       <div className="grid grid-cols-1 gap-2 my-3">
-                        <div className="grid grid-cols-4 gap-2">
+                        <div className="grid grid-cols-3 gap-2">
                           <div className="flex flex-col">
                             <label htmlFor="building" className="font-semibold">
                               Building :
                             </label>
                             <select
-                              name="building"
+                              name="buildingId"
                               placeholder="Enter Building Name"
                               className="border p-1 rounded-md border-black"
+                              onChange={handleChange}
+                              value={formData.buildingId}
                             >
                               <option value="">Select Building</option>
-                              <option value="">East Building</option>
-                              <option value="">West Building</option>
+                              {buildings.map((building) => (
+                                <option value={building.id} key={building.id}>
+                                  {building.name}
+                                </option>
+                              ))}
                             </select>
                           </div>
-                          <div className="flex flex-col">
+                          {/* <div className="flex flex-col">
                             <label htmlFor="wing" className="font-semibold">
                               Wing :
                             </label>
@@ -279,38 +322,42 @@ const Patrolling = () => {
                               <option value="">Wing A</option>
                               <option value="">Wing B</option>
                             </select>
-                          </div>
+                          </div> */}
                           {/* <div className="grid grid-cols-2 gap-5"> */}
                           <div className="flex flex-col">
                             <label htmlFor="floor" className="font-medium">
                               Floor :
                             </label>
                             <select
-                              name="floor"
+                              name="floorId"
                               className="border p-1 rounded-md border-black"
+                              value={formData.floorId}
+                              onChange={handleChange}
                             >
                               <option value="">Select Floor</option>
-                              <option value="">Floor 1</option>
-                              <option value="">Floor 2</option>
-                              <option value="">Floor 3</option>
-                              <option value="">Floor 4</option>
-                              <option value="">Floor 5</option>
+                              {floors.map((floor) => (
+                                <option value={floor.id} key={floor.id}>
+                                  {floor.name}
+                                </option>
+                              ))}
                             </select>
                           </div>
                           <div className="flex flex-col">
                             <label htmlFor="room" className="font-medium">
-                              Room :
+                              Unit :
                             </label>
                             <select
-                              name="room"
+                              name="unitId"
                               className="border p-1 rounded-md border-black"
+                              value={formData.unitId}
+                              onChange={handleChange}
                             >
-                              <option value="">Select Room</option>
-                              <option value="">Room 101</option>
-                              <option value="">Room 102</option>
-                              <option value="">Room 103</option>
-                              <option value="">Room 104</option>
-                              <option value="">Room 104</option>
+                              <option value="">Select Unit</option>
+                              {units.map((unit) => (
+                                <option value={unit.id} key={unit.id}>
+                                  {unit.name}
+                                </option>
+                              ))}
                             </select>
                           </div>
                           {/* </div> */}
@@ -325,7 +372,9 @@ const Patrolling = () => {
                             </label>
                             <input
                               type="date"
-                              name="startTime"
+                              name="startDate"
+                              value={formData.startDate}
+                              onChange={handleChange}
                               className="border p-1 rounded-md border-black"
                             />
                           </div>
@@ -335,7 +384,9 @@ const Patrolling = () => {
                             </label>
                             <input
                               type="date"
-                              name="endTime"
+                              name="endDate"
+                              onChange={handleChange}
+                              value={formData.endDate}
                               className="border p-1 rounded-md border-black"
                             />
                           </div>
@@ -346,6 +397,8 @@ const Patrolling = () => {
                             <input
                               type="time"
                               name="startTime"
+                              value={formData.startTime}
+                              onChange={handleChange}
                               className="border p-1 rounded-md border-black"
                             />
                           </div>
@@ -356,6 +409,8 @@ const Patrolling = () => {
                             <input
                               type="time"
                               name="endTime"
+                              value={formData.endTime}
+                              onChange={handleChange}
                               className="border p-1 rounded-md border-black"
                             />
                           </div>
@@ -364,18 +419,18 @@ const Patrolling = () => {
                       <div className="flex items-center gap-2 my-2">
                         <p
                           onClick={() => setInterval("hrs")}
-                          className={`font-medium cursor-pointer transition-all duration-300 ${
+                          className={`font-medium cursor-pointer transition-all border px-4 rounded-full p-1 border-gray-300 duration-300 ${
                             interval === "hrs" &&
-                            "bg-black text-white shadow-custom-all-sides rounded-full p-1 px-2"
+                            "bg-black text-white  rounded-full p-1 px-2"
                           }`}
                         >
                           Time Interval(hrs)
                         </p>
                         <p
                           onClick={() => setInterval("specific")}
-                          className={`font-medium cursor-pointer transition-all duration-300 ${
+                          className={`font-medium cursor-pointer transition-all duration-300 border px-4 rounded-full p-1 border-gray-300  ${
                             interval === "specific" &&
-                            "bg-black text-white shadow-custom-all-sides rounded-full p-1 px-2"
+                            "bg-black text-white  rounded-full p-1 "
                           }`}
                         >
                           Specific Time
@@ -385,30 +440,34 @@ const Patrolling = () => {
                         <div>
                           <input
                             type="text"
-                            name="endTime"
+                            name="timeInterval"
+                            value={formData.timeInterval}
+                            onChange={handleChange}
                             className="border p-1 rounded-md border-black my-1"
                             placeholder="Enter Interval Hour(s) "
                           />
                         </div>
                       )}
                       {interval === "specific" && (
-                       <div className="grid grid-cols-6 gap-2 bg-gray-100 p-4 rounded">
-                       {hours.map((hour) => (
-                         <p
-                           key={hour}
-                           className={`p-2 rounded cursor-pointer ${
-                            selectedHours.includes(hour) ? 'bg-gray-500 text-white' : 'bg-gray-200 text-black'
-                          }`}
-                           onClick={() => toggleHourSelection(hour)}
-                         >
-                           {hour}
-                         </p>
-                       ))}
-                     </div>
+                        <div className="grid grid-cols-6 gap-2 bg-gray-100 p-4 rounded">
+                          {hours.map((hour) => (
+                            <p
+                              key={hour}
+                              className={`p-2 rounded cursor-pointer ${
+                                selectedHours.includes(hour)
+                                  ? "bg-gray-500 text-white"
+                                  : "bg-gray-200 text-black"
+                              }`}
+                              onClick={() => toggleHourSelection(hour)}
+                            >
+                              {hour}
+                            </p>
+                          ))}
+                        </div>
                       )}
                       <div className="flex gap-5 justify-center items-center mt-4">
                         <button
-                          onClick={closeModal}
+                          onClick={handlePatrollingSubmit}
                           className="text-white bg-black hover:bg-white hover:text-black border-2 border-black font-semibold py-1 px-4 rounded transition-all duration-300"
                         >
                           Submit
@@ -426,46 +485,9 @@ const Patrolling = () => {
                 </div>
               </div>
             )}
-
-            {/* <button
-              className="border-2 font-semibold hover:bg-black hover:text-white transition-all border-black p-2 rounded-md text-black cursor-pointer text-center flex items-center gap-2 justify-center"
-              style={{ height: "1cm" }}
-            >
-              Import
-            </button>
-            <button
-              className="border-2 font-semibold hover:bg-black hover:text-white transition-all border-black p-2 rounded-md text-black cursor-pointer text-center flex items-center gap-2 justify-center"
-              style={{ height: "1cm" }}
-            >
-              Filter
-            </button>
-            <button
-              className="border-2 font-semibold hover:bg-black hover:text-white transition-all border-black p-2 rounded-md text-black cursor-pointer text-center flex items-center gap-2 justify-center"
-              style={{ height: "1cm" }}
-            >
-              History
-            </button>
-            <button
-              className="border-2 font-semibold hover:bg-black hover:text-white transition-all border-black p-2 rounded-md text-black cursor-pointer text-center flex items-center gap-2 justify-center"
-              style={{ height: "1cm" }}
-            >
-              All
-            </button>
-            <button
-              className="border-2 font-semibold hover:bg-black hover:text-white transition-all border-black p-2 rounded-md text-black cursor-pointer text-center flex items-center gap-2 justify-center"
-              style={{ height: "1cm" }}
-            >
-              In
-            </button>
-            <button
-              className="border-2 font-semibold hover:bg-black hover:text-white transition-all border-black p-2 rounded-md text-black cursor-pointer text-center flex items-center gap-2 justify-center"
-              style={{ height: "1cm" }}
-            >
-              Out
-            </button> */}
           </span>
         </div>
-        <Table columns={columns} data={data} />
+        <Table columns={columns} data={filteredData} />
       </div>
     </section>
   );
