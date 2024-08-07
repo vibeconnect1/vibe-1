@@ -599,6 +599,27 @@ import EmployeeGoodsInOut from "./pages/Employees/EmployeeGoodsInOut.jsx";
 import EmployeeStaffDetails from "./pages/Employees/EmployeeSubPages/EmployeeStaffDetails.jsx";
 import EmployeeGVehicle from "./pages/Employees/EmployeeGVehicle.jsx"
 import Schedule from "./pages/SubPages/Schedule.jsx";
+import EmployeeCourseCertificate from "./pages/Employees/EmployeeSkillGrow/EmployeeCourseCertificate.jsx";
+import EmployeeCourseCertificateDetails from "./pages/Employees/EmployeeSkillGrow/EmployeeCourseCertificateDetails.jsx";
+import EmployeeProjectCertificate from "./pages/Employees/EmployeeSkillGrow/EmployeeProjectCertificate.jsx";
+import EmployeeRRCertificate from "./pages/Employees/EmployeeSkillGrow/EmployeeRRCertificate.jsx";
+import EmployeeCourseRequestApproval from "./pages/Employees/EmployeeSkillGrow/EmployeeCourseRequestApproval.jsx";
+import EmployeeCourseDetails from "./pages/Employees/EmployeeSkillGrow/EmployeeCourseDetails.jsx";
+import EmployeeProjectRequestApproval from "./pages/Employees/EmployeeSkillGrow/EmployeeProjectRequestApproval.jsx";
+import EmployeeRequested from "./pages/Employees/EmployeeSkillGrow/EmployeeRequested.jsx";
+import CreateEmployeeRequest from "./pages/Employees/EmployeeSkillGrow/CreateEmployeeRequest.jsx";
+import EditEmployeeRequest from "./pages/Employees/EmployeeSkillGrow/EditEmployeeRequest.jsx";
+import ViewEmployeeRequest from "./pages/Employees/EmployeeSkillGrow/ViewEmployeeRequest.jsx";
+import EmployeeApproved from "./pages/Employees/EmployeeSkillGrow/EmployeeApproved.jsx";
+import EmployeeProjectView from "./pages/Employees/EmployeeSkillGrow/EmployeeProjectView.jsx";
+import EmployeeRejected from "./pages/Employees/EmployeeSkillGrow/EmployeeRejected.jsx";
+import EmployeeProjectTracking from "./pages/Employees/EmployeeSkillGrow/EmployeeProjectTracking.jsx";
+import EmployeeProjectRepository from "./pages/Employees/EmployeeSkillGrow/EmployeeProjectRepository.jsx";
+import EmployeeProjectRepositoryDetails from "./pages/Employees/EmployeeSkillGrow/EmployeeProjectRepositoryDetails.jsx";
+import EmployeeKnowledgeBase from "./pages/Employees/EmployeeSkillGrow/EmployeeKnowledgeBase.jsx";
+import EmployeeProjectTaskView from "./pages/Employees/EmployeeSkillGrow/EmployeeProjectTaskView.jsx";
+import EmployeeProjectTaskCompleted from "./pages/Employees/EmployeeSkillGrow/EmployeeProjectTaskCompleted.jsx";
+import EmployeeProjectRejectDetails from "./pages/Employees/EmployeeSkillGrow/EmployeeProjectRejectDetails.jsx";
 // new admin hrms
 
 function App() {
@@ -5759,6 +5780,180 @@ function App() {
           {/* New HRMS changes */}
 
           {/* newest admin hrms */}
+
+          {/* skill grow employee*/}
+          <Route path="/employee/certificate" element={<Navigate to="/employee/certificate/course" replace />}  />
+          <Route
+            path="/employee/certificate/course"
+            element={
+              <ProtectedRoute>
+                <EmployeeCourseCertificate/>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/employee/certificate/coursedetails"
+            element={
+              <ProtectedRoute>
+                <EmployeeCourseCertificateDetails/>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/employee/certificate/project"
+            element={
+              <ProtectedRoute>
+                <EmployeeProjectCertificate/>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/employee/certificate/rr-certificate"
+            element={
+              <ProtectedRoute>
+                <EmployeeRRCertificate/>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/employee/certificate/course-request-approval"
+            element={
+              <ProtectedRoute>
+                <EmployeeCourseRequestApproval/>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/employee/certificate/course-details"
+            element={
+              <ProtectedRoute>
+                <EmployeeCourseDetails/>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/employee/certificate/project-request-approval"
+            element={
+              <ProtectedRoute>
+                <EmployeeProjectRequestApproval/>
+              </ProtectedRoute>
+            }
+          />
+          <Route path="/employee/certificate/project-request-approval" element={<Navigate to="/employee/certificate/project-request-approval/request" replace />}  />
+          <Route
+            path="/employee/certificate/project-request-approval/request"
+            element={
+              <ProtectedRoute>
+                <EmployeeRequested/>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/employee/certificate/project-request-approval/create-request"
+            element={
+              <ProtectedRoute>
+                <CreateEmployeeRequest/>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/employee/certificate/project-request-approval/edit-request/:id"
+            element={
+              <ProtectedRoute>
+                <EditEmployeeRequest/>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/employee/certificate/project-request-approval/view-request/:id"
+            element={
+              <ProtectedRoute>
+                <ViewEmployeeRequest/>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/employee/certificate/project-request-approval/approved"
+            element={
+              <ProtectedRoute>
+                <EmployeeApproved/>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/employee/certificate/project-view"
+            element={
+              <ProtectedRoute>
+                <EmployeeProjectView/>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/employee/certificate/project-request-approval/rejected"
+            element={
+              <ProtectedRoute>
+                <EmployeeRejected/>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/employee/certificate/project-tracking"
+            element={
+              <ProtectedRoute>
+                <EmployeeProjectTracking/>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/employee/certificate/project-repository"
+            element={
+              <ProtectedRoute>
+                <EmployeeProjectRepository/>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/employee/certificate/project-repository-details"
+            element={
+              <ProtectedRoute>
+                <EmployeeProjectRepositoryDetails/>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/employee/certificate/knowledge-base"
+            element={
+              <ProtectedRoute>
+                <EmployeeKnowledgeBase/>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/employee/certificate/project-task-view"
+            element={
+              <ProtectedRoute>
+                <EmployeeProjectTaskView/>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/employee/certificate/project-task-completed"
+            element={
+              <ProtectedRoute>
+                <EmployeeProjectTaskCompleted/>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/employee/certificate/project-reject-details"
+            element={
+              <ProtectedRoute>
+                <EmployeeProjectRejectDetails/>
+              </ProtectedRoute>
+            }
+          />
+          {/* skill grow employee*/}
+
         </Routes>
         <Footer />
       </Router>
