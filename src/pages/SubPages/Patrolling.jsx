@@ -57,8 +57,11 @@ const Patrolling = () => {
     const fetchPatrolling = async () => {
       try {
         const patrollingResp = await getPatrollings();
-        setPatrollings(patrollingResp.data);
-        setFilteredData(patrollingResp.data);
+        const sortedData = patrollingResp.data.sort((a,b)=> (
+          new Date(b.created_at) - new Date(a.created_at)
+        ))
+        setPatrollings(sortedData);
+        setFilteredData(sortedData);
       } catch (error) {
         console.log(error);
       }
