@@ -14,22 +14,23 @@ function EmployeeCourseRequestApproval() {
     {
       id: 1,
       image: digitalMarketingImg,
-      priceLevel: "paid",
-      skillLevel: "beginner",
+      priceLevel: "Paid",
+      skillLevel: "Level 2",
       title: "Digital Marketing",
       instructor: "Anil Sharma",
       rating: "4.0 ★★★★,",
       reviews: 67788,
       price: "₹ 13000",
-      language: "Hindi",
+      language: "English",
       duration: "42 Days",
       lectures: "30 lectures",
+      exam: "Exam included",
     },
     {
       id: 2,
       image: reactImg,
-      priceLevel: "paid",
-      skillLevel: "Advanced",
+      priceLevel: "Paid",
+      skillLevel: "Level 3",
       title: "React Native",
       instructor: "Vivek Kumar",
       rating: "4.0 ★★★★,",
@@ -38,12 +39,13 @@ function EmployeeCourseRequestApproval() {
       language: "English",
       duration: "15 Days",
       lectures: 15,
+      exam: "Exam included",
     },
     {
       id: 3,
       image: figmaImg,
       priceLevel: "Free",
-      skillLevel: "All Level",
+      skillLevel: "Level 4",
       title: "Figma Design",
       instructor: "Sunil More",
       rating: "4.0 ★★★★,",
@@ -52,12 +54,13 @@ function EmployeeCourseRequestApproval() {
       language: "English",
       duration: "12 Days",
       lectures: 7,
+      exam: "Exam not included",
     },
     {
       id: 4,
       image: reactImg,
-      priceLevel: "paid",
-      skillLevel: "Advanced",
+      priceLevel: "Paid",
+      skillLevel: "Level 5",
       title: "Java and Spring Boot",
       instructor: "Max David",
       rating: "5.0 ★★★★★,",
@@ -66,12 +69,13 @@ function EmployeeCourseRequestApproval() {
       language: "English",
       duration: "2 Months",
       lectures: 30,
+      exam: "Exam not included",
     },
     {
       id: 5,
       image: graphicImgImg,
       priceLevel: "Free",
-      skillLevel: "Intermediate",
+      skillLevel: "Level 6",
       title: "PhotoGraphy",
       instructor: "Ajay Singh",
       rating: "4.7 ★★★★",
@@ -80,12 +84,13 @@ function EmployeeCourseRequestApproval() {
       language: "Hindi",
       duration: "10 Days",
       lectures: 10,
+      exam: "Exam included",
     },
     {
       id: 6,
       image: reactImg,
-      priceLevel: "paid",
-      skillLevel: "Advanced",
+      priceLevel: "Paid",
+      skillLevel: "Level 7",
       title: "Mysql",
       instructor: "Niharika Singh",
       rating: "4.5 ★★★★",
@@ -94,12 +99,13 @@ function EmployeeCourseRequestApproval() {
       language: "Hindi",
       duration: "20 Days",
       lectures: 12,
+      exam: "Exam included",
     },
     {
       id: 7,
       image: graphicImgImg,
-      priceLevel: "paid",
-      skillLevel: "beginner",
+      priceLevel: "Paid",
+      skillLevel: "Level 8",
       title: "VFX And Gaming",
       instructor: "Vinay Kumar",
       rating: "4.5 ★★★★",
@@ -108,12 +114,13 @@ function EmployeeCourseRequestApproval() {
       language: "Hindi",
       duration: "30 Days",
       lectures: 15,
+      exam: "Exam included",
     },
     {
       id: 8,
       image: digitalMarketingImg,
       priceLevel: "Free",
-      skillLevel: "beginner",
+      skillLevel: "Level 9",
       title: "Accounting Courses",
       instructor: "Maya Kishan",
       rating: "4.4 ★★★★",
@@ -122,12 +129,13 @@ function EmployeeCourseRequestApproval() {
       language: "Hindi",
       duration: "14 Days",
       lectures: 10,
+      exam: "Exam not  included",
     },
     {
       id: 9,
       image: figmaImg,
       priceLevel: "Free",
-      skillLevel: "All Level",
+      skillLevel: "Level 10",
       title: "finance",
       instructor: "Vijay Sharma",
       rating: "4.0 ★★★★",
@@ -136,6 +144,8 @@ function EmployeeCourseRequestApproval() {
       language: "Hindi",
       duration: "14 Days",
       lectures: 12,
+      level: "Available at Level 3",
+      exam: "Exam included",
     },
   ];
   return (
@@ -144,7 +154,7 @@ function EmployeeCourseRequestApproval() {
       <div className="w-full flex flex-col overflow-hidden">
         <div className="flex justify-center my-2 w-full">
           <div
-            className="sm:flex flex-wrap grid grid-cols-2 sm:flex-row text-sm font-medium p-2 rounded-md text-white"
+            className="sm:flex flex-wrap grid grid-cols-2 sm:flex-row gap-2 text-sm font-medium p-2 rounded-md text-white"
             style={{ background: themeColor }}
           >
             <NavLink
@@ -219,16 +229,29 @@ function EmployeeCourseRequestApproval() {
             </NavLink>
           </div>
         </div>
-        <div className="md:mx-8 mx-5 lg:mx-14">
-          <div className="xl:grid grid-cols-4 gap-5">
+        <div className=" mx-5">
+          <h2 className="text-right font-medium ">
+            Current Level :{" "}
+            <span className="rounded-full border px-4 p-1 text-green-600 bg-green-400 bg-opacity-30 border-green-600">
+              Level 3
+            </span>
+          </h2>
+          <div className="xl:grid grid-cols-4 gap-2">
             <div className="col-span-3 mb-5">
-              <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:my-5">
+              <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-2 sm:my-5">
                 {courses.map((course, index) => (
                   <div
                     className="shadow-custom-all-sides rounded-md"
                     key={index}
                   >
-                    <Link to={"/employee/certificate/course-details"}>
+                    <Link
+                      //  to={"/employee/certificate/course-details"}
+                      to={
+                        course.priceLevel === "Paid"
+                          ? "/employee/certificate/course-details"
+                          : "/employee/certificate/course-details-free"
+                      }
+                    >
                       <div className="">
                         <div>
                           <img
@@ -245,15 +268,18 @@ function EmployeeCourseRequestApproval() {
                               {course.priceLevel}
                             </div>
                           </div>
-                          <h2 className="text-2xl font-semibold">
-                            {course.title}
-                          </h2>
+                          <h2 className=" font-medium">{course.title}</h2>
                           <p className="mt-1">{course.instructor}</p>
                           <p className="mt-1">
                             {course.rating} ({course.reviews})
                           </p>
-                          <p className="mt-1"> {course.price}</p>
-                          <p>{course.language}</p>
+                          <div className="flex justify-between">
+                            <p className=""> {course.price}</p>
+                            <p>{course.language}</p>
+                          </div>
+                          <h2 className="text-right text-gray-400">
+                            {course.exam}
+                          </h2>
                           <div className="flex justify-between border-t border-gray-300 my-2 py-2">
                             <p className="flex gap-1">
                               <IoTimeOutline
@@ -388,72 +414,243 @@ function EmployeeCourseRequestApproval() {
                 </div>
               </div>
               <div className="shadow-custom-all-sides rounded-md py-5 px-5 my-5">
+                <h2 className="text-lg font-semibold">Course Status</h2>
+                <div className="gap-5 my-3">
+                  <div className="flex items-center space-x-2 my-1">
+                    <input
+                      type="checkbox"
+                      id="checkbox"
+                      className="form-checkbox h-4 w-4 text-blue-600"
+                    />
+                    <label htmlFor="checkbox" className="text-gray-700">
+                      New Courses
+                    </label>
+                  </div>
+                  <div className="flex items-center space-x-2 my-1">
+                    <input
+                      type="checkbox"
+                      id="checkbox"
+                      className="form-checkbox h-4 w-4 text-blue-600"
+                    />
+                    <label htmlFor="checkbox" className="text-gray-700">
+                      Applied Courses
+                    </label>
+                  </div>
+                  <div className="flex items-center space-x-2 my-1">
+                    <input
+                      type="checkbox"
+                      id="checkbox"
+                      className="form-checkbox h-4 w-4 text-blue-600"
+                    />
+                    <label htmlFor="checkbox" className="text-gray-700">
+                      Awaiting Approval
+                    </label>
+                  </div>
+                  <div className="flex items-center space-x-2 my-1">
+                    <input
+                      type="checkbox"
+                      id="checkbox"
+                      className="form-checkbox h-4 w-4 text-blue-600"
+                    />
+                    <label htmlFor="checkbox" className="text-gray-700">
+                      Approved
+                    </label>
+                  </div>
+                  <div className="flex items-center space-x-2 my-1">
+                    <input
+                      type="checkbox"
+                      id="checkbox"
+                      className="form-checkbox h-4 w-4 text-blue-600"
+                    />
+                    <label htmlFor="checkbox" className="text-gray-700">
+                      Started
+                    </label>
+                  </div>
+                  <div className="flex items-center space-x-2 my-1">
+                    <input
+                      type="checkbox"
+                      id="checkbox"
+                      className="form-checkbox h-4 w-4 text-blue-600"
+                    />
+                    <label htmlFor="checkbox" className="text-gray-700">
+                      Rejected
+                    </label>
+                  </div>
+                </div>
+              </div>
+              <div className="shadow-custom-all-sides rounded-md py-5 px-5 my-5">
                 <h2 className="text-lg font-semibold">Price Level</h2>
-                <div className="flex flex-wrap gap-5 my-3">
-                  <button
-                    type="submit"
-                    className="border-2 border-gray-400 rounded-md px-4 p-1"
-                  >
-                    All
-                  </button>
-                  <button
-                    type="submit"
-                    className="border-2 border-gray-400 rounded-md px-4 p-1"
-                  >
-                    Free
-                  </button>
-                  <button
-                    type="submit"
-                    className="border-2 border-gray-400 rounded-md px-4 p-1"
-                  >
-                    Complimentry
-                  </button>
+                <div className="gap-5 my-3">
+                  <div className="flex items-center space-x-2 my-1">
+                    <input
+                      type="checkbox"
+                      id="checkbox"
+                      className="form-checkbox h-4 w-4 text-blue-600"
+                    />
+                    <label htmlFor="checkbox" className="text-gray-700 text-sm">
+                      All
+                    </label>
+                  </div>
+                  <div className="flex items-center space-x-2 my-1">
+                    <input
+                      type="checkbox"
+                      id="checkbox"
+                      className="form-checkbox h-4 w-4 text-blue-600"
+                    />
+                    <label htmlFor="checkbox" className="text-gray-700 text-sm">
+                      Free
+                    </label>
+                  </div>
+                  <div className="flex items-center space-x-2 my-1">
+                    <input
+                      type="checkbox"
+                      id="checkbox"
+                      className="form-checkbox h-4 w-4 text-blue-600"
+                    />
+                    <label htmlFor="checkbox" className="text-gray-700 text-sm">
+                      Complimentary (Paid by Company)
+                    </label>
+                  </div>
+                  <div className="flex items-center space-x-2 my-1">
+                    <input
+                      type="checkbox"
+                      id="checkbox"
+                      className="form-checkbox h-4 w-4 text-blue-600"
+                    />
+                    <label htmlFor="checkbox" className="text-gray-700 text-sm">
+                      Paid
+                    </label>
+                  </div>
                 </div>
               </div>
               <div className="shadow-custom-all-sides rounded-md py-5 px-5 my-5">
                 <h2 className="text-lg font-semibold">Skill Level</h2>
-                <div className="flex flex-wrap gap-5 my-3">
-                  <button
-                    type="submit"
-                    className="border-2 border-gray-400 rounded-md px-4 p-1"
-                  >
-                    All Level
-                  </button>
-                  <button
-                    type="submit"
-                    className="border-2 border-gray-400 rounded-md px-4 p-1"
-                  >
-                    Beginner
-                  </button>
-                  <button
-                    type="submit"
-                    className="border-2 border-gray-400 rounded-md px-4 p-1"
-                  >
-                    Intermediate
-                  </button>
-                  <button
-                    type="submit"
-                    className="border-2 border-gray-400 rounded-md px-4 p-1"
-                  >
-                    Advanced
-                  </button>
+                <div className="my-3">
+                  <div className="flex items-center space-x-2 my-1">
+                    <input
+                      type="checkbox"
+                      id="checkbox"
+                      className="form-checkbox h-4 w-4 text-blue-600"
+                    />
+                    <label htmlFor="checkbox" className="text-gray-700">
+                      All Level
+                    </label>
+                  </div>
+                  <div className="flex items-center space-x-2 my-1">
+                    <input
+                      type="checkbox"
+                      id="checkbox"
+                      className="form-checkbox h-4 w-4 text-blue-600"
+                    />
+                    <label htmlFor="checkbox" className="text-gray-700">
+                      Level 1
+                    </label>
+                  </div>
+                  <div className="flex items-center space-x-2 my-1">
+                    <input
+                      type="checkbox"
+                      id="checkbox"
+                      className="form-checkbox h-4 w-4 text-blue-600"
+                    />
+                    <label htmlFor="checkbox" className="text-gray-700">
+                      Level 2
+                    </label>
+                  </div>
+                  <div className="flex items-center space-x-2 my-1">
+                    <input
+                      type="checkbox"
+                      id="checkbox"
+                      className="form-checkbox h-4 w-4 text-blue-600"
+                    />
+                    <label htmlFor="checkbox" className="text-gray-700">
+                      Level 3
+                    </label>
+                  </div>
                 </div>
               </div>
               <div className="shadow-custom-all-sides rounded-md py-5 px-5 my-5">
                 <h2 className="text-lg font-semibold">Language</h2>
-                <div className="flex flex-wrap gap-5 my-3">
-                  <button
-                    type="submit"
-                    className="border-2 border-gray-400 rounded-md px-4 p-1"
-                  >
-                    English
-                  </button>
-                  <button
-                    type="submit"
-                    className="border-2 border-gray-400 rounded-md px-4 p-1"
-                  >
-                    Hindi
-                  </button>
+                <div className="my-3">
+                  <div className="flex items-center space-x-2 my-1">
+                    <input
+                      type="checkbox"
+                      id="checkbox"
+                      className="form-checkbox h-4 w-4 text-blue-600"
+                    />
+                    <label htmlFor="checkbox" className="text-gray-700">
+                      English
+                    </label>
+                  </div>
+                  <div className="flex items-center space-x-2 my-1">
+                    <input
+                      type="checkbox"
+                      id="checkbox"
+                      className="form-checkbox h-4 w-4 text-blue-600"
+                    />
+                    <label htmlFor="checkbox" className="text-gray-700">
+                      Hindi
+                    </label>
+                  </div>
+                </div>
+              </div>
+              <div className="shadow-custom-all-sides rounded-md py-5 px-5 my-5">
+                <h2 className="text-lg font-semibold">Time</h2>
+                <div className="my-3">
+                  <div className="flex items-center space-x-2 my-1">
+                    <input
+                      type="checkbox"
+                      id="checkbox"
+                      className="form-checkbox h-4 w-4 text-blue-600"
+                    />
+                    <label htmlFor="checkbox" className="text-gray-700">
+                      Full Time
+                    </label>
+                  </div>
+                  <div className="flex items-center space-x-2 my-1">
+                    <input
+                      type="checkbox"
+                      id="checkbox"
+                      className="form-checkbox h-4 w-4 text-blue-600"
+                    />
+                    <label htmlFor="checkbox" className="text-gray-700">
+                      Part Time
+                    </label>
+                  </div>
+                </div>
+              </div>
+              <div className="shadow-custom-all-sides rounded-md py-5 px-5 my-5">
+                <h2 className="text-lg font-semibold">Format</h2>
+                <div className="my-3">
+                  <div className="flex items-center space-x-2 my-1">
+                    <input
+                      type="checkbox"
+                      id="checkbox"
+                      className="form-checkbox h-4 w-4 text-blue-600"
+                    />
+                    <label htmlFor="checkbox" className="text-gray-700">
+                      All
+                    </label>
+                  </div>
+                  <div className="flex items-center space-x-2 my-1">
+                    <input
+                      type="checkbox"
+                      id="checkbox"
+                      className="form-checkbox h-4 w-4 text-blue-600"
+                    />
+                    <label htmlFor="checkbox" className="text-gray-700">
+                      Offline
+                    </label>
+                  </div>
+                  <div className="flex items-center space-x-2 my-1">
+                    <input
+                      type="checkbox"
+                      id="checkbox"
+                      className="form-checkbox h-4 w-4 text-blue-600"
+                    />
+                    <label htmlFor="checkbox" className="text-gray-700">
+                      Online
+                    </label>
+                  </div>
                 </div>
               </div>
             </div>

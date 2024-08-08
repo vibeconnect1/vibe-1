@@ -3,18 +3,16 @@ import Navbar from "../../../components/Navbar";
 import { Link, NavLink } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { CgWebsite } from "react-icons/cg";
-import marketing from "/digitalMarketing.jpg";
+import marketing from "/digitalMarketing.jpg"
 function EmployeeApproved() {
   const themeColor = useSelector((state) => state.theme.color);
   const approved = [
     {
       id: 1,
-      img: marketing,
-      projectIcon: (
-        <div className="border-2 border-inherit rounded-md p-3 mr-3">
-          <CgWebsite size={30} />
-        </div>
-      ),
+      img:marketing,
+      projectIcon: <div className="border-2 border-inherit rounded-md p-3 mr-3">
+        <CgWebsite size={30}/>
+      </div>,
       projectName: "Web Development",
       projectDesc:
         "Web application design is an important stage when building a web application...",
@@ -29,7 +27,7 @@ function EmployeeApproved() {
     },
     {
       id: 2,
-      img: marketing,
+      img:marketing,
       projectName: "Marketing Strategy",
       projectDesc:
         "Development of a new marketing strategy to increase brand awareness and sales increase brand awareness and...",
@@ -44,7 +42,7 @@ function EmployeeApproved() {
     },
     {
       id: 3,
-      img: marketing,
+      img:marketing,
       projectName: "Business Project",
       projectDesc:
         "Development of a new marketing strategy to increase brand awareness and sales increase brand awareness and...",
@@ -64,7 +62,7 @@ function EmployeeApproved() {
       <div className="w-full flex flex-col overflow-hidden">
         <div className="flex justify-center my-2 w-full">
           <div
-            className="sm:flex flex-wrap grid grid-cols-2 sm:flex-row font-medium p-2 rounded-md text-sm text-white"
+            className="sm:flex flex-wrap grid grid-cols-2 sm:flex-row gap-2 text-sm font-medium p-2 rounded-md text-white"
             style={{ background: themeColor }}
           >
             <NavLink
@@ -139,7 +137,7 @@ function EmployeeApproved() {
             </NavLink>
           </div>
         </div>
-        <div className="flex justify-center  w-full">
+        <div className="flex justify-center my-2 w-full">
           <div className="sm:flex grid grid-cols-2 sm:flex-row gap-5 font-medium p-1 sm:rounded-full rounded-md opacity-90 bg-gray-200">
             <NavLink
               to={"/employee/certificate/project-request-approval/request"}
@@ -174,7 +172,7 @@ function EmployeeApproved() {
           </div>
         </div>
         <div>
-          <div className="border-2 border-gray-400 rounded-md mx-10 my-5">
+          <div className="border border-gray-400 rounded-md mx-5 my-5">
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 mx-5 my-5">
               {approved.map((item) => (
                 <Link
@@ -183,9 +181,9 @@ function EmployeeApproved() {
                   className="shadow-custom-all-sides rounded-md flex flex-col justify-between"
                 >
                   <img src={item.img} className="h-32 rounded-md"></img>
-                  <div className="flex px-5 pt-3">
-                    <div>{item.projectIcon}</div>
-                    <p className="text-xl text-gray-700 font-medium">
+                  <div className="flex px-2 pt-3">
+                     {/* <div>{item.projectIcon}</div> */}
+                    <p className=" text-gray-700 font-medium">
                       {item.projectName}
                     </p>
                   </div>
@@ -215,7 +213,7 @@ function EmployeeApproved() {
                           <p className="text-gray-500 text-sm font-medium">
                             Due Date
                           </p>
-                          <p className="text-gray-600 text-base font-medium">
+                          <p className="text-gray-600 text-sm font-medium">
                             {item.dueDate}
                           </p>
                         </div>
@@ -225,7 +223,7 @@ function EmployeeApproved() {
                           <p className="text-gray-500 text-sm font-medium">
                             Budget
                           </p>
-                          <p className="text-gray-600 text-base font-medium">
+                          <p className="text-gray-600 text-sm font-medium">
                             {item.budget}
                           </p>
                         </div>

@@ -79,7 +79,7 @@ function EmployeeProjectCertificate() {
       <Navbar/>
       <div className='w-full flex flex-col overflow-hidden'>
         <div className="flex justify-center my-2 w-full">
-          <div className="sm:flex flex-wrap grid grid-cols-2 sm:flex-row font-medium p-2 rounded-md text-sm text-white" style={{background:themeColor}}>
+          <div className="sm:flex flex-wrap grid grid-cols-2 sm:flex-row text-sm gap-2 font-medium p-2 rounded-md text-white" style={{background:themeColor}}>
             <NavLink
               to={"/employee/certificate/project"}
               className={({ isActive }) => `p-1 ${
@@ -139,7 +139,7 @@ function EmployeeProjectCertificate() {
           </div>
         </div>
         <div className="flex justify-center my-2 w-full">
-          <div className="sm:flex grid grid-cols-2 sm:flex-row gap-5 font-medium p-2 sm:rounded-full rounded-md opacity-90 bg-gray-200">
+          <div className="sm:flex grid grid-cols-2 sm:flex-row gap-5 font-medium p-1 sm:rounded-full rounded-md opacity-90 bg-gray-200">
             <NavLink
               to={"/employee/certificate/course"}
               className={({ isActive }) => `p-1 ${
@@ -158,29 +158,30 @@ function EmployeeProjectCertificate() {
             </NavLink>
           </div>
         </div>
-        <div className='flex justify-between md:flex-row flex-col md:mx-14 mx-5 my-5'>
+        <div className='flex justify-between md:flex-row flex-col my-2 mx-5'>
           <input
             type="text"
             placeholder="search"
-            className="border-2 p-2 border-gray-300 rounded-lg mb-3 md:mb-0"
+            className="border w-96 p-2 border-gray-300 rounded-lg "
           />
           <button
             onClick={openModal}
-            className='border-2 border-gray-400 rounded-md px-4 p-2 flex gap-2 justify-center'
+            style={{background: themeColor}}
+            className='border text-white border-gray-400 rounded-md px-4 p-2 flex gap-2 justify-center'
           >
             <IoAddCircleOutline size={22} />
             Upload Certificate
           </button>
         </div>
-        <div className='border-2 border-gray-400 rounded-md md:mx-14 mx-5 mb-5'>
+        <div className='border border-gray-400 rounded-md mx-5 my-2'>
           <div className='md:grid grid-cols-3'>
             <div className='relative px-5 py-5'>
               <Link to={''} >
-                <img src='/certificate1.jpg' alt="Certificate" id='certificate-content'/>
+                <img src='/Pro1.png' alt="Certificate" id='certificate-content'/>
               </Link>
               <div className='flex justify-between my-2'>
-                <h2 className='text-lg font-semibold'>Project Certificate</h2>
-                <p className='text-lg font-normal'>14 Feb 2024</p>
+                <h2 className='text-lg font-semibold'>Internal CRM Project</h2>
+                <p className='text-lg font-normal'>04 Aug, 2023</p>
               </div>
               <div className='absolute top-4 right-4'>
                 <button className="p-2 bg-black text-white rounded-full">
@@ -195,11 +196,11 @@ function EmployeeProjectCertificate() {
             </div>
             <div className='relative px-5 py-5'>
               <Link to={''} >
-                <img src='/certificate1.jpg' alt="Certificate" id='certificate-content'/>
+                <img src='/pro2.png' alt="Certificate" id='certificate-content'/>
               </Link>
               <div className='flex justify-between my-2'>
-                <h2 className='text-lg font-semibold'>Project Certificate</h2>
-                <p className='text-lg font-normal'>22 feb 2024</p>
+                <h2 className='text-lg font-semibold'>Skill Grow Project</h2>
+                <p className='text-lg font-normal'>1 Sep 2023</p>
               </div>
               <div className='absolute top-4 right-4'>
                 <button className="p-2 bg-black text-white rounded-full">
@@ -214,11 +215,11 @@ function EmployeeProjectCertificate() {
             </div>
             <div className='relative px-5 py-5'>
               <Link to={''} >
-                <img src='/certificate1.jpg' alt="Certificate" id='certificate-content'/>
+                <img src='/pro3.png' alt="Certificate" id='certificate-content'/>
               </Link>
               <div className='flex justify-between my-2'>
-                <h2 className='text-lg font-semibold'>Project Certificate</h2>
-                <p className='text-lg font-normal'>14 July 2024</p>
+                <h2 className='text-lg font-semibold'>Data Integration Project</h2>
+                <p className='text-lg font-normal'>20 Mar, 2024</p>
               </div>
               <div className='absolute top-4 right-4'>
                 <button className="p-2 bg-black text-white rounded-full">

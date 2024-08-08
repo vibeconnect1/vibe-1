@@ -30,6 +30,8 @@ function EmployeeProjectTaskView() {
   const [newChat, setNewChat] = useState("");
   const [subTaskLevel, setSubTaskLevel] = useState(false);
   const [subTaskDependence, setSubTaskDependence] = useState(false);
+  const [sections, setSections] = useState([]);
+  const [inputText, setInputText] = useState("");
   const handleSwitchChange = (event) => {
     setRepeat(event.target.checked);
   };
@@ -117,6 +119,22 @@ function EmployeeProjectTaskView() {
     document.getElementById("fileInput").click();
   };
   const completePercentage = 30;
+
+  // subtask
+  const handleInputChange = (e) => {
+    setInputText(e.target.value);
+  };
+
+  const addSection = () => {
+    if (inputText.trim() !== "") {
+      setSections([...sections, { id: sections.length, text: inputText }]);
+      setInputText("");
+    }
+  };
+
+  const removeSection = (id) => {
+    setSections(sections.filter((section) => section.id !== id));
+  };
 
   return (
     <section className="flex">
@@ -304,8 +322,8 @@ function EmployeeProjectTaskView() {
           </div>
         </div>
         {createModal && (
-          <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center">
-            <div className="bg-white p-5 rounded-lg shadow-lg w-2/5 relative h-4/3 overflow-y-auto hide-scrollbar">
+          <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center z-50">
+            <div className="bg-white p-5 rounded-lg shadow-lg w-2/5 relative max-h-[90%] overflow-y-auto hide-scrollbar">
               <button
                 onClick={closeModal}
                 className="absolute top-2 right-2 text-gray-500 hover:text-gray-700"
@@ -481,49 +499,49 @@ function EmployeeProjectTaskView() {
                           />
                         </div>
                         <div className="mb-3">
-                          <h2 className="text-lg font-medium text-gray-600">
+                          <h2 className="font-medium text-gray-600">
                             Select Working Day
                           </h2>
-                          <div className="flex gap-3 mt-2">
+                          <div className="flex gap-2 mt-2">
                             <button
                               type="submit"
-                              className="px-4 py-1 border-2 border-gray-400 text-gray-800 rounded-md"
+                              className="px-2 text-sm py-1 border-2 border-gray-400 text-gray-800 rounded-md"
                             >
                               Mon
                             </button>
                             <button
                               type="submit"
-                              className="px-4 py-1 border-2 border-gray-400  text-gray-800 rounded-md"
+                              className="px-2 text-sm py-1 border-2 border-gray-400  text-gray-800 rounded-md"
                             >
                               Tue
                             </button>
                             <button
                               type="submit"
-                              className="px-4 py-1 border-2 border-gray-400  text-gray-800 rounded-md"
+                              className="px-2 text-sm border-2 border-gray-400  text-gray-800 rounded-md"
                             >
                               Wed
                             </button>
                             <button
                               type="submit"
-                              className="px-4 py-1 border-2 border-gray-400  text-gray-800 rounded-md"
+                              className="px-2 text-sm border-2 border-gray-400  text-gray-800 rounded-md"
                             >
                               Thu
                             </button>
                             <button
                               type="submit"
-                              className="px-4 py-1 border-2 border-gray-400  text-gray-800 rounded-md"
+                              className="px-2 text-sm border-2 border-gray-400  text-gray-800 rounded-md"
                             >
                               Fri
                             </button>
                             <button
                               type="submit"
-                              className="px-4 py-1 border-2 border-gray-400  text-gray-800 rounded-md"
+                              className="px-2 text-sm border-2 border-gray-400  text-gray-800 rounded-md"
                             >
                               Sat
                             </button>
                             <button
                               type="submit"
-                              className="px-4 py-1 border-2 border-gray-400 text-gray-800 rounded-md"
+                              className="px-2 text-sm border-2 border-gray-400 text-gray-800 rounded-md"
                             >
                               Sun
                             </button>
@@ -698,16 +716,156 @@ function EmployeeProjectTaskView() {
                       <div className="flex items-center mt-2">
                         <input
                           type="text"
-                          placeholder="Add Sub Task"
-                          className="flex-1 border-2 border-gray-400 p-1 rounded-md text-gray-800"
+                          value={inputText}
+                          onChange={handleInputChange}
+                          className="border border-gray-300 rounded-l py-2 px-4 w-full"
+                          placeholder="Enter text"
                         />
                         <button
-                          className="ml-2 font-semibold text-white bg-green-500 px-4 p-1 rounded-md"
-                          onClick={() => setSubTask(!subTask)}
+                          onClick={addSection}
+                          className="bg-blue-500 text-white py-2 px-4 rounded-r"
                         >
                           Add
                         </button>
                       </div>
+                      {sections.map((section) => (
+                        <div
+                          key={section.id}
+                          className="my-4 p-4 border rounded"
+                        >
+                          <p className="mt-2">{section.text}</p>
+                          <div className="flex gap-5 my-2">
+                            <button
+                              className="border-2 border-gray-300 rounded-md text-sm p-1 px-4"
+                              onClick={() => setDueDateModal(!dueDateModal)}
+                            >
+                              Due Date
+                            </button>
+                            <button
+                              className="border-2 border-gray-300 rounded-md text-sm p-1 px-4"
+                              onClick={() => setDueDateModal(!dueDateModal)}
+                            >
+                              status
+                            </button>
+                            <button
+                              className="border-2 border-gray-300 rounded-md text-sm p-1 px-4"
+                              onClick={() =>
+                                setSubTaskDependence(!subTaskDependence)
+                              }
+                            >
+                              dependency
+                            </button>
+                            <button
+                              className="border-2 border-gray-300 rounded-md text-sm p-1 px-4"
+                              onClick={() => setAssign(!assign)}
+                            >
+                              Assign to
+                            </button>
+                          </div>
+                          <div className="grid grid-cols-2">
+                            <div className="flex gap-5">
+                              <p>Start Date:</p>
+                              <p>:</p>
+                            </div>
+                            <div className="flex gap-5">
+                              <p>End Date:</p>
+                              <p>:</p>
+                            </div>
+                          </div>
+                          {subTaskDependence && (
+                            <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+                              <div className="relative bg-white p-5 rounded-md w-96">
+                                <button
+                                  className="absolute top-2 right-2 text-gray-500"
+                                  onClick={() =>
+                                    setSubTaskDependence(!subTaskDependence)
+                                  }
+                                >
+                                  <IoClose size={24} />
+                                </button>
+                                <div className="flex gpa-5">
+                                  <p className="text-lg text-gray-600 font-semibold">
+                                    Add Dependency
+                                  </p>
+                                  <button
+                                    className="border-2 border-gray-200 border-dashed w-8 h-8 rounded-full ml-2 flex justify-center items-center hover:text-blue-400 hover:border-blue-400"
+                                    onClick={() => setDependency(!dependency)}
+                                  >
+                                    <span>
+                                      <IoMdAdd />
+                                    </span>
+                                  </button>
+                                </div>
+                                <div className="flex">
+                                  <input
+                                    type="checkbox"
+                                    name="completed"
+                                    className="mr-2 font-3"
+                                  />
+                                  <label className="flex items-center text-gray-600 text-base">
+                                    Reward and Loyalty Program
+                                  </label>
+                                </div>
+                                <div className="flex">
+                                  <input
+                                    type="checkbox"
+                                    name="completed"
+                                    className="mr-2 font-3"
+                                  />
+                                  <label className="flex items-center text-gray-600 text-base">
+                                    Skill Grow
+                                  </label>
+                                </div>
+                                <div className="flex">
+                                  <input
+                                    type="checkbox"
+                                    name="completed"
+                                    className="mr-2 font-3"
+                                  />
+                                  <label className="flex items-center text-gray-600 text-base">
+                                    Create boards in Matboard
+                                  </label>
+                                </div>
+                                {dependency && (
+                                  <div className="flex items-center mt-2">
+                                    <input
+                                      type="text"
+                                      placeholder="Add New Dependency"
+                                      className="flex-1 border-2 border-gray-400 p-1 rounded-md text-gray-800"
+                                    />
+                                    <button className="ml-2 font-semibold text-white bg-green-500 px-4 p-1 rounded-md">
+                                      Add
+                                    </button>
+                                  </div>
+                                )}
+                              </div>
+                            </div>
+                          )}
+                          <div className="flex gap-2 mt-3">
+                            <div className="flex items-center w-full">
+                              <input
+                                type="text"
+                                value={inputText}
+                                onChange={handleInputChange}
+                                className="border border-gray-300 rounded-l py-1 px-4 w-full"
+                                placeholder="Enter text"
+                              />
+                              <button
+                                onClick={addSection}
+                                className="bg-blue-500 text-white py-1 px-4 rounded-r"
+                              >
+                                Add
+                              </button>
+                            </div>
+                            <button
+                              onClick={() => removeSection(section.id)}
+                              className="bg-red-500 text-white py-1 px-3 rounded"
+                            >
+                              <RiDeleteBin6Line />
+                            </button>
+                          </div>
+                        </div>
+                      ))}
                       {subTask && (
                         <div className="mt-2 border-2 border-gray-300 rounded-md px-5 py-2">
                           <h2 className="text-lg font-semibold text-gray-700 text-start">
@@ -756,7 +914,9 @@ function EmployeeProjectTaskView() {
                               <div className="relative bg-white p-5 rounded-md w-96">
                                 <button
                                   className="absolute top-2 right-2 text-gray-500"
-                                  onClick={() =>setSubTaskDependence(!subTaskDependence)}
+                                  onClick={() =>
+                                    setSubTaskDependence(!subTaskDependence)
+                                  }
                                 >
                                   <IoClose size={24} />
                                 </button>
@@ -804,17 +964,17 @@ function EmployeeProjectTaskView() {
                                   </label>
                                 </div>
                                 {dependency && (
-                                    <div className="flex items-center mt-2">
-                                      <input
-                                        type="text"
-                                        placeholder="Add New Dependency"
-                                        className="flex-1 border-2 border-gray-400 p-1 rounded-md text-gray-800"
-                                      />
-                                      <button className="ml-2 font-semibold text-white bg-green-500 px-4 p-1 rounded-md">
-                                        Add
-                                      </button>
-                                    </div>
-                                  )}
+                                  <div className="flex items-center mt-2">
+                                    <input
+                                      type="text"
+                                      placeholder="Add New Dependency"
+                                      className="flex-1 border-2 border-gray-400 p-1 rounded-md text-gray-800"
+                                    />
+                                    <button className="ml-2 font-semibold text-white bg-green-500 px-4 p-1 rounded-md">
+                                      Add
+                                    </button>
+                                  </div>
+                                )}
                               </div>
                             </div>
                           )}

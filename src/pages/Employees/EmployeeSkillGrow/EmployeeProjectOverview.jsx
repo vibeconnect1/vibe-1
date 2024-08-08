@@ -116,8 +116,8 @@ function EmployeeProjectOverview() {
               <MdEdit size={20} />
             </button>
             {overview && (
-              <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center">
-                <div className="bg-white p-5 rounded-lg shadow-lg md:w-2/5 relative h-4/6 overflow-y-auto">
+              <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center z-50">
+                <div className="bg-white p-5 rounded-lg shadow-lg md:w-2/5 relative max-h[80%] overflow-y-auto">
                   <button
                     onClick={closeModal}
                     className="absolute top-2 right-2 text-gray-500 hover:text-gray-700"

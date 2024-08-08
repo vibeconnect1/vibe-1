@@ -142,7 +142,7 @@ function EmployeeProjectTracking() {
       <div className="w-full flex flex-col overflow-hidden">
         <div className="flex justify-center my-2 w-full">
           <div
-            className="sm:flex flex-wrap grid grid-cols-2 sm:flex-row text-sm font-medium p-2 rounded-md text-white"
+            className="sm:flex flex-wrap grid grid-cols-2 sm:flex-row gap-2 text-sm font-medium p-2 rounded-md text-white"
             style={{ background: themeColor }}
           >
             <NavLink
@@ -217,15 +217,15 @@ function EmployeeProjectTracking() {
             </NavLink>
           </div>
         </div>
-        <div className="flex justify-start mx-10 my-5">
+        <div className="flex justify-start mx-5 my-2">
           <input
             type="text"
             placeholder="search"
-            className="border-2 p-2 w-96 border-gray-300 rounded-lg mx-2"
+            className="border p-2 w-96 border-gray-300 rounded-lg"
           />
         </div>
         <div>
-          <div className="border-2 border-gray-400 rounded-md mx-10 my-5">
+          <div className="border border-gray-400 rounded-md mx-5">
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 mx-5 my-5">
               {projectTracking.map((item) => (
                 <Link
@@ -233,16 +233,16 @@ function EmployeeProjectTracking() {
                   key={item.id}
                   className="shadow-custom-all-sides flex flex-col justify-between rounded-md"
                 >
-                    <img src={item.img} className="h-32 rounded-md"></img>
-                    <div className="flex px-5 pt-3">
-                      <div>{item.projectIcon}</div>
-                      <p className="text-xl text-gray-700">
-                        {item.projectName}
-                        <p className="text-sm text-gray-600 mt-1">
-                          {item.projectSubTitle}
-                        </p>
+                  <img src={item.img} className="h-32 rounded-md"></img>
+                  <div className="flex px-5 pt-3">
+                    {/* <div>{item.projectIcon}</div> */}
+                    <p className="font-medium text-gray-700">
+                      {item.projectName}
+                      <p className="text-sm text-gray-600 mt-1">
+                        {item.projectSubTitle}
                       </p>
-                    </div>
+                    </p>
+                  </div>
                   <div className="flex justify-between px-3">
                     {/* <button
                       className="relative"
@@ -376,7 +376,7 @@ function EmployeeProjectTracking() {
                           <p className="text-gray-500 text-sm font-medium">
                             Due Date
                           </p>
-                          <p className="text-gray-600 text-base font-medium">
+                          <p className="text-gray-600 text-sm font-medium">
                             {item.dueDate}
                           </p>
                         </div>
@@ -386,7 +386,7 @@ function EmployeeProjectTracking() {
                           <p className="text-gray-500 text-sm font-medium">
                             Budget
                           </p>
-                          <p className="text-gray-600 text-base font-medium">
+                          <p className="text-gray-600 text-sm font-medium">
                             {item.budget}
                           </p>
                         </div>

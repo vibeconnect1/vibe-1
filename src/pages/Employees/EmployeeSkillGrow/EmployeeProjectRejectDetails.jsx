@@ -24,17 +24,11 @@ function EmployeeProjectRejectDetails() {
           </div>
           <div className="border-t border-gray-400 my-2"></div>
           <p className="text-gray-800 font-semibold text-base mx-5 mb-3">
-            Web Development
+          Remote Work Proposal
               </p>
           <div className="px-5 pb-5">
             <p className="text-base text-gray-500">
-              Give a high-level overview of the product / project you re working
-              on, its goals, etc..Elaborate on the target audience of your
-              project/product, link out to additional resources. Vivamus pretium
-              laoreet massa eu euismod. Nunc accumsan id odio sed luctus.
-              Suspendisse a lacus sed ex consequat interdum quis non eros. Lorem
-              ipsum dolor sit amet, consectetur adipisicing elit. Debitis labore
-              nam fuga sapiente vel iste animiicta ab at placeat sint.
+            "Request for approval to work remotely either fulltime or part-time along with a plan outlining how productivity will be maintained",
             </p>
           </div>
           <div className="border-b border-thin mt-3 flex justify-between py-3 mx-5">

@@ -132,7 +132,7 @@ function EmployeeProjectRepository() {
       <div className="w-full flex flex-col overflow-hidden">
         <div className="flex justify-center my-2 w-full">
           <div
-            className="sm:flex flex-wrap grid grid-cols-2 sm:flex-row text-white p-2 font-medium rounded-md text-sm"
+            className="sm:flex flex-wrap grid grid-cols-2 sm:flex-row text-white p-2 gap-2 text-sm font-medium rounded-md"
             style={{ background: themeColor }}
           >
             <NavLink
@@ -207,15 +207,15 @@ function EmployeeProjectRepository() {
             </NavLink>
           </div>
         </div>
-        <div className="flex justify-start my-2">
+        <div className="flex justify-start mx-5 my-2">
           <input
             type="text"
             placeholder="search"
-            className="border-2 p-2 w-96 border-gray-300 rounded-lg mx-2"
+            className="border p-2 w-96 border-gray-300 rounded-lg"
           />
         </div>
         <div>
-          <div className="border-2 border-gray-400 rounded-md m-2">
+          <div className="border border-gray-400 rounded-md mx-5 my-2">
             <div className="md:grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 mx-5">
               {projectData.map((item) => (
                 <Link
@@ -225,8 +225,8 @@ function EmployeeProjectRepository() {
                 >
                   <img src={item.img} className="h-32 rounded-md"></img>
                     <div className="flex px-5 pt-3">
-                      <div>{item.projectIcon}</div>
-                      <p className="text-xl text-gray-700">
+                      {/* <div>{item.projectIcon}</div> */}
+                      <p className="font-medium text-gray-700">
                         {item.projectName}
                         <p className="text-sm text-gray-600 mt-1">
                           {item.projectSubTitle}
@@ -428,7 +428,7 @@ function EmployeeProjectRepository() {
                           <p className="text-gray-500 text-sm font-medium">
                             Due Date
                           </p>
-                          <p className="text-gray-600 text-base font-medium">
+                          <p className="text-gray-600 text-sm font-medium">
                             {item.dueDate}
                           </p>
                         </div>
@@ -438,7 +438,7 @@ function EmployeeProjectRepository() {
                           <p className="text-gray-500 text-sm font-medium">
                             Budget
                           </p>
-                          <p className="text-gray-600 text-base font-medium">
+                          <p className="text-gray-600 text-sm font-medium">
                             {item.budget}
                           </p>
                         </div>

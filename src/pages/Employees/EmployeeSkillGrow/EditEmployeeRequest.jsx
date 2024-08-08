@@ -2,7 +2,7 @@ import React, { useRef, useState } from "react";
 import Navbar from "../../../components/Navbar";
 import { useSelector } from "react-redux";
 import { ImImage } from "react-icons/im";
-
+import FileInputBox from "../../../containers/Inputs/FileInputBox"
 function EditEmployeeRequest() {
   const themeColor = useSelector((state) => state.theme.color);
   const [file, setFile] = useState(null);
@@ -125,10 +125,13 @@ function EditEmployeeRequest() {
                   id="teamMember"
                   className="border p-1 py-2 border-gray-500 rounded-md w-full"
                 >
-                  <option value="">Assign To Admin</option>
-                  <option value="">Karan</option>
-                  <option value="">Naharika</option>
-                  <option value="">Vinay</option>
+                  <option value="">Select Team Member</option>
+                  <option value="">Karan Gupta</option>
+                  <option value="">Riya Yadav</option>
+                  <option value="">Vinay Singh</option>
+                  <option value="">Naharika Gupta</option>
+                  <option value="">Neha Mishra</option>
+                  <option value="">Ritesh Pandey</option>
                 </select>
               </div>
               <div className="flex flex-col ">
@@ -148,6 +151,15 @@ function EditEmployeeRequest() {
                   <option value="">Medium</option>
                   <option value="">Low</option>
                 </select>
+              </div>
+              <div className="col-span-3">
+                <label
+                  className="block text-lg font-medium text-gray-700 mb-2"
+                  htmlFor="description"
+                >
+                  Attachment
+                </label>
+                <FileInputBox/>
               </div>
               <div className="col-span-3">
                 <label
@@ -205,7 +217,7 @@ function EditEmployeeRequest() {
             <div className="flex justify-center border-t border-gray-300 py-5 mt-5">
               <button
                 type="submit"
-                className="border-2 border-gray-400 rounded-md p-2 px-5"
+                className="border-2 border-gray-400 rounded-md p-2 px-5 hover:bg-black hover:text-white"
               >
                 Edit
               </button>
@@ -216,6 +228,5 @@ function EditEmployeeRequest() {
     </section>
   );
 }
-
 
 export default EditEmployeeRequest

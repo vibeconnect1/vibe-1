@@ -69,7 +69,7 @@ function EmployeeCourseCertificate() {
       <div className="w-full flex flex-col overflow-hidden">
         <div className="flex justify-center my-2 w-full">
           <div
-            className="sm:flex flex-wrap grid grid-cols-2 sm:flex-row font-medium p-2 text-sm rounded-md text-white"
+            className="sm:flex flex-wrap grid grid-cols-2 sm:flex-row gap-2 text-sm font-medium p-2 rounded-md text-white"
             style={{ background: themeColor }}
           >
             <NavLink
@@ -144,8 +144,8 @@ function EmployeeCourseCertificate() {
             </NavLink>
           </div>
         </div>
-        <div className="flex justify-center  w-full">
-          <div className="sm:flex grid grid-cols-2 sm:flex-row gap-5 font-medium p-2 sm:rounded-full rounded-md opacity-90 bg-gray-200">
+        <div className="flex justify-center my-2 w-full">
+          <div className="sm:flex grid grid-cols-2 sm:flex-row gap-5 font-medium p-1  sm:rounded-full rounded-md opacity-90 bg-gray-200">
             <NavLink
               to={"/employee/certificate/course"}
               className={({ isActive }) =>
@@ -168,99 +168,103 @@ function EmployeeCourseCertificate() {
             </NavLink>
           </div>
         </div>
-        <div className="flex justify-between md:flex-row flex-col  m-5">
+        <div className="flex justify-between md:flex-row flex-col mx-5 m-2">
           <input
             type="text"
             placeholder="search"
-            className="border p-2 border-gray-300 rounded-lg w-96 md:mb-0"
+            className="border p-2 border-gray-300 rounded-lg w-96"
           />
           <button
             onClick={openModal}
-            className="border-2 border-gray-400 rounded-md px-4 p-1 flex gap-2 items-center justify-center"
+            style={{ background: themeColor }}
+            className="border-2 text-white rounded-md px-4 p-2 flex gap-2 justify-center"
           >
-            <IoAddCircleOutline  />
+            <IoAddCircleOutline size={22} />
             Upload Certificate
           </button>
         </div>
-        <div className="border border-gray-400 rounded-md  mx-5">
-          <div className="md:grid grid-cols-3">
-            <div className="relative px-5 py-5">
-              <div>
+        <div className="border border-gray-400 rounded-md mx-5 my-2 p-4">
+          <div className="md:grid grid-cols-3 gap-4">
+          <div>
+              <div className="relative p-5">
                 <img
-                  src="/certificate.png"
+                  src="/py3.png"
                   alt="Certificate"
                   id="certificate-content"
                 />
+
+                <div className="absolute top-2 right-3">
+                  <button className="p-2 bg-black text-white rounded-full">
+                    <IoIosShareAlt size={20} />
+                  </button>
+                </div>
+                <div className="absolute bottom-4 right-4">
+                  <button
+                    onClick={generatePDF}
+                    className="p-2 bg-black text-white rounded-full"
+                  >
+                    <FaDownload size={20} />
+                  </button>
+                </div>
               </div>
-              <div className="flex justify-between my-2">
-                <h2 className="text-lg font-semibold">Python Certificate</h2>
-                <p className="text-lg font-normal">14 Jan 2022</p>
-              </div>
-              <div className="absolute top-4 right-4">
-                <button className="p-2 bg-black text-white rounded-full">
-                  <IoIosShareAlt size={20} />
-                </button>
-              </div>
-              <div className="absolute bottom-16 right-4">
-                <button
-                  onClick={generatePDF}
-                  className="p-2 bg-black text-white rounded-full"
-                >
-                  <FaDownload size={20} />
-                </button>
-              </div>
+                <div className="flex justify-between ">
+                  <h2 className=" font-medium">Python Advance Programming</h2>
+                  <p className="text-sm font-medium">13 Sep, 2023</p>
+                </div>
             </div>
-            <div className="relative px-5 py-5">
-              <div>
+            <div>
+              <div className="relative p-5">
                 <img
-                  src="/certificate.png"
+                  src="/py2.png"
                   alt="Certificate"
                   id="certificate-content"
                 />
+
+                <div className="absolute top-2 right-3">
+                  <button className="p-2 bg-black text-white rounded-full">
+                    <IoIosShareAlt size={20} />
+                  </button>
+                </div>
+                <div className="absolute bottom-4 right-4">
+                  <button
+                    onClick={generatePDF}
+                    className="p-2 bg-black text-white rounded-full"
+                  >
+                    <FaDownload size={20} />
+                  </button>
+                </div>
               </div>
-              <div className="flex justify-between my-2">
-                <h2 className="text-lg font-semibold">Python Certificate</h2>
-                <p className="text-lg font-normal">14 Jan 2022</p>
-              </div>
-              <div className="absolute top-4 right-4">
-                <button className="p-2 bg-black text-white rounded-full">
-                  <IoIosShareAlt size={20} />
-                </button>
-              </div>
-              <div className="absolute bottom-16 right-4">
-                <button
-                  onClick={generatePDF}
-                  className="p-2 bg-black text-white rounded-full"
-                >
-                  <FaDownload size={20} />
-                </button>
-              </div>
+                <div className="flex justify-between ">
+                  <h2 className=" font-medium">Python Advance Programming</h2>
+                  <p className="text-sm font-medium">13 Sep, 2023</p>
+                </div>
             </div>
-            <div className="relative px-5 py-5">
-              <div>
+            <div>
+              <div className="relative p-5">
                 <img
-                  src="/certificate.png"
+                  src="/py3.png"
                   alt="Certificate"
                   id="certificate-content"
                 />
+
+                <div className="absolute top-2 right-3">
+                  <button className="p-2 bg-black text-white rounded-full">
+                    <IoIosShareAlt size={20} />
+                  </button>
+                </div>
+                <div className="absolute bottom-4 right-4">
+                  <button
+                    onClick={generatePDF}
+                    className="p-2 bg-black text-white rounded-full"
+                  >
+                    <FaDownload size={20} />
+                  </button>
+                </div>
               </div>
-              <div className="flex justify-between my-2">
-                <h2 className="text-lg font-semibold">Python Certificate</h2>
-                <p className="text-lg font-normal">14 Jan 2022</p>
-              </div>
-              <div className="absolute top-4 right-4">
-                <button className="p-2 bg-black text-white rounded-full">
-                  <IoIosShareAlt size={20} />
-                </button>
-              </div>
-              <div className="absolute bottom-16 right-4">
-                <button
-                  onClick={generatePDF}
-                  className="p-2 bg-black text-white rounded-full"
-                >
-                  <FaDownload size={20} />
-                </button>
-              </div>
+                <div className="flex justify-between ">
+                  <h2 className=" font-medium">Python Advance Programming</h2>
+                  <p className="text-sm font-medium">13 Sep, 2023</p>
+                </div>
             </div>
           </div>
         </div>

@@ -60,101 +60,130 @@ function EmployeeBudget() {
     {
       id: 1,
       category: "Design",
-      total: "₹  11,500",
+      totalBudget: "₹  11,500",
+      totalSpent: '₹ 6,000',
       percentage: "23%",
       color: "bg-yellow-500",
     },
     {
       id: 2,
       category: "Saas Services",
-      total: "₹  5,000",
+      totalBudget: "₹  5,000",
+      totalSpent: '₹ 4,000',
       percentage: "10%",
       color: "bg-gray-500",
     },
     {
       id: 3,
       category: "Development",
-      total: "₹ 11,250",
+      totalBudget: "₹ 11,250",
+      totalSpent: '₹ 12,000',
       percentage: "22.5%",
       color: "bg-red-500",
     },
     {
       id: 4,
       category: "SEO",
-      total: "₹ 9,000",
+      totalBudget: "₹ 9,000",
+      totalSpent: '₹ 9,000',
       percentage: "18%",
       color: "bg-purple-500",
     },
     {
       id: 5,
       category: "Entertainment",
-      total: "₹ 2,000",
+      totalBudget: "₹ 2,000",
+      totalSpent: '₹ 4,000',
       percentage: "4%",
       color: "bg-pink-500",
     },
     {
       id: 6,
       category: "Marketing",
-      total: "₹ 9,500",
+      totalBudget: "₹ 9,500",
       percentage: "19%",
+      totalSpent: '₹ 7,000',
       color: "bg-green-500",
     },
     {
       id: 7,
       category: "Extra",
-      total: "₹ 1,750",
+      totalBudget: "₹ 1,750",
+      totalSpent: '₹ 2,000',
       percentage: "3.5%",
       color: "bg-blue-500",
     },
   ];
   const budgetDetails = [
     {
-      type: "Concept",
-      totalBudget: "₹ 12,000",
-      expensesAmount: "₹ 6,500",
-      expensesPercent: "52%",
+      id:1,
+      categoryType: "Design",
+      totalBudget: "₹ 11,500",
+      spentAmount: "₹ 6,000",
+      expensesPercent: "47.83%.",
       remaining: "₹ 5,500",
-      color: "bg-violet-500",
-    },
-    {
-      type: "Design",
-      totalBudget: "₹ 18,000",
-      expensesAmount: "₹ 8,000",
-      expensesPercent: "45%",
-      remaining: "₹ 10,000",
+      overSpent:" - ",
       color: "bg-yellow-500",
     },
     {
-      type: "Development",
-      totalBudget: "₹ 64,000",
-      expensesAmount: "₹ 38,000",
-      expensesPercent: "54%",
-      remaining: "₹ 26,000",
+      id:2,
+      categoryType: "Saas Services",
+      totalBudget: "₹ 5,000",
+      spentAmount: "₹ 4,000",
+      expensesPercent: "20.00%",
+      remaining: "₹ 1,000",
+      overSpent:" - ",
+      color: "bg-gray-500",
+    },
+    {
+      id:3,
+      categoryType: "Development",
+      totalBudget: "₹ 11,250",
+      spentAmount: "₹ 12,000",
+      expensesPercent: "-06.25%",
+      remaining: "₹ 0",
+      overSpent:"₹ 750 ",
       color: "bg-red-500",
     },
     {
-      type: "SEO",
-      totalBudget: "₹ 8,000",
-      expensesAmount: "₹ 3,000",
-      expensesPercent: "65%",
-      remaining: "₹ 5,000",
+      id:4,
+      categoryType: "SEO",
+      totalBudget: "₹ 9,000",
+      spentAmount: "₹ 9,000",
+      expensesPercent: "00.00%",
+      remaining: "₹ 0",
+      overSpent:' - ',
       color: "bg-violet-500",
     },
     {
-      type: "Extra",
+      id: 5,
+      categoryType: "Entertainment",
       totalBudget: "₹ 2,000",
-      expensesAmount: "₹ 1,500",
-      expensesPercent: "85%",
-      remaining: "₹ 500",
-      color: "bg-blue-500",
+      spentAmount: '₹ 4,000',
+      expensesPercent: "-50.00%",
+      remaining: "₹ 0",
+      overSpent:'₹ 2,000',
+      color: "bg-pink-500",
     },
     {
-      type: "Marketing",
-      totalBudget: "₹ 34,500",
-      expensesAmount: "₹ 24,500",
-      expensesPercent: "88%",
-      remaining: "₹ 10,000",
+      id:6,
+      categoryType: "Marketing",
+      totalBudget: "₹ 9,500",
+      spentAmount: "₹ 7,000",
+      expensesPercent: "26.32%",
+      remaining: "₹ 2,500",
+      overSpent:' - ',
       color: "bg-green-500",
+    },
+    {
+      id:7,
+      categoryType: "Extra",
+      totalBudget: "₹ 17,00",
+      spentAmount: "₹ 2,000",
+      expensesPercent: "-15.00%",
+      remaining: "₹ 0",
+      overSpent:'₹ 300 ',
+      color: "bg-blue-500",
     },
   ];
 
@@ -327,7 +356,6 @@ function EmployeeBudget() {
               </h2>
               <div>
                 <button
-                  to=""
                   className={` font-semibold border-2 border-gray-300 px-4  flex gap-2 items-center rounded-md ${"hover:bg-gray-200 rounded-full p-1"}`}
                   onClick={() => setAddBudgetCategory(!addBudgetCategory)}
                 >
@@ -370,9 +398,6 @@ function EmployeeBudget() {
                               </option>
                               <option value="marketing">Marketing</option>
                               <option value="extra">Extra</option>
-                              <option value="frontend">Frontend</option>
-                              <option value="database">Database</option>
-                              <option value="backEnd">BackEnd</option>
                             </select>
                           </div>
                           <div>
@@ -391,13 +416,13 @@ function EmployeeBudget() {
                           </div>
                           <div>
                             <label
-                              htmlFor="percentage"
+                              htmlFor="spent"
                               className="block text-sm font-medium text-gray-700 mb-1"
                             >
-                              Percentage
+                              Total Spent
                             </label>
                             <input
-                              id="percentage"
+                              id="spent"
                               type="number"
                               placeholder="Enter percentage"
                               className="border-2 p-2 mb-4 border-gray-300 rounded-lg w-full"
@@ -426,7 +451,10 @@ function EmployeeBudget() {
                       Category
                     </th>
                     <th className="px-6 py-3 border-gray-300 bg-gray-100 text-left text-xs font-semibold text-slate-900 uppercase tracking-wider">
-                      Total
+                      Budget
+                    </th>
+                    <th className="px-6 py-3 border-gray-300 bg-gray-100 text-left text-xs font-semibold text-slate-900 uppercase tracking-wider">
+                      Spent
                     </th>
                     <th className="px-6 py-3 border-gray-300 bg-gray-100 text-left text-xs font-semibold text-slate-900 uppercase tracking-wider">
                       Percentage
@@ -438,18 +466,21 @@ function EmployeeBudget() {
                 </thead>
                 <tbody>
                   {budgetCategory.map((data, index) => (
-                    <tr className="hover:bg-gray-100" key={index}>
-                      <td className="px-6 py-3 border-t border-gray-200 flex items-center space-x-3 text-gray-500 whitespace-nowrap">
+                    <tr className="hover:bg-gray-100 border-t border-gray-200" key={index}>
+                      <td className="px-6 py-3 flex items-center space-x-3 text-gray-500 whitespace-nowrap">
                         <div className={`w-2 h-2 ${data.color}`}></div>
                         <span>{data.category}</span>
                       </td>
-                      <td className="px-6 py-3 border-t border-gray-200 text-gray-500 whitespace-nowrap">
-                        {data.total}
+                      <td className="px-6 py-3 text-gray-500 whitespace-nowrap">
+                        {data.totalBudget}
                       </td>
-                      <td className="px-6 py-3 border-t border-gray-200 text-gray-500 whitespace-nowrap">
+                      <td className="px-6 py-3 text-gray-500 whitespace-nowrap">
+                        {data.totalSpent}
+                      </td>
+                      <td className="px-6 py-3 text-gray-500 whitespace-nowrap">
                         {data.percentage}
                       </td>
-                      <td className="px-6 py-4 border-t border-gray-200 text-gray-500 whitespace-nowrap">
+                      <td className="px-6 py-4 text-gray-500 whitespace-nowrap">
                         <button
                           className="relative"
                           onClick={() => handleBudgetCategoryDropDown(data.id)}
@@ -509,53 +540,59 @@ function EmployeeBudget() {
               <thead>
                 <tr>
                   <th className="px-6 py-3 border-gray-300 bg-gray-100 text-left text-xs font-semibold text-slate-900 uppercase tracking-wider">
-                    Type
+                    Category Type
                   </th>
                   <th className="px-6 py-3 border-gray-300 bg-gray-100 text-left text-xs font-semibold text-slate-900 uppercase tracking-wider">
                     Total Budget
                   </th>
                   <th className="px-6 py-3 border-gray-300 bg-gray-100 text-left text-xs font-semibold text-slate-900 uppercase tracking-wider">
-                    Expenses (USD)
+                    Total Spent
                   </th>
                   <th className="px-6 py-3 border-gray-300 bg-gray-100 text-left text-xs font-semibold text-slate-900 uppercase tracking-wider">
                     Expenses (%)
                   </th>
                   <th className="px-6 py-3 border-gray-300 bg-gray-100 text-left text-xs font-semibold text-slate-900 uppercase tracking-wider">
-                    Remaining (USD)
+                    Remaining
+                  </th>
+                  <th className="px-6 py-3 border-gray-300 bg-gray-100 text-left text-xs font-semibold text-slate-900 uppercase tracking-wider">
+                    Over Spent
                   </th>
                 </tr>
               </thead>
               <tbody>
                 {budgetDetails.map((data, index) => (
-                  <tr className="hover:bg-gray-100" key={index}>
-                    <td className="px-6 py-3 border-t border-gray-200 flex items-center space-x-3 text-gray-500 whitespace-nowrap">
+                  <tr className="hover:bg-gray-100 border-t border-gray-200" key={index}>
+                    <td className="px-6 py-3 flex items-center space-x-3 text-gray-500 whitespace-nowrap">
                       <div className={`w-2 h-2 ${data.color}`}></div>
-                      <span>{data.type}</span>
+                      <span>{data.categoryType}</span>
                     </td>
-                    <td className="px-6 py-3 border-t border-gray-200 text-gray-500 whitespace-nowrap">
+                    <td className="px-6 py-3  text-gray-500 whitespace-nowrap">
                       {data.totalBudget}
                     </td>
-                    <td className="px-6 py-3 border-t border-gray-200 text-gray-500 whitespace-nowrap">
-                      {data.expensesAmount}
+                    <td className="px-6 py-3 text-gray-500 whitespace-nowrap">
+                      {data.spentAmount}
                     </td>
-                    <td className="px-6 py-3 border-t border-gray-200 text-gray-500 flex items-center space-x-1 whitespace-nowrap">
+                    <td className="px-6 py-3 text-gray-500 flex items-center space-x-1 whitespace-nowrap">
                       <span>{data.expensesPercent}</span>
                       <span
                         className={`text-lg ${
-                          parseFloat(data.expensesPercent) > 60
+                          parseFloat(data.expensesPercent) > 0
                             ? "text-green-500"
                             : "text-red-500"
                         }`}
                       >
-                        {parseFloat(data.expensesPercent) > 60 ? (
+                        {parseFloat(data.expensesPercent) > 0 ? (
                           <IoIosArrowRoundUp size={22} />
                         ) : (
                           <IoIosArrowRoundDown size={22} />
                         )}
                       </span>
                     </td>
-                    <td className="px-6 py-3 border-t border-gray-200 text-gray-500">
+                    <td className="px-6 py-3 text-gray-500">
                       {data.remaining}
+                    </td>
+                    <td className="px-6 py-3text-gray-500">
+                      {data.overSpent}
                     </td>
                   </tr>
                 ))}
@@ -597,9 +634,6 @@ function EmployeeBudget() {
                     <option value="entertainment">Entertainment</option>
                     <option value="marketing">Marketing</option>
                     <option value="extra">Extra</option>
-                    <option value="frontend">Frontend</option>
-                    <option value="database">Database</option>
-                    <option value="backEnd">BackEnd</option>
                   </select>
                 </div>
                 <div>
@@ -618,13 +652,13 @@ function EmployeeBudget() {
                 </div>
                 <div>
                   <label
-                    htmlFor="percentage"
+                    htmlFor="spent"
                     className="block text-sm font-medium text-gray-700 mb-1"
                   >
-                    Percentage
+                    Total Spent
                   </label>
                   <input
-                    id="percentage"
+                    id="spent"
                     type="number"
                     placeholder="Enter percentage"
                     className="border-2 p-2 mb-4 border-gray-300 rounded-lg w-full"
@@ -657,21 +691,26 @@ function EmployeeBudget() {
                 Budget Details
               </h2>
               <div className="grid grid-cols-1 gap-4">
-                <div className="bg-gray-50 p-4 rounded-lg border border-gray-300">
+                <div className="bg-gray-50 p-1 px-3 rounded-lg border border-gray-300">
                   <h3 className="text-lg font-medium text-gray-800 mb-2">
                     Category Name
                   </h3>
                   <p className="text-gray-600">Design</p>
                 </div>
 
-                <div className="bg-gray-50 p-4 rounded-lg border border-gray-300">
+                <div className="bg-gray-50 p-1 px-3 rounded-lg border border-gray-300">
                   <h3 className="text-lg font-medium text-gray-800 mb-2">
                     Total Budget
                   </h3>
                   <p className="text-gray-600">₹ 11,500</p>
                 </div>
-
-                <div className="bg-gray-50 p-4 rounded-lg border border-gray-300">
+                <div className="bg-gray-50 p-1 px-3 rounded-lg border border-gray-300">
+                  <h3 className="text-lg font-medium text-gray-800 mb-2">
+                    Total Spent
+                  </h3>
+                  <p className="text-gray-600">₹ 6000</p>
+                </div>
+                <div className="bg-gray-50 p-1 px-3 rounded-lg border border-gray-300">
                   <h3 className="text-lg font-medium text-gray-800 mb-2">
                     Percentage
                   </h3>

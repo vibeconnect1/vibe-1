@@ -81,7 +81,7 @@ function EmployeeRRCertificate() {
       <div className="w-full flex flex-col overflow-hidden">
         <div className="flex justify-center my-2 w-full">
           <div
-            className="sm:flex flex-wrap grid grid-cols-2 sm:flex-row font-medium p-2 rounded-md text-sm text-white"
+            className="sm:flex flex-wrap grid grid-cols-2 sm:flex-row gap-2 text-sm font-medium p-2 rounded-md text-white"
             style={{ background: themeColor }}
           >
             <NavLink
@@ -156,36 +156,37 @@ function EmployeeRRCertificate() {
             </NavLink>
           </div>
         </div>
-        <div className="mt-8 mx-14 mb-2">
+        {/* <div className="my-2 mx-5">
           <h2 className="text-2xl font-semibold">Reward & Recognition</h2>
-        </div>
-        <div className="flex justify-between md:flex-row flex-col md:mx-14 mx-5 my-5">
+        </div> */}
+        <div className="flex justify-between md:flex-row flex-col my-2 mx-5">
           <input
             type="text"
             placeholder="search"
-            className="border-2 p-2 border-gray-300 rounded-lg mb-3 md:mb-0"
+            className="border w-96 p-2 border-gray-300 rounded-lg"
           />
           <button
             onClick={openModal}
-            className="border-2 border-gray-400 rounded-md px-4 p-2 flex gap-2 justify-center"
+            style={{background: themeColor}}
+            className="border-2 border-gray-300 rounded-md text-white px-4 p-2 flex gap-2 justify-center"
           >
             <IoAddCircleOutline size={22} />
             Upload Certificate
           </button>
         </div>
-        <div className="border-2 border-gray-400 rounded-md md:mx-14 mx-5 mb-5">
+        <div className="border border-gray-400 rounded-md  mx-5 mb-5">
           <div className="md:grid grid-cols-3">
             <div className="relative px-5 py-5">
               <Link to={""}>
                 <img
-                  src="/rewardCertificate.webp"
+                  src="/rrcertificate.png"
                   alt="Certificate"
                   id="certificate-content"
                 />
               </Link>
               <div className="flex justify-between my-2">
                 <h2 className="text-lg font-semibold">Reward Certificate</h2>
-                <p className="text-lg font-normal">14 mar 2024</p>
+                <p className="text-lg font-normal">12 Feb, 2024</p>
               </div>
               <div className="absolute top-4 right-4">
                 <button className="p-2 bg-black text-white rounded-full">
@@ -204,14 +205,14 @@ function EmployeeRRCertificate() {
             <div className="relative px-5 py-5">
               <Link to={""}>
                 <img
-                  src="/rewardCertificate.webp"
+                  src="/rrcertificate.png"
                   alt="Certificate"
                   id="certificate-content"
                 />
               </Link>
               <div className="flex justify-between my-2">
                 <h2 className="text-lg font-semibold">Reward Certificate</h2>
-                <p className="text-lg font-normal">2 may 2024</p>
+                <p className="text-lg font-normal">2 may, 2024</p>
               </div>
               <div className="absolute top-4 right-4">
                 <button className="p-2 bg-black text-white rounded-full">
@@ -230,14 +231,14 @@ function EmployeeRRCertificate() {
             <div className="relative px-5 py-5">
               <Link to={""}>
                 <img
-                  src="/rewardCertificate.webp"
+                  src="/rrcertificate.png"
                   alt="Certificate"
                   id="certificate-content"
                 />
               </Link>
               <div className="flex justify-between my-2">
                 <h2 className="text-lg font-semibold">reward Certificate</h2>
-                <p className="text-lg font-normal">24 jun 2024</p>
+                <p className="text-lg font-normal">24 june, 2024</p>
               </div>
               <div className="absolute top-4 right-4">
                 <button className="p-2 bg-black text-white rounded-full">

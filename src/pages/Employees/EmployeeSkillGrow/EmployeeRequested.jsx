@@ -48,7 +48,7 @@ function EmployeeRequested() {
       ],
       budget: "20000",
       status: "Request",
-      dueDate: "20-july-2024",
+      dueDate: "1 July, 2024",
     },
     {
       id: 2,
@@ -57,13 +57,13 @@ function EmployeeRequested() {
       projectDesc:
         "Proposal for client relationship management initiative to improve customer satisfaction and retention",
       profiles: [
-        { id: 1, src: "/profile1.jpg", alt: "Profile 1" },
-        { id: 2, src: "/profile2.jpg", alt: "Profile 2" },
-        { id: 3, src: "/profile3.jpg", alt: "Profile 3" },
+        { id: 1, src: "/profile5.jpg", alt: "Profile 1" },
+        { id: 2, src: "/profile4.jpg", alt: "Profile 2" },
+        { id: 3, src: "/profile2.jpg", alt: "Profile 3" },
       ],
       budget: "15000",
       status: "In Review",
-      dueDate: "20-july-2024",
+      dueDate: "30 July, 2024",
     },
     {
       id: 3,
@@ -72,29 +72,29 @@ function EmployeeRequested() {
       projectDesc:
         "Development of a new marketing strategy to increase brand awareness and sales...",
       profiles: [
-        { id: 1, src: "/profile1.jpg", alt: "Profile 1" },
-        { id: 2, src: "/profile2.jpg", alt: "Profile 2" },
-        { id: 3, src: "/profile3.jpg", alt: "Profile 3" },
+        { id: 1, src: "/profile6.jpg", alt: "Profile 1" },
+        { id: 2, src: "/profile4.jpg", alt: "Profile 2" },
+        { id: 3, src: "/profile1.jpg", alt: "Profile 3" },
       ],
       budget: "25000",
       status: "In Review",
-      dueDate: "20-july-2024",
+      dueDate: "1 June, 2024",
     },
     {
       id: 4,
       img: marketing,
-      projectName: "Marketing Strategy",
+      projectName: "Social Media",
       projectDesc:
-        "Development of a new marketing strategy to increase brand awareness and sales...",
+        "Social media refers to online platforms and technologies that enable users to create, share, and interact with content and connect with others.",
       profiles: [
         { id: 1, src: "/profile1.jpg", alt: "Profile 1" },
         { id: 2, src: "/profile2.jpg", alt: "Profile 2" },
-        { id: 3, src: "/profile3.jpg", alt: "Profile 3" },
-        { id: 4, src: "/profile3.jpg", alt: "Profile 3" },
+        { id: 3, src: "/profile4.jpg", alt: "Profile 3" },
+        { id: 4, src: "/profile5.jpg", alt: "Profile 3" },
       ],
-      budget: "25000",
+      budget: "60000",
       status: "Request",
-      dueDate: "20-july-2024",
+      dueDate: "21 July, 2024",
     },
   ];
   const getStatusColor = (status) => {
@@ -111,7 +111,7 @@ function EmployeeRequested() {
       <div className="w-full flex flex-col overflow-hidden">
         <div className="flex justify-center my-2 w-full">
           <div
-            className="sm:flex flex-wrap grid grid-cols-2 sm:flex-row text-sm font-medium p-2 rounded-md text-white"
+            className="sm:flex flex-wrap grid grid-cols-2 sm:flex-row gap-2 text-sm font-medium p-2 rounded-md text-white"
             style={{ background: themeColor }}
           >
             <NavLink
@@ -187,7 +187,7 @@ function EmployeeRequested() {
           </div>
         </div>
         <div className="flex justify-center my-2 w-full">
-          <div className="sm:flex grid grid-cols-2 sm:flex-row gap-5 font-medium p-2 sm:rounded-full rounded-md opacity-90 bg-gray-200">
+          <div className="sm:flex grid grid-cols-2 sm:flex-row gap-5 font-medium p-1 sm:rounded-full rounded-md opacity-90 bg-gray-200">
             <NavLink
               to="/employee/certificate/project-request-approval/request"
               className={({ isActive }) =>
@@ -221,19 +221,20 @@ function EmployeeRequested() {
           </div>
         </div>
         <div>
-          <div className="flex justify-end mx-10">
+          <div className="flex justify-end mx-5">
             <Link
               to={
                 "/employee/certificate/project-request-approval/create-request"
               }
-              className="border-2 border-gray-400 rounded-md px-4 p-2 flex gap-2"
+              style={{background: themeColor}}
+              className="border-2 text-white rounded-md px-4 p-2 flex gap-2"
             >
               <IoAddCircleOutline size={22} />
               Request Project
             </Link>
           </div>
           <div>
-            <div className="border-2 border-gray-400 rounded-md mx-10 my-5">
+            <div className="border border-gray-400 rounded-md mx-5 my-2">
               <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 mx-5 my-5">
                 {projectData.map((item) => (
                   <div
@@ -243,8 +244,8 @@ function EmployeeRequested() {
                     <img src={item.img} className="h-32 rounded-md"></img>
                     <div className="flex justify-between mx-2">
                       <div className="flex px-3 pt-3">
-                        <div>{item.projectIcon}</div>
-                        <p className="text-xl text-gray-700 font-medium ">
+                        {/* <div>{item.projectIcon}</div> */}
+                        <p className=" text-gray-700 font-medium ">
                           {item.projectName}
                         </p>
                       </div>
@@ -314,7 +315,7 @@ function EmployeeRequested() {
                             <p className="text-gray-500 text-sm font-medium">
                               Due Date
                             </p>
-                            <p className="text-gray-600 text-base font-medium">
+                            <p className="text-gray-600 text-sm font-medium">
                               {item.dueDate}
                             </p>
                           </div>
@@ -324,7 +325,7 @@ function EmployeeRequested() {
                             <p className="text-gray-500 text-sm font-medium">
                               Budget
                             </p>
-                            <p className="text-gray-600 text-base font-medium">
+                            <p className="text-gray-600 text-sm font-medium">
                               {item.budget}
                             </p>
                           </div>

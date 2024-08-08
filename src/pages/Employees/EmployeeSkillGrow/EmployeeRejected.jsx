@@ -45,7 +45,7 @@ function EmployeeRejected() {
       <div className="w-full flex flex-col overflow-hidden">
         <div className="flex justify-center my-2 w-full">
           <div
-            className="sm:flex flex-wrap grid grid-cols-2 sm:flex-row text-sm font-medium p-2 rounded-md text-white"
+            className="sm:flex flex-wrap grid grid-cols-2 sm:flex-row gap-2 text-sm font-medium p-2 rounded-md text-white"
             style={{ background: themeColor }}
           >
             <NavLink
@@ -121,7 +121,7 @@ function EmployeeRejected() {
           </div>
         </div>
         <div className="flex justify-center my-2 w-full">
-          <div className="sm:flex grid grid-cols-2 sm:flex-row gap-5 font-medium p-2 sm:rounded-full rounded-md opacity-90 bg-gray-200">
+          <div className="sm:flex grid grid-cols-2 sm:flex-row gap-5 font-medium p-1 sm:rounded-full rounded-md opacity-90 bg-gray-200">
             <NavLink
               to={"/employee/certificate/project-request-approval/request"}
               className={({ isActive }) =>
@@ -157,32 +157,33 @@ function EmployeeRejected() {
         <div className="flex justify-end mx-10">
           <Link
             to={"/employee/certificate/project-request-approval/create-request"}
-            className="border-2 border-gray-400 rounded-md px-4 p-2 flex gap-2"
+            className="border-2 border-gray-400 text-white rounded-md px-4 p-2 flex gap-2"
+            style={{background: themeColor}}
           >
             <IoAddCircleOutline size={22} />
             Request Project
           </Link>
         </div>
         <div>
-          <div className="border-2 border-gray-400 rounded-md mx-10 my-5">
+          <div className="border border-gray-400 rounded-md mx-5 my-5 p-1">
             {data.map((item) => (
               <Link
                 to={"/employee/certificate/project-reject-details"}
                 key={item.id}
               >
-                <div className="shadow-custom-all-sides rounded-md my-5 mx-10">
+                <div className="shadow-custom-all-sides rounded-md mb-2 ">
                   <div className="flex flex-col md:flex-row justify-between py-5 px-5 gap-5">
                     <div className="flex flex-col md:flex-row gap-3 md:gap-10">
                       <div>
-                        <h2 className="text-xl font-semibold">{item.title}</h2>
-                        <p className="text-lg">{item.description}</p>
+                        <h2 className=" font-semibold">{item.title}</h2>
+                        <p className="">{item.description}</p>
                       </div>
                       {item.subItems.map((subItem, index) => (
                         <div key={index}>
-                          <h2 className="text-xl font-semibold">
+                          <h2 className=" font-semibold">
                             {subItem.subTitle}
                           </h2>
-                          <p className="text-lg text-gray-600 sm:w-1/2">
+                          <p className="text-sm text-gray-600 sm:w-1/2">
                             {subItem.subDescription}
                           </p>
                         </div>

@@ -620,6 +620,7 @@ import EmployeeKnowledgeBase from "./pages/Employees/EmployeeSkillGrow/EmployeeK
 import EmployeeProjectTaskView from "./pages/Employees/EmployeeSkillGrow/EmployeeProjectTaskView.jsx";
 import EmployeeProjectTaskCompleted from "./pages/Employees/EmployeeSkillGrow/EmployeeProjectTaskCompleted.jsx";
 import EmployeeProjectRejectDetails from "./pages/Employees/EmployeeSkillGrow/EmployeeProjectRejectDetails.jsx";
+import FreeCoursesDetails from "./pages/Employees/EmployeeSkillGrow/FreeCoursesDetails.jsx";
 // new admin hrms
 
 function App() {
@@ -5949,6 +5950,14 @@ function App() {
             element={
               <ProtectedRoute>
                 <EmployeeProjectRejectDetails/>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/employee/certificate/course-details-free"
+            element={
+              <ProtectedRoute>
+                <FreeCoursesDetails/>
               </ProtectedRoute>
             }
           />

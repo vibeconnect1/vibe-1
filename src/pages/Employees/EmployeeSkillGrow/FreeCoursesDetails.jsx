@@ -9,7 +9,7 @@ import { Link } from 'react-router-dom';
 import { IoBookOutline } from 'react-icons/io5';
 import { LiaCertificateSolid } from "react-icons/lia";
 import { BiDislike, BiLike } from "react-icons/bi";
-function EmployeeCourseDetails() {
+function FreeCoursesDetails() {
   const [openSection, setOpenSection] = useState('Course Description');
   const [courseContent, setCourseContent] = useState(null);
   const [faqIndex, setFaqIndex] = useState(null);
@@ -363,7 +363,7 @@ const faqs = [
           <div className='col-span-1 mx-5 my-5'>
             <div className='shadow-custom-all-sides rounded-md px-5 py-5'>
               <h2 className='text-2xl font-semibold'>This course includes</h2>
-              <h2 className='text-lg font-medium my-3'>₹ 3000</h2>
+              <h2 className='text-lg font-medium my-3'>Free</h2>
               <div className='flex justify-between mt-1'>
               <div className='flex gap-2'>
               <IoBookOutline className='mt-1'/><h2>Lectures</h2>
@@ -420,4 +420,7 @@ const faqs = [
   );
 }
 
-export default EmployeeCourseDetails;
+
+
+
+export default FreeCoursesDetails

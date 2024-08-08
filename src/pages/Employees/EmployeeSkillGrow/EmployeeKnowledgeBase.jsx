@@ -123,7 +123,7 @@ function EmployeeKnowledgeBase() {
       <Navbar />
       <div className="w-full flex flex-col overflow-hidden">
         <div className="flex justify-center my-2 w-full">
-          <div className="sm:flex flex-wrap grid grid-cols-2 sm:flex-row text-sm font-medium p-2 rounded-md  text-white" style={{ background: themeColor }}>
+          <div className="sm:flex flex-wrap grid grid-cols-2 sm:flex-row gap-2 text-sm font-medium p-2 rounded-md  text-white" style={{ background: themeColor }}>
             <NavLink
               to={"/employee/certificate/course"}
               className={({ isActive }) => `p-1 ${isActive && "bg-white text-blue-500 shadow-custom-all-sides"} rounded-md px-4 cursor-pointer text-center transition-all duration-300 ease-linear`}
@@ -168,82 +168,82 @@ function EmployeeKnowledgeBase() {
             </NavLink>
           </div>
         </div>
-        <div className="mx-2 flex flex-wrap gap-2 my-2">
-          <div className={`border-2 border-gray-400 rounded-md p-3 px-5 text-center cursor-pointer transition-all duration-300 ease-linear w-40 ${openSection === 'Top Question' ? 'bg-black text-white shadow-custom-all-sides' : ''}`} 
+        <div className="mx-4 flex flex-wrap gap-2 my-2">
+          <div className={`border border-gray-400 rounded-md p-2 px-4 text-sm text-center cursor-pointer transition-all duration-300 ease-linear w-36 ${openSection === 'Top Question' ? 'bg-black text-white shadow-custom-all-sides' : ''}`} 
                onClick={() => handleToggle('Top Question')}>
             Top Question
           </div>
-          <div className={`border-2 border-gray-400 rounded-md p-3 px-5 text-center cursor-pointer transition-all duration-300 ease-linear w-40 ${openSection === 'Business Rules' ? 'bg-black text-white shadow-custom-all-sides' : ''}`} 
+          <div className={`border border-gray-400 rounded-md p-2 px-4 text-sm text-center cursor-pointer transition-all duration-300 ease-linear w-40 ${openSection === 'Business Rules' ? 'bg-black text-white shadow-custom-all-sides' : ''}`} 
                onClick={() => handleToggle('Business Rules')}>
             Business Rules
           </div>
-          <div className={`border-2 border-gray-400 rounded-md p-3 px-5 text-center cursor-pointer transition-all duration-300 ease-linear w-40 ${openSection === 'Security' ? 'bg-black text-white shadow-custom-all-sides' : ''}`} 
+          <div className={`border border-gray-400 rounded-md p-2 px-4 text-sm text-center cursor-pointer transition-all duration-300 ease-linear w-40 ${openSection === 'Security' ? 'bg-black text-white shadow-custom-all-sides' : ''}`} 
                onClick={() => handleToggle('Security')}>
             Security
           </div>
-          <div className={`border-2 border-gray-400 rounded-md p-3 px-5 text-center cursor-pointer transition-all duration-300 ease-linear w-40 ${openSection === 'Reporting' ? 'bg-black text-white shadow-custom-all-sides' : ''}`} 
+          <div className={`border border-gray-400 rounded-md p-2 px-4 text-sm text-center cursor-pointer transition-all duration-300 ease-linear w-40 ${openSection === 'Reporting' ? 'bg-black text-white shadow-custom-all-sides' : ''}`} 
                onClick={() => handleToggle('Reporting')}>
             Reporting
           </div>
-          <div className={`border-2 border-gray-400 rounded-md p-3 px-5 text-center cursor-pointer transition-all duration-300 ease-linear w-40 ${openSection === 'Accounts' ? 'bg-black text-white shadow-custom-all-sides' : ''}`} 
+          <div className={`border border-gray-400 rounded-md p-2 px-4 text-sm text-center cursor-pointer transition-all duration-300 ease-linear w-40 ${openSection === 'Accounts' ? 'bg-black text-white shadow-custom-all-sides' : ''}`} 
                onClick={() => handleToggle('Accounts')}>
             Accounts
           </div>
-          <div className={`border-2 border-gray-400 rounded-md p-3 px-5 text-center cursor-pointer transition-all duration-300 ease-linear w-40 ${openSection === 'Integrations' ? 'bg-black text-white shadow-custom-all-sides' : ''}`} 
+          <div className={`border border-gray-400 rounded-md p-2 px-4 text-sm text-center cursor-pointer transition-all duration-300 ease-linear w-40 ${openSection === 'Integrations' ? 'bg-black text-white shadow-custom-all-sides' : ''}`} 
                onClick={() => handleToggle('Integrations')}>
             Integrations
           </div>
-          <div className={`border-2 border-gray-400 rounded-md p-3 px-5 text-center cursor-pointer transition-all duration-300 ease-linear w-40 ${openSection === 'Tickets' ? 'bg-black text-white shadow-custom-all-sides' : ''}`} 
+          <div className={`border border-gray-400 rounded-md p-2 px-4 text-sm text-center cursor-pointer transition-all duration-300 ease-linear w-40 ${openSection === 'Tickets' ? 'bg-black text-white shadow-custom-all-sides' : ''}`} 
                onClick={() => handleToggle('Tickets')}>
             Tickets
           </div>
         </div>
-        <div className="flex justify-end my-2">
+        <div className="flex justify-start mx-5 my-2">
           <input
             type="text"
             placeholder="search"
-            className="border-2 p-2 w-full border-gray-300 rounded-lg mx-2"
+            className="border p-2 w-full border-gray-300 rounded-lg"
           />
         </div>
-        <div className='mx-2'>
+        <div className='mx-5 mb-10'>
           {openSection === 'Top Question' && <div className='mt-2'>
             <div className="grid md:grid-cols-3 gap-5">
-              <div className='border-2 border-gray-400 rounded-md cursor-pointer' onClick={() => handleToggle('Business Rules')}>
+              <div className='border border-gray-400 rounded-md cursor-pointer' onClick={() => handleToggle('Business Rules')}>
                 <div className='px-5 py-5 space-y-3'>
                   <h2 className='text-3xl font-semibold'>Business Rules</h2>
                   <p className='text-lg'> What is the purpose of focusing on</p>
                   <p className='text-lg'> How often should employee skills be assessed for growth?</p>
                 </div>
               </div>
-              <div className='border-2 border-gray-400 rounded-md cursor-pointer' onClick={() => handleToggle('Security')}>
+              <div className='border border-gray-400 rounded-md cursor-pointer' onClick={() => handleToggle('Security')}>
                 <div className='px-5 py-5 space-y-3'>
                   <h2 className='text-3xl font-semibold'>Security</h2>
                   <p className='text-lg'> How do i use whitelist and blacklist to control access ?</p>
                   <p className='text-lg'> What Supports default Trigger ?</p>
                 </div>
               </div>
-              <div className='border-2 border-gray-400 rounded-md cursor-pointer' onClick={() => handleToggle('Reporting')}>
+              <div className='border border-gray-400 rounded-md cursor-pointer' onClick={() => handleToggle('Reporting')}>
                 <div className='px-5 py-5 space-y-3'>
                   <h2 className='text-3xl font-semibold'>Reporting</h2>
                   <p className='text-lg'> What are the difference between automations and triggers ?</p>
                   <p className='text-lg'> What supports default Trigger ?</p>
                 </div>
               </div>
-              <div className='border-2 border-gray-400 rounded-md cursor-pointer' onClick={() => handleToggle('Accounts')}>
+              <div className='border border-gray-400 rounded-md cursor-pointer' onClick={() => handleToggle('Accounts')}>
                 <div className='px-5 py-5 space-y-3'>
                   <h2 className='text-3xl font-semibold'>Accounts</h2>
                   <p className='text-lg'> How to download invoices ?</p>
                   <p className='text-lg'> How can i change Owner of my support Account ?</p>
                 </div>
               </div>
-              <div className='border-2 border-gray-400 rounded-md cursor-pointer' onClick={() => handleToggle('Integrations')}>
+              <div className='border border-gray-400 rounded-md cursor-pointer' onClick={() => handleToggle('Integrations')}>
                 <div className='px-5 py-5 space-y-3'>
                   <h2 className='text-3xl font-semibold'>Integrations</h2>
                   <p className='text-lg'> What are the difference between automations and triggers ?</p>
                   <p className='text-lg'> What supports default Trigger ?</p>
                 </div>
               </div>
-              <div className='border-2 border-gray-400 rounded-md cursor-pointer' onClick={() => handleToggle('Tickets')}>
+              <div className='border border-gray-400 rounded-md cursor-pointer' onClick={() => handleToggle('Tickets')}>
                 <div className='px-5 py-5 space-y-3'>
                   <h2 className='text-3xl font-semibold'>Tickets</h2>
                   <p className='text-lg'> What are the difference between automations and triggers ?</p>
