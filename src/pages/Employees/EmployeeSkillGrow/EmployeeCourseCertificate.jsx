@@ -144,7 +144,7 @@ function EmployeeCourseCertificate() {
             </NavLink>
           </div>
         </div>
-        <div className="flex justify-center my-2 w-full">
+        <div className="flex justify-center  w-full">
           <div className="sm:flex grid grid-cols-2 sm:flex-row gap-5 font-medium p-2 sm:rounded-full rounded-md opacity-90 bg-gray-200">
             <NavLink
               to={"/employee/certificate/course"}
@@ -168,21 +168,21 @@ function EmployeeCourseCertificate() {
             </NavLink>
           </div>
         </div>
-        <div className="flex justify-between md:flex-row flex-col md:mx-14 mx-5 my-5">
+        <div className="flex justify-between md:flex-row flex-col  m-5">
           <input
             type="text"
             placeholder="search"
-            className="border-2 p-2 border-gray-300 rounded-lg mb-3 md:mb-0"
+            className="border p-2 border-gray-300 rounded-lg w-96 md:mb-0"
           />
           <button
             onClick={openModal}
-            className="border-2 border-gray-400 rounded-md px-4 p-2 flex gap-2 justify-center"
+            className="border-2 border-gray-400 rounded-md px-4 p-1 flex gap-2 items-center justify-center"
           >
-            <IoAddCircleOutline size={22} />
+            <IoAddCircleOutline  />
             Upload Certificate
           </button>
         </div>
-        <div className="border-2 border-gray-400 rounded-md md:mx-14 mx-5 mb-5">
+        <div className="border border-gray-400 rounded-md  mx-5">
           <div className="md:grid grid-cols-3">
             <div className="relative px-5 py-5">
               <div>

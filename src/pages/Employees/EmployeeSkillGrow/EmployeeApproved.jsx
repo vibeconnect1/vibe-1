@@ -64,7 +64,7 @@ function EmployeeApproved() {
       <div className="w-full flex flex-col overflow-hidden">
         <div className="flex justify-center my-2 w-full">
           <div
-            className="sm:flex flex-wrap grid grid-cols-2 sm:flex-row font-medium p-2 rounded-md text-white"
+            className="sm:flex flex-wrap grid grid-cols-2 sm:flex-row font-medium p-2 rounded-md text-sm text-white"
             style={{ background: themeColor }}
           >
             <NavLink
@@ -139,8 +139,8 @@ function EmployeeApproved() {
             </NavLink>
           </div>
         </div>
-        <div className="flex justify-center my-2 w-full">
-          <div className="sm:flex grid grid-cols-2 sm:flex-row gap-5 font-medium p-2 sm:rounded-full rounded-md opacity-90 bg-gray-200">
+        <div className="flex justify-center  w-full">
+          <div className="sm:flex grid grid-cols-2 sm:flex-row gap-5 font-medium p-1 sm:rounded-full rounded-md opacity-90 bg-gray-200">
             <NavLink
               to={"/employee/certificate/project-request-approval/request"}
               className={({ isActive }) =>
