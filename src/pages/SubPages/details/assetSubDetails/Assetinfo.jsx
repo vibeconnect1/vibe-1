@@ -1,14 +1,16 @@
 import React, { useState } from "react";
-import { BiEditAlt } from "react-icons/bi";
+import { BiEdit, BiEditAlt } from "react-icons/bi";
 import { CgAdd } from "react-icons/cg";
 import { Switch } from "../../../../Buttons";
 import { FaQrcode, FaRegFileAlt } from "react-icons/fa";
 import AssetQrCode from "./AssetQrCode";
 import DataTable from "react-data-table-component";
 import { Link, useParams } from "react-router-dom";
-import { postAssetparams } from "../../../../api";
+import { getAssetparamsDetails, postAssetparams } from "../../../../api";
 import toast from "react-hot-toast";
 import Table from "../../../../components/table/Table";
+import { SendDateFormat } from "../../../../utils/dateUtils";
+import EditAssetParams from "./EditAssetParams";
 const initialFormData = {
   name: "",
   order: "",
@@ -63,6 +65,7 @@ const Assetinfo = ({ assetData }) => {
     uom,
   } = assetData;
   const [qrCode, setQrCode] = useState(false);
+  const [paramsId, setParamsId] = useState("");
   console.log(assetData);
 
   const isImage = (filePath) => {
@@ -76,16 +79,32 @@ const Assetinfo = ({ assetData }) => {
 
   const dateFormat = (dateString) => {
     const date = new Date(dateString);
-    return date.toLocaleString(); // Adjust the format as needed
+    return date.toLocaleString();
   };
 
   const handleToggle = () => {
     setAssetBreakdown(!breakdown);
   };
 
-  // Charactor Limit		Consumption view	Edit	Delete
+  const [editParams, setEditParams] = useState(false);
+ 
+  const handleEditParameter = async (id) => {
+    setEditParams(true);
+    setParamsId(id);
+   
+  };
 
   const assetParmsColumn = [
+    {
+      name: "Action",
+      cell: (row) => (
+        <div className="flex items-center gap-4">
+          <button onClick={() => handleEditParameter(row.id)}>
+            <BiEdit size={15} />
+          </button>
+        </div>
+      ),
+    },
     { name: "Name", selector: (row) => row.name },
     { name: "Order", selector: (row) => row.order },
     { name: "Charactor Limit", selector: (row) => row.digit },
@@ -104,6 +123,14 @@ const Assetinfo = ({ assetData }) => {
     {
       name: "Check prev Readings",
       selector: (row) => (row.check_prev ? "Yes" : "No"),
+    },
+    {
+      name: "created on",
+      selector: (row) => dateFormat(row.created_at),
+    },
+    {
+      name: "Updated on",
+      selector: (row) => dateFormat(row.updated_at),
     },
   ];
 
@@ -150,10 +177,7 @@ const Assetinfo = ({ assetData }) => {
     }
   };
 
- 
-
   const domainPrefix = "https://admin.vibecopilot.ai";
-  
 
   return (
     <section>
@@ -328,139 +352,151 @@ const Assetinfo = ({ assetData }) => {
             <h2 className="border-b  text-xl border-black font-semibold">
               Attachments
             </h2>
-           <div className="flex md:flex-row flex-col justify-between gap-2 w-full">
-
-           
+            <div className="flex md:flex-row flex-col justify-between gap-2 w-full">
               <div className="bg-gray-100 p-1 rounded-md my-2 px-2 w-96">
                 <p className="text-center font-medium">Purchase Invoice</p>
                 <div className="flex  gap-4 justify-center my-4 items-center text-center">
                   {assetData.purchase_invoices &&
-                  assetData.purchase_invoices.length > 0
-                    ? assetData.purchase_invoices.map((invoice, index) => (
-                        <div key={invoice.id} className="">
-                          {isImage(domainPrefix + invoice.document) ? (
-                            <img
-                              src={domainPrefix + invoice.document}
-                              alt={`Attachment ${index + 1}`}
-                              className="w-full h-auto cursor-pointer"
-                              onClick={() =>
-                                window.open(domainPrefix +invoice.document, "_blank")
-                              }
-                            />
-                          ) : (
-                            <a
-                              href={domainPrefix + invoice.document}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="attachment-link hover:text-blue-400 transition-all duration-300  text-center flex flex-col items-center  "
-                            >
-                              <FaRegFileAlt size={50} />
-                              {getFileName(invoice.document)}
-                            </a>
-                          )}
-                        </div>
-                      ))
-                    :<p className="text-center w-full">No Attachments</p>}
+                  assetData.purchase_invoices.length > 0 ? (
+                    assetData.purchase_invoices.map((invoice, index) => (
+                      <div key={invoice.id} className="">
+                        {isImage(domainPrefix + invoice.document) ? (
+                          <img
+                            src={domainPrefix + invoice.document}
+                            alt={`Attachment ${index + 1}`}
+                            className="w-full h-auto cursor-pointer"
+                            onClick={() =>
+                              window.open(
+                                domainPrefix + invoice.document,
+                                "_blank"
+                              )
+                            }
+                          />
+                        ) : (
+                          <a
+                            href={domainPrefix + invoice.document}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="attachment-link hover:text-blue-400 transition-all duration-300  text-center flex flex-col items-center  "
+                          >
+                            <FaRegFileAlt size={50} />
+                            {getFileName(invoice.document)}
+                          </a>
+                        )}
+                      </div>
+                    ))
+                  ) : (
+                    <p className="text-center w-full">No Attachments</p>
+                  )}
                 </div>
               </div>
               <div className="bg-gray-100 p-1 rounded-md my-2 px-2 w-96">
                 <p className="text-center font-medium">Insurance</p>
                 <div className="flex  gap-4 justify-center my-4 items-center text-center">
-                  {assetData.insurances &&
-                  assetData.insurances.length > 0
-                    ? assetData.insurances.map((insurance, index) => (
-                        <div key={insurance.id} className="">
-                          {isImage(domainPrefix + insurance.document) ? (
-                            <img
-                              src={domainPrefix + insurance.document}
-                              alt={`Attachment ${index + 1}`}
-                              className="w-40 h-28 object-cover rounded-md"
-                              onClick={() =>
-                                window.open(domainPrefix +insurance.document, "_blank")
-                              }
-                            />
-                          ) : (
-                            <a
-                              href={domainPrefix + insurance.document}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="attachment-link hover:text-blue-400 transition-all duration-300  text-center flex flex-col items-center  "
-                            >
-                              <FaRegFileAlt size={50} />
-                              {getFileName(insurance.document)}
-                            </a>
-                          )}
-                        </div>
-                      ))
-                    : <p className="text-center w-full">No Attachments</p>}
+                  {assetData.insurances && assetData.insurances.length > 0 ? (
+                    assetData.insurances.map((insurance, index) => (
+                      <div key={insurance.id} className="">
+                        {isImage(domainPrefix + insurance.document) ? (
+                          <img
+                            src={domainPrefix + insurance.document}
+                            alt={`Attachment ${index + 1}`}
+                            className="w-40 h-28 object-cover rounded-md"
+                            onClick={() =>
+                              window.open(
+                                domainPrefix + insurance.document,
+                                "_blank"
+                              )
+                            }
+                          />
+                        ) : (
+                          <a
+                            href={domainPrefix + insurance.document}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="attachment-link hover:text-blue-400 transition-all duration-300  text-center flex flex-col items-center  "
+                          >
+                            <FaRegFileAlt size={50} />
+                            {getFileName(insurance.document)}
+                          </a>
+                        )}
+                      </div>
+                    ))
+                  ) : (
+                    <p className="text-center w-full">No Attachments</p>
+                  )}
                 </div>
               </div>
               <div className="bg-gray-100 p-1 rounded-md my-2 px-2 w-96">
                 <p className="text-center font-medium">Manuals</p>
                 <div className="flex  gap-4 justify-center my-4 items-center text-center">
-                  {assetData.manuals &&
-                  assetData.manuals.length > 0
-                    ? assetData.manuals.map((manual, index) => (
-                        <div key={manual.id} className="">
-                          {isImage(domainPrefix + manual.document) ? (
-                            <img
-                              src={domainPrefix + manual.document}
-                              alt={`Attachment ${index + 1}`}
-                              className="w-40 h-28 object-cover rounded-md"
-                              onClick={() =>
-                                window.open(domainPrefix +manual.document, "_blank")
-                              }
-                            />
-                          ) : (
-                            <a
-                              href={domainPrefix + manual.document}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="attachment-link hover:text-blue-400 transition-all duration-300  text-center flex flex-col items-center  "
-                            >
-                              <FaRegFileAlt size={50} />
-                              {getFileName(manual.document)}
-                            </a>
-                          )}
-                        </div>
-                      ))
-                    : <p className="text-center w-full">No Attachments</p>}
+                  {assetData.manuals && assetData.manuals.length > 0 ? (
+                    assetData.manuals.map((manual, index) => (
+                      <div key={manual.id} className="">
+                        {isImage(domainPrefix + manual.document) ? (
+                          <img
+                            src={domainPrefix + manual.document}
+                            alt={`Attachment ${index + 1}`}
+                            className="w-40 h-28 object-cover rounded-md"
+                            onClick={() =>
+                              window.open(
+                                domainPrefix + manual.document,
+                                "_blank"
+                              )
+                            }
+                          />
+                        ) : (
+                          <a
+                            href={domainPrefix + manual.document}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="attachment-link hover:text-blue-400 transition-all duration-300  text-center flex flex-col items-center  "
+                          >
+                            <FaRegFileAlt size={50} />
+                            {getFileName(manual.document)}
+                          </a>
+                        )}
+                      </div>
+                    ))
+                  ) : (
+                    <p className="text-center w-full">No Attachments</p>
+                  )}
                 </div>
               </div>
+            </div>
+            <div className="bg-gray-100 p-1 rounded-md my-2 px-2 ">
+              <p className="text-center font-medium">Other Files</p>
+              <div className="flex  gap-4 flex-wrap my-4 items-center  text-center">
+                {assetData.other_files && assetData.other_files.length > 0 ? (
+                  assetData.other_files.map((other, index) => (
+                    <div key={other.id} className="">
+                      {isImage(domainPrefix + other.document) ? (
+                        <img
+                          src={domainPrefix + other.document}
+                          alt={`Attachment ${index + 1}`}
+                          className="w-40 h-28 object-cover rounded-md"
+                          onClick={() =>
+                            window.open(domainPrefix + other.document, "_blank")
+                          }
+                        />
+                      ) : (
+                        <a
+                          href={domainPrefix + other.document}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="attachment-link hover:text-blue-400 transition-all duration-300  text-center flex flex-col items-center  "
+                        >
+                          <FaRegFileAlt size={50} />
+                          {getFileName(other.document)}
+                        </a>
+                      )}
+                    </div>
+                  ))
+                ) : (
+                  <p className="text-center w-full">No Attachments</p>
+                )}
               </div>
-              <div className="bg-gray-100 p-1 rounded-md my-2 px-2 ">
-                <p className="text-center font-medium">Other Files</p>
-                <div className="flex  gap-4 flex-wrap my-4 items-center  text-center">
-                  {assetData.other_files &&
-                  assetData.other_files.length > 0
-                    ? assetData.other_files.map((other, index) => (
-                        <div key={other.id} className="">
-                          {isImage(domainPrefix + other.document) ? (
-                            <img
-                              src={domainPrefix + other.document}
-                              alt={`Attachment ${index + 1}`}
-                              className="w-40 h-28 object-cover rounded-md"
-                              onClick={() =>
-                                window.open(domainPrefix +other.document, "_blank")
-                              }
-                            />
-                          ) : (
-                            <a
-                              href={domainPrefix + other.document}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="attachment-link hover:text-blue-400 transition-all duration-300  text-center flex flex-col items-center  "
-                            >
-                              <FaRegFileAlt size={50} />
-                              {getFileName(other.document)}
-                            </a>
-                          )}
-                        </div>
-                      ))
-                    : (<p className="text-center w-full">No Attachments</p>)}
-                </div>
-              </div>
-           
+            </div>
+
             <div className="">
               <h2 className="border-b  text-xl border-black font-semibold">
                 Consumption Parameter
@@ -631,8 +667,17 @@ const Assetinfo = ({ assetData }) => {
             isPagination={true}
           />
         </div>
-        {qrCode && <AssetQrCode assetName={name} building={building_name} floor={floor_name} unit={unit_name} onClose={() => setQrCode(false)} QR={domainPrefix + assetData.qr_code_image_url
-} />}
+        {qrCode && (
+          <AssetQrCode
+            assetName={name}
+            building={building_name}
+            floor={floor_name}
+            unit={unit_name}
+            onClose={() => setQrCode(false)}
+            QR={domainPrefix + assetData.qr_code_image_url}
+          />
+        )}
+        {editParams && <EditAssetParams id={paramsId} assetId={id} onclose={()=> setEditParams(false)} />}
       </div>
     </section>
   );

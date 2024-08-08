@@ -235,6 +235,7 @@ const AddAsset = () => {
       formDataSend.append("site_asset[model_number]", formData.model_number);
       formDataSend.append("site_asset[purchased_on]", formData.purchased_on);
       formDataSend.append("site_asset[purchase_cost]", formData.purchase_cost);
+     
       formDataSend.append(
         "site_asset[asset_group_id]",
         formData.asset_group_id
@@ -606,7 +607,7 @@ const AddAsset = () => {
                     value={formData.parent_asset_id}
                   >
                     <option value="">Select Parent Asset </option>
-                    {parentAsset.map((parent) => (
+                    {parentAsset && parentAsset.map((parent) => (
                       <option value={parent.id} key={parent.id}>
                         {parent.name}
                       </option>

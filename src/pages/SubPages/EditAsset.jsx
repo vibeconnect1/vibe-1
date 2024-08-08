@@ -94,6 +94,9 @@ const EditAsset = () => {
         setFormData(prevFormData => ({
           ...prevFormData,
           ...details.data,
+          is_meter: details.data.is_meter || false,
+          warranty: details.data.warranty || false,
+          critical: details.data.critical || false,
           breakdown: details.data.breakdown || false,
           invoice: details.data.invoice || [],
           insurance: details.data.insurance || [],
@@ -348,6 +351,7 @@ const EditAsset = () => {
       formDataSend.append("site_asset[purchased_on]", formData.purchased_on);
       formDataSend.append("site_asset[purchase_cost]", formData.purchase_cost);
       formDataSend.append("site_asset[installation]", formData.installation);
+      formDataSend.append("site_asset[parent_asset_id]", formData.parent_asset_id);
       formDataSend.append(
         "site_asset[warranty_expiry]",
         formData.warranty_expiry

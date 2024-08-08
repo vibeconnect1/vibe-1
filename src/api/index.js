@@ -367,10 +367,10 @@ export const editAssetGroupsDetails = async (id, data) =>
       token: token,
     },
   });
-export const getParentAsset = async (id, data) =>
+export const getParentAsset = async (id) =>
   axiosInstance.get(
     `/site_assets.json?q[asset_type_eq]=parent&q[asset_group_id_eq]=${id}`,
-    data,
+    
     {
       params: {
         token: token,
@@ -408,6 +408,18 @@ export const postAssetSubGroups = async (data) =>
 
 export const postAssetparams = async (data) =>
   axiosInstance.post("/asset_params.json", data, {
+    params: {
+      token: token,
+    },
+  });
+export const getAssetparamsDetails = async (id) =>
+  axiosInstance.get(`/asset_params/${id}.json`, {
+    params: {
+      token: token,
+    },
+  });
+export const editAssetparamsDetails = async (id, data) =>
+  axiosInstance.put(`/asset_params/${id}.json`,data, {
     params: {
       token: token,
     },
