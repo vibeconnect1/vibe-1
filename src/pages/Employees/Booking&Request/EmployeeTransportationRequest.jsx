@@ -104,20 +104,20 @@ const EmployeeTransportationRequest = () => {
     },
   ];
 
-  const customStyle = {
-    headRow: {
-      style: {
-        backgroundColor: themeColor,
-        color: "white",
-        fontSize: "10px",
-      },
-    },
-    headCells: {
-      style: {
-        textTransform: "upperCase",
-      },
-    },
-  };
+  // const customStyle = {
+  //   headRow: {
+  //     style: {
+  //       backgroundColor: themeColor,
+  //       color: "white",
+  //       fontSize: "10px",
+  //     },
+  //   },
+  //   headCells: {
+  //     style: {
+  //       textTransform: "upperCase",
+  //     },
+  //   },
+  // };
 
   const data = [
     {
@@ -154,7 +154,7 @@ const EmployeeTransportationRequest = () => {
             <CustomNavLink to="/employee/booking-request/flight-ticket-request">Flight Ticket Request</CustomNavLink>
             <CustomNavLink to="/employee/booking-request/cab-bus-request">Cab/Bus Request</CustomNavLink>
             <CustomNavLink to="/employee/booking-request/transportation-request">Transportation Request</CustomNavLink>
-            <CustomNavLink to="/employee/booking-request/traveling-allowance-request">Add Traveling Allowance Request</CustomNavLink>
+            <CustomNavLink to="/employee/booking-request/traveling-allowance-request"> Traveling Allowance Request</CustomNavLink>
           </div>
         </div>
         <div className="w-full flex md:flex-row flex-col gap-5 justify-between mt-10 my-2">
@@ -225,7 +225,7 @@ const EmployeeTransportationRequest = () => {
             responsive
             columns={columns}
             data={data}
-            customStyles={customStyle}
+            // customStyles={customStyle}
             pagination
             fixedHeader
             selectableRowsHighlight

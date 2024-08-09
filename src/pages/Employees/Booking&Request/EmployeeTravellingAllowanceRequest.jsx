@@ -105,20 +105,20 @@ const EmployeeTravellingAllowanceRequest = () => {
   ];
 
   // Custom table styles
-  const customStyle = {
-    headRow: {
-      style: {
-        backgroundColor: themeColor,
-        color: "white",
-        fontSize: "10px",
-      },
-    },
-    headCells: {
-      style: {
-        textTransform: "uppercase",
-      },
-    },
-  };
+  // const customStyle = {
+  //   headRow: {
+  //     style: {
+  //       backgroundColor: themeColor,
+  //       color: "white",
+  //       fontSize: "10px",
+  //     },
+  //   },
+  //   headCells: {
+  //     style: {
+  //       textTransform: "uppercase",
+  //     },
+  //   },
+  // };
 
   // Dummy data for demonstration
   const data = [
@@ -158,7 +158,7 @@ const EmployeeTravellingAllowanceRequest = () => {
             <CustomNavLink to="/employee/booking-request/flight-ticket-request">Flight Ticket Request</CustomNavLink>
             <CustomNavLink to="/employee/booking-request/cab-bus-request">Cab/Bus Request</CustomNavLink>
             <CustomNavLink to="/employee/booking-request/transportation-request">Transportation Request</CustomNavLink>
-            <CustomNavLink to="/employee/booking-request/traveling-allowance-request">Add Traveling Allowance Request</CustomNavLink>
+            <CustomNavLink to="/employee/booking-request/traveling-allowance-request">Traveling Allowance Request</CustomNavLink>
           </div>
         </div>
         {/* Filter and Add section */}
@@ -232,7 +232,7 @@ const EmployeeTravellingAllowanceRequest = () => {
             responsive
             columns={columns}
             data={data}
-            customStyles={customStyle}
+            // customStyles={customStyle}
             pagination
             fixedHeader
             selectableRowsHighlight

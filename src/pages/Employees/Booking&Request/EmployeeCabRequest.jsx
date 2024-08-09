@@ -125,20 +125,20 @@ const EmployeeCabRequest = () => {
   ];
 
   // Custom style for the table
-  const customStyle = {
-    headRow: {
-      style: {
-        backgroundColor: themeColor,
-        color: "white",
-        fontSize: "10px",
-      },
-    },
-    headCells: {
-      style: {
-        textTransform: "uppercase",
-      },
-    },
-  };
+  // const customStyle = {
+  //   headRow: {
+  //     style: {
+  //       backgroundColor: themeColor,
+  //       color: "white",
+  //       fontSize: "10px",
+  //     },
+  //   },
+  //   headCells: {
+  //     style: {
+  //       textTransform: "uppercase",
+  //     },
+  //   },
+  // };
 
   const data = [
     {
@@ -182,7 +182,7 @@ const EmployeeCabRequest = () => {
               Transportation Request
             </CustomNavLink>
             <CustomNavLink to="/employee/booking-request/traveling-allowance-request">
-              Add Traveling Allowance Request
+               Traveling Allowance Request
             </CustomNavLink>
           </div>
         </div>
@@ -255,7 +255,7 @@ const EmployeeCabRequest = () => {
             responsive
             columns={columns}
             data={data}
-            customStyles={customStyle}
+            // customStyles={customStyle}
             pagination
             fixedHeader
             selectableRowsHighlight

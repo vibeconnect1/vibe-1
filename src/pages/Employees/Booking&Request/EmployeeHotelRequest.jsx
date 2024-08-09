@@ -110,20 +110,20 @@ const EmployeeHotelRequest = () => {
   ];
 
   // Custom style for table headers
-  const customStyle = {
-    headRow: {
-      style: {
-        backgroundColor: themeColor,
-        color: "white",
-        fontSize: "10px",
-      },
-    },
-    headCells: {
-      style: {
-        textTransform: "uppercase",
-      },
-    },
-  };
+  // const customStyle = {
+  //   headRow: {
+  //     style: {
+  //       backgroundColor: themeColor,
+  //       color: "white",
+  //       fontSize: "10px",
+  //     },
+  //   },
+  //   headCells: {
+  //     style: {
+  //       textTransform: "uppercase",
+  //     },
+  //   },
+  // };
 
   // Sample data for the table
   const data = [
@@ -156,7 +156,7 @@ const EmployeeHotelRequest = () => {
             <CustomNavLink to="/employee/booking-request/flight-ticket-request">Flight Ticket Request</CustomNavLink>
             <CustomNavLink to="/employee/booking-request/cab-bus-request">Cab/Bus Request</CustomNavLink>
             <CustomNavLink to="/employee/booking-request/transportation-request">Transportation Request</CustomNavLink>
-            <CustomNavLink to="/employee/booking-request/traveling-allowance-request">Add Traveling Allowance Request</CustomNavLink>
+            <CustomNavLink to="/employee/booking-request/traveling-allowance-request"> Traveling Allowance Request</CustomNavLink>
           </div>
         </div>
 
@@ -229,7 +229,7 @@ const EmployeeHotelRequest = () => {
           responsive
           columns={columns}
           data={data}
-          customStyles={customStyle}
+          // customStyles={customStyle}
           pagination
           fixedHeader
           selectableRowsHighlight

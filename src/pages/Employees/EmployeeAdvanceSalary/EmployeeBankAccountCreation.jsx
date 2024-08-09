@@ -56,7 +56,7 @@ function EmployeeBankAccountCreation() {
         <div className='flex justify-center my-2 w-full'>
           <div className="sm:flex grid grid-cols-2 sm:flex-row gap-5 font-medium p-2 sm:rounded-full rounded-md opacity-90 bg-gray-200 ">
             <NavLink
-              to={"/employee/advance-salary-module"}
+              to={"/employee/advance-salary"}
               className={({ isActive }) =>`p-1 ${
               isActive && "bg-white text-blue-500 shadow-custom-all-sides" 
               } rounded-full px-4 cursor-pointer text-center transition-all duration-300 ease-linear`}

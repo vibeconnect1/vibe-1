@@ -2770,9 +2770,9 @@ function App() {
           <Route
             path="/calendar"
             element={
-              // <ProtectedAdminRoutes>
+              <ProtectedRoute>
                 <Calender />
-              // </ProtectedAdminRoutes>
+              </ProtectedRoute>
             }
           />
           <Route
@@ -3393,7 +3393,7 @@ function App() {
           />
 
           {/* booking & Req */}
-
+          <Route path="/employee/booking-request" element={<Navigate to="/employee/booking-request/hotel-request" replace />}  />
           <Route
             path="/employee/booking-request/hotel-request"
             element={

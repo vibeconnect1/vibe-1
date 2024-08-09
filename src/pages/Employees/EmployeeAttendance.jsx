@@ -112,12 +112,12 @@ const userId = getItemInLocalStorage("UserId")
               placeholder="Search By Name"
               className="border-2 p-2 w-96 border-gray-300 rounded-lg"
             />
-            <button
+            {/* <button
               className="bg-black w-20 rounded-lg text-white p-2 my-5"
               onClick={() => setModal(true)}
             >
               Export
-            </button>
+            </button> */}
           </div>
 
          <Table  columns={column} data={attendanceData}/>

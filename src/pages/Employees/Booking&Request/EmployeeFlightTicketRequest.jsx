@@ -144,21 +144,21 @@ const EmployeeFlightRequest = () => {
   ];
 
   // Custom styles for the table
-  const customStyles = {
-    headRow: {
-      style: {
-        backgroundColor: themeColor,
-        color: "white",
-        fontSize: "12px",
-      },
-    },
-    headCells: {
-      style: {
-        textTransform: "uppercase",
-        fontSize: "10px",
-      },
-    },
-  };
+  // const customStyles = {
+  //   headRow: {
+  //     style: {
+  //       backgroundColor: themeColor,
+  //       color: "white",
+  //       fontSize: "12px",
+  //     },
+  //   },
+  //   headCells: {
+  //     style: {
+  //       textTransform: "uppercase",
+  //       fontSize: "10px",
+  //     },
+  //   },
+  // };
 
   return (
     <section className="flex">
@@ -179,7 +179,7 @@ const EmployeeFlightRequest = () => {
               Transportation Request
             </CustomNavLink>
             <CustomNavLink to="/employee/booking-request/traveling-allowance-request">
-              Add Traveling Allowance Request
+               Traveling Allowance Request
             </CustomNavLink>
           </div>
         </div>
@@ -252,7 +252,7 @@ const EmployeeFlightRequest = () => {
             responsive
             columns={columns}
             data={data}
-            customStyles={customStyles}
+            // customStyles={customStyles}
             pagination
             fixedHeader
             selectableRowsHighlight

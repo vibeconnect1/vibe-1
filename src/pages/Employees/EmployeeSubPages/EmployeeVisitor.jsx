@@ -156,9 +156,9 @@ const EmployeeVisitor = () => {
       <section className="flex">
         <Navbar />
         <div className=" w-full flex mx-3  flex-col overflow-hidden">
-          <EmployeePasses/>
+          {/* <EmployeePasses/> */}
           <div className="flex w-full  m-2">
-            <div className="flex w-full md:flex-row flex-col space-x-4  border-b border-gray-400">
+            {/* <div className="flex w-full md:flex-row flex-col space-x-4  border-b border-gray-400">
               <h2
                 className={`p-2 ${
                   page === "Visitor In"
@@ -189,18 +189,9 @@ const EmployeeVisitor = () => {
               >
                 History
               </h2>
-            </div>
+            </div> */}
           </div>
-          <div className="flex justify-end">
-            <Link
-              to={"/employee/add-new-visitor"}
-              style={{ background: themeColor }}
-              className=" font-semibold  hover:text-white duration-150 transition-all p-2 rounded-md text-white cursor-pointer text-center flex items-center gap-2 justify-center"
-            >
-              <PiPlusCircle size={20} />
-              Add New Visitor
-            </Link>
-          </div>
+          
           {page === "Visitor In" && (
             <div className="grid md:grid-cols-3 gap-2 items-center">
               <input
@@ -233,6 +224,16 @@ const EmployeeVisitor = () => {
                   &nbsp; <span>Unexpected visitor</span>
                 </span>
               </div>
+              <div className="flex justify-end">
+            <Link
+              to={"/employee/add-new-visitor"}
+              style={{ background: themeColor }}
+              className=" font-semibold  hover:text-white duration-150 transition-all p-2 rounded-md text-white cursor-pointer text-center flex items-center gap-2 justify-center"
+            >
+              <PiPlusCircle size={20} />
+              Add New Visitor
+            </Link>
+          </div>
             </div>
           )}
           {page === "Visitor Out" && (
