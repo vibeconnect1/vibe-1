@@ -6,6 +6,7 @@ import { Link } from "react-router-dom";
 import { getItemInLocalStorage } from "../../../utils/localStorage";
 import Table from "../../../components/table/Table";
 import { getEvents } from "../../../api";
+import { BsEye } from "react-icons/bs";
 
 const EmployeeEvents = () => {
   const [searchText, setSearchText] = useState("");
@@ -35,22 +36,27 @@ const EmployeeEvents = () => {
       name: "Action",
       cell: (row) => (
         <Link to={`/communication/event/event-details/${row.id}`}>
-          {row.action}
+          <BsEye size={15}/>
         </Link>
       ),
       sortable: true,
     },
-    { name: "Title", selector: (row) => row.title, sortable: true },
+    { name: "Title", selector: (row) => row.event_name, sortable: true },
     {
-      name: "Unit",
-      selector: (row) => row.unit,
+      name: "Venue",
+      selector: (row) => row.venue,
       sortable: true,
     },
     { name: "Created By", selector: (row) => row.bookedBy, sortable: true },
-    { name: "Start Date", selector: (row) => row.bookedOn, sortable: true },
+    { name: "Description", selector: (row) => row.discription, sortable: true },
+    {
+      name: "Start Date",
+      selector: (row) => dateFormat(row.start_date_time),
+      sortable: true,
+    },
     {
       name: "End Date",
-      selector: (row) => row.facilityType,
+      selector: (row) => dateFormat(row.end_date_time),
       sortable: true,
     },
     {
@@ -70,14 +76,14 @@ const EmployeeEvents = () => {
     },
     {
       name: "Created On",
-      selector: (row) => row.bookingStatus,
+      selector: (row) => dateFormat(row.created_at),
       sortable: true,
     },
-    {
-      name: "Attachments",
-      selector: (row) => row.bookingStatus,
-      sortable: true,
-    },
+    // {
+    //   name: "Attachments",
+    //   selector: (row) => row.bookingStatus,
+    //   sortable: true,
+    // },
   ];
   
 

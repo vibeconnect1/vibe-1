@@ -3,6 +3,7 @@ import Navbar from "../../components/Navbar";
 import DataTable from "react-data-table-component";
 import { BsEye } from "react-icons/bs";
 import { Link } from "react-router-dom";
+import Table from "../../components/table/Table";
 
 const EmployeePantry = () => {
 
@@ -84,16 +85,16 @@ const EmployeePantry = () => {
             //   onChange={handleSearch}
           />
         </div>
-        <DataTable
+        <Table
           responsive
           columns={columns}
           data={data}
-          customStyles={customStyle}
-          pagination
-          fixedHeader
-          // fixedHeaderScrollHeight="450px"
-          selectableRowsHighlight
-          highlightOnHover
+          // customStyles={customStyle}
+          // pagination
+          // fixedHeader
+          // // fixedHeaderScrollHeight="450px"
+          // selectableRowsHighlight
+          // highlightOnHover
         />
       </div>
     </section>

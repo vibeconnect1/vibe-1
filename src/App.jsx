@@ -621,6 +621,8 @@ import EmployeeProjectTaskView from "./pages/Employees/EmployeeSkillGrow/Employe
 import EmployeeProjectTaskCompleted from "./pages/Employees/EmployeeSkillGrow/EmployeeProjectTaskCompleted.jsx";
 import EmployeeProjectRejectDetails from "./pages/Employees/EmployeeSkillGrow/EmployeeProjectRejectDetails.jsx";
 import FreeCoursesDetails from "./pages/Employees/EmployeeSkillGrow/FreeCoursesDetails.jsx";
+import SupplierSetup from "./pages/Setup/Supplier/SupplierSetup.jsx";
+import EmployeeDashboard from "./pages/Employees/EmployeeDashboard.jsx";
 // new admin hrms
 
 function App() {
@@ -1168,9 +1170,9 @@ function App() {
           <Route
             path="/admin/profile"
             element={
-              <ProtectedAdminRoutes>
+              <ProtectedRoute>
                 <Profile />
-              </ProtectedAdminRoutes>
+              </ProtectedRoute>
             }
           />
           <Route
@@ -1184,9 +1186,9 @@ function App() {
           <Route
             path="/admin/edit-profile"
             element={
-              <ProtectedAdminRoutes>
+              <ProtectedRoute>
                 <EditProfile />
-              </ProtectedAdminRoutes>
+              </ProtectedRoute>
             }
           />
 
@@ -1514,33 +1516,41 @@ function App() {
           <Route
             path="/suppliers"
             element={
-              <ProtectedRoute>
+              <ProtectedAdminRoutes>
                 <Suppliers />
-              </ProtectedRoute>
+              </ProtectedAdminRoutes>
             }
           />
           <Route
             path="/suppliers/add-supplier"
             element={
-              <ProtectedRoute>
+              <ProtectedAdminRoutes>
                 <AddSupplier />
-              </ProtectedRoute>
+              </ProtectedAdminRoutes>
             }
           />
           <Route
             path="/suppliers/edit-supplier/:id"
             element={
-              <ProtectedRoute>
+              <ProtectedAdminRoutes>
                 <EditSuppliers />
-              </ProtectedRoute>
+              </ProtectedAdminRoutes>
             }
           />
           <Route
             path="/suppliers/supplier-details/:id"
             element={
-              <ProtectedRoute>
+              <ProtectedAdminRoutes>
                 <SupplierDetails />
-              </ProtectedRoute>
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/setup/supplier-setup"
+            element={
+              <ProtectedAdminRoutes>
+                <SupplierSetup />
+              </ProtectedAdminRoutes>
             }
           />
 
@@ -2004,11 +2014,11 @@ function App() {
           />
           {/*admin project management */}
           <Route
-            path="/admin/project-management"
+            path="/project-management"
             element={
-              <ProtectedAdminRoutes>
+              <ProtectedRoute>
                 <ProjectManagement />
-              </ProtectedAdminRoutes>
+              </ProtectedRoute>
             }
           />
           <Route
@@ -5962,7 +5972,14 @@ function App() {
             }
           />
           {/* skill grow employee*/}
-
+          <Route
+            path="/employee/dashboard"
+            element={
+              <ProtectedRoute>
+                <EmployeeDashboard/>
+              </ProtectedRoute>
+            }
+          />
         </Routes>
         <Footer />
       </Router>

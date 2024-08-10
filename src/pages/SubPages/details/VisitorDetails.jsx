@@ -8,6 +8,7 @@ import Table from "../../../components/table/Table";
 import { BiEdit, BiQr } from "react-icons/bi";
 import Navbar from "../../../components/Navbar";
 import VisitorQRCode from "../../../containers/modals/VisitorQRCode";
+
 const VisitorDetails = () => {
   const [details, setDetails] = useState({});
   const { id } = useParams();
@@ -59,8 +60,26 @@ const VisitorDetails = () => {
       sortable: true,
     },
     {
-      name: " Created On",
+      name: "Created On",
       selector: (row) => dateFormat(row.created_at),
+      sortable: true,
+    },
+  ];
+
+  const visitorLogColumn = [
+    {
+      name: "Sr. no.",
+      selector: (row, index) => index + 1,
+      sortable: true,
+    },
+    {
+      name: " Check in",
+      selector: (row) => (row.check_in ? dateTimeFormat(row.check_in) : ""),
+      sortable: true,
+    },
+    {
+      name: " Check out",
+      selector: (row) => (row.check_in ? dateTimeFormat(row.check_out) : ""),
       sortable: true,
     },
   ];
@@ -68,7 +87,7 @@ const VisitorDetails = () => {
   return (
     <section className="flex">
       <Navbar />
-      <div className=" w-full flex mx-3  flex-col overflow-hidden">
+      <div className=" w-full flex mx-3 flex-col overflow-hidden">
         <div className="flex flex-col gap-2">
           <h2
             style={{
@@ -93,13 +112,20 @@ const VisitorDetails = () => {
             </Link>
           </div>
           <div className="flex justify-center">
-          {details.visitor_files && details.visitor_files.length > 0 ? (
-              details.visitor_files.map((doc, index) => (  
-                <img src={domainPrefix + doc.document} alt="" className="w-48 h-48 rounded-full cursor-pointer"  onClick={() => window.open(domainPrefix + doc.document, "_blank")}/>
-               ))
+            {details.profile_picture && details.profile_picture !== null ? (
+              // details.visitor_files.map((doc, index) => (
+                <img
+                  src={domainPrefix + details.profile_picture.url}
+                  alt=""
+                  className="w-48 h-48 rounded-full cursor-pointer"
+                  onClick={() =>
+                    window.open(domainPrefix + details.profile_picture.url, "_blank")
+                  }
+                />
+              // ))
             ) : (
-            <img src={image} alt="" className="w-48 h-48" />
-          )}
+              <img src={image} alt="" className="w-48 h-48" />
+            )}
           </div>
           <div className="md:grid  px-4 flex flex-col grid-cols-3 gap-5 gap-x-4">
             {/* <div className="grid grid-cols-2 ">
@@ -166,43 +192,7 @@ const VisitorDetails = () => {
                 </p>
               </div>
             )}
-            <div className="grid grid-cols-2 ">
-              <p className="font-semibold text-sm">Check In : </p>
-              <p>
-                {details &&
-                details.visits_log &&
-                details.visits_log.length > 0 ? (
-                  details.visits_log.map((visit, index) =>
-                    visit.check_in ? (
-                      <span key={index}>{dateTimeFormat(visit.check_in)}</span>
-                    ) : (
-                      <span key={index}>-</span>
-                    )
-                  )
-                ) : (
-                  <span>-</span>
-                )}
-              </p>
-             
-            </div>
-            <div className="grid grid-cols-2 ">
-              <p className="font-semibold text-sm">Check Out : </p>
-              <p>
-                {details &&
-                details.visits_log &&
-                details.visits_log.length > 0 ? (
-                  details.visits_log.map((visit, index) =>
-                    visit.check_out ? (
-                      <span key={index}>{dateTimeFormat(visit.check_out)}</span>
-                    ) : (
-                      <span key={index}>-</span>
-                    )
-                  )
-                ) : (
-                  <span>-</span>
-                )}
-              </p>
-            </div>
+
             <div className="grid grid-cols-2 ">
               <p className="font-semibold text-sm">Host : </p>
               {details.created_by_name && (
@@ -226,6 +216,18 @@ const VisitorDetails = () => {
                 <p className="">{details.working_days.join(", ")}</p>
               </div>
             )}
+          </div>
+          <div className="my-4">
+            <h2 className="font-medium border-b-2 text-lg border-black px-4 ">
+              Visitor Log
+            </h2>
+            <div className="m-4">
+              {details.visits_log && details.visits_log.length !== 0 ? (
+                <Table columns={visitorLogColumn} data={details.visits_log} />
+              ) : (
+                <p className="text-center">No Log Yet</p>
+              )}
+            </div>
           </div>
           <div className="my-4 ">
             <h2 className="font-medium border-b-2 text-lg border-black px-4 ">

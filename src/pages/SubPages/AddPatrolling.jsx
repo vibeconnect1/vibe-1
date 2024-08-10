@@ -9,11 +9,11 @@ import toast from "react-hot-toast";
 
 const EditPatrolling = () => {
   const themeColor = useSelector((state) => state.theme.color);
-  const [interval, setInterval] = useState("hrs");
   const hours = Array.from({ length: 24 }, (_, i) =>
     i < 10 ? `0${i}` : `${i}`
-  );
-  const [selectedHours, setSelectedHours] = useState([]);
+);
+const [selectedHours, setSelectedHours] = useState([]);
+const [interval, setInterval] = useState("hrs");
   const [floors, setFloors] = useState([]);
   const [units, setUnits] = useState([]);
 
@@ -54,6 +54,7 @@ const EditPatrolling = () => {
           startTime: formatTime(details.start_time),
           timeInterval: details.time_intervals,
         });
+        setSelectedHours(details.specific_times || []);
         fetchFloors(details.building_id)
         fetchUnits(details.floor_id)
         
@@ -61,6 +62,7 @@ const EditPatrolling = () => {
         console.log(error);
       }
     };
+    
     const fetchFloors = async (buildId) => {
       try {
         const floorResp = await getFloors(buildId);
@@ -137,6 +139,9 @@ const navigate = useNavigate()
     sendData.append("patrolling[start_time]", formData.startTime);
     sendData.append("patrolling[end_time]", formData.endTime);
     sendData.append("patrolling[time_intervals]", formData.timeInterval);
+    selectedHours.forEach(hour => {
+      sendData.append("patrolling[specific_times][]", hour);
+    });
     try {
       toast.loading("Editing Patrolling please wait!");
       const patRes = await editPatrollingDetails(id, sendData);
@@ -150,12 +155,17 @@ const navigate = useNavigate()
       console.log(error);
       toast.dismiss();
       toast.error("Something went wrong!");
-    } finally {
-      setTimeout(() => {
-        setPatrollingAdded(false);
-      }, 500);
     }
+    
   };
+
+  useEffect(() => {
+    if (selectedHours.length === 0) {
+      setInterval("hrs");
+    } else {
+      setInterval("specific");
+    }
+  }, [selectedHours]);
   return (
     <section className="flex">
       <Navbar />

@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import Navbar from "../../components/Navbar";
 import DataTable from "react-data-table-component";
 import { BsEye } from "react-icons/bs";
+import Table from "../../components/table/Table";
 
 const EmployeeDoctorAppointment = () => {
   const [selectedStatus, setSelectedStatus] = useState("all");
@@ -193,17 +194,17 @@ const EmployeeDoctorAppointment = () => {
             Book an Appointment
           </Link>
         </div>
-        <DataTable
+        <Table
           responsive
           //   selectableRows
           columns={columns}
           data={data}
-          customStyles={customStyle}
-          pagination
-          fixedHeader
-          // fixedHeaderScrollHeight="450px"
-          selectableRowsHighlight
-          highlightOnHover
+          // customStyles={customStyle}
+          // pagination
+          // fixedHeader
+          // // fixedHeaderScrollHeight="450px"
+          // selectableRowsHighlight
+          // highlightOnHover
         />
       </div>
     </section>

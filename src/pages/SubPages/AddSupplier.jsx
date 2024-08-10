@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { postVendors } from "../../api";
+import React, { useEffect, useState } from "react";
+import { getVendorCategory, getVendorsType, postVendors } from "../../api";
 import { getItemInLocalStorage } from "../../utils/localStorage";
 import { useSelector } from "react-redux";
 import FileInputBox from "../../containers/Inputs/FileInputBox";
@@ -7,6 +7,8 @@ import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 const AddSupplier = () => {
   const siteId = getItemInLocalStorage("SITEID");
+  const [types, setTypes] = useState([]);
+  const [categories, setCategories] = useState([]);
   console.log(siteId);
   const [formData, setFormData] = useState({
     vendor_name: "",
@@ -31,6 +33,8 @@ const AddSupplier = () => {
     district: "",
     attachments: [],
     vtype: "",
+    type: "",
+    category: "",
     // firstanme: "abc",
     // lastname: "wer",
   });
@@ -48,9 +52,27 @@ const AddSupplier = () => {
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
-  
-    
   };
+  useEffect(() => {
+    const fetchType = async () => {
+      try {
+        const typeRes = await getVendorsType();
+        setTypes(typeRes.data.suppliers);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    const fetchCategory = async () => {
+      try {
+        const catRes = await getVendorCategory();
+        setCategories(catRes.data.categories);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchType();
+    fetchCategory();
+  }, []);
 
   const isValidURL = (url) => {
     try {
@@ -65,13 +87,15 @@ const AddSupplier = () => {
     if (!formData.company_name || !formData.vendor_name) {
       return toast.error("All fields are Required!");
     }
-    if (formData.email &&!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+    if (formData.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
       return toast.error("Invalid email address!");
     }
-    if (formData.secondary_email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.secondary_email)) {
+    if (
+      formData.secondary_email &&
+      !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.secondary_email)
+    ) {
       return toast.error("Invalid Secondary Email!");
     }
-  
 
     const sendData = new FormData();
     sendData.append("vendor[site_id]", siteId);
@@ -93,6 +117,8 @@ const AddSupplier = () => {
     sendData.append("vendor[account_number]", formData.account_number);
     sendData.append("vendor[bank_branch_name]", formData.bank_branch_name);
     sendData.append("vendor[ifsc_code]", formData.ifsc_code);
+    sendData.append("vendor[vendor_supplier_id]", formData.type);
+    sendData.append("vendor[vendor_categories_id]", formData.category);
 
     sendData.append("vendor[website_url]", formData.website_url);
     sendData.append("vendor[district]", formData.district);
@@ -170,7 +196,12 @@ const AddSupplier = () => {
                 className="border p-1 px-4 border-gray-500 rounded-md"
                 pattern="[0-9]*"
                 onKeyDown={(e) => {
-                  if (!/[0-9]/.test(e.key) && e.key !== "Backspace" && e.key !== "ArrowLeft" && e.key !== "ArrowRight") {
+                  if (
+                    !/[0-9]/.test(e.key) &&
+                    e.key !== "Backspace" &&
+                    e.key !== "ArrowLeft" &&
+                    e.key !== "ArrowRight"
+                  ) {
                     e.preventDefault();
                   }
                 }}
@@ -191,7 +222,12 @@ const AddSupplier = () => {
                 className="border p-1 px-4 border-gray-500 rounded-md"
                 pattern="[0-9]*"
                 onKeyDown={(e) => {
-                  if (!/[0-9]/.test(e.key) && e.key !== "Backspace" && e.key !== "ArrowLeft" && e.key !== "ArrowRight") {
+                  if (
+                    !/[0-9]/.test(e.key) &&
+                    e.key !== "Backspace" &&
+                    e.key !== "ArrowLeft" &&
+                    e.key !== "ArrowRight"
+                  ) {
                     e.preventDefault();
                   }
                 }}
@@ -243,22 +279,36 @@ const AddSupplier = () => {
               <label htmlFor="" className="font-semibold">
                 Select Supplier Type:
               </label>
-              <select className="border p-1 px-4 border-gray-500 rounded-md">
+              <select
+                className="border p-1 px-4 border-gray-500 rounded-md"
+                name="type"
+                value={formData.type}
+                onChange={handleChange}
+              >
                 <option value="">Select Supplier Type</option>
-                <option value="unit1">Type 1</option>
-                <option value="unit2">Type 2</option>
-                <option value="unit2">Type 3</option>
+                {types.map((type) => (
+                  <option value={type.id} key={type.id}>
+                    {type.name}
+                  </option>
+                ))}
               </select>
             </div>
             <div className="flex flex-col gap-2">
               <label htmlFor="" className="font-semibold">
                 Select Category:
               </label>
-              <select className="border p-1 px-4 border-gray-500 rounded-md">
+              <select
+                className="border p-1 px-4 border-gray-500 rounded-md"
+                name="category"
+                value={formData.category}
+                onChange={handleChange}
+              >
                 <option value="">Select Category</option>
-                <option value="unit1">Category 1</option>
-                <option value="unit2">Category 2</option>
-                <option value="unit2">Category 3</option>
+                {categories.map((cat) => (
+                  <option value={cat.id} key={cat.id}>
+                    {cat.name}
+                  </option>
+                ))}
               </select>
             </div>
             <div className="flex flex-col gap-2">
@@ -380,7 +430,12 @@ const AddSupplier = () => {
                 className="border p-1 px-4 border-gray-500 rounded-md"
                 pattern="[0-9]*"
                 onKeyDown={(e) => {
-                  if (!/[0-9]/.test(e.key) && e.key !== "Backspace" && e.key !== "ArrowLeft" && e.key !== "ArrowRight") {
+                  if (
+                    !/[0-9]/.test(e.key) &&
+                    e.key !== "Backspace" &&
+                    e.key !== "ArrowLeft" &&
+                    e.key !== "ArrowRight"
+                  ) {
                     e.preventDefault();
                   }
                 }}
@@ -433,7 +488,12 @@ const AddSupplier = () => {
                 className="border p-1 px-4 border-gray-500 rounded-md"
                 pattern="[0-9]*"
                 onKeyDown={(e) => {
-                  if (!/[0-9]/.test(e.key) && e.key !== "Backspace" && e.key !== "ArrowLeft" && e.key !== "ArrowRight") {
+                  if (
+                    !/[0-9]/.test(e.key) &&
+                    e.key !== "Backspace" &&
+                    e.key !== "ArrowLeft" &&
+                    e.key !== "ArrowRight"
+                  ) {
                     e.preventDefault();
                   }
                 }}

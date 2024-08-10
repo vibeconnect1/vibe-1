@@ -116,7 +116,8 @@ const Login = () => {
       if (userType === "pms_admin") {
         navigate("/dashboard");
       } else {
-        navigate("/mytickets");
+      
+        navigate(selectedSiteId === 10 ? "/employee/dashboard":"/mytickets");
       }
       toast.dismiss();
       window.location.reload();

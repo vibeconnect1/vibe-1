@@ -12,14 +12,27 @@ import { GoAlert } from "react-icons/go";
 import ReactApexChart from "react-apexcharts";
 import { BsDatabaseDash } from "react-icons/bs";
 import { Link } from "react-router-dom";
+import Switch from "../../../Buttons/Switch";
 function EmployeeProjectOverview() {
   const [overview, setOverview] = useState(false);
   const [budget, setBudget] = useState(false);
+  const [createModal, setCreateModal] = useState(false);
+  const [createTask, setCreateTask] = useState("selfTask");
+  const [repeat, setRepeat] = useState(false);
+  const handleSwitchChange = (event) => {
+    setRepeat(event.target.checked);
+  };
   const EditModal = () => {
     setOverview(true);
   };
   const closeModal = () => {
     setOverview(false);
+  };
+  const CreateModal = () => {
+    setCreateModal(true);
+  };
+  const closeCreateModal = () => {
+    setCreateModal(false);
   };
 
   const workloadData = [
@@ -297,7 +310,6 @@ function EmployeeProjectOverview() {
                         />
                       </div>
                     </div>
-
                     <div>
                       <button
                         type="submit"
@@ -364,12 +376,12 @@ function EmployeeProjectOverview() {
             <h2 className="text-lg font-semibold pt-2 text-slate-800">
               Upcoming Deadlines
             </h2>
-            <Link
-              to={"/employee/certificate/project-task-view"}
+            <button
+              onClick={CreateModal}
               className="border-2 border-gray-400 rounded-md p-1 px-5 flex gap-1 hover:bg-gray-200"
             >
               <IoAddCircleOutline className="mt-1" /> Add
-            </Link>
+            </button>
           </div>
           <div className="p-4 overflow-x-auto">
             <table className="min-w-full bg-white border-gray-200">
@@ -566,6 +578,248 @@ function EmployeeProjectOverview() {
           </div>
         </div>
       </div>
+      {createModal && (
+        <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white p-5 rounded-lg shadow-lg w-2/5 relative max-h-[90%] overflow-y-auto hide-scrollbar">
+            <button
+              onClick={closeCreateModal}
+              className="absolute top-2 right-2 text-gray-500 hover:text-gray-700"
+            >
+              <IoClose size={24} />
+            </button>
+            <div className="mx-5 my-5">
+              <h2 className="text-2xl font-semibold text-gray-800 mb-4">
+                Create Task
+              </h2>
+              <div className="flex gap-5 my-5">
+                <button
+                  className={`text-gray-600 border-2 p-1 px-5 rounded-md ${
+                    createTask === "selfTask"
+                      ? "border-black"
+                      : "border-gray-300"
+                  }`}
+                  onClick={() => setCreateTask("selfTask")}
+                >
+                  Self Task
+                </button>
+                <button
+                  className={`text-gray-600 border-2 p-1 px-5 rounded-md ${
+                    createTask === "assignToOthers"
+                      ? "border-black"
+                      : "border-gray-300"
+                  }`}
+                  onClick={() => setCreateTask("assignToOthers")}
+                >
+                  Assign to Others
+                </button>
+              </div>
+              <div className="border-t border-gray-300 mb-5"></div>
+
+              {createTask === "selfTask" && (
+                <div>
+                  <div className="grid grid-cols-2 gap-5">
+                    <input
+                      type="text"
+                      placeholder="Task Topic"
+                      className="border-2 p-2 mb-4 border-gray-300 rounded-lg w-full"
+                    />
+                    <input
+                      type="date"
+                      placeholder="Due Date"
+                      className="border-2 p-2 mb-4 border-gray-300 rounded-lg w-full"
+                    />
+                  </div>
+                  <div className="grid grid-cols-2 gap-5">
+                    <div className="col-span-1">
+                      <select
+                        className="border-2 p-2 mb-4 border-gray-300 rounded-lg w-full"
+                        placeholder="Assign To"
+                      >
+                        <option value="">Select Assignee</option>
+                        <option value="user1">Karan</option>
+                        <option value="user2">Virat</option>
+                        <option value="user3">Suraj</option>
+                      </select>
+                    </div>
+                    <div className="col-span-1">
+                      <select
+                        className="border-2 p-2 mb-4 border-gray-300 rounded-lg w-full"
+                        placeholder="Dependent Task"
+                      >
+                        <option value="">Select Dependent Task</option>
+                        <option value="task1">Task 1</option>
+                        <option value="task2">Task 2</option>
+                        <option value="task3">Task 3</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div className="grid grid-cols-2 gap-5">
+                    <div className="col-span-2">
+                      <input
+                        type="file"
+                        className="border-2 p-2 mb-4 border-gray-300 rounded-lg w-full"
+                      />
+                      <textarea
+                        placeholder="Description"
+                        className="border-2 p-2 mb-2 border-gray-300 rounded-lg w-full"
+                      />
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {createTask === "assignToOthers" && (
+                <div>
+                  <div className="grid grid-cols-2 gap-5">
+                    <input
+                      type="text"
+                      placeholder="Task Topic"
+                      className="border-2 p-2 mb-4 border-gray-300 rounded-lg w-full"
+                    />
+                    <input
+                      type="date"
+                      placeholder="Due Date"
+                      className="border-2 p-2 mb-4 border-gray-300 rounded-lg w-full"
+                    />
+                  </div>
+                  <div className="grid grid-cols-2 gap-5">
+                    <div className="col-span-1">
+                      <select
+                        className="border-2 p-2 mb-4 border-gray-300 rounded-lg w-full"
+                        placeholder="Assign To"
+                      >
+                        <option value="">Select Assignee</option>
+                        <option value="user1">Karan</option>
+                        <option value="user2">Virat</option>
+                        <option value="user3">Suraj</option>
+                      </select>
+                    </div>
+                    <div className="col-span-1">
+                      <select
+                        className="border-2 p-2 mb-4 border-gray-300 rounded-lg w-full"
+                        placeholder="Dependent Task"
+                      >
+                        <option value="">Select Dependent Task</option>
+                        <option value="task1">Task 1</option>
+                        <option value="task2">Task 2</option>
+                        <option value="task3">Task 3</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div className="grid grid-cols-2 gap-5">
+                    <div className="col-span-2">
+                      <input
+                        type="file"
+                        className="border-2 p-2 mb-4 border-gray-300 rounded-lg w-full"
+                      />
+                      <textarea
+                        placeholder="Description"
+                        className="border-2 p-2 mb-2 border-gray-300 rounded-lg w-full"
+                      />
+                    </div>
+                  </div>
+                  <div className="grid grid-cols-2 gap-5 mb-5">
+                    <div className="col-span-1">
+                      <div className="flex gap-10">
+                        <div className="flex gap-2">
+                          <Switch />
+                          <label>Urgent</label>
+                        </div>
+                        <div className="flex gap-2 items-center">
+                          <Switch
+                            checked={repeat}
+                            onChange={handleSwitchChange}
+                            className="mr-2"
+                          />
+                          <label>Repeat</label>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  {repeat && (
+                    <div>
+                      <div className="grid grid-cols-2 gap-5 mt-4">
+                        <input
+                          type="date"
+                          placeholder="From Date"
+                          className="border-2 p-2 mb-4 border-gray-300 rounded-lg w-full"
+                        />
+                        <input
+                          type="date"
+                          placeholder="To Date"
+                          className="border-2 p-2 mb-4 border-gray-300 rounded-lg w-full"
+                        />
+                        <input
+                          type="time"
+                          placeholder="Time"
+                          className="border-2 p-2 mb-4 border-gray-300 rounded-lg w-full"
+                        />
+                      </div>
+                      <div className="mb-3">
+                        <h2 className="font-medium text-gray-600">
+                          Select Working Day
+                        </h2>
+                        <div className="flex gap-2 mt-2">
+                          <button
+                            type="submit"
+                            className="px-2 text-sm py-1 border-2 border-gray-400 text-gray-800 rounded-md"
+                          >
+                            Mon
+                          </button>
+                          <button
+                            type="submit"
+                            className="px-2 text-sm py-1 border-2 border-gray-400  text-gray-800 rounded-md"
+                          >
+                            Tue
+                          </button>
+                          <button
+                            type="submit"
+                            className="px-2 text-sm border-2 border-gray-400  text-gray-800 rounded-md"
+                          >
+                            Wed
+                          </button>
+                          <button
+                            type="submit"
+                            className="px-2 text-sm border-2 border-gray-400  text-gray-800 rounded-md"
+                          >
+                            Thu
+                          </button>
+                          <button
+                            type="submit"
+                            className="px-2 text-sm border-2 border-gray-400  text-gray-800 rounded-md"
+                          >
+                            Fri
+                          </button>
+                          <button
+                            type="submit"
+                            className="px-2 text-sm border-2 border-gray-400  text-gray-800 rounded-md"
+                          >
+                            Sat
+                          </button>
+                          <button
+                            type="submit"
+                            className="px-2 text-sm border-2 border-gray-400 text-gray-800 rounded-md"
+                          >
+                            Sun
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              )}
+              <div>
+                <button
+                  type="submit"
+                  className="px-4 py-2 bg-black text-white rounded-md w-full"
+                >
+                  Create
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

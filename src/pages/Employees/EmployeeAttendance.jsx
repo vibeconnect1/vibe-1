@@ -106,11 +106,11 @@ const userId = getItemInLocalStorage("UserId")
           </div>
         </div> */}
         <div className=" flex mx-3 flex-col my-5 ">
-          <div className="flex md:flex-row flex-col justify-between items-center">
+          <div className="flex md:flex-row flex-col justify-between items-center my-2">
             <input
               type="text"
-              placeholder="Search By Name"
-              className="border-2 p-2 w-96 border-gray-300 rounded-lg"
+              placeholder="Search by Name"
+              className="border p-2 w-96 border-gray-300 rounded-lg"
             />
             {/* <button
               className="bg-black w-20 rounded-lg text-white p-2 my-5"

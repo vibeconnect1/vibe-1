@@ -40,6 +40,7 @@ const AddNewVisitor = () => {
     hostApproval: false,
     goodsInward: false,
     host: "",
+    passNumber:""
   });
   console.log(formData);
   const handleFrequencyChange = (e) => {
@@ -165,11 +166,12 @@ const AddNewVisitor = () => {
     postData.append("visitor[skip_host_approval]", formData.hostApproval);
     postData.append("visitor[goods_inwards]", formData.goodsInward);
     postData.append("visitor[visit_type]", selectedVisitorType);
+    postData.append("visitor[pass_number]", formData.passNumber);
     postData.append("visitor[frequency]", selectedFrequency);
     if (capturedImage) {
       const response = await fetch(capturedImage);
       const blob = await response.blob();
-      postData.append("visitor_files[]", blob, "visitor_image.jpg");
+      postData.append("visitor[profile_pic]", blob, "visitor_image.jpg");
     }
     const blob = await fetch(capturedImage).then((res) => res.blob());
     selectedWeekdays.forEach((day) => {
@@ -185,14 +187,14 @@ const AddNewVisitor = () => {
         extraVisitor.mobile
       );
     });
-    const sendOTP = new FormData();
-    sendOTP.append("mobile_number", formData.mobile);
-    sendOTP.append("otp", otp);
+    // const sendOTP = new FormData();
+    // sendOTP.append("mobile_number", formData.mobile);
+    // sendOTP.append("otp", otp);
     try {
       toast.loading("Creating new visitor Please wait!");
       const visitResp = await postNewVisitor(postData);
-      const sendOtp = await postVisitorOTPApi(sendOTP);
-      console.log(sendOtp);
+      // const sendOtp = await postVisitorOTPApi(sendOTP);
+      // console.log(sendOtp);
       console.log(visitResp);
       navigate("/admin/passes/visitors");
       toast.dismiss();
@@ -396,7 +398,10 @@ const AddNewVisitor = () => {
                 Pass Number
               </label>
               <input
-                type="number"
+                type="text"
+                value={formData.passNumber}
+                onChange={handleChange}
+                name="passNumber"
                 id="additionalVisitor"
                 className="border border-gray-400 p-2 rounded-md"
                 placeholder="Enter Pass number"

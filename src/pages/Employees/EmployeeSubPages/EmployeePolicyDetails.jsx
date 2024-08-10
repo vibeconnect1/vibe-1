@@ -3,6 +3,7 @@ import Navbar from "../../../components/Navbar";
 import policy from "/policy.png";
 import { BiPlus } from "react-icons/bi";
 import { PiPlusCircle } from "react-icons/pi";
+import { Link } from "react-router-dom";
 
 const EmployeePolicyDetails = () => {
   return (
@@ -113,7 +114,7 @@ const EmployeePolicyDetails = () => {
               </div>
             </div>
             <div className="flex justify-center">
-              <button className="bg-black p-1 px-4 rounded-md text-white border-2 border-black hover:bg-white hover:text-black transition-all duration-300">Process to proposal</button>
+              <Link to={"/employee/insurance"} className="bg-black p-1 px-4 rounded-md text-white border-2 border-black hover:bg-white hover:text-black transition-all duration-300">Process to proposal</Link>
             </div>
           </div>
         </div>

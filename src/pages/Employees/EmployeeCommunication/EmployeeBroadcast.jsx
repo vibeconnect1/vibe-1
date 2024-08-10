@@ -5,6 +5,8 @@ import { ImEye } from "react-icons/im";
 import { Link } from "react-router-dom";
 import { getItemInLocalStorage } from "../../../utils/localStorage";
 import Table from "../../../components/table/Table";
+import { getBroadCast } from "../../../api";
+import { BsEye } from "react-icons/bs";
 const EmployeeBroadcast = () => {
   const [searchText, setSearchText] = useState("");
   const [user, setUser] = useState("");
@@ -17,7 +19,6 @@ const EmployeeBroadcast = () => {
       const broadcastResp = await getBroadCast()
       setFilteredData(broadcastResp.data)
       console.log(broadcastResp)
-
     }
     fetchBroadCast()
   }, []);
@@ -31,21 +32,21 @@ const EmployeeBroadcast = () => {
       name: "Action",
       cell: (row) => (
         <Link to={`/communication/broadcast/broadcast-details/${row.id}`}>
-          {row.action}
+          {<BsEye size={15} />}
         </Link>
       ),
       sortable: true,
     },
-    { name: "Title", selector: (row) => row.title, sortable: true },
+    { name: "Title", selector: (row) => row.notice_title, sortable: true },
     {
-      name: "Type",
-      selector: (row) => row.type,
+      name: "Description",
+      selector: (row) => row.notice_discription,
       sortable: true,
     },
     { name: "Created By", selector: (row) => row.CreatedBy, sortable: true },
     {
       name: "Created On",
-      selector: (row) => row.CreatedOn,
+      selector: (row) => dateFormat(row.created_at),
       sortable: true,
     },
     {
@@ -53,21 +54,21 @@ const EmployeeBroadcast = () => {
       selector: (row) => row.status,
       sortable: true,
     },
+    // {
+    //   name: "Expired",
+    //   selector: (row) => row.expired,
+    //   sortable: true,
+    // },
     {
-      name: "Expired",
-      selector: (row) => row.expired,
+      name: "Expiry Date",
+      selector: (row) => dateFormat(row.expiry_date),
       sortable: true,
     },
-    {
-      name: "Expired On",
-      selector: (row) => row.expiredOn,
-      sortable: true,
-    },
-    {
-      name: "Attachments",
-      selector: (row) => row.attachments,
-      sortable: true,
-    },
+    // {
+    //   name: "Attachments",
+    //   selector: (row) => row.attachments,
+    //   sortable: true,
+    // },
   ];
  
 

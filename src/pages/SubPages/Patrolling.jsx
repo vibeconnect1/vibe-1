@@ -44,6 +44,7 @@ const Patrolling = () => {
     startTime: "",
     endTime: "",
     timeInterval: "",
+    // specificTimes:""
   });
   const openModal = () => {
     setModalVisible(true);
@@ -147,6 +148,7 @@ const Patrolling = () => {
         : [...prevSelectedHours, hour]
     );
   };
+  
   const buildings = getItemInLocalStorage("Building");
 
   const handleChange = async (e) => {
@@ -199,6 +201,9 @@ const Patrolling = () => {
     sendData.append("patrolling[start_time]", formData.startTime);
     sendData.append("patrolling[end_time]", formData.endTime);
     sendData.append("patrolling[time_intervals]", formData.timeInterval);
+    selectedHours.forEach(hour => {
+      sendData.append("patrolling[specific_times][]", hour);
+    });
     try {
       toast.loading("Creating Patrolling please wait!");
       const patRes = await postPatrolling(sendData);

@@ -14,6 +14,7 @@ import image from "/profile.png";
 import ProfileGrow from './ProfileGrow';
 import ProfileCatchUp from './ProfileCatchup';
 import { getItemInLocalStorage } from '../../utils/localStorage';
+import image2 from "/profile4.jpg"
 function Profile() {
     const [page, setPage] = useState("grow");
     const employee = {
@@ -59,7 +60,7 @@ function Profile() {
                             <img src={interview} className="rounded-md w-full h-56" alt="" />
                         </div>
                         <div className='absolute -bottom-8 left-6'>
-                            <img src={pic1} className="w-24 h-24 rounded-full" alt="" />
+                            <img src={image2} className="w-24 h-24 rounded-full" alt="" />
                         </div>
                         <div className='absolute top-4 right-6 border-2 border-black bg-white p-1 rounded-full '>
                             <IoCamera size={30} className='text-blue-600'/>

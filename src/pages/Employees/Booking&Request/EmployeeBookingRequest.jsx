@@ -19,7 +19,7 @@ const EmployeeBookingRequest = () => {
               <CustomNavLink to="/employee/booking-request/flight-ticket-request">Flight Ticket Request</CustomNavLink>
               <CustomNavLink to="/employee/booking-request/cab-bus-request">Cab/Bus Request</CustomNavLink>
               <CustomNavLink to="/employee/booking-request/transportation-request">Transportation Request</CustomNavLink>
-              <CustomNavLink to="/employee/booking-request/traveling-allowance-request">Add Traveling Allowance Request</CustomNavLink>
+              <CustomNavLink to="/employee/booking-request/traveling-allowance-request"> Traveling Allowance Request</CustomNavLink>
             </div>
           </div>
 

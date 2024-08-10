@@ -3,6 +3,7 @@ import DataTable from "react-data-table-component";
 import { BsEye } from "react-icons/bs";
 import { PiPlusCircle } from "react-icons/pi";
 import { Link } from "react-router-dom";
+import Table from "../../../components/table/Table";
 
 const DailyPickup = () => {
   const columns = [
@@ -163,17 +164,17 @@ const DailyPickup = () => {
           Book
         </Link>
       </div>
-      <DataTable
+      <Table
         responsive
         // selectableRows
         columns={columns}
         data={filteredData}
-        customStyles={customStyle}
-        pagination
-        fixedHeader
-        // fixedHeaderScrollHeight="420px"
-        selectableRowsHighlight
-        highlightOnHover
+        // customStyles={customStyle}
+        // pagination
+        // fixedHeader
+        // // fixedHeaderScrollHeight="420px"
+        // selectableRowsHighlight
+        // highlightOnHover
       />
     </section>
   );

@@ -6,6 +6,7 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
 import { FaDownload } from "react-icons/fa";
+import Table from "../../components/table/Table";
 
 const Salary = () => {
   const [searchText, setSearchText] = useState("");
@@ -147,15 +148,15 @@ const Salary = () => {
             className="border border-gray-400 rounded-lg p-2"
           /> */}
         </div>
-        <DataTable
+        <Table
           responsive
           columns={columns}
           data={filteredData}
-          customStyles={customStyle}
-          pagination
-          fixedHeader
-          selectableRowsHighlight
-          highlightOnHover
+          // customStyles={customStyle}
+          // pagination
+          // fixedHeader
+          // selectableRowsHighlight
+          // highlightOnHover
         />
       </div>
     </section>

@@ -20,6 +20,7 @@ export default {
       },
       colors: {
         'scrollbar-thumb': 'var(--scrollbar-thumb-color)',
+        'purple-custom': '#8000FF',
       },
 
     },

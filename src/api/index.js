@@ -76,9 +76,57 @@ export const getVendors = async () =>
       token: token,
     },
   });
+export const getVendorCategory = async () =>
+  axiosInstance.get("/vendor_categories.json", {
+    params: {
+      token: token,
+    },
+  });
+export const getVendorCategoryDetails = async (id) =>
+  axiosInstance.get(`/vendor_categories/${id}.json`, {
+    params: {
+      token: token,
+    },
+  });
+export const deleteVendorCategory = async (id) =>
+  axiosInstance.delete(`/vendor_categories/${id}.json`, {
+    params: {
+      token: token,
+    },
+  });
+export const postVendorCategory = async (data) =>
+  axiosInstance.post("/vendor_categories.json", data, {
+    params: {
+      token: token,
+    },
+  });
+export const postVendorType = async (data) =>
+  axiosInstance.post("/vendor_suppliers.json", data, {
+    params: {
+      token: token,
+    },
+  });
+export const getVendorsType = async () =>
+  axiosInstance.get("/vendor_suppliers.json", {
+    params: {
+      token: token,
+    },
+  });
+export const getVendorsTypeDetails = async (id) =>
+  axiosInstance.get(`/vendor_suppliers/${id}.json`, {
+    params: {
+      token: token,
+    },
+  });
 
 export const getVendorsDetails = async (id) =>
   axiosInstance.get(`/vendors/${id}.json`, {
+    params: {
+      token: token,
+    },
+  });
+export const deleteVendorType = async (id) =>
+  axiosInstance.delete(`/vendor_suppliers/${id}.json`, {
     params: {
       token: token,
     },
@@ -370,7 +418,7 @@ export const editAssetGroupsDetails = async (id, data) =>
 export const getParentAsset = async (id) =>
   axiosInstance.get(
     `/site_assets.json?q[asset_type_eq]=parent&q[asset_group_id_eq]=${id}`,
-    
+
     {
       params: {
         token: token,
@@ -419,7 +467,7 @@ export const getAssetparamsDetails = async (id) =>
     },
   });
 export const editAssetparamsDetails = async (id, data) =>
-  axiosInstance.put(`/asset_params/${id}.json`,data, {
+  axiosInstance.put(`/asset_params/${id}.json`, data, {
     params: {
       token: token,
     },
@@ -619,13 +667,13 @@ export const postNewVisitor = async (data) =>
     },
   });
 export const getPatrollings = async () =>
-  axiosInstance.get("/patrollings.json",  {
+  axiosInstance.get("/patrollings.json", {
     params: {
       token: token,
     },
   });
 export const getPatrollingDetails = async (id) =>
-  axiosInstance.get(`/patrollings/${id}.json`,  {
+  axiosInstance.get(`/patrollings/${id}.json`, {
     params: {
       token: token,
     },
