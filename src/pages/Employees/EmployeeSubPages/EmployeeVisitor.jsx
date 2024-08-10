@@ -51,9 +51,9 @@ const EmployeeVisitor = () => {
           <Link to={`/employee/passes/visitors/visitor-details/${row.id}`}>
             <BsEye size={15} />
           </Link>
-          <Link to={`/employee/passes/visitors/edit-visitor/${row.id}`}>
+          {/* <Link to={`/employee/passes/visitors/edit-visitor/${row.id}`}>
             <BiEdit size={15} />
-          </Link>
+          </Link> */}
         </div>
       ),
     },
@@ -116,21 +116,21 @@ const EmployeeVisitor = () => {
       selector: (row) => (row.end_pass ? dateFormat(row.end_pass) : ""),
       sortable: true,
     },
-    {
-      name: "Check In",
-      selector: (row) => (row.check_in ? dateTimeFormat(row.check_in) : ""),
-      sortable: true,
-    },
-    {
-      name: "Check Out",
-      selector: (row) => (row.check_out ? dateTimeFormat(row.check_out) : ""),
-      sortable: true,
-    },
-    {
-      name: "Status",
-      selector: (row) => row.status,
-      sortable: true,
-    },
+    // {
+    //   name: "Check In",
+    //   selector: (row) => (row.check_in ? dateTimeFormat(row.check_in) : ""),
+    //   sortable: true,
+    // },
+    // {
+    //   name: "Check Out",
+    //   selector: (row) => (row.check_out ? dateTimeFormat(row.check_out) : ""),
+    //   sortable: true,
+    // },
+    // {
+    //   name: "Status",
+    //   selector: (row) => row.status,
+    //   sortable: true,
+    // },
     // {
     //   name: "Host",
     //   selector: (row) => row.created_by,

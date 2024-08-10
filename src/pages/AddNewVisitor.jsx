@@ -150,6 +150,10 @@ const AddNewVisitor = () => {
     ) {
       return toast.error("All fields are Required");
     }
+    const mobilePattern = /^\d{10}$/;
+    if (!mobilePattern.test(formData.mobile)) {
+      return toast.error("Mobile number must be  10 digits.");
+    }
 
     const postData = new FormData();
     postData.append("visitor[site_id]", siteId);
@@ -451,6 +455,7 @@ const AddNewVisitor = () => {
               value={formData.expectedDate}
               onChange={handleChange}
               name="expectedDate"
+              min={new Date().toISOString().split("T")[0]}
             />
           </div>
 

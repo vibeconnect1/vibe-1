@@ -3,11 +3,12 @@
 import React, { useEffect, useState } from "react";
 // import Detail from "../../../containers/Detail";
 import image from "/profile.png";
-import { getVisitorDetails } from "../../../api";
+import { domainPrefix, getVisitorDetails } from "../../../api";
 import { Link, useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 import Table from "../../../components/table/Table";
-import { BiEdit } from "react-icons/bi";
+import { BiEdit, BiQr } from "react-icons/bi";
+import VisitorQRCode from "../../../containers/modals/VisitorQRCode";
 const EmployeeVisitorDetails = () => {
   const [details, setDetails] = useState({});
   const { id } = useParams();
@@ -59,13 +60,20 @@ const EmployeeVisitorDetails = () => {
       sortable: true,
     },
   ];
+  const [qrModal, setQrmodal] = useState(false);
   return (
     <div className="w-screen">
       <div className="flex flex-col gap-2">
-        <div className="flex justify-end mx-2 mt-1">
-          <Link to={`/employee/passes/visitors/edit-visitor/${id}`} className="border-2 border-black rounded-full px-2 p-1 flex items-center gap-2">
+        <div className="flex justify-end mx-4 mt-1">
+          {/* <Link to={`/employee/passes/visitors/edit-visitor/${id}`} className="border-2 border-black rounded-full px-2 p-1 flex items-center gap-2">
             <BiEdit /> Edit Details
-          </Link>
+          </Link> */}
+            <button
+              onClick={() => setQrmodal(true)}
+              className="border-2 border-black rounded-full px-2 p-1 flex items-center gap-2"
+            >
+              <BiQr /> QR code
+            </button>
         </div>
         <h2
           style={{
@@ -76,8 +84,21 @@ const EmployeeVisitorDetails = () => {
           Visitor Details
         </h2>
         <div className="flex justify-center">
-          <img src={image} alt="" className="w-48 h-48" />
-        </div>
+            {details.profile_picture && details.profile_picture !== null ? (
+              // details.visitor_files.map((doc, index) => (
+                <img
+                  src={domainPrefix + details.profile_picture.url}
+                  alt=""
+                  className="w-48 h-48 rounded-full cursor-pointer"
+                  onClick={() =>
+                    window.open(domainPrefix + details.profile_picture.url, "_blank")
+                  }
+                />
+              // ))
+            ) : (
+              <img src={image} alt="" className="w-48 h-48" />
+            )}
+          </div>
         <div className="md:grid  px-4 flex flex-col grid-cols-3 gap-5 gap-x-4">
           {/* <div className="grid grid-cols-2 ">
             <p className="font-semibold text-sm">Site Name : </p>
@@ -157,9 +178,14 @@ const EmployeeVisitorDetails = () => {
             </p>
           </div>
           <div className="grid grid-cols-2 ">
-            <p className="font-semibold text-sm">Created By : </p>
-            <p className="">{details.created_by_id}</p>
-          </div>
+              <p className="font-semibold text-sm">Created By : </p>
+              {details.created_by_name && (
+                <p className="">
+                  {details.created_by_name.firstname}{" "}
+                  {details.created_by_name.lastname}
+                </p>
+              )}
+            </div>
           <div className="grid grid-cols-2 ">
             <p className="font-semibold text-sm">Created On : </p>
             <p className="">{dateFormat(details.created_at)}</p>
@@ -175,7 +201,7 @@ const EmployeeVisitorDetails = () => {
           <h2 className="font-medium border-b-2 text-lg border-black px-4 ">
             Additional Visitors Info
           </h2>
-          <div className="m-4 mx-20 ">
+          <div className="m-4 lg:mx-20 ">
             {details.extra_visitors && details.extra_visitors.length !== 0 ? (
               <Table columns={VisitorColumns} data={details.extra_visitors} />
             ) : (
@@ -184,6 +210,12 @@ const EmployeeVisitorDetails = () => {
           </div>
         </div>
       </div>
+      {qrModal && (
+        <VisitorQRCode
+          QR={domainPrefix + details.qr_code_image_url}
+          onClose={() => setQrmodal(false)}
+        />
+      )}
     </div>
   );
 };

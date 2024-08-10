@@ -155,9 +155,9 @@ const Navbar = () => {
                 className={({ isActive }) =>
                   ` ${
                     isActive
-                      ? `flex p-2  gap-3.5 rounded-md group items-center  font-medium `
+                      ? `flex p-2  gap-3.5 rounded-md group items-center  font-medium text-sm`
                       : // ? `text-black bg-white flex p-2  gap-3.5 rounded-md group items-center  font-medium ${fontSize}`
-                        ` group flex items-center  gap-3.5 font-medium p-2 hover:bg-gray-800 rounded-md `
+                        ` group flex items-center  gap-3.5 font-medium p-2 hover:bg-gray-800 rounded-md text-sm`
                   }`
                 }
               >
@@ -183,7 +183,7 @@ const Navbar = () => {
                   ` ${
                     isActive
                       ? `text-black bg-white flex p-2  gap-3.5 rounded-md group items-center  font-medium `
-                      : ` group flex items-center  gap-3.5 font-medium p-2 hover:bg-gray-800 rounded-md `
+                      : ` group flex items-center  gap-3.5 font-medium p-2 hover:bg-gray-800 rounded-md text-sm`
                   }`
                 }
               >
@@ -212,7 +212,7 @@ const Navbar = () => {
                   ` ${
                     isActive
                       ? `text-black bg-white flex p-2  gap-3.5 rounded-md group items-center  font-medium `
-                      : ` group flex items-center  gap-3.5 font-medium p-2 hover:bg-gray-800 rounded-md `
+                      : ` group flex items-center  gap-3.5 font-medium p-2 hover:bg-gray-800 rounded-md text-sm`
                   }`
                 }
               >
@@ -243,7 +243,7 @@ const Navbar = () => {
                       ` ${
                         isActive
                           ? `text-black bg-white flex p-2  gap-3.5 rounded-md group items-center  font-medium `
-                          : ` group flex items-center  gap-3.5 font-medium p-2 hover:bg-gray-800 rounded-md `
+                          : ` group flex items-center  gap-3.5 font-medium p-2 hover:bg-gray-800 rounded-md text-sm`
                       }`
                     }
                   >
@@ -1383,7 +1383,7 @@ const Navbar = () => {
                     isActive
                       ? `flex p-2  gap-3.5 rounded-md group items-center  font-medium`
                       : // ? `text-black bg-white flex p-2  gap-3.5 rounded-md group items-center  font-medium ${fontSize}`
-                        ` group flex items-center  gap-3.5 font-medium p-2 hover:bg-gray-800 rounded-md `
+                        ` group flex items-center  gap-3.5 font-medium p-2 hover:bg-gray-800 rounded-md text-sm`
                   }`
                 }
               >
@@ -1406,7 +1406,7 @@ const Navbar = () => {
                   {firstName} {lastName}
                 </h2>
               </NavLink>
-              <NavLink
+             {siteId === 10 && <NavLink
                   to={"/employee/dashboard"}
                   className={({ isActive }) =>
                     ` ${
@@ -1431,7 +1431,7 @@ const Navbar = () => {
                   >
                     Dashboard
                   </h2>
-                </NavLink>
+                </NavLink>}
 
                 {feat.includes("project_task") && (
                   <NavLink
@@ -1468,7 +1468,7 @@ const Navbar = () => {
                       ` ${
                         isActive
                           ? `text-black bg-white flex p-2  gap-3.5 rounded-md group items-center  font-medium `
-                          : ` group flex items-center  gap-3.5 font-medium p-2 hover:bg-gray-800 rounded-md `
+                          : ` group flex items-center  gap-3.5 font-medium p-2 hover:bg-gray-800 rounded-md text-sm`
                       }`
                     }
                   >

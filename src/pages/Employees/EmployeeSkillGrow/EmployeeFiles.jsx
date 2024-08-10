@@ -202,7 +202,7 @@ function EmployeeFiles() {
                       <h2 className="text-2xl font-semibold text-gray-800 mb-4">
                         Add File
                       </h2>
-                      <div className="grid lg:grid-cols-2 grid-cols-1 gap-3">
+                      <div className="">
                         <div>
                           <label
                             htmlFor="file-name"
@@ -214,56 +214,17 @@ function EmployeeFiles() {
                             id="file-name"
                             type="text"
                             placeholder="Enter file name"
-                            className="border-2 p-2 border-gray-300 rounded-lg w-full"
+                            className="border p-2 border-gray-300 rounded-lg w-full"
                           />
                         </div>
                         <div>
-                          <label
-                            htmlFor="file-size"
-                            className="text-base font-semibold text-gray-600 my-2"
-                          >
-                            File Size (MB)
-                          </label>
-                          <input
-                            id="file-size"
-                            type="number"
-                            placeholder="Enter file size in MB"
-                            className="border-2 p-2 border-gray-300 rounded-lg w-full"
-                          />
-                        </div>
-                        <div>
-                          <label
-                            htmlFor="modified-date"
-                            className="text-base font-semibold text-gray-600 my-2"
-                          >
-                            Modified Date
-                          </label>
-                          <input
-                            id="modified-date"
-                            type="date"
-                            className="border-2 p-2 border-gray-300 rounded-lg w-full"
-                          />
-                        </div>
-                        <div>
-                          <label
-                            htmlFor="uploaded-by"
-                            className="text-base font-semibold text-gray-600 my-2"
-                          >
-                            Uploaded By
-                          </label>
-                          <input
-                            id="uploaded-by"
-                            type="text"
-                            placeholder="Enter name of uploader"
-                            className="border-2 p-2 border-gray-300 rounded-lg w-full"
-                          />
                         </div>
                         <div className="mb-3">
                           <h2 className="text-base font-semibold text-gray-600 my-2">
-                            File Logo
+                            Choose File
                           </h2>
                           <div
-                            className="flex justify-center border-2 border-gray-400 rounded-md p-5 items-center w-20 cursor-pointer"
+                            className="flex justify-center border border-gray-400 rounded-md p-5 items-center w-20 cursor-pointer"
                             onClick={handleClick}
                           >
                             <ImImage size={20} />

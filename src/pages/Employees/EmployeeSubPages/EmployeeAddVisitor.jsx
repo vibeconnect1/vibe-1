@@ -1,11 +1,12 @@
-import React, { useState, useRef , useEffect} from "react";
+import React, { useState, useRef, useEffect } from "react";
 import image from "/profile.png";
-import { FaTrash } from 'react-icons/fa';
+import { FaTrash } from "react-icons/fa";
 import { useSelector } from "react-redux";
 import { getItemInLocalStorage } from "../../../utils/localStorage";
 import toast from "react-hot-toast";
 import { getSetupUsers, postNewVisitor } from "../../../api";
 import { useNavigate } from "react-router-dom";
+import FileInputBox from "../../../containers/Inputs/FileInputBox";
 
 const EmployeeAddVisitor = () => {
   const siteId = getItemInLocalStorage("SITEID");
@@ -13,11 +14,12 @@ const EmployeeAddVisitor = () => {
   const [behalf, setbehalf] = useState("Visitor");
   const inputRef = useRef(null);
   const [imageFile, setImageFile] = useState(null);
-  const [visitors, setVisitors] = useState([{ name: '', mobile: '' }]);
+  const [visitors, setVisitors] = useState([{ name: "", mobile: "" }]);
   const [selectedFrequency, setSelectedFrequency] = useState("Once");
   const [selectedVisitorType, setSelectedVisitorType] = useState("Guest");
   const [passStartDate, setPassStartDate] = useState("");
   const [passEndDate, setPassEndDate] = useState("");
+
   const [formData, setFormData] = useState({
     visitorName: "",
     mobile: "",
@@ -28,7 +30,6 @@ const EmployeeAddVisitor = () => {
     expectedTime: "",
     hostApproval: false,
     goodsInward: false,
-   
   });
   console.log(formData);
   const themeColor = useSelector((state) => state.theme.color);
@@ -40,32 +41,32 @@ const EmployeeAddVisitor = () => {
   };
   const handleAddVisitor = (event) => {
     event.preventDefault();
-    setVisitors([...visitors, { name: '', mobile: '' }]);
-};
+    setVisitors([...visitors, { name: "", mobile: "" }]);
+  };
 
-const handleInputChange = (index, event) => {
+  const handleInputChange = (index, event) => {
     const { name, value } = event.target;
     const newVisitors = [...visitors];
     newVisitors[index][name] = value;
     setVisitors(newVisitors);
-};
+  };
 
-const handleRemoveVisitor = (index) => {
+  const handleRemoveVisitor = (index) => {
     const newVisitors = [...visitors];
     newVisitors.splice(index, 1);
     setVisitors(newVisitors);
-};
+  };
 
   const getHeadingText = () => {
     switch (behalf) {
-      case 'Visitor':
-        return 'NEW VISITOR';
-      case 'Delivery':
-        return 'DELIVERY & SUPPORT STAFF';
-      case 'Cab':
-        return 'CAB';
+      case "Visitor":
+        return "NEW VISITOR";
+      case "Delivery":
+        return "DELIVERY & SUPPORT STAFF";
+      case "Cab":
+        return "CAB";
       default:
-        return 'CREATE VISITOR';
+        return "CREATE VISITOR";
     }
   };
 
@@ -88,11 +89,20 @@ const handleRemoveVisitor = (index) => {
     ) {
       return toast.error("All fields are Required");
     }
+    const mobilePattern = /^\d{10}$/;
+    if (!mobilePattern.test(formData.mobile)) {
+      return toast.error("Mobile number must be  10 digits.");
+    }
 
     const postData = new FormData();
     postData.append("visitor[site_id]", siteId);
     postData.append("visitor[created_by_id]", userId);
     postData.append("visitor[name]", formData.visitorName);
+    // if (capturedImage) {
+    //   const response = await fetch(capturedImage);
+    //   const blob = await response.blob();
+    postData.append("visitor[profile_pic]", imageFile, "visitor_image.jpg");
+    // }
     postData.append("visitor[contact_no]", formData.mobile);
     postData.append("visitor[purpose]", formData.purpose);
     postData.append("visitor[start_pass]", passStartDate);
@@ -127,7 +137,7 @@ const handleRemoveVisitor = (index) => {
       console.log(error);
     }
   };
- 
+
   const currentDates = new Date();
   const year = currentDates.getFullYear();
   const month = String(currentDates.getMonth() + 1).padStart(2, "0");
@@ -163,25 +173,29 @@ const handleRemoveVisitor = (index) => {
           ? prevSelectedWeekdays.filter((day) => day !== weekday)
           : [...prevSelectedWeekdays, weekday]
       );
-     
     }
   };
+  const userType = getItemInLocalStorage("USERTYPE");
   return (
     <div className="flex justify-center items-center  w-full p-4">
-    <div className="md:border border-gray-300 rounded-lg md:p-4 w-full md:mx-4 ">
-      <h2
-        style={{ background: themeColor }}
-        className="text-center md:text-xl font-bold p-2 bg-black rounded-full text-white"
-      >
-        {getHeadingText()}
-      </h2>
-      <br />
-       
+      <div className="md:border border-gray-300 rounded-lg md:p-4 w-full md:mx-4 ">
+        <h2
+          style={{ background: themeColor }}
+          className="text-center md:text-xl font-bold p-2 bg-black rounded-full text-white"
+        >
+          {getHeadingText()}
+        </h2>
+        <br />
+
         {behalf !== "Cab" && behalf !== "Delivery" && (
-          <div onClick={handleImageClick} className="cursor-pointer flex justify-center items-center my-4">
+          <div
+            onClick={handleImageClick}
+            className="cursor-pointer flex justify-center items-center my-4"
+          >
             {imageFile ? (
               <img
                 src={URL.createObjectURL(imageFile)}
+                // src={imageFile || image}
                 alt="Uploaded"
                 className="border-4 border-gray-300 rounded-full w-40 h-40 object-cover"
               />
@@ -197,12 +211,11 @@ const handleRemoveVisitor = (index) => {
               ref={inputRef}
               onChange={handleImageChange}
               style={{ display: "none" }}
+              accept=".jpg, .jpeg, .png"
             />
           </div>
         )}
-
-            
-<div className="flex md:flex-row flex-col  my-5 gap-10">
+        <div className="flex md:flex-row flex-col  my-5 gap-10">
           <div className="flex gap-2 flex-col">
             <h2 className="font-semibold">Visitor Type :</h2>
             <div className="flex items-center gap-5">
@@ -267,10 +280,8 @@ const handleRemoveVisitor = (index) => {
           </div>
         </div>
 
-
-
         <div className="grid md:grid-cols-3 gap-5">
-        {selectedVisitorType === "Support Staff" && (
+          {selectedVisitorType === "Support Staff" && (
             <div className="grid gap-2 items-center w-full">
               <label htmlFor="" className="font-medium">
                 Support Category :
@@ -289,8 +300,8 @@ const handleRemoveVisitor = (index) => {
                 Visitor Name:
               </label>
               <input
-               value={formData.visitorName}
-               onChange={handleChange}
+                value={formData.visitorName}
+                onChange={handleChange}
                 type="text"
                 name="visitorName"
                 id="visitorName"
@@ -315,16 +326,13 @@ const handleRemoveVisitor = (index) => {
               />
             </div>
           )}
-            
 
-
-        {/* <div className="grid gap-2 items-center w-full">
+          {/* <div className="grid gap-2 items-center w-full">
             <label htmlFor="">Host</label>
             <select className="border border-gray-400 p-2 rounded-md"><option value="">Select Person to meet</option>
             <option value="">Mittu</option></select>
             
             </div> */}
-          
 
           {behalf !== "Delivery" && behalf !== "Cab" && (
             <div className="grid gap-2 items-center w-full">
@@ -372,8 +380,6 @@ const handleRemoveVisitor = (index) => {
             />
           </div>
 
-        
-
           <div className="grid gap-2 items-center w-full">
             <label htmlFor="expectedDate" className="font-semibold">
               Expected Date:
@@ -385,6 +391,7 @@ const handleRemoveVisitor = (index) => {
               value={formData.expectedDate}
               onChange={handleChange}
               name="expectedDate"
+              min={new Date().toISOString().split("T")[0]}
             />
           </div>
 
@@ -414,6 +421,7 @@ const handleRemoveVisitor = (index) => {
                 onChange={handleChange}
                 name="purpose"
               >
+                <option value="">Select Purpose</option>
                 <option value="Meeting">Meeting</option>
                 <option value="Delivery">Delivery</option>
                 <option value="Personal">Personal</option>
@@ -422,31 +430,70 @@ const handleRemoveVisitor = (index) => {
               </select>
             </div>
           )}
-
-<span>
-            <input type="checkbox"
-            value={formData.hostApproval}
-            checked={formData.hostApproval}
+        </div>
+        <span className="my-2">
+          {userType !== "security_guard" && (
+            <>
+              <input
+                type="checkbox"
+                value={formData.hostApproval}
+                checked={formData.hostApproval}
+                onChange={() =>
+                  setFormData((prevState) => ({
+                    ...prevState,
+                    hostApproval: !prevState.hostApproval,
+                  }))
+                }
+                id="hostApproval"
+              />
+              &nbsp;<label htmlFor="">Skip Host Approval</label>
+              &nbsp;&nbsp;&nbsp;
+            </>
+          )}
+          <input
+            type="checkbox"
+            id="goods"
+            value={formData.goodsInward}
             onChange={() =>
               setFormData((prevState) => ({
                 ...prevState,
-                hostApproval: !prevState.hostApproval,
+                goodsInward: !prevState.goodsInward,
               }))
             }
-            id="hostApproval"
-            />&nbsp;<label htmlFor="">Skip Host Approval</label>&nbsp;&nbsp;&nbsp;
-            <input type="checkbox"
-             value={formData.goodsInward}
-             onChange={() =>
-               setFormData((prevState) => ({
-                 ...prevState,
-                 goodsInward: !prevState.goodsInward,
-               }))
-             }
-            />&nbsp;&nbsp;<label htmlFor="">Goods Inwards</label></span>
-       </div>
-          
-          <h2 className="font-medium border-b-2 mt-5 border-black">
+          />
+          &nbsp;&nbsp;<label htmlFor="goods">Goods Inwards</label>
+        </span>
+        {formData.goodsInward && (
+          <>
+            <div className="grid grid-cols-3 gap-2  my-2">
+              <div className="flex flex-col gap-2">
+                <p className="font-medium">No. of Goods :</p>
+                <input
+                  type="number"
+                  name=""
+                  id=""
+                  className="border border-gray-400 p-2 rounded-md w-full"
+                  placeholder="Enter Number "
+                />
+              </div>
+              <div className="col-span-2 flex flex-col gap-2">
+                <p className="font-medium ">Description :</p>
+                <textarea
+                  name=""
+                  id=""
+                  className="border border-gray-400 p-2 rounded-md w-full"
+                  rows={1}
+                  placeholder="Enter Description"
+                ></textarea>
+              </div>
+            </div>
+            <div className="flex flex-col gap-2">
+              <p className="font-medium">Attachments Related to goods </p>
+              <FileInputBox />
+            </div>
+          </>
+        )}
+        <h2 className="font-medium border-b-2 mt-5 border-black">
           Additional Visitor
         </h2>
         <div className="grid md:grid-cols-3 gap-3 mt-5">
@@ -545,7 +592,6 @@ const handleRemoveVisitor = (index) => {
         )}
         <div className="flex gap-5 justify-center items-center my-4">
           <button
-            
             onClick={createNewVisitor}
             className="bg-black text-white hover:bg-gray-700 font-semibold py-2 px-4 rounded"
           >

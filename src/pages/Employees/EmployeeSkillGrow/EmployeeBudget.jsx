@@ -7,14 +7,15 @@ import ReactApexChart from "react-apexcharts";
 import { BsDatabaseDash, BsEye, BsThreeDotsVertical } from "react-icons/bs";
 import { IoAddCircleOutline, IoClose } from "react-icons/io5";
 import { RiDeleteBin6Line } from "react-icons/ri";
-import { BiEdit } from "react-icons/bi";
+import { BiEdit, BiPlus } from "react-icons/bi";
+import { FaTrash } from "react-icons/fa";
 function EmployeeBudget() {
   const [addBudgetCategory, setAddBudgetCategory] = useState(false);
   const [budgetCategoryAction, setBudgetCategoryAction] = useState(null);
   const dropdownRefs = useRef([]);
   const [categoryEditModal, setCategoryEditModal] = useState(false);
   const [categoryDetailsModal, setCategoryDetailsModal] = useState(false);
-
+  const [bifurcations, setBifurcations] = useState([{ name: "", amount: "" }]);
   const handleBudgetCategoryDropDown = (index) => {
     setBudgetCategoryAction(budgetCategoryAction === index ? null : index);
   };
@@ -61,7 +62,7 @@ function EmployeeBudget() {
       id: 1,
       category: "Design",
       totalBudget: "₹  11,500",
-      totalSpent: '₹ 6,000',
+      totalSpent: "₹ 6,000",
       percentage: "23%",
       color: "bg-yellow-500",
     },
@@ -69,7 +70,7 @@ function EmployeeBudget() {
       id: 2,
       category: "Saas Services",
       totalBudget: "₹  5,000",
-      totalSpent: '₹ 4,000',
+      totalSpent: "₹ 4,000",
       percentage: "10%",
       color: "bg-gray-500",
     },
@@ -77,7 +78,7 @@ function EmployeeBudget() {
       id: 3,
       category: "Development",
       totalBudget: "₹ 11,250",
-      totalSpent: '₹ 12,000',
+      totalSpent: "₹ 12,000",
       percentage: "22.5%",
       color: "bg-red-500",
     },
@@ -85,7 +86,7 @@ function EmployeeBudget() {
       id: 4,
       category: "SEO",
       totalBudget: "₹ 9,000",
-      totalSpent: '₹ 9,000',
+      totalSpent: "₹ 9,000",
       percentage: "18%",
       color: "bg-purple-500",
     },
@@ -93,7 +94,7 @@ function EmployeeBudget() {
       id: 5,
       category: "Entertainment",
       totalBudget: "₹ 2,000",
-      totalSpent: '₹ 4,000',
+      totalSpent: "₹ 4,000",
       percentage: "4%",
       color: "bg-pink-500",
     },
@@ -102,87 +103,87 @@ function EmployeeBudget() {
       category: "Marketing",
       totalBudget: "₹ 9,500",
       percentage: "19%",
-      totalSpent: '₹ 7,000',
+      totalSpent: "₹ 7,000",
       color: "bg-green-500",
     },
     {
       id: 7,
       category: "Extra",
       totalBudget: "₹ 1,750",
-      totalSpent: '₹ 2,000',
+      totalSpent: "₹ 2,000",
       percentage: "3.5%",
       color: "bg-blue-500",
     },
   ];
   const budgetDetails = [
     {
-      id:1,
+      id: 1,
       categoryType: "Design",
       totalBudget: "₹ 11,500",
       spentAmount: "₹ 6,000",
       expensesPercent: "47.83%.",
       remaining: "₹ 5,500",
-      overSpent:" - ",
+      overSpent: " - ",
       color: "bg-yellow-500",
     },
     {
-      id:2,
+      id: 2,
       categoryType: "Saas Services",
       totalBudget: "₹ 5,000",
       spentAmount: "₹ 4,000",
       expensesPercent: "20.00%",
       remaining: "₹ 1,000",
-      overSpent:" - ",
+      overSpent: " - ",
       color: "bg-gray-500",
     },
     {
-      id:3,
+      id: 3,
       categoryType: "Development",
       totalBudget: "₹ 11,250",
       spentAmount: "₹ 12,000",
       expensesPercent: "-06.25%",
       remaining: "₹ 0",
-      overSpent:"₹ 750 ",
+      overSpent: "₹ 750 ",
       color: "bg-red-500",
     },
     {
-      id:4,
+      id: 4,
       categoryType: "SEO",
       totalBudget: "₹ 9,000",
       spentAmount: "₹ 9,000",
       expensesPercent: "00.00%",
       remaining: "₹ 0",
-      overSpent:' - ',
+      overSpent: " - ",
       color: "bg-violet-500",
     },
     {
       id: 5,
       categoryType: "Entertainment",
       totalBudget: "₹ 2,000",
-      spentAmount: '₹ 4,000',
+      spentAmount: "₹ 4,000",
       expensesPercent: "-50.00%",
       remaining: "₹ 0",
-      overSpent:'₹ 2,000',
+      overSpent: "₹ 2,000",
       color: "bg-pink-500",
     },
     {
-      id:6,
+      id: 6,
       categoryType: "Marketing",
       totalBudget: "₹ 9,500",
       spentAmount: "₹ 7,000",
       expensesPercent: "26.32%",
       remaining: "₹ 2,500",
-      overSpent:' - ',
+      overSpent: " - ",
       color: "bg-green-500",
     },
     {
-      id:7,
+      id: 7,
       categoryType: "Extra",
       totalBudget: "₹ 17,00",
       spentAmount: "₹ 2,000",
       expensesPercent: "-15.00%",
       remaining: "₹ 0",
-      overSpent:'₹ 300 ',
+      overSpent: "₹ 300 ",
       color: "bg-blue-500",
     },
   ];
@@ -255,6 +256,22 @@ function EmployeeBudget() {
       data: [90, 32, 30, 40, 100, 20],
     },
   ];
+
+  const handleAddBudgetBifurcation = (event) => {
+    event.preventDefault();
+    setBifurcations([...bifurcations, { name: "", amount: "" }]);
+  };
+  const handleRemoveBifurcation = (index) => {
+    const newBifurcation = [...bifurcations];
+    newBifurcation.splice(index, 1);
+    setBifurcations(newBifurcation);
+  };
+  const handleInputChange = (index, event) => {
+    const { name, value } = event.target;
+    const newBifurcation = [...bifurcations];
+    newBifurcation[index][name] = value;
+    setBifurcations(newBifurcation);
+  };
 
   return (
     <div className="">
@@ -339,7 +356,9 @@ function EmployeeBudget() {
       <div className="grid lg:grid-cols-4 grid-cols-1 md:gap-5 mx-5">
         <div className="lg:col-span-2">
           <div className="shadow-custom-all-sides rounded-md h-auto">
-            <h2 className="text-xl font-semibold mx-8 my-5 mb-16 py-2">Expenses</h2>
+            <h2 className="text-xl font-semibold mx-8 my-5 mb-16 py-2">
+              Expenses
+            </h2>
             <ReactApexChart
               options={options}
               series={series}
@@ -363,7 +382,7 @@ function EmployeeBudget() {
                 </button>
                 {addBudgetCategory && (
                   <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center z">
-                    <div className="bg-white p-5 rounded-lg shadow-lg w-96 relative h-68 overflow-y-auto">
+                    <div className="bg-white p-5 rounded-lg shadow-lg hide-scrollbar w-auto relative max-h-[80%] overflow-y-auto">
                       <button
                         className="absolute top-2 right-2 text-gray-500 hover:text-gray-700"
                         onClick={() => setAddBudgetCategory(!addBudgetCategory)}
@@ -375,7 +394,7 @@ function EmployeeBudget() {
                           Budget Details
                         </h2>
                         <div className="grid grid-cols-1 my-2">
-                          <div>
+                          {/* <div>
                             <label
                               htmlFor="category-name"
                               className="block text-sm font-medium text-gray-700 mb-1"
@@ -399,7 +418,7 @@ function EmployeeBudget() {
                               <option value="marketing">Marketing</option>
                               <option value="extra">Extra</option>
                             </select>
-                          </div>
+                          </div> */}
                           <div>
                             <label
                               htmlFor="total-budget"
@@ -410,11 +429,11 @@ function EmployeeBudget() {
                             <input
                               id="total-budget"
                               type="number"
-                              placeholder="Enter total budget"
+                              placeholder="Enter Total budget"
                               className="border-2 p-2 mb-4 border-gray-300 rounded-lg w-full"
                             />
                           </div>
-                          <div>
+                          {/* <div>
                             <label
                               htmlFor="spent"
                               className="block text-sm font-medium text-gray-700 mb-1"
@@ -427,11 +446,61 @@ function EmployeeBudget() {
                               placeholder="Enter percentage"
                               className="border-2 p-2 mb-4 border-gray-300 rounded-lg w-full"
                             />
+                          </div> */}
+                          {bifurcations.map((bifurcate, index) => (
+                            <div key={index} className="flex gap-2 items-end my-2">
+                              <div className="grid gap-2 items-center w-full">
+                                <label htmlFor="" className="font-semibold">
+                                  Category Name:
+                                </label>
+                                <input
+                                  type="text"
+                                  placeholder="Name"
+                                  name="name"
+                                  className="border border-gray-400 p-2 rounded-md"
+                                  value={bifurcate.name}
+                                  onChange={(event) =>
+                                    handleInputChange(index, event)
+                                  }
+                                />
+                              </div>
+                             
+                              <div className="grid gap-2 items-center w-full">
+                                <label htmlFor="" className="font-semibold">
+                                  Amount:
+                                </label>
+                                <input
+                                  type="text"
+                                  placeholder="Enter amount"
+                                  name="amount"
+                                  className="border border-gray-400 p-2 rounded-md"
+                                  value={bifurcate.amount}
+                                  onChange={(event) =>
+                                    handleInputChange(index, event)
+                                  }
+                                />
+                                
+                              </div>
+                                <button
+                                  onClick={() => handleRemoveBifurcation(index)}
+                                >
+                                  <FaTrash className="text-red-400" />
+                                </button>
+                            </div>
+                          ))}
+                          <div className="flex justify-end">
+                            <button
+                              onClick={handleAddBudgetBifurcation}
+                              className="border-black border-2 hover:bg-gray-200 font-semibold py-1 px-4 rounded"
+                            >
+                              <BiPlus />
+                            </button>
                           </div>
                         </div>
                         <div>
                           <button
                             type="submit"
+                            onClick={() => setAddBudgetCategory(!addBudgetCategory)}
                             className="px-4 py-2 bg-black text-white rounded-md w-full"
                           >
                             Add
@@ -466,7 +535,10 @@ function EmployeeBudget() {
                 </thead>
                 <tbody>
                   {budgetCategory.map((data, index) => (
-                    <tr className="hover:bg-gray-100 border-t border-gray-200" key={index}>
+                    <tr
+                      className="hover:bg-gray-100 border-t border-gray-200"
+                      key={index}
+                    >
                       <td className="px-6 py-3 flex items-center space-x-3 text-gray-500 whitespace-nowrap">
                         <div className={`w-2 h-2 ${data.color}`}></div>
                         <span>{data.category}</span>
@@ -561,7 +633,10 @@ function EmployeeBudget() {
               </thead>
               <tbody>
                 {budgetDetails.map((data, index) => (
-                  <tr className="hover:bg-gray-100 border-t border-gray-200" key={index}>
+                  <tr
+                    className="hover:bg-gray-100 border-t border-gray-200"
+                    key={index}
+                  >
                     <td className="px-6 py-3 flex items-center space-x-3 text-gray-500 whitespace-nowrap">
                       <div className={`w-2 h-2 ${data.color}`}></div>
                       <span>{data.categoryType}</span>
@@ -591,9 +666,7 @@ function EmployeeBudget() {
                     <td className="px-6 py-3 text-gray-500">
                       {data.remaining}
                     </td>
-                    <td className="px-6 py-3text-gray-500">
-                      {data.overSpent}
-                    </td>
+                    <td className="px-6 py-3text-gray-500">{data.overSpent}</td>
                   </tr>
                 ))}
               </tbody>
