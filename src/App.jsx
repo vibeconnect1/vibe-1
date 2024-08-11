@@ -623,6 +623,7 @@ import EmployeeProjectRejectDetails from "./pages/Employees/EmployeeSkillGrow/Em
 import FreeCoursesDetails from "./pages/Employees/EmployeeSkillGrow/FreeCoursesDetails.jsx";
 import SupplierSetup from "./pages/Setup/Supplier/SupplierSetup.jsx";
 import EmployeeDashboard from "./pages/Employees/EmployeeDashboard.jsx";
+import EmployeeFieldSenseLead from "./pages/EmployeeFieldSenseLead.jsx";
 // new admin hrms
 
 function App() {
@@ -4864,9 +4865,9 @@ function App() {
           <Route
             path="/admin/create-field-sence-leads"
             element={
-              <ProtectedAdminRoutes>
+              <ProtectedRoute>
                 <CreateFieldSenseLeads />
-              </ProtectedAdminRoutes>
+              </ProtectedRoute>
             }
           />
 
@@ -4892,6 +4893,14 @@ function App() {
             element={
               <ProtectedRoute>
                 <CreateEmployeeFieldSenseMeeting />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/employee/field-sense-leads"
+            element={
+              <ProtectedRoute>
+                <EmployeeFieldSenseLead />
               </ProtectedRoute>
             }
           />

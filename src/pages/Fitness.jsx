@@ -7,6 +7,7 @@ import { BsEye } from "react-icons/bs";
 import { TiTick } from "react-icons/ti";
 import Navbar from "../components/Navbar";
 import { IoClose } from "react-icons/io5";
+import Table from "../components/table/Table";
 
 const Fitness = () => {
   const [selectedStatus, setSelectedStatus] = useState("all");
@@ -209,17 +210,17 @@ const Fitness = () => {
             Book an Appointment
           </Link>
         </div>
-        <DataTable
+        <Table
           responsive
           //   selectableRows
           columns={columns}
           data={data}
-          customStyles={customStyle}
-          pagination
-          fixedHeader
-          // fixedHeaderScrollHeight="450px"
-          selectableRowsHighlight
-          highlightOnHover
+          // customStyles={customStyle}
+          // pagination
+          // fixedHeader
+          // // fixedHeaderScrollHeight="450px"
+          // selectableRowsHighlight
+          // highlightOnHover
         />
       </div>
     </section>

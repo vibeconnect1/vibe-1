@@ -86,7 +86,7 @@ function EmployeeFieldSenseMeeting() {
               Meeting Management
             </NavLink>
             <NavLink
-              to={"/employee/field-sence-leads"}
+              to={"/employee/field-sense-leads"}
               className={({ isActive }) =>
                 `p-1 ${
                   isActive && "bg-white text-blue-500 shadow-custom-all-sides"

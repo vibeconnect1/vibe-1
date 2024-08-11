@@ -6,6 +6,7 @@ import { BsEye } from "react-icons/bs";
 import Navbar from "../components/Navbar";
 import { TiTick } from "react-icons/ti";
 import { IoClose } from "react-icons/io5";
+import Table from "../components/table/Table";
 
 const DoctorAppointment = () => {
   const [selectedStatus, setSelectedStatus] = useState("all");
@@ -80,22 +81,7 @@ const DoctorAppointment = () => {
     },
   ];
 
-  //custom style
-  const customStyle = {
-    headRow: {
-      style: {
-        backgroundColor: "black",
-        color: "white",
-
-        fontSize: "10px",
-      },
-    },
-    headCells: {
-      style: {
-        textTransform: "upperCase",
-      },
-    },
-  };
+  
   const data = [
     {
         id: 1,
@@ -208,17 +194,17 @@ const DoctorAppointment = () => {
             Book an Appointment
           </Link>
         </div>
-        <DataTable
+        <Table
           responsive
           //   selectableRows
           columns={columns}
           data={data}
-          customStyles={customStyle}
-          pagination
-          fixedHeader
-          // fixedHeaderScrollHeight="450px"
-          selectableRowsHighlight
-          highlightOnHover
+          // customStyles={customStyle}
+          // pagination
+          // fixedHeader
+          // // fixedHeaderScrollHeight="450px"
+          // selectableRowsHighlight
+          // highlightOnHover
         />
       </div>
     </section>

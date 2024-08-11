@@ -6,6 +6,7 @@ import { MdApproval, MdCancel } from "react-icons/md";
 import { PiPlusCircle } from "react-icons/pi";
 import { TiTick } from "react-icons/ti";
 import { Link } from "react-router-dom";
+import Table from "../../components/table/Table";
 
 const AdminDailyPickup = () => {
   const columns = [
@@ -194,16 +195,16 @@ const AdminDailyPickup = () => {
           </button>
         </div>
       </div>
-      <DataTable
+      <Table
         responsive
         columns={columns}
         data={filteredData}
-        customStyles={customStyle}
-        pagination
-        fixedHeader
-        // fixedHeaderScrollHeight="420px"
-        selectableRowsHighlight
-        highlightOnHover
+        // customStyles={customStyle}
+        // pagination
+        // fixedHeader
+        // // fixedHeaderScrollHeight="420px"
+        // selectableRowsHighlight
+        // highlightOnHover
       />
     </section>
   );
