@@ -88,11 +88,11 @@ function EmployeeProjectSummary() {
                 <img src={profile4} className="w-9 h-9 mt-1 rounded-full" alt="Profile" />
                 <img src={profile5} className="w-9 h-9 mt-1 rounded-full" alt="Profile" />
                 <img src={profile6} className="w-9 h-9 mt-1 rounded-full" alt="Profile" />
-                <div className="border-2 border-gray-200 border-dashed w-10 h-10 rounded-full ml-2 flex justify-center items-center hover:text-blue-400 hover:border-blue-400">
+                {/* <div className="border-2 border-gray-200 border-dashed w-10 h-10 rounded-full ml-2 flex justify-center items-center hover:text-blue-400 hover:border-blue-400">
                   <span>
                     <IoMdAdd />
                   </span>
-                </div>
+                </div> */}
               </div>
             </div>
           </div>
@@ -132,7 +132,7 @@ function EmployeeProjectSummary() {
                 />
                 <p className="text-gray-500 font-medium text-base">Cost</p>
               </div>
-              <p className="font-semibold text-base text-gray-800">₹ 18,000</p>
+              <p className="font-semibold text-base text-gray-800">₹ 50,000</p>
             </div>
           </div>
           <div className="shadow-custom-all-sides rounded-md pt-2 pb-6 my-3">

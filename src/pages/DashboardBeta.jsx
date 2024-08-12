@@ -94,15 +94,15 @@ const DashboardBeta = () => {
   return (
     <section className="flex">
       <Navbar />
-      {/* <div className=" w-full flex lg:mx-3 flex-col overflow-hidden"> */}
-      {/* <iframe
+      <div className=" w-full flex lg:mx-3 flex-col overflow-hidden">
+      <iframe
         src={url}
         title="Report"
        
         className='h-screen w-screen'
-      /> */}
-      {/* </div> */}
-      <GridLayout
+      />
+      </div>
+      {/* <GridLayout
         className=""
         layout={layout}
         cols={12}
@@ -176,17 +176,8 @@ const DashboardBeta = () => {
             </p>
           </div>
         </div>
-        {/* <div
-          key="chart1"
-          className="bg-yellow-300 border flex items-center rounded-md justify-center"
-        >
-          {" "}
-          <div className="rounded-md">
-
-          <HighchartsReact highcharts={Highcharts} options={chartOptions} />
-          </div>
-        </div> */}
-      </GridLayout>
+       
+      </GridLayout> */}
     </section>
   );
 };

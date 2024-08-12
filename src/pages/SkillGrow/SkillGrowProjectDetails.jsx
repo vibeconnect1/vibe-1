@@ -1,5 +1,5 @@
 import React from "react";
-import Navbar from "../../../components/Navbar";
+import Navbar from "../../components/Navbar";
 import { CiCalendar, CiFlag1 } from "react-icons/ci";
 import { IoTimeOutline } from "react-icons/io5";
 import { MdOutlineCurrencyRupee } from "react-icons/md";
@@ -14,7 +14,7 @@ import profile5 from "/profile5.jpg";
 import profile6 from "/profile6.jpg";
 import Chart from "react-apexcharts";
 import { FaRegFileLines } from "react-icons/fa6";
-function EmployeeProjectRejectDetails() {
+function SkillGrowProjectDetails() {
   const options = {
     chart: {
       type: "radialBar",
@@ -104,7 +104,7 @@ function EmployeeProjectRejectDetails() {
     },
   ];
 
-  const task = [
+  const task =[
     {
       id: 1,
       taskName: "Develop Product Design",
@@ -113,7 +113,7 @@ function EmployeeProjectRejectDetails() {
       delayDate: "",
       status: "pending",
       assignee: "Akshat Shrawat",
-      progress: "0%",
+      progress: "0%"
     },
     {
       id: 2,
@@ -123,7 +123,7 @@ function EmployeeProjectRejectDetails() {
       delayDate: "",
       status: "pending",
       assignee: "Raj Verma",
-      progress: "0%",
+      progress: "0%"
     },
     {
       id: 3,
@@ -133,7 +133,7 @@ function EmployeeProjectRejectDetails() {
       delayDate: "",
       status: "pending",
       assignee: "Kunal Sah",
-      progress: "0%",
+      progress: "0%"
     },
     {
       id: 4,
@@ -143,7 +143,7 @@ function EmployeeProjectRejectDetails() {
       delayDate: "",
       status: "pending",
       assignee: "Ravindar Sahani",
-      progress: "0%",
+      progress: "0%"
     },
     {
       id: 5,
@@ -153,7 +153,7 @@ function EmployeeProjectRejectDetails() {
       delayDate: "",
       status: "pending",
       assignee: "Vishal Sharma",
-      progress: "0%",
+      progress: "0%"
     },
     {
       id: 6,
@@ -163,7 +163,7 @@ function EmployeeProjectRejectDetails() {
       delayDate: "",
       status: "pending",
       assignee: "Harsh Thakur",
-      progress: "0%",
+      progress: "0%"
     },
     {
       id: 7,
@@ -173,7 +173,7 @@ function EmployeeProjectRejectDetails() {
       delayDate: "",
       status: "pending",
       assignee: "Shantanu Kantak",
-      progress: "0%",
+      progress: "0%"
     },
     {
       id: 8,
@@ -183,7 +183,7 @@ function EmployeeProjectRejectDetails() {
       delayDate: "",
       status: "pending",
       assignee: "Sameer Parmar",
-      progress: "0%",
+      progress: "0%"
     },
     {
       id: 9,
@@ -193,7 +193,7 @@ function EmployeeProjectRejectDetails() {
       delayDate: "",
       status: "pending",
       assignee: "Ganesh Verma",
-      progress: "0%",
+      progress: "0%"
     },
     {
       id: 10,
@@ -203,21 +203,15 @@ function EmployeeProjectRejectDetails() {
       delayDate: "",
       status: "pending",
       assignee: "Arjun Sahani",
-      progress: "0%",
-    },
-  ];
-
+      progress: "0%"
+    }
+  ]
+  
+  
   return (
     <section className="flex">
       <Navbar />
       <div className="w-full flex flex-col overflow-hidden">
-        <div className=" flex justify-end">
-          <p className="p-1 rounded-full border border-red-500 text-red-500 bg-opacity-30 bg-red-200 px-4 mx-5 mt-2">Rejected</p>
-        </div>
-        <div className="mx-5">
-          <p className="font-medium">Reason for rejection</p>
-          <p className="bg-gray-100 p-2 rounded-md">Overlapping with Existing Projects: The project is redundant or overlaps with other ongoing initiatives, leading to duplication of efforts.</p>
-        </div>
         <div className="grid lg:grid-cols-4 gap-5 mb-5 mx-5 mt-5">
           <div className="col-span-2 ">
             <div className="shadow-custom-all-sides rounded-md py-4 h-full">
@@ -333,8 +327,7 @@ function EmployeeProjectRejectDetails() {
                   </div>
                   <div>
                     <h2 className="text-base font-semibold flex items-center">
-                      Vinay Singh{" "}
-                      <span className="text-gray-500"> (Owner)</span>
+                      Vinay Singh <span className="text-gray-500"> (Owner)</span>
                     </h2>
                   </div>
                 </div>
@@ -455,14 +448,11 @@ function EmployeeProjectRejectDetails() {
                     key={budget.id}
                     className="hover:bg-gray-200 border-t border-gray-200"
                   >
-                    <td className="px-6 py-4 text-gray-500 whitespace-nowrap">
-                      {budget.categoryName}
+                    <td className="px-6 py-4 text-gray-500 whitespace-nowrap">{budget.categoryName}
                     </td>
-                    <td className="px-6 py-3 text-gray-500 whitespace-nowrap">
-                      {budget.categoryBudget}
+                    <td className="px-6 py-3 text-gray-500 whitespace-nowrap">{budget.categoryBudget}
                     </td>
-                    <td className="px-6 py-4 text-gray-500 whitespace-nowrap">
-                      {budget.percent}
+                    <td className="px-6 py-4 text-gray-500 whitespace-nowrap">{budget.percent}
                     </td>
                   </tr>
                 ))}
@@ -606,7 +596,7 @@ function EmployeeProjectRejectDetails() {
                   <th className="px-6 py-5 border-gray-300 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
                     End Date
                   </th>
-
+                 
                   <th className="px-6 py-5 border-gray-300 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
                     Status
                   </th>
@@ -630,16 +620,16 @@ function EmployeeProjectRejectDetails() {
                     <td className="px-6 py-3 text-gray-500 whitespace-nowrap">
                       {task.startDate}
                     </td>
-                    <td className="px-6 py-4 text-gray-500 whitespace-nowrap">
+                    <td className="px-6 py-4 text-gray-500 whitespace-nowrap"> 
                       {task.endDate}
                     </td>
-                    <td className="px-6 py-4 text-gray-500 whitespace-nowrap">
+                    <td className="px-6 py-4 text-gray-500 whitespace-nowrap"> 
                       {task.status}
                     </td>
-                    <td className="px-6 py-4 text-gray-500 whitespace-nowrap">
+                    <td className="px-6 py-4 text-gray-500 whitespace-nowrap"> 
                       {task.progress}
                     </td>
-                    <td className="px-6 py-4 text-gray-500 whitespace-nowrap">
+                    <td className="px-6 py-4 text-gray-500 whitespace-nowrap"> 
                       {task.assignee}
                     </td>
                   </tr>
@@ -653,4 +643,4 @@ function EmployeeProjectRejectDetails() {
   );
 }
 
-export default EmployeeProjectRejectDetails;
+export default SkillGrowProjectDetails;

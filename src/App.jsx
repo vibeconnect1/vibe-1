@@ -624,6 +624,26 @@ import FreeCoursesDetails from "./pages/Employees/EmployeeSkillGrow/FreeCoursesD
 import SupplierSetup from "./pages/Setup/Supplier/SupplierSetup.jsx";
 import EmployeeDashboard from "./pages/Employees/EmployeeDashboard.jsx";
 import EmployeeFieldSenseLead from "./pages/EmployeeFieldSenseLead.jsx";
+import Course from "./pages/SkillGrow/Course.jsx";
+import SkillGrowHeaderComponent from "./pages/SkillGrow/SkillGrowHeaderComponent.jsx";
+import SkillGrowProjects from "./pages/SkillGrow/SkillGrowProjects.jsx";
+import SkillGrowEmployeeProfile from "./pages/SkillGrow/SkillGrowEmployeeProfile.jsx";
+import Instructor from "./pages/SkillGrow/Instructor.jsx";
+import SkillGrowDashboard from "./pages/SkillGrow/SkillGrowDashboard.jsx";
+import CreateCourse from "./pages/SkillGrow/CreateCourse.jsx";
+import EditCourse from "./pages/SkillGrow/EditCourse.jsx";
+import SkillGrowEmployeeProfileDetails from "./pages/SkillGrow/SkillGrowEmployeeProfileDetails.jsx";
+import SkillGrowProjectDetails from "./pages/SkillGrow/SkillGrowProjectDetails.jsx";
+import CourseDetails from "./pages/SkillGrow/CourseDetails.jsx";
+import InstructorDetails from "./pages/SkillGrow/InstructorDetails.jsx";
+import CreateCourseDetails from "./pages/SkillGrow/CreateCourseDetails.jsx";
+import CourseDescription from "./pages/SkillGrow/CourseDescription.jsx";
+import CourseCurriculum from "./pages/SkillGrow/CourseCurriculum.jsx";
+import CreateFAQs from "./pages/SkillGrow/CreateFAQs.jsx";
+import EditCourseDetails from "./pages/SkillGrow/EditCourseDetails.jsx";
+import EditCourseDescription from "./pages/SkillGrow/EditCourseDescription.jsx";
+import EditCurriculum from "./pages/SkillGrow/EditCurriculum.jsx";
+import EditFAQs from "./pages/SkillGrow/EditFAQs.jsx";
 // new admin hrms
 
 function App() {
@@ -5989,6 +6009,169 @@ function App() {
               </ProtectedRoute>
             }
           />
+          {/* Admin Skill Grow */}
+          <Route path="/admin/skill-grow" element={<Navigate to="/admin/skill-grow/course" replace />}  />
+          <Route
+            path="/admin/skill-grow/header"
+            element={
+              <ProtectedAdminRoutes>
+                <SkillGrowHeaderComponent/>
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/skill-grow/course"
+            element={
+              <ProtectedAdminRoutes>
+                <Course />
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/skill-grow/projects"
+            element={
+              <ProtectedAdminRoutes>
+                <SkillGrowProjects />
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/skill-grow/employee-profile"
+            element={
+              <ProtectedAdminRoutes>
+                <SkillGrowEmployeeProfile/>
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/skill-grow/instructor"
+            element={
+              <ProtectedAdminRoutes>
+                <Instructor/>
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/skill-grow/dashboard"
+            element={
+              <ProtectedAdminRoutes>
+                <SkillGrowDashboard/>
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/skill-grow/create-course"
+            element={
+              <ProtectedAdminRoutes>
+                <CreateCourse/>
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/skill-grow/edit-course"
+            element={
+              <ProtectedAdminRoutes>
+                <EditCourse/>
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/skill-grow/employee-profile-details"
+            element={
+              <ProtectedAdminRoutes>
+                <SkillGrowEmployeeProfileDetails/>
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/skill-grow/project-details"
+            element={
+              <ProtectedAdminRoutes>
+                <SkillGrowProjectDetails/>
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/skill-grow/course-details"
+            element={
+              <ProtectedAdminRoutes>
+                <CourseDetails/>
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/skill-grow/instructor-details"
+            element={
+              <ProtectedAdminRoutes>
+                <InstructorDetails/>
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/skill-grow/create-course-details"
+            element={
+              <ProtectedAdminRoutes>
+                <CreateCourseDetails/>
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/skill-grow/course-description"
+            element={
+              <ProtectedAdminRoutes>
+                <CourseDescription/>
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/skill-grow/course-curriculum"
+            element={
+              <ProtectedAdminRoutes>
+                <CourseCurriculum/>
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/skill-grow/create-faqs"
+            element={
+              <ProtectedAdminRoutes>
+                <CreateFAQs/>
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/skill-grow/edit-course-details"
+            element={
+              <ProtectedAdminRoutes>
+                <EditCourseDetails/>
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/skill-grow/edit-course-description"
+            element={
+              <ProtectedAdminRoutes>
+                <EditCourseDescription/>
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/skill-grow/edit-curriculum"
+            element={
+              <ProtectedAdminRoutes>
+                <EditCurriculum/>
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/skill-grow/edit-faqs"
+            element={
+              <ProtectedAdminRoutes>
+                <EditFAQs/>
+              </ProtectedAdminRoutes>
+            }
+          />
+
         </Routes>
         <Footer />
       </Router>

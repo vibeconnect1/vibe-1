@@ -255,7 +255,7 @@ function EmployeeProjectOverview() {
               />
               <p className="text-gray-500 font-medium text-base">Cost</p>
             </div>
-            <p className="font-semibold text-base text-gray-800">₹ 18,000</p>
+            <p className="font-semibold text-base text-gray-800">₹ 50,000</p>
           </div>
         </div>
         <div className="shadow-custom-all-sides rounded-md  my-5">
@@ -453,11 +453,11 @@ function EmployeeProjectOverview() {
                 <h2 className="text-4xl font-semibold">30 Days</h2>
               </div>
               <div className="flex gap-2 mt-2">
-                <p className="text-base mx-1 my-1">15 July, 2024</p>
-                <p className="text-base mx-1 my-1">15 Aug, 2024</p>
+                <p className="text-base mx-1 my-1">22 July, 2024</p>
+                <p className="text-base mx-1 my-1">22 Aug, 2024</p>
               </div>
               <div className="flex gap-3">
-                <h2 className="text-xl mx-1 my-1">Delay Date :</h2>
+                <h2 className=" mx-1 my-1">Delay Date :</h2>
                 <h2 className="text-base mx-1 my-2">20 Aug, 2024</h2>
               </div>
             </div>

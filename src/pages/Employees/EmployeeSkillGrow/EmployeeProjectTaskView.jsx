@@ -6,6 +6,10 @@ import Switch from "../../../Buttons/Switch";
 import profile1 from "/profile1.jpg";
 import profile2 from "/profile2.jpg";
 import profile3 from "/profile3.jpg";
+import profile from "/profile.png";
+import profile4 from "/profile4.jpg";
+import profile6 from "/profile6.jpg";
+import profile5 from "/profile5.jpg";
 import { FiDownload, FiFilter } from "react-icons/fi";
 import { IoMdAdd } from "react-icons/io";
 import { MdDelete } from "react-icons/md";
@@ -1269,15 +1273,16 @@ function EmployeeProjectTaskView() {
                       className="border-2 p-1 border-gray-300 rounded-lg  w-full my-5"
                     ></input>
                   </div>
-                  <div className="overflow-y-scroll h-32">
+                  <div className="overflow-y-scroll h-40">
+                    
                     <div className="flex justify-between">
                       <div className="flex gap-2">
                         <img
-                          src={profile3}
+                          src={profile4}
                           className="w-9 h-9 mt-1 rounded-full"
                           alt="Profile"
                         />
-                        <h2 className="flex items-center">Rohan</h2>
+                        <h2 className="flex items-center">Ravindar</h2>
                       </div>
                       <input
                         type="checkbox"
@@ -1288,11 +1293,11 @@ function EmployeeProjectTaskView() {
                     <div className="flex justify-between">
                       <div className="flex gap-2">
                         <img
-                          src={profile3}
+                          src={profile}
                           className="w-9 h-9 mt-1 rounded-full"
                           alt="Profile"
                         />
-                        <h2 className="flex items-center">Rohan</h2>
+                        <h2 className="flex items-center">Praful</h2>
                       </div>
                       <input
                         type="checkbox"
@@ -1303,11 +1308,11 @@ function EmployeeProjectTaskView() {
                     <div className="flex justify-between">
                       <div className="flex gap-2">
                         <img
-                          src={profile3}
+                          src={profile}
                           className="w-9 h-9 mt-1 rounded-full"
                           alt="Profile"
                         />
-                        <h2 className="flex items-center">Rohan</h2>
+                        <h2 className="flex items-center">Mayur</h2>
                       </div>
                       <input
                         type="checkbox"
@@ -1318,11 +1323,11 @@ function EmployeeProjectTaskView() {
                     <div className="flex justify-between">
                       <div className="flex gap-2">
                         <img
-                          src={profile3}
+                          src={profile}
                           className="w-9 h-9 mt-1 rounded-full"
                           alt="Profile"
                         />
-                        <h2 className="flex items-center">Rohan</h2>
+                        <h2 className="flex items-center">Akshat</h2>
                       </div>
                       <input
                         type="checkbox"
@@ -1333,11 +1338,11 @@ function EmployeeProjectTaskView() {
                     <div className="flex justify-between">
                       <div className="flex gap-2">
                         <img
-                          src={profile3}
+                          src={profile6}
                           className="w-9 h-9 mt-1 rounded-full"
                           alt="Profile"
                         />
-                        <h2 className="flex items-center">Rohan</h2>
+                        <h2 className="flex items-center">Kunal</h2>
                       </div>
                       <input
                         type="checkbox"
@@ -1345,70 +1350,11 @@ function EmployeeProjectTaskView() {
                         className="mr-2 font-3"
                       />
                     </div>
+                   
                     <div className="flex justify-between">
                       <div className="flex gap-2">
                         <img
-                          src={profile3}
-                          className="w-9 h-9 mt-1 rounded-full"
-                          alt="Profile"
-                        />
-                        <h2 className="flex items-center">Rohan</h2>
-                      </div>
-                      <input
-                        type="checkbox"
-                        name="completed"
-                        className="mr-2 font-3"
-                      />
-                    </div>
-                    <div className="flex justify-between">
-                      <div className="flex gap-2">
-                        <img
-                          src={profile3}
-                          className="w-9 h-9 mt-1 rounded-full"
-                          alt="Profile"
-                        />
-                        <h2 className="flex items-center">Rohan</h2>
-                      </div>
-                      <input
-                        type="checkbox"
-                        name="completed"
-                        className="mr-2 font-3"
-                      />
-                    </div>
-                    <div className="flex justify-between">
-                      <div className="flex gap-2">
-                        <img
-                          src={profile3}
-                          className="w-9 h-9 mt-1 rounded-full"
-                          alt="Profile"
-                        />
-                        <h2 className="flex items-center">Rohan</h2>
-                      </div>
-                      <input
-                        type="checkbox"
-                        name="completed"
-                        className="mr-2 font-3"
-                      />
-                    </div>
-                    <div className="flex justify-between">
-                      <div className="flex gap-2">
-                        <img
-                          src={profile3}
-                          className="w-9 h-9 mt-1 rounded-full"
-                          alt="Profile"
-                        />
-                        <h2 className="flex items-center">Rohan</h2>
-                      </div>
-                      <input
-                        type="checkbox"
-                        name="completed"
-                        className="mr-2 font-3"
-                      />
-                    </div>
-                    <div className="flex justify-between">
-                      <div className="flex gap-2">
-                        <img
-                          src={profile2}
+                          src={profile5}
                           className="w-9 h-9 mt-1 rounded-full"
                           alt="Profile"
                         />
@@ -1420,21 +1366,7 @@ function EmployeeProjectTaskView() {
                         className="mr-2 font-3"
                       />
                     </div>
-                    <div className="flex justify-between">
-                      <div className="flex gap-2">
-                        <img
-                          src={profile1}
-                          className="w-9 h-9 mt-1 rounded-full"
-                          alt="Profile"
-                        />
-                        <h2 className="flex items-center">Naharika</h2>
-                      </div>
-                      <input
-                        type="checkbox"
-                        name="completed"
-                        className="mr-2 font-3"
-                      />
-                    </div>
+                    
                   </div>
                   <div className="border-t border-inherit my-5"></div>
                   <button className="border-2 border-gray-300 rounded-md p-1 px-4 hover:bg-gray-300 hover:text-white">

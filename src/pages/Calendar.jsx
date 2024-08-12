@@ -1247,7 +1247,7 @@ const Calender = () => {
     console.log(code);
     try {
      
-      const redirectUri = "https://vibecopilot.ai/employee/calender";
+      const redirectUri = "https://app.vibecopilot.ai/calendar";
       const apiUrl = `https://vibecopilot.ai/api/get-outlook-token/?code=${code}&redirect_uri=${redirectUri}`;
 
       const response = await fetch(apiUrl);
@@ -1317,7 +1317,7 @@ const Calender = () => {
     const params = {
       client_id:
         "339274559462-6r06f0d9aqubhnhqmvrkjaqs8nikiidd.apps.googleusercontent.com",
-      redirect_uri: "http://localhost:5173/calendar",
+      redirect_uri: "https://app.vibecopilot.ai/calendar",
       
       response_type: "token",
       
