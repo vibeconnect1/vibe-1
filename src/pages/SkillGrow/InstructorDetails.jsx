@@ -4,6 +4,7 @@ import profile5 from "/profile5.jpg";
 import react from "/reactImg.png";
 import graphic from "/graphic.jpg";
 import ReactApexChart from "react-apexcharts";
+import { IoBookOutline } from "react-icons/io5";
 function InstructorDetails() {
   const instructorCourses = [
     {
@@ -176,7 +177,7 @@ function InstructorDetails() {
             <div className="bg-white p-4 rounded-lg shadow-custom-all-sides">
               <div className="flex justify-between items-center mb-2">
                 <h2 className="text-lg font-semibold text-gray-700">
-                  Active Employees
+                  Employees Enrollment
                 </h2>
                 <div className="text-green-500 text-sm">
                   0.20% <span className="text-green-500">↑</span> vs last Week
@@ -192,9 +193,21 @@ function InstructorDetails() {
             </div>
           </div>
         </div>
+        <div
+          className={`shadow-custom-all-sides rounded-md cursor-pointer h-36 m-2 mx-5`}
+        >
+          <div className="flex justify-between mx-5 py-3">
+            <p className="text-sm font-medium text-gray-600">COURSES</p>
+            <IoBookOutline size={20} className="text-violet-500" />
+          </div>
+          <p className="text-4xl font-semibold text-center">4</p>
+          <p className="text-base text-gray-600 text-center">Total Courses</p>
+        </div>
         <div className="grid grid-cols-1">
           <div className="mx-5 mb-10 shadow-custom-all-sides rounded-md">
-            <h2 className="text-xl font-medium text-gray-600 mx-5 my-5">Courses List</h2>
+            <h2 className="text-xl font-medium text-gray-600 mx-5 my-5">
+              Courses List
+            </h2>
             <table className="w-full bg-white border-gray-200">
               <thead>
                 <tr>
@@ -205,7 +218,7 @@ function InstructorDetails() {
                     Enrolled
                   </th>
                   <th className="px-6 py-5 border-gray-300 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                    Reting
+                    Rating
                   </th>
                   <th className="px-6 py-5 border-gray-300 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
                     Review

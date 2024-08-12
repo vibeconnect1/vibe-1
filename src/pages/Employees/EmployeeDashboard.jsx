@@ -233,6 +233,7 @@ const EmployeeDashboard = () => {
                 {tickets.map((ticket, index) => (
                   <div
                     key={index}
+                    style={{background: themeColor}}
                     className="mb-4 flex bg-gray-800 rounded-2xl border-2 text-white  "
                   >
                     {/* Ticket Number Section */}
@@ -249,13 +250,13 @@ const EmployeeDashboard = () => {
                         <span className="text-md font-medium">
                           {ticket.title}
                         </span>
-                        <span className="text-xs text-gray-400">
+                        <span className="text-xs text-gray-50">
                           {ticket.timeAgo}
                         </span>
                       </div>
                       <div>
                         <p className="text-sm">Status: {ticket.status}</p>
-                        <p className="text-xs text-gray-400">
+                        <p className="text-xs text-gray-100">
                           Created on: {ticket.created}
                         </p>
                       </div>
