@@ -129,9 +129,9 @@ const faqs = [
       <Navbar />
       <div className='w-full flex flex-col overflow-hidden'>
         <div className="flex justify-between my-2 w-full bg-gray-100">
-          <div className='mx-14 my-5'>
-            <h2 className='text-3xl font-semibold'>Digital Marketing Course</h2>
-            <p className='text-xl font-medium mt-2'>The Complete Digital Marketing Course - 12 Courses in 1</p>
+          <div className='mx-10 my-5'>
+            <h2 className='text-xl font-semibold'>Digital Marketing Course</h2>
+            <p className=' font-medium mt-2'>The Complete Digital Marketing Course - 12 Courses in 1</p>
             <div className='flex flex-wrap gap-5 mt-2'>
               <p className='flex gap-2'><MdOutlineStar className='text-yellow-400 my-1' size={20} /><span className='text-lg '>4.0/5.0</span></p>
               <p className='flex gap-2'><PiStudent className='text-orange-400 my-1' size={20} /><span className='text-lg '>3K Enrolled</span></p>
@@ -146,24 +146,24 @@ const faqs = [
         </div>
         <div className='md:grid grid-cols-3 mb-5 gap-5 mx-5'>
           <div className='col-span-2'>
-            <div className="flex flex-wrap gap-5 my-5 shadow-custom-all-sides rounded-md py-3 px-3">
-              <div className={`rounded-md p-3 px-10 text-center cursor-pointer transition-all duration-300 ease-linear ${openSection === 'Course Description' ? 'bg-black text-white shadow-custom-all-sides' : ''}`}
+            <div className="flex flex-wrap justify-between my-5 shadow-custom-all-sides rounded-md py-3 px-3">
+              <div className={`rounded-md p-3 px-5 text-center cursor-pointer transition-all duration-300 ease-linear ${openSection === 'Course Description' ? 'bg-black text-white shadow-custom-all-sides' : ''}`}
                 onClick={() => handleToggle('Course Description')}>
                 Description
               </div>
-              <div className={`rounded-md p-3 px-10 text-center cursor-pointer transition-all duration-300 ease-linear ${openSection === 'Curriculum' ? 'bg-black text-white shadow-custom-all-sides' : ''}`}
+              <div className={`rounded-md p-3 px-5 text-center cursor-pointer transition-all duration-300 ease-linear ${openSection === 'Curriculum' ? 'bg-black text-white shadow-custom-all-sides' : ''}`}
                 onClick={() => handleToggle('Curriculum')}>
                 Curriculum
               </div>
-              <div className={`rounded-md p-3 px-10 text-center cursor-pointer transition-all duration-300 ease-linear ${openSection === 'Instructor' ? 'bg-black text-white shadow-custom-all-sides' : ''}`}
+              <div className={`rounded-md p-3 px-5 text-center cursor-pointer transition-all duration-300 ease-linear ${openSection === 'Instructor' ? 'bg-black text-white shadow-custom-all-sides' : ''}`}
                 onClick={() => handleToggle('Instructor')}>
                 Instructor
               </div>
-              <div className={`rounded-md p-3 px-10 text-center cursor-pointer transition-all duration-300 ease-linear ${openSection === 'Review' ? 'bg-black text-white shadow-custom-all-sides' : ''}`}
+              <div className={`rounded-md p-3 px-5 text-center cursor-pointer transition-all duration-300 ease-linear ${openSection === 'Review' ? 'bg-black text-white shadow-custom-all-sides' : ''}`}
                 onClick={() => handleToggle('Review')}>
                 Reviews
               </div>
-              <div className={`rounded-md p-3 px-10 text-center cursor-pointer transition-all duration-300 ease-linear ${openSection === 'FAQs' ? 'bg-black text-white shadow-custom-all-sides' : ''}`}
+              <div className={`rounded-md p-3 px-5 text-center cursor-pointer transition-all duration-300 ease-linear ${openSection === 'FAQs' ? 'bg-black text-white shadow-custom-all-sides' : ''}`}
                 onClick={() => handleToggle('FAQs')}>
                 FAQs
               </div>

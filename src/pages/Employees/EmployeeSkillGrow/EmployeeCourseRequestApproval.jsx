@@ -3,6 +3,8 @@ import Navbar from "../../../components/Navbar";
 import { Link, NavLink } from "react-router-dom";
 import { useSelector } from "react-redux";
 import digitalMarketingImg from "/digitalMarketing.jpg";
+import sixSigma from "/six sigma.jpg";
+
 import reactImg from "/reactImg.png";
 import figmaImg from "/figma.jpg";
 import graphicImgImg from "/graphic.jpg";
@@ -13,18 +15,33 @@ function EmployeeCourseRequestApproval() {
   const courses = [
     {
       id: 1,
-      image: digitalMarketingImg,
+      image: sixSigma,
       priceLevel: "Paid",
       skillLevel: "Level 2",
-      title: "Digital Marketing",
+      title: "Lean Six Sigma Programme",
       instructor: "Anil Sharma",
       rating: "4.0 ★★★★,",
       reviews: 67788,
-      price: "₹ 13000",
+      price: "₹ 3000",
       language: "English",
       duration: "42 Days",
       lectures: "30 lectures",
       exam: "Exam included",
+    },
+    {
+      id: 3,
+      image: digitalMarketingImg,
+      priceLevel: "Free",
+      skillLevel: "Level 4",
+      title: "Digital Marketing",
+      instructor: "Sunil More",
+      rating: "4.0 ★★★★,",
+      reviews: 6788,
+      price: "Free",
+      language: "English",
+      duration: "12 Days",
+      lectures: 7,
+      exam: "Exam not included",
     },
     {
       id: 2,
@@ -41,21 +58,7 @@ function EmployeeCourseRequestApproval() {
       lectures: 15,
       exam: "Exam included",
     },
-    {
-      id: 3,
-      image: figmaImg,
-      priceLevel: "Free",
-      skillLevel: "Level 4",
-      title: "Figma Design",
-      instructor: "Sunil More",
-      rating: "4.0 ★★★★,",
-      reviews: 6788,
-      price: "Free",
-      language: "English",
-      duration: "12 Days",
-      lectures: 7,
-      exam: "Exam not included",
-    },
+    
     {
       id: 4,
       image: reactImg,

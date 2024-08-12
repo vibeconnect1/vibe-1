@@ -44,62 +44,80 @@ function EmployeeCourseDetails() {
       date: "2 Days ago",
       rating: 4.5,
       review:
-        "Lectures were at a really good pace and I never felt lost. The instructor was well informed and allowed me to learn and navigate Figma easily.",
+        "Lectures were at a really good pace, and I never felt lost. The instructor was well-informed and allowed me to learn and navigate Lean Six Sigma concepts easily.",
     },
   ];
 
   const courseContentInfo = [
     {
-      topic: "Introduction of Digital Marketing",
+      topic: "Introduction to Lean Six Sigma",
       ContentSubTopic: [
         {
-          subTopic: "Introduction",
+          subTopic: "History and Timeline of Lean and Six Sigma Significance of LSS in Digital Transformation",
           time: "10m 10s",
         },
         {
-          subTopic: "SEO Basics",
+          subTopic: "Industry Success Story",
           time: "12m 30s",
         },
         {
-          subTopic: "Content Marketing",
+          subTopic: "Overview of DMAIC Framework",
           time: "15m 45s",
         },
       ],
     },
     {
-      topic: "Search Engine Optimization (SEO):",
+      topic: "Define Phase",
       ContentSubTopic: [
         {
-          subTopic: "On-page and off-page SEO",
+          subTopic: "Stakeholder Analysis",
           time: "15m 10s",
         },
         {
-          subTopic: "Keyword research and strategy",
+          subTopic: "Identify Opportunities for Innovation /Digitalization",
           time: "8m 30s",
         },
+        
+      ],
+    },
+    {
+      topic: "Measure Phase",
+      ContentSubTopic: [
         {
-          subTopic: "Technical SEO",
-          time: "15m 45s",
+          subTopic: "Understanding Data",
+          time: "45m 10s",
+        },
+        {
+          subTopic: "Data Collection",
+          time: "52m 30s",
+        },
+        {
+          subTopic: "Measurement system validation",
+          time: "20m 45s",
+        },
+        {
+          subTopic: "Data Visualization",
+          time: "5m 45s",
         },
       ],
     },
     {
-      topic: "Content Marketing:",
+      topic: "Analyze Phase",
       ContentSubTopic: [
         {
-          subTopic: "Content creation and strategy",
-          time: "10m 10s",
+          subTopic: "Process Door Approach/Analyze of Process",
+          time: "45m 10s",
         },
         {
-          subTopic: "Blogging and article writing",
-          time: "12m 30s",
+          subTopic: "Statistical Based Decision Making: Hypothesis Testing",
+          time: "52m 30s",
         },
         {
-          subTopic: "Video and multimedia content",
-          time: "20m 45s",
+          subTopic: "Statistical Based Decision Making: Correlation, Regression and AI and ML",
+          time: "30m 45s",
         },
         {
-          subTopic: "Content distribution and promotion",
+          subTopic: "Case Study",
           time: "5m 45s",
         },
       ],
@@ -107,29 +125,29 @@ function EmployeeCourseDetails() {
   ];
   const faqs = [
     {
-      question: "How does Digital Marketing Work?",
+      question: "What is the role of a Six Sigma Green Belt?",
       answer:
-        "Digital marketing involves the use of digital channels, such as social media, email, and search engines, to promote products and services. It includes strategies like SEO, content marketing, and PPC advertising to reach and engage with potential customers.",
+        "A Six Sigma Green Belt supports and leads process improvement projects within an organization. They work under the guidance of Black Belts and are responsible for implementing Six Sigma methodologies to reduce defects, improve quality, and optimize processes.",
     },
     {
-      question: "What is SEO?",
+      question: "What are the prerequisites for Six Sigma Green Belt certification?",
       answer:
-        "SEO, or Search Engine Optimization, is the process of optimizing your website to rank higher in search engine results pages (SERPs). This involves optimizing content, improving site structure, and building backlinks to increase visibility and drive organic traffic.",
+        "Typically, there are no strict prerequisites for pursuing a Green Belt certification, but it is beneficial to have a basic understanding of process improvement and quality management. Some programs may recommend prior experience in a related field or completion of a Yellow Belt certification.",
     },
     {
-      question: "Who should join this course?",
+      question: "What tools and techniques will I learn as a Six Sigma Green Belt?",
       answer:
-        "This course is ideal for marketing professionals, entrepreneurs, small business owners, and anyone interested in learning digital marketing strategies to enhance their business or career.",
+        "As a Green Belt, you will learn tools and techniques such as DMAIC (Define, Measure, Analyze, Improve, Control), process mapping, statistical analysis, root cause analysis, Failure Mode and Effects Analysis (FMEA), and control charts.",
     },
     {
-      question: "What are the terms and conditions for this program?",
+      question: "How does a Green Belt differ from a Black Belt in Six Sigma?",
       answer:
-        "The terms and conditions include adherence to the course schedule, participation in all modules, and completion of assignments. Refund policies, course access periods, and certification requirements are also outlined in the program details.",
+        "A Green Belt typically works on projects part-time and focuses on smaller-scale process improvements, while a Black Belt works full-time on Six Sigma projects and leads larger, more complex initiatives. Black Belts also have a deeper understanding of statistical analysis and project management.",
     },
     {
-      question: "What certificates will be received for this program?",
+      question: "What career opportunities can I pursue with a Six Sigma Green Belt certification?",
       answer:
-        "Upon successful completion of the course, participants will receive a certificate of completion that validates their knowledge and skills in digital marketing. This certificate can be used to enhance resumes and demonstrate expertise to employers or clients.",
+        "A Six Sigma Green Belt certification can open doors to various roles such as Process Improvement Specialist, Quality Analyst, Operations Manager, Project Manager, and more. It enhances your ability to contribute to organizational efficiency and quality improvement, making you a valuable asset in various industries.",
     },
   ];
   const [req, setReq] = useState(false);
@@ -150,7 +168,8 @@ function EmployeeCourseDetails() {
           <div className="mx-5 my-5 w-full">
             <div className="w-full flex items-center justify-between">
               <h2 className="text-xl font-semibold">
-                Digital Marketing Course
+                Lean Six Sigma Programme
+                {/* Digital Marketing Course */}
               </h2>
               <h2 className="text-right font-medium ">
                 <span className="rounded-full border px-4 p-1 text-green-600 bg-green-400 bg-opacity-30 border-green-600">
@@ -159,7 +178,8 @@ function EmployeeCourseDetails() {
               </h2>
             </div>
             <p className=" font-medium mt-2">
-              The Complete Digital Marketing Course - 12 Courses in 1
+              Hands on online simulation projects at every step to help you
+              apply your learnings real time
             </p>
             <div className="flex flex-wrap gap-5 mt-2">
               <p className="flex gap-2">
@@ -244,34 +264,36 @@ function EmployeeCourseDetails() {
               {openSection === "Course Description" && (
                 <div className="mt-2">
                   <div className="max-w-4xl mx-auto p-8 shadow-custom-all-sides rounded-md">
-                    <h1 className="text-3xl font-bold text-center mb-6">
-                      Digital Marketing
+                    <h1 className="text-2xl font-bold text-center mb-6">
+                      Lean Six Sigma Programme
                     </h1>
                     <div className="flex gap-3 mb-1">
-                      <h2 className="text-xl font-semibold">Duration:</h2>
-                      <p className="text-lg">6 Weeks</p>
+                      <h2 className=" font-semibold">Duration:</h2>
+                      <p className="">6 Weeks</p>
                     </div>
                     <div className="flex gap-3 mb-1">
-                      <h2 className="text-lg font-semibold">Format:</h2>
-                      <p className="text-lg">Online, Self-Paced</p>
+                      <h2 className=" font-semibold">Format:</h2>
+                      <p className="">Online, Self-Paced</p>
                     </div>
+                    <p className="text-sm font-medium">
+                      This Programme helps you enable to become a well-rounded
+                      professional who develops a deep understanding on Lean Six
+                      Sigma Green Belt concepts, to not just optimize business
+                      processes but also gain insights on the applicability
+                      aspect.
+                    </p>
+
                     <div className="mb-6 mt-3">
                       <h2 className="text-xl font-semibold mb-1">
                         Course Highlights:
                       </h2>
                       <ul className="list-decimal list-inside space-y-2">
                         <li>
-                          Comprehensive introduction to digital marketing
-                          strategies
+                          Overview of Lean Six Sigma & Digital Transformation
                         </li>
-                        <li>
-                          In-depth modules on SEO, content marketing, social
-                          media marketing, email marketing, PPC advertising
-                        </li>
-                        <li>Hands-on projects and real-world case studies</li>
-                        <li>
-                          Interactive video lessons, quizzes, and assessments
-                        </li>
+                        <li>Stakeholder Analysis</li>
+                        <li>In Class Quiz Activity • Minitab Exercise</li>
+                        <li>Principle of lean</li>
                         <li>Certification upon completion</li>
                       </ul>
                     </div>
@@ -280,27 +302,34 @@ function EmployeeCourseDetails() {
                         Key Learning Outcomes:
                       </h2>
                       <ul className="list-decimal list-inside space-y-2">
+                        <li>Develop data-driven decision-making skills</li>
+                        <li>Enhance problem-solving abilities.</li>
                         <li>
-                          Develop and execute effective digital marketing plans
+                          Gain expertise in managing Lean Six Sigma projects.
                         </li>
-                        <li>Optimize websites for search engines</li>
+                        <li>Learn to manage and sustain change effectively.</li>
                         <li>
-                          Create engaging content across multiple platforms
+                          Acquire techniques for cost reduction and efficiency.
                         </li>
-                        <li>Utilize social media for business growth</li>
-                        <li>Run successful email and PPC campaigns</li>
-                        <li>Analyze and report on marketing performance</li>
+                        <li>Prepare for Lean Six Sigma certification exams.</li>
                       </ul>
                     </div>
                     <div className="mb-6">
                       <h2 className="text-xl font-semibold mb-2">
-                        Target Audience:
+                        Who should enroll for the programme?
                       </h2>
                       <ul className="list-decimal list-inside space-y-2">
-                        <li>Marketing professionals</li>
-                        <li>Entrepreneurs and small business owners</li>
                         <li>
-                          Individuals looking to upskill in digital marketing
+                          Business Analysts who need to apply data-driven
+                          approaches to problem-solving.
+                        </li>
+                        <li>
+                          Managers and Supervisors seeking to improve process
+                          efficiency and quality within their teams.
+                        </li>
+                        <li>
+                          Supply Chain Managers aiming to optimize logistics and
+                          inventory management.
                         </li>
                       </ul>
                     </div>
@@ -382,18 +411,7 @@ function EmployeeCourseDetails() {
                     </div>
                   </div>
                   <p className="text-base text-gray-700 mt-2 mx-5">
-                    With a robust rating of 4.0 and a track record of
-                    successfully guiding 5,000 students, Anil Sharma is a
-                    distinguished expert in digital marketing. His courses,
-                    totaling 7 in number, have garnered over 1,000 reviews,
-                    reflecting his impact and the value he brings to his
-                    students. Anil’s approach to digital marketing education is
-                    both practical and insightful, equipping learners with the
-                    skills needed to excel in the fast-paced digital landscape.
-                    Whether you’re just starting or looking to refine your
-                    marketing strategies, Anil Sharma’s expertise and proven
-                    teaching methods offer a valuable resource for achieving
-                    your goals.
+                  With a robust rating of 4.0 and a track record of successfully guiding 5,000 students, Anil Sharma is a distinguished expert not only in digital marketing but now also in Lean Six Sigma. His courses, totaling 7 in number, have garnered over 1,000 reviews, reflecting the impact and value he brings to his students across disciplines. Anil’s approach to Lean Six Sigma education is both practical and insightful, equipping learners with the essential skills needed to excel in process improvement and operational excellence. Whether you’re new to Lean Six Sigma or looking to deepen your expertise, Anil Sharma’s proven teaching methods and cross-functional experience offer a valuable resource for achieving your goals in today’s competitive landscape.
                   </p>
                 </div>
               )}
@@ -523,7 +541,7 @@ function EmployeeCourseDetails() {
                   <MdAccessTimeFilled className="mt-1" />
                   <h2>Duration</h2>
                 </div>
-                <p>42 Days</p>
+                <p>6 weeks</p>
               </div>
               <div className="flex justify-between mt-1">
                 <div className="flex gap-2">
@@ -563,20 +581,12 @@ function EmployeeCourseDetails() {
               </div>
             </div>
             <div className="shadow-custom-all-sides rounded-md px-5 py-5 my-5">
-              <h2 className="text-2xl font-semibold mb-3">
-                Digital Marketing Requirements
+              <h2 className=" font-semibold mb-3">
+                Requirements for the Session
               </h2>
               <ol className="list-decimal list-inside space-y-2">
-                <li>
-                  No prior experience needed - I'll teach you everything you
-                  need to know
-                </li>
-                <li>A computer with access to the internet</li>
-                <li>No paid software required</li>
-                <li>
-                  I'll walk you through, step-by-step, how to get all the
-                  necessary software installed and set up
-                </li>
+                <li>A laptop/desktop with a good audio system</li>
+                <li>A strong and stable WI-Fi connectivity</li>
               </ol>
             </div>
           </div>
