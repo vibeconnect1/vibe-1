@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { PiPlusCircle } from "react-icons/pi";
 import { Link } from "react-router-dom";
 //import Navbar from "../../../components/Navbar";
@@ -9,7 +9,8 @@ import { BiEdit } from "react-icons/bi";
 import { TiTick } from "react-icons/ti";
 import { IoClose } from "react-icons/io5";
 import Table from "../../components/table/Table";
-const InwardsTable = () => {
+import { getGoods } from "../../api";
+const InwardsTable = ({goodIn}) => {
   const [selectedStatus, setSelectedStatus] = useState("all");
   const themeColor = useSelector((state) => state.theme.color);
   const columns = [
@@ -82,8 +83,6 @@ const InwardsTable = () => {
       selector: (row) => row.status,
       sortable: true,
     },
-
-    
   ];
 
   //custom style
@@ -149,6 +148,7 @@ const InwardsTable = () => {
     },
   ];
 
+
   return (
     <section className="flex">
       <div className=" w-full flex mx-3 flex-col overflow-hidden">
@@ -207,7 +207,6 @@ const InwardsTable = () => {
               </label>
             </div>
           </div>
-         
         </div>
         <Table
           columns={columns}

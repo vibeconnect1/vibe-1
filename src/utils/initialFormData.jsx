@@ -43,3 +43,13 @@ export const initialAddAssetFormData = {
     manuals: [],
     others: [],
   };
+
+  export const initialSchedule = {
+    Sunday: { selected: false, start_time: '', end_time: '' },
+    Monday: { selected: false, start_time: '', end_time: '' },
+    Tuesday: { selected: false, start_time: '', end_time: '' },
+    Wednesday: { selected: false, start_time: '', end_time: '' },
+    Thursday: { selected: false, start_time: '', end_time: '' },
+    Friday: { selected: false, start_time: '', end_time: '' },
+    Saturday: { selected: false, start_time: '', end_time: '' },
+  };

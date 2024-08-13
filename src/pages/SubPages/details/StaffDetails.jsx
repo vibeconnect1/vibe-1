@@ -1,148 +1,213 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-
+import Navbar from "../../../components/Navbar";
+import { domainPrefix, getStaffDetails } from "../../../api";
+import { useParams } from "react-router-dom";
+import image from "/profile.png";
+import {
+  dateFormat,
+  FormattedDateToShowProperly,
+  SendDateFormat,
+} from "../../../utils/dateUtils";
+import { FaRegFileAlt } from "react-icons/fa";
+import Table from "../../../components/table/Table";
 const StaffDetails = () => {
   const themeColor = useSelector((state) => state.theme.color);
+  const [details, setDetails] = useState({});
+  const { id } = useParams();
+  useEffect(() => {
+    const fetchDetails = async () => {
+      try {
+        const res = await getStaffDetails(id);
+        setDetails(res.data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchDetails();
+  }, []);
+
+  const scheduleArray = details.working_schedule
+  ? Object.keys(details.working_schedule).map((day) => ({
+      day: day,
+      start_time: details.working_schedule[day].start_time,
+      end_time: details.working_schedule[day].end_time,
+    }))
+  : [];
   const columns = [
-
-
     {
-      name: "Name",
-      selector: (row) => row.Name,
+      name: "Sr. no.",
+      selector: (row, index) => index + 1,
       sortable: true,
     },
     {
-      name: "Mobile No.",
-      selector: (row) => row.contact_no,
+      name: "Days",
+      selector: (row) => row.day,
       sortable: true,
     },
-  ]
- const data = [
-  {
-    Name:"Mittu Panda",
-    contact_no:"7637820933"
-  }
- ]
-  return (   
-    <div className="w-screen p-4">
-      <div className="flex flex-col gap-2">
-      <h2
-          style={{
-            background: themeColor,
-          }}
-          className="text-center w-full text-white font-semibold text-lg p-2 px-4 "
-        >
-          Staff Details
-        </h2>
+    {
+      name: "Start Time",
+      selector: (row) => row.start_time,
+      sortable: true,
+    },
+    {
+      name: "End Time",
+      selector: (row) => row.end_time,
+      sortable: true,
+    },
+  ];
 
-        <div className="md:grid  px-4 flex flex-col grid-cols-3 gap-5 gap-x-4">
-          <div className="grid grid-cols-2 ">
-            <p className="font-semibold text-sm">ID : </p>
-            <p className="">1</p>
+  const isImage = (filePath) => {
+    const imageExtensions = ["jpg", "jpeg", "png", "gif", "bmp", "svg"];
+    const extension = filePath.split(".").pop().split("?")[0].toLowerCase();
+    return imageExtensions.includes(extension);
+  };
+  const getFileName = (filePath) => {
+    return filePath.split("/").pop().split("?")[0];
+  };
+
+
+  return (
+    <section className="flex">
+      <div className="hidden md:block">
+        <Navbar />
+      </div>
+      <div className=" w-full flex mx-3 flex-col overflow-hidden mb-10">
+        <div className="flex flex-col gap-2 my-2">
+          <h2
+            style={{
+              background: themeColor,
+            }}
+            className="text-center w-full text-white font-semibold rounded-md text-lg p-2 px-4 "
+          >
+            Staff Details
+          </h2>
+          <div className="flex justify-center">
+            {details.profile_picture && details.profile_picture !== null ? (
+              // details.visitor_files.map((doc, index) => (
+              <img
+                src={domainPrefix + details.profile_picture.url}
+                alt=""
+                className="w-48 h-48 rounded-full cursor-pointer"
+                onClick={() =>
+                  window.open(
+                    domainPrefix + details.profile_picture.url,
+                    "_blank"
+                  )
+                }
+              />
+            ) : (
+              // ))
+              <img src={image} alt="" className="w-48 h-48" />
+            )}
           </div>
-          <div className="grid grid-cols-2 ">
-            <p className="font-semibold text-sm">Name  : </p>
-            <p className="">Rajnish Patil</p>
-          </div>
-          <div className="grid grid-cols-2 ">
-            <p className="font-semibold text-sm">Unit : </p>
-            <p className="">78</p>
-          </div>
-          {/* <div className="grid grid-cols-2 ">
-            <p className="font-semibold text-sm">Vehicle Type : </p>
-            <p className="">Hatchback</p>
-          </div> */}
-          <div className="grid grid-cols-2 ">
-            <p className="font-semibold text-sm">department: </p>
-            <p className="">Security</p>
-          </div>
-          {/* <div className="grid grid-cols-2 ">
-            <p className="font-semibold text-sm">OTP : </p>
-            <p className="">{details.otp}</p>
-          </div> */}
-          <div className="grid grid-cols-2 ">
-            <p className="font-semibold text-sm">Email : </p>
-            <p className="">rajnish@gmail.com</p>
-          </div>
-          <div className="grid grid-cols-2 ">
-            <p className="font-semibold text-sm">Mobile : </p>
-            <p className="">8965456123</p>
-          </div>
-          <div className="grid grid-cols-2 ">
-            <p className="font-semibold text-sm">Staff Id : </p>
-            <p className="">178</p>
-          </div>
-          <div className="grid grid-cols-2 ">
-            <p className="font-semibold text-sm">Work Type : </p>
-            <p className="">Driver</p>
-          </div>
-          <div className="grid grid-cols-2 ">
-            <p className="font-semibold text-sm">Vendor name : </p>
-            <p className="">Rakesh</p>
-          </div>
-          <div className="grid grid-cols-2 ">
-            <p className="font-semibold text-sm">Status : </p>
-            <p className="">Rejected</p>
-          </div>
-          {/* <div className="grid grid-cols-2 ">
-            <p className="font-semibold text-sm">Status : </p>
-            <p className="">Active</p>
-          </div>
-          
+          <div className="md:grid  px-4 flex flex-col grid-cols-3 gap-5 gap-x-4 border-gray-400 border rounded-xl p-2 py-4 bg-gray-50">
             <div className="grid grid-cols-2 ">
-              <p className="font-semibold text-sm">Qr Code : </p>
+              <p className="font-semibold text-sm">Name : </p>
               <p className="">
-               123
+                {details.firstname} {details.lastname}
               </p>
-            </div> */}
+            </div>
+            <div className="grid grid-cols-2 ">
+              <p className="font-semibold text-sm">Unit : </p>
+              <p className="">{details.unit_name}</p>
+            </div>
 
             {/* <div className="grid grid-cols-2 ">
-              <p className="font-semibold text-sm">Pass End Date : </p>
-              <p className="">
-                4/3/2024
+              <p className="font-semibold text-sm">department: </p>
+              <p className="">Security</p>
+            </div> */}
+
+            <div className="grid grid-cols-2 ">
+              <p className="font-semibold text-sm">Email : </p>
+              <p className="">{details.email}</p>
+            </div>
+            <div className="grid grid-cols-2 ">
+              <p className="font-semibold text-sm">Mobile : </p>
+              <p className="">{details.mobile_no}</p>
+            </div>
+            <div className="grid grid-cols-2 ">
+              <p className="font-semibold text-sm">Staff Id : </p>
+              <p className="">{details.staff_id}</p>
+            </div>
+            <div className="grid grid-cols-2 ">
+              <p className="font-semibold text-sm">Work Type : </p>
+              <p className="">{details.work_type}</p>
+            </div>
+            <div className="grid grid-cols-2 ">
+              <p className="font-semibold text-sm">Status : </p>
+              <p className="">{details.status ? "Active" : "Inactive"}</p>
+            </div>
+            <div className="grid grid-cols-2 ">
+              <p className="font-semibold text-sm">Supplier name : </p>
+              <p className="text-sm">{details.vendor_name}</p>
+            </div>
+            <div className="grid grid-cols-2 ">
+              <p className="font-semibold text-sm">Valid From : </p>
+              <p className="text-sm">{dateFormat(details.valid_from)}</p>
+            </div>
+            <div className="grid grid-cols-2 ">
+              <p className="font-semibold text-sm">Valid Till : </p>
+              <p className="text-sm">{dateFormat(details.valid_till)}</p>
+            </div>
+            <div className="grid grid-cols-2 ">
+              <p className="font-semibold text-sm">Created on : </p>
+              <p className="text-sm">
+                {FormattedDateToShowProperly(details.created_at)}
               </p>
             </div>
-         
-          <div className="grid grid-cols-2 ">
-            <p className="font-semibold text-sm">Check In : </p>
-            <p className="">
-             2:00
-            </p>
-          </div>
-          <div className="grid grid-cols-2 ">
-            <p className="font-semibold text-sm">Check Out : </p>
-            <p className="">
-             3:00
-            </p>
-          </div>
-          <div className="grid grid-cols-2 ">
-            <p className="font-semibold text-sm">Created By : </p>
-            <p className="">Ramesh</p>
-          </div>
-          <div className="grid grid-cols-2 ">
-            <p className="font-semibold text-sm">Created On : </p>
-            <p className="">3/5/2024</p>
-          </div>
-        
             <div className="grid grid-cols-2 ">
-              <p className="font-semibold text-sm">Permitted Days : </p>
-              <p className="">10</p>
-            </div> */}
-
-        </div>
-        {/* <div className="my-4 ">
-          <h2 className="font-medium border-b-2 text-lg border-black px-4 ">
-            Additional Visitors Info
-          </h2>
-          <div className="m-4 mx-20 ">
-            <Table columns={columns} data={data} />
+              <p className="font-semibold text-sm">Updated on : </p>
+              <p className="text-sm">
+                {FormattedDateToShowProperly(details.updated_at)}
+              </p>
             </div>
-            </div> */}
+          </div>
+          <div>
+            <h2 className="font-medium border-b border-gray-300 mb-2">Working Schedule</h2>
+            <Table columns={columns} data={scheduleArray} />
+          </div>
+          <div>
+            <h2 className="font-medium border-b border-gray-300">
+              Attachments
+            </h2>
+            <div className="p-2 flex flex-wrap gap-4 items-center justify-center">
+
+            
+            {details.staff_documents && details.staff_documents.length > 0 ? (
+              details.staff_documents.map((staff, index) => (
+                <div key={staff.id} className="">
+                  {isImage(domainPrefix + staff.document) ? (
+                    <img
+                      src={domainPrefix + staff.document}
+                      alt={`Attachment`}
+                      className="w-40 h-28 object-cover rounded-md"
+                      onClick={() =>
+                        window.open(domainPrefix + staff.document, "_blank")
+                      }
+                    />
+                  ) : (
+                    <a
+                      href={domainPrefix + staff.document}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="attachment-link hover:text-blue-400 transition-all duration-300  flex flex-col  "
+                    >
+                      <FaRegFileAlt size={50} />
+                      {getFileName(staff.document)}
+                    </a>
+                  )}
+                </div>
+              ))
+            ) : (
+              <p className="text-center w-full">No Attachments</p>
+            )}
+            </div>
+          </div>
+        </div>
       </div>
-    </div>
+    </section>
   );
 };
-
-
 
 export default StaffDetails;

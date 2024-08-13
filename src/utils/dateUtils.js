@@ -39,7 +39,7 @@ export function FormattedDateToShowProperly(inputDateTime) {
 
 export const dateFormat = (dateString) => {
   const date = new Date(dateString);
-  return date.toLocaleString(); 
+  return date.toLocaleDateString(); 
 };
 
 export function SendDateFormat(dateString) {

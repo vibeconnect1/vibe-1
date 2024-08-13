@@ -106,6 +106,12 @@ export const postVendorType = async (data) =>
       token: token,
     },
   });
+export const editVendorTypeDetails = async (id,data) =>
+  axiosInstance.put(`/vendor_suppliers/${id}.json`, data, {
+    params: {
+      token: token,
+    },
+  });
 export const getVendorsType = async () =>
   axiosInstance.get("/vendor_suppliers.json", {
     params: {
@@ -686,6 +692,36 @@ export const editPatrollingDetails = async (id, data) =>
   });
 export const postPatrolling = async (data) =>
   axiosInstance.post("/patrollings.json", data, {
+    params: {
+      token: token,
+    },
+  });
+export const getGoods = async () =>
+  axiosInstance.get("/goods_in_outs.json", {
+    params: {
+      token: token,
+    },
+  });
+export const getStaff = async () =>
+  axiosInstance.get("/staffs.json", {
+    params: {
+      token: token,
+    },
+  });
+export const getStaffDetails = async (id) =>
+  axiosInstance.get(`/staffs/${id}.json`, {
+    params: {
+      token: token,
+    },
+  });
+export const editStaffDetails = async (id, data) =>
+  axiosInstance.put(`/staffs/${id}.json`, data,{
+    params: {
+      token: token,
+    },
+  });
+export const postStaff = async (data) =>
+  axiosInstance.post("/staffs.json", data, {
     params: {
       token: token,
     },

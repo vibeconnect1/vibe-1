@@ -2525,7 +2525,7 @@ function App() {
             }
           />
           <Route
-            path="/admin/add-staff"
+            path="/admin/passes/add-staff"
             element={
               <ProtectedAdminRoutes>
                 <AddStaff />
@@ -2533,7 +2533,7 @@ function App() {
             }
           />
           <Route
-            path="/admin/staff-details/:id"
+            path="/admin/passes/staff-details/:id"
             element={
               <ProtectedAdminRoutes>
                 <StaffDetails />

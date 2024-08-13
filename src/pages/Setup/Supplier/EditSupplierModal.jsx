@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import ModalWrapper from "../../../containers/modals/ModalWrapper";
 import { useSelector } from "react-redux";
 import toast from "react-hot-toast";
-import { getVendorCategoryDetails, getVendorsTypeDetails, postVendorCategory, postVendorType } from "../../../api";
+import { editVendorTypeDetails, getVendorCategoryDetails, getVendorsTypeDetails, postVendorCategory, postVendorType } from "../../../api";
 
 const EditSupplierModal = ({ page, onclose, setAdded, typeId, catId }) => {
   const [typeName, setTypeName] = useState("");
@@ -24,7 +24,7 @@ useEffect(()=>{
 const fetchTypeDetails = async()=>{
     try {
         const typeRes = await getVendorsTypeDetails(typeId)
-        setTypeName(typeRes)
+        setTypeName(typeRes.data.supplier.name)
         console.log(typeRes)
     } catch (error) {
         console.log(error)
@@ -32,7 +32,7 @@ const fetchTypeDetails = async()=>{
 }
 fetchTypeDetails()
 },[typeId])
-
+console.log(typeName)
   const handleTypeSubmit = async () => {
     if (!typeName) {
       return toast.error("Please Enter Type");
@@ -40,7 +40,7 @@ fetchTypeDetails()
     const formData = new FormData();
     formData.append("name", typeName);
     try {
-      const res = await postVendorType(formData);
+      const res = await editVendorTypeDetails(typeId, formData);
       toast.success("Supplier type created Successfully");
       setAdded(true);
       onclose()
