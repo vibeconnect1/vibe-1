@@ -133,9 +133,7 @@ const EmployeeDashboard = () => {
             <h1 className="text-xl font-semibold">Dashboard</h1>
 
           <div className="flex items-center space-x-4">
-            <button className="p-2">
-              <i className="fas fa-bell"></i>
-            </button>
+            
             <button className="p-2">
               <BiSolidBellRing size={20} />
             </button>

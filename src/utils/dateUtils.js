@@ -67,7 +67,13 @@ export function convertToIST(dateTimeString) {
 
 export const formatTime = (dateTimeString) => {
   const date = new Date(dateTimeString);
-  const hours = (`0${date.getHours()}`).slice(-2);
+  let hours = date.getHours();
   const minutes = (`0${date.getMinutes()}`).slice(-2);
-  return `${hours}:${minutes}`;
+  const ampm = hours >= 12 ? 'PM' : 'AM';
+
+
+  hours = hours % 12 || 12;
+
+  return `${hours}:${minutes} ${ampm}`;
 };
+

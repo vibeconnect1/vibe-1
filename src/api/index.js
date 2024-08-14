@@ -672,12 +672,8 @@ export const postNewVisitor = async (data) =>
       token: token,
     },
   });
-export const postNewGoods = async (data) =>
-  axiosInstance.post("/goods_in_outs.json", data, {
-    params: {
-      token: token,
-    },
-  });
+
+
 export const getPatrollings = async () =>
   axiosInstance.get("/patrollings.json", {
     params: {
@@ -708,6 +704,12 @@ export const getGoods = async () =>
       token: token,
     },
   });
+  export const postNewGoods = async (data) =>
+    axiosInstance.post("/goods_in_outs.json", data, {
+      params: {
+        token: token,
+      },
+    });
 export const getStaff = async () =>
   axiosInstance.get("/staffs.json", {
     params: {

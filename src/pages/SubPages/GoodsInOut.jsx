@@ -4,9 +4,6 @@ import OutwardsTable from "./OurwardTable";
 import Navbar from "../../components/Navbar";
 import Passes from "../Passes";
 import { getGoods } from "../../api";
-// import InwardsTable from './InwardsTable';
-// import OutwardsTable from './OutwardsTable';
-//import Navbar from '../../components/Navbar'
 
 const GoodsInOut = () => {
   const [page, setPage] = useState("Inwards");
@@ -17,17 +14,20 @@ const GoodsInOut = () => {
       try {
         const goodsRes = await getGoods();
         const filterGoodsIn = goodsRes.data.filter(
-          (good) => good.ward_type === "in"
+          good => good.ward_type === "in"
         );
         const filterGoodsOut = goodsRes.data.filter(
           (good) => good.ward_type === "out"
         );
         setGoodsIn(filterGoodsIn);
         setGoodsOut(filterGoodsOut);
+        console.log(goodsRes.data)
+        console.log(filterGoodsIn)
       } catch (error) {
         console.log(error);
       }
     };
+    fetchGoods()
   }, []);
   return (
     <div className="visitors-page">
