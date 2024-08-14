@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 //import Navbar from '../../components/Navbar'
 import { PiPlusCircle } from "react-icons/pi";
 import { Link } from "react-router-dom";
@@ -6,15 +6,13 @@ import RVehiclesTable from "./RVehiclesTable";
 import RVehiclesHistory from "./RVehiclesHistory";
 import Navbar from "../../components/Navbar";
 import Passes from "../Passes";
+import { getRegisteredVehicle } from "../../api";
 
 const RVehicles = () => {
   const [page, setPage] = useState("All");
 
   const [selectedVisitor, setSelectedVisitor] = useState(null);
-
-  const handleClick = (visitorType) => {
-    setSelectedVisitor(visitorType);
-  };
+ 
   return (
     <div className="visitors-page">
       <section className="flex">
@@ -26,7 +24,9 @@ const RVehicles = () => {
               <div className="flex w-full space-x-4 ">
                 <h2
                   className={`p-2 ${
-                    page === "All" ? "text-blue-500 bg-white shadow-custom-all-sides rounded-t-md" : "text-black"
+                    page === "All"
+                      ? "text-blue-500 bg-white shadow-custom-all-sides rounded-t-md"
+                      : "text-black"
                   }   px-4 cursor-pointer text-center text-sm`}
                   onClick={() => setPage("All")}
                 >
@@ -34,7 +34,9 @@ const RVehicles = () => {
                 </h2>
                 <h2
                   className={`p-2 ${
-                    page === "History" ? "text-blue-500 bg-white shadow-custom-all-sides rounded-t-md" : "text-black"
+                    page === "History"
+                      ? "text-blue-500 bg-white shadow-custom-all-sides rounded-t-md"
+                      : "text-black"
                   }  px-4 cursor-pointer text-center text-sm`}
                   onClick={() => setPage("History")}
                 >

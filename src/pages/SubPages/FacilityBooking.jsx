@@ -219,8 +219,9 @@ const FacilityBooking = () => {
               onClose={() => setIsOpen(false)}
               className="bg-gray-100 my-4 p-2 rounded-md font-bold "
             >
-              <div className="grid grid-cols-2 bg-gray-300 p-2 rounded-md gap-5 pb-4">
-                <p className="font-medium"> will get policy from api</p>
+              <div className="grid  bg-gray-100  rounded-md gap-5 p-4">
+                <li className="font-medium"> Cancellations made between 48 and 168 hours (2 to 7 days) before the booking time will incur a 50% cancellation fee.</li>
+                <li className="font-medium"> Cancellations made less than 48 hours before the booking time will not be refunded.</li>
               </div>
             </Collapsible>
             <Collapsible
@@ -234,8 +235,9 @@ const FacilityBooking = () => {
               onClose={() => setIsTermOpen(false)}
               className="bg-gray-100 my-4 p-2 rounded-md font-bold "
             >
-              <div className="grid grid-cols-2 bg-gray-300 p-2 rounded-md gap-5 pb-4">
-                <p className="font-medium"> will get terms from api</p>
+              <div className="grid  bg-gray-100 rounded-md gap-5 p-4">
+                <li className="font-medium">The facility must be used for the purpose stated at the time of booking. Any change in purpose requires prior approval.</li>
+                <li className="font-medium">The booking party is responsible for any damage caused to the facility during the booking period. Any repair costs will be charged to the booking party.</li>
               </div>
             </Collapsible>
           </div>

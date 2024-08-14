@@ -1608,6 +1608,36 @@ const Navbar = () => {
                     </h2>
                   </NavLink>
                 )}
+                 {feat.includes("communication") && (
+                  <NavLink
+                    to={"/employee/employee-communication"}
+                    className={({ isActive }) =>
+                      ` ${
+                        isActive
+                          ? "text-black bg-white flex p-2  gap-3.5 rounded-md group items-center text-sm font-medium"
+                          : " group flex items-center text-sm gap-3.5 font-medium p-2 hover:bg-gray-800 rounded-md "
+                      }`
+                    }
+                  >
+                    <div>
+                      {React.createElement(BsBroadcast, { size: "20" })}
+                    </div>
+                    <h2
+                      className={`whitespace-pre duration-300 ${
+                        !open && "opacity-0 translate-x-28 overflow-hidden"
+                      }`}
+                    >
+                      Communication
+                    </h2>
+                    <h2
+                      className={`${
+                        open && "hidden"
+                      } absolute left-48 bg-white font-semibold whitespace-pre text-gray-900 rounded-md drop-shadow-lg px-0 py-0 w-0 overflow-hidden group-hover:px-2 group-hover:py-1 group-hover:left-14 group-hover:duration-300 group-hover:w-fit  `}
+                    >
+                      Communication
+                    </h2>
+                  </NavLink>
+                )}
               {feat.includes("gatepass") && (
                   <NavLink
                   to={"/employee/passes"}
@@ -1636,6 +1666,68 @@ const Navbar = () => {
                       } absolute left-48 bg-white font-semibold whitespace-pre text-gray-900 rounded-md drop-shadow-lg px-0 py-0 w-0 overflow-hidden group-hover:px-2 group-hover:py-1 group-hover:left-14 group-hover:duration-300 group-hover:w-fit  `}
                     >
                       Passes
+                    </h2>
+                  </NavLink>
+                )}
+                  {feat.includes("doctors") && (
+                  <NavLink
+                    to={"/employee/doc-appointment"}
+                    className={({ isActive }) =>
+                      ` ${
+                        isActive
+                          ? "text-black bg-white flex p-2  gap-3.5 rounded-md group items-center text-sm font-medium"
+                          : " group flex items-center text-sm gap-3.5 font-medium p-2 hover:bg-gray-800 rounded-md "
+                      }`
+                    }
+                  >
+                    <div>
+                      {React.createElement(FaBriefcaseMedical, { size: "20" })}
+                    </div>
+                    <h2
+                      className={`whitespace-pre duration-300 ${
+                        !open && "opacity-0 translate-x-28 overflow-hidden"
+                      }`}
+                    >
+                      Doctor Appointment
+                    </h2>
+                    <h2
+                      className={`${
+                        open && "hidden"
+                      } absolute left-48 bg-white font-semibold whitespace-pre text-gray-900 rounded-md drop-shadow-lg px-0 py-0 w-0 overflow-hidden group-hover:px-2 group-hover:py-1 group-hover:left-14 group-hover:duration-300 group-hover:w-fit  `}
+                    >
+                      Doctor Appointment
+                    </h2>
+                  </NavLink>
+                )}
+                {feat.includes("permits") && (
+                  <NavLink
+                    to={"/documents"}
+                    className={({ isActive }) =>
+                      ` ${
+                        isActive
+                          ? "text-black bg-white flex p-2  gap-3.5 rounded-md group items-center text-sm font-medium"
+                          : " group flex items-center text-sm gap-3.5 font-medium p-2 hover:bg-gray-800 rounded-md "
+                      }`
+                    }
+                  >
+                    <div>
+                      {React.createElement(IoDocumentTextOutline, {
+                        size: "20",
+                      })}
+                    </div>
+                    <h2
+                      className={`whitespace-pre duration-300 ${
+                        !open && "opacity-0 translate-x-28 overflow-hidden"
+                      }`}
+                    >
+                      Document Pro
+                    </h2>
+                    <h2
+                      className={`${
+                        open && "hidden"
+                      } absolute left-48 bg-white font-semibold whitespace-pre text-gray-900 rounded-md drop-shadow-lg px-0 py-0 w-0 overflow-hidden group-hover:px-2 group-hover:py-1 group-hover:left-14 group-hover:duration-300 group-hover:w-fit  `}
+                    >
+                      Document Pro
                     </h2>
                   </NavLink>
                 )}
@@ -1698,6 +1790,37 @@ const Navbar = () => {
                       } absolute left-48 bg-white font-semibold whitespace-pre text-gray-900 rounded-md drop-shadow-lg px-0 py-0 w-0 overflow-hidden group-hover:px-2 group-hover:py-1 group-hover:left-14 group-hover:duration-300 group-hover:w-fit  `}
                     >
                       Birthday
+                    </h2>
+                  </NavLink>
+                )}
+                 {feat.includes("business_cards") && (
+                  <NavLink
+                    to={"/employees/businesscard"}
+                    className={({ isActive }) =>
+                      ` ${
+                        isActive
+                          ? "text-black bg-white flex p-2  gap-3.5 rounded-md group items-center text-sm font-medium"
+                          : " group flex items-center text-sm gap-3.5 font-medium p-2 hover:bg-gray-800 rounded-md "
+                      }`
+                    }
+                  >
+                    <div>
+                      {React.createElement(TiBusinessCard, { size: "20" })}
+                    </div>
+
+                    <h2
+                      className={`whitespace-pre duration-300 ${
+                        !open && "opacity-0 translate-x-28 overflow-hidden"
+                      }`}
+                    >
+                      Business Card
+                    </h2>
+                    <h2
+                      className={`${
+                        open && "hidden"
+                      } absolute left-48 bg-white font-semibold whitespace-pre text-gray-900 rounded-md drop-shadow-lg px-0 py-0 w-0 overflow-hidden group-hover:px-2 group-hover:py-1 group-hover:left-14 group-hover:duration-300 group-hover:w-fit  `}
+                    >
+                      Business Card
                     </h2>
                   </NavLink>
                 )}
@@ -1796,37 +1919,7 @@ const Navbar = () => {
                     </h2>
                   </NavLink>
                 )}
-                {feat.includes("business_cards") && (
-                  <NavLink
-                    to={"/employees/businesscard"}
-                    className={({ isActive }) =>
-                      ` ${
-                        isActive
-                          ? "text-black bg-white flex p-2  gap-3.5 rounded-md group items-center text-sm font-medium"
-                          : " group flex items-center text-sm gap-3.5 font-medium p-2 hover:bg-gray-800 rounded-md "
-                      }`
-                    }
-                  >
-                    <div>
-                      {React.createElement(TiBusinessCard, { size: "20" })}
-                    </div>
-
-                    <h2
-                      className={`whitespace-pre duration-300 ${
-                        !open && "opacity-0 translate-x-28 overflow-hidden"
-                      }`}
-                    >
-                      Business Card
-                    </h2>
-                    <h2
-                      className={`${
-                        open && "hidden"
-                      } absolute left-48 bg-white font-semibold whitespace-pre text-gray-900 rounded-md drop-shadow-lg px-0 py-0 w-0 overflow-hidden group-hover:px-2 group-hover:py-1 group-hover:left-14 group-hover:duration-300 group-hover:w-fit  `}
-                    >
-                      Business Card
-                    </h2>
-                  </NavLink>
-                )}
+               
               {/* : */}
               <>
                 {feat.includes("face_recognition") && (
@@ -1917,36 +2010,7 @@ const Navbar = () => {
                     </h2>
                   </NavLink>
                 )}
-                {feat.includes("communication") && (
-                  <NavLink
-                    to={"/employee/employee-communication"}
-                    className={({ isActive }) =>
-                      ` ${
-                        isActive
-                          ? "text-black bg-white flex p-2  gap-3.5 rounded-md group items-center text-sm font-medium"
-                          : " group flex items-center text-sm gap-3.5 font-medium p-2 hover:bg-gray-800 rounded-md "
-                      }`
-                    }
-                  >
-                    <div>
-                      {React.createElement(BsBroadcast, { size: "20" })}
-                    </div>
-                    <h2
-                      className={`whitespace-pre duration-300 ${
-                        !open && "opacity-0 translate-x-28 overflow-hidden"
-                      }`}
-                    >
-                      Communication
-                    </h2>
-                    <h2
-                      className={`${
-                        open && "hidden"
-                      } absolute left-48 bg-white font-semibold whitespace-pre text-gray-900 rounded-md drop-shadow-lg px-0 py-0 w-0 overflow-hidden group-hover:px-2 group-hover:py-1 group-hover:left-14 group-hover:duration-300 group-hover:w-fit  `}
-                    >
-                      Communication
-                    </h2>
-                  </NavLink>
-                )}
+               
                 {feat.includes("bills") && (
                   <NavLink
                     to={"/employee/bill-pay"}
@@ -2037,36 +2101,7 @@ const Navbar = () => {
                   </NavLink>
                 )}
 
-                {feat.includes("doctors") && (
-                  <NavLink
-                    to={"/employee/doc-appointment"}
-                    className={({ isActive }) =>
-                      ` ${
-                        isActive
-                          ? "text-black bg-white flex p-2  gap-3.5 rounded-md group items-center text-sm font-medium"
-                          : " group flex items-center text-sm gap-3.5 font-medium p-2 hover:bg-gray-800 rounded-md "
-                      }`
-                    }
-                  >
-                    <div>
-                      {React.createElement(FaBriefcaseMedical, { size: "20" })}
-                    </div>
-                    <h2
-                      className={`whitespace-pre duration-300 ${
-                        !open && "opacity-0 translate-x-28 overflow-hidden"
-                      }`}
-                    >
-                      Doctor Appointment
-                    </h2>
-                    <h2
-                      className={`${
-                        open && "hidden"
-                      } absolute left-48 bg-white font-semibold whitespace-pre text-gray-900 rounded-md drop-shadow-lg px-0 py-0 w-0 overflow-hidden group-hover:px-2 group-hover:py-1 group-hover:left-14 group-hover:duration-300 group-hover:w-fit  `}
-                    >
-                      Doctor Appointment
-                    </h2>
-                  </NavLink>
-                )}
+              
                 {feat.includes("field_sense") && (
                   <NavLink
                     to={"/employee/field-sense-meeting"}
@@ -2186,38 +2221,7 @@ const Navbar = () => {
                   </NavLink>
                 )}
                 
-                {feat.includes("permits") && (
-                  <NavLink
-                    to={"/documents"}
-                    className={({ isActive }) =>
-                      ` ${
-                        isActive
-                          ? "text-black bg-white flex p-2  gap-3.5 rounded-md group items-center text-sm font-medium"
-                          : " group flex items-center text-sm gap-3.5 font-medium p-2 hover:bg-gray-800 rounded-md "
-                      }`
-                    }
-                  >
-                    <div>
-                      {React.createElement(IoDocumentTextOutline, {
-                        size: "20",
-                      })}
-                    </div>
-                    <h2
-                      className={`whitespace-pre duration-300 ${
-                        !open && "opacity-0 translate-x-28 overflow-hidden"
-                      }`}
-                    >
-                      Document Pro
-                    </h2>
-                    <h2
-                      className={`${
-                        open && "hidden"
-                      } absolute left-48 bg-white font-semibold whitespace-pre text-gray-900 rounded-md drop-shadow-lg px-0 py-0 w-0 overflow-hidden group-hover:px-2 group-hover:py-1 group-hover:left-14 group-hover:duration-300 group-hover:w-fit  `}
-                    >
-                      Document Pro
-                    </h2>
-                  </NavLink>
-                )}
+                
 
                 {feat.includes("fnb") && (
                   <NavLink

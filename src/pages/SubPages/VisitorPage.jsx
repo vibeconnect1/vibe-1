@@ -6,7 +6,7 @@ import Passes from "../Passes";
 import Navbar from "../../components/Navbar";
 import { useSelector } from "react-redux";
 import Table from "../../components/table/Table";
-import { getExpectedVisitor } from "../../api";
+import { getExpectedVisitor, getVisitorHistory } from "../../api";
 import { BsEye } from "react-icons/bs";
 import { BiEdit } from "react-icons/bi";
 
@@ -16,7 +16,13 @@ const VisitorPage = () => {
   const themeColor = useSelector((state) => state.theme.color);
   const [selectedVisitor, setSelectedVisitor] = useState("expected");
   const [visitor, setVisitor] = useState([]);
+  const [unexpectedVisitor, setUnexpectedVisitor] = useState([]);
+  const [FilteredUnexpectedVisitor, setFilteredUnexpectedVisitor] = useState(
+    []
+  );
   const [filteredData, setFilteredData] = useState([]);
+  const [histories, setHistories] = useState([]);
+  const [filteredHistory, setFilteredHistory] = useState([]);
   const webcamRef = useRef(null);
   const handleClick = (visitorType) => {
     setSelectedVisitor(visitorType);
@@ -36,15 +42,36 @@ const VisitorPage = () => {
         const sortedVisitor = visitorResp.data.sort((a, b) => {
           return new Date(b.created_at) - new Date(a.created_at);
         });
+        const filteredUnexpectedVisitor = sortedVisitor.filter(
+          (visit) => visit.user_type === "security_guard"
+        );
         setVisitor(sortedVisitor);
         setFilteredData(sortedVisitor);
+        setUnexpectedVisitor(filteredUnexpectedVisitor);
+        setFilteredUnexpectedVisitor(filteredUnexpectedVisitor);
         console.log(sortedVisitor);
       } catch (error) {
         console.log(error);
       }
     };
+    const fetchVisitorHistory = async () => {
+      try {
+        const historyResp = await getVisitorHistory();
+        const sortedVisitor = historyResp.data.sort((a, b) => {
+          return new Date(b.created_at) - new Date(a.created_at);
+        });
+        setHistories(sortedVisitor);
+        setFilteredHistory(sortedVisitor);
+        console.log(sortedVisitor);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
     fetchExpectedVisitor();
+    fetchVisitorHistory();
   }, []);
+
   const VisitorColumns = [
     {
       name: "Action",
@@ -118,30 +145,30 @@ const VisitorPage = () => {
       selector: (row) => (row.end_pass ? dateFormat(row.end_pass) : ""),
       sortable: true,
     },
-    {
-      name: "Check In",
-      selector: (row) =><p>
-      {row &&
-      row.visits_log &&
-      row.visits_log.length > 0 ? (
-        row.visits_log.map((visit, index) =>
-          visit.check_in ? (
-            <span key={index}>{dateTimeFormat(visit.check_in)}</span>
-          ) : (
-            <span key={index}>-</span>
-          )
-        )
-      ) : (
-        <span>-</span>
-      )}
-    </p>,
-      sortable: true,
-    },
-    {
-      name: "Check Out",
-      selector: (row) => (row.check_out ? dateTimeFormat(row.check_out) : ""),
-      sortable: true,
-    },
+    // {
+    //   name: "Check In",
+    //   selector: (row) => (
+    //     <p>
+    //       {row && row.visits_log && row.visits_log.length > 0 ? (
+    //         row.visits_log.map((visit, index) =>
+    //           visit.check_in ? (
+    //             <span key={index}>{dateTimeFormat(visit.check_in)}</span>
+    //           ) : (
+    //             <span key={index}>-</span>
+    //           )
+    //         )
+    //       ) : (
+    //         <span>-</span>
+    //       )}
+    //     </p>
+    //   ),
+    //   sortable: true,
+    // },
+    // {
+    //   name: "Check Out",
+    //   selector: (row) => (row.check_out ? dateTimeFormat(row.check_out) : ""),
+    //   sortable: true,
+    // },
     {
       name: "Status",
       selector: (row) => row.status,
@@ -158,21 +185,101 @@ const VisitorPage = () => {
   const handleSearch = (e) => {
     const searchValue = e.target.value;
     setSearchText(searchValue);
+
     if (searchValue.trim() === "") {
-      setFilteredData(visitor);
+      if (selectedVisitor === "expected") {
+        setFilteredData(visitor);
+      } else {
+        setFilteredUnexpectedVisitor(unexpectedVisitor);
+      }
     } else {
-      const filteredResults = visitor.filter(
+      if (selectedVisitor === "expected") {
+        const filteredResults = visitor.filter(
+          (item) =>
+            item.name.toLowerCase().includes(searchValue.toLowerCase()) ||
+            (item.vehicle_number &&
+              item.vehicle_number
+                .toLowerCase()
+                .includes(searchValue.toLowerCase()))
+        );
+
+        setFilteredData(filteredResults);
+      } else {
+        const filteredResults = unexpectedVisitor.filter(
+          (item) =>
+            item.name.toLowerCase().includes(searchValue.toLowerCase()) ||
+            (item.vehicle_number &&
+              item.vehicle_number
+                .toLowerCase()
+                .includes(searchValue.toLowerCase()))
+        );
+
+        setFilteredUnexpectedVisitor(filteredResults);
+      }
+    }
+  };
+  const [searchHIstoryText, setSearchHistoryText] = useState("");
+  const handleSearchHistory = (e) => {
+    const searchValue = e.target.value;
+    setSearchHistoryText(searchValue);
+    if (searchValue.trim() === "") {
+      setFilteredHistory(histories);
+    }else{
+      const filteredResults = histories.filter(
         (item) =>
           item.name.toLowerCase().includes(searchValue.toLowerCase()) ||
-          (item.vehicle_number &&
-            item.vehicle_number
+          (item.contact_no &&
+            item.contact_no
               .toLowerCase()
               .includes(searchValue.toLowerCase()))
       );
-      setFilteredData(filteredResults);
+      setFilteredHistory(filteredResults)
     }
   };
 
+  const historyColumn = [
+    {
+      name: "Action",
+      cell: (row) => (
+        <div className="flex items-center gap-4">
+          <Link to={`/admin/passes/visitors/visitor-details/${row.id}`}>
+            <BsEye size={15} />
+          </Link>
+        </div>
+      ),
+    },
+    {
+      name: "Name",
+      selector: (row) => row.name,
+      sortable: true,
+    },
+    {
+      name: "Purpose",
+      selector: (row) => row.purpose,
+      sortable: true,
+    },
+    {
+      name: "Mobile no.",
+      selector: (row) => row.contact_no,
+      sortable: true,
+    },
+    {
+      name: "Approval Date",
+      selector: (row) => dateTimeFormat(row.approval_date),
+      sortable: true,
+    },
+    {
+      name: "Approval",
+      selector: (row) =>
+        row.approved ? (
+          <p className="text-green-400">Approved</p>
+        ) : (
+          <p className="text-red-400">Denied</p>
+        ),
+      sortable: true,
+    },
+  ];
+ 
   return (
     <div className="visitors-page">
       <section className="flex">
@@ -213,21 +320,12 @@ const VisitorPage = () => {
               </h2>
             </div>
           </div>
-          <div className="flex justify-end">
-            <Link
-              to={"/admin/add-new-visitor"}
-              style={{ background: themeColor }}
-              className=" font-semibold  hover:text-white duration-150 transition-all p-2 rounded-md text-white cursor-pointer text-center flex items-center gap-2 justify-center"
-            >
-              <PiPlusCircle size={20} />
-              Add New Visitor
-            </Link>
-          </div>
+
           {page === "Visitor In" && (
             <div className="grid md:grid-cols-3 gap-2 items-center">
               <input
                 type="text"
-                className="border border-black p-2 rounded-md placeholder:text-sm"
+                className="border border-gray-300 p-2 rounded-md placeholder:text-sm"
                 value={searchText}
                 onChange={handleSearch}
                 placeholder="Search using Visitor name, Host, vehicle number"
@@ -235,7 +333,7 @@ const VisitorPage = () => {
 
               <div className="border md:flex-row flex-col flex p-2 rounded-md text-center border-black">
                 <span
-                  className={` md:border-r px-2 border-black cursor-pointer hover:underline ${
+                  className={` md:border-r px-2 border-gray-300 cursor-pointer hover:underline ${
                     selectedVisitor === "expected"
                       ? "text-blue-600 underline"
                       : ""
@@ -255,13 +353,23 @@ const VisitorPage = () => {
                   &nbsp; <span>Unexpected visitor</span>
                 </span>
               </div>
+              <div className="flex justify-end">
+                <Link
+                  to={"/admin/add-new-visitor"}
+                  style={{ background: themeColor }}
+                  className=" font-semibold  hover:text-white duration-150 transition-all p-2 rounded-md text-white cursor-pointer text-center flex items-center gap-2 justify-center"
+                >
+                  <PiPlusCircle size={20} />
+                  Add New Visitor
+                </Link>
+              </div>
             </div>
           )}
           {page === "Visitor Out" && (
             <div className="grid md:grid-cols-3 gap-2 items-center">
               <input
                 type="text"
-                className="border border-black p-2 rounded-md placeholder:text-sm"
+                className="border border-gray-300 p-2 rounded-md placeholder:text-sm"
                 value={searchText}
                 onChange={handleSearch}
                 placeholder="Search using Visitor name, Host, vehicle number"
@@ -292,21 +400,27 @@ const VisitorPage = () => {
             </div>
           )}
           {page === "History" && (
-            <div>
+            <div className="">
               <input
                 type="text"
-                placeholder="Search using Guest's Name or Pass Number"
-                className="border p-2 rounded-md border-black w-96"
+                placeholder="Search using Name or Mobile Number"
+                className="border p-2 rounded-md border-gray-300 w-full mb-2 placeholder:text-sm"
+                value={searchHIstoryText}
+                onChange={handleSearchHistory}
               />
+              <Table columns={historyColumn} data={filteredHistory} />
             </div>
           )}
           <div className="my-4">
             {selectedVisitor === "expected" && page === "Visitor In" && (
               <Table columns={VisitorColumns} data={filteredData} />
             )}
-            {selectedVisitor === "unexpected" && (
-              // <Table columns={VisitorColumns} data={visitor} />
-              <p className="font-medium text-center">No Records</p>
+            {selectedVisitor === "unexpected" && page === "Visitor In" && (
+              <Table
+                columns={VisitorColumns}
+                data={FilteredUnexpectedVisitor}
+              />
+              // <p className="font-medium text-center">No Records</p>
             )}
           </div>
         </div>

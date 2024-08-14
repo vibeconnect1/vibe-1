@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { PiPlusCircle } from "react-icons/pi";
 import { Link } from "react-router-dom";
 //import Navbar from "../../../components/Navbar";
@@ -10,10 +10,29 @@ import { IoClose } from "react-icons/io5";
 import { useSelector } from "react-redux";
 import Table from "../../components/table/Table";
 import qr from "/QR.png"
+import { getRegisteredVehicle } from "../../api";
 const RVehiclesTable = () => {
   const [selectedStatus, setSelectedStatus] = useState("all");
   const themeColor = useSelector((state) => state.theme.color);
-
+  const [registeredVehicles, setRegisteredVehicles] = useState([]);
+  const [filteredVehicles, setFilteredVehicles] = useState([]);
+ 
+  useEffect(() => {
+    const fetchRegisteredVehicle = async () => {
+      try {
+        const historyResp = await getRegisteredVehicle();
+        const sortedVisitor = historyResp.data.sort((a, b) => {
+          return new Date(b.created_at) - new Date(a.created_at);
+        });
+        setRegisteredVehicles(sortedVisitor);
+        setFilteredVehicles(sortedVisitor);
+        console.log(sortedVisitor);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchRegisteredVehicle();
+  }, []);
   const columns = [
     {
       name: "Action",
@@ -30,7 +49,12 @@ const RVehiclesTable = () => {
     },
     {
       name: "Vehicle Number",
-      selector: (row) => row.Vehicle_Number,
+      selector: (row) => row.vehicle_number,
+      sortable: true,
+    },
+    {
+      name: "Category",
+      selector: (row) => row.category,
       sortable: true,
     },
     {
@@ -40,19 +64,19 @@ const RVehiclesTable = () => {
     },
     {
       name: "Vehicle Category",
-      selector: (row) => row.Vehicle_Category,
+      selector: (row) => row.vehicle_category,
       sortable: true,
     },
 
     {
       name: "Vehicle Type",
-      selector: (row) => row.Vehicle_Type,
+      selector: (row) => row.vehicle_type,
       sortable: true,
     },
 
     {
       name: "Sticker Number",
-      selector: (row) => row.Sticker_Number,
+      selector: (row) => row.sticker_number,
       sortable: true,
     },
     // {
@@ -62,7 +86,12 @@ const RVehiclesTable = () => {
     // },
     {
       name: "Registration Number",
-      selector: (row) => row.Registration_Number,
+      selector: (row) => row.registration_number,
+      sortable: true,
+    },
+    {
+      name: "Insurance Number",
+      selector: (row) => row.insurance_number,
       sortable: true,
     },
     {
@@ -257,49 +286,14 @@ const RVehiclesTable = () => {
               <PiPlusCircle size={20} />
               Add
             </Link>
-            {/* <button
-              className="border-2 font-semibold hover:bg-black hover:text-white transition-all border-black p-2 rounded-md text-black cursor-pointer text-center flex items-center gap-2 justify-center"
-              style={{ height: "1cm" }}
-            >
-              Import
-            </button>
-            <button
-              className="border-2 font-semibold hover:bg-black hover:text-white transition-all border-black p-2 rounded-md text-black cursor-pointer text-center flex items-center gap-2 justify-center"
-              style={{ height: "1cm" }}
-            >
-              Filter
-            </button>
-            <button
-              className="border-2 font-semibold hover:bg-black hover:text-white transition-all border-black p-2 rounded-md text-black cursor-pointer text-center flex items-center gap-2 justify-center"
-              style={{ height: "1cm" }}
-            >
-              History
-            </button>
-            <button
-              className="border-2 font-semibold hover:bg-black hover:text-white transition-all border-black p-2 rounded-md text-black cursor-pointer text-center flex items-center gap-2 justify-center"
-              style={{ height: "1cm" }}
-            >
-              All
-            </button>
-            <button
-              className="border-2 font-semibold hover:bg-black hover:text-white transition-all border-black p-2 rounded-md text-black cursor-pointer text-center flex items-center gap-2 justify-center"
-              style={{ height: "1cm" }}
-            >
-              In
-            </button>
-            <button
-              className="border-2 font-semibold hover:bg-black hover:text-white transition-all border-black p-2 rounded-md text-black cursor-pointer text-center flex items-center gap-2 justify-center"
-              style={{ height: "1cm" }}
-            >
-              Out
-            </button> */}
+          
           </span>
         </div>
         <Table
           responsive
           //   selectableRows
           columns={columns}
-          data={data}
+          data={registeredVehicles}
           isPagination={true}
         />
       </div>

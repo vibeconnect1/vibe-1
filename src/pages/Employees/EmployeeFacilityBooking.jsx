@@ -116,7 +116,8 @@ const EmployeeFacilityBooking = () => {
             className="bg-gray-300 my-4 p-2 rounded-md font-bold "
           >
             <div className="grid grid-cols-2 bg-gray-300 p-2 rounded-md gap-5 pb-4">
-              <p className="font-medium"> will get policy from api</p>
+              <li className="font-medium"> Cancellations made between 48 and 168 hours (2 to 7 days) before the booking time will incur a 50% cancellation fee.</li>
+              <li className="font-medium"> Cancellations made between 48 and 168 hours (2 to 7 days) before the booking time will incur a 50% cancellation fee.</li>
             </div>
           </Collapsible>
           <Collapsible

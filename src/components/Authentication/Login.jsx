@@ -13,7 +13,7 @@ const Login = () => {
     password: "",
   });
   const [password, showPassword] = useState(false);
-
+  const [page, setPage] = useState("login");
   const onChange = (e) => {
     setFormData((prev) => ({
       ...prev,
@@ -49,29 +49,29 @@ const Login = () => {
       const userName = response.data.user.firstname;
       setItemInLocalStorage("SITEID", selectedSiteId);
       setItemInLocalStorage("Name", userName);
-      const features = response.data.features
-      setItemInLocalStorage("FEATURES", features)
-      
+      const features = response.data.features;
+      setItemInLocalStorage("FEATURES", features);
+
       const featNames = features.map((feature) => feature.feature_name);
       // vibe login
       // if (selectedSiteId === 10) {
-        if (featNames.includes('project_task')) {
-        console.log("running copilot login")
+      if (featNames.includes("project_task")) {
+        console.log("running copilot login");
         const vibeResponse = await vibeLogin({
-            email: formData.email,
-            password: formData.password,
-          });
-          console.log("vibe", vibeResponse);
-          const vibeToken = vibeResponse.data.token.access.token;
-          setItemInLocalStorage("VIBETOKEN", vibeToken);
-          const vibeUserId = vibeResponse.data.data.user_id;
-          setItemInLocalStorage("VIBEUSERID", vibeUserId);
-          const vibeOrganizationId = vibeResponse.data.data.organization_id;
-          setItemInLocalStorage("VIBEORGID", vibeOrganizationId);
-        }
+          email: formData.email,
+          password: formData.password,
+        });
+        console.log("vibe", vibeResponse);
+        const vibeToken = vibeResponse.data.token.access.token;
+        setItemInLocalStorage("VIBETOKEN", vibeToken);
+        const vibeUserId = vibeResponse.data.data.user_id;
+        setItemInLocalStorage("VIBEUSERID", vibeUserId);
+        const vibeOrganizationId = vibeResponse.data.data.organization_id;
+        setItemInLocalStorage("VIBEORGID", vibeOrganizationId);
+      }
 
       //
-      console.log("skipped copilot")
+      console.log("skipped copilot");
       const loginD = response.data.user;
       setItemInLocalStorage("user", loginD);
       console.log("User details", loginD);
@@ -90,7 +90,7 @@ const Login = () => {
       setItemInLocalStorage("categories", categories);
       const token = response.data.user.api_key;
       setItemInLocalStorage("TOKEN", token);
-    
+
       // console.log(userName)
       const lastName = response.data.user.lastname;
       setItemInLocalStorage("LASTNAME", lastName);
@@ -108,16 +108,13 @@ const Login = () => {
       const complaint = response.data.complanits;
       setItemInLocalStorage("complaint", complaint);
 
-      
-
       // console.log(userName)
       // console.log("Sit",selectedSiteId)
       toast.loading("Processing your data please wait...");
       if (userType === "pms_admin") {
         navigate("/dashboard");
       } else {
-      
-        navigate(selectedSiteId === 10 ? "/employee/dashboard":"/mytickets");
+        navigate(selectedSiteId === 10 ? "/employee/dashboard" : "/mytickets");
       }
       toast.dismiss();
       window.location.reload();
@@ -165,41 +162,59 @@ const Login = () => {
                 value={formData.email}
               />
             </div>
-            <div className="flex flex-col gap-2 relative mx-5">
-              <label htmlFor="password" className="font-medium">
-                Password:
-              </label>
-              <input
-                name="password"
-                id="password"
-                className="rounded-sm p-1 px-2 border border-black"
-                placeholder="**********"
-                type={password ? "text" : "password"}
-                onChange={onChange}
-                value={formData.password}
-              />
-              <div className="p-1 rounded-full  absolute top-12 right-2 transform -translate-y-1/2 cursor-pointer font">
-                {password ? (
-                  <AiFillEye onClick={togglePassword} />
-                ) : (
-                  <AiFillEyeInvisible onClick={togglePassword} />
-                )}
+            {page === "login" && (
+              <div className="flex flex-col gap-2 relative mx-5">
+                <label htmlFor="password" className="font-medium">
+                  Password:
+                </label>
+                <input
+                  name="password"
+                  id="password"
+                  className="rounded-sm p-1 px-2 border border-black"
+                  placeholder="**********"
+                  type={password ? "text" : "password"}
+                  onChange={onChange}
+                  value={formData.password}
+                />
+                <div className="p-1 rounded-full  absolute top-12 right-2 transform -translate-y-1/2 cursor-pointer font">
+                  {password ? (
+                    <AiFillEye onClick={togglePassword} />
+                  ) : (
+                    <AiFillEyeInvisible onClick={togglePassword} />
+                  )}
+                </div>
               </div>
-            </div>
+            )}
             <div className="mx-5 flex gap-2">
               <input type="checkbox" name="" id="" />
               <label htmlFor="" className="">
                 Remember Me
               </label>
             </div>
-            <div className="flex justify-center w-full">
-              <button
-                type="submit"
-                className="w-20 my-2 bg-black text-white p-1 rounded-md text-xl font-bold hover:bg-gray-300 "
+            <div className="flex justify-center gap-4 w-full">
+              {page === "login" && (
+                <button
+                  type="submit"
+                  className="w-20 my-2 bg-black text-white p-1 rounded-md text-xl font-bold hover:bg-gray-300 "
+                >
+                  Login
+                </button>
+              )}
+              <p
+                onClick={() => setPage("sso")}
+                className="w-20 my-2 border-black border-2 p-1 cursor-pointer text-center rounded-md text-xl font-medium hover:bg-gray-300 "
+              >
+                {page === "sso" ? "Submit" : "SSO"}
+              </p>
+            </div>
+            {page === "sso" && (
+              <p
+                className="text-center cursor-pointer hover:text-blue-400"
+                onClick={() => setPage("login")}
               >
                 Login
-              </button>
-            </div>
+              </p>
+            )}
           </form>
         </div>
       </div>

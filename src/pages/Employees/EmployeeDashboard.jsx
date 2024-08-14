@@ -12,7 +12,7 @@ import { MdFastfood } from "react-icons/md";
 import { FaCheck, FaNetworkWired } from "react-icons/fa";
 import { FiClock } from "react-icons/fi";
 import toast from "react-hot-toast";
-import vibeLogo from "/vibe.png"
+import vibeLogo from "/bio.png"
 const EmployeeDashboard = () => {
   const [completedTasks, setCompletedTasks] = useState([]);
   const tasks = [
@@ -127,10 +127,10 @@ const EmployeeDashboard = () => {
               src={vibeLogo}
               // src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQGMshTNukLxdr-RYX5Hd9jz9ByEiJgl4liNw&s"
               alt="vibeconnect"
-              className="h-8 mr-2 bg-white p-1 rounded-md"
+              className="h-10 mr-2 bg-white p-1 rounded-md"
             />
           </div>
-            <h1 className="text-xl font-semibold">Vibe Connect</h1>
+            <h1 className="text-xl font-semibold">Dashboard</h1>
 
           <div className="flex items-center space-x-4">
             <button className="p-2">

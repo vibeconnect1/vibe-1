@@ -4,7 +4,7 @@ import { FaTrash } from "react-icons/fa";
 import { useSelector } from "react-redux";
 import { getItemInLocalStorage } from "../utils/localStorage";
 import toast from "react-hot-toast";
-import { getSetupUsers, postNewVisitor, postVisitorOTPApi } from "../api";
+import { getSetupUsers, postNewGoods, postNewVisitor, postVisitorOTPApi } from "../api";
 import { useNavigate } from "react-router-dom";
 import Webcam from "react-webcam";
 import FileInputBox from "../containers/Inputs/FileInputBox";
@@ -40,7 +40,10 @@ const AddNewVisitor = () => {
     hostApproval: false,
     goodsInward: false,
     host: "",
-    passNumber:""
+    passNumber: "",
+    noOfGoods: "",
+    goodsDescription: "",
+    goodsAttachments: [],
   });
   console.log(formData);
   const handleFrequencyChange = (e) => {
@@ -141,6 +144,14 @@ const AddNewVisitor = () => {
   };
 
   const otp = generateOtp();
+  const handleFileChange = (files, fieldName) => {
+    // Changed to receive 'files' directly
+    setFormData({
+      ...formData,
+      [fieldName]: files,
+    });
+    console.log(fieldName);
+  };
   const navigate = useNavigate();
   const createNewVisitor = async () => {
     if (
@@ -191,14 +202,26 @@ const AddNewVisitor = () => {
         extraVisitor.mobile
       );
     });
-    // const sendOTP = new FormData();
-    // sendOTP.append("mobile_number", formData.mobile);
-    // sendOTP.append("otp", otp);
     try {
       toast.loading("Creating new visitor Please wait!");
       const visitResp = await postNewVisitor(postData);
-      // const sendOtp = await postVisitorOTPApi(sendOTP);
-      // console.log(sendOtp);
+      const postGoods = new FormData();
+      formData.goodsAttachments.forEach((docs) => {
+        postGoods.append("goods_files[]", docs);
+      });
+      postGoods.append("goods_in_out[visitor_id]", visitResp.data.id);
+      postGoods.append("goods_in_out[no_of_goods]", formData.noOfGoods);
+      postGoods.append("goods_in_out[description]", formData.noOfGoods);
+      postGoods.append("goods_in_out[ward_type]", "in");
+      postGoods.append("goods_in_out[vehicle_no]", formData.vehicleNumber);
+      postGoods.append("goods_in_out[person_name]", formData.visitorName);
+      postGoods.append("goods_in_out[created_by_id]", userId);
+      try {
+        const goodsRes = await postNewGoods(postGoods)
+        console.log(goodsRes)
+      } catch (error) {
+        console.log(error)
+      }
       console.log(visitResp);
       navigate("/admin/passes/visitors");
       toast.dismiss();
@@ -523,25 +546,44 @@ const AddNewVisitor = () => {
             &nbsp;&nbsp;<label htmlFor="goods">Goods Inwards</label>
           </span>
         </div>
-          {formData.goodsInward && (
-            <>
-            
+        {formData.goodsInward && (
+          <>
             <div className="grid grid-cols-3 gap-2  my-2">
               <div className="flex flex-col gap-2">
                 <p className="font-medium">No. of Goods :</p>
-                <input type="number" name="" id=""  className="border border-gray-400 p-2 rounded-md w-full" placeholder="Enter Number " />
+                <input
+                  type="number"
+                  name="noOfGoods"
+                  id=""
+                  className="border border-gray-400 p-2 rounded-md w-full"
+                  placeholder="Enter Number "
+                  value={formData.noOfGoods}
+                  onChange={handleChange}
+                />
               </div>
               <div className="col-span-2 flex flex-col gap-2">
                 <p className="font-medium ">Description :</p>
-                <textarea name="" id=""   className="border border-gray-400 p-2 rounded-md w-full" rows={1} placeholder="Enter Description"></textarea>
+                <textarea
+                  name="goodsDescription"
+                  id=""
+                  value={formData.goodsDescription}
+                  onChange={handleChange}
+                  className="border border-gray-400 p-2 rounded-md w-full"
+                  rows={1}
+                  placeholder="Enter Description"
+                ></textarea>
               </div>
             </div>
-              <div className="flex flex-col gap-2">
-                <p className="font-medium">Attachments Related to goods </p>
-                <FileInputBox />
-              </div>
-            </>
-          )}
+
+            <FileInputBox
+              handleChange={(files) =>
+                handleFileChange(files, "goodsAttachments")
+              }
+              fieldName={"goodsAttachments"}
+              isMulti={true}
+            />
+          </>
+        )}
         <h2 className="font-medium border-b-2 mt-5 border-black">
           Additional Visitor
         </h2>

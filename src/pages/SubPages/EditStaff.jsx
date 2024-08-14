@@ -4,7 +4,14 @@ import FileInputBox from "../../containers/Inputs/FileInputBox";
 import Navbar from "../../components/Navbar";
 import Webcam from "react-webcam";
 import image from "/profile.png";
-import { domainPrefix, editStaffDetails, getAllUnits, getStaffDetails, getVendors, postStaff } from "../../api";
+import {
+  domainPrefix,
+  editStaffDetails,
+  getAllUnits,
+  getStaffDetails,
+  getVendors,
+  postStaff,
+} from "../../api";
 import toast from "react-hot-toast";
 import { useNavigate, useParams } from "react-router-dom";
 import { initialSchedule } from "../../utils/initialFormData";
@@ -41,18 +48,26 @@ const EmployeeAddStaff = () => {
     documents: [],
     workingSchedule: initialSchedule,
   });
-  const daysOfWeek = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
+  const daysOfWeek = [
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday",
+    "Sunday",
+  ];
 
-const initializeWorkingSchedule = (apiSchedule) => {
-  return daysOfWeek.reduce((acc, day) => {
-    acc[day] = {
-      selected: !!apiSchedule[day], // true if the day exists in the API data
-      start_time: apiSchedule[day]?.start_time || "",
-      end_time: apiSchedule[day]?.end_time || ""
-    };
-    return acc;
-  }, {});
-};
+  const initializeWorkingSchedule = (apiSchedule) => {
+    return daysOfWeek.reduce((acc, day) => {
+      acc[day] = {
+        selected: !!apiSchedule[day], // true if the day exists in the API data
+        start_time: apiSchedule[day]?.start_time || "",
+        end_time: apiSchedule[day]?.end_time || "",
+      };
+      return acc;
+    }, {});
+  };
   useEffect(() => {
     const fetchEditDetails = async () => {
       try {
@@ -67,13 +82,13 @@ const initializeWorkingSchedule = (apiSchedule) => {
           status: editData.status,
           unit: editData.unit_id,
           validFrom: SendDateFormat(editData.valid_from),
-          validTill:SendDateFormat(editData.valid_till),
+          validTill: SendDateFormat(editData.valid_till),
           vendorId: editData.vendor_id,
           workType: editData.work_type,
           workingSchedule: initializeWorkingSchedule(editData.working_schedule),
         });
-        setCapturedImage(domainPrefix + editData.profile_picture.url)
-        
+        setCapturedImage(domainPrefix + editData.profile_picture.url);
+
         console.log(editData);
       } catch (error) {
         console.log(error);
@@ -208,7 +223,7 @@ const initializeWorkingSchedule = (apiSchedule) => {
       sendData.append("attachfiles[]", docs);
     });
     try {
-      const res = await editStaffDetails(id,sendData);
+      const res = await editStaffDetails(id, sendData);
       toast.success("Staff Edited Successfully");
       navigate("/admin/passes/staff");
       console.log(res);
@@ -220,7 +235,7 @@ const initializeWorkingSchedule = (apiSchedule) => {
   return (
     <section className="flex">
       <div className="hidden md:block">
-      <Navbar />
+        <Navbar />
       </div>
       <div className=" w-full flex mx-3 flex-col overflow-hidden">
         <div className="flex justify-center items-center my-2 w-full ">

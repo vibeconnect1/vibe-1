@@ -672,6 +672,12 @@ export const postNewVisitor = async (data) =>
       token: token,
     },
   });
+export const postNewGoods = async (data) =>
+  axiosInstance.post("/goods_in_outs.json", data, {
+    params: {
+      token: token,
+    },
+  });
 export const getPatrollings = async () =>
   axiosInstance.get("/patrollings.json", {
     params: {
@@ -897,6 +903,18 @@ export const getServicesRoutineDetails = async (id) =>
   });
 export const getExpectedVisitor = async () =>
   axiosInstance.get(`/visitors.json`, {
+    params: {
+      token: token,
+    },
+  });
+export const getRegisteredVehicle = async () =>
+  axiosInstance.get(`/registered_vehicles.json`, {
+    params: {
+      token: token,
+    },
+  });
+export const getVisitorHistory = async () =>
+  axiosInstance.get(`/visitors/approval_history.json`, {
     params: {
       token: token,
     },

@@ -25,7 +25,7 @@ function Profile() {
       position: 'Senior Marketing Analyst',
       manager: 'karan',
       connection: 90,
-      bio: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla convallis libero et est tristique vehicula.',
+      bio: 'I work with a team of professionals to provide innovative solutions to increase the work efficiency and work life balance through automation. I am responsible for identifying and pursuing new business opportunities, negotiating contracts, and managing client relationships.',
     }
     // const items = ['Item 1', 'Item 2', 'Item 3', 'Item 4'];
     const [modal, showModal] = useState(false);
