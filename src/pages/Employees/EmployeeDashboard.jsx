@@ -126,7 +126,7 @@ const EmployeeDashboard = () => {
             <img
               src={vibeLogo}
               // src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQGMshTNukLxdr-RYX5Hd9jz9ByEiJgl4liNw&s"
-              alt="vibeconnect"
+              alt="biocon"
               className="h-10 mr-2 bg-white p-1 rounded-md"
             />
           </div>

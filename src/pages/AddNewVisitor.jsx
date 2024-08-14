@@ -4,7 +4,7 @@ import { FaTrash } from "react-icons/fa";
 import { useSelector } from "react-redux";
 import { getItemInLocalStorage } from "../utils/localStorage";
 import toast from "react-hot-toast";
-import { getSetupUsers, postNewGoods, postNewVisitor, postVisitorOTPApi } from "../api";
+import { getHostList, getSetupUsers, getVisitorStaffCategory, postNewGoods, postNewVisitor, postVisitorOTPApi } from "../api";
 import { useNavigate } from "react-router-dom";
 import Webcam from "react-webcam";
 import FileInputBox from "../containers/Inputs/FileInputBox";
@@ -28,6 +28,7 @@ const AddNewVisitor = () => {
   const handleCloseCamera = () => {
     setShowWebcam(false);
   };
+  const [staffCategories, setStaffCategories] = useState([])
   const [passEndDate, setPassEndDate] = useState("");
   const [formData, setFormData] = useState({
     visitorName: "",
@@ -44,7 +45,9 @@ const AddNewVisitor = () => {
     noOfGoods: "",
     goodsDescription: "",
     goodsAttachments: [],
+    supportCategory:""
   });
+
   console.log(formData);
   const handleFrequencyChange = (e) => {
     setSelectedFrequency(e.target.value);
@@ -166,10 +169,12 @@ const AddNewVisitor = () => {
       return toast.error("Mobile number must be  10 digits.");
     }
 
+
     const postData = new FormData();
     postData.append("visitor[site_id]", siteId);
     postData.append("visitor[created_by_id]", formData.host);
     postData.append("visitor[name]", formData.visitorName);
+    postData.append("visitor[visitor_staff_category_id]", formData.supportCategory);
     postData.append("visitor[contact_no]", formData.mobile);
     postData.append("visitor[purpose]", formData.purpose);
     postData.append("visitor[start_pass]", passStartDate);
@@ -231,13 +236,28 @@ const AddNewVisitor = () => {
       toast.dismiss();
     }
   };
+ 
   useEffect(() => {
     const fetchUsers = async () => {
-      const usersResp = await getSetupUsers();
-      setHosts(usersResp.data);
-      console.log(usersResp);
+     try {
+       const usersResp = await getHostList(siteId);
+       setHosts(usersResp.data.hosts);
+       console.log(usersResp);
+     } catch (error) {
+      console.log(error)
+     }
     };
+    const fetchVisitorCategory = async ()=>{
+      try {
+        const visitorCat = await getVisitorStaffCategory()
+        setStaffCategories(visitorCat.data.categories)
+      } catch (error) {
+        console.log(error)
+      }
+
+    }
     fetchUsers();
+    fetchVisitorCategory()
   }, []);
 
   return (
@@ -356,14 +376,13 @@ const AddNewVisitor = () => {
           {selectedVisitorType === "Support Staff" && (
             <div className="grid gap-2 items-center w-full">
               <label htmlFor="" className="font-medium">
-                Support Category :
+              Select Support Staff Category :
               </label>
-              <select className="border border-gray-400 p-2 rounded-md">
-                <option value="">Select Support Staff Category</option>
-                <option value="">Maintenance Workers</option>
-                <option value="">Janitors</option>
-                <option value="">Groundskeepers</option>
-                <option value="">Security Personnel</option>
+              <select className="border border-gray-400 p-2 rounded-md" value={formData.supportCategory} onChange={handleChange} name="supportCategory">
+                <option value="">Select Category</option>
+               {staffCategories.map((staffCat)=>(
+                <option value={staffCat.id} key={staffCat.id}>{staffCat.name}</option>
+               ))}
               </select>
             </div>
           )}
@@ -413,7 +432,7 @@ const AddNewVisitor = () => {
               <option value="">Select Person to meet</option>
               {hosts.map((host) => (
                 <option value={host.id} key={host.id}>
-                  {host.firstname} {host.lastname}
+                  {host.name} 
                 </option>
               ))}
             </select>

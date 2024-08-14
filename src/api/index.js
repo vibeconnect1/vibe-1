@@ -106,7 +106,7 @@ export const postVendorType = async (data) =>
       token: token,
     },
   });
-export const editVendorTypeDetails = async (id,data) =>
+export const editVendorTypeDetails = async (id, data) =>
   axiosInstance.put(`/vendor_suppliers/${id}.json`, data, {
     params: {
       token: token,
@@ -660,6 +660,12 @@ export const getSetupUsers = async () =>
       token: token,
     },
   });
+export const getHostList = async (siteId) =>
+  axiosInstance.get(`/visitors/fetch_potential_hosts.json?site_id=${siteId}`, {
+    params: {
+      token: token,
+    },
+  });
 export const postSetupUsers = async (data) =>
   axiosInstance.post("/users/create.json", data, {
     params: {
@@ -672,7 +678,6 @@ export const postNewVisitor = async (data) =>
       token: token,
     },
   });
-
 
 export const getPatrollings = async () =>
   axiosInstance.get("/patrollings.json", {
@@ -704,12 +709,24 @@ export const getGoods = async () =>
       token: token,
     },
   });
-  export const postNewGoods = async (data) =>
-    axiosInstance.post("/goods_in_outs.json", data, {
-      params: {
-        token: token,
-      },
-    });
+export const postGoods = async (data) =>
+  axiosInstance.post("/goods_in_outs.json", data, {
+    params: {
+      token: token,
+    },
+  });
+export const getVisitorStaffCategory = async () =>
+  axiosInstance.get("/visitor_staff_category.json", {
+    params: {
+      token: token,
+    },
+  });
+export const postNewGoods = async (data) =>
+  axiosInstance.post("/goods_in_outs.json", data, {
+    params: {
+      token: token,
+    },
+  });
 export const getStaff = async () =>
   axiosInstance.get("/staffs.json", {
     params: {
@@ -723,7 +740,7 @@ export const getStaffDetails = async (id) =>
     },
   });
 export const editStaffDetails = async (id, data) =>
-  axiosInstance.put(`/staffs/${id}.json`, data,{
+  axiosInstance.put(`/staffs/${id}.json`, data, {
     params: {
       token: token,
     },
@@ -911,6 +928,18 @@ export const getExpectedVisitor = async () =>
   });
 export const getRegisteredVehicle = async () =>
   axiosInstance.get(`/registered_vehicles.json`, {
+    params: {
+      token: token,
+    },
+  });
+export const getVisitorApprovals = async () =>
+  axiosInstance.get(`/visitors/approval_form.json`, {
+    params: {
+      token: token,
+    },
+  });
+export const visitorApproval = async (id, data) =>
+  axiosInstance.patch(`/visitors/${id}/approve_visitor.json`, data,{
     params: {
       token: token,
     },

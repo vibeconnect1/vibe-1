@@ -39,7 +39,7 @@ export function FormattedDateToShowProperly(inputDateTime) {
 
 export const dateFormat = (dateString) => {
   const date = new Date(dateString);
-  return date.toLocaleDateString(); 
+  return date.toLocaleDateString();
 };
 
 export function SendDateFormat(dateString) {
@@ -66,14 +66,16 @@ export function convertToIST(dateTimeString) {
 }
 
 export const formatTime = (dateTimeString) => {
+  if (!dateTimeString) {
+    return "";
+  }
   const date = new Date(dateTimeString);
+  if (isNaN(date.getTime())) {
+    return "";
+  }
   let hours = date.getHours();
-  const minutes = (`0${date.getMinutes()}`).slice(-2);
-  const ampm = hours >= 12 ? 'PM' : 'AM';
-
-
+  const minutes = `0${date.getMinutes()}`.slice(-2);
+  const ampm = hours >= 12 ? "PM" : "AM";
   hours = hours % 12 || 12;
-
   return `${hours}:${minutes} ${ampm}`;
 };
-

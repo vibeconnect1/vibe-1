@@ -6,11 +6,20 @@ import Passes from "../Passes";
 import Navbar from "../../components/Navbar";
 import { useSelector } from "react-redux";
 import Table from "../../components/table/Table";
-import { getExpectedVisitor, getVisitorHistory } from "../../api";
+import {
+  getExpectedVisitor,
+  getVisitorApprovals,
+  getVisitorHistory,
+  visitorApproval,
+} from "../../api";
 import { BsEye } from "react-icons/bs";
 import { BiEdit } from "react-icons/bi";
 
 import Webcam from "react-webcam";
+import { formatTime } from "../../utils/dateUtils";
+import { IoClose } from "react-icons/io5";
+import { FaCheck } from "react-icons/fa";
+import toast from "react-hot-toast";
 const VisitorPage = () => {
   const [page, setPage] = useState("Visitor In");
   const themeColor = useSelector((state) => state.theme.color);
@@ -20,9 +29,11 @@ const VisitorPage = () => {
   const [FilteredUnexpectedVisitor, setFilteredUnexpectedVisitor] = useState(
     []
   );
+  const [approvals, setApprovals] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
   const [histories, setHistories] = useState([]);
   const [filteredHistory, setFilteredHistory] = useState([]);
+
   const webcamRef = useRef(null);
   const handleClick = (visitorType) => {
     setSelectedVisitor(visitorType);
@@ -67,11 +78,25 @@ const VisitorPage = () => {
         console.log(error);
       }
     };
-
+   
+    fetchApprovals();
     fetchExpectedVisitor();
     fetchVisitorHistory();
   }, []);
-
+  const fetchApprovals = async () => {
+    try {
+      const approvalResp = await getVisitorApprovals();
+      const sortedApproval = approvalResp.data.sort((a, b) => {
+        return new Date(b.created_at) - new Date(a.created_at);
+      });
+      setApprovals(sortedApproval);
+      // setFilteredHistory(sortedApproval);
+      console.log(sortedApproval);
+      console.log(approvalResp);
+    } catch (error) {
+      console.log(error);
+    }
+  };
   const VisitorColumns = [
     {
       name: "Action",
@@ -224,16 +249,14 @@ const VisitorPage = () => {
     setSearchHistoryText(searchValue);
     if (searchValue.trim() === "") {
       setFilteredHistory(histories);
-    }else{
+    } else {
       const filteredResults = histories.filter(
         (item) =>
           item.name.toLowerCase().includes(searchValue.toLowerCase()) ||
           (item.contact_no &&
-            item.contact_no
-              .toLowerCase()
-              .includes(searchValue.toLowerCase()))
+            item.contact_no.toLowerCase().includes(searchValue.toLowerCase()))
       );
-      setFilteredHistory(filteredResults)
+      setFilteredHistory(filteredResults);
     }
   };
 
@@ -279,7 +302,70 @@ const VisitorPage = () => {
       sortable: true,
     },
   ];
- 
+  const handleApproval = async (id, decision) => {
+    const approveData = new FormData();
+    approveData.append("approve", decision);
+    try {
+      const res = await visitorApproval(id, approveData)
+      console.log(res)
+      fetchApprovals()
+      if (decision === true) {
+        toast.success("Visitor approved successfully")
+      }else{
+        toast.success("Approval denied")
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const approvalColumn = [
+    {
+      name: "Action",
+      cell: (row) => (
+        <div className="flex items-center gap-4">
+          <Link to={`/admin/passes/visitors/visitor-details/${row.id}`}>
+            <BsEye size={15} />
+          </Link>
+        </div>
+      ),
+    },
+    {
+      name: "Name",
+      selector: (row) => row.name,
+      sortable: true,
+    },
+    {
+      name: "Purpose",
+      selector: (row) => row.purpose,
+      sortable: true,
+    },
+    {
+      name: "Expected Date",
+      selector: (row) => dateFormat(row.expected_date),
+      sortable: true,
+    },
+    {
+      name: "Expected Time",
+      selector: (row) => formatTime(row.expected_time),
+      sortable: true,
+    },
+    {
+      name: "Approval",
+      selector: (row) => (
+        <div className="flex gap-2">
+          <button className="text-white bg-green-400 rounded-full p-1" onClick={()=>handleApproval(row.id, true)}>
+            <FaCheck size={20} />{" "}
+          </button>
+          <button className="text-white bg-red-400 rounded-full p-1" onClick={()=>handleApproval(row.id, false)}>
+            <IoClose size={20} />{" "}
+          </button>
+        </div>
+      ),
+
+      sortable: true,
+    },
+  ];
+
   return (
     <div className="visitors-page">
       <section className="flex">
@@ -287,7 +373,7 @@ const VisitorPage = () => {
         <div className=" w-full flex mx-3  flex-col overflow-hidden">
           <Passes />
           <div className="flex w-full  m-2">
-            <div className="flex w-full md:flex-row flex-col space-x-4  border-b border-gray-400">
+            <div className="flex w-full md:flex-row flex-col space-x-4 border-b border-gray-400">
               <h2
                 className={`p-2 ${
                   page === "Visitor In"
@@ -307,6 +393,16 @@ const VisitorPage = () => {
                 onClick={() => setPage("Visitor Out")}
               >
                 Visitor Out
+              </h2>
+              <h2
+                className={`p-2 ${
+                  page === "approval"
+                    ? "text-blue-500 font-medium  shadow-custom-all-sides"
+                    : "text-black"
+                }  rounded-t-md  rounded-sm cursor-pointer text-center text-sm flex items-center justify-center transition-all duration-300`}
+                onClick={() => setPage("approval")}
+              >
+                Approvals
               </h2>
               <h2
                 className={`p-2 ${
@@ -409,6 +505,18 @@ const VisitorPage = () => {
                 onChange={handleSearchHistory}
               />
               <Table columns={historyColumn} data={filteredHistory} />
+            </div>
+          )}
+          {page === "approval" && (
+            <div className="">
+              <input
+                type="text"
+                placeholder="Search using Name or Mobile Number"
+                className="border p-2 rounded-md border-gray-300 w-full mb-2 placeholder:text-sm"
+                // value={searchHIstoryText}
+                // onChange={handleSearchHistory}
+              />
+              <Table columns={approvalColumn} data={approvals} />
             </div>
           )}
           <div className="my-4">

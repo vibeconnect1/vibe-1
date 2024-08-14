@@ -644,6 +644,7 @@ import EditCourseDetails from "./pages/SkillGrow/EditCourseDetails.jsx";
 import EditCourseDescription from "./pages/SkillGrow/EditCourseDescription.jsx";
 import EditCurriculum from "./pages/SkillGrow/EditCurriculum.jsx";
 import EditFAQs from "./pages/SkillGrow/EditFAQs.jsx";
+import AddGoods from "./pages/SubPages/AddGoods.jsx";
 // new admin hrms
 
 function App() {
@@ -6168,6 +6169,14 @@ function App() {
             element={
               <ProtectedAdminRoutes>
                 <EditFAQs/>
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/passes/add-goods-in-out"
+            element={
+              <ProtectedAdminRoutes>
+                <AddGoods/>
               </ProtectedAdminRoutes>
             }
           />

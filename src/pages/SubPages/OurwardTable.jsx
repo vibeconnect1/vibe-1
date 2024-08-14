@@ -9,16 +9,17 @@ import { BiEdit } from "react-icons/bi";
 import { TiTick } from "react-icons/ti";
 import { IoClose } from "react-icons/io5";
 import Table from "../../components/table/Table";
+import { dateFormat, formatTime } from "../../utils/dateUtils";
 
-const OutwardsTable = () => {
-  const [selectedStatus, setSelectedStatus] = useState("all");
+const OutwardsTable = ({ goodsOut }) => {
+  const [filteredData, setFilteredData] = useState(goodsOut);
   const themeColor = useSelector((state) => state.theme.color);
   const columns = [
     {
       name: "Action",
       cell: (row) => (
         <div className="flex items-center gap-4">
-          <Link to={`/admin/outward-details/${row.id}`}>
+          <Link to={`/admin/inwards-details/${row.id}`}>
             <BsEye size={15} />
           </Link>
         </div>
@@ -27,203 +28,80 @@ const OutwardsTable = () => {
 
     {
       name: "Type",
-      selector: (row) => row.Type,
-      sortable: true,
-    },
-    {
-      name: "Returnable/Non Returnable",
-      selector: (row) => row.return,
-      sortable: true,
-    },
-    {
-      name: "Expected Return Datee",
-      selector: (row) => row.erd,
+      selector: (row) => (row.ward_type === "in" ? "Inward" : "Outward"),
       sortable: true,
     },
 
-    {
-      name: "Category",
-      selector: (row) => row.Category,
-      sortable: true,
-    },
     {
       name: "Person Name",
-      selector: (row) => row.name,
-      sortable: true,
-    },
-    {
-      name: "Profile Image",
-      selector: (row) => row.Profile_Image,
-      sortable: true,
-    },
-    {
-      name: "Pass No.",
-      selector: (row) => row.Pass_No,
+      selector: (row) => row.visitor_name.name,
       sortable: true,
     },
 
     {
-      name: "Mode of Transport",
-      selector: (row) => row.Transport,
+      name: "Vehicle Number",
+      selector: (row) => row.vehicle_no,
       sortable: true,
     },
     {
-      name: "LR No.",
-      selector: (row) => row.LR_No,
+      name: "Goods In Time",
+      selector: (row) => formatTime(row.goods_in_time),
       sortable: true,
     },
 
     {
-      name: "Trip ID",
-      selector: (row) => row.trip_id,
+      name: "Goods out Time",
+      selector: (row) => formatTime(row.goods_out_time),
       sortable: true,
     },
     {
-      name: "Gate Entry",
-      selector: (row) => row.Gate_Entry,
+      name: "Created on",
+      selector: (row) => dateFormat(row.created_at),
       sortable: true,
     },
-
-    {
-      name: "Item Details",
-      selector: (row) => row.Item_Details,
-      sortable: true,
-    },
-   
-
-    
   ];
 
-  //custom style
-  const customStyle = {
-    headRow: {
-      style: {
-        backgroundColor: themeColor,
-        color: "white",
-
-        fontSize: "10px",
-      },
-    },
-    headCells: {
-      style: {
-        textTransform: "upperCase",
-      },
-    },
+  const [searchText, setSearchText] = useState("");
+  const handleSearch = (e) => {
+    const searchValue = e.target.value;
+    setSearchText(searchValue);
+    if (searchValue.trim === "") {
+      setFilteredData(goodsOut);
+    } else {
+      const filteredResult = goodsOut.filter(
+        (item) =>
+          item.visitor_name.name
+            .toLowerCase()
+            .includes(searchValue.toLowerCase()) ||
+          item.vehicle_no.toLowerCase().includes(searchValue.toLowerCase())
+      );
+      setFilteredData(filteredResult);
+    }
   };
-  const data = [
-    {
-      id: 1,
-      Type: "abc",
-      return: "returnable",
-      erd: "24/05/2024",
-      Category: "abc",
-      name: "asd",
-      Profile_Image: "kl",
-      Pass_No: "789",
-      Transport: "Road",
-      LR_No: "456",
-      trip_id: "45",
-      Gate_Entry: "56",
-      Item_Details: "56",
-      status: "Upcoming",
-    },
-    {
-      id: 2,
-      Type: "abc",
-      return: "returnable",
-      erd: "24/05/2024",
-      Category: "abc",
-      name: "asd",
-      Profile_Image: "kl",
-      Pass_No: "789",
-      Transport: "Road",
-      LR_No: "456",
-      trip_id: "45",
-      Gate_Entry: "56",
-      Item_Details: "56",
-
-      status: "Upcoming",
-    },
-    {
-      id: 3,
-      Type: "abc",
-      return: "returnable",
-      erd: "24/05/2024",
-      Category: "abc",
-      name: "asd",
-      Profile_Image: "kl",
-      Pass_No: "789",
-      Transport: "Road",
-      LR_No: "456",
-      trip_id: "45",
-      Gate_Entry: "56",
-      Item_Details: "56",
-
-      status: "Upcoming",
-    },
-  ];
 
   return (
     <section className="flex">
       <div className=" w-full flex mx-3 flex-col overflow-hidden">
         <div className="flex md:flex-row flex-col gap-5 justify-between my-2">
-          <div className="sm:flex grid grid-cols-2 items-center justify-center  gap-4 border border-gray-300 rounded-md px-3 p-2 w-auto">
-            <div className="flex items-center gap-2">
-              <input
-                type="radio"
-                id="all"
-                name="status"
-                checked={selectedStatus === "all"}
-                onChange={() => handleStatusChange("all")}
-              />
-              <label htmlFor="all" className="text-sm">
-                All
-              </label>
-            </div>
-            <div className="flex items-center gap-2">
-              <input
-                type="radio"
-                id="upcoming"
-                name="status"
-                // checked={selectedStatus === "open"}
-                checked={
-                  selectedStatus === "upcoming" || selectedStatus === "upcoming"
-                }
-                // onChange={() => handleStatusChange("open")}
-              />
-              <label htmlFor="open" className="text-sm">
-                upcoming
-              </label>
-            </div>
-            <div className="flex items-center gap-2">
-              <input
-                type="radio"
-                id="completed"
-                name="status"
-                checked={selectedStatus === "completed"}
-                onChange={() => handleStatusChange("completed")}
-              />
-              <label htmlFor="completed" className="text-sm">
-                Completed
-              </label>
-            </div>
-
-            <div className="flex items-center gap-2">
-              <input
-                type="radio"
-                id="cancelled"
-                name="status"
-                checked={selectedStatus === "cancelled"}
-                //   onChange={() => handleStatusChange("cancelled")}
-              />
-              <label htmlFor="completed" className="text-sm">
-                Cancelled
-              </label>
-            </div>
-          </div>
-         
+          <input
+            type="text"
+            name=""
+            id=""
+            value={searchText}
+            onChange={handleSearch}
+            className="border-gray-300 border rounded-md p-2 w-full placeholder:text-sm"
+            placeholder="Search by name, vehicle number"
+          />
+          <Link
+            to={"/admin/passes/add-goods-in-out"}
+            className="p-1 font-medium px-4 text-white rounded-md flex items-center gap-2"
+            style={{ background: themeColor }}
+          >
+            {" "}
+            <PiPlusCircle /> Add
+          </Link>
         </div>
-        <Table columns={columns} data={data} isPagination={true} />
+        <Table columns={columns} data={filteredData} isPagination={true} />
       </div>
     </section>
   );

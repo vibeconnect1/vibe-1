@@ -7,13 +7,30 @@ import { BsEye } from "react-icons/bs";
 import { useSelector } from "react-redux";
 import { BiEdit } from "react-icons/bi";
 import { TiTick } from "react-icons/ti";
-import { IoClose } from "react-icons/io5";
+import { IoAddCircle, IoClose } from "react-icons/io5";
 import Table from "../../components/table/Table";
 import { getGoods } from "../../api";
 import { dateFormat, formatTime } from "../../utils/dateUtils";
-const InwardsTable = ({ goodsIn }) => {
-  const [selectedStatus, setSelectedStatus] = useState("all");
+const InwardsTable = () => {
+  const [filteredData, setFilteredData] = useState([])
   const themeColor = useSelector((state) => state.theme.color);
+  const [goodsIn, setGoodsIn] = useState([])
+  useEffect(() => {
+    const fetchGoods = async () => {
+      try {
+        const goodsRes = await getGoods();
+        const filterGoodsIn = goodsRes.data.filter(
+          good => good.ward_type === "in"
+        );
+       
+        setGoodsIn(filterGoodsIn);
+setFilteredData(filterGoodsIn)
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchGoods()
+  }, []);
   const columns = [
     {
       name: "Action",
@@ -34,7 +51,7 @@ const InwardsTable = ({ goodsIn }) => {
 
     {
       name: "Person Name",
-      selector: (row) => row.visitor_name,
+      selector: (row) => row.visitor_name.name,
       sortable: true,
     },
 
@@ -61,22 +78,42 @@ const InwardsTable = ({ goodsIn }) => {
     },
   ];
   console.log(goodsIn);
-
+const [searchText, setSearchText] = useState("")
+  const handleSearch = (e)=>{
+const searchValue = e.target.value
+setSearchText(searchValue)
+if (searchValue.trim === "") {
+  setFilteredData(goodsIn)
+}else{
+  const filteredResult = goodsIn.filter((item)=> item.visitor_name.name.toLowerCase().includes(searchValue.toLowerCase()) || item.vehicle_no.toLowerCase().includes(searchValue.toLowerCase()) )
+  setFilteredData(filteredResult)
+}
+  }
+console.log("in", filteredData)
   return (
     <section className="flex">
-      <div className=" w-full flex mx-3 flex-col overflow-hidden">
+      <div className=" w-full flex mx-3 flex-col overflow-hidden mb-10">
         <div className="flex md:flex-row flex-col gap-5 justify-between my-2">
           <input
             type="text"
-            name=""
+            value={searchText}
+            onChange={handleSearch}
             id=""
             className="border-gray-300 border rounded-md p-2 w-full placeholder:text-sm"
             placeholder="Search by name, vehicle number"
           />
+          <Link
+          to={"/admin/passes/add-goods-in-out"}
+            className="p-1 font-medium px-4 text-white rounded-md flex items-center gap-2"
+            style={{ background: themeColor }}
+          >
+            {" "}
+            <PiPlusCircle /> Add
+          </Link>
         </div>
         <Table
           columns={columns}
-          data={goodsIn}
+          data={filteredData}
           // customStyles={customStyle}
           isPagination={true}
         />

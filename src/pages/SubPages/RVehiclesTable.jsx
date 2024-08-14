@@ -59,7 +59,7 @@ const RVehiclesTable = () => {
     },
     {
       name: "Parking Slot",
-      selector: (row) => row.Parking_Slot,
+      selector: (row) => row.slot_number,
       sortable: true,
     },
     {
@@ -150,133 +150,18 @@ const RVehiclesTable = () => {
       sortable: true,
     },
   ];
-
-  //custom style
-  const customStyle = {
-    headRow: {
-      style: {
-        backgroundColor: themeColor,
-        color: "white",
-
-        fontSize: "10px",
-      },
-    },
-    headCells: {
-      style: {
-        textTransform: "upperCase",
-      },
-    },
-  };
-  const data = [
-    {
-      id: 1,
-      Vehicle_Number: "MH02BC1215",
-      Parking_Slot: "P1",
-      Vehicle_Category: "EV",
-      Vehicle_Type: "$ Wheeler",
-      Sticker_Number: "78",
-      // Category: "uio",
-      Registration_Number: "456",
-      ActiveInactive: "Active",
-      // Insurance_Number: "45",
-      // Insurance_Valid_Till: "23/05/2024",
-      // Staff_Name: "abc",
-      status: "Upcoming",
-      // Qr_Code: "45",
-    },
-    {
-      id: 2,
-      Vehicle_Number: "MH02BC1215",
-      Parking_Slot: "P2",
-      Vehicle_Category: "EV",
-      Vehicle_Type: "$ Wheeler",
-      Sticker_Number: "78",
-      // Category: "uio",
-      Registration_Number: "456",
-      ActiveInactive: "Active",
-      // Insurance_Number: "45",
-      // Insurance_Valid_Till: "23/05/2024",
-      // Staff_Name: "abc",
-      status: "Upcoming",
-      // Qr_Code: "45",
-    },
-    {
-      id: 3,
-      Vehicle_Number: "MH02BC1215",
-      Parking_Slot: "P3",
-      Vehicle_Category: "EV",
-      Vehicle_Type: "$ Wheeler",
-      Sticker_Number: "78",
-      // Category: "uio",
-      Registration_Number: "456",
-      ActiveInactive: "Active",
-      // Insurance_Number: "45",
-      // Insurance_Valid_Till: "23/05/2024",
-      // Staff_Name: "abc",
-      status: "Upcoming",
-      // Qr_Code: "45",
-    },
-   
-  ];
-
   return (
     <section className="flex">
       <div className=" w-full flex mx-3 flex-col overflow-hidden">
         <div className="flex md:flex-row flex-col gap-5 justify-between  my-2">
-          <div className="sm:flex grid grid-cols-2 items-center justify-center  gap-4 border border-gray-300 rounded-md px-3 p-2 w-auto">
-            <div className="flex items-center gap-2">
-              <input
-                type="radio"
-                id="all"
-                name="status"
-                checked={selectedStatus === "all"}
-                onChange={() => handleStatusChange("all")}
-              />
-              <label htmlFor="all" className="text-sm">
-                All
-              </label>
-            </div>
-            <div className="flex items-center gap-2">
-              <input
-                type="radio"
-                id="upcoming"
-                name="status"
-                // checked={selectedStatus === "open"}
-                checked={
-                  selectedStatus === "upcoming" || selectedStatus === "upcoming"
-                }
-                // onChange={() => handleStatusChange("open")}
-              />
-              <label htmlFor="open" className="text-sm">
-                upcoming
-              </label>
-            </div>
-            <div className="flex items-center gap-2">
-              <input
-                type="radio"
-                id="completed"
-                name="status"
-                checked={selectedStatus === "completed"}
-                onChange={() => handleStatusChange("completed")}
-              />
-              <label htmlFor="completed" className="text-sm">
-                Completed
-              </label>
-            </div>
-
-            <div className="flex items-center gap-2">
-              <input
-                type="radio"
-                id="cancelled"
-                name="status"
-                checked={selectedStatus === "cancelled"}
-                //   onChange={() => handleStatusChange("cancelled")}
-              />
-              <label htmlFor="completed" className="text-sm">
-                Cancelled
-              </label>
-            </div>
-          </div>
+        <input
+            type="text"
+            // value={searchText}
+            // onChange={handleSearch}
+            id=""
+            className="border-gray-300 border rounded-md p-2 w-full placeholder:text-sm"
+            placeholder="Search by name, vehicle number"
+          />
           <span className="flex gap-4">
             <Link
               to={"/admin/add-rvehicles"}

@@ -136,6 +136,10 @@ const VisitorDetails = () => {
               <p className="font-semibold text-sm">Visitor Type : </p>
               <p className="">{details.visit_type}</p>
             </div>
+           {details.visit_type === "Support Staff" && <div className="grid grid-cols-2 ">
+              <p className="font-semibold text-sm">Staff Category : </p>
+              <p className="">{details.visitor_staff_category.name}</p>
+            </div>}
             <div className="grid grid-cols-2 ">
               <p className="font-semibold text-sm">Visitor's Name : </p>
               <p className="">{details.name}</p>
