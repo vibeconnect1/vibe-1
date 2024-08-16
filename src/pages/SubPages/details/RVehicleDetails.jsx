@@ -1,103 +1,188 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
-import image from "/profile.png"
+import image from "/profile.png";
 import { useSelector } from "react-redux";
 import { FaQrcode } from "react-icons/fa";
 import { Link, useParams } from "react-router-dom";
 import { BiEditAlt } from "react-icons/bi";
 import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
-import qr from "/QR.png"
+import qr from "/QR.png";
 import ModalWrapper from "../../../containers/modals/ModalWrapper";
-
+import { domainPrefix, getRegisteredVehicleDetails } from "../../../api";
+import axios from "axios";
+import vibeLogo from "/vibe.png";
+import { FormattedDateToShowProperly } from "../../../utils/dateUtils";
 const RVehicleDetails = () => {
   const themeColor = useSelector((state) => state.theme.color);
-  const [qrCode, setQrCode] = useState(false)
- const {id} = useParams()
+  const [qrCode, setQrCode] = useState(false);
+  const { id } = useParams();
+  const [details, setDetails] = useState([]);
 
+  const handlePrintQRCode = async () => {
+    const doc = new jsPDF();
+    const logoText = "Vibeconnect";
+    try {
+      const response = await axios.get(
+        domainPrefix + details.qr_code_image_url,
+        { responseType: "blob" }
+      );
+      const blob = response.data;
+      const qrCodeDataURL = await new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onloadend = () => resolve(reader.result);
+        reader.onerror = reject;
+        reader.readAsDataURL(blob);
+      });
 
- const handlePrintQRCode = async () => {
-  console.log("qr")
-  const qrCodeElement = document.getElementById("qrCodeElement");
+      // Calculate the center position for the QR code
+      const qrCodeSize = 180;
+      const qrCodeX = (doc.internal.pageSize.width - qrCodeSize) / 2;
+      const qrCodeY = 40;
 
-  if (!qrCodeElement) {
-    return;
-  }
+      doc.addImage(
+        qrCodeDataURL,
+        "PNG",
+        qrCodeX,
+        qrCodeY,
+        qrCodeSize,
+        qrCodeSize
+      );
 
-  // Use html2canvas to capture the QR code as an image
-  const canvas = await html2canvas(qrCodeElement);
-  const qrImage = canvas.toDataURL("image/png");
+      // Load the Vibe logo image
+      const logoResponse = await axios.get(vibeLogo, { responseType: "blob" });
+      const logoBlob = logoResponse.data;
+      const logoDataURL = await new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onloadend = () => resolve(reader.result);
+        reader.onerror = reject;
+        reader.readAsDataURL(logoBlob);
+      });
 
-  const doc = new jsPDF();
-  const margin = 10;
-  const pageWidth = doc.internal.pageSize.getWidth();
+      // Calculate the center position for the Vibe logo
+      const logoSize = 20;
+      const logoX = qrCodeX + (qrCodeSize - logoSize) / 2;
+      const logoY = qrCodeY + (qrCodeSize - logoSize) / 2;
 
-  // Add the QR code image to the PDF
-  const qrCodeSize = 200;
-  const qrCodeX = (pageWidth - qrCodeSize) / 2;
-  doc.addImage(qrImage, "PNG", qrCodeX, margin, qrCodeSize, qrCodeSize);
+      // Add greyish background with rounded corners behind the logo
+      const backgroundMargin = 5;
+      const backgroundX = logoX - backgroundMargin;
+      const backgroundY = logoY - backgroundMargin;
+      const backgroundSize = logoSize + 2 * backgroundMargin;
+      const cornerRadius = 5;
 
-  // Add the location details below the QR code
-  const locationDetails = {
-    room: "Room 101",
-    building: "Building A",
-    floor: "Floor 1",
+      doc.setFillColor(255, 255, 255); // Set fill color to light grey
+      doc.roundedRect(
+        backgroundX,
+        backgroundY,
+        backgroundSize,
+        backgroundSize,
+        cornerRadius,
+        cornerRadius,
+        "F"
+      );
+
+      doc.addImage(logoDataURL, "PNG", logoX, logoY, logoSize, logoSize);
+
+      doc.setFontSize(16);
+      doc.setFont("Helvetica", "bold");
+      doc.setTextColor(100);
+      // doc.text(assetName, 105, 10, null, null, "center");
+
+      // Adding heading and border at the bottom
+      const heading = "Location";
+      const pageWidth = doc.internal.pageSize.width;
+      const headingY = 230;
+
+      doc.setFontSize(14);
+      doc.text(heading, 105, headingY, null, null, "center");
+      doc.line(10, headingY + 5, pageWidth - 10, headingY + 5); // Draw border line
+
+      // Adding building, floor, and unit name in a single row below the heading
+      const locationInfoY = headingY + 20;
+      doc.setFontSize(12);
+      doc.setTextColor(50);
+
+      // Calculating positions for equal spacing
+      const textWidth = pageWidth - 20; // 10 units padding on each side
+      const textSectionWidth = textWidth / 3;
+      const buildingX = 10;
+      // const floorX = buildingX + textSectionWidth;
+      // const unitX = floorX + textSectionWidth;
+
+      doc.text(`Slot: ${details.slot_name}`, buildingX, locationInfoY);
+      // doc.text(`Floor: ${details.floor_name}`, floorX, locationInfoY);
+      // doc.text(`Unit: ${details.unit_name}`, unitX, locationInfoY);
+
+      const pageHeight = doc.internal.pageSize.height;
+      const logoTextWidth = doc.getTextWidth(logoText);
+
+      doc.text(logoText, pageWidth - logoTextWidth - 10, pageHeight - 10);
+      doc.save(`${details.slot_name}.pdf`);
+    } catch (error) {
+      console.log(error);
+    }
   };
-  const locationText = `${locationDetails.room}, ${locationDetails.floor}, ${locationDetails.building} `;
-  const locationY = margin + qrCodeSize + 10; // Adjust the Y position
 
-  doc.setFontSize(12);
-  doc.text(locationText, pageWidth / 2, locationY, { align: "center" });
+  useEffect(() => {
+    const fetchRVehicles = async () => {
+      try {
+        const res = await getRegisteredVehicleDetails(id);
+        console.log(res);
+        setDetails(res.data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchRVehicles();
+  }, []);
 
-  // Save the PDF
-  doc.save("QRCode.pdf");
-};
-  return (   
-    <div className="w-screen p-4">
+  return (
+    <div className="w-screen p-2">
       <div className="flex flex-col gap-2">
-      <h2
+        <h2
           style={{
             background: themeColor,
           }}
-          className="text-center w-full text-white font-semibold text-lg p-2 px-4 "
+          className="text-center w-full text-white font-semibold rounded-md text-lg p-2 px-4 "
         >
-          R Vehicles Details
+          Registered Vehicle Details
         </h2>
         <div className="flex gap-2 justify-end">
-            <button
-              className="flex gap-2 items-center justify-center border-2 border-black px-4 p-1 rounded-full hover:bg-black hover:text-white transition-all duration-500"
-              onClick={() => setQrCode(true)}
-            >
-              <FaQrcode /> QR Code
-            </button>
-            <Link
-              to={`/admin/edit-rvehicles/${id}`}
-              className="flex gap-2 items-center border-2 border-black px-4 p-1 rounded-full hover:bg-black transition-all duration-300 hover:text-white"
-            >
-              <BiEditAlt />
-              Edit Details
-            </Link>
-            </div>
-        <div className="md:grid  px-4 flex flex-col grid-cols-3 gap-5 gap-x-4">
+          <button
+            className="flex gap-2 items-center justify-center border-2 border-black px-4 p-1 rounded-full hover:bg-black hover:text-white transition-all duration-500"
+            onClick={() => setQrCode(true)}
+          >
+            <FaQrcode /> QR Code
+          </button>
+          <Link
+            to={`/admin/edit-rvehicles/${id}`}
+            className="flex gap-2 items-center border-2 border-black px-4 p-1 rounded-full hover:bg-black transition-all duration-300 hover:text-white"
+          >
+            <BiEditAlt />
+            Edit Details
+          </Link>
+        </div>
+        <div className="md:grid px-4 flex flex-col grid-cols-3 gap-5 gap-x-4 border p-2 border-gray-200 bg-gray-50 rounded-md">
           <div className="grid grid-cols-2 ">
-            <p className="font-semibold text-sm">Slot Number : </p>
-            <p className="">5000</p>
+            <p className="font-semibold text-sm">Slot Name : </p>
+            <p className="">{details.slot_number}</p>
           </div>
-          <div className="grid grid-cols-2 ">
-            <p className="font-semibold text-sm">Parking Slot  : </p>
+          {/* <div className="grid grid-cols-2 ">
+            <p className="font-semibold text-sm">Parking Slot : </p>
             <p className="">15</p>
-          </div>
+          </div> */}
           <div className="grid grid-cols-2 ">
             <p className="font-semibold text-sm">Vehicle Category : </p>
-            <p className="">4 Wheeler</p>
+            <p className="">{details.vehicle_category}</p>
           </div>
           <div className="grid grid-cols-2 ">
             <p className="font-semibold text-sm">Vehicle Type : </p>
-            <p className="">Hatchback</p>
+            <p className="">{details.vehicle_type}</p>
           </div>
           <div className="grid grid-cols-2 ">
             <p className="font-semibold text-sm">Sticker Number: </p>
-            <p className="">84</p>
+            <p className="">{details.sticker_number}</p>
           </div>
           {/* <div className="grid grid-cols-2 ">
             <p className="font-semibold text-sm">OTP : </p>
@@ -105,70 +190,66 @@ const RVehicleDetails = () => {
           </div> */}
           <div className="grid grid-cols-2 ">
             <p className="font-semibold text-sm">Category : </p>
-            <p className="">Owned</p>
+            <p className="">{details.category}</p>
           </div>
           <div className="grid grid-cols-2 ">
-            <p className="font-semibold text-sm">"Registration Number : </p>
-            <p className="">456</p>
+            <p className="font-semibold text-sm">Registration No. : </p>
+            <p className="">{details.registration_number}</p>
           </div>
           <div className="grid grid-cols-2 ">
             <p className="font-semibold text-sm">Active/Inactive : </p>
-            <p className="">yes</p>
+            <p className="">{details.status ? "Active" : "Inactive"}</p>
           </div>
           <div className="grid grid-cols-2 ">
             <p className="font-semibold text-sm">Insurance Number : </p>
-            <p className="">2</p>
+            <p className="">{details.insurance_number}</p>
           </div>
           <div className="grid grid-cols-2 ">
             <p className="font-semibold text-sm">Insurance Valid Till : </p>
-            <p className="">2/2/2024</p>
+            <p className="">{details.insurance_valid_till}</p>
           </div>
+          {details.user_name && <div className="grid grid-cols-2 ">
+            <p className="font-semibold text-sm">Person Name : </p>
+            <p className="">{`${details.user_name.firstname} ${details.user_name.lastname}`}</p>
+          </div>}
+          {details.created_by_name && <div className="grid grid-cols-2 ">
+            <p className="font-semibold text-sm">Created by : </p>
+            <p className="">{`${details.created_by_name.firstname} ${details.created_by_name.lastname}`}</p>
+          </div>}
           <div className="grid grid-cols-2 ">
-            <p className="font-semibold text-sm">Staff Name : </p>
-            <p className="">Ramesh Kumar</p>
+            <p className="font-semibold text-sm">Created on : </p>
+            <p className="text-sm">{FormattedDateToShowProperly(details.created_at)}</p>
           </div>
-          <div className="grid grid-cols-2 ">
-            <p className="font-semibold text-sm">Status : </p>
-            <p className="">Active</p>
+           <div className="grid grid-cols-2 ">
+            <p className="font-semibold text-sm">Updated on : </p>
+            <p className="text-sm">{FormattedDateToShowProperly(details.updated_at)}</p>
           </div>
-
-
-            <div className="grid grid-cols-2 ">
-              <p className="font-semibold text-sm">Qr Code : </p>
-              <p className="">
-               123
-              </p>
-            </div>
-
-           
-
         </div>
-       
       </div>
-      {qrCode && <ModalWrapper onclose={()=> setQrCode(false)}>
-      <div className="mx-4 flex flex-col justify-between items-center gap-10">
-       <div id="qrCodeElement">
-
-        <img
-          src={qr}
-          alt="qr"
-          width={200}
-          className="border shadow-xl rounded-md"
-          />
+      {qrCode && (
+        <ModalWrapper onclose={() => setQrCode(false)}>
+          <div className="mx-4 flex flex-col justify-between items-center gap-10">
+            <div id="qrCodeElement">
+              <img
+                src={domainPrefix + details.qr_code_image_url}
+                alt="qr"
+                width={200}
+                className="border shadow-xl rounded-md"
+              />
+            </div>
+            <button
+              className="px-4 w-full border-2 border-black rounded-md flex justify-center items-center gap-2 py-1"
+              onClick={handlePrintQRCode}
+              // onClick={() => downloadFile(QR)}
+            >
+              <FaQrcode />
+              Print QR Code
+            </button>
           </div>
-        <button
-          className="px-4 w-full border-2 border-black rounded-md flex justify-center items-center gap-2 py-1"
-          onClick={handlePrintQRCode}
-          // onClick={() => downloadFile(QR)}
-        >
-          <FaQrcode />
-          Print QR Code
-        </button>
-      </div>
-    </ModalWrapper>}
+        </ModalWrapper>
+      )}
     </div>
   );
 };
-
 
 export default RVehicleDetails;

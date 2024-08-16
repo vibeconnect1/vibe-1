@@ -34,7 +34,7 @@ const OutwardsTable = ({ goodsOut }) => {
 
     {
       name: "Person Name",
-      selector: (row) => row.visitor_name.name,
+      selector: (row) => row.person_name?.name,
       sortable: true,
     },
 

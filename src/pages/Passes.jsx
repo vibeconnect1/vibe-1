@@ -59,7 +59,7 @@ const Passes = () => {
       >
         Staff
       </NavLink>
-      <NavLink
+      {/* <NavLink
         to={"/admin/passes/materials"}
         className={({ isActive }) =>
           `  md:rounded-full px-4 cursor-pointer text-center transition-all duration-300 ease-linear ${
@@ -68,7 +68,7 @@ const Passes = () => {
         }
       >
        Materials
-      </NavLink>
+      </NavLink> */}
       <NavLink
         to={"/admin/passes/patrolling"}
         className={({ isActive }) =>

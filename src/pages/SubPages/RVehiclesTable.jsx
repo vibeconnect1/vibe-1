@@ -94,11 +94,11 @@ const RVehiclesTable = () => {
       selector: (row) => row.insurance_number,
       sortable: true,
     },
-    {
-      name: "Active/Inactive",
-      selector: (row) => row.ActiveInactive,
-      sortable: true,
-    },
+    // {
+    //   name: "Active/Inactive",
+    //   selector: (row) => row.ActiveInactive,
+    //   sortable: true,
+    // },
     // {
     //   name: "Insurance Number",
     //   selector: (row) => row.Insurance_Number,
@@ -115,16 +115,16 @@ const RVehiclesTable = () => {
     //   selector: (row) => row.Staff_Name,
     //   sortable: true,
     // },
-    {
-      name: "Status",
-      selector: (row) => row.status,
-      sortable: true,
-    },
-    {
-      name: "Qr Code",
-      selector: (row) => <img src={qr} alt="" width={40} />,
-      sortable: true,
-    },
+    // {
+    //   name: "Status",
+    //   selector: (row) => row.status,
+    //   sortable: true,
+    // },
+    // {
+    //   name: "Qr Code",
+    //   selector: (row) => <img src={qr} alt="" width={40} />,
+    //   sortable: true,
+    // },
 
     // {
     //   name: "Cancellation",
@@ -134,21 +134,21 @@ const RVehiclesTable = () => {
     //     ),
     //   sortable: true,
     // },
-    {
-      name: "Approval",
-      selector: (row) =>
-        row.status === "Upcoming" && (
-          <div className="flex justify-center gap-2">
-            <button className="text-green-400 font-medium hover:bg-green-400 hover:text-white transition-all duration-200 p-1 rounded-full">
-              <TiTick size={20} />
-            </button>
-            <button className="text-red-400 font-medium hover:bg-red-400 hover:text-white transition-all duration-200 p-1 rounded-full">
-              <IoClose size={20} />
-            </button>
-          </div>
-        ),
-      sortable: true,
-    },
+    // {
+    //   name: "Approval",
+    //   selector: (row) =>
+    //     row.status === "Upcoming" && (
+    //       <div className="flex justify-center gap-2">
+    //         <button className="text-green-400 font-medium hover:bg-green-400 hover:text-white transition-all duration-200 p-1 rounded-full">
+    //           <TiTick size={20} />
+    //         </button>
+    //         <button className="text-red-400 font-medium hover:bg-red-400 hover:text-white transition-all duration-200 p-1 rounded-full">
+    //           <IoClose size={20} />
+    //         </button>
+    //       </div>
+    //     ),
+    //   sortable: true,
+    // },
   ];
   return (
     <section className="flex">
@@ -165,8 +165,9 @@ const RVehiclesTable = () => {
           <span className="flex gap-4">
             <Link
               to={"/admin/add-rvehicles"}
-              className="border-2 font-semibold hover:bg-black hover:text-white transition-all border-black p-2 rounded-md text-black cursor-pointer text-center flex items-center gap-2 justify-center"
-              style={{ height: "1cm" }}
+              
+              className="border-2 font-semibold hover:bg-black hover:text-white transition-all  p-2 rounded-md text-white cursor-pointer text-center flex items-center gap-2 justify-center"
+              style={{background: themeColor }}
             >
               <PiPlusCircle size={20} />
               Add

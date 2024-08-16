@@ -28,6 +28,8 @@ const [interval, setInterval] = useState("hrs");
     timeInterval: "",
   });
 
+  console.log(formData)
+
   const toggleHourSelection = (hour) => {
     setSelectedHours((prevSelectedHours) =>
       prevSelectedHours.includes(hour)

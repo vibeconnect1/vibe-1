@@ -709,6 +709,12 @@ export const getGoods = async () =>
       token: token,
     },
   });
+export const getGoodsDetails = async (id) =>
+  axiosInstance.get(`/goods_in_outs/${id}.json`, {
+    params: {
+      token: token,
+    },
+  });
 export const postGoods = async (data) =>
   axiosInstance.post("/goods_in_outs.json", data, {
     params: {
@@ -932,6 +938,31 @@ export const getRegisteredVehicle = async () =>
       token: token,
     },
   });
+export const getRegisteredVehicleDetails = async (id) =>
+  axiosInstance.get(`/registered_vehicles/${id}.json`, {
+    params: {
+      token: token,
+    },
+  });
+export const editRegisteredVehicleDetails = async (id, data) =>
+  axiosInstance.put(`/registered_vehicles/${id}.json`, data,{
+    params: {
+      token: token,
+    },
+  });
+
+export const postRegisteredVehicle = async (data) =>
+  axiosInstance.post(`/registered_vehicles.json`, data, {
+    params: {
+      token: token,
+    },
+  });
+export const getParkingConfig = async () =>
+  axiosInstance.get(`/parking_configurations.json`,  {
+    params: {
+      token: token,
+    },
+  });
 export const getVisitorApprovals = async () =>
   axiosInstance.get(`/visitors/approval_form.json`, {
     params: {
@@ -939,7 +970,7 @@ export const getVisitorApprovals = async () =>
     },
   });
 export const visitorApproval = async (id, data) =>
-  axiosInstance.patch(`/visitors/${id}/approve_visitor.json`, data,{
+  axiosInstance.patch(`/visitors/${id}/approve_visitor.json`, data, {
     params: {
       token: token,
     },
