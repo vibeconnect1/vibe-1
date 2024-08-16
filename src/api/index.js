@@ -69,6 +69,43 @@ export const EditSiteAsset = async (data, id) =>
     },
   });
 
+// visitor setup
+
+export const getVisitorCategory = async () =>
+  axiosInstance.get("/visitor_staff_category.json", {
+    params: {
+      token: token,
+    },
+  });
+
+export const postVisitorCategory = async (data) =>
+  axiosInstance.post("/visitor_staff_categories.json", data, {
+    params: {
+      token: token,
+    },
+  });
+
+export const deleteVisitorCategory = async (id) =>
+  axiosInstance.delete(`/visitor_staff_categories/${id}.json`, {
+    params: {
+      token: token,
+    },
+  });
+
+export const getVisitorCategoryDetails = async (id) =>
+  axiosInstance.get(`/visitor_staff_categories/${id}.json`, {
+    params: {
+      token: token,
+    },
+  });
+
+export const editVisitorCategory = async (id, data ) =>
+  axiosInstance.patch(`/visitor_staff_categories/${id}.json`, data, {
+    params: {
+      token: token,
+    },
+  });
+
 // vendor
 export const getVendors = async () =>
   axiosInstance.get("/vendors.json", {
@@ -131,6 +168,20 @@ export const deleteVendorType = async (id) =>
       token: token,
     },
   });
+export const editVendorType = async(id, data) =>
+  axiosInstance.patch(`/vendor_suppliers/${id}.json`, data, {
+    params: {
+      token:token,
+    }
+  })
+
+  export const editVendorCategory = async(id, data) =>
+    axiosInstance.patch(`/vendor_categories/${id}.json`, data, {
+      params: {
+        token:token,
+      }
+    })
+
 export const postVendors = async (data) =>
   axiosInstance.post("/vendors.json", data, {
     params: {

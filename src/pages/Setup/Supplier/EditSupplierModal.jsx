@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import ModalWrapper from "../../../containers/modals/ModalWrapper";
 import { useSelector } from "react-redux";
 import toast from "react-hot-toast";
-import { getVendorCategoryDetails, getVendorsTypeDetails, postVendorCategory, postVendorType } from "../../../api";
+import { getVendorCategoryDetails, getVendorsTypeDetails, editVendorCategory, editVendorType } from "../../../api";
 
 const EditSupplierModal = ({ page, onclose, setAdded, typeId, catId }) => {
   const [typeName, setTypeName] = useState("");
@@ -12,7 +12,7 @@ useEffect(()=>{
 const fetchCatDetails = async()=>{
     try {
         const catRes = await getVendorCategoryDetails(catId)
-        setCategoryName(catRes)
+        setCategoryName(catRes.data.category.name)
         console.log(catRes)
     } catch (error) {
         console.log(error)
@@ -20,11 +20,12 @@ const fetchCatDetails = async()=>{
 }
 fetchCatDetails()
 },[catId])
+
 useEffect(()=>{
 const fetchTypeDetails = async()=>{
     try {
         const typeRes = await getVendorsTypeDetails(typeId)
-        setTypeName(typeRes)
+        setTypeName(typeRes.data.supplier.name)
         console.log(typeRes)
     } catch (error) {
         console.log(error)
@@ -40,7 +41,7 @@ fetchTypeDetails()
     const formData = new FormData();
     formData.append("name", typeName);
     try {
-      const res = await postVendorType(formData);
+      const res = await editVendorType(typeId, formData,);
       toast.success("Supplier type created Successfully");
       setAdded(true);
       onclose()
@@ -60,7 +61,7 @@ fetchTypeDetails()
     const formData = new FormData();
     formData.append("name", categoryName);
     try {
-      const res = await postVendorCategory(formData);
+      const res = await editVendorCategory(catId, formData);
       toast.success("Supplier category created Successfully");
       setAdded(true);
       onclose()
