@@ -59,7 +59,7 @@ const RVehiclesTable = () => {
     },
     {
       name: "Parking Slot",
-      selector: (row) => row.slot_number,
+      selector: (row) => row.slot_name,
       sortable: true,
     },
     {
@@ -150,17 +150,31 @@ const RVehiclesTable = () => {
     //   sortable: true,
     // },
   ];
+const [searchText, setSearchText] = useState("")
+const handleSearch = (e)=>{
+  const searchValue = e.target.value
+  setSearchText(searchValue)
+
+  if (searchValue.trim() === "") {
+    setFilteredVehicles(registeredVehicles)
+  }else{
+    const filteredResult = registeredVehicles.filter((item)=> item.vehicle_number.toLowerCase().includes(searchValue.toLowerCase()) || item.slot_name && item.slot_name.toLowerCase().includes(searchValue.toLowerCase()) || item.sticker_number && item.sticker_number.toLowerCase().includes(searchValue.toLowerCase()))
+    setFilteredVehicles(filteredResult)
+  }
+}
+
+
   return (
     <section className="flex">
       <div className=" w-full flex mx-3 flex-col overflow-hidden">
         <div className="flex md:flex-row flex-col gap-5 justify-between  my-2">
         <input
             type="text"
-            // value={searchText}
-            // onChange={handleSearch}
+            value={searchText}
+            onChange={handleSearch}
             id=""
             className="border-gray-300 border rounded-md p-2 w-full placeholder:text-sm"
-            placeholder="Search by name, vehicle number"
+            placeholder="Search by parking slot, sticker number, vehicle number"
           />
           <span className="flex gap-4">
             <Link
@@ -179,7 +193,7 @@ const RVehiclesTable = () => {
           responsive
           //   selectableRows
           columns={columns}
-          data={registeredVehicles}
+          data={filteredVehicles}
           isPagination={true}
         />
       </div>

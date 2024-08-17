@@ -208,15 +208,15 @@ const PatrollingDetails = () => {
             </div>
            {details.specific_times  && <div className="grid grid-cols-2 ">
               <p className="font-semibold text-sm">Specific Time : </p>
-              <p className="flex gap-2 items-center">
+              <div className="flex gap-2 items-center">
                 {details.specific_times &&
-                  details.specific_times.map((time) => {
+                  details.specific_times.map((time, index) => {
                     const hour = parseInt(time, 10);
                     const period = hour >= 12 ? "PM" : "AM";
                     const formattedHour = hour % 12 || 12; // Convert to 12-hour format
-                    return <p>{`${formattedHour} ${period},`}</p>;
+                    return <p key={index}>{`${formattedHour} ${period},`}</p>;
                   })}
-              </p>
+              </div>
             </div>}
           </div>
         </div>

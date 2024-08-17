@@ -18,7 +18,7 @@ import { BiEdit } from "react-icons/bi";
 import Webcam from "react-webcam";
 import { formatTime } from "../../utils/dateUtils";
 import { IoClose } from "react-icons/io5";
-import { FaCheck } from "react-icons/fa";
+import { FaCheck } from "react-icons/fa6";
 import toast from "react-hot-toast";
 const VisitorPage = () => {
   const [page, setPage] = useState("Visitor In");
@@ -29,6 +29,7 @@ const VisitorPage = () => {
   const [FilteredUnexpectedVisitor, setFilteredUnexpectedVisitor] = useState(
     []
   );
+  const [FilteredApproval, setFilteredApproval] = useState([]);
   const [approvals, setApprovals] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
   const [histories, setHistories] = useState([]);
@@ -78,7 +79,7 @@ const VisitorPage = () => {
         console.log(error);
       }
     };
-   
+
     fetchApprovals();
     fetchExpectedVisitor();
     fetchVisitorHistory();
@@ -90,9 +91,7 @@ const VisitorPage = () => {
         return new Date(b.created_at) - new Date(a.created_at);
       });
       setApprovals(sortedApproval);
-      // setFilteredHistory(sortedApproval);
-      console.log(sortedApproval);
-      console.log(approvalResp);
+      setFilteredApproval(sortedApproval);
     } catch (error) {
       console.log(error);
     }
@@ -259,6 +258,19 @@ const VisitorPage = () => {
       setFilteredHistory(filteredResults);
     }
   };
+  const [searchApprovalText, setSearchApprovalText] = useState("");
+  const handleSearchApproval = (e) => {
+    const searchValue = e.target.value;
+    setSearchApprovalText(searchValue);
+    if (searchValue.trim() === "") {
+      setFilteredApproval(approvals);
+    } else {
+      const filteredResults = approvals.filter((item) =>
+        item.name.toLowerCase().includes(searchValue.toLowerCase())
+      );
+      setFilteredApproval(filteredResults);
+    }
+  };
 
   const historyColumn = [
     {
@@ -306,13 +318,13 @@ const VisitorPage = () => {
     const approveData = new FormData();
     approveData.append("approve", decision);
     try {
-      const res = await visitorApproval(id, approveData)
-      console.log(res)
-      fetchApprovals()
+      const res = await visitorApproval(id, approveData);
+      console.log(res);
+      fetchApprovals();
       if (decision === true) {
-        toast.success("Visitor approved successfully")
-      }else{
-        toast.success("Approval denied")
+        toast.success("Visitor approved successfully");
+      } else {
+        toast.success("Approval denied");
       }
     } catch (error) {
       console.log(error);
@@ -353,10 +365,16 @@ const VisitorPage = () => {
       name: "Approval",
       selector: (row) => (
         <div className="flex gap-2">
-          <button className="text-white bg-green-400 rounded-full p-1" onClick={()=>handleApproval(row.id, true)}>
+          <button
+            className="text-white bg-green-400 rounded-full p-1"
+            onClick={() => handleApproval(row.id, true)}
+          >
             <FaCheck size={20} />{" "}
           </button>
-          <button className="text-white bg-red-400 rounded-full p-1" onClick={()=>handleApproval(row.id, false)}>
+          <button
+            className="text-white bg-red-400 rounded-full p-1"
+            onClick={() => handleApproval(row.id, false)}
+          >
             <IoClose size={20} />{" "}
           </button>
         </div>
@@ -426,7 +444,6 @@ const VisitorPage = () => {
                 onChange={handleSearch}
                 placeholder="Search using Visitor name, Host, vehicle number"
               />
-
               <div className="border md:flex-row flex-col flex p-2 rounded-md text-center border-black">
                 <span
                   className={` md:border-r px-2 border-gray-300 cursor-pointer hover:underline ${
@@ -513,10 +530,10 @@ const VisitorPage = () => {
                 type="text"
                 placeholder="Search using Name or Mobile Number"
                 className="border p-2 rounded-md border-gray-300 w-full mb-2 placeholder:text-sm"
-                // value={searchHIstoryText}
-                // onChange={handleSearchHistory}
+                value={searchApprovalText}
+                onChange={handleSearchApproval}
               />
-              <Table columns={approvalColumn} data={approvals} />
+              <Table columns={approvalColumn} data={FilteredApproval} />
             </div>
           )}
           <div className="my-4">

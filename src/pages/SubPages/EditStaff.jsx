@@ -16,6 +16,7 @@ import toast from "react-hot-toast";
 import { useNavigate, useParams } from "react-router-dom";
 import { initialSchedule } from "../../utils/initialFormData";
 import { SendDateFormat } from "../../utils/dateUtils";
+import { Switch } from "../../Buttons";
 const EmployeeAddStaff = () => {
   const themeColor = useSelector((state) => state.theme.color);
   const [showWebcam, setShowWebcam] = useState(false);
@@ -47,6 +48,7 @@ const EmployeeAddStaff = () => {
     status: true,
     documents: [],
     workingSchedule: initialSchedule,
+ 
   });
   const daysOfWeek = [
     "Monday",
@@ -85,6 +87,7 @@ const EmployeeAddStaff = () => {
           validTill: SendDateFormat(editData.valid_till),
           vendorId: editData.vendor_id,
           workType: editData.work_type,
+          
           workingSchedule: initializeWorkingSchedule(editData.working_schedule),
         });
         setCapturedImage(domainPrefix + editData.profile_picture.url);
@@ -177,7 +180,7 @@ const EmployeeAddStaff = () => {
     console.log(fieldName);
   };
   const navigate = useNavigate();
-  const handleAddStaff = async () => {
+  const handleEditStaff = async () => {
     if (
       !formData.firstName ||
       !formData.lastName ||
@@ -214,10 +217,21 @@ const EmployeeAddStaff = () => {
         formData.workingSchedule[day].end_time
       );
     });
+    // if (capturedImage) {
+    //   const response = await fetch(capturedImage);
+    //   const blob = await response.blob();
+    //   sendData.append("staff[profile_picture]", blob, "staff_image.jpg");
+    // }
+
     if (capturedImage) {
-      const response = await fetch(capturedImage);
-      const blob = await response.blob();
-      sendData.append("staff[profile_picture]", blob, "staff_image.jpg");
+      try {
+        const response = await fetch(capturedImage);
+        const blob = await response.blob();
+        sendData.append("staff[profile_picture]", blob, "staff_image.jpg");
+      } catch (error) {
+        console.error("Failed to fetch the profile picture:", error);
+        return toast.error("Failed to upload the profile picture.");
+      }
     }
     formData.documents.forEach((docs) => {
       sendData.append("attachfiles[]", docs);
@@ -225,7 +239,7 @@ const EmployeeAddStaff = () => {
     try {
       const res = await editStaffDetails(id, sendData);
       toast.success("Staff Edited Successfully");
-      navigate("/admin/passes/staff");
+      navigate(`/admin/passes/staff-details/${id}`);
       console.log(res);
     } catch (error) {
       console.log(error);
@@ -472,20 +486,16 @@ const EmployeeAddStaff = () => {
                   className="border p-2 rounded-md border-gray-300"
                 />
               </div>
-              {/* <div className="grid gap-2 items-center w-full">
+              <div className="grid gap-2 items-center w-full">
                 <label htmlFor="status" className="font-semibold">
-                  Status
+                  Active/Inactive
                 </label>
-                <select
-                  id="status"
-                  value={status}
-                  onChange={(e) => setStatus(e.target.value)}
-                  className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
-                >
-                  <option value="">Select Status</option>
-                 
-                </select>
-              </div> */}
+               <div className="flex items-center gap-4">
+                <p>Inactive</p>
+                <Switch checked={formData.status} onChange={()=>setFormData({...formData, status: !formData.status})} />
+                <p>Active</p>
+               </div>
+              </div>
             </div>
             <div className="grid gap-2 items-center w-full mt-2">
               <label htmlFor="" className="font-semibold">
@@ -553,7 +563,7 @@ const EmployeeAddStaff = () => {
             <div className="flex gap-5 justify-center items-center my-4">
               <button
                 type="submit"
-                onClick={handleAddStaff}
+                onClick={handleEditStaff}
                 className="text-white bg-black hover:bg-white hover:text-black border-2 border-black font-semibold py-2 px-4 rounded transition-all duration-300"
               >
                 Save

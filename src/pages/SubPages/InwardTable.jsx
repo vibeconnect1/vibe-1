@@ -12,24 +12,24 @@ import Table from "../../components/table/Table";
 import { getGoods } from "../../api";
 import { dateFormat, formatTime } from "../../utils/dateUtils";
 const InwardsTable = () => {
-  const [filteredData, setFilteredData] = useState([])
+  const [filteredData, setFilteredData] = useState([]);
   const themeColor = useSelector((state) => state.theme.color);
-  const [goodsIn, setGoodsIn] = useState([])
+  const [goodsIn, setGoodsIn] = useState([]);
   useEffect(() => {
     const fetchGoods = async () => {
       try {
         const goodsRes = await getGoods();
         const filterGoodsIn = goodsRes.data.filter(
-          good => good.ward_type === "in"
+          (good) => good.ward_type === "in"
         );
-       
+
         setGoodsIn(filterGoodsIn);
-setFilteredData(filterGoodsIn)
+        setFilteredData(filterGoodsIn);
       } catch (error) {
         console.log(error);
       }
     };
-    fetchGoods()
+    fetchGoods();
   }, []);
   const columns = [
     {
@@ -78,18 +78,24 @@ setFilteredData(filterGoodsIn)
     },
   ];
   console.log(goodsIn);
-const [searchText, setSearchText] = useState("")
-  const handleSearch = (e)=>{
-const searchValue = e.target.value
-setSearchText(searchValue)
-if (searchValue.trim === "") {
-  setFilteredData(goodsIn)
-}else{
-  const filteredResult = goodsIn.filter((item)=> item.visitor_name.name.toLowerCase().includes(searchValue.toLowerCase()) || item.vehicle_no.toLowerCase().includes(searchValue.toLowerCase()) )
-  setFilteredData(filteredResult)
-}
-  }
-console.log("in", filteredData)
+  const [searchText, setSearchText] = useState("");
+  const handleSearch = (e) => {
+    const searchValue = e.target.value;
+    setSearchText(searchValue);
+    if (searchValue.trim === "") {
+      setFilteredData(goodsIn);
+    } else {
+      const filteredResult = goodsIn.filter(
+        (item) =>
+          item.person_name && 
+        item.person_name.name &&
+        item.person_name.name.toLowerCase().includes(searchValue.toLowerCase()) ||
+          (item.vehicle_no &&
+            item.vehicle_no.toLowerCase().includes(searchValue.toLowerCase()))
+      );
+      setFilteredData(filteredResult);
+    }
+  };
   return (
     <section className="flex">
       <div className=" w-full flex mx-3 flex-col overflow-hidden mb-10">
@@ -103,7 +109,7 @@ console.log("in", filteredData)
             placeholder="Search by name, vehicle number"
           />
           <Link
-          to={"/admin/passes/add-goods-in-out"}
+            to={"/admin/passes/add-goods-in-out"}
             className="p-1 font-medium px-4 text-white rounded-md flex items-center gap-2"
             style={{ background: themeColor }}
           >

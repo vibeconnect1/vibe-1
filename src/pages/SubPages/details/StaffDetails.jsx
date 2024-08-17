@@ -101,42 +101,42 @@ const StaffDetails = () => {
               <img src={image} alt="" className="w-48 h-48" />
             )}
           </div>
-          <div className="md:grid  px-4 flex flex-col grid-cols-3 gap-5 gap-x-4 border-gray-400 border rounded-xl p-2 py-4 bg-gray-50">
+          <div className="md:grid  px-2 flex flex-col grid-cols-3 gap-5  border-gray-400 border rounded-xl p-2 py-4 bg-gray-50">
             <div className="grid grid-cols-2 ">
               <p className="font-semibold text-sm">Name : </p>
-              <p className="">
+              <p className="text-sm">
                 {details.firstname} {details.lastname}
               </p>
             </div>
             <div className="grid grid-cols-2 ">
               <p className="font-semibold text-sm">Unit : </p>
-              <p className="">{details.unit_name}</p>
+              <p className="text-sm">{details.unit_name}</p>
             </div>
 
             {/* <div className="grid grid-cols-2 ">
               <p className="font-semibold text-sm">department: </p>
               <p className="">Security</p>
             </div> */}
-
+<div className="grid grid-cols-2 ">
+              <p className="font-semibold text-sm">Mobile : </p>
+              <p className="text-sm">{details.mobile_no}</p>
+            </div>
             <div className="grid grid-cols-2 ">
               <p className="font-semibold text-sm">Email : </p>
-              <p className="">{details.email}</p>
+              <p className="text-sm">{details.email}</p>
             </div>
-            <div className="grid grid-cols-2 ">
-              <p className="font-semibold text-sm">Mobile : </p>
-              <p className="">{details.mobile_no}</p>
-            </div>
+            
             <div className="grid grid-cols-2 ">
               <p className="font-semibold text-sm">Staff Id : </p>
-              <p className="">{details.staff_id}</p>
+              <p className="text-sm">{details.staff_id}</p>
             </div>
             <div className="grid grid-cols-2 ">
               <p className="font-semibold text-sm">Work Type : </p>
-              <p className="">{details.work_type}</p>
+              <p className="text-sm">{details.work_type}</p>
             </div>
             <div className="grid grid-cols-2 ">
               <p className="font-semibold text-sm">Status : </p>
-              <p className="">{details.status ? "Active" : "Inactive"}</p>
+              <p className="text-sm">{details.status ? "Active" : "Inactive"}</p>
             </div>
             <div className="grid grid-cols-2 ">
               <p className="font-semibold text-sm">Supplier name : </p>
@@ -149,6 +149,10 @@ const StaffDetails = () => {
             <div className="grid grid-cols-2 ">
               <p className="font-semibold text-sm">Valid Till : </p>
               <p className="text-sm">{dateFormat(details.valid_till)}</p>
+            </div>
+            <div className="grid grid-cols-2 ">
+              <p className="font-semibold text-sm">Status : </p>
+              <p className="text-sm">{details.status ? <span className="text-green-400">Active</span>: <span className="text-red-400">Inactive</span>}</p>
             </div>
             <div className="grid grid-cols-2 ">
               <p className="font-semibold text-sm">Created on : </p>

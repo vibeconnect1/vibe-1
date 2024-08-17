@@ -110,12 +110,19 @@ const SupplierSetup = () => {
   const handleDeleteType = async (id) => {
     try {
       const deleteRes = await deleteVendorType(id);
-      if (deleteRes.success) {
-        toast.success("Supplier Type Delete Successfully");
+      // if (deleteRes.success) {
+      //   toast.success("Supplier Type Delete Successfully");
+      //   setAdded(true)
+      // }
+      toast.success("Supplier Type Delete Successfully");
         setAdded(true)
-      }
     } catch (error) {
       console.log(error);
+    }
+    finally{
+      setTimeout(() => {
+        setAdded(false)
+      }, 500);
     }
   };
   const handleDeleteCategory = async (id) => {
@@ -127,6 +134,11 @@ const SupplierSetup = () => {
       // }
     } catch (error) {
       console.log(error);
+    }
+    finally{
+      setTimeout(() => {
+        setAdded(false)
+      }, 500);
     }
   };
   return (

@@ -37,9 +37,9 @@ const Passes = () => {
           }`
         }
       >
-        R Vehicles
+        Registered Vehicles
       </NavLink>
-      <NavLink
+      {/* <NavLink
          to={"/admin/passes/guest-vehicles"}
         className={({ isActive }) =>
           `  md:rounded-full px-4 cursor-pointer text-center transition-all duration-300 ease-linear ${
@@ -48,7 +48,7 @@ const Passes = () => {
         }
       >
         G Vehicles
-      </NavLink>
+      </NavLink> */}
       <NavLink
          to={"/admin/passes/staff"}
         className={({ isActive }) =>

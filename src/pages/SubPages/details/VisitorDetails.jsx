@@ -31,7 +31,16 @@ const VisitorDetails = () => {
     return date.toDateString();
   };
   const dateTimeFormat = (dateString) => {
+    if (!dateString) {
+      return " ";
+    }
+
     const date = new Date(dateString);
+
+    if (isNaN(date)) {
+      return " ";
+    }
+
     return date.toLocaleString();
   };
 
@@ -79,7 +88,7 @@ const VisitorDetails = () => {
     },
     {
       name: " Check out",
-      selector: (row) => (row.check_in ? dateTimeFormat(row.check_out) : ""),
+      selector: (row) => (row.check_in ? dateTimeFormat(row.check_out) : null),
       sortable: true,
     },
   ];
@@ -114,16 +123,19 @@ const VisitorDetails = () => {
           <div className="flex justify-center">
             {details.profile_picture && details.profile_picture !== null ? (
               // details.visitor_files.map((doc, index) => (
-                <img
-                  src={domainPrefix + details.profile_picture.url}
-                  alt=""
-                  className="w-48 h-48 rounded-full cursor-pointer"
-                  onClick={() =>
-                    window.open(domainPrefix + details.profile_picture.url, "_blank")
-                  }
-                />
-              // ))
+              <img
+                src={domainPrefix + details.profile_picture.url}
+                alt=""
+                className="w-48 h-48 rounded-full cursor-pointer"
+                onClick={() =>
+                  window.open(
+                    domainPrefix + details.profile_picture.url,
+                    "_blank"
+                  )
+                }
+              />
             ) : (
+              // ))
               <img src={image} alt="" className="w-48 h-48" />
             )}
           </div>
@@ -136,10 +148,12 @@ const VisitorDetails = () => {
               <p className="font-semibold text-sm">Visitor Type : </p>
               <p className="">{details.visit_type}</p>
             </div>
-           {details.visit_type === "Support Staff" && <div className="grid grid-cols-2 ">
-              <p className="font-semibold text-sm">Staff Category : </p>
-              <p className="">{details.visitor_staff_category.name}</p>
-            </div>}
+            {details.visit_type === "Support Staff" && (
+              <div className="grid grid-cols-2 ">
+                <p className="font-semibold text-sm">Staff Category : </p>
+                <p className="">{details.visitor_staff_category.name}</p>
+              </div>
+            )}
             <div className="grid grid-cols-2 ">
               <p className="font-semibold text-sm">Visitor's Name : </p>
               <p className="">{details.name}</p>
@@ -221,20 +235,9 @@ const VisitorDetails = () => {
               </div>
             )}
           </div>
-          <div className="my-4">
-            <h2 className="font-medium border-b-2 text-lg border-black px-4 ">
-              Visitor Log
-            </h2>
-            <div className="m-4">
-              {details.visits_log && details.visits_log.length !== 0 ? (
-                <Table columns={visitorLogColumn} data={details.visits_log} />
-              ) : (
-                <p className="text-center">No Log Yet</p>
-              )}
-            </div>
-          </div>
+
           <div className="my-4 ">
-            <h2 className="font-medium border-b-2 text-lg border-black px-4 ">
+            <h2 className="font-medium border-b text-lg border-gray-400 px-2 ">
               Additional Visitors Info
             </h2>
             <div className="m-4  ">
@@ -242,6 +245,18 @@ const VisitorDetails = () => {
                 <Table columns={VisitorColumns} data={details.extra_visitors} />
               ) : (
                 <p className="text-center">No Additional Visitor Added</p>
+              )}
+            </div>
+          </div>
+          <div className="my-4">
+            <h2 className="font-medium border-b text-lg border-gray-400 px-2 ">
+              Visitor Log
+            </h2>
+            <div className="m-4">
+              {details.visits_log && details.visits_log.length !== 0 ? (
+                <Table columns={visitorLogColumn} data={details.visits_log} />
+              ) : (
+                <p className="text-center">No Log Yet</p>
               )}
             </div>
           </div>

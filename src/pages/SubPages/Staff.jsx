@@ -13,27 +13,26 @@ import Navbar from "../../components/Navbar";
 import Passes from "../Passes";
 import { domainPrefix, getStaff } from "../../api";
 import { dateFormat, SendDueDateFormat } from "../../utils/dateUtils";
-import image from "/profile.png"
+import image from "/profile.png";
 const Staff = () => {
-  const [selectedStatus, setSelectedStatus] = useState("all");
+  const [filteredStaff, setFilteredStaff] = useState([]);
   const themeColor = useSelector((state) => state.theme.color);
   const [staffs, setStaffs] = useState([]);
   useEffect(() => {
     const fetchStaff = async () => {
       try {
         const staffRes = await getStaff();
-        const sortedData = staffRes.data.sort((a,b)=>(
-          new Date(b.created_at) - new Date(a.created_at)
-        ))
+        const sortedData = staffRes.data.sort(
+          (a, b) => new Date(b.created_at) - new Date(a.created_at)
+        );
         setStaffs(sortedData);
+        setFilteredStaff(sortedData);
       } catch (error) {
         console.log(error);
       }
     };
     fetchStaff();
   }, []);
-
- 
 
   const columns = [
     {
@@ -62,16 +61,12 @@ const Staff = () => {
             }
           />
         ) : (
-          <img
-            src={image} // Placeholder image
-            alt="Default"
-            className="w-10 h-10 rounded-full"
-          />
+          <img src={image} alt="Default" className="w-10 h-10 rounded-full" />
         );
       },
       sortable: true,
     },
-    
+
     {
       name: "ID",
       selector: (row) => row.id,
@@ -132,10 +127,29 @@ const Staff = () => {
     },
     {
       name: "Status",
-      selector: (row) => (row.status ? "Active" : "Inactive"),
+      selector: (row) =>
+        row.status ? (
+          <p className="text-green-400">Active</p>
+        ) : (
+          <p className="text-red-400">Inactive</p>
+        ),
       sortable: true,
     },
   ];
+  const [searchText, setSearchText] = useState("");
+  const handleSearch = (e) => {
+    const searchValue = e.target.value;
+    setSearchText(searchValue);
+    if (searchValue.trim() === "") {
+      setFilteredStaff(staffs);
+    } else {
+      const filteredResult = staffs.filter((item) => {
+        const fullName = `${item.firstname} ${item.lastname}`.toLowerCase();
+        return fullName.includes(searchValue.toLowerCase()) || item.unit_name.toLowerCase().includes(searchValue.toLowerCase()) || item.mobile_no && item.mobile_no.toLowerCase().includes(searchValue.toLowerCase());
+      });
+      setFilteredStaff(filteredResult);
+    }
+  };
 
   return (
     <section className="flex">
@@ -144,9 +158,11 @@ const Staff = () => {
         <Passes />
         <div className="flex md:flex-row flex-col gap-5 justify-between  my-2">
           <input
-            type="search"
+            type="text"
             name=""
             id=""
+            value={searchText}
+            onChange={handleSearch}
             className="border border-gray-300 rounded-md w-full px-2 placeholder:text-sm"
             placeholder="Search by name, unit, mobile"
           />
@@ -154,16 +170,15 @@ const Staff = () => {
           <span className="flex gap-4">
             <Link
               to={"/admin/passes/add-staff"}
-              style={{background: themeColor}}
+              style={{ background: themeColor }}
               className="border-2 font-semibold transition-all  p-2 rounded-md text-white cursor-pointer text-center flex items-center gap-2 justify-center"
             >
               <PiPlusCircle size={20} />
               Add
             </Link>
-           
           </span>
         </div>
-        <Table columns={columns} data={staffs} isPagination={true} />
+        <Table columns={columns} data={filteredStaff} isPagination={true} />
       </div>
     </section>
   );

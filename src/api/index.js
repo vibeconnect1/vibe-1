@@ -125,6 +125,20 @@ export const getVendorsTypeDetails = async (id) =>
     },
   });
 
+  export const editVendorType = async(id, data) =>
+    axiosInstance.patch(`/vendor_suppliers/${id}.json`, data, {
+      params: {
+        token:token,
+      }
+    })
+  
+    export const editVendorCategory = async(id, data) =>
+      axiosInstance.patch(`/vendor_categories/${id}.json`, data, {
+        params: {
+          token:token,
+        }
+      })
+
 export const getVendorsDetails = async (id) =>
   axiosInstance.get(`/vendors/${id}.json`, {
     params: {
@@ -944,8 +958,14 @@ export const getRegisteredVehicleDetails = async (id) =>
       token: token,
     },
   });
+export const getPatrollingHistory = async () =>
+  axiosInstance.get(`/patrolling_histories.json`, {
+    params: {
+      token: token,
+    },
+  });
 export const editRegisteredVehicleDetails = async (id, data) =>
-  axiosInstance.put(`/registered_vehicles/${id}.json`, data,{
+  axiosInstance.put(`/registered_vehicles/${id}.json`, data, {
     params: {
       token: token,
     },
@@ -958,7 +978,7 @@ export const postRegisteredVehicle = async (data) =>
     },
   });
 export const getParkingConfig = async () =>
-  axiosInstance.get(`/parking_configurations.json`,  {
+  axiosInstance.get(`/parking_configurations.json`, {
     params: {
       token: token,
     },
@@ -993,6 +1013,43 @@ export const editVisitorDetails = async (id, data) =>
       token: token,
     },
   });
+
+
+  export const getVisitorCategory = async () =>
+    axiosInstance.get("/visitor_staff_category.json", {
+      params: {
+        token: token,
+      },
+    });
+  
+  export const postVisitorCategory = async (data) =>
+    axiosInstance.post("/visitor_staff_categories.json", data, {
+      params: {
+        token: token,
+      },
+    });
+  
+  export const deleteVisitorCategory = async (id) =>
+    axiosInstance.delete(`/visitor_staff_categories/${id}.json`, {
+      params: {
+        token: token,
+      },
+    });
+  
+  export const getVisitorCategoryDetails = async (id) =>
+    axiosInstance.get(`/visitor_staff_categories/${id}.json`, {
+      params: {
+        token: token,
+      },
+    });
+  
+  export const editVisitorCategory = async (id, data ) =>
+    axiosInstance.patch(`/visitor_staff_categories/${id}.json`, data, {
+      params: {
+        token: token,
+      },
+    });
+
 export const postLOI = async (data) =>
   axiosInstance.post(`/loi_details.json`, data, {
     params: {

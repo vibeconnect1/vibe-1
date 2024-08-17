@@ -70,9 +70,9 @@ const OutwardsTable = ({ goodsOut }) => {
     } else {
       const filteredResult = goodsOut.filter(
         (item) =>
-          item.visitor_name.name
-            .toLowerCase()
-            .includes(searchValue.toLowerCase()) ||
+          item.person_name && 
+        item.person_name.name &&
+        item.person_name.name.toLowerCase().includes(searchValue.toLowerCase()) ||
           item.vehicle_no.toLowerCase().includes(searchValue.toLowerCase())
       );
       setFilteredData(filteredResult);
