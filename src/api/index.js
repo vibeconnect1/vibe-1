@@ -106,9 +106,25 @@ export const editVisitorCategory = async (id, data ) =>
     },
   });
 
+// Vehicle Parking Setup
+
+export const getVisitorParking = async () =>
+  axiosInstance.get("/parking_configurations.json", {
+    params :{
+      token:token,
+    },
+  })
+
+  export const postVehicleParking = async (data) =>
+    axiosInstance.post("/parking_configurations.json", data, {
+      params: {
+        token: token,
+      },
+    });
+  
 // vendor
 export const getVendors = async () =>
-  axiosInstance.get("/vendors.json", {
+  axiosInstance.get("/vendors.json",{
     params: {
       token: token,
     },
