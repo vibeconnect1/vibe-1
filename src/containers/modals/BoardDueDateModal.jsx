@@ -10,7 +10,7 @@ const BoardDueDateModal = ({
 }) => {
   const themeColor = useSelector((state) => state.theme.color);
   return (
-    <div className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-30 backdrop-blur-sm z-20">
+    <div className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-30 backdrop-blur-sm z-50">
       <div
         style={{ background: themeColor }}
         className="bg-white overflow-auto max-h-[70%] w-[25rem]  md:w-auto  p-4  flex flex-col rounded-md gap-2"
@@ -19,15 +19,10 @@ const BoardDueDateModal = ({
           Update Timeline of Project/Board
         </h3>
 
-          <h4 className="text-white font-medium text-lg">
-            {project.board_name}
-          </h4>
+        <h4 className="text-white font-medium text-lg">{project.board_name}</h4>
         <div className="">
-
-          <div
-          className="text-white font-medium flex flex-col gap-2"
-          >
-            Set Project Timeline : 
+          <div className="text-white font-medium flex flex-col gap-2">
+            Set Project Timeline :
             <input
               min={new Date().toISOString().split("T")[0]}
               type="date"
@@ -39,7 +34,7 @@ const BoardDueDateModal = ({
         </div>
 
         <div
-        className="my-2 gap-2"
+          className="my-2 gap-2"
           style={{
             display: "flex",
             justifyContent: "flex-end",

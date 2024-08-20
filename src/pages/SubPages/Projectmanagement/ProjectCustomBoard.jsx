@@ -2,6 +2,8 @@ import React, { useEffect, useRef, useState } from "react";
 import Navbar from "../../../components/Navbar";
 import { getItemInLocalStorage } from "../../../utils/localStorage";
 import { API_URL, getVibeBackground, getVibeBoardData, getVibeBoardUser } from "../../../api";
+import ProjectOverview from "./ProjectDetails";
+import ProjectDetails from "./ProjectDetails";
 
 const ProjectCustomBoard = () => {
   const defaultImage = { index: 0, src: "" };
@@ -199,6 +201,10 @@ const ProjectCustomBoard = () => {
       setIsLoading(false);
     }
   };
+  const [show, setShow] = useState(true);
+  const userId = getItemInLocalStorage("VIBEUSERID")
+  const [isAssignedTo, setIsAssignedTo] = useState(false);
+  const [isBoardCreatedby, setIsBoardCreatedby] = useState(false);
   useEffect(() => {
     if (jsonData && jsonData.success) {
       setboard(jsonData.board);
@@ -227,14 +233,14 @@ const ProjectCustomBoard = () => {
   return (
     <section
       className="flex"
-      style={{
-        background: `url(${selectedImage})no-repeat center center / cover`,
-      }}
+      // style={{
+      //   background: `url(${selectedImage})no-repeat center center / cover`,
+      // }}
     >
       <Navbar />
-      <div className="w-full flex mx-3 flex-col p-2 mb-10 ">
+      <div className="w-full flex  flex-col p-2 mb-10 ">
         <section className="my-2">
-          <div
+          {/* <div
             className="col-md mb-2 dynamic primary-color-shade1"
             style={{
               marginTop: "0px",
@@ -288,7 +294,9 @@ const ProjectCustomBoard = () => {
                 ))}
               </ul>
             </div>
-          </div>
+            
+          </div> */}
+          <ProjectDetails/>
         </section>
       </div>
     </section>

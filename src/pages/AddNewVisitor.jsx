@@ -4,7 +4,7 @@ import { FaTrash } from "react-icons/fa";
 import { useSelector } from "react-redux";
 import { getItemInLocalStorage } from "../utils/localStorage";
 import toast from "react-hot-toast";
-import { getHostList, getSetupUsers, getVisitorStaffCategory, postNewGoods, postNewVisitor, postVisitorOTPApi } from "../api";
+import { getHostList, getParkingConfig, getSetupUsers, getVisitorStaffCategory, postNewGoods, postNewVisitor, postVisitorOTPApi } from "../api";
 import { useNavigate } from "react-router-dom";
 import Webcam from "react-webcam";
 import FileInputBox from "../containers/Inputs/FileInputBox";
@@ -21,6 +21,7 @@ const AddNewVisitor = () => {
   const [passStartDate, setPassStartDate] = useState("");
   const [showWebcam, setShowWebcam] = useState(false);
   const [capturedImage, setCapturedImage] = useState(null);
+  const [slots, setSlots] = useState([]);
   const handleOpenCamera = () => {
     setShowWebcam(true);
   };
@@ -45,7 +46,8 @@ const AddNewVisitor = () => {
     noOfGoods: "",
     goodsDescription: "",
     goodsAttachments: [],
-    supportCategory:""
+    supportCategory:"",
+    slotNumber:""
   });
 
   console.log(formData);
@@ -188,6 +190,7 @@ const AddNewVisitor = () => {
     postData.append("visitor[visit_type]", selectedVisitorType);
     postData.append("visitor[pass_number]", formData.passNumber);
     postData.append("visitor[frequency]", selectedFrequency);
+    postData.append("visitor[parking_slot]", formData.slotNumber );
     if (capturedImage) {
       const response = await fetch(capturedImage);
       const blob = await response.blob();
@@ -256,8 +259,17 @@ const AddNewVisitor = () => {
       }
 
     }
+    const fetchParkingConfig = async () => {
+      try {
+        const parkingRes = await getParkingConfig();
+        setSlots(parkingRes.data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
     fetchUsers();
     fetchVisitorCategory()
+    fetchParkingConfig()
   }, []);
 
   return (
@@ -485,6 +497,25 @@ const AddNewVisitor = () => {
               name="vehicleNumber"
               onChange={handleChange}
             />
+          </div>
+          <div className="grid gap-2 items-center w-full">
+          <label htmlFor="slotNumber" className="font-semibold">
+              Select parking Slot
+            </label>
+            <select
+              name="slotNumber"
+              value={formData.slotNumber}
+              onChange={handleChange}
+              className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
+            >
+              <option value="">Select Slot</option>
+              {slots.map((slot) => (
+                <option value={slot.id} key={slot.id}>
+                  {slot.name}
+                </option>
+              ))}
+            </select>
+           
           </div>
           <div className="grid gap-2 items-center w-full">
             <label htmlFor="expectedDate" className="font-semibold">

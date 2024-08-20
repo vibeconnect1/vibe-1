@@ -2047,25 +2047,25 @@ function App() {
           <Route
             path="/admin/project-management/create-project"
             element={
-              <ProtectedAdminRoutes>
+              <ProtectedRoute>
                 <CreateProject />
-              </ProtectedAdminRoutes>
+              </ProtectedRoute>
             }
           />
           <Route
-            path="/admin/project-management/customBoard"
+            path="/project-management/customBoard"
             element={
-              <ProtectedAdminRoutes>
+              <ProtectedRoute>
                 <ProjectCustomBoard />
-              </ProtectedAdminRoutes>
+              </ProtectedRoute>
             }
           />
           <Route
-            path="/admin/project-management/project-details/:id"
+            path="/project-management/project-details/:id"
             element={
-              <ProtectedAdminRoutes>
+              <ProtectedRoute>
                 <ProjectDetails />
-              </ProtectedAdminRoutes>
+              </ProtectedRoute>
             }
           />
           <Route

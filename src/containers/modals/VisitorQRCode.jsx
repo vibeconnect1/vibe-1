@@ -5,7 +5,7 @@ import jsPDF from "jspdf";
 import axios from "axios";
 import logo from "/vibe.png"
 
-const VisitorQRCode = ({ onClose, QR, assName, building, floor, unit }) => {
+const VisitorQRCode = ({ onClose, QR, }) => {
   // const handlePrintQRCode = async () => {
   //   const doc = new jsPDF();
   //   const logoText = "Vibeconnect";

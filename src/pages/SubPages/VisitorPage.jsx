@@ -21,10 +21,13 @@ import { IoClose } from "react-icons/io5";
 import { FaCheck } from "react-icons/fa6";
 import toast from "react-hot-toast";
 const VisitorPage = () => {
-  const [page, setPage] = useState("Visitor In");
+  const [page, setPage] = useState("all");
   const themeColor = useSelector((state) => state.theme.color);
   const [selectedVisitor, setSelectedVisitor] = useState("expected");
   const [visitor, setVisitor] = useState([]);
+  const [all, setAll] = useState([]);
+  const [visitorIn, setVisitorIn] = useState([]);
+  const [visitorOut, setVisitorOut] = useState([]);
   const [unexpectedVisitor, setUnexpectedVisitor] = useState([]);
   const [FilteredUnexpectedVisitor, setFilteredUnexpectedVisitor] = useState(
     []
@@ -57,7 +60,17 @@ const VisitorPage = () => {
         const filteredUnexpectedVisitor = sortedVisitor.filter(
           (visit) => visit.user_type === "security_guard"
         );
+        const filteredVisitorIn = sortedVisitor.filter(
+          (visit) => visit.visitor_in_out === "IN"
+        );
+        const filteredVisitorOut = sortedVisitor.filter(
+          (visit) => visit.visitor_in_out === "OUT"
+        );
         setVisitor(sortedVisitor);
+        setAll(sortedVisitor);
+        setVisitorIn(filteredVisitorIn);
+        console.log(filteredVisitorIn);
+        setVisitorOut(filteredVisitorOut);
         setFilteredData(sortedVisitor);
         setUnexpectedVisitor(filteredUnexpectedVisitor);
         setFilteredUnexpectedVisitor(filteredUnexpectedVisitor);
@@ -195,7 +208,15 @@ const VisitorPage = () => {
     // },
     {
       name: "Status",
-      selector: (row) => row.status,
+      selector: (row) => (
+        <div
+          className={`${
+            row.visitor_in_out === "IN" ? "text-red-400" : "text-green-400"
+          } `}
+        >
+          {row.visitor_in_out}
+        </div>
+      ),
       sortable: true,
     },
     {
@@ -212,13 +233,13 @@ const VisitorPage = () => {
 
     if (searchValue.trim() === "") {
       if (selectedVisitor === "expected") {
-        setFilteredData(visitor);
+        setFilteredData(visitorIn);
       } else {
         setFilteredUnexpectedVisitor(unexpectedVisitor);
       }
     } else {
       if (selectedVisitor === "expected") {
-        const filteredResults = visitor.filter(
+        const filteredResults = visitorIn.filter(
           (item) =>
             item.name.toLowerCase().includes(searchValue.toLowerCase()) ||
             (item.vehicle_number &&
@@ -242,6 +263,25 @@ const VisitorPage = () => {
       }
     }
   };
+  const [searchAll, setSearchAll] = useState([])
+  const handleSearchAll = (e) => {
+    const searchValue = e.target.value;
+    setSearchAll(searchValue);
+    if (searchValue.trim() === "") {
+      setAll(visitor);
+    } else {
+      const filteredResults = visitor.filter(
+        (item) =>
+          item.name.toLowerCase().includes(searchValue.toLowerCase()) ||
+          (item.vehicle_number &&
+            item.vehicle_number
+              .toLowerCase()
+              .includes(searchValue.toLowerCase()))
+      );
+      setAll(filteredResults);
+    }
+  };
+
   const [searchHIstoryText, setSearchHistoryText] = useState("");
   const handleSearchHistory = (e) => {
     const searchValue = e.target.value;
@@ -383,6 +423,7 @@ const VisitorPage = () => {
       sortable: true,
     },
   ];
+  document.title = `Passes - Vibe Connect`;
 
   return (
     <div className="visitors-page">
@@ -392,6 +433,16 @@ const VisitorPage = () => {
           <Passes />
           <div className="flex w-full  m-2">
             <div className="flex w-full md:flex-row flex-col space-x-4 border-b border-gray-400">
+              <h2
+                className={`p-2 px-4 ${
+                  page === "all"
+                    ? "text-blue-500 font-medium  shadow-custom-all-sides"
+                    : "text-black"
+                } rounded-t-md  cursor-pointer text-center text-sm flex items-center justify-center transition-all duration-300`}
+                onClick={() => setPage("all")}
+              >
+                All
+              </h2>
               <h2
                 className={`p-2 ${
                   page === "Visitor In"
@@ -435,6 +486,49 @@ const VisitorPage = () => {
             </div>
           </div>
 
+          {page === "all" && (
+            <div className="grid md:grid-cols-3 gap-2 items-center">
+              <input
+                type="text"
+                className="border border-gray-300 p-2 rounded-md placeholder:text-sm"
+                value={searchAll}
+                onChange={handleSearchAll}
+                placeholder="Search using Visitor name, Host, vehicle number"
+              />
+              <div className="border md:flex-row flex-col flex p-2 rounded-md text-center border-black">
+                <span
+                  className={` md:border-r px-2 border-gray-300 cursor-pointer hover:underline ${
+                    selectedVisitor === "expected"
+                      ? "text-blue-600 underline"
+                      : ""
+                  } text-center`}
+                  onClick={() => handleClick("expected")}
+                >
+                  <span>Expected visitor</span>
+                </span>
+                <span
+                  className={`cursor-pointer hover:underline ${
+                    selectedVisitor === "unexpected"
+                      ? "text-blue-600 underline"
+                      : ""
+                  } text-center`}
+                  onClick={() => handleClick("unexpected")}
+                >
+                  &nbsp; <span>Unexpected visitor</span>
+                </span>
+              </div>
+              <div className="flex justify-end">
+                <Link
+                  to={"/admin/add-new-visitor"}
+                  style={{ background: themeColor }}
+                  className=" font-semibold  hover:text-white duration-150 transition-all p-2 rounded-md text-white cursor-pointer text-center flex items-center gap-2 justify-center"
+                >
+                  <PiPlusCircle size={20} />
+                  Add New Visitor
+                </Link>
+              </div>
+            </div>
+          )}
           {page === "Visitor In" && (
             <div className="grid md:grid-cols-3 gap-2 items-center">
               <input
@@ -479,37 +573,40 @@ const VisitorPage = () => {
             </div>
           )}
           {page === "Visitor Out" && (
-            <div className="grid md:grid-cols-3 gap-2 items-center">
-              <input
-                type="text"
-                className="border border-gray-300 p-2 rounded-md placeholder:text-sm"
-                value={searchText}
-                onChange={handleSearch}
-                placeholder="Search using Visitor name, Host, vehicle number"
-              />
+            <div className="flex flex-col gap-2">
+              <div className="grid md:grid-cols-3 gap-2 items-center">
+                <input
+                  type="text"
+                  className="border border-gray-300 p-2 rounded-md placeholder:text-sm"
+                  value={searchText}
+                  onChange={handleSearch}
+                  placeholder="Search using Visitor name, Host, vehicle number"
+                />
 
-              <div className="border md:flex-row flex-col flex p-2 rounded-md text-center border-black">
-                <span
-                  className={` md:border-r px-2 border-black cursor-pointer hover:underline ${
-                    selectedVisitor === "expected"
-                      ? "text-blue-600 underline"
-                      : ""
-                  } text-center`}
-                  onClick={() => handleClick("expected")}
-                >
-                  <span>Expected visitor</span>
-                </span>
-                <span
-                  className={`cursor-pointer hover:underline ${
-                    selectedVisitor === "unexpected"
-                      ? "text-blue-600 underline"
-                      : ""
-                  } text-center`}
-                  onClick={() => handleClick("unexpected")}
-                >
-                  &nbsp; <span>Unexpected visitor</span>
-                </span>
+                <div className="border md:flex-row flex-col flex p-2 rounded-md text-center border-black">
+                  <span
+                    className={` md:border-r px-2 border-black cursor-pointer hover:underline ${
+                      selectedVisitor === "expected"
+                        ? "text-blue-600 underline"
+                        : ""
+                    } text-center`}
+                    onClick={() => handleClick("expected")}
+                  >
+                    <span>Expected visitor</span>
+                  </span>
+                  <span
+                    className={`cursor-pointer hover:underline ${
+                      selectedVisitor === "unexpected"
+                        ? "text-blue-600 underline"
+                        : ""
+                    } text-center`}
+                    onClick={() => handleClick("unexpected")}
+                  >
+                    &nbsp; <span>Unexpected visitor</span>
+                  </span>
+                </div>
               </div>
+              <Table columns={VisitorColumns} data={visitorOut} />
             </div>
           )}
           {page === "History" && (
@@ -538,7 +635,7 @@ const VisitorPage = () => {
           )}
           <div className="my-4">
             {selectedVisitor === "expected" && page === "Visitor In" && (
-              <Table columns={VisitorColumns} data={filteredData} />
+              <Table columns={VisitorColumns} data={visitorIn} />
             )}
             {selectedVisitor === "unexpected" && page === "Visitor In" && (
               <Table
@@ -547,6 +644,19 @@ const VisitorPage = () => {
               />
               // <p className="font-medium text-center">No Records</p>
             )}
+            {/* all */}
+            <div className="">
+              {selectedVisitor === "expected" && page === "all" && (
+                <Table columns={VisitorColumns} data={all} />
+              )}
+              {selectedVisitor === "unexpected" && page === "all" && (
+                <Table
+                  columns={VisitorColumns}
+                  data={FilteredUnexpectedVisitor}
+                />
+                // <p className="font-medium text-center">No Records</p>
+              )}
+            </div>
           </div>
         </div>
       </section>

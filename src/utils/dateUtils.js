@@ -64,6 +64,19 @@ export function convertToIST(dateTimeString) {
   const istDate = date.toLocaleString("en-IN", options);
   return istDate;
 }
+export const dateTimeFormat = (dateString) => {
+  if (!dateString) {
+    return " ";
+  }
+
+  const date = new Date(dateString);
+
+  if (isNaN(date)) {
+    return " ";
+  }
+
+  return date.toLocaleString();
+};
 
 export const formatTime = (dateTimeString) => {
   if (!dateTimeString) {

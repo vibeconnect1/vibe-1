@@ -9,6 +9,7 @@ import { useSelector } from "react-redux";
 import Boards from "../components/Boards";
 import bridge from "/bridge.jpg";
 import { getItemInLocalStorage } from "../utils/localStorage";
+import vibe from "/vibe.jpeg"
 import {
   API_URL,
   getOutsideUsers,
@@ -99,6 +100,8 @@ const ProjectManagement = () => {
   const [boardName, setBoardName] = useState("");
   const [emails, setEmails] = useState([]);
   const [dueDate, setDueDate] = useState(todayDate);
+  const [profile, setProfile] = useState(null)
+  const [summary, setSummary] = useState("")
   var handleChangeSelect = (selectedOption) => {
     setSelectedOption(selectedOption);
     console.log(emails);
@@ -183,6 +186,8 @@ const ProjectManagement = () => {
     formData.append("due_date", dueDate);
     formData.append("access_to", idStringOutsider);
     formData.append("user_id", user_id);
+    formData.append("image", profile);
+    formData.append("summery", summary);
     try {
       const boardResp = await postNewProjectBoard(formData);
       if (boardResp.success) {
@@ -206,7 +211,7 @@ const ProjectManagement = () => {
 const navigate = useNavigate()
   const goToProject = (id) => {
     // if (!isEditingDate) {
-      navigate(`/admin/project-management/customBoard/${id}`);
+      navigate(`/project-management/customBoard/${id}`);
     // }
     
   };
@@ -229,6 +234,7 @@ const navigate = useNavigate()
       }
     } catch (error) {}
   };
+  document.title= `Project Management - Vibe Connect`
   return (
     <section
       className="flex"
@@ -238,11 +244,11 @@ const navigate = useNavigate()
     >
       <Navbar />
       <div className="w-full flex mx-3 flex-col overflow-hidden">
-        <div className=" overflow-x-auto">
+        {/* <div className=" overflow-x-auto">
         <Boards />
-        </div>
+        </div> */}
 
-        {/* <section className="my-2">
+        <section className="my-2">
           <div>
             <div className="flex justify-end">
               <div
@@ -256,6 +262,10 @@ const navigate = useNavigate()
             {isModalOpen && (
               <CustomBoardCreate
                 closeProjectModal={closeProjectModal}
+                profile={profile}
+                setProfile={setProfile}
+                setSummary={setSummary}
+                summary={summary}
                 boardName={boardName}
                 setBoardName={setBoardName}
                 handleChangeSelect={handleChangeSelect}
@@ -286,7 +296,7 @@ const navigate = useNavigate()
             )}
           </div>
           <ProjectBoard />
-        </section> */}
+        </section>
       </div>
     </section>
   );

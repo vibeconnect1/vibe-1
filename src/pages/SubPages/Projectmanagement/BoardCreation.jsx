@@ -8,7 +8,6 @@ import { useSelector } from "react-redux";
 import { AiOutlineClose } from "react-icons/ai";
 const CustomBoardCreate = ({
   closeProjectModal,
-
   boardName,
   setBoardName,
   isSecondInputVisible,
@@ -23,6 +22,10 @@ const CustomBoardCreate = ({
   setDueDate,
   handleDueDateChange,
   createBoard,
+  profile,
+  setProfile,
+  summary,
+  setSummary,
 }) => {
   const themeColor = useSelector((state) => state.theme.color);
   const modalStyleProjectName = {
@@ -49,7 +52,7 @@ const CustomBoardCreate = ({
     <div className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-30 backdrop-blur-sm z-50 p-10">
       <div
         style={{ background: themeColor }}
-        className="md:w-auto w-full p-4 md:px-10 flex flex-col rounded-md overflow-auto max-h-[100%] hide-scrollbar"
+        className="md:w-auto w-full p-4 md:px-5 flex flex-col rounded-md overflow-auto max-h-[100%] hide-scrollbar"
       >
         <button
           className="place-self-end p-1 rounded-full bg-white"
@@ -81,101 +84,135 @@ const CustomBoardCreate = ({
               value={boardName}
               onChange={(e) => setBoardName(e.target.value)}
             />
-            <div className="flex flex-col gap-1 my-2">
-              <h2 className="font-medium">Set Project Timeline : </h2>
+            
+              <div className="flex flex-col gap-1 my-2">
+                <h2 className="font-medium">Set Project Timeline : </h2>
+                <input
+                  min={todayDate}
+                  type="date"
+                  style={{ borderRadius: 4 }}
+                  value={dueDate}
+                  onChange={handleDueDateChange}
+                  className="text-black p-1 outline-none"
+                />
+              </div>
+           
+            <div className="flex gap-4 items-center w-[35rem]">
+              {isSecondInputVisible && (
+                <>
+                  <div className="flex-1">
+                    <Select
+                      isMulti
+                      onChange={handleChangeSelect}
+                      options={emails}
+                      className="w-full"
+                      placeholder="Add people by email"
+                      noOptionsMessage={() => "Email not available..."}
+                      maxMenuHeight={120}
+                      styles={{
+                        placeholder: (baseStyles, state) => ({
+                          ...baseStyles,
+                          color: "black",
+                        }),
+                        clearIndicator: (baseStyles) => ({
+                          ...baseStyles,
+                          color: "red",
+                        }),
+                        dropdownIndicator: (baseStyles) => ({
+                          ...baseStyles,
+                          color: "black",
+                        }),
+                        control: (baseStyles) => ({
+                          ...baseStyles,
+                          borderColor: "darkblue",
+                        }),
+                        option: (baseStyles) => ({
+                          ...baseStyles,
+                          color: "black",
+                        }),
+                        multiValueRemove: (baseStyles, state) => ({
+                          ...baseStyles,
+                          color: state.isFocused ? "red" : "gray",
+                          backgroundColor: state.isFocused
+                            ? "black"
+                            : "lightgreen",
+                        }),
+                      }}
+                    />
+                  </div>
+                  <div className="flex-1">
+                    <Select
+                      isMulti
+                      onChange={handleChangeSelectOutsider}
+                      options={emailsOutsider}
+                      className="w-full placeholder:text-sm"
+                      placeholder="Add Outsider people by email "
+                      noOptionsMessage={() => "Email not available..."}
+                      maxMenuHeight={120}
+                      styles={{
+                        placeholder: (baseStyles, state) => ({
+                          ...baseStyles,
+                          color: "black",
+                        }),
+                        clearIndicator: (baseStyles) => ({
+                          ...baseStyles,
+                          color: "red",
+                        }),
+                        dropdownIndicator: (baseStyles) => ({
+                          ...baseStyles,
+                          color: "black",
+                        }),
+                        control: (baseStyles) => ({
+                          ...baseStyles,
+                          borderColor: "darkblue",
+                        }),
+                        option: (baseStyles) => ({
+                          ...baseStyles,
+                          color: "black",
+                        }),
+                        multiValueRemove: (baseStyles, state) => ({
+                          ...baseStyles,
+                          color: state.isFocused ? "red" : "gray",
+                          backgroundColor: state.isFocused
+                            ? "black"
+                            : "lightgreen",
+                        }),
+                      }}
+                    />
+                  </div>
+                </>
+              )}
+            </div>
+
+            <div className="flex flex-col gap-2">
+              <p className="font-medium">Summary :</p>
+              <textarea
+                name=""
+                id=""
+                cols="30"
+                rows="3"
+                value={summary}
+                onChange={(event) => setSummary(event.target.value)}
+                placeholder="Describe Project"
+                className="border border-white border-dashed rounded-md p-2 text-black"
+              ></textarea>
+            </div>
+            <div className="flex flex-col gap-2">
+              <p className="font-medium">Project Profile :</p>
               <input
-                min={todayDate}
-                type="date"
-                style={{ borderRadius: 4 }}
-                value={dueDate}
-                onChange={handleDueDateChange}
-                className="text-black p-1 outline-none"
+                type="file"
+                name=""
+                id=""
+                onChange={(event) => setProfile(event.target.files[0])}
+                accept="image/*"
+                className="border-2 border-white border-dashed rounded-md p-2"
               />
             </div>
-            {isSecondInputVisible && (
-              <Select
-                isMulti
-                onChange={handleChangeSelect}
-                options={emails}
-                className="searchInput mt-4 mb-2"
-                placeholder="Add people by email"
-                noOptionsMessage={() => "Email not avaliable..."}
-                maxMenuHeight={120}
-                styles={{
-                  placeholder: (baseStyles, state) => ({
-                    ...baseStyles,
-                    color: "black",
-                  }),
-                  clearIndicator: (baseStyles) => ({
-                    ...baseStyles,
-                    color: "red",
-                  }),
-                  dropdownIndicator: (baseStyles) => ({
-                    ...baseStyles,
-                    color: "black",
-                  }),
-                  control: (baseStyles) => ({
-                    ...baseStyles,
-                    borderColor: "darkblue",
-                  }),
-                  option: (baseStyles) => ({
-                    ...baseStyles,
-                    color: "black",
-                  }),
-                  multiValueRemove: (baseStyles, state) => ({
-                    ...baseStyles,
-                    color: state.isFocused ? "red" : "gray",
-                    backgroundColor: state.isFocused ? "black" : "lightgreen",
-                  }),
-                }}
-              />
-            )}
-            {isSecondInputVisible && (
-              <>
-                <span className="">Outsider Access :</span>
-                <Select
-                  isMulti
-                  onChange={handleChangeSelectOutsider}
-                  options={emailsOutsider}
-                  className="searchInput mt-2"
-                  placeholder="Add Outsider people by email"
-                  noOptionsMessage={() => "Email not avaliable..."}
-                  maxMenuHeight={120}
-                  styles={{
-                    placeholder: (baseStyles, state) => ({
-                      ...baseStyles,
-                      color: "black",
-                    }),
-                    clearIndicator: (baseStyles) => ({
-                      ...baseStyles,
-                      color: "red",
-                    }),
-                    dropdownIndicator: (baseStyles) => ({
-                      ...baseStyles,
-                      color: "black",
-                    }),
-                    control: (baseStyles) => ({
-                      ...baseStyles,
-                      borderColor: "darkblue",
-                    }),
-                    option: (baseStyles) => ({
-                      ...baseStyles,
-                      color: "black",
-                    }),
-                    multiValueRemove: (baseStyles, state) => ({
-                      ...baseStyles,
-                      color: state.isFocused ? "red" : "gray",
-                      backgroundColor: state.isFocused ? "black" : "lightgreen",
-                    }),
-                  }}
-                />
-              </>
-            )}
           </div>
 
           <div className="flex justify-center w-full my-4">
             <button
-              className="w-full p-1 shadow-custom-all-sides rounded-md font-medium bg-black bg-opacity-30"
+              className="w-full p-1 shadow-custom-all-sides rounded-md font-medium  bg-opacity-30 bg-white text-black"
               onClick={createBoard}
               disabled={isButtonDisabled}
             >

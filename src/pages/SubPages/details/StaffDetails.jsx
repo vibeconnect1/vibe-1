@@ -11,9 +11,12 @@ import {
 } from "../../../utils/dateUtils";
 import { FaRegFileAlt } from "react-icons/fa";
 import Table from "../../../components/table/Table";
+import { BiQr } from "react-icons/bi";
+import VisitorQRCode from "../../../containers/modals/VisitorQRCode";
 const StaffDetails = () => {
   const themeColor = useSelector((state) => state.theme.color);
   const [details, setDetails] = useState({});
+  const [qrModal, setQrmodal] = useState(false);
   const { id } = useParams();
   useEffect(() => {
     const fetchDetails = async () => {
@@ -28,12 +31,12 @@ const StaffDetails = () => {
   }, []);
 
   const scheduleArray = details.working_schedule
-  ? Object.keys(details.working_schedule).map((day) => ({
-      day: day,
-      start_time: details.working_schedule[day].start_time,
-      end_time: details.working_schedule[day].end_time,
-    }))
-  : [];
+    ? Object.keys(details.working_schedule).map((day) => ({
+        day: day,
+        start_time: details.working_schedule[day].start_time,
+        end_time: details.working_schedule[day].end_time,
+      }))
+    : [];
   const columns = [
     {
       name: "Sr. no.",
@@ -66,7 +69,6 @@ const StaffDetails = () => {
     return filePath.split("/").pop().split("?")[0];
   };
 
-
   return (
     <section className="flex">
       <div className="hidden md:block">
@@ -82,6 +84,15 @@ const StaffDetails = () => {
           >
             Staff Details
           </h2>
+          <div className="flex justify-end">
+            <button
+              onClick={() => setQrmodal(true)}
+              className="border-2 border-black rounded-full px-2 p-1 flex items-center gap-2"
+            >
+              {" "}
+              <BiQr /> QR code
+            </button>
+          </div>
           <div className="flex justify-center">
             {details.profile_picture && details.profile_picture !== null ? (
               // details.visitor_files.map((doc, index) => (
@@ -117,7 +128,7 @@ const StaffDetails = () => {
               <p className="font-semibold text-sm">department: </p>
               <p className="">Security</p>
             </div> */}
-<div className="grid grid-cols-2 ">
+            <div className="grid grid-cols-2 ">
               <p className="font-semibold text-sm">Mobile : </p>
               <p className="text-sm">{details.mobile_no}</p>
             </div>
@@ -125,7 +136,7 @@ const StaffDetails = () => {
               <p className="font-semibold text-sm">Email : </p>
               <p className="text-sm">{details.email}</p>
             </div>
-            
+
             <div className="grid grid-cols-2 ">
               <p className="font-semibold text-sm">Staff Id : </p>
               <p className="text-sm">{details.staff_id}</p>
@@ -136,7 +147,9 @@ const StaffDetails = () => {
             </div>
             <div className="grid grid-cols-2 ">
               <p className="font-semibold text-sm">Status : </p>
-              <p className="text-sm">{details.status ? "Active" : "Inactive"}</p>
+              <p className="text-sm">
+                {details.status ? "Active" : "Inactive"}
+              </p>
             </div>
             <div className="grid grid-cols-2 ">
               <p className="font-semibold text-sm">Supplier name : </p>
@@ -152,7 +165,13 @@ const StaffDetails = () => {
             </div>
             <div className="grid grid-cols-2 ">
               <p className="font-semibold text-sm">Status : </p>
-              <p className="text-sm">{details.status ? <span className="text-green-400">Active</span>: <span className="text-red-400">Inactive</span>}</p>
+              <p className="text-sm">
+                {details.status ? (
+                  <span className="text-green-400">Active</span>
+                ) : (
+                  <span className="text-red-400">Inactive</span>
+                )}
+              </p>
             </div>
             <div className="grid grid-cols-2 ">
               <p className="font-semibold text-sm">Created on : </p>
@@ -168,7 +187,9 @@ const StaffDetails = () => {
             </div>
           </div>
           <div>
-            <h2 className="font-medium border-b border-gray-300 mb-2">Working Schedule</h2>
+            <h2 className="font-medium border-b border-gray-300 mb-2">
+              Working Schedule
+            </h2>
             <Table columns={columns} data={scheduleArray} />
           </div>
           <div>
@@ -176,40 +197,44 @@ const StaffDetails = () => {
               Attachments
             </h2>
             <div className="p-2 flex flex-wrap gap-4 items-center justify-center">
-
-            
-            {details.staff_documents && details.staff_documents.length > 0 ? (
-              details.staff_documents.map((staff, index) => (
-                <div key={staff.id} className="">
-                  {isImage(domainPrefix + staff.document) ? (
-                    <img
-                      src={domainPrefix + staff.document}
-                      alt={`Attachment`}
-                      className="w-40 h-28 object-cover rounded-md"
-                      onClick={() =>
-                        window.open(domainPrefix + staff.document, "_blank")
-                      }
-                    />
-                  ) : (
-                    <a
-                      href={domainPrefix + staff.document}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="attachment-link hover:text-blue-400 transition-all duration-300  flex flex-col  "
-                    >
-                      <FaRegFileAlt size={50} />
-                      {getFileName(staff.document)}
-                    </a>
-                  )}
-                </div>
-              ))
-            ) : (
-              <p className="text-center w-full">No Attachments</p>
-            )}
+              {details.staff_documents && details.staff_documents.length > 0 ? (
+                details.staff_documents.map((staff, index) => (
+                  <div key={staff.id} className="">
+                    {isImage(domainPrefix + staff.document) ? (
+                      <img
+                        src={domainPrefix + staff.document}
+                        alt={`Attachment`}
+                        className="w-40 h-28 object-cover rounded-md"
+                        onClick={() =>
+                          window.open(domainPrefix + staff.document, "_blank")
+                        }
+                      />
+                    ) : (
+                      <a
+                        href={domainPrefix + staff.document}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="attachment-link hover:text-blue-400 transition-all duration-300  flex flex-col  "
+                      >
+                        <FaRegFileAlt size={50} />
+                        {getFileName(staff.document)}
+                      </a>
+                    )}
+                  </div>
+                ))
+              ) : (
+                <p className="text-center w-full">No Attachments</p>
+              )}
             </div>
           </div>
         </div>
       </div>
+      {qrModal && (
+        <VisitorQRCode
+          QR={domainPrefix + details.qr_code_image_url}
+          onClose={() => setQrmodal(false)}
+        />
+      )}
     </section>
   );
 };

@@ -3,6 +3,8 @@ import { useSelector } from "react-redux";
 import { getVibeBoardTemplate } from "../../../api";
 import { AiOutlineClose } from "react-icons/ai";
 import { FaSearch } from "react-icons/fa";
+import { getItemInLocalStorage } from "../../../utils/localStorage";
+import { PiPlus } from "react-icons/pi";
 
 const ProjectBoardTemplate = ({
   closeProjectModal,
@@ -13,7 +15,7 @@ const ProjectBoardTemplate = ({
   setselectedimage,
   goToProject,
   selectedTemplateId,
-  setSelectedTemplateId 
+  setSelectedTemplateId,
 }) => {
   const [template, setTemplate] = useState([]);
   const themeColor = useSelector((state) => state.theme.color);
@@ -25,10 +27,10 @@ const ProjectBoardTemplate = ({
       GetTemplate();
     }
   }, [isOpen]);
-
+  const userId = getItemInLocalStorage("VIBEUSERID");
   const GetTemplate = async () => {
     try {
-      const jsonData = await getVibeBoardTemplate();
+      const jsonData = await getVibeBoardTemplate(userId);
       if (jsonData.success) {
         console.log(jsonData.data);
         setTemplate(jsonData.data);
@@ -42,7 +44,6 @@ const ProjectBoardTemplate = ({
   const handleSearchChange = (event) => {
     setSearchQuery(event.target.value);
   };
-
 
   // Function to toggle the open/close state of a category menu
   const toggleCategoryMenu = (category) => {
@@ -204,29 +205,26 @@ const ProjectBoardTemplate = ({
               </div>
             </div>
 
-            <div className="" style={{ width: "76%" }}>
+            <div className="my-2" style={{ width: "76%" }}>
               <div>
-                <div className="">
-                  <div className="flex items-center w-full gap-2">
+                <div className="flex justify-between w-full">
+                  <div className="flex items-center gap-2">
                     <FaSearch className="text-gray-400" />
                     <input
                       type="text"
-                      className="bg-transparent outline-none w-full"
+                      className="bg-transparent outline-none  "
                       spellCheck="true"
                       value={searchQuery}
                       onChange={handleSearchChange}
                       placeholder="Search..."
                     />
                   </div>
-                </div>
-                <div className="flex justify-end">
-                  {" "}
                   <span
-                    className="bg-white text-black flex items-center font-medium  p-1 px-2 rounded-md"
+                    className="bg-white text-black flex items-center font-medium  p-1 gap-2 px-2 rounded-md"
                     onClick={() => goToProject(board_id_for_Temp)}
                   >
-                    <i className="fa fa-plus mr-1"></i>
-                    <p>Create a blank board</p>
+                    <PiPlus />
+                    <p className="text-sm">Create blank board</p>
                   </span>
                 </div>
               </div>
@@ -243,14 +241,10 @@ const ProjectBoardTemplate = ({
                     track your team's tasks
                   </span>
                 </div>
-                <div className="flex justify-center ml-5">
+                <div className="flex justify-end ">
                   <button
                     style={{
                       borderRadius: 50,
-                      paddingLeft: 30,
-                      paddingTop: 10,
-                      // paddingBottom:8,
-                      paddingRight: 30,
                       color: "white",
                     }}
                     onClick={() => {
@@ -258,7 +252,7 @@ const ProjectBoardTemplate = ({
                     }}
                   >
                     <h6>
-                      <p className="bg-white text-black p-1 rounded-md font-medium px-2">
+                      <p className="bg-white text-black p-1 rounded-md font-medium px-2 text-sm">
                         Use this template
                       </p>
                     </h6>
@@ -266,7 +260,6 @@ const ProjectBoardTemplate = ({
                 </div>
               </div>
               <div className="p-2">
-                
                 <img
                   src={
                     selectedimage

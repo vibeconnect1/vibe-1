@@ -12,8 +12,8 @@ import { GoAlert } from "react-icons/go";
 import ReactApexChart from "react-apexcharts";
 import { BsDatabaseDash } from "react-icons/bs";
 import { Link } from "react-router-dom";
-import Switch from "../../../Buttons/Switch";
-function EmployeeProjectOverview() {
+import { Switch } from "../../../../Buttons";
+function ProjectOverView() {
   const [overview, setOverview] = useState(false);
   const [budget, setBudget] = useState(false);
   const [createModal, setCreateModal] = useState(false);
@@ -248,16 +248,7 @@ function EmployeeProjectOverview() {
             </div>
             <p className="font-semibold text-sm text-gray-800">30 Days</p>
           </div>
-          <div className="flex justify-between py-3 mx-5">
-            <div className="flex gap-2">
-              <MdOutlineCurrencyRupee
-                className="mt-1 text-violet-800"
-                size={20}
-              />
-              <p className="text-gray-500 font-medium text-base">Cost</p>
-            </div>
-            <p className="font-semibold text-base text-gray-800">₹ 50,000</p>
-          </div>
+         
         </div>
         <div className="shadow-custom-all-sides rounded-md  my-5">
           <div className="flex justify-between mx-5 py-3">
@@ -825,4 +816,7 @@ function EmployeeProjectOverview() {
   );
 }
 
-export default EmployeeProjectOverview;
+
+
+
+export default ProjectOverView

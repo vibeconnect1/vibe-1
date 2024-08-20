@@ -2167,10 +2167,10 @@ export const updateVibeBoardDate = async (data) => {
     throw error;
   }
 };
-export const getVibeBoardTemplate = async () => {
+export const getVibeBoardTemplate = async (userID) => {
   try {
     const response = await vibeAuth.get(
-      `/api/employee/get-template/`,
+      `/api/employee/get-template/?user_id=${userID}`,
 
       {
         headers: {

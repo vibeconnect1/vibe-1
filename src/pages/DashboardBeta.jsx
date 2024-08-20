@@ -92,7 +92,7 @@ const DashboardBeta = () => {
     ],
   };
   return (
-    <section className="flex">
+    <section className="flex w-screen">
       <Navbar />
       {/* <div className=" w-full flex lg:mx-3 flex-col overflow-hidden">
       <iframe

@@ -11,9 +11,14 @@ import AssetQrCode from "./assetSubDetails/AssetQrCode";
 import ModalWrapper from "../../../containers/modals/ModalWrapper";
 import Navbar from "../../../components/Navbar";
 import { domainPrefix, getPatrollingDetails } from "../../../api";
-import { convertToIST, SendDateFormat } from "../../../utils/dateUtils";
+import {
+  convertToIST,
+  dateTimeFormat,
+  SendDateFormat,
+} from "../../../utils/dateUtils";
 import axios from "axios";
 import vibeLogo from "/vibe.png";
+import Table from "../../../components/table/Table";
 const PatrollingDetails = () => {
   const themeColor = useSelector((state) => state.theme.color);
   const [qrCode, setQrCode] = useState(false);
@@ -136,6 +141,30 @@ const PatrollingDetails = () => {
     }
   };
 
+  const PatrollingColumn = [
+    {
+      name: " Name",
+      selector: (row) => row.user_name,
+      sortable: true,
+    },
+    {
+      name: "Expected Time",
+      selector: (row) => dateTimeFormat(row.expected_time),
+      sortable: true,
+    },
+    {
+      name: "Actual Time",
+      selector: (row) =>
+        row.actual_time ? dateTimeFormat(row.actual_time) : "",
+      sortable: true,
+    },
+    {
+      name: "Status",
+      selector: (row) => row.status,
+      sortable: true,
+    },
+  ];
+
   return (
     <section className="flex">
       <Navbar />
@@ -186,10 +215,12 @@ const PatrollingDetails = () => {
               <p className="font-semibold text-sm">End Date : </p>
               <p className="">{SendDateFormat(details.end_date)}</p>
             </div>
-           {details.time_intervals && <div className="grid grid-cols-2 ">
-              <p className="font-semibold text-sm">Time Interval : </p>
-              <p className="">{details.time_intervals}hr</p>
-            </div>}
+            {details.time_intervals && (
+              <div className="grid grid-cols-2 ">
+                <p className="font-semibold text-sm">Time Interval : </p>
+                <p className="">{details.time_intervals}hr</p>
+              </div>
+            )}
             <div className="grid grid-cols-2 ">
               <p className="font-semibold text-sm">Start Time : </p>
               <p className="">{convertToIST(details.start_time)}</p>
@@ -206,19 +237,23 @@ const PatrollingDetails = () => {
               <p className="font-semibold text-sm">Updated on : </p>
               <p className="">{SendDateFormat(details.updated_at)}</p>
             </div>
-           {details.specific_times  && <div className="grid grid-cols-2 ">
-              <p className="font-semibold text-sm">Specific Time : </p>
-              <div className="flex gap-2 items-center">
-                {details.specific_times &&
-                  details.specific_times.map((time, index) => {
-                    const hour = parseInt(time, 10);
-                    const period = hour >= 12 ? "PM" : "AM";
-                    const formattedHour = hour % 12 || 12; // Convert to 12-hour format
-                    return <p key={index}>{`${formattedHour} ${period},`}</p>;
-                  })}
+            {details.specific_times && (
+              <div className="grid grid-cols-2 ">
+                <p className="font-semibold text-sm">Specific Time : </p>
+                <div className="flex gap-2 items-center">
+                  {details.specific_times &&
+                    details.specific_times.map((time, index) => {
+                      const hour = parseInt(time, 10);
+                      const period = hour >= 12 ? "PM" : "AM";
+                      const formattedHour = hour % 12 || 12; // Convert to 12-hour format
+                      return <p key={index}>{`${formattedHour} ${period},`}</p>;
+                    })}
+                </div>
               </div>
-            </div>}
+            )}
           </div>
+          <h2 className="font-medium border-b border-gray-400">Logs</h2>
+          <Table columns={PatrollingColumn} data={details.patrolling_logs} />
         </div>
         {qrCode && (
           <ModalWrapper onclose={() => setQrCode(false)}>
