@@ -1,30 +1,78 @@
 import React, { useState } from "react";
 import ModalWrapper from "../../../containers/modals/ModalWrapper";
 import { useSelector } from "react-redux";
-import { postVehicleParking } from "../../../api";
-const AddVehicleParkingModal = ({ onclose }) => {
+import { postVehicleParking, getFloors } from "../../../api";
+import { getItemInLocalStorage } from "../../../utils/localStorage";
+import toast from "react-hot-toast";
+const AddVehicleParkingModal = ({ onclose, setAdded}) => {
   const themeColor = useSelector((state) => state.theme.color);
+  const buildings = getItemInLocalStorage("Building");
+  const [floors, setFloors] = useState([]);
   const [formData, setFormData] = useState({
-    buildingName: "",
-    floorName: "",
-    parkingSlots: "",
-    vehicleType: "",
+    building_id: "",
+    floor_id: "",
+    name: "",
+    vehicle_type: "",
   });
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+  const handleChange = async (e) => {
+    async function fetchFloor(floorID) {
+      console.log(floorID);
+      try {
+        const build = await getFloors(floorID);
+        setFloors(build.data.map((item) => ({ name: item.name, id: item.id })));
+      } catch (e) {
+        console.log(e);
+      }
+    }
+    if (e.target.type === "select-one" && e.target.name === "building_id") {
+      const BuildID = Number(e.target.value);
+      await fetchFloor(BuildID);
+
+      setFormData({
+        ...formData,
+        building_id: BuildID,
+      });
+    }
+    else {
+      setFormData({
+        ...formData,
+        [e.target.name]: e.target.value,
+      });
+    }
   };
   const handleAddVehicleParking = async () => {
+    if(formData.building_id === "" ||
+      formData.floor_id === "" ||
+      formData.name === "" ||
+      formData.vehicle_type === "" 
+    )
+    {
+      return toast.error("All fields are required");
+    }
     const postData = new FormData();
-    postData.append("parking_configuration[building_name]", formData.buildingName);
-    postData.append("parking_configuration[floor_name]", formData.floorName);
-    postData.append("parking_configuration[name]", formData.parkingSlots);
-    postData.append("parking_configuration[vehicle_type]", formData.vehicleType);
+    postData.append(
+      "parking_configuration[building_id]",
+      formData.building_id
+    );
+    postData.append("parking_configuration[floor_id]", formData.floor_id);
+    postData.append("parking_configuration[name]", formData.name);
+    postData.append(
+      "parking_configuration[vehicle_type]",
+      formData.vehicle_type
+    );
     console.log(formData);
     try {
       const resp = await postVehicleParking(postData);
-      setFormData("")
+      toast.success("created Successfully");
+      setFormData("");
+      setAdded(true);
+      onclose();
     } catch (error) {
       console.log(error);
+    }finally {
+      setTimeout(() => {
+        setAdded(false);
+      }, 500);
     }
   };
 
@@ -39,27 +87,37 @@ const AddVehicleParkingModal = ({ onclose }) => {
             <label className="mb-2 text-sm text-gray-600 font-medium">
               Building Name
             </label>
-            <input
-              type="text"
-              name="buildingName"
-              value={formData.buildingName}
+            <select
+              className="border p-2 px-4 border-gray-500 rounded-md"
               onChange={handleChange}
-              placeholder="Enter Building Name"
-              className="border rounded-md md:w-96 border-gray-500 p-2 px-2"
-            />
+              value={formData.building_id}
+              name="building_id"
+            >
+              <option value="">Select Building</option>
+              {buildings?.map((building) => (
+                <option key={building.id} value={building.id}>
+                  {building.name}
+                </option>
+              ))}
+            </select>
           </div>
           <div className="flex flex-col">
             <label className="mb-2 text-sm text-gray-600 font-medium">
               Floor Name
             </label>
-            <input
-              type="text"
-              name="floorName"
-              value={formData.floorName}
+            <select
+              className="border p-2 px-4 border-gray-500 rounded-md"
               onChange={handleChange}
-              placeholder="Enter Floor Name"
-              className="border rounded-md md:w-96 border-gray-500 p-2 px-2"
-            />
+              value={formData.floor_id}
+              name="floor_id"
+            >
+              <option value="">Select Floor</option>
+              {floors?.map((floor) => (
+                <option value={floor.id} key={floor.id}>
+                  {floor.name}
+                </option>
+              ))}
+            </select>
           </div>
           <div className="flex flex-col">
             <label className="mb-2 text-sm text-gray-600 font-medium">
@@ -67,8 +125,8 @@ const AddVehicleParkingModal = ({ onclose }) => {
             </label>
             <input
               type="text"
-              name="parkingSlots"
-              value={formData.parkingSlots}
+              name="name"
+              value={formData.name}
               onChange={handleChange}
               placeholder="Enter Parking Slot"
               className="border rounded-md md:w-96 border-gray-500 p-2 px-2"
@@ -80,8 +138,8 @@ const AddVehicleParkingModal = ({ onclose }) => {
             </label>
             <input
               type="text"
-              name="vehicleType"
-              value={formData.vehicleType}
+              name="vehicle_type"
+              value={formData.vehicle_type}
               onChange={handleChange}
               placeholder="Enter Vehicle Type"
               className="border rounded-md md:w-96 border-gray-500 p-2 px-2"
@@ -95,7 +153,7 @@ const AddVehicleParkingModal = ({ onclose }) => {
               style={{ background: themeColor }}
               onClick={handleAddVehicleParking}
             >
-              Add
+              Submit
             </button>
           </div>
         </div>

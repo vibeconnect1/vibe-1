@@ -55,7 +55,7 @@ const AddVisitorSetupModal = ({ onclose, setAdded}) => {
               onClick={handleCategorySubmit}
               style={{ background: themeColor }}
             >
-              Add
+              Submit
             </button>
           </div>
         </div>

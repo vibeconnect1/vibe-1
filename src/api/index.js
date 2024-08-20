@@ -108,20 +108,39 @@ export const editVisitorCategory = async (id, data ) =>
 
 // Vehicle Parking Setup
 
-export const getVisitorParking = async () =>
-  axiosInstance.get("/parking_configurations.json", {
+export const getVehicleParking = async () =>
+  axiosInstance.get(`/parking_configurations.json`, {
     params :{
       token:token,
     },
   })
 
   export const postVehicleParking = async (data) =>
-    axiosInstance.post("/parking_configurations.json", data, {
+    axiosInstance.post(`/parking_configurations.json`, data, {
       params: {
         token: token,
       },
     });
-  
+
+  export const deleteVehicleParking = async(id) =>
+    axiosInstance.delete(`/parking_configurations/${id}.json`,{
+      params: {
+        token: token,
+      },
+    })
+
+    export const getVehicleParkingDetails = async(id) => 
+      axiosInstance.get(`/parking_configurations/${id}.json`,{
+        params:{
+          token:token,
+        },
+      })
+      export const editVehicleParking = async (data, id) =>
+        axiosInstance.patch(`/parking_configurations/${id}.json`, data, {
+          params: {
+            token: token,
+          },
+        });
 // vendor
 export const getVendors = async () =>
   axiosInstance.get("/vendors.json",{

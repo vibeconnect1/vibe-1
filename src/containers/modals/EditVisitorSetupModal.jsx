@@ -68,7 +68,7 @@ const EditVisitorSetupModal = ({ onclose, catId, setAdded }) => {
               className=" border-2 border-gray-500 text-white rounded-md px-4 p-1 w-full"
               style={{background: themeColor}}
             >
-              Edit
+              Submit
             </button>
           </div>
         </div>
