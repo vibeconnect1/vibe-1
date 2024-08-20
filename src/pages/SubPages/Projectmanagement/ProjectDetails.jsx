@@ -15,6 +15,7 @@ import profile5 from "/profile5.jpg";
 // import EmployeeProjectSummary from "./EmployeeProjectSummary";
 import { IoClose } from "react-icons/io5";
 import ProjectOverView from "./Details/ProjectOverView";
+import { useSelector } from "react-redux";
 function ProjectDetails() {
   const [projectDetails, setProjectDetails] = useState("Overview");
   const handleToggle = (section) => {
@@ -22,12 +23,15 @@ function ProjectDetails() {
   };
   const [assign, setAssign] = useState(false);
 
+  const boardData = useSelector((state) => state.board.data);
+  console.log(boardData)
+
   return (
    
       <div className="w-full flex flex-col overflow-hidden">
         <div className="flex justify-between  my-2">
           <div>
-            <h2 className="text-2xl font-semibold">Vibe Project Details</h2>
+            <h2 className="text-2xl mx-2 font-semibold">{boardData.board_name}</h2>
           </div>
           <div className="relative flex items-center pr-32">
             <img

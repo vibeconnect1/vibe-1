@@ -1,11 +1,22 @@
 import React, { useEffect, useRef, useState } from "react";
 import Navbar from "../../../components/Navbar";
 import { getItemInLocalStorage } from "../../../utils/localStorage";
-import { API_URL, getVibeBackground, getVibeBoardData, getVibeBoardUser } from "../../../api";
+import {
+  API_URL,
+  getVibeBackground,
+  getVibeBoardData,
+  getVibeBoardUser,
+} from "../../../api";
 import ProjectOverview from "./ProjectDetails";
 import ProjectDetails from "./ProjectDetails";
+import { useDispatch } from "react-redux";
+import {
+  fetchBoardDataFailure,
+  fetchBoardDataSuccess,
+} from "../../../features/Project/ProjectSlice";
 
 const ProjectCustomBoard = () => {
+  const dispatch = useDispatch();
   const defaultImage = { index: 0, src: "" };
   let selectedImageSrc = defaultImage.src;
   let selectedImageIndex = defaultImage.index;
@@ -90,34 +101,30 @@ const ProjectCustomBoard = () => {
       setSelectedSectionTitles([...selectedSectionTitles, lowercaseTitle]);
     }
   };
-  const org_id = localStorage.getItem('VIBEORGID');
+  const org_id = localStorage.getItem("VIBEORGID");
   const GetTaskPermission = async (id) => {
-    
-  
     const params = {
       user_id: user_id,
-      board_id: id
-  
+      board_id: id,
     };
     try {
       const jsonData = await getDataFromAPI(Get_TaskPermission, params);
       if (jsonData.success) {
-        console.log(jsonData.permissions)
+        console.log(jsonData.permissions);
         const usersData = jsonData.permissions;
-        console.log("🚀 ~ GetTaskPermission ~ usersData:", usersData)
+        console.log("🚀 ~ GetTaskPermission ~ usersData:", usersData);
         setTaskAccessTo(usersData);
-       
+
         // setUsersAssignBoardViewAccess(usersData)
         // setShouldFetchUsersViewAccess(true);
       } else {
-        console.log('Failed to fetch users');
+        console.log("Failed to fetch users");
       }
     } catch (error) {
-      console.error('Error fetching users:', error);
+      console.error("Error fetching users:", error);
     }
   };
   const fetchData = async (board_id) => {
-    
     // const params = {
     //   user_id: user_id,
     //   org_id: org_id,
@@ -130,10 +137,10 @@ const ProjectCustomBoard = () => {
         setUsers(usersData);
         setShouldFetchUsers(true);
       } else {
-        console.log('Failed to fetch users');
+        console.log("Failed to fetch users");
       }
     } catch (error) {
-      console.error('Error fetching users:', error);
+      console.error("Error fetching users:", error);
     }
   };
 
@@ -142,7 +149,7 @@ const ProjectCustomBoard = () => {
     setID(searchParams.get("id"));
     const task_id = searchParams.get("t_id");
     if (searchParams.get("id")) {
-        console.log("test")
+      console.log("test");
       setIdFromURL(searchParams.get("id"));
       GetBoardData(searchParams.get("id"));
       localStorage.setItem("board_id", searchParams.get("id"));
@@ -156,6 +163,7 @@ const ProjectCustomBoard = () => {
     }
   }, [location.search]);
   const user_id = getItemInLocalStorage("VIBEUSERID");
+
   const GetBoardData = async (id) => {
     setIsLoading(true);
     try {
@@ -170,11 +178,10 @@ const ProjectCustomBoard = () => {
         console.log("Board data");
         console.log(data);
         setJsonData(data);
-
+        dispatch(fetchBoardDataSuccess(data));
         const updatedView = data.board_view;
         console.log(updatedView);
         setActiveView(updatedView ? updatedView : "Kanban");
-
         setboard(data.board);
         setCreatedById(data.board.created_by.id);
         setboardTemp(data.board.template_name);
@@ -194,15 +201,17 @@ const ProjectCustomBoard = () => {
         setIsLoading(false);
       } else {
         console.log("Something went wrong");
+        dispatch(fetchBoardDataFailure("Something went wrong"));
         setIsLoading(false);
       }
     } catch (error) {
       console.error("Error:", error);
+      dispatch(fetchBoardDataFailure(error.message));
       setIsLoading(false);
     }
   };
   const [show, setShow] = useState(true);
-  const userId = getItemInLocalStorage("VIBEUSERID")
+  const userId = getItemInLocalStorage("VIBEUSERID");
   const [isAssignedTo, setIsAssignedTo] = useState(false);
   const [isBoardCreatedby, setIsBoardCreatedby] = useState(false);
   useEffect(() => {
@@ -296,7 +305,7 @@ const ProjectCustomBoard = () => {
             </div>
             
           </div> */}
-          <ProjectDetails/>
+          <ProjectDetails projectName={board.board_name} />
         </section>
       </div>
     </section>

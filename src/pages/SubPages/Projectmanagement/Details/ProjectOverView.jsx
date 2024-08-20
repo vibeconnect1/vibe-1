@@ -13,7 +13,10 @@ import ReactApexChart from "react-apexcharts";
 import { BsDatabaseDash } from "react-icons/bs";
 import { Link } from "react-router-dom";
 import { Switch } from "../../../../Buttons";
+import { useSelector } from "react-redux";
+import { dateFormat, FormattedDateToShowProperly } from "../../../../utils/dateUtils";
 function ProjectOverView() {
+  const boardData = useSelector((state)=> state.board.data)
   const [overview, setOverview] = useState(false);
   const [budget, setBudget] = useState(false);
   const [createModal, setCreateModal] = useState(false);
@@ -114,6 +117,24 @@ function ProjectOverView() {
   };
 
   const series = [75];
+
+  const calculateEstimatedTime = (startDate, endDate) => {
+    if (!startDate || !endDate) {
+      return 'Start date or end date is missing';
+    }
+
+    const start = new Date(startDate);
+    const end = new Date(endDate);
+
+    if (start > end) {
+      return '';
+    }
+
+    const diffInMs = end - start;
+    const diffInDays = Math.floor(diffInMs / (1000 * 60 * 60 * 24));
+
+    return `${diffInDays} days`;
+  };
   return (
     <div className="md:grid lg:grid-cols-3 mx-5 gap-5">
       <div className="col-span-1 lg:col-span-2 mb-10">
@@ -142,50 +163,7 @@ function ProjectOverView() {
                     <h2 className="text-2xl font-semibold text-gray-800 mb-4 border-b border-gray-500 text-center py-4">
                       Edit Project Summary
                     </h2>
-                    <div className="grid lg:grid-cols-2 lg:gap-5">
-                      <div>
-                        <label className="block text-gray-700 mb-2 font-semibold">
-                          Start Date
-                        </label>
-                        <input
-                          type="date"
-                          placeholder="Start Date"
-                          className="border-2 p-2 mb-4 border-gray-300 rounded-lg w-full"
-                        />
-                      </div>
-                      <div>
-                        <label className="block text-gray-700 mb-2 font-semibold">
-                          End Date
-                        </label>
-                        <input
-                          type="date"
-                          placeholder="End Date"
-                          className="border-2 p-2 mb-4 border-gray-300 rounded-lg w-full"
-                        />
-                      </div>
-                    </div>
-                    <div className="grid lg:grid-cols-2 lg:gap-5">
-                      <div>
-                        <label className="block text-gray-700 mb-2 font-semibold">
-                          Estimate Time (hours)
-                        </label>
-                        <input
-                          type="number"
-                          placeholder="Estimate Time (hours)"
-                          className="border-2 p-2 mb-4 border-gray-300 rounded-lg w-full"
-                        />
-                      </div>
-                      <div>
-                        <label className="block text-gray-700 mb-2 font-semibold">
-                          Cost
-                        </label>
-                        <input
-                          type="number"
-                          placeholder="Cost"
-                          className="border-2 p-2 mb-4 border-gray-300 rounded-lg w-full"
-                        />
-                      </div>
-                    </div>
+                  
                     <div className="grid grid-cols-1 gap-5">
                       <div>
                         <label className="block text-gray-700 mb-2 font-semibold">
@@ -193,7 +171,7 @@ function ProjectOverView() {
                         </label>
                         <textarea
                           placeholder="Description"
-                          className="border-2 p-2 mb-4 border-gray-300 rounded-lg w-full"
+                          className="border p-2 mb-4 border-gray-300 rounded-lg w-full"
                           rows="4"
                         ></textarea>
                       </div>
@@ -203,7 +181,7 @@ function ProjectOverView() {
                         type="submit"
                         className="px-4 py-2 bg-black text-white rounded-md w-full"
                       >
-                        Edit
+                        Save
                       </button>
                     </div>
                   </div>
@@ -214,13 +192,7 @@ function ProjectOverView() {
           <div className="border-t border-gray-400 mt-2 mb-5"></div>
           <div className="px-5 pb-5">
             <p className="text-base text-gray-500">
-              Give a high-level overview of the product / project you re working
-              on, its goals, etc..Elaborate on the target audience of your
-              project/product, link out to additional resources. Vivamus pretium
-              laoreet massa eu euismod. Nunc accumsan id odio sed luctus.
-              Suspendisse a lacus sed ex consequat interdum quis non eros. Lorem
-              ipsum dolor sit amet, consectetur adipisicing elit. Debitis labore
-              nam fuga sapiente vel iste animiicta ab at placeat sint.
+            {boardData.summery}
             </p>
           </div>
           <div className="border-b border-thin mt-3 flex justify-between py-3 mx-5">
@@ -230,14 +202,14 @@ function ProjectOverView() {
                 Start Date
               </p>
             </div>
-            <p className="font-semibold text-sm text-gray-800">22 July 2024</p>
+            <p className="font-semibold text-sm text-gray-800">{dateFormat(boardData.created_at)}</p>
           </div>
           <div className="border-b border-thin flex justify-between py-3 mx-5">
             <div className="flex gap-2">
               <CiCalendar className="mt-1 text-violet-800" size={20} />
               <p className="text-gray-500 font-medium text-base">End Date</p>
             </div>
-            <p className="font-semibold text-sm text-gray-800">22 Aug 2024</p>
+            <p className="font-semibold text-sm text-gray-800">{dateFormat(boardData.due_date)}</p>
           </div>
           <div className="border-b border-thin flex justify-between py-3 mx-5">
             <div className="flex gap-2">
@@ -246,12 +218,12 @@ function ProjectOverView() {
                 Estimate Time
               </p>
             </div>
-            <p className="font-semibold text-sm text-gray-800">30 Days</p>
+            <p className="font-semibold text-sm text-gray-800">{calculateEstimatedTime(boardData.created_at, boardData.due_date)}</p>
           </div>
          
         </div>
         <div className="shadow-custom-all-sides rounded-md  my-5">
-          <div className="flex justify-between mx-5 py-3">
+          {/* <div className="flex justify-between mx-5 py-3">
             <h2 className="text-lg font-semibold  text-slate-800">Budget</h2>
             <button
               className={`relative ${"hover:bg-gray-200 rounded-full p-2"}`}
@@ -314,8 +286,8 @@ function ProjectOverView() {
                 </div>
               </div>
             )}
-          </div>
-          <div className="grid md:grid-cols-2 border-t border-gray-300">
+          </div> */}
+          {/* <div className="grid md:grid-cols-2 border-t border-gray-300">
             <div className="flex justify-between gap-5 items-center p-5 px-10">
               <div>
                 <h2 className="text-3xl font-semibold mb-2">₹ 50,000</h2>
@@ -361,7 +333,7 @@ function ProjectOverView() {
                 />
               </div>
             </div>
-          </div>
+          </div> */}
         </div>
         <div className="shadow-custom-all-sides rounded-md  my-5">
           <div className="flex md:flex-row flex-col justify-between py-3 mx-5">
@@ -442,16 +414,13 @@ function ProjectOverView() {
           <div className="flex justify-between mx-5 my-3 pb-8">
             <div className="">
               <div className="flex gap-5">
-                <h2 className="text-4xl font-semibold">30 Days</h2>
+                <h2 className="text-4xl font-semibold">{calculateEstimatedTime(boardData.created_at, boardData.due_date)}</h2>
               </div>
-              <div className="flex gap-2 mt-2">
-                <p className="text-base mx-1 my-1">22 July, 2024</p>
-                <p className="text-base mx-1 my-1">22 Aug, 2024</p>
+              <div className="flex gap-2 mt-2 items-center">
+                <p className="text-base mx-1 my-1">{dateFormat(boardData.created_at)}</p> -
+                <p className="text-base mx-1 my-1">{dateFormat(boardData.due_date)}</p>
               </div>
-              <div className="flex gap-3">
-                <h2 className=" mx-1 my-1">Delay Date :</h2>
-                <h2 className="text-base mx-1 my-2">20 Aug, 2024</h2>
-              </div>
+             
             </div>
             <div className="text-6xl">
               <CiFlag1 />
@@ -469,7 +438,7 @@ function ProjectOverView() {
             height={350}
           />
         </div>
-        <div className="shadow-custom-all-sides rounded-md mb-5">
+        {/* <div className="shadow-custom-all-sides rounded-md mb-5">
           <div className="flex justify-between mx-5 my-3 pt-5 pb-3">
             <h2 className="text-lg font-semibold mx-5 text-slate-800">
               Recent Activity
@@ -568,7 +537,7 @@ function ProjectOverView() {
               <p className="text-sm text-gray-500 text-nowrap">1 Days</p>
             </div>
           </div>
-        </div>
+        </div> */}
       </div>
       {createModal && (
         <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center z-50">
