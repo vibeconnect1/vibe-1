@@ -133,7 +133,7 @@ function ProjectDetails() {
             Summary
           </div>
         </div>
-        <div className="border-t border-gray-300 mb-5 mx-5"></div>
+        <div className="border-t border-gray-300 mb-2 mx-5"></div>
         {projectDetails === "Overview" && (
           <div>
             <ProjectOverView />

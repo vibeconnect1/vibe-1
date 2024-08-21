@@ -2568,3 +2568,55 @@ export const UpdateTaskAction = async (data) => {
     throw error;
   }
 };
+export const UpdateProjectSectionTitle = async (data) => {
+  try {
+    const response = await vibeAuth.put(
+      `/api/employee/board/update-board-checklist`,
+      data,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error updating title :", error);
+    throw error;
+  }
+};
+
+export const deleteSection = async (taskDeleteIDSection,userId) => {
+  try {
+    const response = await vibeAuth.delete(
+      `/api/employee/board/delete-board-checklist/?check_id=${taskDeleteIDSection}&user_id=${userId}`,
+      
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error deleting section :", error);
+    throw error;
+  }
+};
+export const addBoardChecklist = async (data) => {
+  try {
+    const response = await vibeAuth.post(
+      `/api/employee/board/add-board-checklist/`,
+      data,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error deleting section :", error);
+    throw error;
+  }
+};

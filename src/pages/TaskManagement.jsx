@@ -4406,10 +4406,30 @@ const TaskManagement = () => {
                 style={{
                   borderRadius: 8,
                   marginTop: 40,
-                  maxHeight: 380,
+                  maxHeight: 500,
                   overflow: "auto",
                 }}
               >
+                 <div
+                className="grid grid-cols-6 bg-gray-200 py-2"
+                // className="flex justify-evenly bg-gray-300 py-2"
+                style={{ position: "sticky", top: 0, zIndex: 1 }}
+              >
+                <div
+                  className="font-medium col-span-1"
+                  style={{ fontSize: 14, paddingLeft: 20 }}
+                >
+                  Title
+                </div>
+                <div className="font-medium text-center" style={{ fontSize: 14 }}>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Status
+                </div>
+                <div className="" style={{ fontSize: 14 }}></div>
+                <div className="font-medium" style={{ fontSize: 14 }}>
+                  &nbsp;&nbsp;Created by{" "}
+                </div>
+                <div className="font-medium text-center col-span-2" style={{ fontSize: 14 }}>Due Date</div>
+              </div>
                 <hr className="m-0" />
                 <DragDropContext onDragEnd={onDragEndTask}>
                   <div
@@ -4433,7 +4453,7 @@ const TaskManagement = () => {
                             style={{
                               borderRadius: 15,
                               color: "#fff",
-                              padding: "15px",
+                              // padding: "15px",
                               paddingTop: 0,
                               // ,height:'auto',maxHeight: 200
                             }}
@@ -4500,7 +4520,7 @@ const TaskManagement = () => {
                                       >
                                         <div
                                           // ref={cardRef}
-                                          className="shadow-custom-all-sides bg-white grid grid-cols-10 text-black  rounded-md"
+                                          className="shadow-custom-all-sides bg-white grid grid-cols-8 text-black  rounded-md"
                                           style={{
                                             // display: "flex",
                                             // flexDirection: "row",
@@ -4529,7 +4549,7 @@ const TaskManagement = () => {
                                             )
                                           }
                                         >
-                                          <div className="col-span-3">
+                                          <div className="col-span-1">
                                             {/* <div className="" style={{display:"flex" , justifyContent:"flex-start"}}>
                                             {task.urgent_status === true &&<span style={{ backgroundColor: '#00b272',color:'#fff', borderRadius: '6px 0px 10px 0px', fontSize: 12, margin:'6px' }} className="pr-2 pl-2">
                                               <b>Urgent</b>
@@ -4538,7 +4558,7 @@ const TaskManagement = () => {
                                         </div> */}
                                             {task.title}
                                           </div>
-                                          <div className="col-span-1">
+                                          <div className="col-span-2 flex justify-center">
                                             {showStatus ? (
                                               <div
                                                 onClick={(e) => {
@@ -4588,7 +4608,7 @@ const TaskManagement = () => {
                                             {task.division}
                                           </div>
                                           <div
-                                            className=" col-span-2"
+                                            className=" col-span-1"
                                             style={{
                                               fontSize: 13,
                                               cursor: "default",
@@ -4617,7 +4637,7 @@ const TaskManagement = () => {
                                         </div> */}
 
                                           <div
-                                            className="col-span-2 "
+                                            className="col-span-2 flex justify-end"
                                             style={{ fontSize: 13 }}
                                           >
                                             {ShowFormatedDueDateOnDateField(
@@ -4625,9 +4645,7 @@ const TaskManagement = () => {
                                             )}
                                           </div>
                                           {task.created_by.id === user_id ? (
-                                            // <div className='col-md-1' onClick={(event) => handleDeleteTask(task.id, event)}>
-                                            //   <FaTrashAlt style={{ fontSize: 14, color: 'whitesmoke', marginBottom: 4, cursor: 'pointer' }} ></FaTrashAlt>
-                                            // </div>
+                                            
                                             <div
                                               className="flex justify-end text-red-400"
                                               onClick={(event) =>

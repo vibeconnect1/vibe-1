@@ -204,7 +204,7 @@ const ProjectBoard = () => {
                 />
                 {/* </div> */}
                 {/*  */}
-                <div className="flex flex-col justify-around h-full px-2">
+                <div className="flex flex-col justify-between my-2 h-full px-2">
                   <div className="flex w-full">
                     {/* <div className="w-full"> */}
                     <div className="w-full">
