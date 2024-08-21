@@ -686,6 +686,38 @@ export const postSetupUsers = async (data) =>
       token: token,
     },
   });
+  export const getVehicleParking = async () =>
+    axiosInstance.get(`/parking_configurations.json`, {
+      params :{
+        token:token,
+      },
+    })
+    export const postVehicleParking = async (data) =>
+      axiosInstance.post(`/parking_configurations.json`, data, {
+        params: {
+          token: token,
+        },
+      });
+      export const deleteVehicleParking = async(id) =>
+        axiosInstance.delete(`/parking_configurations/${id}.json`,{
+          params: {
+            token: token,
+          },
+        })
+    
+        export const getVehicleParkingDetails = async(id) => 
+          axiosInstance.get(`/parking_configurations/${id}.json`,{
+            params:{
+              token:token,
+            },
+          })
+          export const editVehicleParking = async (data, id) =>
+            axiosInstance.patch(`/parking_configurations/${id}.json`, data, {
+              params: {
+                token: token,
+              },
+            });
+
 export const postNewVisitor = async (data) =>
   axiosInstance.post("/visitors.json", data, {
     params: {

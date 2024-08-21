@@ -179,6 +179,7 @@ const ProjectCustomBoard = () => {
         console.log(data);
         setJsonData(data);
         dispatch(fetchBoardDataSuccess(data));
+        console.log(data)
         const updatedView = data.board_view;
         console.log(updatedView);
         setActiveView(updatedView ? updatedView : "Kanban");

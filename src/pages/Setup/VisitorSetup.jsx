@@ -9,8 +9,11 @@ import AddVisitorSetupModal from "../../containers/modals/AddVisitorSetupModal";
 import EditVisitorSetupModal from "../../containers/modals/EditVisitorSetupModal";
 import { getVisitorCategory, deleteVisitorCategory } from "../../api";
 import toast from "react-hot-toast";
+import VehicleParkingSetup from "./VehicleParkingSetupModal/VehicleParkingSetup";
+import { Link } from "react-router-dom";
 function VisitorSetup() {
   const themeColor = useSelector((state) => state.theme.color);
+  const [page, setPage] = useState("visitor");
   const [searchText, setSearchText] = useState("");
   const [visitorSetupModal, setVisitorSetupModal] = useState(false);
   const [editVisitorSetupModal, setEditVisitorSetupModal] = useState(false);
@@ -50,7 +53,7 @@ function VisitorSetup() {
     if (searchValue.trim() === "") {
       setFilteredData(categories);
     } else {
-      const filteredResults = filteredData.filter((items) =>
+      const filteredResults = categories.filter((items) =>
         items.name.toLowerCase().includes(searchValue.toLowerCase())
       );
       setFilteredData(filteredResults);
@@ -94,41 +97,81 @@ function VisitorSetup() {
     <section className="flex">
       <Navbar />
       <div className="w-full flex mx-3 flex-col overflow-hidden">
-        <div className="flex flex-col sm:flex-row md:justify-between gap-3 my-2">
-          <input
-            type="text"
-            placeholder="Search"
-            className="border p-2 w-96 border-gray-300 rounded-lg"
-            value={searchText}
-            onChange={handleSearch}
-          />
-          <div className="flex gap-3 sm:flex-row flex-col">
-            <button
-              className="text-white font-semibold px-4 p-1 flex gap-2 items-center rounded-md"
-              style={{ background: themeColor }}
-              onClick={() => setVisitorSetupModal(true)}
-            >
-              <IoAddCircleOutline size={22} /> Add
-            </button>
+        <div className=" flex gap-2 p-2 pb-0 border-b-2 border-gray-200 w-full">
+          <h2
+            className={`p-1 ${
+              page === "visitor" &&
+              `bg-white font-medium text-blue-500 shadow-custom-all-sides`
+            } rounded-t-md px-4 cursor-pointer text-center transition-all duration-300 ease-linear`}
+            onClick={() => setPage("visitor")}
+          >
+            Staff Category
+          </h2>
+          <h2
+            className={`p-1 ${
+              page === "vehicleParking" &&
+              "bg-white font-medium text-blue-500 shadow-custom-all-sides"
+            } rounded-t-md px-4 cursor-pointer transition-all duration-300 ease-linear`}
+            onClick={() => setPage("vehicleParking")}
+          >
+            Parking Slot
+          </h2>
+        </div>
+        <div className="flex gap-2 my-2">
+          <Link className="font-medium text-gray-600" to={"/setup"}>
+            Setup
+          </Link>
+          <p className="font-medium text-gray-600">{">"}</p>
+          <Link
+            className="font-medium text-gray-600"
+            to={"/setup/visitor-setup"}
+          >
+            Visitor Setup
+          </Link>
+        </div>
+        {page === "visitor" ? (
+          <div>
+            <div className="flex flex-col sm:flex-row md:justify-between gap-3 my-3">
+              <input
+                type="text"
+                placeholder="Search"
+                className="border p-2 sm:w-96 border-gray-300 rounded-lg"
+                value={searchText}
+                onChange={handleSearch}
+              />
+              <div className="flex gap-3 sm:flex-row flex-col">
+                <button
+                  className="text-white font-semibold px-4 p-1 flex gap-2 items-center justify-center rounded-md"
+                  style={{ background: themeColor }}
+                  onClick={() => setVisitorSetupModal(true)}
+                >
+                  <IoAddCircleOutline size={22} /> Add
+                </button>
+              </div>
+            </div>
+            <div className="my-3">
+              <Table columns={column} data={filteredData} isPagination={true} />
+            </div>
+            {visitorSetupModal && (
+              <AddVisitorSetupModal
+                setAdded={setAdded}
+                onclose={() => setVisitorSetupModal(false)}
+              />
+            )}
+            {editVisitorSetupModal && (
+              <EditVisitorSetupModal
+                catId={catId}
+                setAdded={setAdded}
+                onclose={() => setEditVisitorSetupModal(false)}
+              />
+            )}
           </div>
-        </div>
-        <div className="">
-          <Table columns={column} data={filteredData} isPagination={true} />
-        </div>
+        ) : (
+          <div>
+            <VehicleParkingSetup />
+          </div>
+        )}
       </div>
-      {visitorSetupModal && (
-        <AddVisitorSetupModal
-          setAdded={setAdded}
-          onclose={() => setVisitorSetupModal(false)}
-        />
-      )}
-      {editVisitorSetupModal && (
-        <EditVisitorSetupModal
-          catId={catId}
-          setAdded={setAdded}
-          onclose={() => setEditVisitorSetupModal(false)}
-        />
-      )}
     </section>
   );
 }
