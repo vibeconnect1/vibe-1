@@ -5,6 +5,7 @@ import {
   API_URL,
   getVibeBackground,
   getVibeBoardData,
+  GetVibeBoardTaskPermission,
   getVibeBoardUser,
 } from "../../../api";
 import ProjectOverview from "./ProjectDetails";
@@ -29,6 +30,7 @@ const ProjectCustomBoard = () => {
   const [activeView, setActiveView] = useState("Kanban");
   const [board, setboard] = useState([]);
   const [createdById, setCreatedById] = useState(null);
+  const [taskAccessTo, setTaskAccessTo] = useState([]);
   const [boardTemp, setboardTemp] = useState([]);
   const [boardCataName, setboardCataName] = useState([]);
   const [boardAssignedEmail, setboardAssignedEmail] = useState([]);
@@ -108,7 +110,7 @@ const ProjectCustomBoard = () => {
       board_id: id,
     };
     try {
-      const jsonData = await getDataFromAPI(Get_TaskPermission, params);
+      const jsonData = await GetVibeBoardTaskPermission(userId, id);
       if (jsonData.success) {
         console.log(jsonData.permissions);
         const usersData = jsonData.permissions;

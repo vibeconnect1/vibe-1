@@ -16,6 +16,7 @@ import profile5 from "/profile5.jpg";
 import { IoClose } from "react-icons/io5";
 import ProjectOverView from "./Details/ProjectOverView";
 import { useSelector } from "react-redux";
+import ProjectTasks from "./Details/ProjectTasks";
 function ProjectDetails() {
   const [projectDetails, setProjectDetails] = useState("Overview");
   const handleToggle = (section) => {
@@ -70,7 +71,7 @@ function ProjectDetails() {
           </div>
         </div>
 
-        <div className="flex flex-wrap gap-5 mt-3 mx-5 rounded-md">
+        <div className="flex flex-wrap gap-5  mx-5 rounded-md">
           <div
             className={`p-3 text-slate-800 cursor-pointer ${
               projectDetails === "Overview"
@@ -140,7 +141,7 @@ function ProjectDetails() {
         )}
         {projectDetails === "task" && (
           <div>
-            {/* <EmployeeProjectTask /> */}
+            <ProjectTasks />
           </div>
         )}
         {projectDetails === "budget" && (

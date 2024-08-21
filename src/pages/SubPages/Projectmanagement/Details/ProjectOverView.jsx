@@ -17,6 +17,8 @@ import { useSelector } from "react-redux";
 import { dateFormat, FormattedDateToShowProperly } from "../../../../utils/dateUtils";
 function ProjectOverView() {
   const boardData = useSelector((state)=> state.board.data)
+  const taskData = useSelector((state)=> state.board.taskData)
+  console.log(taskData)
   const [overview, setOverview] = useState(false);
   const [budget, setBudget] = useState(false);
   const [createModal, setCreateModal] = useState(false);

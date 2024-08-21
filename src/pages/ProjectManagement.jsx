@@ -244,11 +244,11 @@ const navigate = useNavigate()
     >
       <Navbar />
       <div className="w-full flex mx-3 flex-col overflow-hidden">
-        {/* <div className=" overflow-x-auto">
+        <div className=" overflow-x-auto">
         <Boards />
-        </div> */}
+        </div>
 
-        <section className="my-2">
+        {/* <section className="my-2">
           <div>
             <div className="flex justify-end">
               <div
@@ -296,7 +296,7 @@ const navigate = useNavigate()
             )}
           </div>
           <ProjectBoard />
-        </section>
+        </section> */}
       </div>
     </section>
   );

@@ -285,28 +285,37 @@ const Ticket = () => {
     //   "Ticket Number": item.ticket_number,
     // }));
     const Alltickets = await getAllTickets();
-    const mappedData = Alltickets.map((ticket) => ({
-      "Site Name": ticket.site_name,
-      "Ticket No.": ticket.ticket_number,
-      "Related To": ticket.issue_type_id,
-      Title: ticket.heading,
-      Description: ticket.text,
-      Building: ticket.building_name,
-      Floor: ticket.floor_name,
-      Unit: ticket.unit,
-      Category: ticket.category_type,
-      "Sub Category": ticket.sub_category,
-      Status: ticket.issue_status,
-      Type: ticket.issue_type,
-      Priority: ticket.priority,
-      "Assigned To": ticket.assigned_to,
-      "Created By": ticket.created_by,
-      "Created On": dateFormat(ticket.created_at),
-      "Updated On": dateFormat(ticket.updated_at),
-      "Update By": ticket.updated_by,
-      "Resolution Breached": ticket.resolution_breached ? "Yes" : "No",
-      "Response Breached": ticket.response_breached,
-    }));
+    const mappedData = Alltickets.map((ticket) => {
+      // Format complaint logs as a single string
+      const complaintLogs = ticket.complaint_logs.map((log) => {
+        return `Log By: ${log.log_by}, Status: ${log.log_status}, Date: ${dateFormat(log.created_at)}`;
+      }).join(' | ');
+  
+      return {
+        "Site Name": ticket.site_name,
+        "Ticket No.": ticket.ticket_number,
+        "Related To": ticket.issue_type_id,
+        Title: ticket.heading,
+        Description: ticket.text,
+        Building: ticket.building_name,
+        Floor: ticket.floor_name,
+        Unit: ticket.unit,
+        Category: ticket.category_type,
+        "Sub Category": ticket.sub_category,
+        Status: ticket.issue_status,
+        Type: ticket.issue_type,
+        Priority: ticket.priority,
+        "Assigned To": ticket.assigned_to,
+        "Created By": ticket.created_by,
+        "Created On": dateFormat(ticket.created_at),
+        "Updated On": dateFormat(ticket.updated_at),
+        "Updated By": ticket.updated_by,
+        "Resolution Breached": ticket.resolution_breached ? "Yes" : "No",
+        "Response Breached": ticket.response_breached ? "Yes" : "No",
+        "Complaint Logs": complaintLogs, // Include the formatted complaint logs
+      };
+    });
+
     const fileType =
       "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8";
     const fileName = "helpdesk_data.xlsx";

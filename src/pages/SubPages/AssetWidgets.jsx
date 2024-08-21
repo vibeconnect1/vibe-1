@@ -32,13 +32,14 @@ const AssetWidgets = () => {
         const breakdownAssets = assets.filter(
           (asset) => asset.breakdown === true
         );
-        const inUseAssets = assets.filter((asset) => asset.breakdown === false);
+        const inUseAssets = assets.filter((asset) => asset.breakdown === false || asset.breakdown === null);
         setAllAssets(assets);
         setBreakDown(breakdownAssets);
         setInUse(inUseAssets);
         setBreakdownCount(breakdownAssets.length);
         console.log(breakdownAssets.length);
         setInUseCount(inUseAssets.length);
+        console.log(inUseAssets.length);
       } catch (error) {
         console.error("Error fetching data:", error);
       }

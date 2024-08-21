@@ -10,6 +10,7 @@ const boardSlice = createSlice({
     error: null,
     activeView: 'Kanban',
     selectedEmail: [],
+    taskData:null
   },
   reducers: {
     fetchBoardDataStart: (state) => {
@@ -19,6 +20,7 @@ const boardSlice = createSlice({
     fetchBoardDataSuccess: (state, action) => {
       const data = action.payload;
       state.data = data.board;
+      state.taskData = data.data;
       state.activeView = data.board_view || 'Kanban';
       state.selectedEmail = data.board.assign_to.map((email) => ({
         value: email.user_id,
@@ -30,9 +32,12 @@ const boardSlice = createSlice({
       state.isLoading = false;
       state.error = action.payload;
     },
+    updateActiveView: (state, action) => {
+      state.activeView = action.payload;
+    },
   },
 });
 
-export const { fetchBoardDataStart, fetchBoardDataSuccess, fetchBoardDataFailure } = boardSlice.actions;
+export const { fetchBoardDataStart, fetchBoardDataSuccess, fetchBoardDataFailure, updateActiveView  } = boardSlice.actions;
 
 export default boardSlice.reducer;

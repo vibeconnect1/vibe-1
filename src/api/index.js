@@ -125,19 +125,19 @@ export const getVendorsTypeDetails = async (id) =>
     },
   });
 
-  export const editVendorType = async(id, data) =>
-    axiosInstance.patch(`/vendor_suppliers/${id}.json`, data, {
-      params: {
-        token:token,
-      }
-    })
-  
-    export const editVendorCategory = async(id, data) =>
-      axiosInstance.patch(`/vendor_categories/${id}.json`, data, {
-        params: {
-          token:token,
-        }
-      })
+export const editVendorType = async (id, data) =>
+  axiosInstance.patch(`/vendor_suppliers/${id}.json`, data, {
+    params: {
+      token: token,
+    },
+  });
+
+export const editVendorCategory = async (id, data) =>
+  axiosInstance.patch(`/vendor_categories/${id}.json`, data, {
+    params: {
+      token: token,
+    },
+  });
 
 export const getVendorsDetails = async (id) =>
   axiosInstance.get(`/vendors/${id}.json`, {
@@ -686,37 +686,37 @@ export const postSetupUsers = async (data) =>
       token: token,
     },
   });
-  export const getVehicleParking = async () =>
-    axiosInstance.get(`/parking_configurations.json`, {
-      params :{
-        token:token,
-      },
-    })
-    export const postVehicleParking = async (data) =>
-      axiosInstance.post(`/parking_configurations.json`, data, {
-        params: {
-          token: token,
-        },
-      });
-      export const deleteVehicleParking = async(id) =>
-        axiosInstance.delete(`/parking_configurations/${id}.json`,{
-          params: {
-            token: token,
-          },
-        })
-    
-        export const getVehicleParkingDetails = async(id) => 
-          axiosInstance.get(`/parking_configurations/${id}.json`,{
-            params:{
-              token:token,
-            },
-          })
-          export const editVehicleParking = async (data, id) =>
-            axiosInstance.patch(`/parking_configurations/${id}.json`, data, {
-              params: {
-                token: token,
-              },
-            });
+export const getVehicleParking = async () =>
+  axiosInstance.get(`/parking_configurations.json`, {
+    params: {
+      token: token,
+    },
+  });
+export const postVehicleParking = async (data) =>
+  axiosInstance.post(`/parking_configurations.json`, data, {
+    params: {
+      token: token,
+    },
+  });
+export const deleteVehicleParking = async (id) =>
+  axiosInstance.delete(`/parking_configurations/${id}.json`, {
+    params: {
+      token: token,
+    },
+  });
+
+export const getVehicleParkingDetails = async (id) =>
+  axiosInstance.get(`/parking_configurations/${id}.json`, {
+    params: {
+      token: token,
+    },
+  });
+export const editVehicleParking = async (data, id) =>
+  axiosInstance.patch(`/parking_configurations/${id}.json`, data, {
+    params: {
+      token: token,
+    },
+  });
 
 export const postNewVisitor = async (data) =>
   axiosInstance.post("/visitors.json", data, {
@@ -1046,41 +1046,40 @@ export const editVisitorDetails = async (id, data) =>
     },
   });
 
+export const getVisitorCategory = async () =>
+  axiosInstance.get("/visitor_staff_category.json", {
+    params: {
+      token: token,
+    },
+  });
 
-  export const getVisitorCategory = async () =>
-    axiosInstance.get("/visitor_staff_category.json", {
-      params: {
-        token: token,
-      },
-    });
-  
-  export const postVisitorCategory = async (data) =>
-    axiosInstance.post("/visitor_staff_categories.json", data, {
-      params: {
-        token: token,
-      },
-    });
-  
-  export const deleteVisitorCategory = async (id) =>
-    axiosInstance.delete(`/visitor_staff_categories/${id}.json`, {
-      params: {
-        token: token,
-      },
-    });
-  
-  export const getVisitorCategoryDetails = async (id) =>
-    axiosInstance.get(`/visitor_staff_categories/${id}.json`, {
-      params: {
-        token: token,
-      },
-    });
-  
-  export const editVisitorCategory = async (id, data ) =>
-    axiosInstance.patch(`/visitor_staff_categories/${id}.json`, data, {
-      params: {
-        token: token,
-      },
-    });
+export const postVisitorCategory = async (data) =>
+  axiosInstance.post("/visitor_staff_categories.json", data, {
+    params: {
+      token: token,
+    },
+  });
+
+export const deleteVisitorCategory = async (id) =>
+  axiosInstance.delete(`/visitor_staff_categories/${id}.json`, {
+    params: {
+      token: token,
+    },
+  });
+
+export const getVisitorCategoryDetails = async (id) =>
+  axiosInstance.get(`/visitor_staff_categories/${id}.json`, {
+    params: {
+      token: token,
+    },
+  });
+
+export const editVisitorCategory = async (id, data) =>
+  axiosInstance.patch(`/visitor_staff_categories/${id}.json`, data, {
+    params: {
+      token: token,
+    },
+  });
 
 export const postLOI = async (data) =>
   axiosInstance.post(`/loi_details.json`, data, {
@@ -2237,7 +2236,7 @@ export const updateVibeBoardTemplate = async (data) => {
 export const getVibeBoardData = async (boardId, userId) => {
   try {
     const response = await vibeAuth.get(
-      `/api/employee/custom_board/get-tasks/?board_id=${boardId}&user_id=${userId}`,
+      `/api/v1/employee/task/custom_board/get-task/?board_id=${boardId}&user_id=${userId}`,
       {
         headers: {
           "Content-Type": "multipart/form-data",
@@ -2498,6 +2497,74 @@ export const GetTaskBulk = async (userId, taskId) => {
     return response.data;
   } catch (error) {
     console.error("Error getting bulk task :", error);
+    throw error;
+  }
+};
+export const GetVibeBoardTaskPermission = async (userId, boardId) => {
+  try {
+    const response = await vibeAuth.get(
+      `/api/employee/board/get_task_permission/?user_id=${userId}&board_id=${boardId}`,
+
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error getting task permission:", error);
+    throw error;
+  }
+};
+export const updateChecklistSequence = async (data) => {
+  try {
+    const response = await vibeAuth.put(
+      `/api/employee/board/checklist/update-checklist-sequence/`,
+      data,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error updating checklist sequence :", error);
+    throw error;
+  }
+};
+export const Updatetaskchecklist = async (data) => {
+  try {
+    const response = await vibeAuth.put(
+      `/api/v1/employee/task/relocate-task/`,
+      data,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error updating task checklist :", error);
+    throw error;
+  }
+};
+export const UpdateTaskAction = async (data) => {
+  try {
+    const response = await vibeAuth.put(
+      `/api/employee/task/add-task-action/`,
+      data,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error updating task action :", error);
     throw error;
   }
 };

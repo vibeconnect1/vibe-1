@@ -171,7 +171,7 @@ const DetailsEdit = () => {
         },
         complaint_log: {
           log_status: formData.issue_status,
-          issue_status: formData?.issue_status,
+          complaint_status_id: formData?.issue_status_id,
           priority: formData.priority,
           assigned_to: formData.assigned_to,
           comment: formData.comment,
