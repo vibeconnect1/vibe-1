@@ -1,35 +1,66 @@
 import React, { useState, useRef, useEffect } from "react";
-
-// import '../employee/EmployeeTaskSelf.css'
-
-// import { getDataFromAPI, postDataToAPI } from '../../../Api/api_Methods';
-// import { AddBoardChecklistTask, GetUsers } from '../../../Api/api_Urls';
+import { useNavigate } from "react-router-dom";
+// import { GetDependencies } from "../../../Api/api_Urls";
+// import { getDataFromAPI, postDataToAPI } from "../../../Api/api_Methods";
 import Select from "react-select";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import ReactSwitch from "react-switch";
-// import { ThreeDots } from 'react-loader-spinner';
-// import Modal from 'react-modal';
-// import { useMediaQuery } from 'react-responsive';
-
-import { SendDueDateFormat } from "../../utils/dateUtils";
-import toast from "react-hot-toast";
+// import { ToastContainer, toast } from "react-toastify";
+// import "react-toastify/dist/ReactToastify.css";
+import { SendDueDateFormat } from "../../../../utils/dateUtils";
+import {
+  getVibeProjectUsers,
+  createVibeChecklistSubTask,
+  getProjectTaskDependencies,
+} from "../../../../api";
+import { getItemInLocalStorage } from "../../../../utils/localStorage";
 import { useSelector } from "react-redux";
 import { AiOutlineClose } from "react-icons/ai";
-import { getDependencies, getVibeUsers, postCalendarTask } from "../../api";
+import toast from "react-hot-toast";
 
-function TaskSelf({ onClose }) {
-  // const [modalTaskRepeatDaysIsOpen, setTaskRepeatDaysModalIsOpen] = useState('');
+function ProjectTaskSelf({ onClose, BoardAssignedemails, setCreatedTaskId }) {
+  const user_id = getItemInLocalStorage("VIBEUSERID");
+  const [emails, setEmails] = useState([]);
+  const themeColor = useSelector((state) => state.theme.color);
+  console.log("other");
+  console.log(BoardAssignedemails);
+  useEffect(() => {
+    const storedSection = localStorage.getItem("section");
+    setId(storedSection);
+  }, []);
+  const getTaskAssign = async () => {
+    const board_id = localStorage.getItem("board_id");
+    console.log(`board id ${board_id}`);
+    const user_id = getItemInLocalStorage("VIBEUSERID");
+    const org_id = localStorage.getItem("org_id");
 
-  // const openTaskRepeatDays = () => {
-  //   console.log("hi")
-  //   closeTaskRepeatDays();
-  //   setTaskRepeatDaysModalIsOpen(true);
-  // };
+    try {
+      const jsonData = await getVibeProjectUsers(user_id, org_id, board_id);
+      if (jsonData.success) {
+        const users = jsonData.data;
+        console.log("users");
+        console.log(users);
+        const assignEmails = users.map((user) => ({
+          value: user.user_id,
+          label: user.email,
+        }));
 
-  // const closeTaskRepeatDays = () => {
-  //   setTaskRepeatDaysModalIsOpen(false);
-  // };
+        setEmails(assignEmails);
+      } else {
+        console.log("Something went wrong");
+      }
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
+  useEffect(() => {
+    const assignEmailsFromStorage = localStorage.getItem("assignEmails");
+    getTaskAssign();
+  }, [setEmails]);
+
+  const screenWidth = window.innerWidth;
+  const [nav_id, setId] = useState(null);
 
   const [modalTaskSelfIsOpen, setTaskSelfModalIsOpen] = useState("");
   const closeTaskSelf = () => {
@@ -51,7 +82,6 @@ function TaskSelf({ onClose }) {
     setAssignToOthersActive(true);
     setSelfTaskActive(false);
   };
-
   const [checked, setChecked] = useState(0);
   function ToggleSwitch() {
     const handleChange = (val) => {
@@ -61,7 +91,11 @@ function TaskSelf({ onClose }) {
     console.log(checked);
     return (
       <>
-        <span className="font-medium text-white">Urgent</span>
+        <span
+          style={{ color: "#000", fontWeight: "bold", marginBottom: "0rem" }}
+        >
+          Urgent
+        </span>
         <div
           className="app"
           //  style={{ marginTop: '25px', marginLeft: '10px' }}
@@ -72,71 +106,18 @@ function TaskSelf({ onClose }) {
       </>
     );
   }
-
-  const currentDate = new Date();
-  const year = currentDate.getFullYear();
-  const month = String(currentDate.getMonth() + 1).padStart(2, "0");
-  const day = String(currentDate.getDate()).padStart(2, "0");
-  const todayDate = `${year}-${month}-${day}`;
-  const currentTime = `${currentDate.getHours()}:${String(
-    currentDate.getMinutes()
-  ).padStart(2, "0")}`;
-
-  const maxTime = `23:59`;
-  const filterTime = (time) => {
-    const selectedDate = new Date(time);
-    const currentDate = new Date();
-
-    // Compare selected date with current date
-    if (selectedDate.getTime() > currentDate.getTime()) {
-      return true; // Future date
-    } else if (selectedDate.getTime() === currentDate.getTime()) {
-      // If selected date is today, compare times
-      const selectedTime =
-        selectedDate.getHours() * 60 + selectedDate.getMinutes();
-      const currentTime =
-        currentDate.getHours() * 60 + currentDate.getMinutes();
-      return selectedTime >= currentTime; // Future time
-    } else {
-      return false; // Past date
-    }
-  };
-  // const filterTime = (time) => {
-  //   const selectedDate = new Date(time);
-  //   const currentDate = new Date();
-  //   const currentDateTime = new Date();
-
-  //   // Compare selected date with current date
-  //   if (selectedDate.getTime() > currentDateTime.getTime()) {
-  //     return true; // Future date/time
-  //   } else if (
-  //     selectedDate.getFullYear() === currentDate.getFullYear() &&
-  //     selectedDate.getMonth() === currentDate.getMonth() &&
-  //     selectedDate.getDate() === currentDate.getDate()
-  //   ) {
-  //     // If selected date is today, set the time to the current time
-  //     selectedDate.setHours(currentDate.getHours());
-  //     selectedDate.setMinutes(currentDate.getMinutes());
-  //     return true;
-  //   } else {
-  //     return false; // Past date/time
-  //   }
-  // };
-
   const [task_topic, setTaskTopic] = useState("");
   // const [due_date, setDueDate] = useState(new Date());
   const [due_date, setDueDate] = useState(null);
-  const [from_due_date, setFromDueDate] = useState(new Date());
-  const [to_due_date, setToDueDate] = useState(new Date());
   const [task_description, setTaskDescription] = useState("");
   const [attachments, setAttachment] = useState([]);
-  const [selectedOption, setSelectedOption] = useState("");
-  const [taskTime, setTaskTime] = useState("");
+  const [selectedOption, setSelectedOption] = useState([]);
 
   var handleChangeSelect = (selectedOption) => {
     setSelectedOption(selectedOption);
+    // alert(selectedOption);
+    console.log(emails);
   };
-
   const fileInputRef = useRef(null);
 
   const handleFileAttachment = (event) => {
@@ -145,57 +126,17 @@ function TaskSelf({ onClose }) {
     setAttachment(newAttachments);
   };
 
-  const [isCreatingTask, setIsCreatingTask] = useState(false);
-
-  const [showVerifiedButton, setShowVerifiedButton] = useState("block");
-  const [showVerifiedLoader, setShowVerifiedLoader] = useState("none");
-
-  const [loading, setLoading] = useState(false);
-
-  
-
-  const [selectedDateRepeat, setSelectedDateRepeat] = useState(null);
-  const [selectedToDateRepeat, setSelectedToDateRepeat] = useState(null);
-  const [selectedWeekdaysRepeat, setSelectedWeekdaysRepeat] = useState([]);
-  // -----------------------------------------
-
-  // const mainWeek = selectedWeekdays.join(",");
-
-  const screenWidth = window.innerWidth;
-  const previousWidth = useRef(window.innerWidth);
-  const [modalWidth, setModalWidth] = useState("900px");
-  useEffect(() => {
-    handleResize();
-
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
-  }, []);
-
-  const handleResize = () => {
-    const currentWidth = window.innerWidth;
-
-    if (currentWidth !== previousWidth.current) {
-      if (currentWidth <= 767) {
-        setModalWidth("270px");
-      } else if (currentWidth <= 1024) {
-        setModalWidth("600px");
-      } else {
-        setModalWidth("720px");
-      }
-
-      previousWidth.current = currentWidth;
-    }
-  };
-  const themeColor = useSelector((state) => state.theme.color);
-
+  const navigate = useNavigate();
+  const [from_due_date, setFromDueDate] = useState(new Date());
+  const [to_due_date, setToDueDate] = useState(new Date());
+  const [taskTime, setTaskTime] = useState("");
   const [selectedWeekdays, setSelectedWeekdays] = useState([]);
 
   const [weekdaysMap, setWeekdaysMap] = useState([
     { day: "Mon", index: 0, isActive: false },
-    { day: "Tue", index: 1, isActive: false },
+    { day: "Tues", index: 1, isActive: false },
     { day: "Wed", index: 2, isActive: false },
-    { day: "Thu", index: 3, isActive: false },
+    { day: "Thurs", index: 3, isActive: false },
     { day: "Fri", index: 4, isActive: false },
     { day: "Sat", index: 5, isActive: false },
     { day: "Sun", index: 6, isActive: false },
@@ -246,9 +187,19 @@ function TaskSelf({ onClose }) {
 
     return (
       <>
-        <label className="font-medium text-white">Repeat</label>
+        <label
+          style={{
+            color: "#000",
+            fontWeight: "bold",
+            marginBottom: "0rem",
+            marginTop: "0px",
+            fontWeight: 700,
+          }}
+        >
+          Repeat
+        </label>
         <div
-          className=""
+          className="app"
           //  style={{ marginTop: '25px', marginLeft: '10px' }}
         >
           {/* <p style={{ color: '#000', fontWeight: 'bold', marginBottom: '0rem' }}>Urgent</p> */}
@@ -257,69 +208,25 @@ function TaskSelf({ onClose }) {
       </>
     );
   }
+  const [isCreatingTask, setIsCreatingTask] = useState(false);
+  const [showVerifiedButton, setShowVerifiedButton] = useState("block");
+  const [showVerifiedLoader, setShowVerifiedLoader] = useState("none");
 
-  const [dependencyTaskTitle, setDependencyTaskTitle] = useState([]); 
-  const get_dependencies = async () => {
-    const board_id = localStorage.getItem('board_id');
-    console.log(`board id ${board_id}`)
-    const user_id = localStorage.getItem('VIBEUSERID');  
-    const org_id = localStorage.getItem('org_id');
-
-    try {
-    
-
-      const jsonData = await  getDependencies(user_id);
-
-      if (jsonData.success) {
-        const users = jsonData.data;
-        console.log('users');
-        console.log(users);
-        const assignEmails = users.map(user => ({
-          value: user.task_id,
-          label: user.task_topic,
-        }));
-
-       
-        setDependencyTaskTitle(jsonData.data);
-
-      } else {
-        console.log('Something went wrong');
-      }
-    } catch (error) {
-      console.error('Error:', error);
-    }
-  };
-  useEffect(() => {
-    
-    get_dependencies()
-  }, [setDependencyTaskTitle]);
-  const options = dependencyTaskTitle.map(task => ({
-    value: task.task_id,
-    label: task.task_topic
-  }));
+  const [loading, setLoading] = useState(false);
   const createTask = async () => {
-    const valuesString = selectedTasks.map(task => task.value).join(',');
-    console.log(taskTime);
-    console.log(selectedWeekdays);
-    console.log(repeatMeet);
-    console.log(due_date);
-    console.log(to_due_date);
-
+    const user_id = getItemInLocalStorage("VIBEUSERID");
+    console.log(user_id);
+    const valuesString = selectedTasks.map((task) => task.value).join(",");
     if (assignToOthers && (!selectedOption || selectedOption.length === 0)) {
-      toast.error("Please select someone to assign the task to.", {
-        position: "top-center",
-        autoClose: 2000,
-      });
+      toast.error("Please select someone to assign the task to.");
       return;
     }
     if (isCreatingTask) {
-      return; 
+      return;
     }
-
     setLoading(true);
 
     if (!selectedOption) {
-      console.log(isAssignToOthersActive);
       if (!task_topic) {
         toast.error("Please fill Task Topic.", {
           position: "top-center",
@@ -334,14 +241,13 @@ function TaskSelf({ onClose }) {
         });
         return;
       }
-      const user_id = localStorage.getItem("VIBEUSERID");
 
       setShowVerifiedButton("none");
       setShowVerifiedLoader("block");
-
       const formData = new FormData();
       formData.append("task_topic", task_topic);
       formData.append("due_date", SendDueDateFormat(due_date));
+
       formData.append("created_by", user_id);
       formData.append("user_id", user_id);
       formData.append("task_description", task_description);
@@ -353,56 +259,56 @@ function TaskSelf({ onClose }) {
       formData.append("assign_to", user_id);
       formData.append("from_due_date", from_due_date);
       formData.append("to_due_date", to_due_date);
-      formData.append("to_time_date", taskTime);
+      formData.append("to_due_time", taskTime);
       const mainWeek = selectedWeekdays.join(",");
       formData.append("included_weekdays", mainWeek);
       formData.append("repeat_task", repeatMeet);
-      formData.append('depend_on',valuesString);
+      formData.append("depend_on", valuesString);
+
       setIsCreatingTask(true);
-      //   postDataToAPI(AddBoardChecklistTask, formData)
-      //     .then((response) => {
-      //       if (response.success) {
-      //         setLoading(false);
-      //         onClose();
-      //         window.location.reload();
-      //       } else {
-      //         setLoading(false);
-      //         console.log("unsuccess");
-      //         setShowVerifiedButton("block");
-      //         setShowVerifiedLoader("none");
-      //         if (response.status === 422) {
-      //           toast.error(`${response.message}`, {
-      //             style: {
-      //               width: "500px",
-      //             },
-      //             position: "top-center",
-      //             autoClose: 5000,
-      //           });
-      //         }
-      //       }
-      //     })
-      //     .catch((error) => {
-      //       setLoading(false);
-      //       setShowVerifiedButton("block");
-      //       setShowVerifiedLoader("none");
-      //     })
-      //     .finally(() => {
-      //       setLoading(false);
-      //       setIsCreatingTask(false);
-      //       setShowVerifiedButton("block");
-      //       setShowVerifiedLoader("none");
-      //     });
-      try {
-        toast.loading("Creating New Task Please Wait!")
-        const response = await postCalendarTask(formData);
-        console.log(response);
-        toast.dismiss()
-        onClose()
-        toast.success("Task Created Successfully")
-      } catch (error) {
-        console.log(error);
-        toast.error("Error Creating Task");
-      }
+      await createVibeChecklistSubTask(formData);
+      console
+        .log(formData)
+        .then((response) => {
+          if (response.success) {
+            setLoading(false);
+            onClose();
+            //  alert("hii")
+            //  window.location.reload();
+            // navigate(
+            //   `/employee/customBoard/?id=${response.data.board_id}&t_id=${response.data.task_id}`
+            // );
+
+            setCreatedTaskId(response.data.task_id);
+            //  localStorage.setItem('createdTaskId', response.data.task_id);
+          } else {
+            setLoading(false);
+            console.log("unsuccess");
+            setShowVerifiedButton("block");
+            setShowVerifiedLoader("none");
+            if (response.status === 422) {
+              toast.error(`${response.message}`, {
+                style: {
+                  width: "500px",
+                },
+                position: "top-center",
+                autoClose: 5000,
+              });
+            }
+          }
+        })
+        .catch((error) => {
+          setLoading(false);
+          //alert('Please check your internet and try again!');
+          setShowVerifiedButton("block");
+          setShowVerifiedLoader("none");
+        })
+        .finally(() => {
+          setLoading(false);
+          setIsCreatingTask(false);
+          setShowVerifiedButton("block");
+          setShowVerifiedLoader("none");
+        });
     } else {
       const idList = selectedOption.map((email) => parseInt(email.value));
 
@@ -411,11 +317,9 @@ function TaskSelf({ onClose }) {
           position: "top-center",
           autoClose: 2000,
         });
-
-        //alert('Please fill in all the fields before creating the task.');
         return;
       }
-      if (!due_date) {
+      if (!due_date && repeatMeet === false) {
         toast.error("Please select Due Date.", {
           position: "top-center",
           autoClose: 2000,
@@ -429,11 +333,25 @@ function TaskSelf({ onClose }) {
         });
         return;
       }
+      if (repeatMeet && to_due_date <= from_due_date) {
+        toast.error("Please fill to due date of Repeat task correctly.", {
+          position: "top-center",
+          autoClose: 2000,
+        });
+        return;
+      }
 
-      const user_id = localStorage.getItem("VIBEUSERID");
+      if (repeatMeet && !taskTime) {
+        toast.error("Please fill time of Repeat task.", {
+          position: "top-center",
+          autoClose: 2000,
+        });
+        return;
+      }
+
+      setLoading(true);
       setShowVerifiedButton("none");
       setShowVerifiedLoader("block");
-      setLoading(true);
       const formData = new FormData();
       formData.append("task_topic", task_topic);
       formData.append("due_date", SendDueDateFormat(due_date));
@@ -444,54 +362,62 @@ function TaskSelf({ onClose }) {
       attachments.forEach((file, index) => {
         formData.append("attachments", file);
       });
-      const idString = idList.join(",");
-      // idList.forEach((id) => {
-      formData.append("assign_to", idString);
-      // });
-      formData.append("redirect_link", "/employee/myBoard");
-      formData.append("where_to", "myboard");
+      formData.append("checklist", nav_id.split("_")[1]);
+      idList.forEach((id) => {
+        formData.append("assign_to", id);
+      });
       formData.append("from_due_date", from_due_date);
       formData.append("to_due_date", to_due_date);
-      formData.append("to_time_date", taskTime);
+      formData.append("to_due_time", taskTime);
       const mainWeek = selectedWeekdays.join(",");
       formData.append("included_weekdays", mainWeek);
       formData.append("repeat_task", repeatMeet);
+      formData.append("depend_on", valuesString);
 
       setIsCreatingTask(true);
-      try {
-        const response = await postCalendarTask(formData);
-        console.log(response);
+      //   try {
 
-        if (response.success) {
-          setLoading(false);
-          onClose();
-        //   window.location.reload();
-        } else {
-          setLoading(false);
-          console.log("unsuccess");
-          setShowVerifiedButton("block");
-          setShowVerifiedLoader("none");
-          if (response.status === 422) {
-            toast.error(`${response.message}`, {
-              style: {
-                width: "500px",
-              },
-              position: "top-center",
-              autoClose: 5000,
-            });
-          }
+      //   } catch (error) {
+      //     console.log(error)
+      //   }
+      const response = await createVibeChecklistSubTask(formData);
+      // .then((response) => {
+      if (response.success) {
+        setLoading(false);
+        onClose();
+        // navigate(
+        //   `/employee/customBoard/?id=${response.data.board_id}&t_id=${response.data.task_id}`
+        // );
+        setCreatedTaskId(response.data.task_id);
+        //  localStorage.setItem('createdTaskId', response.data.task_id);
+      } else {
+        setLoading(false);
+        console.log("unsuccess");
+        setShowVerifiedButton("block");
+        setShowVerifiedLoader("none");
+        if (response.status === 422) {
+          toast.error(`${response.message}`, {
+            style: {
+              width: "500px",
+            },
+            position: "top-center",
+            autoClose: 5000,
+          });
         }
-      } catch (error) {
-        setLoading(false);
-        //alert('Please check your internet and try again!');
-        setShowVerifiedButton("block");
-        setShowVerifiedLoader("none");
-      } finally {
-        setIsCreatingTask(false);
-        setLoading(false);
-        setShowVerifiedButton("block");
-        setShowVerifiedLoader("none");
       }
+      // })
+      // .catch((error) => {
+      setLoading(false);
+      //alert('Please check your internet and try again!');
+      setShowVerifiedButton("block");
+      setShowVerifiedLoader("none");
+      // })
+      // .finally(() => {
+      setIsCreatingTask(false);
+      setLoading(false);
+      setShowVerifiedButton("block");
+      setShowVerifiedLoader("none");
+      // });
     }
   };
 
@@ -506,56 +432,71 @@ function TaskSelf({ onClose }) {
     return `${year}-${month}-${day}T${hours}:${minutes}`;
   }
 
-  const [emails, setEmails] = useState([]);
+  const [selectedEmails, setSelectedEmails] = useState([]);
 
-  useEffect(() => {
-    const getTaskAssign = async () => {
-      const user_id = localStorage.getItem("VIBEUSERID");
-      const org_id = localStorage.getItem("organization_id");
+  const [user_ids, setUserIds] = useState([]);
 
-      try {
-        // const params = {
-        //   user_id: user_id,
-        //   org_id: org_id,
-        // };
+  //  useEffect(() => {
 
-        const jsonData = await getVibeUsers(user_id);
+  //   const getTaskAssign = async () => {
+  //     const board_id = localStorage.getItem('board_id');
+  //     console.log(`board id ${board_id}`)
+  //     const user_id = localStorage.getItem('user_id');
+  //     const org_id = localStorage.getItem('org_id');
 
-        if (jsonData.success) {
-          const users = jsonData.data;
-          const assignEmails = users.map((user) => ({
-            value: user.user_id,
-            label: user.email,
-          }));
+  //     try {
+  //       const params = {
+  //         user_id: user_id,
+  //         org_id: org_id,
+  //         board_id: board_id
+  //       };
 
-          setEmails(assignEmails);
-          // Store the emails in local storage
-          localStorage.setItem("assignEmails", JSON.stringify(assignEmails));
-        } else {
-          console.log("Something went wrong");
-        }
-      } catch (error) {
-        console.error("Error:", error);
-      }
-    };
+  //       const jsonData = await getDataFromAPI(Get_Users_In_Board, params);
 
-    getTaskAssign();
-  }, [setEmails]);
+  //       if (jsonData.success) {
+  //         const users = jsonData.data;
+  //         console.log('users');
+  //         console.log(users);
+  //         const assignEmails = users.map(user => ({
+  //           value: user.user_id,
+  //           label: user.email,
+  //         }));
+
+  //         setEmails(assignEmails);
+
+  //       } else {
+  //         console.log('Something went wrong');
+  //       }
+  //     } catch (error) {
+  //       console.error('Error:', error);
+  //     }
+  //   };
+
+  //   const assignEmailsFromStorage = localStorage.getItem('assignEmails');
+
+  //   if (assignEmailsFromStorage) {
+  //     setEmails(JSON.parse(assignEmailsFromStorage));
+  //   } else {
+
+  //     getTaskAssign();
+  //   }
+  // }, [setEmails]);
 
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
-  //   const CustomInput = React.forwardRef(({ value, onClick }, ref) => (
-  //     <input
-  //       className="p-2 w-full rounded-md"
-  //       onClick={onClick}
-  //       value={value}
-  //       ref={ref}
-  //       placeholder="Select Date and Time"
-  //       style={{
-  //         backgroundColor: "white",
-  //         color: "black",
-  //       }}
-  //     />
-  //   ));
+  const CustomInput = React.forwardRef(({ value, onClick }, ref) => (
+    <input
+      className="datepickers"
+      onClick={onClick}
+      value={value}
+      ref={ref}
+      placeholder="Select Date and Time"
+      style={{
+        backgroundColor: "white",
+        color: "black",
+        width: windowWidth <= 768 ? "150%" : "192%",
+      }}
+    />
+  ));
   useEffect(() => {
     const handleResize = () => {
       setWindowWidth(window.innerWidth);
@@ -567,6 +508,34 @@ function TaskSelf({ onClose }) {
       window.removeEventListener("resize", handleResize);
     };
   }, []);
+  const currentDate = new Date();
+  const year = currentDate.getFullYear();
+  const month = String(currentDate.getMonth() + 1).padStart(2, "0");
+  const day = String(currentDate.getDate()).padStart(2, "0");
+  const todayDate = `${year}-${month}-${day}`;
+  const currentTime = `${currentDate.getHours()}:${String(
+    currentDate.getMinutes()
+  ).padStart(2, "0")}`;
+
+  const maxTime = `23:59`;
+  const filterTime = (time) => {
+    const selectedDate = new Date(time);
+    const currentDate = new Date();
+
+    // Compare selected date with current date
+    if (selectedDate.getTime() > currentDate.getTime()) {
+      return true; // Future date
+    } else if (selectedDate.getTime() === currentDate.getTime()) {
+      // If selected date is today, compare times
+      const selectedTime =
+        selectedDate.getHours() * 60 + selectedDate.getMinutes();
+      const currentTime =
+        currentDate.getHours() * 60 + currentDate.getMinutes();
+      return selectedTime >= currentTime; // Future time
+    } else {
+      return false; // Past date
+    }
+  };
 
   const [width, setWidth] = useState(window.innerWidth);
 
@@ -582,19 +551,59 @@ function TaskSelf({ onClose }) {
       window.removeEventListener("resize", handleResize);
     };
   }, []);
+
+  // --------------------
+  const [dependencyTaskTitle, setDependencyTaskTitle] = useState([]);
+  const get_dependencies = async () => {
+    const board_id = localStorage.getItem("board_id");
+    console.log(`board id ${board_id}`);
+    // const user_id = localStorage.getItem("user_id");
+    // const org_id = localStorage.getItem("org_id");
+
+    try {
+      //   const params = {
+      //     user_id: user_id,
+      //     board_id: board_id,
+      //   };
+
+      const jsonData = await getProjectTaskDependencies(user_id, board_id);
+
+      if (jsonData.success) {
+        const users = jsonData.data;
+        console.log("users");
+        console.log(users);
+        const assignEmails = users.map((user) => ({
+          value: user.task_id,
+          label: user.task_topic,
+        }));
+
+        setDependencyTaskTitle(jsonData.data);
+      } else {
+        console.log("Something went wrong");
+      }
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
+
+  useEffect(() => {
+    get_dependencies();
+  }, [setDependencyTaskTitle]);
   const [selectedTasks, setSelectedTasks] = useState([]);
+
   const handleChangeSelectTitle = (selectedOptions) => {
     setSelectedTasks(selectedOptions);
-    console.log('Selected Tasks:', selectedOptions);
+    console.log("Selected Tasks:", selectedOptions);
   };
+
+  // Format tasks for react-select
+  const options = dependencyTaskTitle.map((task) => ({
+    value: task.task_id,
+    label: task.task_topic,
+  }));
+  // ---------
   return (
     <div>
-      {modalTaskSelfIsOpen && <TaskSelf onClose={closeTaskSelf} />}
-      {/* {modalTaskRepeatDaysIsOpen && (
-        <TaskRepeatDays
-          open={openTaskRepeatDays}
-        />
-      )} */}
       <div className="  fixed inset-0 flex justify-center items-center bg-black bg-opacity-30 backdrop-blur-sm z-50 p-10 ">
         <div
           style={{ background: themeColor }}
@@ -609,7 +618,7 @@ function TaskSelf({ onClose }) {
           <div className="overflow-auto hide-scrollbar mt-5">
             <div className="px-2 hide-scrollbar">
               <div className="hide-scrollbar">
-                <div className="hide-scrollbar" >
+                <div className="hide-scrollbar">
                   <div
                     style={{
                       overflowY: assignToOthers ? "scroll" : "scroll",
@@ -618,7 +627,6 @@ function TaskSelf({ onClose }) {
                     className="hide-scrollbar"
                   >
                     <div
-
                     // style={{ position: 'sticky', top: -20, zIndex: 10, background: assignToOthers ? 'linear-gradient(to right, white 68.6%, #132A3A 0%)' : 'linear-gradient(to right, white 68.7%, #132A3A 0%)' }}
                     >
                       <div>
@@ -664,10 +672,10 @@ function TaskSelf({ onClose }) {
                               Task Topic
                             </label>
                             <label
-                            className="text-red-500"
-                              style={{  marginBottom: "0rem" }}
+                              className="text-red-500"
+                              style={{ marginBottom: "0rem" }}
                             >
-                               *{" "}
+                              *{" "}
                             </label>
                           </div>
                           <input
@@ -698,10 +706,10 @@ function TaskSelf({ onClose }) {
                               Due Date
                             </label>
                             <label
-                             className="text-red-500"
-                              style={{  marginBottom: "0rem" }}
+                              className="text-red-500"
+                              style={{ marginBottom: "0rem" }}
                             >
-                               *{" "}
+                              *{" "}
                             </label>
                           </div>
 
@@ -719,128 +727,125 @@ function TaskSelf({ onClose }) {
                           />
                         </div>
                       </div>
-<div className="grid grid-cols-2 gap-2 items-center">
-
-
-                      <div className="my-2 flex flex-col">
-                        <label className="font-medium text-white ">
-                          Task Description
-                        </label>
-
-                        <textarea
-                          style={{ resize: "none" }}
-                          className=" rounded-md px-2 outline-none"
-                          placeholder="Describe Task"
-                          rows={3}
-                          type="text"
-                          spellCheck={true}
-                          value={task_description}
-                          maxLength={250}
-                          onChange={(e) => setTaskDescription(e.target.value)}
-                        />
-                      </div>
-                      <div className="flex flex-col">
-                        <label className="font-medium text-white">
-                          Attachment
-                        </label>
-
-                        <input
-                          style={{
-                            border: "white dotted 2px",
-                            height: "75px",
-                            color: "white",
-                          
-                          }}
-                          className="rounded-md p-5 px-10"
-                          ref={fileInputRef}
-                          
-                          type="file"
-                          multiple
-                          onChange={handleFileAttachment}
-                        />
-                      </div>
-                      </div>
-                      <div  class="grid grid-cols-2 items-center gap-2">
-                        <div>
-
-                       
-                  <label  className="text-white font-medium">Select Dependent Tasks :</label>
-   
-                  <Select
-                    isMulti
-                    value={selectedTasks}
-                    onChange={handleChangeSelectTitle}
-                    options={options}
-                    placeholder="Select tasks..."
-                    noOptionsMessage={() => "Tasks not available..."}
-                    styles={{
-                      placeholder: base => ({
-                        ...base,
-                        color: 'black'
-                      }),
-                      clearIndicator: base => ({
-                        ...base,
-                        color: 'red'
-                      }),
-                      dropdownIndicator: base => ({
-                        ...base,
-                        color: 'black'
-                      }),
-                      control: base => ({
-                        ...base,
-                        borderColor: 'darkblue'
-                      }),
-                      multiValueRemove: (base, { isFocused }) => ({
-                        ...base,
-                        color: isFocused ? 'red' : 'gray',
-                        backgroundColor: isFocused ? 'black' : 'lightgreen'
-                      })
-                    }}
-                    />
-                    </div>
-                      {assignToOthers && (
-                        <div className="">
+                      <div className="grid grid-cols-2 gap-2 items-center">
+                        <div className="my-2 flex flex-col">
                           <label className="font-medium text-white ">
-                            Assign :
+                            Task Description
+                          </label>
+
+                          <textarea
+                            style={{ resize: "none" }}
+                            className=" rounded-md px-2 outline-none"
+                            placeholder="Describe Task"
+                            rows={3}
+                            type="text"
+                            spellCheck={true}
+                            value={task_description}
+                            maxLength={250}
+                            onChange={(e) => setTaskDescription(e.target.value)}
+                          />
+                        </div>
+                        <div className="flex flex-col">
+                          <label className="font-medium text-white">
+                            Attachment
+                          </label>
+
+                          <input
+                            style={{
+                              border: "white dotted 2px",
+                              height: "75px",
+                              color: "white",
+                            }}
+                            className="rounded-md p-5 px-10"
+                            ref={fileInputRef}
+                            type="file"
+                            multiple
+                            onChange={handleFileAttachment}
+                          />
+                        </div>
+                      </div>
+                      <div className="grid grid-cols-2 items-center gap-2">
+                        <div>
+                          <label className="text-white font-medium">
+                            Select Dependent Tasks :
                           </label>
 
                           <Select
                             isMulti
-                            onChange={handleChangeSelect}
-                            options={emails}
-                            noOptionsMessage={() => "Email not available..."}
-                            maxMenuHeight={100}
+                            value={selectedTasks}
+                            onChange={handleChangeSelectTitle}
+                            options={options}
+                            placeholder="Select tasks..."
+                            noOptionsMessage={() => "Tasks not available..."}
                             styles={{
-                              placeholder: (baseStyles, state) => ({
-                                ...baseStyles,
+                              placeholder: (base) => ({
+                                ...base,
                                 color: "black",
                               }),
-                              clearIndicator: (baseStyles) => ({
-                                ...baseStyles,
+                              clearIndicator: (base) => ({
+                                ...base,
                                 color: "red",
                               }),
-                              dropdownIndicator: (baseStyles) => ({
-                                ...baseStyles,
+                              dropdownIndicator: (base) => ({
+                                ...base,
                                 color: "black",
                               }),
-                              control: (baseStyles) => ({
-                                ...baseStyles,
+                              control: (base) => ({
+                                ...base,
                                 borderColor: "darkblue",
                               }),
-                              multiValueRemove: (baseStyles, state) => ({
-                                ...baseStyles,
-                                color: state.isFocused ? "red" : "gray",
-                                backgroundColor: state.isFocused
+                              multiValueRemove: (base, { isFocused }) => ({
+                                ...base,
+                                color: isFocused ? "red" : "gray",
+                                backgroundColor: isFocused
                                   ? "black"
                                   : "lightgreen",
                               }),
                             }}
-                            menuPosition={"fixed"}
                           />
                         </div>
-                      )}
-                  </div>
+                        {assignToOthers && (
+                          <div className="">
+                            <label className="font-medium text-white ">
+                              Assign :
+                            </label>
 
+                            <Select
+                              isMulti
+                              onChange={handleChangeSelect}
+                              options={emails}
+                              noOptionsMessage={() => "Email not available..."}
+                              maxMenuHeight={100}
+                              styles={{
+                                placeholder: (baseStyles, state) => ({
+                                  ...baseStyles,
+                                  color: "black",
+                                }),
+                                clearIndicator: (baseStyles) => ({
+                                  ...baseStyles,
+                                  color: "red",
+                                }),
+                                dropdownIndicator: (baseStyles) => ({
+                                  ...baseStyles,
+                                  color: "black",
+                                }),
+                                control: (baseStyles) => ({
+                                  ...baseStyles,
+                                  borderColor: "darkblue",
+                                }),
+                                multiValueRemove: (baseStyles, state) => ({
+                                  ...baseStyles,
+                                  color: state.isFocused ? "red" : "gray",
+                                  backgroundColor: state.isFocused
+                                    ? "black"
+                                    : "lightgreen",
+                                }),
+                              }}
+                              menuPosition={"fixed"}
+                            />
+                          </div>
+                        )}
+                      </div>
 
                       {assignToOthers && (
                         <>
@@ -902,7 +907,7 @@ function TaskSelf({ onClose }) {
 
                                     <input
                                       value={to_due_date}
-                                      spellcheck="true"
+                                      spellCheck="true"
                                       onChange={(e) =>
                                         setToDueDate(e.target.value)
                                       }
@@ -928,7 +933,6 @@ function TaskSelf({ onClose }) {
                                     <input
                                       type="time"
                                       value={taskTime}
-                                      
                                       onChange={(event) =>
                                         setTaskTime(event.target.value)
                                       }
@@ -1062,7 +1066,6 @@ function TaskSelf({ onClose }) {
                             type="button"
                             onClick={createTask}
                             style={{
-                           
                               background: themeColor,
                             }}
                           >
@@ -1083,12 +1086,12 @@ function TaskSelf({ onClose }) {
                         >
                           <span className="sr-only"></span>
                           </div> */}
-                        </div>
+                      </div>
 
                       {/* <div className="col-md-6 mt-4 imgtask"> */}
-                        {/* {assignToOthers ?
+                      {/* {assignToOthers ?
                       <img style={{ width: '80%', height: "125%", marginLeft: '40px', marginTop: '-100px' }} src={require('../../../Static/images/businesswoman leaning on big clock with arms crossed.png')} alt="" /> : <img style={{ width: '75%', height: "75%", marginLeft: '20px' }} src={require('../../../Static/images/laptop and charts.png')} alt="" />} */}
-                        {/* {assignToOthers ? (
+                      {/* {assignToOthers ? (
                       <img
                         style={{
                           width: "70%",
@@ -1123,4 +1126,4 @@ function TaskSelf({ onClose }) {
   );
 }
 
-export default TaskSelf;
+export default ProjectTaskSelf;

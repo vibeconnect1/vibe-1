@@ -145,13 +145,13 @@ function ProjectOverView() {
             <p className="text-lg font-semibold text-slate-800">
               Project Summary
             </p>
-            <button
+            {/* <button
               className={`relative ${"hover:bg-gray-200 rounded-full p-3"}`}
               onClick={EditModal}
             >
               <MdEdit size={20} />
               
-            </button>
+            </button> */}
             {overview && (
               <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center z-50">
                 <div className="bg-white p-5 rounded-lg shadow-lg md:w-2/5 relative max-h[80%] overflow-y-auto">

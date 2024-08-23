@@ -2,7 +2,7 @@ import { getItemInLocalStorage } from "../utils/localStorage";
 import axiosInstance from "./axiosInstance";
 import vibeAuth from "./vibeAuth";
 export const API_URL = "https://vibecopilot.ai";
-export const vibeMedia = "https://vibecopilot.ai/api/media";
+export const vibeMedia = "https://vibecopilot.ai/api/media/";
 const token = getItemInLocalStorage("TOKEN");
 export const domainPrefix = "https://admin.vibecopilot.ai";
 export const login = async (data) => axiosInstance.post("/login.json", data);
@@ -1364,6 +1364,22 @@ export const getVibeUsers = async (vibeUserId) => {
     throw error;
   }
 };
+export const getVibeProjectUsers = async (vibeUserId, orgId, boardId) => {
+  try {
+    const response = await vibeAuth.get(
+      `/api/employee/get-users/?user_id=${vibeUserId}&org_id=${orgId}&board_id=${boardId}`,
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching calendar events:", error);
+    throw error;
+  }
+};
 export const getProjectUsers = async (vibeUserId, vibeOrgId) => {
   try {
     const response = await vibeAuth.get(
@@ -2381,6 +2397,23 @@ export const postOutlookAuth = async (data) => {
     throw error;
   }
 };
+export const getProjectTaskDependencies = async (userId, boardId) => {
+  try {
+    const response = await vibeAuth.get(
+      `/api/v1/employee/task/get-dependencies/?user_id=${userId}&board_id=${boardId}`,
+
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error getting dependencies :", error);
+    throw error;
+  }
+};
 export const getDependencies = async (userId) => {
   try {
     const response = await vibeAuth.get(
@@ -2571,7 +2604,7 @@ export const UpdateTaskAction = async (data) => {
 export const UpdateProjectSectionTitle = async (data) => {
   try {
     const response = await vibeAuth.put(
-      `/api/employee/board/update-board-checklist`,
+      `/api/employee/board/update-board-checklist/`,
       data,
       {
         headers: {
@@ -2586,11 +2619,11 @@ export const UpdateProjectSectionTitle = async (data) => {
   }
 };
 
-export const deleteSection = async (taskDeleteIDSection,userId) => {
+export const deleteSection = async (taskDeleteIDSection, userId) => {
   try {
     const response = await vibeAuth.delete(
       `/api/employee/board/delete-board-checklist/?check_id=${taskDeleteIDSection}&user_id=${userId}`,
-      
+
       {
         headers: {
           "Content-Type": "multipart/form-data",
@@ -2617,6 +2650,41 @@ export const addBoardChecklist = async (data) => {
     return response.data;
   } catch (error) {
     console.error("Error deleting section :", error);
+    throw error;
+  }
+};
+
+export const deleteProjectTask = async (taskId, userId) => {
+  try {
+    const response = await vibeAuth.delete(
+      `/api/v1/employee/tasks/trash/?task_id=${taskId}&user_id=${userId}`,
+      
+      {
+        headers: {
+          "Content-Type": "multipart/form-data/",
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error deleting task :", error);
+    throw error;
+  }
+};
+export const getProjectAssignedUser = async (userId,taskId ) => {
+  try {
+    const response = await vibeAuth.get(
+      `/api/v1/employee/task/get_task_assigned_users?user_id=${userId}&task_id=${taskId}`,
+      
+      {
+        headers: {
+          "Content-Type": "multipart/form-data/",
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error deleting task :", error);
     throw error;
   }
 };

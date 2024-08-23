@@ -187,12 +187,12 @@ const ProjectBoard = () => {
           </center>
         </div>
       ) : projectList.length > 0 ? (
-        <div className="grid md:grid-cols-4 gap-3">
+        <div className="grid md:grid-cols-4 gap-3 ">
           {projectList.map((project) => {
             console.log(project);
             return (
               <div
-                className="my-2 min-h-96 bg-white shadow-custom-all-sides rounded-xl  hover:bg-gray-100 transition-all duration-300 cursor-pointer flex flex-col"
+                className="my-2 min-h-96 max-w-96 bg-white shadow-custom-all-sides rounded-md  hover:bg-gray-100 transition-all duration-300 cursor-pointer flex flex-col"
                 key={project.id}
                 onClick={() => goToProject(project.id)}
               >
@@ -200,7 +200,7 @@ const ProjectBoard = () => {
                 <img
                   src={project.image ? API_URL + project.image : projectHolder}
                   alt=""
-                  className=" min-h-40 rounded-t-lg"
+                  className=" min-h-40 rounded-t-md"
                 />
                 {/* </div> */}
                 {/*  */}
@@ -271,7 +271,7 @@ const ProjectBoard = () => {
                     </div>
 
                     {project.created_by.user_id === user_id ? (
-                      <div className="flex justify-between mt-2">
+                      <div className="flex justify-between my-2">
                         {project.created_by.user_id === user_id ? (
                           <div
                             className="flex text-sm gap-2 items-center "

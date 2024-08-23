@@ -1,13 +1,15 @@
 import React, { useState, useEffect, useRef } from "react";
-import { BsThreeDotsVertical } from "react-icons/bs";
+import { BsEye, BsThreeDotsVertical } from "react-icons/bs";
 import Chart from "react-apexcharts";
 import { useSelector } from "react-redux";
 import {
-    addBoardChecklist,
-    deleteSection,
+  addBoardChecklist,
+  deleteProjectTask,
+  deleteSection,
   getVibeBoardData,
   GetVibeBoardTaskPermission,
   getVibeBoardUser,
+  getVibeStatus,
   updateChecklistSequence,
   UpdateProjectSectionTitle,
   updateSalesView,
@@ -23,13 +25,25 @@ import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 import { FaCheck, FaPencilAlt, FaTrashAlt } from "react-icons/fa";
 import RemainingTime from "../../../../utils/RemainingTime";
 import LinearProgressBar from "../../../../components/LinearProgessBar";
-import { ShowFormatedDueDateOnDateField } from "../../../../utils/dateUtils";
+import {
+  dateFormat,
+  ShowFormatedDueDateOnDateField,
+} from "../../../../utils/dateUtils";
 import DeleteSectionModal from "./DeleteSectionModal";
 import toast from "react-hot-toast";
+import TaskSelf from "../../../../containers/modals/SelfTask";
+import ProjectTaskSelf from "./ProjectTaskSelf";
+import Table from "../../../../components/table/Table";
+import { FcDeleteRow } from "react-icons/fc";
+import { MdDeleteForever } from "react-icons/md";
 
 function ProjectTasks() {
   const themeColor = useSelector((state) => state.theme.color);
   const user_id = getItemInLocalStorage("VIBEUSERID");
+  const [taskDynamicStatus, settaskDynamicStatus] = useState([]);
+  const [taskMoreStatusId, settaskMoreStatusId] = useState([]);
+  const [taskMoreStatusList, settaskMoreStatusList] = useState([]);
+  const [taskMoreStatusIdList, settaskMoreStatusIdList] = useState([]);
   const [createdById, setCreatedById] = useState(null);
   const [id, setID] = useState("");
   const [fontColor, setFontColor] = useState("black");
@@ -56,8 +70,90 @@ function ProjectTasks() {
   const [isBoardCreatedby, setIsBoardCreatedby] = useState(false);
   const [showInput, setShowInput] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
-  const [sectionName, setSectionName] = useState('');
+  const [sectionName, setSectionName] = useState("");
   const [sections, setSections] = useState([]);
+  const [taskMoreStatus, settaskMoreStatus] = useState([]);
+ 
+  
+
+  console.log(filteredItems)
+  const handleCheckboxChangeStatus = (event) => {
+    const selectedStatusId = event.target.value;
+    console.log(`Checkbox selected: ${selectedStatusId}`);
+    setSelectedStatusIds(prevSelectedStatusIds => {
+      if (prevSelectedStatusIds.includes(selectedStatusId)) {
+          return prevSelectedStatusIds.filter(id => id !== selectedStatusId);
+      } else {
+          return [...prevSelectedStatusIds, selectedStatusId];
+      }
+  });
+  };
+  const Get_Status = async () => {
+    try {
+      const response = await getVibeStatus(user_id);
+      if (response.success) {
+        console.log("success");
+        console.log(response.data);
+        settaskMoreStatus(response.data[0].status_name);
+        settaskMoreStatusId(response.data[0].id);
+        const statusOptionsdata = response.data.map((status) => ({
+          value: status.id,
+          label: status.status_name,
+        }));
+        settaskDynamicStatus(statusOptionsdata);
+        settaskMoreStatusList(statusOptionsdata.map((option) => option.label));
+        settaskMoreStatusIdList(
+          statusOptionsdata.map((option) => option.value)
+        );
+        console.log(response.data[0].status_name);
+        console.log(response.data[0].id);
+      } else {
+        console.log("Something went wrong");
+      }
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
+
+  useEffect(() => {
+    Get_Status();
+    GetUsersDataOutsider();
+  }, []);
+  const GetUsersDataOutsider = async () => {
+    // const user_id= localStorage.getItem('user_id');
+    // const org_id= localStorage.getItem('organization_id');
+     try {
+        
+        //  const params = {
+        //    user_id: user_id,
+        //   //  org_id:org_id,
+        //   //  os:false
+        //  };
+     
+         const jsonData = await getOutsideUsers(user_id);
+       
+         if (jsonData.success) {
+
+         
+         const users = jsonData.data;
+           console.log("🚀 ~ GetUsersDataOutsider ~ users:", users)
+           const AssignEmailsOutsider = users.map((user) => ({
+             value: user.id,
+             label: user.email,
+           }));
+           
+           setOptionsOutsiderView(AssignEmailsOutsider);
+           console.log("-----heyyyy");
+           console.log(selectedEmailOutsiderView)
+           
+         } else {
+           console.log('Something went wrong');
+         }
+       } catch (error) {
+         console.error('Error:', error);
+       }
+ }
+
   const handleClickOutside = (event) => {
     if (
       dropdownRefs.current.every((ref) => ref && !ref.contains(event.target))
@@ -221,6 +317,107 @@ function ProjectTasks() {
   };
   const [isLoading, setIsLoading] = useState(true);
   const [jsonData, setJsonData] = useState(null);
+  const extractTasks = (boardData) => {
+    return boardData.flatMap((section) =>
+      section.tasks.map((task) => ({
+        sectionId: section.id,
+        sectionTitle: section.title,
+        taskId: task.id,
+        taskTopic: task.task_topic,
+        taskDescription: task.task_description,
+        taskSequence: task.sequence,
+        deadLine: task.task_due_date,
+        taskStatus: task.task_status,
+        taskCreatedBy: task.task_created_by,
+        taskCreatedAt: task.task_created_at,
+        urgentStatus: task.urgent_status,
+      }))
+    );
+  };
+  const columns = [
+    {
+      name: "Action",
+      selector: (row) => (
+        <div>
+          <BsEye size={15} />
+        </div>
+      ),
+    },
+    { name: "Task Topic", selector: (row) => row.taskTopic, sortable: true },
+    {
+      name: "Section Title",
+      selector: (row) => row.sectionTitle,
+      sortable: true,
+    },
+    // { name: 'Task ID', selector: row => row.taskId, sortable: true },
+    // { name: 'Task Description', selector: row => row.taskDescription },
+    {
+      name: "Status",
+      selector: (row) => (
+        <div className="flex justify-center">
+          <p style={{ background: row.taskStatus?.color }} className="text-center p-1 px-2 rounded-full text-white">
+            {row.taskStatus.status_name}
+          </p>
+        </div>
+      ),
+      sortable: true,
+    },
+    {
+      name: "Deadline",
+      selector: (row) => dateFormat(row.deadLine),
+      sortable: true,
+    },
+    {
+      name: "urgent",
+      selector: (row) => (row.urgentStatus ? "YES" : "NO"),
+      sortable: true,
+    },
+    {
+      name: "Created By",
+      selector: (row) =>
+        `${row.taskCreatedBy.firstname} ${row.taskCreatedBy.lastname}`,
+      sortable: true,
+    },
+    {
+      name: "Created on",
+      selector: (row) => dateFormat(row.taskCreatedAt),
+      sortable: true,
+    },
+    {
+      name: "",
+      selector: (row) => (
+        <div className="text-red-400 cursor-pointer">
+          <MdDeleteForever
+            size={25}
+            onClick={(event) => openModalDeleteTask(row.taskId, event)}
+          />
+        </div>
+      ),
+    },
+  ];
+
+  const [selectedStatusId, setSelectedStatusId] = useState("all");
+const [filteredTasksList, setFilteredTasksList] = useState([]);
+const taskDynamicStatusWithAll = [{ value: "all", label: "All" }, ...taskDynamicStatus];
+const handleStatusChange = (event) => {
+    const selectedStatus = event.target.value;
+    setSelectedStatusId(selectedStatus);
+  
+    if (selectedStatus === "all") {
+      setFilteredTasksList(tasksList); 
+    } else {
+      const filteredTasks = tasksList.filter(task => task.taskStatus.id.toString() === selectedStatus);
+      setFilteredTasksList(filteredTasks);
+    }
+  };
+  
+  const [tasksList, setTasks] = useState([]);
+
+  useEffect(() => {
+    if (boardData && boardData.length > 0) {
+      setTasks(extractTasks(boardData));
+    }
+  }, [boardData]);
   const GetBoardData = async (id) => {
     setIsLoading(true);
     try {
@@ -793,7 +990,7 @@ function ProjectTasks() {
       }
     }
   }, [searchQuery, filteredTaskData, filteredItems]);
-
+console.log(filteredItems)
   const handleIconClickSectionTitle = (sectionId, currentTitle) => {
     setEditingSectionId(sectionId);
     setEditedSectionTitle(currentTitle);
@@ -819,90 +1016,197 @@ function ProjectTasks() {
     } catch (error) {}
   };
   // -----------------Delete Section
-const [isModalOpenDeleteSection, setIsModalOpenDeleteSection] = useState(false);
+  const [isModalOpenDeleteSection, setIsModalOpenDeleteSection] =
+    useState(false);
 
-const [taskDeleteIDSection, setTaskDeleteIDSection] = useState('');
-function openModalDeleteSection(taskId, event) {
-  event.stopPropagation();
-  console.log(taskId);
-  const numericId = taskId.split('_')[1];
-  setTaskDeleteIDSection(numericId);
-  setIsModalOpenDeleteSection(true); 
-}
+  const [taskDeleteIDSection, setTaskDeleteIDSection] = useState("");
+  function openModalDeleteSection(taskId, event) {
+    event.stopPropagation();
+    console.log(taskId);
+    const numericId = taskId.split("_")[1];
+    setTaskDeleteIDSection(numericId);
+    setIsModalOpenDeleteSection(true);
+  }
 
-function closeModalDeleteSection() {
-  setIsModalOpenDeleteSection(false);
-}
-const handleDeleteSection = async() => {
-//   deleteDataFromAPI(`${DeleteSection}?check_id=${taskDeleteIDSection}&user_id=${user_id}`)
- await deleteSection(taskDeleteIDSection,user_id)
-    .then((res) => {
-      if (res.success ) {
-        // window.location.reload();
-        toast.success('Section Deleted Successfully');
-          console.log('Task deleted successfully');
+  function closeModalDeleteSection() {
+    setIsModalOpenDeleteSection(false);
+  }
+  const handleDeleteSection = async () => {
+    //   deleteDataFromAPI(`${DeleteSection}?check_id=${taskDeleteIDSection}&user_id=${user_id}`)
+    await deleteSection(taskDeleteIDSection, user_id)
+      .then((res) => {
+        if (res.success) {
+          // window.location.reload();
+          toast.success("Section Deleted Successfully");
+          console.log("Task deleted successfully");
           closeModalDeleteSection();
           GetBoardData(id);
-      } else {
-        if(res.success === false)
-        toast.error('Task has been Failed to delete task',{position: "top-center",autoClose: 2000});
-        // window.location.reload();
-        closeModalDeleteSection();
-        console.error('Failed to delete task.');
-      }
-    })
-    .catch((error) => {
-      console.error('An error occurred:', error);
-    });
-};
-const handleAddSection = () => {
-    createChecklist(sectionName)
-    console.log('Adding section:', sectionName);
+        } else {
+          if (res.success === false)
+            toast.error("Task has been Failed to delete task", {
+              position: "top-center",
+              autoClose: 2000,
+            });
+          // window.location.reload();
+          closeModalDeleteSection();
+          console.error("Failed to delete task.");
+        }
+      })
+      .catch((error) => {
+        console.error("An error occurred:", error);
+      });
+  };
+  const handleAddSection = () => {
+    createChecklist(sectionName);
+    console.log("Adding section:", sectionName);
 
     const newSection = {
       id: sections.length + 1,
-      name: sectionName
+      name: sectionName,
     };
 
     setSections([...sections, newSection]);
 
-    setSectionName('');
+    setSectionName("");
     setShowInput(false);
     // window.location.reload();
-
   };
   const createChecklist = async (sectionName) => {
-    console.log(sectionName)
+    console.log(sectionName);
     if (sectionName.length > 20) {
-      toast.error('Section name should not exceed 20 characters', { position: "top-center", autoClose: 2000 });
+      toast.error("Section name should not exceed 20 characters", {
+        position: "top-center",
+        autoClose: 2000,
+      });
       return;
     }
     const formData = new FormData();
-    formData.append('board', idFromURL);
-    formData.append('name', sectionName);
+    formData.append("board", idFromURL);
+    formData.append("name", sectionName);
 
     try {
       const res = await addBoardChecklist(formData);
 
       if (res.success) {
-        console.log('Success')
+        console.log("Success");
         window.location.reload();
       }
     } catch (error) {
-      toast.error('Please Check Your Internet , Try again! ', { position: "top-center", autoClose: 2000 })
-
+      toast.error("Please Check Your Internet , Try again! ", {
+        position: "top-center",
+        autoClose: 2000,
+      });
     } finally {
-
     }
+  };
+  const [modalTaskSelfIsOpen, setTaskSelfModalIsOpen] = useState(false);
 
+  const openTaskSelf = (section_id) => {
+    localStorage.setItem("section", section_id);
+
+    closeTaskSelf();
+    setTaskSelfModalIsOpen(true);
+  };
+
+  const closeTaskSelf = () => {
+    setTaskSelfModalIsOpen(false);
+  };
+  const openEmployeeTaskOthers = () => {
+    closeTaskOthers();
+    setTaskSelfModalIsOpen(true);
+  };
+  const closeTaskOthers = () => {
+    setTaskOthersModalIsOpen(false);
+  };
+  const [isModalChatOpen, setIsModalChatOpen] = useState(false);
+  const [isModalOpenDeleteTask, setIsModalOpenDeleteTask] = useState(false);
+  const [taskDeleteID, setTaskDeleteID] = useState("");
+  function openModalDeleteTask(taskId, event) {
+    event.stopPropagation();
+    console.log(taskId);
+    setTaskDeleteID(taskId);
+    setIsModalOpenDeleteTask(true);
+    setIsModalChatOpen(false);
   }
+
+  function closeModalDeleteTask() {
+    setIsModalOpenDeleteTask(false);
+    setIsModalChatOpen(false);
+  }
+
+  const handleDeleteTask = async () => {
+    setboardData((prevTaskList) => {
+      console.log(prevTaskList);
+
+      const updatedTaskList = JSON.parse(JSON.stringify(prevTaskList));
+
+      const boardIndex = updatedTaskList.findIndex((board) =>
+        board.tasks.some((task) => task.id === taskDeleteID)
+      );
+
+      if (boardIndex !== -1) {
+        const taskIndex = updatedTaskList[boardIndex].tasks.findIndex(
+          (task) => task.id === taskDeleteID
+        );
+
+        if (taskIndex !== -1) {
+          updatedTaskList[boardIndex].tasks.splice(taskIndex, 1);
+        }
+      }
+
+      return updatedTaskList;
+    });
+
+    // deleteDataFromAPI(`${DeleteTask}?task_id=${taskDeleteID.split("_")[1]}&user_id=${user_id}`)
+    const taskId = taskDeleteID.split("_")[1];
+    await deleteProjectTask(taskId, user_id)
+      .then((res) => {
+        if (res.success) {
+          // window.location.reload();
+          toast.success("Task has been moved to Trash", {
+            position: "top-center",
+            autoClose: 2000,
+          });
+          console.log("Task deleted successfully");
+          closeModalDeleteTask();
+        } else {
+          if (res.success === false)
+            toast.error("Task has been Failed to delete", {
+              position: "top-center",
+              autoClose: 2000,
+            });
+          window.location.reload();
+          console.error("Failed to delete task.");
+        }
+      })
+      .catch((error) => {
+        console.error("An error occurred:", error);
+      });
+  };
+
   return (
     <div className="mx-2">
+      {modalTaskSelfIsOpen && (
+        <ProjectTaskSelf
+          onClose={closeTaskSelf}
+          open={openEmployeeTaskOthers}
+          BoardAssignedemails={boardAssignedEmail}
+          setCreatedTaskId={setCreatedTaskId}
+        />
+      )}
+      {/* {modalTaskSelfIsOpen && (
+        <TaskSelf
+          onClose={closeTaskSelf}
+          open={openEmployeeTaskOthers}
+          BoardAssignedemails={boardAssignedEmail}
+          setCreatedTaskId={setCreatedTaskId}
+        />
+      )} */}
       <div className="grid grid-cols-1">
-        <div className=" ">
+        <div className="flex gap-4 ">
           <div className="flex gap-4 bg-gray-200 w-32 rounded-md">
             <button
-              className={`transition-all duration-300 ${
+              className={`transition-all duration-150 ${
                 taskView === "Kanban"
                   ? "shadow-custom-all-sides font-medium bg-white p-1 rounded-md"
                   : "mx-1"
@@ -913,7 +1217,7 @@ const handleAddSection = () => {
               Kanban
             </button>
             <button
-              className={`transition-all duration-300 ${
+              className={`transition-all duration-150 ${
                 taskView === "List"
                   ? "shadow-custom-all-sides font-medium bg-white p-1 px-4 rounded-md"
                   : ""
@@ -924,6 +1228,37 @@ const handleAddSection = () => {
               List
             </button>
           </div>
+         {activeView === "Kanban" && <div className="flex items-center gap-2 border rounded-md p-1 px-2">
+            {taskDynamicStatus.map((option, index) => (
+              <div key={index} className="flex items-center gap-2">
+                <label style={{ color: "black" }}  className="flex items-center gap-2">
+                  <input
+                    name="filterStatus"
+                    type="checkbox"
+                    
+                    value={option.value}
+                    onChange={handleCheckboxChangeStatus}
+                  />
+                  {option.label}
+                </label>
+              </div>
+            ))}
+          </div>}
+         {activeView === "List" && <div className="flex items-center gap-2 border rounded-md p-1 px-2">
+           
+    {taskDynamicStatusWithAll.map((option, index) => (
+    <label key={index} className="flex items-center gap-2">
+      <input
+        type="radio"
+        name="statusFilter"
+        value={option.value.toString()}
+        checked={selectedStatusId === option.value.toString()}
+        onChange={handleStatusChange}
+      />
+      {option.label}
+    </label>
+  ))}
+          </div>}
         </div>
         {activeView === "Kanban" && (
           <section
@@ -1096,7 +1431,7 @@ const handleAddSection = () => {
                                             )}
                                             <FaTrashAlt
                                               title="Delete Section"
-                                                className="cursor-pointer "
+                                              className="cursor-pointer "
                                               style={{ fontSize: 14 }}
                                               onClick={(event) =>
                                                 openModalDeleteSection(
@@ -1619,21 +1954,19 @@ const handleAddSection = () => {
                                 />
                                 <br></br>
                                 <div className="flex items-center gap-2 justify-end">
-
-                                <button
-                                  onClick={handleAddSection}
-                                  className="border-2 p-1 px-4 border-green-400 rounded-md bg-green-400 text-white"
+                                  <button
+                                    onClick={handleAddSection}
+                                    className="border-2 p-1 px-4 border-green-400 rounded-md bg-green-400 text-white"
                                   >
-                                  Add
-                                </button>
-                                <button
-                                  onClick={() => setShowInput(false)}
-                                  className="border-2 p-1 px-4 border-red-400 text-red-400 rounded-md"
+                                    Add
+                                  </button>
+                                  <button
+                                    onClick={() => setShowInput(false)}
+                                    className="border-2 p-1 px-4 border-red-400 text-red-400 rounded-md"
                                   >
-                                  Cancel
-                                </button>
-                                    </div>
-                               
+                                    Cancel
+                                  </button>
+                                </div>
                               </div>
                             )}
                           </div>
@@ -1649,588 +1982,13 @@ const handleAddSection = () => {
         {activeView === "List" && (
           <section
             style={{}}
-            className="
+            className=" my-2
           "
           >
             {/* board-height */}
+            {/* <Table columns={columns} data={tasksList} /> */}
+            <Table columns={columns} data={filteredTasksList.length > 0 ? filteredTasksList : tasksList} />
 
-            <div
-              className="my-2"
-              style={{
-                borderRadius: 8,
-
-                maxHeight: 500,
-                overflow: "auto",
-              }}
-            >
-              <div
-                className="grid grid-cols-6 bg-gray-300 py-2"
-                // className="flex justify-evenly bg-gray-300 py-2"
-                style={{ position: "sticky", top: 0, zIndex: 1 }}
-              >
-                <div
-                  className="font-medium col-span-1"
-                  style={{ fontSize: 14, paddingLeft: 20 }}
-                >
-                  Title
-                </div>
-                <div className="font-medium" style={{ fontSize: 14 }}>
-                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Status
-                </div>
-                <div className="" style={{ fontSize: 14 }}></div>
-                <div className="font-medium" style={{ fontSize: 14 }}>
-                  &nbsp;&nbsp;Created by{" "}
-                </div>
-                <div className="font-medium" style={{ fontSize: 14 }}></div>
-              </div>
-
-              <hr className="m-0" />
-              <DragDropContext onDragEnd={onDragEndTask}>
-                <Droppable
-                  droppableId="board"
-                  direction="horizontal"
-                  type="COLUMN"
-                >
-                  {(providedSection) => (
-                    <div
-                      className="col-md-12 m-0 p-0"
-                      style={{
-                        display: "block",
-                        alignItems: " flex-start",
-                        flexWrap: "nowrap",
-                      }}
-                      {...providedSection.droppableProps}
-                      ref={providedSection.innerRef}
-                    >
-                      {isLoading ? (
-                        <div
-                          className="col-md-12 m-4"
-                          style={{ textAlign: "center", color: fontColor }}
-                        >
-                          <center className="m-4">
-                            <div
-                              className="spinner-border"
-                              style={{ opacity: 0.3 }}
-                              role="status"
-                            >
-                              <span className="sr-only"></span>
-                            </div>
-                            <br />
-                            <span style={{ opacity: 0.6, color: fontColor }}>
-                              Please wait...
-                            </span>
-                          </center>
-                        </div>
-                      ) : filteredItems.length > 0 ? (
-                        filteredItems.map(
-                          (section, index) =>
-                            shouldRenderSection(
-                              section,
-                              selectedSectionTitles
-                            ) && (
-                              <Draggable
-                                key={section.id.toString()}
-                                draggableId={section.id.toString()}
-                                index={index}
-                              >
-                                {(providedSection, snapshotSection) => (
-                                  <div
-                                    className=""
-                                    ref={providedSection.innerRef}
-                                    {...providedSection.draggableProps}
-                                    {...providedSection.dragHandleProps}
-                                    style={{
-                                      ...providedSection.draggableProps.style,
-                                      opacity: snapshotSection.isDragging
-                                        ? "0.7"
-                                        : "1",
-                                      marginRight: 10,
-                                    }}
-                                  >
-                                    <Droppable
-                                      key={section.id}
-                                      droppableId={section.id}
-                                    >
-                                      {(provided) => (
-                                        <div
-                                          className="col-xs-12 col-sm-12 col-md-12 primary-color-shade1 pt-0 pb-2"
-                                          {...provided.droppableProps}
-                                          ref={provided.innerRef}
-                                          style={{
-                                            borderRadius: 15,
-                                            color: "#fff",
-                                            // padding: "15px",
-                                          }}
-                                        >
-                                          <div
-                                            className="rounded-md"
-                                            style={{
-                                              background: themeColor,
-                                              borderRadius: 1,
-                                              color: "#fff",
-                                              fontSize: "16",
-                                              minHeight: 30,
-                                              marginBottom: 2,
-                                              padding: 6,
-                                              marginTop: 2,
-                                            }}
-                                          >
-                                            <p className="font-medium">
-                                              {section.title}
-                                            </p>
-                                          </div>
-
-                                          <div>
-                                            {section.tasks.map(
-                                              (task, index) => {
-                                                const isHighlighted =
-                                                  task.id.split("_")[1] ===
-                                                  taskidFromURL;
-                                                const isCreatedTaskId =
-                                                  task.id.split("_")[1] ==
-                                                  createdTaskid;
-
-                                                if (
-                                                  !cardRefs.current[task.id]
-                                                ) {
-                                                  cardRefs.current[task.id] = {
-                                                    element: null,
-                                                    isHighlighted: false,
-                                                  };
-                                                  cardRefs.current[task.id] = {
-                                                    element: null,
-                                                    isCreatedTaskId: false,
-                                                  };
-                                                }
-
-                                                cardRefs.current[
-                                                  task.id
-                                                ].isHighlighted = isHighlighted;
-                                                cardRefs.current[
-                                                  task.id
-                                                ].isCreatedTaskId =
-                                                  isCreatedTaskId;
-                                                return (
-                                                  <Draggable
-                                                    key={task.id.toString()}
-                                                    draggableId={task.id.toString()}
-                                                    index={index}
-                                                  >
-                                                    {(provided, snapshot) => (
-                                                      <div
-                                                        // ref={provided.innerRef}
-                                                        ref={(el) => {
-                                                          provided.innerRef(el);
-                                                          cardRefs.current[
-                                                            task.id
-                                                          ].element = el;
-                                                          if (
-                                                            (isHighlighted &&
-                                                              el) ||
-                                                            (isCreatedTaskId &&
-                                                              el)
-                                                          ) {
-                                                            el.scrollIntoView({
-                                                              behavior:
-                                                                "smooth",
-                                                              block: "center",
-                                                            });
-                                                            localStorage.removeItem(
-                                                              "createdTaskId"
-                                                            );
-                                                          }
-                                                        }}
-                                                        {...provided.draggableProps}
-                                                        {...provided.dragHandleProps}
-                                                        style={{
-                                                          ...provided
-                                                            .draggableProps
-                                                            .style,
-                                                          opacity:
-                                                            snapshot.isDragging
-                                                              ? "0.7"
-                                                              : "1",
-                                                          color: "#000",
-
-                                                          display: "block",
-                                                        }}
-                                                      >
-                                                        <div
-                                                          // ref={cardRef}
-                                                          className="shadow-custom-all-sides justify-between grid grid-cols-12"
-                                                          style={{
-                                                            backgroundColor:
-                                                              "white",
-                                                            animation:
-                                                              isHighlighted
-                                                                ? "color 5s"
-                                                                : "none",
-                                                            borderRadius: 6,
-                                                            color: "black",
-                                                            fontSize: "16",
-                                                            minHeight: 30,
-                                                            marginBottom: 8,
-                                                            padding: 6,
-                                                            marginTop: 2,
-                                                            marginLeft: 3,
-                                                            marginRight: 3,
-                                                            // backgroundColor: '#245272'
-                                                          }}
-                                                          // onClick={() => openChatModal(task.id)}
-                                                          onClick={() =>
-                                                            openChatModal(
-                                                              task.id,
-                                                              task
-                                                                .task_created_by
-                                                                .firstname,
-                                                              task
-                                                                .task_created_by
-                                                                .lastname,
-                                                              task.task_created_at,
-                                                              task.task_due_date,
-                                                              task
-                                                                .task_created_by
-                                                                .id,
-                                                              task.start_date,
-                                                              task.end_date
-                                                            )
-                                                          }
-                                                        >
-                                                          <div className="col-span-4">
-                                                            {task.task_topic}
-                                                          </div>
-
-                                                          <div className="col-md-2 ml-5">
-                                                            {showStatus ? (
-                                                              <div
-                                                                style={{
-                                                                  display:
-                                                                    "flex",
-                                                                }}
-                                                              >
-                                                                <div
-                                                                  onClick={(
-                                                                    e
-                                                                  ) => {
-                                                                    e.stopPropagation();
-                                                                    setshowStatus(
-                                                                      false
-                                                                    );
-                                                                  }}
-                                                                  className="px-4 p-1"
-                                                                  style={{
-                                                                    textAlign:
-                                                                      "center",
-                                                                    cursor:
-                                                                      "pointer",
-                                                                    fontSize: 12,
-                                                                    borderRadius: 20,
-                                                                    color:
-                                                                      "white",
-
-                                                                    marginTop:
-                                                                      "4px",
-                                                                    width:
-                                                                      "auto",
-                                                                    backgroundColor: `${task.task_status.color}`,
-                                                                  }}
-                                                                >
-                                                                  {
-                                                                    task
-                                                                      .task_status
-                                                                      .status_name
-                                                                  }
-                                                                </div>
-                                                                {task.reopened_count >
-                                                                0 ? (
-                                                                  <div
-                                                                    className="mt-1"
-                                                                    style={{
-                                                                      width: 90,
-                                                                      textAlign:
-                                                                        "center",
-                                                                      marginLeft: 0,
-                                                                      fontSize: 10,
-                                                                      cursor:
-                                                                        "default",
-                                                                      backgroundColor:
-                                                                        "#d33115",
-                                                                      borderRadius: 10,
-                                                                      color:
-                                                                        "white",
-                                                                    }}
-                                                                  >
-                                                                    {" "}
-                                                                    Reopened :{" "}
-                                                                    {
-                                                                      task.reopened_count
-                                                                    }
-                                                                  </div>
-                                                                ) : (
-                                                                  <div></div>
-                                                                )}
-                                                              </div>
-                                                            ) : (
-                                                              <div
-                                                                style={{
-                                                                  display:
-                                                                    "flex",
-                                                                }}
-                                                              >
-                                                                <div
-                                                                  onClick={(
-                                                                    e
-                                                                  ) => {
-                                                                    e.stopPropagation();
-                                                                    setshowStatus(
-                                                                      true
-                                                                    );
-                                                                  }}
-                                                                  className="mr-1"
-                                                                  style={{
-                                                                    textAlign:
-                                                                      "center",
-                                                                    cursor:
-                                                                      "pointer",
-                                                                    fontSize: 5,
-                                                                    borderRadius: 10,
-                                                                    color:
-                                                                      "white",
-                                                                    padding:
-                                                                      "1px",
-                                                                    marginTop:
-                                                                      "4px",
-                                                                    width:
-                                                                      "36px",
-                                                                    height:
-                                                                      "8px",
-                                                                    backgroundColor: `${task.task_status.color}`,
-                                                                  }}
-                                                                ></div>
-                                                                {task.reopened_count >
-                                                                0 ? (
-                                                                  <div
-                                                                    className="mt-1"
-                                                                    style={{
-                                                                      width: 90,
-                                                                      textAlign:
-                                                                        "center",
-                                                                      marginLeft: 0,
-                                                                      fontSize: 10,
-                                                                      cursor:
-                                                                        "default",
-                                                                      backgroundColor:
-                                                                        "#d33115",
-                                                                      borderRadius: 10,
-                                                                      color:
-                                                                        "white",
-                                                                    }}
-                                                                  >
-                                                                    {" "}
-                                                                    Reopened :{" "}
-                                                                    {
-                                                                      task.reopened_count
-                                                                    }
-                                                                  </div>
-                                                                ) : (
-                                                                  <div></div>
-                                                                )}
-                                                              </div>
-                                                            )}
-                                                          </div>
-
-                                                          <div
-                                                            className="col-span-2 text-center"
-                                                            style={{
-                                                              fontSize: 13,
-                                                            }}
-                                                          >
-                                                            {task.division}
-                                                          </div>
-                                                          <div
-                                                            className=" col-span-3"
-                                                            style={{
-                                                              fontSize: 13,
-                                                              cursor: "default",
-                                                              textAlign:
-                                                                "center",
-                                                            }}
-                                                          >
-                                                            Created By :{" "}
-                                                            {
-                                                              task
-                                                                .task_created_by
-                                                                .firstname
-                                                            }{" "}
-                                                            {
-                                                              task
-                                                                .task_created_by
-                                                                .lastname
-                                                            }
-                                                          </div>
-                                                          <div className="col-md"></div>
-                                                          {task.task_created_by
-                                                            .id === user_id ? (
-                                                            <div
-                                                              className="flex justify-end"
-                                                              onClick={(
-                                                                event
-                                                              ) =>
-                                                                openModalDeleteTask(
-                                                                  task.id,
-                                                                  event
-                                                                )
-                                                              }
-                                                            >
-                                                              <FaTrashAlt
-                                                                className="text-red-400 cursor-pointer"
-                                                                style={{
-                                                                  fontSize: 14,
-
-                                                                  cursor:
-                                                                    "pointer",
-                                                                }}
-                                                              ></FaTrashAlt>
-                                                            </div>
-                                                          ) : null}
-                                                          {/* </div> */}
-                                                        </div>
-                                                      </div>
-                                                    )}
-                                                  </Draggable>
-                                                );
-                                              }
-                                            )}
-                                            {provided.placeholder}
-                                          </div>
-
-                                          {!show ? (
-                                            <div
-                                              //   className="col-md-12 mb-0 mt-1 "
-                                              //   style={{
-                                              //     fontSize: "16",
-                                              //     border: "2px solid #30678edc",
-                                              //     padding: "4px 6px",
-                                              //     borderRadius: 6,
-                                              //     color: "#dcdcdc",
-                                              //     cursor: "pointer",
-                                              //     backgroundColor: "#133953",
-                                              //   }}
-                                              className="shadow-custom-all-sides flex cursor-pointer items-center justify-center gap-1 py-[10px]  opacity-90   rounded-lg bg-white  text-[#555] font-medium text-[15px]"
-                                              onClick={() =>
-                                                openTaskSelf(section.id)
-                                              }
-                                            >
-                                              <i
-                                                class="fa fa-plus ml-2 mr-2"
-                                                style={{}}
-                                              ></i>{" "}
-                                              Add Task
-                                            </div>
-                                          ) : null}
-                                        </div>
-                                      )}
-                                    </Droppable>
-                                  </div>
-                                )}
-                              </Draggable>
-                            )
-                        )
-                      ) : (
-                        <div
-                          className="col-md-12"
-                          style={{ textAlign: "center" }}
-                        >
-                          <div class="m-4">
-                            <center>
-                              No Tasks
-                              <br />
-                            </center>
-                          </div>
-                        </div>
-                      )}
-                      {providedSection.placeholder}
-
-                      {!show ? (
-                        <div
-                          className="col-md-12 "
-                          style={{
-                            borderRadius: 15,
-                            // backgroundColor: "#133953",
-                            color: "#fff",
-                          }}
-                        >
-                          <div>
-                            {!showInput ? (
-                              <div
-                                className="col-md-12 mb-0"
-                                style={{
-                                  fontSize: "16",
-                                  padding: 6,
-                                  border: "2px solid black",
-                                  borderRadius: 6,
-                                  height: 40,
-                                  color: "black",
-                                }}
-                                onClick={() => setShowInput(true)}
-                              >
-                                <i className="fa fa-plus ml-2 mr-2"></i> Add
-                                Section
-                              </div>
-                            ) : (
-                              <div>
-                                <input
-                                  type="text"
-                                  spellcheck="true"
-                                  value={sectionName}
-                                  onChange={(e) =>
-                                    setSectionName(e.target.value)
-                                  }
-                                  placeholder="Enter section name"
-                                  className="col-md-12 mb-2"
-                                  style={{
-                                    fontSize: "16",
-                                    padding: 6,
-                                    border: "2px solid #30678edc",
-                                    borderRadius: 6,
-                                    height: 40,
-                                    color: "#fff",
-                                    backgroundColor: "#133953",
-                                  }}
-                                />
-                                <br></br>
-
-                                <button
-                                  onClick={() => setShowInput(false)}
-                                  style={{
-                                    marginRight: 6,
-                                    padding: "2px 12px",
-                                    border: "2px solid #0A9F6A",
-                                    backgroundColor: "#133953",
-                                    color: "#0A9F6A",
-                                  }}
-                                >
-                                  Cancel
-                                </button>
-                                <button
-                                  onClick={handleAddSection}
-                                  style={{
-                                    marginRight: 6,
-                                    padding: "2px 12px",
-                                  }}
-                                >
-                                  Add
-                                </button>
-                              </div>
-                            )}
-                          </div>
-                        </div>
-                      ) : null}
-                    </div>
-                  )}
-                </Droppable>
-              </DragDropContext>
-            </div>
           </section>
         )}
       </div>
@@ -2390,7 +2148,20 @@ const handleAddSection = () => {
           </div>
         </div>
       </div>
-     {isModalOpenDeleteSection && <DeleteSectionModal onclose={closeModalDeleteSection} handleDeleteSection={handleDeleteSection} title={"Do you want to Delete Section?"}  />}
+      {isModalOpenDeleteSection && (
+        <DeleteSectionModal
+          onclose={closeModalDeleteSection}
+          handleDeleteSection={handleDeleteSection}
+          title={"Do you want to Delete Section?"}
+        />
+      )}
+      {isModalOpenDeleteTask && (
+        <DeleteSectionModal
+          onclose={closeModalDeleteTask}
+          handleDeleteSection={handleDeleteTask}
+          title={"Do you want to Delete Task?"}
+        />
+      )}
     </div>
   );
 }
