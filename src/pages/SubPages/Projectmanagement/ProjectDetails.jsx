@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Navbar from "../../../components/Navbar";
 
 // import EmployeeProjectTask from "./EmployeeProjectTask";
@@ -37,7 +37,7 @@ function ProjectDetails() {
   const [showStatusChecklist1, setShowStatusChecklist1] = useState([]);
   const [selectedEmail, setSelectedEmail] = useState("");
   const [selectedEmail3, setSelectedEmail3] = useState("");
-
+  const [id, setID] = useState("");
   const fetchOrg_assignAlready = async (taskid) => {
     try {
       const jsonData = await getProjectAssignedUser(user_id, taskid);
@@ -83,7 +83,9 @@ function ProjectDetails() {
   const [usersAssignBoard, setUsersAssignBoard] = useState([]);
   const [boardAssignedEmail, setboardAssignedEmail] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
-
+  useEffect(() => {
+    const searchParams = new URLSearchParams(location.search);
+    setID(searchParams.get("id"));},[location.search])
   const fetchOrg_assignData = async (board_id, taskid) => {
     try {
       const jsonData = await getVibeUsers(user_id);
@@ -263,7 +265,7 @@ console.log(usersAssignBoard)
       {projectDetails === "summary" && (
         <div>{/* <EmployeeProjectSummary /> */}</div>
       )}
-      {assign && <AssignUser onclose={()=>setAssign(false)} assignTo={boardData.assign_to} users={allUsers} />}
+      {assign && <AssignUser onclose={()=>setAssign(false)} assignTo={boardData.assign_to} users={allUsers} id={id} />}
     </div>
    
   );

@@ -2658,7 +2658,7 @@ export const deleteProjectTask = async (taskId, userId) => {
   try {
     const response = await vibeAuth.delete(
       `/api/v1/employee/tasks/trash/?task_id=${taskId}&user_id=${userId}`,
-      
+
       {
         headers: {
           "Content-Type": "multipart/form-data/",
@@ -2671,11 +2671,11 @@ export const deleteProjectTask = async (taskId, userId) => {
     throw error;
   }
 };
-export const getProjectAssignedUser = async (userId,taskId ) => {
+export const getProjectAssignedUser = async (userId, taskId) => {
   try {
     const response = await vibeAuth.get(
       `/api/v1/employee/task/get_task_assigned_users?user_id=${userId}&task_id=${taskId}`,
-      
+
       {
         headers: {
           "Content-Type": "multipart/form-data/",
@@ -2685,6 +2685,40 @@ export const getProjectAssignedUser = async (userId,taskId ) => {
     return response.data;
   } catch (error) {
     console.error("Error deleting task :", error);
+    throw error;
+  }
+};
+export const updateProjectAssigned = async (data) => {
+  try {
+    const response = await vibeAuth.put(
+      `/api/employee/board/update-board-assign/`,
+      data,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data/",
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error updating assign :", error);
+    throw error;
+  }
+};
+export const postOutSiderInvite = async (data) => {
+  try {
+    const response = await vibeAuth.post(
+      `/api/employee/outsider/invite/`,
+      data,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data/",
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error Assign task :", error);
     throw error;
   }
 };

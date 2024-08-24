@@ -7,6 +7,7 @@ import { persistReducer, persistStore } from "redux-persist";
 import fontSizeReducer from "../features/font/fontSizeSlice";
 import backgroundReducer from "../features/theme/backgroundSlice"
 import boardReducer from "../features/Project/ProjectSlice"
+import addedReducer from "../features/Project/Added"
 const persistConfig = {
   key: "root",
   storage,
@@ -19,6 +20,7 @@ const rootReducer = combineReducers({
   fontSize: fontSizeReducer,
   background: backgroundReducer,
   board: boardReducer,
+  added:addedReducer
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

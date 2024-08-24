@@ -1,20 +1,21 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { CiCalendar, CiFlag1 } from "react-icons/ci";
 import { FiMessageSquare, FiShoppingCart } from "react-icons/fi";
 import { IoAddCircleOutline, IoClose, IoTimeOutline } from "react-icons/io5";
 import { LuPieChart } from "react-icons/lu";
-import { MdEdit, MdOutlineCurrencyRupee, MdOutlineEmail } from "react-icons/md";
+import { MdDeleteForever, MdEdit, MdOutlineCurrencyRupee, MdOutlineEmail } from "react-icons/md";
 import profile1 from "/profile1.jpg";
 import profile2 from "/profile2.jpg";
 import profile3 from "/profile3.jpg";
 import { FaCheck } from "react-icons/fa6";
 import { GoAlert } from "react-icons/go";
 import ReactApexChart from "react-apexcharts";
-import { BsDatabaseDash } from "react-icons/bs";
+import { BsDatabaseDash, BsEye } from "react-icons/bs";
 import { Link } from "react-router-dom";
 import { Switch } from "../../../../Buttons";
 import { useSelector } from "react-redux";
 import { dateFormat, FormattedDateToShowProperly } from "../../../../utils/dateUtils";
+import Table from "../../../../components/table/Table";
 function ProjectOverView() {
   const boardData = useSelector((state)=> state.board.data)
   const taskData = useSelector((state)=> state.board.taskData)
@@ -137,6 +138,95 @@ function ProjectOverView() {
 
     return `${diffInDays} days`;
   };
+  
+
+  const extractTasks = (boardData) => {
+    return boardData.flatMap((section) =>
+      section.tasks.map((task) => ({
+        sectionId: section.id,
+        sectionTitle: section.title,
+        taskId: task.id,
+        taskTopic: task.task_topic,
+        taskDescription: task.task_description,
+        taskSequence: task.sequence,
+        deadLine: task.task_due_date,
+        taskStatus: task.task_status,
+        taskCreatedBy: task.task_created_by,
+        taskCreatedAt: task.task_created_at,
+        urgentStatus: task.urgent_status,
+      }))
+    );
+  };
+
+  const columns = [
+    {
+      name: "Action",
+      selector: (row) => (
+        <div>
+          <BsEye size={15} />
+        </div>
+      ),
+    },
+    { name: "Task Topic", selector: (row) => row.taskTopic, sortable: true },
+    {
+      name: "Section Title",
+      selector: (row) => row.sectionTitle,
+      sortable: true,
+    },
+    // { name: 'Task ID', selector: row => row.taskId, sortable: true },
+    // { name: 'Task Description', selector: row => row.taskDescription },
+    {
+      name: "Status",
+      selector: (row) => (
+        <div className="flex justify-center">
+          <p style={{ background: row.taskStatus?.color }} className="text-center p-1 px-2 rounded-full text-white">
+            {row.taskStatus.status_name}
+          </p>
+        </div>
+      ),
+      sortable: true,
+    },
+    {
+      name: "Deadline",
+      selector: (row) => dateFormat(row.deadLine),
+      sortable: true,
+    },
+    {
+      name: "urgent",
+      selector: (row) => (row.urgentStatus ? "YES" : "NO"),
+      sortable: true,
+    },
+    {
+      name: "Created By",
+      selector: (row) =>
+        `${row.taskCreatedBy.firstname} ${row.taskCreatedBy.lastname}`,
+      sortable: true,
+    },
+    {
+      name: "Created on",
+      selector: (row) => dateFormat(row.taskCreatedAt),
+      sortable: true,
+    },
+    {
+      name: "",
+      selector: (row) => (
+        <div className="text-red-400 cursor-pointer">
+          <MdDeleteForever
+            size={25}
+            onClick={(event) => openModalDeleteTask(row.taskId, event)}
+          />
+        </div>
+      ),
+    },
+  ];
+  const [tasksList, setTasks] = useState([]);
+
+  useEffect(() => {
+    if (taskData && taskData.length > 0) {
+      setTasks(extractTasks(taskData));
+    }
+  }, [taskData]);
+  console.log(taskData)
   return (
     <div className="md:grid lg:grid-cols-3 mx-5 gap-5">
       <div className="col-span-1 lg:col-span-2 mb-10">
@@ -337,19 +427,20 @@ function ProjectOverView() {
             </div>
           </div> */}
         </div>
-        <div className="shadow-custom-all-sides rounded-md  my-5">
-          <div className="flex md:flex-row flex-col justify-between py-3 mx-5">
+        <div className=" rounded-md  my-5">
+          <div className="flex md:flex-row flex-col justify-between py-3 mx-2">
             <h2 className="text-lg font-semibold pt-2 text-slate-800">
               Upcoming Deadlines
             </h2>
-            <button
+            {/* <button
               onClick={CreateModal}
               className="border-2 border-gray-400 rounded-md p-1 px-5 flex gap-1 hover:bg-gray-200"
             >
               <IoAddCircleOutline className="mt-1" /> Add
-            </button>
+            </button> */}
           </div>
-          <div className="p-4 overflow-x-auto">
+          <Table columns={columns} data={tasksList} />
+          {/* <div className="p-4 overflow-x-auto">
             <table className="min-w-full bg-white border-gray-200">
               <thead>
                 <tr>
@@ -407,7 +498,7 @@ function ProjectOverView() {
                 ))}
               </tbody>
             </table>
-          </div>
+          </div> */}
         </div>
       </div>
       <div className="col-span-1">

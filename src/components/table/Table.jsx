@@ -54,7 +54,16 @@ import { useSelector } from "react-redux";
 import axios from "axios";
 import { getAdminPerPageComplaints } from "../../api";
 
-const Table = ({ columns, title, height, pagination= true, data, apiEndpoint, customStyles,onChangePage }) => {
+const Table = ({
+  columns,
+  title,
+  height,
+  pagination = true,
+  data,
+  apiEndpoint,
+  customStyles,
+  onChangePage,
+}) => {
   const themeColor = useSelector((state) => state.theme.color);
 
   // const [data, setData] = useState([]);
@@ -98,24 +107,27 @@ const Table = ({ columns, title, height, pagination= true, data, apiEndpoint, cu
     headCells: {
       style: {
         textTransform: "uppercase",
-         paddingLeft: '16px',
-        paddingRight: '16px',
-        width: "150px"
+        paddingLeft: "16px",
+        paddingRight: "16px",
+        width: "150px",
+        
       },
     },
     // cells: {
     //   style: {
-    //   
+    //
     //   },
     // },
     cells: {
       style: {
-        paddingLeft: '16px',
-        paddingRight: '16px',
-        whiteSpace: 'nowrap',
-        fontWeight: "bold",
-            fontSize: "10px",
-             width: "150px"
+        paddingLeft: "16px",
+        paddingRight: "16px",
+        whiteSpace: "nowrap",
+        fontSize: "14px",
+        lineHeight: "24px",
+        width: "150px",
+        color: "#6b7280",
+        fontWeight: 500
       },
     },
   };

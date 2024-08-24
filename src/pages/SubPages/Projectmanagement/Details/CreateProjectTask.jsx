@@ -19,10 +19,11 @@ import { useSelector } from "react-redux";
 import { AiOutlineClose } from "react-icons/ai";
 import toast from "react-hot-toast";
 
-function ProjectTaskSelf({ onClose, BoardAssignedemails, setCreatedTaskId }) {
+function CreateProjectTask({ onClose, BoardAssignedemails, setCreatedTaskId, setTaskAdded }) {
   const user_id = getItemInLocalStorage("VIBEUSERID");
   const [emails, setEmails] = useState([]);
   const themeColor = useSelector((state) => state.theme.color);
+  const [sectionId, setSectionId] = useState("")
   console.log("other");
   console.log(BoardAssignedemails);
   useEffect(() => {
@@ -92,7 +93,7 @@ function ProjectTaskSelf({ onClose, BoardAssignedemails, setCreatedTaskId }) {
     return (
       <>
         <span
-          style={{ color: "#000", fontWeight: "bold", marginBottom: "0rem" }}
+          style={{ color: "#fff", fontWeight: "bold", marginBottom: "0rem" }}
         >
           Urgent
         </span>
@@ -189,7 +190,7 @@ function ProjectTaskSelf({ onClose, BoardAssignedemails, setCreatedTaskId }) {
       <>
         <label
           style={{
-            color: "#000",
+            color: "#fff",
             fontWeight: "bold",
             marginBottom: "0rem",
             marginTop: "0px",
@@ -217,6 +218,7 @@ function ProjectTaskSelf({ onClose, BoardAssignedemails, setCreatedTaskId }) {
     const user_id = getItemInLocalStorage("VIBEUSERID");
     console.log(user_id);
     const valuesString = selectedTasks.map((task) => task.value).join(",");
+    
     if (assignToOthers && (!selectedOption || selectedOption.length === 0)) {
       toast.error("Please select someone to assign the task to.");
       return;
@@ -225,201 +227,362 @@ function ProjectTaskSelf({ onClose, BoardAssignedemails, setCreatedTaskId }) {
       return;
     }
     setLoading(true);
-
-    if (!selectedOption) {
-      if (!task_topic) {
-        toast.error("Please fill Task Topic.", {
-          position: "top-center",
-          autoClose: 2000,
-        });
-        return;
-      }
-      if (!due_date) {
-        toast.error("Please select Due Date.", {
-          position: "top-center",
-          autoClose: 2000,
-        });
-        return;
-      }
-
-      setShowVerifiedButton("none");
-      setShowVerifiedLoader("block");
-      const formData = new FormData();
-      formData.append("task_topic", task_topic);
-      formData.append("due_date", SendDueDateFormat(due_date));
-
-      formData.append("created_by", user_id);
-      formData.append("user_id", user_id);
-      formData.append("task_description", task_description);
-      formData.append("urgent_status", checked === 0 ? false : true);
-      attachments.forEach((file, index) => {
-        formData.append("attachments", file);
-      });
-
-      formData.append("assign_to", user_id);
-      formData.append("from_due_date", from_due_date);
-      formData.append("to_due_date", to_due_date);
-      formData.append("to_due_time", taskTime);
-      const mainWeek = selectedWeekdays.join(",");
-      formData.append("included_weekdays", mainWeek);
-      formData.append("repeat_task", repeatMeet);
-      formData.append("depend_on", valuesString);
-
-      setIsCreatingTask(true);
-      await createVibeChecklistSubTask(formData);
-      console
-        .log(formData)
-        .then((response) => {
-          if (response.success) {
-            setLoading(false);
-            onClose();
-            //  alert("hii")
-            //  window.location.reload();
-            // navigate(
-            //   `/employee/customBoard/?id=${response.data.board_id}&t_id=${response.data.task_id}`
-            // );
-
-            setCreatedTaskId(response.data.task_id);
-            //  localStorage.setItem('createdTaskId', response.data.task_id);
-          } else {
-            setLoading(false);
-            console.log("unsuccess");
-            setShowVerifiedButton("block");
-            setShowVerifiedLoader("none");
-            if (response.status === 422) {
-              toast.error(`${response.message}`, {
-                style: {
-                  width: "500px",
-                },
-                position: "top-center",
-                autoClose: 5000,
-              });
-            }
-          }
-        })
-        .catch((error) => {
-          setLoading(false);
-          //alert('Please check your internet and try again!');
-          setShowVerifiedButton("block");
-          setShowVerifiedLoader("none");
-        })
-        .finally(() => {
-          setLoading(false);
-          setIsCreatingTask(false);
-          setShowVerifiedButton("block");
-          setShowVerifiedLoader("none");
-        });
-    } else {
-      const idList = selectedOption.map((email) => parseInt(email.value));
-
-      if (!task_topic) {
-        toast.error("Please fill Task Topic.", {
-          position: "top-center",
-          autoClose: 2000,
-        });
-        return;
-      }
-      if (!due_date && repeatMeet === false) {
-        toast.error("Please select Due Date.", {
-          position: "top-center",
-          autoClose: 2000,
-        });
-        return;
-      }
-      if (!idList) {
-        toast.error("Please fill Assign someone.", {
-          position: "top-center",
-          autoClose: 2000,
-        });
-        return;
-      }
-      if (repeatMeet && to_due_date <= from_due_date) {
-        toast.error("Please fill to due date of Repeat task correctly.", {
-          position: "top-center",
-          autoClose: 2000,
-        });
-        return;
-      }
-
-      if (repeatMeet && !taskTime) {
-        toast.error("Please fill time of Repeat task.", {
-          position: "top-center",
-          autoClose: 2000,
-        });
-        return;
-      }
-
-      setLoading(true);
-      setShowVerifiedButton("none");
-      setShowVerifiedLoader("block");
-      const formData = new FormData();
-      formData.append("task_topic", task_topic);
-      formData.append("due_date", SendDueDateFormat(due_date));
-      formData.append("created_by", user_id);
-      formData.append("user_id", user_id);
-      formData.append("task_description", task_description);
-      formData.append("urgent_status", checked === 0 ? false : true);
-      attachments.forEach((file, index) => {
-        formData.append("attachments", file);
-      });
-      formData.append("checklist", nav_id.split("_")[1]);
-      idList.forEach((id) => {
-        formData.append("assign_to", id);
-      });
-      formData.append("from_due_date", from_due_date);
-      formData.append("to_due_date", to_due_date);
-      formData.append("to_due_time", taskTime);
-      const mainWeek = selectedWeekdays.join(",");
-      formData.append("included_weekdays", mainWeek);
-      formData.append("repeat_task", repeatMeet);
-      formData.append("depend_on", valuesString);
-
-      setIsCreatingTask(true);
-      //   try {
-
-      //   } catch (error) {
-      //     console.log(error)
-      //   }
-      const response = await createVibeChecklistSubTask(formData);
-      // .then((response) => {
-      if (response.success) {
-        setLoading(false);
-        onClose();
-        // navigate(
-        //   `/employee/customBoard/?id=${response.data.board_id}&t_id=${response.data.task_id}`
-        // );
-        setCreatedTaskId(response.data.task_id);
-        //  localStorage.setItem('createdTaskId', response.data.task_id);
-      } else {
-        setLoading(false);
-        console.log("unsuccess");
-        setShowVerifiedButton("block");
-        setShowVerifiedLoader("none");
-        if (response.status === 422) {
-          toast.error(`${response.message}`, {
-            style: {
-              width: "500px",
-            },
+  
+    try {
+      if (!selectedOption) {
+        if (!task_topic) {
+          toast.error("Please fill Task Topic.", {
             position: "top-center",
-            autoClose: 5000,
+            autoClose: 2000,
           });
+          return;
+        }
+        if (!due_date) {
+          toast.error("Please select Due Date.", {
+            position: "top-center",
+            autoClose: 2000,
+          });
+          return;
+        }
+  
+        setShowVerifiedButton("none");
+        setShowVerifiedLoader("block");
+  
+        const formData = new FormData();
+        formData.append("task_topic", task_topic);
+        formData.append("due_date", SendDueDateFormat(due_date));
+        formData.append("created_by", user_id);
+        formData.append("user_id", user_id);
+        formData.append("task_description", task_description);
+        formData.append("urgent_status", checked === 0 ? false : true);
+        attachments.forEach((file, index) => {
+          formData.append("attachments", file);
+        });
+        formData.append("assign_to", user_id);
+        formData.append("from_due_date", from_due_date);
+        formData.append("to_due_date", to_due_date);
+        formData.append("to_due_time", taskTime);
+        const mainWeek = selectedWeekdays.join(",");
+        formData.append("included_weekdays", mainWeek);
+        formData.append("repeat_task", repeatMeet);
+        formData.append("depend_on", valuesString);
+  
+        setIsCreatingTask(true);
+        const response = await createVibeChecklistSubTask(formData);
+  
+        if (response.success) {
+          setLoading(false);
+          onClose();
+          setCreatedTaskId(response.data.task_id);
+          toast.success("Task created successfully");
+          setTaskAdded(true);
+        } else {
+          throw new Error(response.message || "Task creation failed.");
+        }
+      } else {
+        const idList = selectedOption.map((email) => parseInt(email.value));
+  
+        if (!task_topic) {
+          toast.error("Please fill Task Topic.", {
+            position: "top-center",
+            autoClose: 2000,
+          });
+          return;
+        }
+        if (!due_date && !repeatMeet) {
+          toast.error("Please select Due Date.", {
+            position: "top-center",
+            autoClose: 2000,
+          });
+          return;
+        }
+        if (!idList) {
+          toast.error("Please fill Assign someone.", {
+            position: "top-center",
+            autoClose: 2000,
+          });
+          return;
+        }
+        if (repeatMeet && to_due_date <= from_due_date) {
+          toast.error("Please fill to due date of Repeat task correctly.", {
+            position: "top-center",
+            autoClose: 2000,
+          });
+          return;
+        }
+        if (repeatMeet && !taskTime) {
+          toast.error("Please fill time of Repeat task.", {
+            position: "top-center",
+            autoClose: 2000,
+          });
+          return;
+        }
+  
+        setShowVerifiedButton("none");
+        setShowVerifiedLoader("block");
+  
+        const formData = new FormData();
+        formData.append("task_topic", task_topic);
+        formData.append("due_date", SendDueDateFormat(due_date));
+        formData.append("created_by", user_id);
+        formData.append("user_id", user_id);
+        formData.append("task_description", task_description);
+        formData.append("urgent_status", checked === 0 ? false : true);
+        attachments.forEach((file, index) => {
+          formData.append("attachments", file);
+        });
+        formData.append("checklist", sectionId.split("_")[1]);
+        idList.forEach((id) => {
+          formData.append("assign_to", id);
+        });
+        formData.append("from_due_date", from_due_date);
+        formData.append("to_due_date", to_due_date);
+        formData.append("to_due_time", taskTime);
+        const mainWeek = selectedWeekdays.join(",");
+        formData.append("included_weekdays", mainWeek);
+        formData.append("repeat_task", repeatMeet);
+        formData.append("depend_on", valuesString);
+  
+        setIsCreatingTask(true);
+        const response = await createVibeChecklistSubTask(formData);
+  
+        if (response.success) {
+          setLoading(false);
+          onClose();
+          setCreatedTaskId(response.data.task_id);
+          toast.success("Task created successfully");
+          setTaskAdded(true);
+        } else {
+          throw new Error(response.message || "Task creation failed.");
         }
       }
-      // })
-      // .catch((error) => {
+    } catch (error) {
       setLoading(false);
-      //alert('Please check your internet and try again!');
-      setShowVerifiedButton("block");
-      setShowVerifiedLoader("none");
-      // })
-      // .finally(() => {
+      console.error(error);
+      toast.error(error.message || "Something went wrong. Please try again.", {
+        style: {
+          width: "500px",
+        },
+        position: "top-center",
+        autoClose: 5000,
+      });
+    } finally {
+      setLoading(false);
       setIsCreatingTask(false);
-      setLoading(false);
       setShowVerifiedButton("block");
       setShowVerifiedLoader("none");
-      // });
+  
+      // Reset task added state after a delay
+      setTimeout(() => {
+        setTaskAdded(false);
+      }, 3000); // Adjust the delay as needed
     }
   };
+  
+//   const createTask = async () => {
+//     const user_id = getItemInLocalStorage("VIBEUSERID");
+//     console.log(user_id);
+//     const valuesString = selectedTasks.map((task) => task.value).join(",");
+//     if (assignToOthers && (!selectedOption || selectedOption.length === 0)) {
+//       toast.error("Please select someone to assign the task to.");
+//       return;
+//     }
+//     if (isCreatingTask) {
+//       return;
+//     }
+//     setLoading(true);
+
+//     if (!selectedOption) {
+//       if (!task_topic) {
+//         toast.error("Please fill Task Topic.", {
+//           position: "top-center",
+//           autoClose: 2000,
+//         });
+//         return;
+//       }
+//       if (!due_date) {
+//         toast.error("Please select Due Date.", {
+//           position: "top-center",
+//           autoClose: 2000,
+//         });
+//         return;
+//       }
+
+//       setShowVerifiedButton("none");
+//       setShowVerifiedLoader("block");
+//       const formData = new FormData();
+//       formData.append("task_topic", task_topic);
+//       formData.append("due_date", SendDueDateFormat(due_date));
+
+//       formData.append("created_by", user_id);
+//       formData.append("user_id", user_id);
+//       formData.append("task_description", task_description);
+//       formData.append("urgent_status", checked === 0 ? false : true);
+//       attachments.forEach((file, index) => {
+//         formData.append("attachments", file);
+//       });
+
+//       formData.append("assign_to", user_id);
+//       formData.append("from_due_date", from_due_date);
+//       formData.append("to_due_date", to_due_date);
+//       formData.append("to_due_time", taskTime);
+//       const mainWeek = selectedWeekdays.join(",");
+//       formData.append("included_weekdays", mainWeek);
+//       formData.append("repeat_task", repeatMeet);
+//       formData.append("depend_on", valuesString);
+
+//       setIsCreatingTask(true);
+//       await createVibeChecklistSubTask(formData);
+//       console
+//         .log(formData)
+//         .then((response) => {
+//           if (response.success) {
+//             setLoading(false);
+//             onClose();
+//             //  alert("hii")
+//             //  window.location.reload();
+//             // navigate(
+//             //   `/employee/customBoard/?id=${response.data.board_id}&t_id=${response.data.task_id}`
+//             // );
+
+//             setCreatedTaskId(response.data.task_id);
+//             //  localStorage.setItem('createdTaskId', response.data.task_id);
+//           } else {
+//             setLoading(false);
+//             console.log("unsuccess");
+//             setShowVerifiedButton("block");
+//             setShowVerifiedLoader("none");
+//             if (response.status === 422) {
+//               toast.error(`${response.message}`, {
+//                 style: {
+//                   width: "500px",
+//                 },
+//                 position: "top-center",
+//                 autoClose: 5000,
+//               });
+//             }
+//           }
+//         })
+//         .catch((error) => {
+//           setLoading(false);
+//           //alert('Please check your internet and try again!');
+//           setShowVerifiedButton("block");
+//           setShowVerifiedLoader("none");
+//         })
+//         .finally(() => {
+//           setLoading(false);
+//           setIsCreatingTask(false);
+//           setShowVerifiedButton("block");
+//           setShowVerifiedLoader("none");
+//         });
+//     } else {
+//       const idList = selectedOption.map((email) => parseInt(email.value));
+
+//       if (!task_topic) {
+//         toast.error("Please fill Task Topic.", {
+//           position: "top-center",
+//           autoClose: 2000,
+//         });
+//         return;
+//       }
+//       if (!due_date && repeatMeet === false) {
+//         toast.error("Please select Due Date.", {
+//           position: "top-center",
+//           autoClose: 2000,
+//         });
+//         return;
+//       }
+//       if (!idList) {
+//         toast.error("Please fill Assign someone.", {
+//           position: "top-center",
+//           autoClose: 2000,
+//         });
+//         return;
+//       }
+//       if (repeatMeet && to_due_date <= from_due_date) {
+//         toast.error("Please fill to due date of Repeat task correctly.", {
+//           position: "top-center",
+//           autoClose: 2000,
+//         });
+//         return;
+//       }
+
+//       if (repeatMeet && !taskTime) {
+//         toast.error("Please fill time of Repeat task.", {
+//           position: "top-center",
+//           autoClose: 2000,
+//         });
+//         return;
+//       }
+//       setLoading(true);
+//       setShowVerifiedButton("none");
+//       setShowVerifiedLoader("block");
+//       const formData = new FormData();
+//       formData.append("task_topic", task_topic);
+//       formData.append("due_date", SendDueDateFormat(due_date));
+//       formData.append("created_by", user_id);
+//       formData.append("user_id", user_id);
+//       formData.append("task_description", task_description);
+//       formData.append("urgent_status", checked === 0 ? false : true);
+//       attachments.forEach((file, index) => {
+//         formData.append("attachments", file);
+//       });
+//       formData.append("checklist", sectionId.split("_")[1]);
+//       idList.forEach((id) => {
+//         formData.append("assign_to", id);
+//       });
+//       formData.append("from_due_date", from_due_date);
+//       formData.append("to_due_date", to_due_date);
+//       formData.append("to_due_time", taskTime);
+//       const mainWeek = selectedWeekdays.join(",");
+//       formData.append("included_weekdays", mainWeek);
+//       formData.append("repeat_task", repeatMeet);
+//       formData.append("depend_on", valuesString);
+
+//       setIsCreatingTask(true);
+      
+//       const response = await createVibeChecklistSubTask(formData);
+//       // .then((response) => {
+//       if (response.success) {
+//         setLoading(false);
+//         onClose();
+//         toast.success("Task created successfully")
+//         setTaskAdded(true)
+//         // navigate(
+//         //   `/employee/customBoard/?id=${response.data.board_id}&t_id=${response.data.task_id}`
+//         // );
+//         setCreatedTaskId(response.data.task_id);
+//         //  localStorage.setItem('createdTaskId', response.data.task_id);
+//       } else {
+//         setLoading(false);
+//         console.log("unsuccess");
+//         setShowVerifiedButton("block");
+//         setShowVerifiedLoader("none");
+//         if (response.status === 422) {
+//           toast.error(`${response.message}`, {
+//             style: {
+//               width: "500px",
+//             },
+//             position: "top-center",
+//             autoClose: 5000,
+//           });
+//         }
+//       }
+//       // })
+//       // .catch((error) => {
+//       setLoading(false);
+//       //alert('Please check your internet and try again!');
+//       setShowVerifiedButton("block");
+//       setShowVerifiedLoader("none");
+//       // })
+//       // .finally(() => {
+//       setIsCreatingTask(false);
+//       setLoading(false);
+//       setShowVerifiedButton("block");
+//       setShowVerifiedLoader("none");
+//       // });
+//     }
+//   };
 
   function formatDate(dateString) {
     const date = new Date(dateString);
@@ -602,6 +765,23 @@ function ProjectTaskSelf({ onClose, BoardAssignedemails, setCreatedTaskId }) {
     label: task.task_topic,
   }));
   // ---------
+  const taskData = useSelector((state)=> state.board.taskData)
+  const extractSection = (boardData) => {
+    return boardData.flatMap((section) =>
+      section.tasks.map((task) => ({
+        sectionId: section.id,
+        sectionTitle: section.title,
+      }))
+    );
+  };
+  const [sectionList, setSectionList] = useState([]);
+
+  useEffect(() => {
+    if (taskData && taskData.length > 0) {
+        setSectionList(extractSection(taskData));
+    }
+  }, [taskData]);
+  console.log(sectionId)
   return (
     <div>
       <div className="  fixed inset-0 flex justify-center items-center bg-black bg-opacity-30 backdrop-blur-sm z-50 p-10 ">
@@ -777,6 +957,7 @@ function ProjectTaskSelf({ onClose, BoardAssignedemails, setCreatedTaskId }) {
                             options={options}
                             placeholder="Select tasks..."
                             noOptionsMessage={() => "Tasks not available..."}
+                            menuPlacement="top"
                             styles={{
                               placeholder: (base) => ({
                                 ...base,
@@ -803,6 +984,27 @@ function ProjectTaskSelf({ onClose, BoardAssignedemails, setCreatedTaskId }) {
                               }),
                             }}
                           />
+                        </div>
+                        <div className="flex flex-col">
+                        <div>
+                            <label className="font-medium text-white">
+                              Select Section
+                            </label>
+                            <label
+                              className="text-red-500"
+                              style={{ marginBottom: "0rem" }}
+                            >
+                              *{" "}
+                            </label>
+                          </div>
+
+                         <select className="border py-2 rounded-md outline-none" value={sectionId} onChange={(e)=>setSectionId(e.target.value)}>
+                            <option value="">Select Section</option>
+                           {sectionList.map((section)=>(
+                            <option value={section.sectionId}>{section.sectionTitle}</option>
+                           ))}
+                         </select>
+                          
                         </div>
                         {assignToOthers && (
                           <div className="">
@@ -1126,4 +1328,10 @@ function ProjectTaskSelf({ onClose, BoardAssignedemails, setCreatedTaskId }) {
   );
 }
 
-export default ProjectTaskSelf;
+
+
+
+
+
+
+export default CreateProjectTask

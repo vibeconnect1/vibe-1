@@ -36,6 +36,8 @@ import ProjectTaskSelf from "./ProjectTaskSelf";
 import Table from "../../../../components/table/Table";
 import { FcDeleteRow } from "react-icons/fc";
 import { MdDeleteForever } from "react-icons/md";
+import { BiPlus } from "react-icons/bi";
+import CreateProjectTask from "./CreateProjectTask";
 
 function ProjectTasks() {
   const themeColor = useSelector((state) => state.theme.color);
@@ -73,20 +75,18 @@ function ProjectTasks() {
   const [sectionName, setSectionName] = useState("");
   const [sections, setSections] = useState([]);
   const [taskMoreStatus, settaskMoreStatus] = useState([]);
- 
-  
 
-  console.log(filteredItems)
+  console.log(filteredItems);
   const handleCheckboxChangeStatus = (event) => {
     const selectedStatusId = event.target.value;
     console.log(`Checkbox selected: ${selectedStatusId}`);
-    setSelectedStatusIds(prevSelectedStatusIds => {
+    setSelectedStatusIds((prevSelectedStatusIds) => {
       if (prevSelectedStatusIds.includes(selectedStatusId)) {
-          return prevSelectedStatusIds.filter(id => id !== selectedStatusId);
+        return prevSelectedStatusIds.filter((id) => id !== selectedStatusId);
       } else {
-          return [...prevSelectedStatusIds, selectedStatusId];
+        return [...prevSelectedStatusIds, selectedStatusId];
       }
-  });
+    });
   };
   const Get_Status = async () => {
     try {
@@ -122,37 +122,33 @@ function ProjectTasks() {
   const GetUsersDataOutsider = async () => {
     // const user_id= localStorage.getItem('user_id');
     // const org_id= localStorage.getItem('organization_id');
-     try {
-        
-        //  const params = {
-        //    user_id: user_id,
-        //   //  org_id:org_id,
-        //   //  os:false
-        //  };
-     
-         const jsonData = await getOutsideUsers(user_id);
-       
-         if (jsonData.success) {
+    try {
+      //  const params = {
+      //    user_id: user_id,
+      //   //  org_id:org_id,
+      //   //  os:false
+      //  };
 
-         
-         const users = jsonData.data;
-           console.log("🚀 ~ GetUsersDataOutsider ~ users:", users)
-           const AssignEmailsOutsider = users.map((user) => ({
-             value: user.id,
-             label: user.email,
-           }));
-           
-           setOptionsOutsiderView(AssignEmailsOutsider);
-           console.log("-----heyyyy");
-           console.log(selectedEmailOutsiderView)
-           
-         } else {
-           console.log('Something went wrong');
-         }
-       } catch (error) {
-         console.error('Error:', error);
-       }
- }
+      const jsonData = await getOutsideUsers(user_id);
+
+      if (jsonData.success) {
+        const users = jsonData.data;
+        console.log("🚀 ~ GetUsersDataOutsider ~ users:", users);
+        const AssignEmailsOutsider = users.map((user) => ({
+          value: user.id,
+          label: user.email,
+        }));
+
+        setOptionsOutsiderView(AssignEmailsOutsider);
+        console.log("-----heyyyy");
+        console.log(selectedEmailOutsiderView);
+      } else {
+        console.log("Something went wrong");
+      }
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
 
   const handleClickOutside = (event) => {
     if (
@@ -354,8 +350,11 @@ function ProjectTasks() {
     {
       name: "Status",
       selector: (row) => (
-        <div className="flex justify-center">
-          <p style={{ background: row.taskStatus?.color }} className="text-center p-1 px-2 rounded-full text-white">
+        <div className="flex justify-center w-full">
+          <p
+            style={{ background: row.taskStatus?.color }}
+            className="text-center p-1 px-2 rounded-full text-xs text-white"
+          >
             {row.taskStatus.status_name}
           </p>
         </div>
@@ -369,7 +368,10 @@ function ProjectTasks() {
     },
     {
       name: "urgent",
-      selector: (row) => (row.urgentStatus ? "YES" : "NO"),
+      selector: (row) => (row.urgentStatus ? 
+        <p className="text-red-400">
+YES
+        </p>  : "NO"),
       sortable: true,
     },
     {
@@ -397,20 +399,25 @@ function ProjectTasks() {
   ];
 
   const [selectedStatusId, setSelectedStatusId] = useState("all");
-const [filteredTasksList, setFilteredTasksList] = useState([]);
-const taskDynamicStatusWithAll = [{ value: "all", label: "All" }, ...taskDynamicStatus];
-const handleStatusChange = (event) => {
+  const [filteredTasksList, setFilteredTasksList] = useState([]);
+  const taskDynamicStatusWithAll = [
+    { value: "all", label: "All" },
+    ...taskDynamicStatus,
+  ];
+  const handleStatusChange = (event) => {
     const selectedStatus = event.target.value;
     setSelectedStatusId(selectedStatus);
-  
+
     if (selectedStatus === "all") {
-      setFilteredTasksList(tasksList); 
+      setFilteredTasksList(tasksList);
     } else {
-      const filteredTasks = tasksList.filter(task => task.taskStatus.id.toString() === selectedStatus);
+      const filteredTasks = tasksList.filter(
+        (task) => task.taskStatus.id.toString() === selectedStatus
+      );
       setFilteredTasksList(filteredTasks);
     }
   };
-  
+
   const [tasksList, setTasks] = useState([]);
 
   useEffect(() => {
@@ -528,7 +535,7 @@ const handleStatusChange = (event) => {
       }
     }
   }, [jsonData]);
-
+const [taskAdded, setTaskAdded] = useState(false)
   useEffect(() => {
     const searchParams = new URLSearchParams(location.search);
     setID(searchParams.get("id"));
@@ -546,7 +553,7 @@ const handleStatusChange = (event) => {
         setTaskIdFromURL(task_id);
       }
     }
-  }, [location.search]);
+  }, [location.search, taskAdded]);
   const UpdateCheckListSequence = async (checklist_id, sequence) => {
     const formData = new FormData();
     formData.append("checklist_id", checklist_id);
@@ -990,7 +997,7 @@ const handleStatusChange = (event) => {
       }
     }
   }, [searchQuery, filteredTaskData, filteredItems]);
-console.log(filteredItems)
+  console.log(filteredItems);
   const handleIconClickSectionTitle = (sectionId, currentTitle) => {
     setEditingSectionId(sectionId);
     setEditedSectionTitle(currentTitle);
@@ -1183,9 +1190,10 @@ console.log(filteredItems)
         console.error("An error occurred:", error);
       });
   };
+const [createTaskInList, setCreateTaskInList] = useState(false)
 
   return (
-    <div className="mx-2">
+    <div className="mx-2 ">
       {modalTaskSelfIsOpen && (
         <ProjectTaskSelf
           onClose={closeTaskSelf}
@@ -1194,16 +1202,21 @@ console.log(filteredItems)
           setCreatedTaskId={setCreatedTaskId}
         />
       )}
-      {/* {modalTaskSelfIsOpen && (
-        <TaskSelf
-          onClose={closeTaskSelf}
+      {createTaskInList && (
+        <CreateProjectTask
+          onClose={()=> setCreateTaskInList(false)}
           open={openEmployeeTaskOthers}
           BoardAssignedemails={boardAssignedEmail}
           setCreatedTaskId={setCreatedTaskId}
+          setTaskAdded={setTaskAdded}
         />
-      )} */}
-      <div className="grid grid-cols-1">
-        <div className="flex gap-4 ">
+      )}
+      
+      <div className="grid grid-cols-1 w-full">
+        <div className="flex items-center justify-between w-full " >
+
+        
+        <div className="flex gap-4 mb-2">
           <div className="flex gap-4 bg-gray-200 w-32 rounded-md">
             <button
               className={`transition-all duration-150 ${
@@ -1228,37 +1241,48 @@ console.log(filteredItems)
               List
             </button>
           </div>
-         {activeView === "Kanban" && <div className="flex items-center gap-2 border rounded-md p-1 px-2">
-            {taskDynamicStatus.map((option, index) => (
-              <div key={index} className="flex items-center gap-2">
-                <label style={{ color: "black" }}  className="flex items-center gap-2">
+          
+          {activeView === "Kanban" && (
+            <div className="flex items-center gap-2 border rounded-md p-1 px-2">
+              {taskDynamicStatus.map((option, index) => (
+                <div key={index} className="flex items-center gap-2">
+                  <label
+                    style={{ color: "black" }}
+                    className="flex items-center gap-2"
+                  >
+                    <input
+                      name="filterStatus"
+                      type="checkbox"
+                      value={option.value}
+                      onChange={handleCheckboxChangeStatus}
+                    />
+                    {option.label}
+                  </label>
+                </div>
+              ))}
+            </div>
+          )}
+          {activeView === "List" && (
+            <div className="flex items-center gap-2 border rounded-md p-1 px-2">
+              {taskDynamicStatusWithAll.map((option, index) => (
+                <label key={index} className="flex items-center gap-2">
                   <input
-                    name="filterStatus"
-                    type="checkbox"
-                    
-                    value={option.value}
-                    onChange={handleCheckboxChangeStatus}
+                    type="radio"
+                    name="statusFilter"
+                    value={option.value.toString()}
+                    checked={selectedStatusId === option.value.toString()}
+                    onChange={handleStatusChange}
                   />
                   {option.label}
                 </label>
-              </div>
-            ))}
-          </div>}
-         {activeView === "List" && <div className="flex items-center gap-2 border rounded-md p-1 px-2">
-           
-    {taskDynamicStatusWithAll.map((option, index) => (
-    <label key={index} className="flex items-center gap-2">
-      <input
-        type="radio"
-        name="statusFilter"
-        value={option.value.toString()}
-        checked={selectedStatusId === option.value.toString()}
-        onChange={handleStatusChange}
-      />
-      {option.label}
-    </label>
-  ))}
-          </div>}
+              ))}
+            </div>
+          )}
+          </div>
+          {activeView === "List" && (
+            <button className="p-1 px-4 rounded-md text-white flex items-center gap-2 " style={{background:themeColor}}
+            onClick={()=>setCreateTaskInList(true)}><BiPlus/> Add Task</button>
+          )}
         </div>
         {activeView === "Kanban" && (
           <section
@@ -1987,8 +2011,12 @@ console.log(filteredItems)
           >
             {/* board-height */}
             {/* <Table columns={columns} data={tasksList} /> */}
-            <Table columns={columns} data={filteredTasksList.length > 0 ? filteredTasksList : tasksList} />
-
+            <Table
+              columns={columns}
+              data={
+                filteredTasksList.length > 0 ? filteredTasksList : tasksList
+              }
+            />
           </section>
         )}
       </div>

@@ -15,6 +15,7 @@ import {
   fetchBoardDataFailure,
   fetchBoardDataSuccess,
 } from "../../../features/Project/ProjectSlice";
+import { useSelector } from "react-redux";
 
 const ProjectCustomBoard = () => {
   const dispatch = useDispatch();
@@ -38,6 +39,7 @@ const ProjectCustomBoard = () => {
   const [idFromURL, setIdFromURL] = useState(null);
   const [users, setUsers] = useState([]);
   const [shouldFetchUsers, setShouldFetchUsers] = useState(false);
+  const added = useSelector((state) => state.added);
   const Get_Background = async () => {
     try {
       const user_id = getItemInLocalStorage("VIBEUSERID");
@@ -163,7 +165,7 @@ const ProjectCustomBoard = () => {
         setTaskIdFromURL(task_id);
       }
     }
-  }, [location.search]);
+  }, [location.search, added]);
   const user_id = getItemInLocalStorage("VIBEUSERID");
 
   const GetBoardData = async (id) => {
