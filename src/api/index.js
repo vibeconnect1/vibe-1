@@ -69,6 +69,31 @@ export const EditSiteAsset = async (data, id) =>
     },
   });
 
+// other bills
+export const postOtherBills = async (data) =>
+  axiosInstance.post("/other_bills.json", data, {
+    params: {
+      token: token,
+    },
+  });
+  export const getOtherBills = async () =>
+    axiosInstance.get("/other_bills.json", {
+      params: {
+        token: token,
+      },
+    });
+    export const getOtherBillsDetails = async (id) =>
+      axiosInstance.get(`/other_bills/${id}.json`, {
+        params: {
+          token: token,
+        },
+      });
+      export const editOtherBillsDetails = async (id, data) =>
+        axiosInstance.put(`/other_bills/${id}.json`, data, {
+          params: {
+            token: token,
+          },
+        });
 // vendor
 export const getVendors = async () =>
   axiosInstance.get("/vendors.json", {
