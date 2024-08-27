@@ -2722,3 +2722,35 @@ export const postOutSiderInvite = async (data) => {
     throw error;
   }
 };
+export const getTaskUsersAssign = async (userId, taskId) => {
+  try {
+    const response = await vibeAuth.get(
+      `/api/v1/employee/task/get_task_assigned_users/?user_id=${userId}&task_id=${taskId}`,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data/",
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error Assign task :", error);
+    throw error;
+  }
+};
+export const getBoardSection = async (userId, boardId) => {
+  try {
+    const response = await vibeAuth.get(
+      `/api/employee/board/get_board_sections/?user_id=${userId}&board_id=${boardId}`,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data/",
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error Assign task :", error);
+    throw error;
+  }
+};

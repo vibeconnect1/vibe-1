@@ -16,8 +16,8 @@ import { Switch } from "../../../../Buttons";
 import { useSelector } from "react-redux";
 import { dateFormat, FormattedDateToShowProperly } from "../../../../utils/dateUtils";
 import Table from "../../../../components/table/Table";
-function ProjectOverView() {
-  const boardData = useSelector((state)=> state.board.data)
+function ProjectOverView({boardData}) {
+  // const boardData = useSelector((state)=> state.board.data)
   const taskData = useSelector((state)=> state.board.taskData)
   console.log(taskData)
   const [overview, setOverview] = useState(false);
@@ -314,7 +314,7 @@ function ProjectOverView() {
           </div>
          
         </div>
-        <div className="shadow-custom-all-sides rounded-md  my-5">
+        <div className="shadow-custom-all-sides rounded-md  ">
           {/* <div className="flex justify-between mx-5 py-3">
             <h2 className="text-lg font-semibold  text-slate-800">Budget</h2>
             <button
@@ -427,8 +427,8 @@ function ProjectOverView() {
             </div>
           </div> */}
         </div>
-        <div className=" rounded-md  my-5">
-          <div className="flex md:flex-row flex-col justify-between py-3 mx-2">
+        <div className=" rounded-md  my-2">
+          <div className="flex md:flex-row flex-col justify-between py-2 mx-2">
             <h2 className="text-lg font-semibold pt-2 text-slate-800">
               Upcoming Deadlines
             </h2>

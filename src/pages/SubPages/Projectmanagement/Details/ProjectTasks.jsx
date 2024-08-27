@@ -6,14 +6,21 @@ import {
   addBoardChecklist,
   deleteProjectTask,
   deleteSection,
+  getBoardSection,
+  getOutsideUsers,
+  getTaskUsersAssign,
   getVibeBoardData,
   GetVibeBoardTaskPermission,
   getVibeBoardUser,
   getVibeStatus,
+  getVibeTaskChecklist,
+  getVibeUsers,
   updateChecklistSequence,
   UpdateProjectSectionTitle,
   updateSalesView,
   UpdateTaskAction,
+  updateTaskStatus,
+  updateVibeUserTask,
 } from "../../../../api";
 import { getItemInLocalStorage } from "../../../../utils/localStorage";
 import { useDispatch } from "react-redux";
@@ -38,6 +45,7 @@ import { FcDeleteRow } from "react-icons/fc";
 import { MdDeleteForever } from "react-icons/md";
 import { BiPlus } from "react-icons/bi";
 import CreateProjectTask from "./CreateProjectTask";
+import ProjectDetailsModal from "./ProjectDetailsModal";
 
 function ProjectTasks() {
   const themeColor = useSelector((state) => state.theme.color);
@@ -75,7 +83,46 @@ function ProjectTasks() {
   const [sectionName, setSectionName] = useState("");
   const [sections, setSections] = useState([]);
   const [taskMoreStatus, settaskMoreStatus] = useState([]);
+  const [taskDescription, setTaskDescription] = useState("");
+  const [taskMoreSection, settaskMoreSection] = useState([]);
+  const [taskMoreSectionList, settaskMoreSectionList] = useState([]);
+  const [taskMoreSectionIdList, settaskMoreSectionIdList] = useState([]);
+  
+  const Get_BoardSection = async () => {
+    try {
+      
 
+      const response = await getBoardSection(user_id, id)
+
+      if (response.success) {
+        console.log("success");
+        console.log(response.data);
+
+        const sectionOptionsdata = response.data.map((section) => ({
+          value: section.id,
+          label: section.name,
+        }));
+       
+        settaskMoreSectionList(
+          sectionOptionsdata.map((option) => option.label)
+        );
+        settaskMoreSectionIdList(
+          sectionOptionsdata.map((option) => option.value)
+        );
+      
+      } else {
+        console.log("Something went wrong");
+      }
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
+  const to_show_section_on_details = async (section) => {
+    console.log("-----------------------------");
+    console.log(section);
+    settaskMoreSection(section);
+    // settaskMoreSectionId(section.id)
+  };
   console.log(filteredItems);
   const handleCheckboxChangeStatus = (event) => {
     const selectedStatusId = event.target.value;
@@ -368,10 +415,8 @@ function ProjectTasks() {
     },
     {
       name: "urgent",
-      selector: (row) => (row.urgentStatus ? 
-        <p className="text-red-400">
-YES
-        </p>  : "NO"),
+      selector: (row) =>
+        row.urgentStatus ? <p className="text-red-400">YES</p> : "NO",
       sortable: true,
     },
     {
@@ -535,7 +580,7 @@ YES
       }
     }
   }, [jsonData]);
-const [taskAdded, setTaskAdded] = useState(false)
+  const [taskAdded, setTaskAdded] = useState(false);
   useEffect(() => {
     const searchParams = new URLSearchParams(location.search);
     setID(searchParams.get("id"));
@@ -603,7 +648,7 @@ const [taskAdded, setTaskAdded] = useState(false)
     formData.append("checklist_id", checklistid);
     try {
       const response = await Updatetaskchecklist(formData);
-      console.log(response);
+      // console.log(response);
       if (response.success) {
         console.log("Success");
       } else {
@@ -1190,8 +1235,253 @@ const [taskAdded, setTaskAdded] = useState(false)
         console.error("An error occurred:", error);
       });
   };
-const [createTaskInList, setCreateTaskInList] = useState(false)
+  const [createTaskInList, setCreateTaskInList] = useState(false);
+  const [startDate, setStartDate] = useState("");
+  const [taskTopicText, setTaskTopicText] = useState("");
+  const [taskid, setTaskID] = useState("");
+  const [createdBy_id, setcreatedBy_id] = useState("");
+  const [createdFirstName, setCreatedFirstName] = useState("");
+  const [endDate, setEndDate] = useState("");
+  const [createdDate, setCreatedDate] = useState("");
+  const [dueDate, setDueDate] = useState(null);
+  const [createdSecondName, setCreatedSecondName] = useState("");
+  const [chatsData, setChatsData] = useState([]);
+  const [currentTaskId, setCurrentTaskId] = useState(null);
+  const openChatModal = (
+    taskId,
+    createdFirst,
+    createdSecond,
+    createdDate,
+    due_dte,
+    created_by_id,
+    start_date,
+    end_date
+  ) => {
+    setStartDate(start_date);
+    setEndDate(end_date);
+    const dateTimeString = due_dte ? due_dte.split("+")[0] : "";
+  
+    const targetDate = new Date(dateTimeString);
 
+    setCreatedFirstName(createdFirst);
+    setCreatedSecondName(createdSecond);
+    setCreatedDate(createdDate);
+    setDueDate(due_dte ? targetDate : "");
+    setcreatedBy_id(created_by_id);
+    setChatsData([]);
+    fetchOrg_assignAlready(id, taskId.split("_")[1]);
+    // Get_Task_Attachment(taskId.split("_")[1]);
+    // Get_Checklist_Task(taskId.split("_")[1]);
+    // setTaskIdForTaskCheckList(taskId.split("_")[1]);
+    const actualTaskId = taskId.split("_")[1];
+    setCurrentTaskId(actualTaskId);
+    // Get_SubChecklist_Tasks(currentTaskId);
+    // get_Maintask_data_dependencies(actualTaskId);
+    console.log("oko ok koo ");
+    const task = boardData
+      .flatMap((section) => section.tasks)
+      .find((task) => task.id.toString() === taskId);
+    if (task) {
+      const section = boardData.find((section) =>
+        section.tasks.some((t) => t.id.toString() === taskId)
+      );
+      if (section) {
+        setSectionName(section.title);
+      }
+      setTaskTopicText(task.task_topic);
+        setTaskDescription(task.task_description);
+        setTaskStatus(task.task_status);
+      //   to_show_status_on_details(task.task_status);
+        to_show_section_on_details(section.title);
+      //   setAttachments(task.attachments || []);
+      //   setAssignedDate(task.due_date || "");
+      //   // Add your code to open the chat modal here
+      //   console.log(taskId);
+      //   Get_Profile();
+      //   Get_Chat_nd_Activities(taskId.split("_")[1]);
+      //   GetTaskChat(taskId.split("_")[1]);
+      //   Get_Checklist_Task(taskId.split("_")[1]);
+      setTaskID(taskId.split("_")[1]);
+      //   settaskidForSocket(taskId.split("_")[1]);
+      //   GetComment(taskId.split("_")[1]);
+      Get_BoardSection();
+      setIsModalChatOpen(true);
+    }
+  };
+  const [usersAssignBoard3, setUsersAssignBoard3] = useState([]);
+  const [usersAssignAlready, setUsersAssignAlready] = useState([]);
+  const [showStatusChecklist1, setShowStatusChecklist1] = useState([]);
+  const [selectedEmail3, setSelectedEmail3] = useState("");
+  const fetchOrg_assignAlready = async (id, taskid) => {
+    const user_id = localStorage.getItem("user_id");
+    try {
+      const jsonData = await getTaskUsersAssign(user_id, taskid);
+      if (jsonData.success) {
+        console.log("GetTaskUsersAssign");
+        console.log(jsonData.data);
+        const usersData = jsonData.data;
+        setUsersAssignBoard3(usersData);
+        setUsersAssignAlready(usersData);
+
+        setShowStatusChecklist1(jsonData.data.email);
+        console.log(setShowStatusChecklist1);
+
+        const selectedEmails = usersData.map((user) => ({
+          value: user.user_id,
+          label: user.email,
+        }));
+        setSelectedEmail(selectedEmails);
+
+        const selectedEmailsTask = usersData.map((user) => ({
+          value: user.user_id,
+          label: user.email,
+        }));
+        setSelectedEmail3(selectedEmailsTask);
+
+        const selectedEmailsisTaskAssignedTo = usersData.map((user) => ({
+          email: user.id,
+        }));
+        const isTaskAssignedTo = selectedEmailsisTaskAssignedTo.some(
+          (user) => user.email === parseInt(user_id, 10)
+        );
+
+        console.log(selectedEmailsisTaskAssignedTo);
+        console.log(isTaskAssignedTo);
+       
+      } else {
+        console.log("Failed to fetch users");
+      }
+    } catch (error) {
+      console.error("Error fetching users:", error);
+    }
+  };
+
+  const UpdateUserTask = async (taskid) => {
+    const formData = new FormData();
+    formData.append("user_id", user_id);
+    formData.append("task_id", taskid);
+    formData.append("task_topic", taskTopicText);
+    formData.append("task_description", taskDescription);
+    // formData.append('due_date',dueDate);
+
+    try {
+      const response = await updateVibeUserTask(formData);
+      console.log(response);
+      if (response.success) {
+        console.log("Success");
+        // window.location.reload();
+      } else {
+        console.log("unable to update");
+      }
+    } catch (error) {}
+  };
+  console.log(taskTopicText);
+  const [usersAssignBoard, setUsersAssignBoard] = useState([]);
+  const fetchOrg_assignData = async (board_id, taskid) => {
+    const org_id = localStorage.getItem("VIBEORGID");
+    const params = {
+      user_id: user_id,
+    };
+    try {
+      const jsonData = await getVibeUsers(user_id)
+      if (jsonData.success) {
+        console.log(jsonData.data);
+        const usersData = jsonData.data;
+        setboardAssignedEmail(usersData.assign_to);
+
+        setUsersAssignBoard3(usersData);
+        
+
+        setUsersAssignBoard(usersData);
+        
+      } else {
+        console.log("Failed to fetch users");
+      }
+    } catch (error) {
+      console.error("Error fetching users:", error);
+    }
+  };
+  const [isModalOpen3, setIsModalOpen3] = useState(false);
+  const handleIconClick3 = () => {
+    fetchOrg_assignAlready(id, taskid);
+    fetchOrg_assignData(id, taskid);
+    setIsModalOpen3(true);
+    //setSelectedEmail(email);
+  };
+  const [isCompleted, setIsCompleted] = useState(false);
+  const [itemtaskTopicText, setItemTaskTopicText] = useState([]);
+  const [items, setItems] = useState([]);
+  const [newItem, setNewItem] = useState("");
+  const Get_Checklist_Task = async (task_id, checksubtaskid) => {
+    try {
+      
+
+      const data = await getVibeTaskChecklist(user_id, task_id);
+
+      if (data.success) {
+        const taskTopics = data.data;
+        setItems(taskTopics);
+
+        const extractedNames = data.data.map((item) => item.name);
+
+        setItemTaskTopicText(extractedNames);
+        console.log(extractedNames);
+
+        const extractedChecklist = data.data.map((item) => item.completed);
+
+        setIsCompleted(extractedChecklist);
+        console.log(extractedChecklist);
+      } else {
+        console.log("Something went wrong");
+      }
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
+  const Update_Assigned_Task = async (idList3) => {
+    const formData = new FormData();
+    formData.append("task_id", taskid);
+    formData.append("user_id", user_id);
+
+    const assignToValues = idList3.join(",");
+
+    formData.append("assign_to", assignToValues);
+
+    try {
+      const response = await updateVibeUserTask(formData);
+      console.log(response);
+      if (response.success) {
+        console.log("Success");
+        Get_Checklist_Task(taskid);
+      } else {
+        console.log("unable to update");
+      }
+    } catch (error) {
+      // toast.error('Please Check Your Internet , Try again! ',{position: "top-center",autoClose: 2000})
+    }
+  };
+  const handleConfirmClick3 = () => {
+    const idList3 = selectedEmail3.map((email) => parseInt(email.value));
+    console.log(idList3);
+    Update_Assigned_Task(idList3);
+
+    console.log(selectedEmail3);
+    const labelList = selectedEmail3.map((email) => email.label).join(", ");
+    console.log(labelList);
+    setShowStatusChecklist1(labelList);
+    // setIsDropdownOpen3(false);
+    setIsModalOpen3(false);
+  };
+  
+  const [isModalOpennn, setIsModalOpennn] = useState(false);
+  const [TempdueDate, setTempdueDate] = useState(null);
+  const [isModalOpenn, setIsModalOpenn] = useState(false);
+  const handleDateChange1 = async (date) => {
+    setTempdueDate(date);
+  };
+  const [taskStatus, setTaskStatus] = useState("");
+  
+ 
   return (
     <div className="mx-2 ">
       {modalTaskSelfIsOpen && (
@@ -1204,84 +1494,127 @@ const [createTaskInList, setCreateTaskInList] = useState(false)
       )}
       {createTaskInList && (
         <CreateProjectTask
-          onClose={()=> setCreateTaskInList(false)}
+          onClose={() => setCreateTaskInList(false)}
           open={openEmployeeTaskOthers}
           BoardAssignedemails={boardAssignedEmail}
           setCreatedTaskId={setCreatedTaskId}
           setTaskAdded={setTaskAdded}
         />
       )}
-      
-      <div className="grid grid-cols-1 w-full">
-        <div className="flex items-center justify-between w-full " >
+      {isModalChatOpen && (
+        <ProjectDetailsModal
+          onclose={() => setIsModalChatOpen(false)}
+          setTaskTopicText={setTaskTopicText}
+          taskTopicText={taskTopicText}
+          UpdateUserTask={() => UpdateUserTask(taskid)}
+          taskid={taskid}
+          createdBy_id={createdBy_id}
+          selectedEmail={selectedEmail}
+          handleIconClick3={handleIconClick3}
+          isModalOpen3={isModalOpen3}
+          selectedEmail3={selectedEmail3}
+          usersAssignBoard3={usersAssignBoard3}
+          setSelectedEmail3={setSelectedEmail3}
+          handleConfirmClick3={handleConfirmClick3}
+          setIsModalOpen3={setIsModalOpen3}
+          setIsModalOpennn={setIsModalOpennn}
+          isModalOpennn={isModalOpennn}
+          handleDateChange1={handleDateChange1}
+          TempdueDate={TempdueDate}
+          dueDate={dueDate}
+          setTaskDescription={setTaskDescription}
+          taskDescription={setTaskDescription}
+          setDueDate={setDueDate}
+          taskStatus={taskStatus}
+          taskMoreStatus={taskMoreStatus}
+          setIsModalOpenn={setIsModalOpenn}
+          setTaskStatus={setTaskStatus}
+          GetBoardData={GetBoardData}
+          isModalOpenn={isModalOpenn}
+          taskMoreStatusList={taskMoreStatusList}
+          taskMoreStatusIdList={taskMoreStatusIdList }
+          // UpdatetaskStatus={UpdatetaskStatus}
+          currentTaskId={currentTaskId}
+          taskMoreSectionIdList={taskMoreSectionIdList}
+          taskMoreSection={taskMoreSection}
+          settaskMoreSection={settaskMoreSection}
+          taskMoreSectionList={taskMoreSectionList}
+        />
+      )}
 
-        
-        <div className="flex gap-4 mb-2">
-          <div className="flex gap-4 bg-gray-200 w-32 rounded-md">
-            <button
-              className={`transition-all duration-150 ${
-                taskView === "Kanban"
-                  ? "shadow-custom-all-sides font-medium bg-white p-1 rounded-md"
-                  : "mx-1"
-              }`}
-              title="Kanban View"
-              onClick={() => handleViewChange("Kanban")}
-            >
-              Kanban
-            </button>
-            <button
-              className={`transition-all duration-150 ${
-                taskView === "List"
-                  ? "shadow-custom-all-sides font-medium bg-white p-1 px-4 rounded-md"
-                  : ""
-              }`}
-              title="List View"
-              onClick={() => handleViewChange("List")}
-            >
-              List
-            </button>
-          </div>
-          
-          {activeView === "Kanban" && (
-            <div className="flex items-center gap-2 border rounded-md p-1 px-2">
-              {taskDynamicStatus.map((option, index) => (
-                <div key={index} className="flex items-center gap-2">
-                  <label
-                    style={{ color: "black" }}
-                    className="flex items-center gap-2"
-                  >
+      <div className="grid grid-cols-1 w-full">
+        <div className="flex items-center justify-between w-full ">
+          <div className="flex gap-4 mb-2">
+            <div className="flex gap-4 bg-gray-200 w-32 rounded-md">
+              <button
+                className={`transition-all duration-150 ${
+                  taskView === "Kanban"
+                    ? "shadow-custom-all-sides font-medium bg-white p-1 rounded-md"
+                    : "mx-1"
+                }`}
+                title="Kanban View"
+                onClick={() => handleViewChange("Kanban")}
+              >
+                Kanban
+              </button>
+              <button
+                className={`transition-all duration-150 ${
+                  taskView === "List"
+                    ? "shadow-custom-all-sides font-medium bg-white p-1 px-4 rounded-md"
+                    : ""
+                }`}
+                title="List View"
+                onClick={() => handleViewChange("List")}
+              >
+                List
+              </button>
+            </div>
+
+            {activeView === "Kanban" && (
+              <div className="flex items-center gap-2 border rounded-md p-1 px-2">
+                {taskDynamicStatus.map((option, index) => (
+                  <div key={index} className="flex items-center gap-2">
+                    <label
+                      style={{ color: "black" }}
+                      className="flex items-center gap-2"
+                    >
+                      <input
+                        name="filterStatus"
+                        type="checkbox"
+                        value={option.value}
+                        onChange={handleCheckboxChangeStatus}
+                      />
+                      {option.label}
+                    </label>
+                  </div>
+                ))}
+              </div>
+            )}
+            {activeView === "List" && (
+              <div className="flex items-center gap-2 border rounded-md p-1 px-2">
+                {taskDynamicStatusWithAll.map((option, index) => (
+                  <label key={index} className="flex items-center gap-2">
                     <input
-                      name="filterStatus"
-                      type="checkbox"
-                      value={option.value}
-                      onChange={handleCheckboxChangeStatus}
+                      type="radio"
+                      name="statusFilter"
+                      value={option.value.toString()}
+                      checked={selectedStatusId === option.value.toString()}
+                      onChange={handleStatusChange}
                     />
                     {option.label}
                   </label>
-                </div>
-              ))}
-            </div>
-          )}
-          {activeView === "List" && (
-            <div className="flex items-center gap-2 border rounded-md p-1 px-2">
-              {taskDynamicStatusWithAll.map((option, index) => (
-                <label key={index} className="flex items-center gap-2">
-                  <input
-                    type="radio"
-                    name="statusFilter"
-                    value={option.value.toString()}
-                    checked={selectedStatusId === option.value.toString()}
-                    onChange={handleStatusChange}
-                  />
-                  {option.label}
-                </label>
-              ))}
-            </div>
-          )}
+                ))}
+              </div>
+            )}
           </div>
           {activeView === "List" && (
-            <button className="p-1 px-4 rounded-md text-white flex items-center gap-2 " style={{background:themeColor}}
-            onClick={()=>setCreateTaskInList(true)}><BiPlus/> Add Task</button>
+            <button
+              className="p-1 px-4 rounded-md text-white flex items-center gap-2 "
+              style={{ background: themeColor }}
+              onClick={() => setCreateTaskInList(true)}
+            >
+              <BiPlus /> Add Task
+            </button>
           )}
         </div>
         {activeView === "Kanban" && (

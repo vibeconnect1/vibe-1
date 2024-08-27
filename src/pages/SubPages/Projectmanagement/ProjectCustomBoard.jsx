@@ -16,6 +16,7 @@ import {
   fetchBoardDataSuccess,
 } from "../../../features/Project/ProjectSlice";
 import { useSelector } from "react-redux";
+import { useLocation } from "react-router-dom";
 
 const ProjectCustomBoard = () => {
   const dispatch = useDispatch();
@@ -24,7 +25,7 @@ const ProjectCustomBoard = () => {
   let selectedImageIndex = defaultImage.index;
   const [selectedImage, setSelectedImage] = useState(defaultImage);
   const [selectedIndex, setSelectedIndex] = useState(null);
-  const [boardData, setboardData] = useState([]);
+  const [boardData, setboardData] = useState({});
   const [jsonData, setJsonData] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [selectedEmail, setSelectedEmail] = useState("");
@@ -147,7 +148,8 @@ const ProjectCustomBoard = () => {
       console.error("Error fetching users:", error);
     }
   };
-
+  const location = useLocation();
+  const [taskidFromURL, setTaskIdFromURL] = useState(null);
   useEffect(() => {
     const searchParams = new URLSearchParams(location.search);
     setID(searchParams.get("id"));
@@ -165,6 +167,7 @@ const ProjectCustomBoard = () => {
         setTaskIdFromURL(task_id);
       }
     }
+    
   }, [location.search, added]);
   const user_id = getItemInLocalStorage("VIBEUSERID");
 
@@ -182,8 +185,9 @@ const ProjectCustomBoard = () => {
         console.log("Board data");
         console.log(data);
         setJsonData(data);
+        // console.log("Dispatching fetchBoardDataSuccess with data:", data);
         dispatch(fetchBoardDataSuccess(data));
-        console.log(data)
+        console.log(data);
         const updatedView = data.board_view;
         console.log(updatedView);
         setActiveView(updatedView ? updatedView : "Kanban");
@@ -191,7 +195,8 @@ const ProjectCustomBoard = () => {
         setCreatedById(data.board.created_by.id);
         setboardTemp(data.board.template_name);
         setboardCataName(data.board.category_name);
-        setboardData(data.data);
+        // setboardData(data);
+        setboardData(data.board);
         setboardAssignedEmail(data.board.assign_to);
 
         if (data.board.assign_to.length > 0) {
@@ -244,73 +249,13 @@ const ProjectCustomBoard = () => {
       }
     }
   }, [jsonData]);
+  console.log(board);
   return (
-    <section
-      className="flex"
-      // style={{
-      //   background: `url(${selectedImage})no-repeat center center / cover`,
-      // }}
-    >
+    <section className="flex">
       <Navbar />
       <div className="w-full flex  flex-col p-2 mb-10 ">
         <section className="my-2">
-          {/* <div
-            className="col-md mb-2 dynamic primary-color-shade1"
-            style={{
-              marginTop: "0px",
-              height: "40px",
-              padding: 0,
-              borderRadius: "50px",
-            }}
-            ref={dropdownRefSection}
-          >
-            <div className={`dropdown ${isDropdownOpenSection ? "show" : ""}`}>
-              <center>
-                <button
-                  className="p-1 mt-1 btn-filter dropdown-toggle"
-                  title="Select Section title"
-                  type="button"
-                  onClick={() =>
-                    setIsDropdownOpenSection(!isDropdownOpenSection)
-                  }
-                >
-                  <span className="dropdown-text"> Section title</span>
-                  <span className="caret"></span>
-                </button>
-              </center>
-              <ul
-                className={`dropdown-menu pl-1 mt-1 custom-dropdown ${
-                  isDropdownOpenSection ? "show" : ""
-                }`}
-                style={{
-                  backgroundColor: "#1b4d6e",
-                  borderRadius: 8,
-                  maxHeight: "300px",
-                  overflowY: "auto",
-                }}
-              >
-                {boardData.map((section, index) => (
-                  <li key={index}>
-                    <a href="#">
-                      <label style={{ color: "#fff" }}>
-                        <input
-                          type="checkbox"
-                          className="option justone"
-                          value={section.title}
-                          onChange={() =>
-                            handleCheckboxChangeSectionTitle(section.title)
-                          }
-                        />
-                        &nbsp;{section.title}
-                      </label>
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </div>
-            
-          </div> */}
-          <ProjectDetails projectName={board.board_name} />
+          <ProjectDetails boardData={board} />
         </section>
       </div>
     </section>

@@ -64,6 +64,7 @@ import { useSelector } from "react-redux";
 import { ImFileText2 } from "react-icons/im";
 import { FcMoneyTransfer } from "react-icons/fc";
 import { GrCertificate } from "react-icons/gr";
+import { persistor } from "../store/store";
 
 const Navbar = () => {
   const [open, setOpen] = useState(false);
@@ -104,8 +105,12 @@ const Navbar = () => {
     localStorage.removeItem("VIBEUSERID");
     localStorage.removeItem("VIBEORGID");
     localStorage.removeItem("FEATURES");
-    navigate("/login");
-    window.location.reload();
+    persistor.purge(['board']).then(() => {
+      navigate("/login");
+      window.location.reload();
+    });
+    // navigate("/login");
+    // window.location.reload();
   };
   const siteId = getItemInLocalStorage("SITEID");
 

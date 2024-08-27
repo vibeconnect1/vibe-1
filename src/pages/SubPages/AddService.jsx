@@ -5,6 +5,7 @@ import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import FileInputBox from "../../containers/Inputs/FileInputBox";
+import CronChecklist from "../../components/Cron";
 
 const AddService = () => {
   const [floors, setFloors] = useState([]);
@@ -195,6 +196,7 @@ const AddService = () => {
               </select>
             </div>
           </div>
+          <CronChecklist />
           <h2 className="border-b text-center text-xl border-black mb-6 font-bold">
             Attachments
           </h2>
