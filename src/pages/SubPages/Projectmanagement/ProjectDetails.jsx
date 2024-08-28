@@ -32,6 +32,7 @@ import { BsPlus } from "react-icons/bs";
 import AssignUser from "./Details/AssignUser";
 import { useDispatch } from "react-redux";
 import { DNA } from "react-loader-spinner";
+import ProjectTeam from "./Details/ProjectTeam";
 function ProjectDetails(boardData) {
   const org_id = localStorage.getItem("VIBEORGID");
   const [users, setUsers] = useState([]);
@@ -193,7 +194,7 @@ function ProjectDetails(boardData) {
       //   setTaskIdFromURL(task_id);
       // }
     }
-  }, []);
+  }, [added]);
   const GetTaskPermission = async (id) => {
     const params = {
       user_id: user_id,
@@ -305,7 +306,7 @@ function ProjectDetails(boardData) {
               alt={` ${user.firstname}`}
             />
           ))}
-          {boardData?.boardData.assign_to?.length > 1 ? (
+          {boardData?.boardData.assign_to?.length > 4 ? (
             <div
               className="h-14 w-14 rounded-full absolute left-24 border-2 flex items-center justify-center cursor-pointer bg-gray-100 border-white"
               onClick={() =>
@@ -416,7 +417,7 @@ function ProjectDetails(boardData) {
       )}
       {/* {projectDetails === "budget" && <div><EmployeeBudget /></div>} */}
       {projectDetails === "files" && <div>{/* <EmployeeFiles /> */}</div>}
-      {projectDetails === "team" && <div>{/* <EmployeeTeam /> */}</div>}
+      {projectDetails === "team" && <div><ProjectTeam team={boardData?.boardData.assign_to} /></div>}
       {projectDetails === "summary" && (
         <div>{/* <EmployeeProjectSummary /> */}</div>
       )}

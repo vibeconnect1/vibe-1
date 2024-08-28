@@ -646,6 +646,11 @@ import EditCurriculum from "./pages/SkillGrow/EditCurriculum.jsx";
 import EditFAQs from "./pages/SkillGrow/EditFAQs.jsx";
 import AddGoods from "./pages/SubPages/AddGoods.jsx";
 import VisitorSetup from "./pages/Setup/VisitorSetup.jsx";
+import MyWorkSpace from "./pages/Employees/EmployeeWorkSpace/MyWorkSpace.jsx";
+import WorkplaceSurvey from "./pages/Employees/EmployeeWorkSpace/WorkplaceSurvey.jsx";
+import WorkSpaceDocs from "./pages/Employees/EmployeeWorkSpace/WorkSpaceDocs.jsx";
+import WorkplaceLeave from "./pages/Employees/EmployeeWorkSpace/WorkplaceLeave.jsx";
+import WorkspaceRoaster from "./pages/Employees/EmployeeWorkSpace/WorkspaceRoaster.jsx";
 // new admin hrms
 
 function App() {
@@ -6187,6 +6192,50 @@ function App() {
               <ProtectedAdminRoutes>
                 <VisitorSetup />
               </ProtectedAdminRoutes>
+            }
+          />
+           <Route
+            path="/employee-portal"
+            element={<Navigate to="/employee-portal/attendance" replace />}
+          />
+           <Route
+            path="/employee-portal/attendance"
+            element={
+              <ProtectedRoute>
+                <MyWorkSpace />
+              </ProtectedRoute>
+            }
+          />
+           <Route
+            path="/employee-portal/survey"
+            element={
+              <ProtectedRoute>
+                <WorkplaceSurvey />
+              </ProtectedRoute>
+            }
+          />
+           <Route
+            path="/employee-portal/docs"
+            element={
+              <ProtectedRoute>
+                <WorkSpaceDocs />
+              </ProtectedRoute>
+            }
+          />
+           <Route
+            path="/employee-portal/leave"
+            element={
+              <ProtectedRoute>
+                <WorkplaceLeave />
+              </ProtectedRoute>
+            }
+          />
+           <Route
+            path="/employee-portal/roster"
+            element={
+              <ProtectedRoute>
+                <WorkspaceRoaster />
+              </ProtectedRoute>
             }
           />
 

@@ -1,6 +1,6 @@
 import React, { useRef, useState } from "react";
 import { AiOutlineClose, AiOutlineUserAdd } from "react-icons/ai";
-import { FaCheck, FaLongArrowAltRight, FaPencilAlt, FaRegCalendarAlt } from "react-icons/fa";
+import { FaCheck, FaComment, FaComments, FaLongArrowAltRight, FaPencilAlt, FaRegCalendarAlt } from "react-icons/fa";
 import { useSelector } from "react-redux";
 import Select from "react-select";
 import { getItemInLocalStorage } from "../../../../utils/localStorage";
@@ -254,7 +254,7 @@ const UpdatetaskSection = async (taskid) => {
     console.log(response);
     if (response.success) {
       //alert('Success');
-toggle()
+      dispatch(toggle())
       console.log(newSections.label);
       console.log(newSections.value);
 
@@ -387,7 +387,7 @@ toggle()
                 </div>
 
                 {/* assign */}
-                <div className="" style={{ display: "flex" }}>
+                <div className="flex-wrap" style={{ display: "flex" }}>
                   <div className="">
                     {createdBy_id === user_id ||
                     (Array.isArray(selectedEmail) &&
@@ -812,29 +812,18 @@ toggle()
                       </div>}
                     {/* </Modal> */}
                   </div>
-                </div>
-
-                {/* <div className="col-md-12 row">
-                  <div className="col-md-3 ">
+                {/* <div className="flex"> */}
+                  <div >
                     <div
-                      style={{
-                        height: "20",
-                        width: "20",
-                        color: "white",
-                        borderRadius: 10,
-                        boxShadow: "0 2px 4px #0a283c",
-                        backgroundColor: "#132A3A",
-                        padding: "5px",
-                        cursor: "pointer",
-                      }}
+                     className="flex items-center gap-2 p-1"
                       // onClick={openModalChat} //for tab and mbl
                       // onClick={openModalChatWeb}
                       // onClick={isWideScreen ? openModalChatWeb :  openModalChat}
-                      onClick={() => {
-                        // handleToggleComments("chat");
-                        handleCloseChatModal();
-                        isWideScreen ? openModalChatWeb() : openModalChat();
-                      }}
+                      // onClick={() => {
+                      //   // handleToggleComments("chat");
+                      //   handleCloseChatModal();
+                      //   isWideScreen ? openModalChatWeb() : openModalChat();
+                      // }}
                     >
                       <FaComments
                         style={{
@@ -847,27 +836,18 @@ toggle()
                       {"   "}Chat
                     </div>
                   </div>
-                  <div className="col-md-4  ">
+                  <div className=" ">
                     <div
-                      style={{
-                        height: "20",
-                        width: "20",
-                        color: "white",
-                        borderRadius: 10,
-                        boxShadow: "0 2px 4px #0a283c",
-                        backgroundColor: "#132A3A",
-                        padding: "5px",
-                        cursor: "pointer",
-                      }}
+                      className="flex gap-2 items-center "
                       // onClick={openModalChat} //for tab and mbl
                       // onClick={openModalChatWeb}
                       // onClick={isWideScreen ? openModalChatWeb :  openModalChat
                       // }
-                      onClick={() => {
-                        // handleToggleComments("comments");
-                        handleCloseCommentModal();
-                        isWideScreen ? openModalChatWeb() : openModalChat();
-                      }}
+                      // onClick={() => {
+                      //   // handleToggleComments("comments");
+                      //   handleCloseCommentModal();
+                      //   isWideScreen ? openModalChatWeb() : openModalChat();
+                      // }}
 
                       // onClick={handleToggleComments}
                     >
@@ -882,7 +862,7 @@ toggle()
                       {"   "}Comments
                     </div>
                   </div>
-                  {isModalOpenSubDateRequest && (
+                  {/* {isModalOpenSubDateRequest && (
                     <div
                       className="modal"
                       style={{ display: "block", height: "450px" }}
@@ -1079,8 +1059,10 @@ toggle()
                         </div>
                       </div>
                     </div>
-                  )}
-                </div> */}
+                  )} */}
+                {/* </div> */}
+                </div>
+
 
                 {/* {isMobileScreen ? (
                   <>

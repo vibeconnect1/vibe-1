@@ -118,6 +118,7 @@ const AssociateAssetChecklist = () => {
       }, 500);
     }
   };
+  
   return (
     <section className="flex ">
       <div className="hidden md:block">
@@ -133,12 +134,15 @@ const AssociateAssetChecklist = () => {
               Services
             </label> */}
             <Select
+              isClearable={false}
+              closeMenuOnSelect={false}
               isMulti
               onChange={handleChangeSelect}
               options={assets}
               noOptionsMessage={() => "No Assets Available"}
               //   maxMenuHeight={90}
               placeholder="Select Assets"
+             
             />
           </div>
           <div className="w-full z-20">
@@ -156,6 +160,7 @@ const AssociateAssetChecklist = () => {
               ))}
             </select> */}
             <Select
+            closeMenuOnSelect={false}
               isMulti
               onChange={handleUserChangeSelect}
               options={assignedTo}
