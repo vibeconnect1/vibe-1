@@ -5,8 +5,8 @@ const RosterCard = ({ date, shiftTiming, isWeeklyOff }) => {
   const cardColor = isWeeklyOff ? 'border-red-500' : 'border-green-500';
 
   return (
-    <div className={`p-3  ${cardColor} rounded-lg border-2 text-black shadow-md my-2`}>
-      <h3 className="text-xl font-semibold">{date}</h3>
+    <div className={`p-1  ${cardColor} rounded-lg border-2  text-black shadow-md my-2`}>
+      <h3 className=" font-semibold">{date}</h3>
       <p className="text-sm">Shift Timing: {shiftTiming}</p>
     </div>
   );

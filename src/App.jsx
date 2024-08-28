@@ -651,6 +651,11 @@ import WorkplaceSurvey from "./pages/Employees/EmployeeWorkSpace/WorkplaceSurvey
 import WorkSpaceDocs from "./pages/Employees/EmployeeWorkSpace/WorkSpaceDocs.jsx";
 import WorkplaceLeave from "./pages/Employees/EmployeeWorkSpace/WorkplaceLeave.jsx";
 import WorkspaceRoaster from "./pages/Employees/EmployeeWorkSpace/WorkspaceRoaster.jsx";
+import WorkSpacepaySlip from "./pages/Employees/EmployeeWorkSpace/WorkSpacepaySlip.jsx";
+import WorkspaceTimesheet from "./pages/Employees/EmployeeWorkSpace/WorkspaceTimesheet.jsx";
+import PayslipData from "./pages/Employees/EmployeeWorkSpace/PayslipData.jsx";
+import WorkspaceESIC from "./pages/Employees/EmployeeWorkSpace/WorkspaceESIC.jsx";
+import AddEsic from "./pages/Employees/EmployeeWorkSpace/AddEsic.jsx";
 // new admin hrms
 
 function App() {
@@ -6235,6 +6240,46 @@ function App() {
             element={
               <ProtectedRoute>
                 <WorkspaceRoaster />
+              </ProtectedRoute>
+            }
+          />
+           <Route
+            path="/employee-portal/payslip"
+            element={
+              <ProtectedRoute>
+                <WorkSpacepaySlip />
+              </ProtectedRoute>
+            }
+          />
+           <Route
+            path="/employee-portal/timesheet"
+            element={
+              <ProtectedRoute>
+                <WorkspaceTimesheet />
+              </ProtectedRoute>
+            }
+          />
+           <Route
+            path="/employee-portal/payslip-details"
+            element={
+              <ProtectedRoute>
+                <PayslipData />
+              </ProtectedRoute>
+            }
+          />
+           <Route
+            path="/employee-portal/esic"
+            element={
+              <ProtectedRoute>
+                <WorkspaceESIC />
+              </ProtectedRoute>
+            }
+          />
+           <Route
+            path="/employee-portal/add-family-esic"
+            element={
+              <ProtectedRoute>
+                <AddEsic />
               </ProtectedRoute>
             }
           />

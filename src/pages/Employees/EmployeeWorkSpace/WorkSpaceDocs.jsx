@@ -240,7 +240,7 @@ const WorkSpaceDocs = () => {
           <div className="bg-white p-6 rounded-lg shadow-lg max-w-md w-full flex flex-col h-auto max-h-[80vh] overflow-y-auto">
             <h2 className="text-2xl font-semibold mb-4">{currentItem?.name}</h2>
             <h2 className="font-medium text-xl border-b border-gray-3">
-              Add Document
+              Add Letter
             </h2>
             <div className="flex flex-col gap-2 mt-2">
 
