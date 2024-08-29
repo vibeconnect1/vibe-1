@@ -43,7 +43,7 @@ const columns = [
         <Link to={"/employee-portal/payslip-details"}  className="btn btn-primary">
           <BsEye />
         </Link>
-        <button onClick={() => handleDownloadTaxPayslip(row.id)} className="btn btn-secondary">
+        <button onClick={() => handleDownloadPayslip(row.id)} className="btn btn-secondary">
           <FaDownload />
         </button>
       </div>
@@ -56,7 +56,7 @@ const columns = [
         <Link to={"/employee-portal/payslip-details"}  className="btn btn-primary">
           <BsEye />
         </Link>
-        <button onClick={() => handleDownloadDetailedPayslip(row.id)} className="btn btn-secondary">
+        <button onClick={() => handleDownloadPayslip(row.id)} className="btn btn-secondary">
           <FaDownload />
         </button>
       </div>

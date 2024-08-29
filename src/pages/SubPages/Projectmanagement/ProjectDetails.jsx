@@ -33,6 +33,8 @@ import AssignUser from "./Details/AssignUser";
 import { useDispatch } from "react-redux";
 import { DNA } from "react-loader-spinner";
 import ProjectTeam from "./Details/ProjectTeam";
+import ProjectFiles from "./Details/ProjectFiles";
+import ProjectSummary from "./Details/ProjectSummary";
 function ProjectDetails(boardData) {
   const org_id = localStorage.getItem("VIBEORGID");
   const [users, setUsers] = useState([]);
@@ -416,10 +418,10 @@ function ProjectDetails(boardData) {
         </div>
       )}
       {/* {projectDetails === "budget" && <div><EmployeeBudget /></div>} */}
-      {projectDetails === "files" && <div>{/* <EmployeeFiles /> */}</div>}
+      {projectDetails === "files" && <div> <ProjectFiles /> </div>}
       {projectDetails === "team" && <div><ProjectTeam team={boardData?.boardData.assign_to} /></div>}
       {projectDetails === "summary" && (
-        <div>{/* <EmployeeProjectSummary /> */}</div>
+        <div><ProjectSummary /> </div>
       )}
       {assign && (
         <AssignUser
