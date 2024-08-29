@@ -179,7 +179,7 @@ const AddService = () => {
             </div>
             <div className="flex flex-col">
               <label htmlFor="" className="font-semibold">
-                Select Room:
+                Select Unit:
               </label>
               <select
                 className="border p-1 px-4 border-gray-500 rounded-md"
@@ -187,7 +187,7 @@ const AddService = () => {
                 onChange={handleChange}
                 name="unit_id"
               >
-                <option value="">Select Room</option>
+                <option value="">Select Unit</option>
                 {units?.map((unit) => (
                   <option value={unit.id} key={unit.id}>
                     {unit.name}
