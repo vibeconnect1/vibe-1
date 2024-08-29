@@ -815,7 +815,7 @@ const UpdatetaskSection = async (taskid) => {
                 {/* <div className="flex"> */}
                   <div >
                     <div
-                     className="flex items-center gap-2 p-1"
+                     className="flex items-center gap-2 p-1 ml-2"
                       // onClick={openModalChat} //for tab and mbl
                       // onClick={openModalChatWeb}
                       // onClick={isWideScreen ? openModalChatWeb :  openModalChat}
@@ -838,7 +838,7 @@ const UpdatetaskSection = async (taskid) => {
                   </div>
                   <div className=" ">
                     <div
-                      className="flex gap-2 items-center "
+                      className="flex gap-2 items-start ml-4 p-1"
                       // onClick={openModalChat} //for tab and mbl
                       // onClick={openModalChatWeb}
                       // onClick={isWideScreen ? openModalChatWeb :  openModalChat
@@ -933,27 +933,27 @@ const UpdatetaskSection = async (taskid) => {
                         </div>
                       </div>
                     </div>
-                  )}
+                  )} */}
 
-                  <div className="col-md-3  pl-0 ">
+                  <div className="flex items-start gap-2 text-white  cursor-pointer hover:shadow-custom-all-sides p-1 ml-2 rounded-md ">
                     <div
-                      style={{
-                        height: "20",
-                        width: "20",
-                        color: "white",
-                        borderRadius: 10,
-                        boxShadow: "0 2px 4px #0a283c",
-                        backgroundColor: "#132A3A",
-                        padding: "5px",
-                        cursor: "pointer",
-                      }}
+                      // style={{
+                      //   height: "20",
+                      //   width: "20",
+                      //   color: "white",
+                      //   borderRadius: 10,
+                      
+                     
+                      //   // padding: "5px",
+                      //   cursor: "pointer",
+                      // }}
                       //  onClick={() => { handleIconClickMainTaskDependency(taskid)}}
-                      onClick={handleIconClickMainTaskDependency}
+                      // onClick={handleIconClickMainTaskDependency}
                     >
-                      &nbsp;&nbsp;Dependency
+                      Dependency
                     </div>
                   </div>
-                  {isModalOpenMainTaskDependency && (
+                  {/* {isModalOpenMainTaskDependency && (
                     <div
                       className="modal "
                       tabIndex="-1"

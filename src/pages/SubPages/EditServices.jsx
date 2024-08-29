@@ -11,7 +11,8 @@ import toast from "react-hot-toast";
 import { useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import FileInputBox from "../../containers/Inputs/FileInputBox";
-
+import Select from "react-select";
+import Navbar from "../../components/Navbar";
 const EditService = () => {
   const [floors, setFloors] = useState([]);
   const [units, setUnits] = useState([]);
@@ -41,8 +42,13 @@ const EditService = () => {
       fetchFloor(ServiceDetailsResponse.data.building_id);
       getUnit(ServiceDetailsResponse.data.floor_id);
       console.log(ServiceDetailsResponse);
+      const selectedUnits = ServiceDetailsResponse.data.units.map(unit => ({
+        value: unit.id,
+        label: unit.name,
+      }));
+      setSelectedOption(selectedUnits);
     };
-
+  
     const fetchFloor = async (floorID) => {
       try {
         const build = await getFloors(floorID);
@@ -54,8 +60,13 @@ const EditService = () => {
     const getUnit = async (UnitID) => {
       try {
         const unit = await getUnits(UnitID);
-        setUnits(unit.data.map((item) => ({ name: item.name, id: item.id })));
-        console.log(unit);
+        // setUnits(unit.data.map((item) => ({ name: item.name, id: item.id })));
+        // console.log(unit);
+        const unitList = unit.data.map((uni) => ({
+          value: uni.id,
+          label: uni.name,
+        }));
+        setUnits(unitList)
       } catch (error) {
         console.log(error);
       }
@@ -76,8 +87,13 @@ const EditService = () => {
     async function getUnit(UnitID) {
       try {
         const unit = await getUnits(UnitID);
-        setUnits(unit.data.map((item) => ({ name: item.name, id: item.id })));
-        console.log(unit);
+        // setUnits(unit.data.map((item) => ({ name: item.name, id: item.id })));
+        // console.log(unit);
+        const unitList = unit.data.map((uni) => ({
+          value: uni.id,
+          label: uni.name,
+        }));
+        setUnits(unitList)
       } catch (error) {
         console.log(error);
       }
@@ -121,8 +137,8 @@ const EditService = () => {
     if (
       !formData.name ||
       !formData.building_id ||
-      !formData.floor_id ||
-      !formData.unit_id
+      !formData.floor_id 
+      
     ) {
       return toast.error("All fields are required.");
     }
@@ -134,7 +150,9 @@ const EditService = () => {
       dataToSend.append("soft_service[name]", formData.name);
       dataToSend.append("soft_service[building_id]", formData.building_id);
       dataToSend.append("soft_service[floor_id]", formData.floor_id);
-      dataToSend.append("soft_service[unit_id]", formData.unit_id);
+      selectedOption.forEach(option => {
+        dataToSend.append("soft_service[unit_id][]", option.value);
+      });
       dataToSend.append("soft_service[user_id]", formData.user_id);
       (formData.attachments || []).forEach((file, index) => {
         dataToSend.append(`attachments[]`, file);
@@ -151,17 +169,25 @@ const EditService = () => {
     }
   };
 
+  const [selectedOption, setSelectedOption] = useState([]);
+  var handleChangeSelect = (selectedOption) => {
+    console.log(selectedOption);
+    setSelectedOption(selectedOption);
+  };
+
   return (
-    <section>
-      <div className="m-2">
+    <section className="flex "> 
+    <Navbar /> 
+   <div className="p-4 overflow-hidden w-full  flex  flex-col">
+      <div className="">
+        <div className="md:mx-20 my-5 md:mb-10 sm:border border-gray-400 p-5  rounded-lg ">
         <h2
           style={{ background: themeColor }}
-          className="text-center text-xl font-bold p-2 bg-black rounded-full text-white"
+          className="text-center text-xl font-bold p-2 bg-black rounded-md text-white"
         >
           Edit Service
         </h2>
-        <div className="md:mx-20 my-5 md:mb-10 sm:border border-gray-400 p-5 px-10 rounded-lg ">
-          <div className="grid md:grid-cols-3 gap-4">
+          <div className="grid md:grid-cols-3 gap-4 my-5">
             <div className="flex flex-col ">
               <label htmlFor="" className="font-semibold">
                 Service Name:
@@ -230,21 +256,19 @@ const EditService = () => {
             </div>
             <div className="flex flex-col">
               <label htmlFor="" className="font-semibold">
-                Select Room:
+                Select Units:
               </label>
-              <select
-                className="border p-1 px-4 border-gray-500 rounded-md"
-                value={formData.unit_id}
-                onChange={handleChange}
-                name="unit_id"
-              >
-                <option value="">Select Room</option>
-                {units?.map((unit) => (
-                  <option value={unit.id} key={unit.id}>
-                    {unit.name}
-                  </option>
-                ))}
-              </select>
+            
+              <Select
+              value={selectedOption}
+               closeMenuOnSelect={false}
+              isMulti
+              onChange={handleChangeSelect}
+              options={units}
+              noOptionsMessage={() => "No Units Available"}
+              //   maxMenuHeight={90}
+              placeholder="Select Units"
+            />
             </div>
 
            
@@ -268,6 +292,7 @@ const EditService = () => {
             
           </div>
         </div>
+      </div>
       </div>
     </section>
   );

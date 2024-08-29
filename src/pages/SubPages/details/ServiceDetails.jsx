@@ -75,8 +75,10 @@ const ServiceDetails = () => {
               <p className="text-sm">{details.floor_name}</p>
             </div>
             <div className="grid grid-cols-2">
-              <p>Room :</p>
-              <p className="text-sm">{details.unit_name}</p>
+              <p>Units :</p>
+              <div className="text-sm">{details.units?.map((unit)=>(
+                <p key={unit.id}>{unit.name}</p>
+              ))}</div>
             </div>
 
             {/* <p>Wing:</p>

@@ -87,12 +87,10 @@ function ProjectTasks() {
   const [taskMoreSection, settaskMoreSection] = useState([]);
   const [taskMoreSectionList, settaskMoreSectionList] = useState([]);
   const [taskMoreSectionIdList, settaskMoreSectionIdList] = useState([]);
-  
+
   const Get_BoardSection = async () => {
     try {
-      
-
-      const response = await getBoardSection(user_id, id)
+      const response = await getBoardSection(user_id, id);
 
       if (response.success) {
         console.log("success");
@@ -102,14 +100,13 @@ function ProjectTasks() {
           value: section.id,
           label: section.name,
         }));
-       
+
         settaskMoreSectionList(
           sectionOptionsdata.map((option) => option.label)
         );
         settaskMoreSectionIdList(
           sectionOptionsdata.map((option) => option.value)
         );
-      
       } else {
         console.log("Something went wrong");
       }
@@ -162,6 +159,10 @@ function ProjectTasks() {
     }
   };
 
+  const [optionsOutsiderView, setOptionsOutsiderView] = useState([]);
+  const [selectedEmailOutsiderView, setSelectedEmailOutsiderView] = useState(
+    []
+  );
   useEffect(() => {
     Get_Status();
     GetUsersDataOutsider();
@@ -676,8 +677,10 @@ function ProjectTasks() {
 
     if (type === "COLUMN") {
       const sourceIndex = boardData.findIndex(
-        (e) => e.id.toString() === draggableId
+        (e) => e.id === draggableId
       );
+      console.log(sourceIndex)
+      console.log("column")
       const movedSection = boardData[sourceIndex];
       const newData = [...boardData];
       newData.splice(sourceIndex, 1);
@@ -765,6 +768,7 @@ function ProjectTasks() {
       if (source.droppableId === destination.droppableId) {
         const reorderedTasks = Array.from(sourceTasks);
         const [movedTask] = reorderedTasks.splice(source.index, 1);
+        console.log("moving");
         reorderedTasks.splice(destination.index, 0, movedTask);
 
         const updatedSection = { ...sourceSection, tasks: reorderedTasks };
@@ -1260,7 +1264,7 @@ function ProjectTasks() {
     setStartDate(start_date);
     setEndDate(end_date);
     const dateTimeString = due_dte ? due_dte.split("+")[0] : "";
-  
+
     const targetDate = new Date(dateTimeString);
 
     setCreatedFirstName(createdFirst);
@@ -1289,10 +1293,10 @@ function ProjectTasks() {
         setSectionName(section.title);
       }
       setTaskTopicText(task.task_topic);
-        setTaskDescription(task.task_description);
-        setTaskStatus(task.task_status);
+      setTaskDescription(task.task_description);
+      setTaskStatus(task.task_status);
       //   to_show_status_on_details(task.task_status);
-        to_show_section_on_details(section.title);
+      to_show_section_on_details(section.title);
       //   setAttachments(task.attachments || []);
       //   setAssignedDate(task.due_date || "");
       //   // Add your code to open the chat modal here
@@ -1347,7 +1351,6 @@ function ProjectTasks() {
 
         console.log(selectedEmailsisTaskAssignedTo);
         console.log(isTaskAssignedTo);
-       
       } else {
         console.log("Failed to fetch users");
       }
@@ -1383,17 +1386,15 @@ function ProjectTasks() {
       user_id: user_id,
     };
     try {
-      const jsonData = await getVibeUsers(user_id)
+      const jsonData = await getVibeUsers(user_id);
       if (jsonData.success) {
         console.log(jsonData.data);
         const usersData = jsonData.data;
         setboardAssignedEmail(usersData.assign_to);
 
         setUsersAssignBoard3(usersData);
-        
 
         setUsersAssignBoard(usersData);
-        
       } else {
         console.log("Failed to fetch users");
       }
@@ -1414,8 +1415,6 @@ function ProjectTasks() {
   const [newItem, setNewItem] = useState("");
   const Get_Checklist_Task = async (task_id, checksubtaskid) => {
     try {
-      
-
       const data = await getVibeTaskChecklist(user_id, task_id);
 
       if (data.success) {
@@ -1472,7 +1471,7 @@ function ProjectTasks() {
     // setIsDropdownOpen3(false);
     setIsModalOpen3(false);
   };
-  
+
   const [isModalOpennn, setIsModalOpennn] = useState(false);
   const [TempdueDate, setTempdueDate] = useState(null);
   const [isModalOpenn, setIsModalOpenn] = useState(false);
@@ -1480,8 +1479,7 @@ function ProjectTasks() {
     setTempdueDate(date);
   };
   const [taskStatus, setTaskStatus] = useState("");
-  
- 
+
   return (
     <div className="mx-2 ">
       {modalTaskSelfIsOpen && (
@@ -1532,7 +1530,7 @@ function ProjectTasks() {
           GetBoardData={GetBoardData}
           isModalOpenn={isModalOpenn}
           taskMoreStatusList={taskMoreStatusList}
-          taskMoreStatusIdList={taskMoreStatusIdList }
+          taskMoreStatusIdList={taskMoreStatusIdList}
           // UpdatetaskStatus={UpdatetaskStatus}
           currentTaskId={currentTaskId}
           taskMoreSectionIdList={taskMoreSectionIdList}

@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import FileInputBox from "../../containers/Inputs/FileInputBox";
 import CronChecklist from "../../components/Cron";
-
+import Select from "react-select";
 const AddService = () => {
   const [floors, setFloors] = useState([]);
   const [units, setUnits] = useState([]);
@@ -39,8 +39,14 @@ const AddService = () => {
     async function getUnit(UnitID) {
       try {
         const unit = await getUnits(UnitID);
-        setUnits(unit.data.map((item) => ({ name: item.name, id: item.id })));
+        // setUnits(unit.data.map((item) => ({ name: item.name, id: item.id })));
         console.log(unit);
+        const unitList = unit.data.map((uni) => ({
+          value: uni.id,
+          label: uni.name,
+        }));
+        setUnits(unitList)
+        console.log(unitList)
       } catch (error) {
         console.log(error);
       }
@@ -84,8 +90,8 @@ const AddService = () => {
     if (
       !formData.name ||
       !formData.building_id ||
-      !formData.floor_id ||
-      !formData.unit_id
+      !formData.floor_id 
+     
     ) {
       return toast.error("All fields are required.");
     }
@@ -97,7 +103,9 @@ const AddService = () => {
       dataToSend.append("soft_service[name]", formData.name);
       dataToSend.append("soft_service[building_id]", formData.building_id);
       dataToSend.append("soft_service[floor_id]", formData.floor_id);
-      dataToSend.append("soft_service[unit_id]", formData.unit_id);
+      selectedOption.forEach(option => {
+        dataToSend.append("soft_service[unit_id][]", option.value);
+      });
       dataToSend.append("soft_service[user_id]", formData.user_id);
       (formData.attachments || []).forEach((file, index) => {
         dataToSend.append(`attachfiles[]`, file);
@@ -110,10 +118,16 @@ const AddService = () => {
     } catch (error) {
       toast.error("Error Creating Service");
       console.log(error);
+      toast.dismiss()
     }
   };
 
   const themeColor = useSelector((state) => state.theme.color);
+  const [selectedOption, setSelectedOption] = useState([]);
+  var handleChangeSelect = (selectedOption) => {
+    console.log(selectedOption);
+    setSelectedOption(selectedOption);
+  };
 
   return (
     <section>
@@ -177,26 +191,26 @@ const AddService = () => {
                 ))}
               </select>
             </div>
-            <div className="flex flex-col">
+            <div className="flex flex-col z-50">
               <label htmlFor="" className="font-semibold">
                 Select Unit:
               </label>
-              <select
-                className="border p-1 px-4 border-gray-500 rounded-md"
-                value={formData.unit_id}
-                onChange={handleChange}
-                name="unit_id"
-              >
-                <option value="">Select Unit</option>
-                {units?.map((unit) => (
-                  <option value={unit.id} key={unit.id}>
-                    {unit.name}
-                  </option>
-                ))}
-              </select>
+            
+               <Select
+               closeMenuOnSelect={false}
+              isMulti
+              onChange={handleChangeSelect}
+              options={units}
+              noOptionsMessage={() => "No Units Available"}
+              //   maxMenuHeight={90}
+              placeholder="Select Units"
+            />
             </div>
           </div>
+          <div>
+<p className="font-medium border-b ">Cron setting</p>
           <CronChecklist />
+          </div>
           <h2 className="border-b text-center text-xl border-black mb-6 font-bold">
             Attachments
           </h2>
@@ -207,7 +221,7 @@ const AddService = () => {
           />
           <div className="md:flex grid md:grid-cols-2 gap-2 my-5 justify-center">
             <button
-              className="bg-black text-white p-1 px-4 rounded-md font-medium"
+              className="bg-black text-white p-2 px-4 rounded-md font-medium"
               onClick={handleAddService}
             >
               Save & Show Details

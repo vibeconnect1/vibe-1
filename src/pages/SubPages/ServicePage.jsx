@@ -50,13 +50,19 @@ const ServicePage = () => {
           selector: (row) => row.floor_name,
           sortable: true,
         },
+        // {
+        //   name: "Unit",
+        //   selector: (row) => row.units.map((unit)=>(
+        //     <p>{unit.name}</p>
+        //   )),
+        //   sortable: true,
+        // },
+        
         {
-          name: "Unit",
-          selector: (row) => row.unit_name,
+          name: "Created by",
+          selector: (row) => row.user_name,
           sortable: true,
         },
-        
-       
     
         {
           name: "Created On",

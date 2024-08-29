@@ -16,7 +16,7 @@ const CronChecklist = () => {
   };
 
   return (
-    <div className="my-2 border-2 border-dashed flex p-2 rounded-md border-gray-300">
+    <div className="my-2 border-2 border-dashed flex items-center p-2 rounded-md border-gray-300">
       
       <Cron value={cronExpression} setValue={handleCronChange} />
       {/* <button onClick={handleTaskExecution}>Run Task</button> */}
