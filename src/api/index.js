@@ -94,6 +94,28 @@ export const postOtherBills = async (data) =>
             token: token,
           },
         });
+//polls
+export const postPolls = async (data) =>
+  axiosInstance.post("/polls.json", data, {
+   
+    params: {
+      token: "775d6ae27272741669a65456ea10cc56cd4cce2bb99287b6",
+    },
+  });
+  export const postPollVote = async (id,data) =>
+    axiosInstance.post(`/polls/${id}/poll_votes.json`, data, {
+     
+      params: {
+        token: "775d6ae27272741669a65456ea10cc56cd4cce2bb99287b6",
+      },
+    });
+  export const getPolls = async () =>
+    axiosInstance.get("/polls.json", {
+      params: {
+        token: "775d6ae27272741669a65456ea10cc56cd4cce2bb99287b6",
+      },
+    });
+  
 // vendor
 export const getVendors = async () =>
   axiosInstance.get("/vendors.json", {
