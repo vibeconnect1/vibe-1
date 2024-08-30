@@ -647,6 +647,15 @@ export const getAssetPPMActivityDetails = async (assetId) =>
       },
     }
   );
+export const getAssetPPMs = async (assetId) =>
+  axiosInstance.get(
+    `/site_assets/${assetId}/asset_ppm_show.json`,
+    {
+      params: {
+        token: token,
+      },
+    }
+  );
 export const getPPMDetails = async (assetId, activityId) =>
   axiosInstance.get(
     `/submissions.json?q[asset_id_eq]=${assetId}&q[activity_id_eq]=${activityId}`,

@@ -168,7 +168,7 @@ const MyWorkSpace = () => {
               setDateRange(update);
             }}
             isClearable={true}
-            placeholderText="Search by Bill Date"
+            placeholderText="Search by Date range"
             className="p-2 border-gray-300 rounded-md w-64 outline-none border"
           />
         </div>
