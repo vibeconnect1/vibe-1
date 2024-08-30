@@ -133,7 +133,7 @@ const Table = ({
   };
 
   return (
-    <div className="rounded-md  shadow-custom-all-sides">
+    <div className="rounded">
       <DataTable
         title={title}
         responsive

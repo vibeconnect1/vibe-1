@@ -36,7 +36,7 @@ ChartJS.register(
 const HRMSDashboard = () => {
   const [expanded, setExpanded] = useState(false);
   const [expanded1, setExpanded1] = useState(false);
-
+document.title= `HRMS Vibe Connect`
   const toggleExpand = () => {
     setExpanded(!expanded);
   };
