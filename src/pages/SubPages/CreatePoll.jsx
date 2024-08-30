@@ -16,20 +16,25 @@ function CreatePolls() {
     const [currentDate, setCurrentDate] = useState('');
 
     useEffect(() => {
-      const today = new Date();
-      const formattedDate = today.toISOString().split('T')[0]; // Format date as YYYY-MM-DD
-      setCurrentDate(formattedDate);
+        const today = new Date();
+        const formattedDate = today.toISOString().split('T')[0]; // Format date as YYYY-MM-DD
+        setCurrentDate(formattedDate);
     }, []);
+
     const navigate = useNavigate();
-    
+
     const handleAddPolls = (event) => {
         event.preventDefault();
 
         if (pollInput.trim() !== "") {
-            setPollsOption([...pollsOption, { pollOption: pollInput }]);
-            setPollInput(''); // Clear the input after adding the poll option
+            if (pollsOption.length < 5) {
+                setPollsOption([...pollsOption, { pollOption: pollInput }]);
+                setPollInput(''); // Clear the input after adding the poll option
+            } else {
+                toast.error("You can only add up to 5 options");
+            }
         } else {
-            alert("Please enter a poll option");
+            toast.error("Please enter a poll option");
         }
     };
 
@@ -133,8 +138,15 @@ function CreatePolls() {
                                     className="border p-1 w-96 px-4 border-gray-500 rounded-md"
                                     value={pollInput}
                                     onChange={(e) => setPollInput(e.target.value)}
+                                    disabled={pollsOption.length >= 5}
                                 />
-                                <button className='border-2 border-black rounded-md p-1 px-4' onClick={handleAddPolls}>Add</button>
+                                <button 
+                                    className='border-2 border-black rounded-md p-1 px-4'
+                                    onClick={handleAddPolls}
+                                    disabled={pollsOption.length >= 5}
+                                >
+                                    Add
+                                </button>
                             </div>
                         </div>
 
@@ -158,16 +170,17 @@ function CreatePolls() {
                             </div>
                         ))}
 
-<div className="flex flex-col">
-      <label className="font-semibold my-2">Start Date/Time</label>
-      <input
-        type="date"
-        name="start_date"
-        value={currentDate}
-        readOnly
-        className="border p-1 px-4 border-gray-500 rounded-md"
-      />
-    </div>
+                        <div className="flex flex-col">
+                            <label className="font-semibold my-2">Start Date/Time</label>
+                            <input
+                                type="date"
+                                name="start_date"
+                                value={currentDate}
+                                readOnly
+                                className="border p-1 px-4 border-gray-500 rounded-md"
+                            />
+                        </div>
+
                         <div className="flex flex-col">
                             <label className="font-semibold my-2">End Date/Time</label>
                             <input
@@ -178,6 +191,7 @@ function CreatePolls() {
                                 className="border p-1 px-4 border-gray-500 rounded-md"
                             />
                         </div>
+
                         <div className="flex flex-col">
                             <label className="font-semibold my-2">Visibility</label>
                             <select
@@ -191,6 +205,7 @@ function CreatePolls() {
                                 <option value="Restricted">Restricted</option>
                             </select>
                         </div>
+
                         <div className="flex flex-col">
                             <label className="font-semibold my-2">Target Groups/Roles</label>
                             <Select
@@ -202,21 +217,21 @@ function CreatePolls() {
                                 placeholder="Select Users"
                             />
                         </div>
-                       
-                       
                     </div>
+
                     <div className="flex flex-col mx-4">
-                            <label className="font-semibold my-2">Poll Description</label>
-                            <textarea
-                                name="description"
-                                value={formData.description}
-                                onChange={handleFormChange}
-                                cols="5"
-                                rows="3"
-                                placeholder="Description"
-                                className="border p-1 px-4 border-gray-500 rounded-md"
-                            />
-                        </div>
+                        <label className="font-semibold my-2">Poll Description</label>
+                        <textarea
+                            name="description"
+                            value={formData.description}
+                            onChange={handleFormChange}
+                            cols="5"
+                            rows="3"
+                            placeholder="Description"
+                            className="border p-1 px-4 border-gray-500 rounded-md"
+                        />
+                    </div>
+
                     <div className='flex justify-center my-5 gap-2'>
                         <button onClick={handleSubmit} className='bg-black text-white p-2 px-4 rounded-md font-medium' style={{ background: themeColor }}>
                             Create Polls
