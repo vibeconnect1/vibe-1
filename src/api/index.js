@@ -99,7 +99,7 @@ export const getVisitorCategoryDetails = async (id) =>
     },
   });
 
-export const editVisitorCategory = async (id, data ) =>
+export const editVisitorCategory = async (id, data) =>
   axiosInstance.patch(`/visitor_staff_categories/${id}.json`, data, {
     params: {
       token: token,
@@ -110,40 +110,40 @@ export const editVisitorCategory = async (id, data ) =>
 
 export const getVehicleParking = async () =>
   axiosInstance.get(`/parking_configurations.json`, {
-    params :{
-      token:token,
+    params: {
+      token: token,
     },
-  })
+  });
 
-  export const postVehicleParking = async (data) =>
-    axiosInstance.post(`/parking_configurations.json`, data, {
-      params: {
-        token: token,
-      },
-    });
+export const postVehicleParking = async (data) =>
+  axiosInstance.post(`/parking_configurations.json`, data, {
+    params: {
+      token: token,
+    },
+  });
 
-  export const deleteVehicleParking = async(id) =>
-    axiosInstance.delete(`/parking_configurations/${id}.json`,{
-      params: {
-        token: token,
-      },
-    })
+export const deleteVehicleParking = async (id) =>
+  axiosInstance.delete(`/parking_configurations/${id}.json`, {
+    params: {
+      token: token,
+    },
+  });
 
-    export const getVehicleParkingDetails = async(id) => 
-      axiosInstance.get(`/parking_configurations/${id}.json`,{
-        params:{
-          token:token,
-        },
-      })
-      export const editVehicleParking = async (data, id) =>
-        axiosInstance.patch(`/parking_configurations/${id}.json`, data, {
-          params: {
-            token: token,
-          },
-        });
+export const getVehicleParkingDetails = async (id) =>
+  axiosInstance.get(`/parking_configurations/${id}.json`, {
+    params: {
+      token: token,
+    },
+  });
+export const editVehicleParking = async (data, id) =>
+  axiosInstance.patch(`/parking_configurations/${id}.json`, data, {
+    params: {
+      token: token,
+    },
+  });
 // vendor
 export const getVendors = async () =>
-  axiosInstance.get("/vendors.json",{
+  axiosInstance.get("/vendors.json", {
     params: {
       token: token,
     },
@@ -203,19 +203,19 @@ export const deleteVendorType = async (id) =>
       token: token,
     },
   });
-export const editVendorType = async(id, data) =>
+export const editVendorType = async (id, data) =>
   axiosInstance.patch(`/vendor_suppliers/${id}.json`, data, {
     params: {
-      token:token,
-    }
-  })
+      token: token,
+    },
+  });
 
-  export const editVendorCategory = async(id, data) =>
-    axiosInstance.patch(`/vendor_categories/${id}.json`, data, {
-      params: {
-        token:token,
-      }
-    })
+export const editVendorCategory = async (id, data) =>
+  axiosInstance.patch(`/vendor_categories/${id}.json`, data, {
+    params: {
+      token: token,
+    },
+  });
 
 export const postVendors = async (data) =>
   axiosInstance.post("/vendors.json", data, {
@@ -292,6 +292,8 @@ export const deleteHelpDeskCategorySetup = async (id, data) =>
       token: token,
     },
   });
+
+// grn
 export const getGRN = async () =>
   axiosInstance.get(`/grn_details.json`, {
     params: {
@@ -299,6 +301,27 @@ export const getGRN = async () =>
     },
   });
 
+export const postGRN = async (data) =>
+  axiosInstance.post(`/grn_details.json`, data, {
+    params: {
+      token: token,
+    },
+  });
+
+export const getGRNDetails = async (id) =>
+  axiosInstance.get(`/grn_details/${id}.json`, {
+    params: {
+      token: token,
+    },
+  });
+
+export const editGRN = async (data, id) =>
+  axiosInstance.put(`/grn_details/${id}.json`, data, {
+    params: {
+      token: token,
+    },
+  });
+  //
 export const postHelpDeskResolutionEscalationSetup = async (data) =>
   axiosInstance.post(`/pms/admin/create_escalation.json`, data, {
     params: {

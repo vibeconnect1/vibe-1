@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
 import Navbar from "../components/Navbar";
-import { BiFilterAlt } from "react-icons/bi";
-import { IoMdAdd } from "react-icons/io";
+import { BiEdit, BiFilterAlt } from "react-icons/bi";
 import Table from "../components/table/Table";
 import { Link } from "react-router-dom";
 import { BsEye } from "react-icons/bs";
 import { useSelector } from "react-redux";
 import { getGRN } from "../api";
+import { IoAddCircleOutline } from "react-icons/io5";
 
 function GRN() {
   const [filter, setFilter] = useState(false);
@@ -23,20 +23,25 @@ function GRN() {
     };
     fetchGRN();
   }, []);
+
+  
   const column = [
     {
-      name: "view",
+      name: "Action",
 
       cell: (row) => (
         <div className="flex items-center gap-4">
           <Link to={`/admin/grn-detail/${row.id}`}>
             <BsEye size={15} />
           </Link>
+          <Link to={`/admin/edit-grn/${row.id}`}>
+            <BiEdit size={15} />
+          </Link>
         </div>
       ),
     },
 
-    { name: "Id", selector: (row) => row.Id, sortable: true },
+    { name: "Id", selector: (row) => row.id, sortable: true },
     { name: "Inventory", selector: (row) => row.Inventory, sortable: true },
     { name: "Supplier", selector: (row) => row.Supplier, sortable: true },
     {
@@ -85,27 +90,30 @@ function GRN() {
     { name: "QC Amount", selector: (row) => row.QCAmount, sortable: true },
     {
       name: "Invoice Date	",
-      selector: (row) => row.InvoiceDate,
+      selector: (row) => row.invoice_date,
       sortable: true,
     },
     {
       name: "Payment Mode",
-      selector: (row) => row.PaymentMode,
+      selector: (row) => row.
+      payment_mode,
       sortable: true,
     },
     {
       name: "Other Expense",
-      selector: (row) => row.OtherExpense,
+      selector: (row) => row.other_expenses
+      ,
       sortable: true,
     },
     {
       name: "Loading Expense	",
-      selector: (row) => row.LoadingExpense,
+      selector: (row) => row.loading_expenses
+      ,
       sortable: true,
     },
     {
       name: "Adjustment Amount",
-      selector: (row) => row.AdjustmentAmount,
+      selector: (row) => row.adjustment_amount,
       sortable: true,
     },
     {
@@ -131,7 +139,7 @@ function GRN() {
       sortable: true,
     },
     { name: "Aging", selector: (row) => row.Aging, sortable: true },
-    { name: "Created On", selector: (row) => row.CreatedOn, sortable: true },
+    { name: "Created On", selector: (row) => row.created_at, sortable: true },
     { name: "Created By", selector: (row) => row.CreatedBy, sortable: true },
   ];
 
@@ -240,7 +248,7 @@ function GRN() {
   return (
     <section className="flex">
       {/* <Navbar /> */}
-      <div className="w-full  flex flex-col overflow-hidden">
+      <div className="w-full flex flex-col overflow-hidden">
         <div>
           {filter && (
             <div className='className="flex flex-col md:flex-row  items-center justify-center gap-2'>
@@ -271,25 +279,23 @@ function GRN() {
               </div>
             </div>
           )}
-          <div className="flex  md:flex-row gap-2 justify-between w-full my-2">
-            <div>
+          <div className="flex md:flex-row flex-col gap-2 justify-between w-full my-2">
               <input
                 type="text"
-                placeholder="search"
-                className="border-2 p-2  border-gray-300 rounded-lg  w-96"
+                placeholder="Search"
+                className="border-2 p-2 border-gray-300 rounded-lg md:w-96 w-full"
               />
-            </div>
-            <div className="flex flex-col sm:flex-row md:justify-between  gap-2 ">
+            <div className="flex flex-col md:flex-row md:justify-between gap-2 ">
               <Link
                 to="/admin/add-grn"
                 style={{ background: themeColor }}
-                className=" font-semibold text-white px-4 p-1 flex gap-2 items-center rounded-md"
+                className=" font-semibold text-white px-4 p-1 flex gap-2 items-center justify-center rounded-md"
               >
-                <IoMdAdd /> Add
+                <IoAddCircleOutline size={20} /> Add
               </Link>
 
               <button
-                className=" font-semibold text-white px-4 p-1 flex gap-2 items-center rounded-md"
+                className=" font-semibold text-white px-4 p-1 flex gap-2 items-center justify-center rounded-md"
                 onClick={() => setFilter(!filter)}
                 style={{ background: themeColor }}
               >

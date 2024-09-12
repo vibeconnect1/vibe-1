@@ -645,6 +645,7 @@ import EditCourseDescription from "./pages/SkillGrow/EditCourseDescription.jsx";
 import EditCurriculum from "./pages/SkillGrow/EditCurriculum.jsx";
 import EditFAQs from "./pages/SkillGrow/EditFAQs.jsx";
 import VisitorSetup from "./pages/Setup/VisitorSetup.jsx";
+import EditGrn from "./pages/SubPages/EditGrn.jsx";
 // new admin hrms
 
 function App() {
@@ -2396,6 +2397,14 @@ function App() {
             element={
               <ProtectedAdminRoutes>
                 <AddGrn />
+              </ProtectedAdminRoutes>
+            }
+          />
+          <Route
+            path="/admin/edit-grn/:id"
+            element={
+              <ProtectedAdminRoutes>
+                <EditGrn />
               </ProtectedAdminRoutes>
             }
           />
