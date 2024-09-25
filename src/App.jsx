@@ -656,6 +656,18 @@ import WorkspaceTimesheet from "./pages/Employees/EmployeeWorkSpace/WorkspaceTim
 import PayslipData from "./pages/Employees/EmployeeWorkSpace/PayslipData.jsx";
 import WorkspaceESIC from "./pages/Employees/EmployeeWorkSpace/WorkspaceESIC.jsx";
 import AddEsic from "./pages/Employees/EmployeeWorkSpace/AddEsic.jsx";
+import VibeConnectPage from "./pages/VibeConnectWebsite/VibeConnectPage.jsx";
+import Layout from "./pages/VibeConnectWebsite/Layout.jsx";
+import PersonalFinancialWebsite from "./pages/VibeConnectWebsite/PersonalFinancialWebsite.jsx";
+import ProjectManagementWebsite from "./pages/VibeConnectWebsite/ProjectManagementWebsite.jsx";
+import SuppliersWebsite from "./pages/VibeConnectWebsite/SuppliersWebsite.jsx";
+import HRMSWebsite from "./pages/VibeConnectWebsite/HRMSWebsite.jsx";
+import AboutUs from "./pages/VibeConnectWebsite/AboutUs.jsx";
+import ContactForm from "./pages/VibeConnectWebsite/Contact.jsx";
+import KnowMorePage from "./pages/VibeConnectWebsite/KnowMorePage.jsx";
+import KnowMorePage1 from "./pages/VibeConnectWebsite/KnowMorePage1.jsx";
+import KnowMorePage2 from "./pages/VibeConnectWebsite/KnowMorePage2.jsx";
+import KnowMorePage3 from "./pages/VibeConnectWebsite/KnowMorePage3.jsx";
 // new admin hrms
 
 function App() {
@@ -712,7 +724,8 @@ function App() {
         {/* <Navbar/> */}
         <Routes>
           <Route path="/login" element={<Login />} />
-          <Route path="/" element={<Navigate to="/login" />} />
+          <Route path="/home" element={<Layout/>} />
+          <Route path="/" element={<Navigate to="/home" />} />
 
           <Route
             path="/dashboard"
@@ -6283,7 +6296,76 @@ function App() {
               </ProtectedRoute>
             }
           />
-
+          <Route
+            path="/Personal-Financial-website"
+            element={
+            
+              <PersonalFinancialWebsite/>
+            }
+          />
+           <Route
+            path="/Project-Management-website"
+            element={
+            
+              <ProjectManagementWebsite/>
+            }
+          />
+           <Route
+            path="/Suppliers-website"
+            element={
+            
+              <SuppliersWebsite/>
+            }
+          />
+          <Route
+            path="/HRMS-website"
+            element={
+            
+              <HRMSWebsite/>
+            }
+          />
+           <Route
+            path="/AboutUs-website"
+            element={
+            
+             <AboutUs/>
+            }
+          />
+           <Route
+            path="/Contact-website"
+            element={
+            
+            <ContactForm/>
+            }
+          />
+           <Route
+            path="/KnowMore-page"
+            element={
+            
+            <KnowMorePage/>
+            }
+          />
+           <Route
+            path="/KnowMore-page1"
+            element={
+            
+            <KnowMorePage1/>
+            }
+          />
+          <Route
+            path="/KnowMore-page2"
+            element={
+            
+           <KnowMorePage2/>
+            }
+          />
+          <Route
+            path="/KnowMore-page3"
+            element={
+            
+           <KnowMorePage3/>
+            }
+          />
         </Routes>
         <Footer />
       </Router>

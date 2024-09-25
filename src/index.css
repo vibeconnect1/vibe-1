@@ -40,7 +40,9 @@ body::before {
 	border-radius: 5px;
 }
 
-
+html {
+  scroll-behavior: smooth;
+}
 
 /*  */
 .custom-scrollbar::-webkit-scrollbar {
