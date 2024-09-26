@@ -31,16 +31,16 @@ const profiles = [
   },
   {
     id: 4,
-    name: '	Work-Life Balance Initiatives',
-    title: '',
+    name: '	Work-Life Balance ',
+    title: 'Initiatives',
     text:"Flexible work schedules, remote work options, and wellness days allow employees to prioritize their personal lives alongside their professional responsibilities, reducing burnout. ",
     description: 'Work-Life Balance Initiatives',
     image: 'https://reshapecxm.com/adobe-reshaping-cxm/media/92db7a2d4ad8e52d744d3f6e910baf6c/cathy-hackl-full.png',
   },
   {
     id: 5,
-    name: '	Wellness Challenges and',
-    title: '  Incentives',
+    name: '	Wellness Challenges ',
+    title: 'and  Incentives',
     text:"Programs that gamify wellness, such as health challenges and rewards for participation, engage employees and foster a culture of health and fitness.Investing in fitness and wellness for employees not only improves their health and well-being but also enhances organizational performance. By fostering a culture that prioritizes wellness, companies can reduce absenteeism, boost morale, and create a more productive work environment.",
     description: 'Wellness Challenges and Incentives',
     image: 'https://reshapecxm.com/adobe-reshaping-cxm/media/808338c114b4d26d56592dbf4de716da/shama-hyder-full.png',
@@ -100,41 +100,45 @@ const ProfileCard2 = () => {
         {index % 2 === 0 ? (
           <>
             {/* Profile Image First */}
-            <div className="w-16 h-16 md:w-20 md:h-20">
+            <div className='flex justify-between items-center w-72'>
+            <div className="w-16 h-16 md:w-24 md:h-24">
               <img
                 src={profile.image}
                 alt={profile.name}
-                className="rounded-full w-full h-full border-2 p-2 md:p-1 border-blue-800"
+                className="rounded-full w-full h-full border-2  p-2 md:p-2 border-blue-800"
               />
             </div>
             {/* Profile Name and Title */}
-            <div className="ml-4 md:ml-6">
-              <h2 className="text-gray-900 text-base md:text-lg font-bold tracking-tight font-fantasy">
+            <div className=" ">
+              <h2 className="text-gray-900 text-base  font-bold tracking-tight font-fantasy">
                 {profile.name}
               </h2>
-              <h3 className="text-gray-900 text-base md:text-lg font-bold tracking-tight font-fantasy">
+              <h3 className="text-gray-900 text-base  font-bold tracking-tight font-fantasy">
                 {profile.title}
               </h3>
+            </div>
             </div>
           </>
         ) : (
           <>
             {/* Profile Name and Title First */}
-            <div className="mr-4 md:mr-6">
-              <h2 className="text-gray-900 text-base md:text-lg font-bold tracking-tight font-fantasy">
+            <div className='flex justify-between items-center w-72'>
+            <div className="">
+              <h2 className="text-gray-900 text-base  font-bold tracking-tight font-fantasy ">
                 {profile.name}
               </h2>
-              <h3 className="text-gray-900 text-base md:text-lg font-bold tracking-tight font-fantasy">
+              <h3 className="text-gray-900 text-base  font-bold tracking-tight font-fantasy ">
                 {profile.title}
               </h3>
             </div>
             {/* Profile Image */}
-            <div className="w-16 h-16 md:w-20 md:h-20">
+            <div className="w-16 h-16 md:w-24 md:h-24">
               <img
                 src={profile.image}
                 alt={profile.name}
-                className="rounded-full w-full h-full border-2 p-2 md:p-1 border-blue-800"
+                className="rounded-full w-full h-full border-2  p-2 md:p-2 border-blue-800"
               />
+            </div>
             </div>
           </>
         )}
@@ -163,7 +167,7 @@ const ProfileCard2 = () => {
                  
                   <div className="w-full  h-0.5 bg-blue-500"></div>
                   <p className="text-center text-blue-500 mt-2 md:mt-2 font-semibold">
-                  <Link to="/KnowMore-page3">Know More...</Link>
+                  <a href="/KnowMore-page3">Know More...</a>
                   </p>
                 </div>
               </motion.div>

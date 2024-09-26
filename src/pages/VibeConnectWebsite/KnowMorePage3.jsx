@@ -6,12 +6,46 @@ import knowledgebase from '../../../Website Image/Knowledge base-1.jpg';
 import purchase from '../../../Website Image/purchase.jpg';
 import reporting from '../../../Website Image/Reporting-1.jpg';
 
-const KnowMorePage3 = () => {
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, []);
+function KnowMorePage3() {
   return (
-    <div className="bg-gradient-to-br from-[#662B96] to-[#0B205B] text-white p-8">
+    <div className="min-h-screen flex flex-col">
+      {/* Header */}
+      <header className="flex justify-between p-4 bg-transparent absolute top-0 w-full z-10">
+        <div></div> {/* Placeholder for logo */}
+        <nav className="space-x-6 text-white">
+          <a href="#integrations" className="hover:underline">Integrations</a>
+          <a href="#pricing" className="hover:underline">Pricing</a>
+          <a href="#login" className="hover:underline">Log in</a>
+          <a href="#login" className="hover:underline">Get Demo</a>
+          <a href="#demo" className="bg-blue-600 text-white py-2 px-4 rounded-full hover:bg-blue-500">Contact Us</a>
+        </nav>
+      </header>
+
+      {/* Main section */}
+      <main className="flex-grow">
+        {/* Gradient background */}
+        <section className="relative  bg-gradient-to-br from-[#662B96] to-[#0B205B] text-center py-40">
+          <h1 className="text-5xl font-bold  text-white mb-4">Finance & Personal Management</h1>
+          {/* <div className="flex justify-center">
+            <button className="bg-blue-500 text-white py-2 px-6 rounded-full">Learn More</button>
+            
+          </div> */}
+          <div className='absolute mt-4 flex justify-center w-full h-full bg-cover bg-center'>
+          <img  src={compliance} alt="" className="z-20"/>
+          </div>
+          <div className="absolute bottom-0 w-full overflow-hidden leading-none">
+    <svg className="relative block w-full h-auto" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320">
+      <path fill="#ffffff" d="M0,320L80,316C160,312,320,304,480,292C640,280,800,264,960,250.7C1120,237,1280,227,1360,223.3L1440,220L1440,320L1360,320C1280,320,1120,320,960,320C800,320,640,320,480,320C320,320,160,320,80,320L0,320Z"></path>
+    </svg>
+  </div>
+        </section>
+        {/* Form section */}
+      
+      </main>
+      <div className="flex justify-center text-base font-semibold relative top-64">
+      <p className="text-gray-800">The Most Employee Centric and Customer Teams are using our tool VIBE to drive experience.</p>
+      </div>
+      <div className="relative top-64 font-serif text-gray-800 p-8">
      
       
      
@@ -44,8 +78,9 @@ const KnowMorePage3 = () => {
         {/* Content */}
         <div className="lg:w-1/2 mb-8 lg:mb-0">
         <h4 className="text-3xl font-bold  mb-2">		Fitness & Wellness </h4>
-    <p className="text-xl  mb-4 text-justify font-serif  leading-relaxed">
-   <span className="font-bold ">Fitness Management:</span> Offers fitness tracking through App, online wellness programs, and health challenges to promote physical well-being and encourage a healthy lifestyle. Fitness and wellness programs for employees are essential components of a healthy workplace. These initiatives focus on promoting physical health, mental well-being, and overall life balance, ultimately enhancing employee satisfaction and productivity.   </p>
+    {/* <p className="text-xl  mb-4 text-justify font-serif  leading-relaxed">
+   <span className="font-bold ">Fitness Management:</span> Offers fitness tracking through App, online wellness programs, and health challenges to promote physical well-being and encourage a healthy lifestyle. Fitness and wellness programs for employees are essential components of a healthy workplace. These initiatives focus on promoting physical health, mental well-being, and overall life balance, ultimately enhancing employee satisfaction and productivity.   </p> */}
+
 <ul >
     <li className="text-xl  mb-4 text-justify font-serif  leading-relaxed"><span className="font-bold ">Nutrition and Healthy Eating:</span>	 Wellness programs often include nutrition workshops, healthy eating challenges, and access to healthy snacks in the workplace, encouraging employees to make informed dietary choices.</li>
 <li className="text-xl  mb-4 text-justify font-serif  leading-relaxed"><span className="font-bold ">Work-Life Balance Initiatives:</span>	 Flexible work schedules, remote work options, and wellness days allow employees to prioritize their personal lives alongside their professional responsibilities, reducing burnout.
@@ -71,7 +106,31 @@ const KnowMorePage3 = () => {
     
     
     </div>
+
+   
+     
+
+      {/* Call to Action Section */}
+      <div className="relative top-52 flex flex-col justify-center items-center py-20 bg-gradient-to-br from-[#662B96] to-[#0B205B] p-8 ">
+        <h1 className="text-3xl md:text-4xl font-bold text-white text-center">
+          Ready to reach product management mastery?
+        </h1>
+        <button className="mt-6 bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition">
+          Get a demo
+        </button>
+        
+        {/* Features List */}
+        <div className="mt-4 flex gap-4 text-sm text-white">
+          <span>Free 14-day trial</span>
+          <span>Easy setup</span>
+          <span>Cancel anytime</span>
+        </div>
+      </div>
+
+   
+   
+    </div>
   );
-};
+}
 
 export default KnowMorePage3;

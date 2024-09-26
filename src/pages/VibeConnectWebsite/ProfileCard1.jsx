@@ -6,8 +6,8 @@ import { Link } from 'react-router-dom';
 const profiles = [
   {
     id: 1,
-    name: '	Project &',
-    title: 'Task  Management',
+    name: '	Project & ',
+    title: 'Task Management  ',
     description: '	Project & Task Management',
     text1:" Project & Task Planning: Provides tools for planning projects,managing sub-task  dependencies, and tracking progress using Kanban or list views, with milestones. Offers task assignment, tracking, and management of deadlines with reminders for timely completion.",
     text2:"	Integration with Tools like WhatsApp for assigning and reminder of pending task.",
@@ -92,7 +92,7 @@ const ProfileCard1 = () => {
 
       <div className="flex flex-col lg:flex-row justify-between gap-6 lg:gap-10 py-6 lg:py-10">
         {/* Sidebar with Profile Images */}
-        <div className="flex flex-col items-start space-y-6 md:space-y-8 py-4 lg:py-8 lg:ml-20 xl:ml-52">
+        <div className="flex flex-col items-start space-y-6 md:space-y-6 py-4 lg:py-8 lg:ml-20 xl:ml-52">
     {profiles.map((profile, index) => (
       <motion.div
         key={profile.id}
@@ -106,41 +106,45 @@ const ProfileCard1 = () => {
         {index % 2 === 0 ? (
           <>
             {/* Profile Image First */}
-            <div className="w-16 h-16 md:w-20 md:h-20">
+            <div className='flex justify-between items-center w-72'>
+            <div className="w-16 h-16 md:w-24 md:h-24">
               <img
                 src={profile.image}
                 alt={profile.name}
-                className="rounded-full w-full h-full border-2 p-2 md:p-1 border-blue-800"
+                className="rounded-full w-full h-full border-2  p-2 md:p-2 border-blue-800"
               />
             </div>
             {/* Profile Name and Title */}
-            <div className="ml-4 md:ml-6">
-              <h2 className="text-gray-900 text-base md:text-lg font-bold uppercase tracking-tight font-fantasy">
+            <div className=" ">
+              <h2 className="text-gray-900 text-base  font-bold tracking-tight font-fantasy">
                 {profile.name}
               </h2>
-              <h3 className="text-gray-900 text-base md:text-lg font-bold uppercase tracking-tight font-fantasy">
+              <h3 className="text-gray-900 text-base  font-bold tracking-tight font-fantasy">
                 {profile.title}
               </h3>
+            </div>
             </div>
           </>
         ) : (
           <>
             {/* Profile Name and Title First */}
-            <div className="mr-4 md:mr-6">
-              <h2 className="text-gray-900 text-base md:text-lg font-bold uppercase tracking-tight font-fantasy">
+            <div className='flex justify-between items-center w-72'>
+            <div className="">
+              <h2 className="text-gray-900 text-base  font-bold tracking-tight font-fantasy ">
                 {profile.name}
               </h2>
-              <h3 className="text-gray-900 text-base md:text-lg font-bold uppercase tracking-tight font-fantasy">
+              <h3 className="text-gray-900 text-base  font-bold tracking-tight font-fantasy ">
                 {profile.title}
               </h3>
             </div>
             {/* Profile Image */}
-            <div className="w-16 h-16 md:w-20 md:h-20">
+            <div className="w-16 h-16 md:w-24 md:h-24">
               <img
                 src={profile.image}
                 alt={profile.name}
-                className="rounded-full w-full h-full border-2 p-2 md:p-1 border-blue-800"
+                className="rounded-full w-full h-full border-2  p-2 md:p-2 border-blue-800"
               />
+            </div>
             </div>
           </>
         )}
@@ -174,7 +178,7 @@ const ProfileCard1 = () => {
                   
                   <div className="w-full   h-0.5 bg-blue-500"></div>
                   <p className="text-center text-blue-500 mt-2 md:mt-4 font-semibold">
-                  <Link to="/KnowMore-page2">Know More...</Link>
+                  <a href="/KnowMore-page2">Know More...</a>
                   </p>
                 </div>
               </motion.div>

@@ -44,8 +44,8 @@ const profiles = [
   },
   {
     id: 5,
-    name: 'PURCHASE ORDER MANAGEMENT',
-    title: ' ',
+    name: 'PURCHASE ORDER ',
+    title: 'MANAGEMENT ',
     text:"Manages purchase and work orders, goods received (GRN) and dispatched (GDN), and inventory. Streamline your procurement and operational processes with Vibe Connect. Easily create and track Purchase Orders and Work Orders from our system to onboarding vendor. Monitor payments and progress in real-time and manage every detail from a single, centralized dashboard. Simplify your operations and boost productivity with a unified solution that keeps procurement and work orders running smoothly.  ",
     description: 'PURCHASE ORDER MANAGEMENT',
     image: purchase,
@@ -88,7 +88,7 @@ const ProfilePage = () => {
       </div>
       <div className="flex flex-col lg:flex-row justify-between gap-6 lg:gap-10 py-6 lg:py-10">
   {/* Sidebar with Profile Images */}
-  <div className="flex flex-col items-start space-y-6 md:space-y-8 py-4 lg:py-8 lg:ml-20 xl:ml-52">
+  <div className="flex flex-col items-start space-y-6 md:space-y-4 py-4 lg:py-8 lg:ml-20 xl:ml-52">
     {profiles.map((profile, index) => (
       <motion.div
         key={profile.id}
@@ -102,31 +102,34 @@ const ProfilePage = () => {
         {index % 2 === 0 ? (
           <>
             {/* Profile Image First */}
+            <div className='flex justify-between items-center w-80'>
             <div className="w-16 h-16 md:w-24 md:h-24">
               <img
                 src={profile.image}
                 alt={profile.name}
-                className="rounded-full w-full h-full border-2  p-2 md:p-1 border-blue-800"
+                className="rounded-full w-full h-full border-2  p-2 md:p-2 border-blue-800"
               />
             </div>
             {/* Profile Name and Title */}
-            <div className="ml-4 md:ml-6">
-              <h2 className="text-gray-900 text-base md:text-lg font-bold tracking-tight font-fantasy">
+            <div className=" ">
+              <h2 className="text-gray-900 text-base  font-bold tracking-tight font-fantasy">
                 {profile.name}
               </h2>
-              <h3 className="text-gray-900 text-base md:text-lg font-bold tracking-tight font-fantasy">
+              <h3 className="text-gray-900 text-base  font-bold tracking-tight font-fantasy">
                 {profile.title}
               </h3>
+            </div>
             </div>
           </>
         ) : (
           <>
             {/* Profile Name and Title First */}
-            <div className="mr-4 md:mr-6">
-              <h2 className="text-gray-900 text-base md:text-lg font-bold tracking-tight font-fantasy">
+            <div className='flex justify-between items-center w-80'>
+            <div className="">
+              <h2 className="text-gray-900 text-base  font-bold tracking-tight font-fantasy ">
                 {profile.name}
               </h2>
-              <h3 className="text-gray-900 text-base md:text-lg font-bold tracking-tight font-fantasy">
+              <h3 className="text-gray-900 text-base  font-bold tracking-tight font-fantasy ">
                 {profile.title}
               </h3>
             </div>
@@ -135,8 +138,9 @@ const ProfilePage = () => {
               <img
                 src={profile.image}
                 alt={profile.name}
-                className="rounded-full w-full h-full border-2  p-2 md:p-1 border-blue-800"
+                className="rounded-full w-full h-full border-2  p-2 md:p-2 border-blue-800"
               />
+            </div>
             </div>
           </>
         )}
