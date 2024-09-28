@@ -4,12 +4,16 @@ import compliance from '../../../Website Image/bg-compliance2.jpg';
 import permit from '../../../Website Image/Permit.jpg';
 import knowledgebase from '../../../Website Image/Knowledge base-1.jpg';
 import purchase from '../../../Website Image/purchase.jpg';
-import reporting from '../../../Website Image/Reporting-1.jpg';
-import permitnew from '../../../Website Image/Permit New.jpg';
-import compliancenew from '../../../Website Image/Compliance new .jpg';
-import auditnew from '../../../Website Image/Audit - New.png';
-import purchasenew from '../../../Website Image/Purchase- New.jpg';
-import reportingnew from '../../../Website Image/Reporting- New.jpg';
+import reporting2 from '../../../Website Image/reporting2.jpeg';
+import permitnew from '../../../Website Image/permit2.jpeg';
+
+import cost from '../../../Website Image/cost2.jpeg';
+
+import compliancenew from '../../../Website Image/compliance2.jpeg';
+import auditnew from '../../../Website Image/audit2.jpeg';
+import reportingnew from '../../../Website Image/document2.jpeg';
+import knowledgenew from '../../../Website Image/Knowledge2.jpeg';
+import purchasenew from '../../../Website Image/purchase2.jpeg';
 
 function KnowMorePage() {
   return (
@@ -50,7 +54,7 @@ function KnowMorePage() {
       <div className="flex justify-center text-base font-semibold relative top-64">
       <p className="text-gray-800">The Most Employee Centric and Customer Teams are using our tool VIBE to drive experience.</p>
       </div>
-      <div className="relative top-64  text-gray-800 font-serif p-10">
+      <div className="relative top-64  text-gray-800 font-serif p-20">
       {/* First Section */}
       <h1 className="text-4xl font-bold font-serif leading-relaxed text-gray-800 mb-2">Management & Compliance </h1>
 <p className="text-xl  mb-4 text-justify font-serif  leading-relaxed ">Vibe Connect’s Compliance Tracker helps you stay ahead of regulatory requirements by continuously monitoring and updating compliance standards. The system automatically tracks updates in regulations, flags any potential risks, and keeps all your compliance documents organized and accessible.</p>
@@ -69,7 +73,8 @@ function KnowMorePage() {
           <img
             src={compliancenew}
             alt="AI Automation"
-            className="rounded-lg shadow-lg"
+            className="rounded-lg shadow-lg h-64 w-96"
+            style={{ transform: "rotate(5deg)" }}
           />
         </div>
       </div>
@@ -89,7 +94,8 @@ function KnowMorePage() {
           <img
             src={auditnew}
             alt="Team Taskforce"
-            className="rounded-lg shadow-lg"
+            className="rounded-lg shadow-lg h-72 w-96"
+            style={{ transform: "rotate(-5deg)" }}
           />
         </div>
       </div>
@@ -109,12 +115,13 @@ function KnowMorePage() {
           <img
             src={permitnew}
             alt="AI Automation"
-            className="rounded-lg shadow-lg"
+            className="rounded-lg shadow-lg h-64 w-96"
+            style={{ transform: "rotate(5deg)" }}
           />
         </div>
       </div>
       <h1 className="text-4xl font-bold   mb-8">Knowledge Management</h1>
-      <div className="flex flex-col gap-8 lg:flex-row justify-between  mb-12">
+      <div className="flex flex-col gap-8 lg:flex-row-reverse justify-between  mb-12">
         {/* Content */}
         <div className="lg:w-1/2 mb-8 lg:mb-0">
         <h3 className="text-3xl font-bold mb-2 ">Knowledge Base</h3>
@@ -132,9 +139,10 @@ function KnowMorePage() {
         {/* Image */}
         <div className="lg:w-1/2 flex justify-center">
           <img
-            src={knowledgebase}
+            src={knowledgenew}
             alt="AI Automation"
-            className="rounded-lg shadow-lg"
+            className="rounded-lg shadow-lg h-64 w-96"
+            style={{ transform: "rotate(-5deg)" }}
           />
         </div>
       </div>
@@ -156,7 +164,8 @@ function KnowMorePage() {
           <img
             src={purchasenew}
             alt="AI Automation"
-            className="rounded-lg shadow-lg"
+            className="rounded-lg shadow-lg h-64 w-96"
+            style={{ transform: "rotate(5deg)" }}
           />
         </div>
       </div>
@@ -175,34 +184,15 @@ function KnowMorePage() {
         {/* Image */}
         <div className="lg:w-1/2 flex justify-center">
           <img
-            src={purchasenew}
+            src={cost}
             alt="AI Automation"
-            className="rounded-lg shadow-lg"
+            className="rounded-lg shadow-lg h-64 w-96"
+            style={{ transform: "rotate(-5deg)" }}
           />
         </div>
       </div>
       <h1 className="text-4xl font-bold   mb-8">	Documentation & Reporting</h1>
-      <div className="flex flex-col gap-8 lg:flex-row justify-between  mb-12">
-        {/* Content */}
-        <div className="lg:w-1/2 mb-8 lg:mb-0">
-        <h3 className="text-3xl font-bold mb-2 ">	Reporting  </h3>
-        <p className="text-xl  mb-4 text-justify font-serif  leading-relaxed">
-        Provides AI/BI dashboards, custom and scheduled reports for comprehensive insights. Vibe Connect’s AI Dashboard & Reports deliver real-time analytics and comprehensive insights to drive your business decisions. Monitor key metrics, visualize trends, and generate detailed reports with ease, all from a single, user-friendly interface. Our advanced system transforms complex data into clear, actionable insights, helping you stay informed and make smarter decisions effortlessly.
-        </p>
-       
-
-
-
-        </div>
-        {/* Image */}
-        <div className="lg:w-1/2 flex justify-center">
-          <img
-            src={reportingnew}
-            alt="AI Automation"
-            className="rounded-lg shadow-lg"
-          />
-        </div>
-      </div>
+    
       <div className="flex flex-col gap-8 lg:flex-row-reverse justify-between  mb-12">
         {/* Content */}
         <div className="lg:w-1/2 mb-8 lg:mb-0">
@@ -220,7 +210,30 @@ function KnowMorePage() {
           <img
             src={reportingnew}
             alt="AI Automation"
-            className="rounded-lg shadow-lg"
+            className="rounded-lg shadow-lg h-64 w-96"
+            style={{ transform: "rotate(-5deg)" }}
+          />
+        </div>
+      </div>
+      <div className="flex flex-col gap-8 lg:flex-row justify-between  mb-12">
+        {/* Content */}
+        <div className="lg:w-1/2 mb-8 lg:mb-0">
+        <h3 className="text-3xl font-bold mb-2 ">	Reporting  </h3>
+        <p className="text-xl  mb-4 text-justify font-serif  leading-relaxed">
+        Provides AI/BI dashboards, custom and scheduled reports for comprehensive insights. Vibe Connect’s AI Dashboard & Reports deliver real-time analytics and comprehensive insights to drive your business decisions. Monitor key metrics, visualize trends, and generate detailed reports with ease, all from a single, user-friendly interface. Our advanced system transforms complex data into clear, actionable insights, helping you stay informed and make smarter decisions effortlessly.
+        </p>
+       
+
+
+
+        </div>
+        {/* Image */}
+        <div className="lg:w-1/2 flex justify-center">
+          <img
+            src={reporting2}
+            alt="AI Automation"
+            className="rounded-lg shadow-lg h-64 w-96"
+            style={{ transform: "rotate(5deg)" }}
           />
         </div>
       </div>

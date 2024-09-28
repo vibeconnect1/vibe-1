@@ -1,6 +1,7 @@
 import { motion, useAnimation } from 'framer-motion';
 import { useEffect, useRef } from 'react';
 import CircularProgress from './CircularProgress';
+import green from '../../../Website Image/greencolour.jpeg';
 
 // Variants for animation
 const textVariants = {
@@ -60,11 +61,8 @@ const VibePage = () => {
 
   return (
     <div
-      className="relative bottom-6 flex h-screen items-center justify-center bg-cover bg-center"
-      style={{
-        backgroundImage:
-          "url('https://reshapecxm.com/adobe-reshaping-cxm/media/d209c1b63fae39809d4c050338f999a2/section2-full.png')",
-      }}
+      className="relative bottom-6 flex h-screen items-center justify-center bg-cover "
+      style={{ backgroundImage: `url(${green})` }}
     >
       <div className="absolute inset-0 bg-gradient-to-r from-green-700 via-transparent to-green-700 opacity-90"></div>
 

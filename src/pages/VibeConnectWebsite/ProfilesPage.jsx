@@ -1,11 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import compliance from '../../../Website Image/completed-task.png';
-import audit from '../../../Website Image/verification.png';
-import document from '../../../Website Image/folder.png';
-import knowledge from '../../../Website Image/development.png';
-import purchase from '../../../Website Image/checklist.png';
+import compliance from '../../../Website Image/Compliance1.jpeg';
+import audit from '../../../Website Image/Audit1.jpeg';
+import document from '../../../Website Image/Document1.jpeg';
+import knowledge from '../../../Website Image/Knowledge1.jpeg';
+import purchase from '../../../Website Image/Purchase1.jpeg';
 
 
 const profiles = [
@@ -88,7 +88,7 @@ const ProfilePage = () => {
       </div>
       <div className="flex flex-col lg:flex-row justify-between gap-6 lg:gap-10 py-6 lg:py-10">
   {/* Sidebar with Profile Images */}
-  <div className="flex flex-col items-start space-y-6 md:space-y-4 py-4 lg:py-8 lg:ml-20 xl:ml-52">
+  <div className="flex flex-col items-start space-y-6 md:space-y-2 py-4 lg:py-6 lg:ml-20 xl:ml-52">
     {profiles.map((profile, index) => (
       <motion.div
         key={profile.id}
@@ -102,12 +102,12 @@ const ProfilePage = () => {
         {index % 2 === 0 ? (
           <>
             {/* Profile Image First */}
-            <div className='flex justify-between items-center w-80'>
-            <div className="w-16 h-16 md:w-24 md:h-24">
+            <div className='flex justify-between items-center w-80 '>
+            <div className="w-16 h-16 md:w-28 md:h-28 rounded-full  border-2  p-2 md:p-2 border-blue-800 ">
               <img
                 src={profile.image}
                 alt={profile.name}
-                className="rounded-full w-full h-full border-2  p-2 md:p-2 border-blue-800"
+                className=" w-full h-full p-2  "
               />
             </div>
             {/* Profile Name and Title */}
@@ -134,11 +134,11 @@ const ProfilePage = () => {
               </h3>
             </div>
             {/* Profile Image */}
-            <div className="w-16 h-16 md:w-24 md:h-24">
+            <div className="w-16 h-16 md:w-28 md:h-28 rounded-full  border-2  p-2 md:p-2 border-blue-800">
               <img
                 src={profile.image}
                 alt={profile.name}
-                className="rounded-full w-full h-full border-2  p-2 md:p-2 border-blue-800"
+                className=" w-full h-full  p-2 "
               />
             </div>
             </div>
