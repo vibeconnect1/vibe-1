@@ -39,9 +39,9 @@ function KnowMorePage() {
             <button className="bg-blue-500 text-white py-2 px-6 rounded-full">Learn More</button>
             
           </div> */}
-          <div className='absolute mt-4 flex justify-center w-full h-full bg-cover bg-center'>
+          {/* <div className='absolute mt-4 flex justify-center w-full h-full bg-cover bg-center'>
           <img  src={compliance} alt="" className="z-20"/>
-          </div>
+          </div> */}
           <div className="absolute bottom-0 w-full overflow-hidden leading-none">
     <svg className="relative block w-full h-auto" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320">
       <path fill="#ffffff" d="M0,320L80,316C160,312,320,304,480,292C640,280,800,264,960,250.7C1120,237,1280,227,1360,223.3L1440,220L1440,320L1360,320C1280,320,1120,320,960,320C800,320,640,320,480,320C320,320,160,320,80,320L0,320Z"></path>
@@ -56,8 +56,8 @@ function KnowMorePage() {
       </div>
       <div className="relative top-64  text-gray-800 font-serif p-20">
       {/* First Section */}
-      <h1 className="text-4xl font-bold font-serif leading-relaxed text-gray-800 mb-2">Management & Compliance </h1>
-<p className="text-xl  mb-4 text-justify font-serif  leading-relaxed ">Vibe Connect’s Compliance Tracker helps you stay ahead of regulatory requirements by continuously monitoring and updating compliance standards. The system automatically tracks updates in regulations, flags any potential risks, and keeps all your compliance documents organized and accessible.</p>
+      {/* <h1 className="text-4xl font-bold font-serif leading-relaxed text-gray-800 mb-2">Management & Compliance </h1> */}
+{/* <p className="text-xl  mb-4 text-justify font-serif w-1/2 leading-relaxed ">Vibe Connect’s Compliance Tracker helps you stay ahead of regulatory requirements by continuously monitoring and updating compliance standards. The system automatically tracks updates in regulations, flags any potential risks, and keeps all your compliance documents organized and accessible.</p> */}
       <div className="flex flex-col gap-8 lg:flex-row justify-between  mb-12">
         {/* Content */}
         <div className="lg:w-1/2 mb-8 lg:mb-0">
@@ -73,7 +73,7 @@ function KnowMorePage() {
           <img
             src={compliancenew}
             alt="AI Automation"
-            className="rounded-lg shadow-lg h-64 w-96"
+            className="rounded-lg shadow-lg h-64 w-full"
             style={{ transform: "rotate(5deg)" }}
           />
         </div>
@@ -94,7 +94,7 @@ function KnowMorePage() {
           <img
             src={auditnew}
             alt="Team Taskforce"
-            className="rounded-lg shadow-lg h-72 w-96"
+            className="rounded-lg shadow-lg h-72 w-full"
             style={{ transform: "rotate(-5deg)" }}
           />
         </div>
@@ -115,12 +115,12 @@ function KnowMorePage() {
           <img
             src={permitnew}
             alt="AI Automation"
-            className="rounded-lg shadow-lg h-64 w-96"
+            className="rounded-lg shadow-lg h-64 w-full"
             style={{ transform: "rotate(5deg)" }}
           />
         </div>
       </div>
-      <h1 className="text-4xl font-bold   mb-8">Knowledge Management</h1>
+     
       <div className="flex flex-col gap-8 lg:flex-row-reverse justify-between  mb-12">
         {/* Content */}
         <div className="lg:w-1/2 mb-8 lg:mb-0">
@@ -141,12 +141,12 @@ function KnowMorePage() {
           <img
             src={knowledgenew}
             alt="AI Automation"
-            className="rounded-lg shadow-lg h-64 w-96"
+            className="rounded-lg shadow-lg h-64 w-full"
             style={{ transform: "rotate(-5deg)" }}
           />
         </div>
       </div>
-      <h1 className="text-4xl font-bold   mb-8">Operational  Management</h1>
+     
       <div className="flex flex-col gap-8 lg:flex-row justify-between  mb-12">
         {/* Content */}
         <div className="lg:w-1/2 mb-8 lg:mb-0">
@@ -164,7 +164,7 @@ function KnowMorePage() {
           <img
             src={purchasenew}
             alt="AI Automation"
-            className="rounded-lg shadow-lg h-64 w-96"
+            className="rounded-lg shadow-lg h-64 w-full"
             style={{ transform: "rotate(5deg)" }}
           />
         </div>
@@ -186,14 +186,14 @@ function KnowMorePage() {
           <img
             src={cost}
             alt="AI Automation"
-            className="rounded-lg shadow-lg h-64 w-96"
+            className="rounded-lg shadow-lg h-64 w-full"
             style={{ transform: "rotate(-5deg)" }}
           />
         </div>
       </div>
-      <h1 className="text-4xl font-bold   mb-8">	Documentation & Reporting</h1>
+      {/* <h1 className="text-4xl font-bold   mb-8">	Documentation & Reporting</h1> */}
     
-      <div className="flex flex-col gap-8 lg:flex-row-reverse justify-between  mb-12">
+      <div className="flex flex-col gap-8 lg:flex-row justify-between  mb-12">
         {/* Content */}
         <div className="lg:w-1/2 mb-8 lg:mb-0">
         <h3 className="text-3xl font-bold mb-2 ">	Document Management   </h3>
@@ -210,12 +210,12 @@ function KnowMorePage() {
           <img
             src={reportingnew}
             alt="AI Automation"
-            className="rounded-lg shadow-lg h-64 w-96"
-            style={{ transform: "rotate(-5deg)" }}
+            className="rounded-lg shadow-lg h-64 w-full"
+            style={{ transform: "rotate(5deg)" }}
           />
         </div>
       </div>
-      <div className="flex flex-col gap-8 lg:flex-row justify-between  mb-12">
+      <div className="flex flex-col gap-8 lg:flex-row-reverse justify-between  mb-12">
         {/* Content */}
         <div className="lg:w-1/2 mb-8 lg:mb-0">
         <h3 className="text-3xl font-bold mb-2 ">	Reporting  </h3>
@@ -232,8 +232,8 @@ function KnowMorePage() {
           <img
             src={reporting2}
             alt="AI Automation"
-            className="rounded-lg shadow-lg h-64 w-96"
-            style={{ transform: "rotate(5deg)" }}
+            className="rounded-lg shadow-lg h-64 w-full"
+            style={{ transform: "rotate(-5deg)" }}
           />
         </div>
       </div>

@@ -1,10 +1,18 @@
 import React, { useEffect } from "react";
 import audit from '../../../Website Image/Audit.jpeg'
-import compliance from '../../../Website Image/bg-compliance2.jpg';
+import softservice from '../../../Website Image/softservice.jpeg';
 import permit from '../../../Website Image/Permit.jpg';
 import knowledgebase from '../../../Website Image/Knowledge base-1.jpg';
 import purchase from '../../../Website Image/purchase.jpg';
 import reporting from '../../../Website Image/Reporting-1.jpg';
+import vendor from '../../../Website Image/vendor.jpeg';
+import asset from '../../../Website Image/asset.jpeg';
+import pass from '../../../Website Image/pass.jpeg';
+import utility from '../../../Website Image/utility.jpeg';
+import work from '../../../Website Image/workspaceimage.jpeg';
+import facility from '../../../Website Image/Facilityimage.jpeg';
+import main from '../../../Website Image/maintenanceimage.jpeg';
+import logs from '../../../Website Image/logsimage.jpeg';
 
 function KnowMorePage1() {
   return (
@@ -27,9 +35,9 @@ function KnowMorePage1() {
         <section className="relative bg-gradient-to-r from-green-500 via-green-600 to-green-800 text-center py-40">
   <h1 className="text-5xl font-bold text-white mb-4">PROPERTY MANAGEMENT TOOLS</h1>
   
-  <div className='absolute mt-4 flex justify-center w-full h-full bg-cover bg-center'>
+  {/* <div className='absolute mt-4 flex justify-center w-full h-full bg-cover bg-center'>
     <img src={compliance} alt="" className="z-20"/>
-  </div>
+  </div> */}
 
   {/* Curved bottom using SVG similar to the screenshot */}
   <div className="absolute bottom-0 w-full overflow-hidden leading-none">
@@ -48,8 +56,8 @@ function KnowMorePage1() {
       </div>
       <div className="relative top-64 font-serif text-gray-800 p-10">
       {/* First Section */}
-      <h1 className="text-4xl font-bold  mb-2">Property Management </h1>
-<p className="text-xl  mb-4 text-justify font-serif  leading-relaxed">Effortlessly manage your property with Vibe Connect’s Property Management. From tracking agreements and handling tenant requests to scheduling maintenance and managing payments, our tool centralizes all property-related tasks. Stay organized and efficient with our 15+ modules in Property Management system along with an intuitive dashboard that gives you complete control over your property management needs.  </p>
+      {/* <h1 className="text-4xl font-bold  mb-2">Property Management </h1> */}
+<p className="text-xl  mb-4 text-justify font-serif w-1/2 leading-relaxed">Effortlessly manage your property with Vibe Connect’s Property Management. From tracking agreements and handling tenant requests to scheduling maintenance and managing payments, our tool centralizes all property-related tasks. Stay organized and efficient with our 15+ modules in Property Management system along with an intuitive dashboard that gives you complete control over your property management needs.  </p>
       <div className="flex flex-col gap-8 lg:flex-row justify-between  mb-12">
         {/* Content */}
         <div className="lg:w-1/2 mb-8 lg:mb-0">
@@ -62,9 +70,10 @@ function KnowMorePage1() {
         {/* Image */}
         <div className="lg:w-1/2 flex justify-center">
           <img
-            src={compliance}
+            src={asset}
             alt="AI Automation"
-            className="rounded-lg shadow-lg"
+            className="rounded-lg shadow-lg h-64 w-full"
+            style={{ transform: "rotate(5deg)" }}
           />
         </div>
       </div>
@@ -82,9 +91,10 @@ function KnowMorePage1() {
         {/* Image */}
         <div className="lg:w-1/2 flex justify-center">
           <img
-            src={audit}
+            src={work}
             alt="Team Taskforce"
-            className="rounded-lg shadow-lg"
+            className="rounded-lg shadow-lg h-64 w-full"
+            style={{ transform: "rotate(-5deg)" }}
           />
         </div>
       </div>
@@ -102,9 +112,10 @@ function KnowMorePage1() {
         {/* Image */}
         <div className="lg:w-1/2 flex justify-center">
           <img
-            src={permit}
+            src={facility}
             alt="AI Automation"
-            className="rounded-lg shadow-lg"
+            className="rounded-lg shadow-lg h-64 w-full"
+            style={{ transform: "rotate(5deg)" }}
           />
         </div>
       </div>
@@ -133,13 +144,14 @@ function KnowMorePage1() {
         {/* Image */}
         <div className="lg:w-1/2 flex justify-center">
           <img
-            src={audit}
+            src={softservice}
             alt="Team Taskforce"
-            className="rounded-lg shadow-lg"
+            className="rounded-lg shadow-lg w-full h-72"
+            style={{ transform: "rotate(-5deg)" }}
           />
         </div>
       </div>
-      <h1 className="text-3xl font-bold  mb-4">	Facilities & Maintenance</h1>
+      {/* <h1 className="text-3xl font-bold  mb-4">	Facilities & Maintenance</h1> */}
       <div className="flex flex-col gap-8 lg:flex-row justify-between items-center mb-12">
         {/* Content */}
         <div className="lg:w-1/2 mb-8 lg:mb-0">
@@ -164,9 +176,10 @@ function KnowMorePage1() {
         {/* Image */}
         <div className="lg:w-1/2 flex justify-center">
           <img
-            src={knowledgebase}
+            src={main}
             alt="AI Automation"
-            className="rounded-lg shadow-lg"
+            className="rounded-lg shadow-lg h-72 w-full"
+            style={{ transform: "rotate(5deg)" }}
           />
         </div>
       </div>
@@ -192,9 +205,10 @@ function KnowMorePage1() {
         {/* Image */}
         <div className="lg:w-1/2 flex justify-center">
           <img
-            src={audit}
+            src={logs}
             alt="Team Taskforce"
-            className="rounded-lg shadow-lg"
+            className="rounded-lg shadow-lg h-72 w-full"
+            style={{ transform: "rotate(-5deg)" }}
           />
         </div>
       </div>
@@ -222,9 +236,10 @@ function KnowMorePage1() {
         {/* Image */}
         <div className="lg:w-1/2 flex justify-center">
           <img
-            src={knowledgebase}
+            src={vendor}
             alt="AI Automation"
-            className="rounded-lg shadow-lg"
+            className="rounded-lg shadow-lg h-64 w-full"
+            style={{ transform: "rotate(5deg)" }}
           />
         </div>
       </div>
@@ -250,9 +265,10 @@ function KnowMorePage1() {
         {/* Image */}
         <div className="lg:w-1/2 flex justify-center">
           <img
-            src={audit}
+            src={utility}
             alt="Team Taskforce"
-            className="rounded-lg shadow-lg"
+            className="rounded-lg shadow-lg h-64 w-full"
+            style={{ transform: "rotate(-5deg)" }}
           />
         </div>
       </div>
@@ -280,9 +296,10 @@ function KnowMorePage1() {
         {/* Image */}
         <div className="lg:w-1/2 flex justify-center">
           <img
-            src={purchase}
+            src={pass}
             alt="AI Automation"
-            className="rounded-lg shadow-lg"
+            className="rounded-lg shadow-lg h-64 w-full"
+            style={{ transform: "rotate(5deg)" }}
           />
         </div>
       </div>

@@ -1,10 +1,10 @@
 import React, { useEffect } from "react";
 import audit from '../../../Website Image/Audit.jpeg'
 import compliance from '../../../Website Image/bg-compliance2.jpg';
-import permit from '../../../Website Image/Permit.jpg';
+import permit from '../../../Website Image/financeimage.jpeg';
 import knowledgebase from '../../../Website Image/Knowledge base-1.jpg';
 import purchase from '../../../Website Image/purchase.jpg';
-import reporting from '../../../Website Image/Reporting-1.jpg';
+import reporting from '../../../Website Image/healthimage.jpeg';
 
 function KnowMorePage3() {
   return (
@@ -31,7 +31,7 @@ function KnowMorePage3() {
             
           </div> */}
           <div className='absolute mt-4 flex justify-center w-full h-full bg-cover bg-center'>
-          <img  src={compliance} alt="" className="z-20"/>
+          {/* <img  src={compliance} alt="" className="z-20"/> */}
           </div>
           <div className="absolute bottom-0 w-full overflow-hidden leading-none">
     <svg className="relative block w-full h-auto" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320">
@@ -51,8 +51,8 @@ function KnowMorePage3() {
      
 
     
-      <h1 className="text-3xl font-bold  mb-4">	Finance & Personal Management </h1>
-      <p className="text-xl  mb-4 text-justify font-serif  leading-relaxed">Finance & Personal Management tools helps individuals manage their finances, bills, insurance, healthcare, and wellness, offering comprehensive solutions for personal and financial well-being at one location. Finance and personal management tools provide individuals with a centralized platform to effectively manage various aspects of their financial lives. These tools encompass a wide range of functionalities designed to simplify tasks such as budgeting, bill tracking, insurance management, healthcare coordination, and overall wellness. Offering comprehensive solutions for personal finance and wellness in one location, these tools empower individuals to take control of their financial futures, enhance their decision-making, and improve their overall quality of life.</p>
+      {/* <h1 className="text-3xl font-bold  mb-4">	Finance & Personal Management </h1> */}
+      <p className="text-xl  mb-4 text-justify font-serif w-1/2 leading-relaxed">Finance & Personal Management tools helps individuals manage their finances, bills, insurance, healthcare, and wellness, offering comprehensive solutions for personal and financial well-being at one location. Finance and personal management tools provide individuals with a centralized platform to effectively manage various aspects of their financial lives. These tools encompass a wide range of functionalities designed to simplify tasks such as budgeting, bill tracking, insurance management, healthcare coordination, and overall wellness. Offering comprehensive solutions for personal finance and wellness in one location, these tools empower individuals to take control of their financial futures, enhance their decision-making, and improve their overall quality of life.</p>
       <div className="flex flex-col gap-8 lg:flex-row justify-between items-center mb-12">
         {/* Content */}
         <div className="lg:w-1/2 mb-8 lg:mb-0">
@@ -70,7 +70,8 @@ function KnowMorePage3() {
           <img
             src={permit}
             alt="AI Automation"
-            className="rounded-lg shadow-lg"
+            className="rounded-lg shadow-lg h-80 w-full"
+            style={{ transform: "rotate(5deg)" }}
           />
         </div>
       </div>
@@ -95,9 +96,10 @@ function KnowMorePage3() {
         {/* Image */}
         <div className="lg:w-1/2 flex justify-center">
           <img
-            src={audit}
+            src={reporting}
             alt="Team Taskforce"
-            className="rounded-lg shadow-lg"
+            className="rounded-lg shadow-lg h-80 w-full"
+            style={{ transform: "rotate(-5deg)" }}
           />
         </div>
       </div>

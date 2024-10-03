@@ -1,11 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import compliance from '../../../Website Image/Compliance1.jpeg';
-import audit from '../../../Website Image/Audit1.jpeg';
-import document from '../../../Website Image/Document1.jpeg';
-import knowledge from '../../../Website Image/Knowledge1.jpeg';
-import purchase from '../../../Website Image/Purchase1.jpeg';
+import compliance from '../../../Website Image/Compliance-blue.png';
+import audit from '../../../Website Image/Audit-blue.png';
+import document from '../../../Website Image/Document-blue.png';
+import knowledge from '../../../Website Image/Knowledge-blue.png';
+import purchase from '../../../Website Image/Purchase-blue.png';
 
 
 const profiles = [
@@ -83,7 +83,7 @@ const ProfilePage = () => {
 
   return (
     <div className="min-h-screen relative bottom-6 bg-cover bg-center" style={{ backgroundImage: 'url("https://reshapecxm.com/adobe-reshaping-cxm/media/b1e411477d49f6d09052d9d6f5da3427/top-influencer-1-at-1-38x-full.png")' }}>
-      <div className="absolute top-0 right-0 w-full lg:w-1/3 bg-gradient-to-r from-blue-700 to-blue-600 text-white px-4 py-2 md:px-8 md:py-2 rounded-bl-2xl shadow-lg">
+      <div className="absolute top-0 right-0 w-full lg:w-1/3  text-white px-4 py-2 md:px-8 md:py-2 rounded-bl-2xl shadow-lg" style={{ backgroundColor: '#00539D' }}>
         <p className="font-bold text-sm md:text-lg tracking-wide uppercase">Management and compliance tools</p>
       </div>
       <div className="flex flex-col lg:flex-row justify-between gap-6 lg:gap-10 py-6 lg:py-10">
@@ -102,20 +102,21 @@ const ProfilePage = () => {
         {index % 2 === 0 ? (
           <>
             {/* Profile Image First */}
-            <div className='flex justify-between items-center w-80 '>
-            <div className="w-16 h-16 md:w-28 md:h-28 rounded-full  border-2  p-2 md:p-2 border-blue-800 ">
-              <img
-                src={profile.image}
-                alt={profile.name}
-                className=" w-full h-full p-2  "
-              />
-            </div>
+            <div className='flex justify-between items-center w-96 '>
+            <div className="w-16 h-16 md:w-28 md:h-28 rounded-full border-2 p-2 md:p-1 border-blue-800" style={{ backgroundColor: '#00539D' }}>
+  <img
+    src={profile.image}
+    alt={profile.name}
+    className="w-full h-full p-2 filter invert"
+  />
+</div>
+
             {/* Profile Name and Title */}
             <div className=" ">
-              <h2 className="text-gray-900 text-base  font-bold tracking-tight font-fantasy">
+              <h2 className="text-gray-900 text-lg  font-bold tracking-tight font-fantasy">
                 {profile.name}
               </h2>
-              <h3 className="text-gray-900 text-base  font-bold tracking-tight font-fantasy">
+              <h3 className="text-gray-900 text-lg  font-bold tracking-tight font-fantasy">
                 {profile.title}
               </h3>
             </div>
@@ -124,9 +125,9 @@ const ProfilePage = () => {
         ) : (
           <>
             {/* Profile Name and Title First */}
-            <div className='flex justify-between items-center w-80'>
+            <div className='flex justify-between items-center w-96'>
             <div className="">
-              <h2 className="text-gray-900 text-base  font-bold tracking-tight font-fantasy ">
+              <h2 className="text-gray-900 text-lg  font-bold tracking-tight font-fantasy ">
                 {profile.name}
               </h2>
               <h3 className="text-gray-900 text-base  font-bold tracking-tight font-fantasy ">
@@ -134,11 +135,11 @@ const ProfilePage = () => {
               </h3>
             </div>
             {/* Profile Image */}
-            <div className="w-16 h-16 md:w-28 md:h-28 rounded-full  border-2  p-2 md:p-2 border-blue-800">
+            <div className="w-16 h-16 md:w-28 md:h-28 rounded-full  border-2  p-2 md:p-1 border-blue-800" style={{ backgroundColor: '#00539D' }}>
               <img
                 src={profile.image}
                 alt={profile.name}
-                className=" w-full h-full  p-2 "
+                className=" w-full h-full  p-2 filter invert "
               />
             </div>
             </div>
@@ -149,7 +150,7 @@ const ProfilePage = () => {
   </div>
 
   {/* Profile Details Section */}
-  <div ref={observerRef} className="lg:w-1/3 py-6 md:py-10 px-4 md:px-10 lg:mr-10 xl:mr-32">
+  <div ref={observerRef} className="lg:w-1/3 py-6 md:py-10 px-4 md:px-10 lg:mr-10 xl:mr-36">
     {profiles.map((profile) => (
       profile.id === activeProfile && (
         <motion.div
