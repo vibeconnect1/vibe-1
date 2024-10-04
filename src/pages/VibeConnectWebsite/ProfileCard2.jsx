@@ -6,8 +6,8 @@ import purple from '../../../Website Image/Screenshot_purple.png';
 import personal from '../../../Website Image/personalfinanceicon.png';
 import insurance from '../../../Website Image/insuranceicon.png';
 import health from '../../../Website Image/healthicon.png';
-import wellness from '../../../Website Image/Employeeengagemnticon.png';
-import work from '../../../Website Image/communicationicon.png';
+import wellness from '../../../Website Image/wellnessicon.png';
+import work from '../../../Website Image/worklifeicon.png';
 
 const profiles = [
   {
@@ -82,12 +82,15 @@ const ProfileCard2 = () => {
   }, []);
 
   return (
-    <div className='relative bottom-6'>
-    <div className="min-h-screen  bg-cover bg-center" style={{ backgroundImage: `url(${purple})` }}>
+    <div className='relative bottom-1'>
+    <div className="min-h-screen  bg-cover bg-center" >
       <div className="absolute top-0 right-0 w-full lg:w-1/3 
- text-white px-4 lg:px-8 py-2 rounded-bl-2xl shadow-lg" style={{ backgroundColor: '#800080' }}>
+ text-white px-4 lg:px-8 py-2 rounded-bl-2xl shadow-lg bg-gradient-to-r from-purple-900  to-blue-700" >
         <p className="font-bold text-lg tracking-wide uppercase">Finance & Personal Management </p>
       </div>
+      <div className="absolute top-0 left-0 bg-gradient-to-r from-purple-900 to-blue-700 h-full w-20 overflow-hidden">
+  {/* Content inside the left sidebar */}
+</div>
 
       <div className="flex flex-col lg:flex-row justify-between gap-6 lg:gap-10 py-6 lg:py-10">
         {/* Sidebar with Profile Images */}
@@ -106,7 +109,7 @@ const ProfileCard2 = () => {
           <>
             {/* Profile Image First */}
             <div className='flex justify-between items-center w-96'>
-            <div className="w-16 h-16 md:w-28 md:h-28 rounded-full border-2  p-2 md:p-1 border-purple-800" style={{ backgroundColor: '#800080' }}>
+            <div className="w-16 h-16 md:w-28 md:h-28 rounded-full border-2  p-2 md:p-1 bg-gradient-to-r from-purple-900  to-blue-700 border-purple-800" >
               <img
                 src={profile.image}
                 alt={profile.name}
@@ -137,7 +140,7 @@ const ProfileCard2 = () => {
               </h3>
             </div>
             {/* Profile Image */}
-            <div className="w-16 h-16 md:w-28 md:h-28 rounded-full border-2  p-2 md:p-1 border-purple-800" style={{ backgroundColor: '#800080' }}>
+            <div className="w-16 h-16 md:w-28 md:h-28 rounded-full border-2  p-2 md:p-1 bg-gradient-to-r from-purple-900  to-blue-700 border-purple-800" >
               <img
                 src={profile.image}
                 alt={profile.name}

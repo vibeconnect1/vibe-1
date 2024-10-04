@@ -51,13 +51,13 @@ function KnowMorePage1() {
         {/* Form section */}
       
       </main>
-      <div className="flex justify-center text-base font-semibold relative top-64">
+      {/* <div className="flex justify-center text-base font-semibold relative top-64">
       <p className="text-gray-800">The Most Employee Centric and Customer Teams are using our tool VIBE to drive experience.</p>
-      </div>
-      <div className="relative top-64 font-serif text-gray-800 p-10">
+      </div> */}
+      <div className="relative top-8 font-serif text-gray-800 px-20">
       {/* First Section */}
       {/* <h1 className="text-4xl font-bold  mb-2">Property Management </h1> */}
-<p className="text-xl  mb-4 text-justify font-serif w-1/2 leading-relaxed">Effortlessly manage your property with Vibe Connect’s Property Management. From tracking agreements and handling tenant requests to scheduling maintenance and managing payments, our tool centralizes all property-related tasks. Stay organized and efficient with our 15+ modules in Property Management system along with an intuitive dashboard that gives you complete control over your property management needs.  </p>
+<p className="text-xl  mb-4 text-justify font-serif  leading-relaxed">Effortlessly manage your property with Vibe Connect’s Property Management. From tracking agreements and handling tenant requests to scheduling maintenance and managing payments, our tool centralizes all property-related tasks. Stay organized and efficient with our 15+ modules in Property Management system along with an intuitive dashboard that gives you complete control over your property management needs.  </p>
       <div className="flex flex-col gap-8 lg:flex-row justify-between  mb-12">
         {/* Content */}
         <div className="lg:w-1/2 mb-8 lg:mb-0">
@@ -68,12 +68,12 @@ function KnowMorePage1() {
 
         </div>
         {/* Image */}
-        <div className="lg:w-1/2 flex justify-center">
+        <div className="lg:w-1/2 flex justify-center ">
           <img
             src={asset}
             alt="AI Automation"
-            className="rounded-lg shadow-lg h-64 w-full"
-            style={{ transform: "rotate(5deg)" }}
+            className="rounded-lg shadow-lg h-64 w-3/4"
+            // style={{ transform: "rotate(5deg)" }}
           />
         </div>
       </div>
@@ -89,12 +89,12 @@ function KnowMorePage1() {
 
         </div>
         {/* Image */}
-        <div className="lg:w-1/2 flex justify-center">
+        <div className="lg:w-1/2 flex justify-center ">
           <img
             src={work}
             alt="Team Taskforce"
-            className="rounded-lg shadow-lg h-64 w-full"
-            style={{ transform: "rotate(-5deg)" }}
+            className="rounded-lg shadow-lg h-80 w-3/4"
+            // style={{ transform: "rotate(-5deg)" }}
           />
         </div>
       </div>
@@ -110,12 +110,12 @@ function KnowMorePage1() {
 
         </div>
         {/* Image */}
-        <div className="lg:w-1/2 flex justify-center">
+        <div className="lg:w-1/2 flex justify-center ">
           <img
             src={facility}
             alt="AI Automation"
-            className="rounded-lg shadow-lg h-64 w-full"
-            style={{ transform: "rotate(5deg)" }}
+            className="rounded-lg shadow-lg h-64 w-3/4"
+            // style={{ transform: "rotate(5deg)" }}
           />
         </div>
       </div>
@@ -142,12 +142,12 @@ function KnowMorePage1() {
 </ul>
         </div>
         {/* Image */}
-        <div className="lg:w-1/2 flex justify-center">
+        <div className="lg:w-1/2 flex justify-center ">
           <img
             src={softservice}
             alt="Team Taskforce"
-            className="rounded-lg shadow-lg w-full h-72"
-            style={{ transform: "rotate(-5deg)" }}
+            className="rounded-lg shadow-lg w-full h-96 w-3/4"
+            // style={{ transform: "rotate(-5deg)" }}
           />
         </div>
       </div>
@@ -167,19 +167,19 @@ function KnowMorePage1() {
 {/* <li className="text-xl  mb-4 text-justify font-serif text-gray-800 leading-relaxed">	<span className="font-bold">Safety and Compliance:</span> Proper maintenance ensures that facilities meet safety regulations and standards, protecting employees and visitors from potential hazards.</li> */}
 <li className="text-xl  mb-4 text-justify font-serif  leading-relaxed"> <span className="font-bold">Data Security:</span>	 Electronic logs can be encrypted and backed up, providing better protection against loss, theft, or unauthorized access compared to physical logs.</li>
 <li className="text-xl  mb-4 text-justify font-serif  leading-relaxed"> <span className="font-bold">Compliance and Audit Readiness:</span>	 Digital logs facilitate compliance with industry regulations by ensuring records are easily accessible and organized for audits.</li>
-<li className="text-xl  mb-4 text-justify font-serif  leading-relaxed">	<span className="font-bold">Analytics and Insights:</span> Digital log management allows for easier data analysis, enabling companies to identify trends, improve processes, and make informed strategic decisions.</li>
+{/* <li className="text-xl  mb-4 text-justify font-serif  leading-relaxed">	<span className="font-bold">Analytics and Insights:</span> Digital log management allows for easier data analysis, enabling companies to identify trends, improve processes, and make informed strategic decisions.</li> */}
 {/* <li className="text-xl  mb-4 text-justify font-serif text-gray-800 leading-relaxed">	In summary, digital log sheet management enhances operational efficiency, accuracy, and security while supporting compliance and data-driven decision-making in companies.</li> */}
 </ul>
 
 
         </div>
         {/* Image */}
-        <div className="lg:w-1/2 flex justify-center">
+        <div className="lg:w-1/2 flex justify-center ">
           <img
             src={main}
             alt="AI Automation"
-            className="rounded-lg shadow-lg h-72 w-full"
-            style={{ transform: "rotate(5deg)" }}
+            className="rounded-lg shadow-lg h-72 w-3/4"
+            // style={{ transform: "rotate(5deg)" }}
           />
         </div>
       </div>
@@ -203,12 +203,12 @@ function KnowMorePage1() {
 {/* <p className="text-xl  mb-4 text-justify font-serif text-gray-800 leading-relaxed">	In summary, vendor management is vital for optimizing costs, ensuring quality, managing risks, and enhancing operational efficiency in both properties and companies.</p> */}
         </div>
         {/* Image */}
-        <div className="lg:w-1/2 flex justify-center">
+        <div className="lg:w-1/2 flex justify-center ">
           <img
             src={logs}
             alt="Team Taskforce"
-            className="rounded-lg shadow-lg h-72 w-full"
-            style={{ transform: "rotate(-5deg)" }}
+            className="rounded-lg shadow-lg h-96 w-3/4"
+            // style={{ transform: "rotate(-5deg)" }}
           />
         </div>
       </div>
@@ -238,8 +238,8 @@ function KnowMorePage1() {
           <img
             src={vendor}
             alt="AI Automation"
-            className="rounded-lg shadow-lg h-64 w-full"
-            style={{ transform: "rotate(5deg)" }}
+            className="rounded-lg shadow-lg h-96 w-3/4"
+            // style={{ transform: "rotate(5deg)" }}
           />
         </div>
       </div>
@@ -263,12 +263,12 @@ function KnowMorePage1() {
 {/* <p className="text-xl  mb-4 text-justify font-serif text-gray-800 leading-relaxed">		In summary, utility and logistics management are vital for operational efficiency, cost control, sustainability, and overall success in both properties and companies.</p> */}
         </div>
         {/* Image */}
-        <div className="lg:w-1/2 flex justify-center">
+        <div className="lg:w-1/2 flex justify-center px-10">
           <img
             src={utility}
             alt="Team Taskforce"
-            className="rounded-lg shadow-lg h-64 w-full"
-            style={{ transform: "rotate(-5deg)" }}
+            className="rounded-lg shadow-lg h-96 w-3/4"
+            // style={{ transform: "rotate(-5deg)" }}
           />
         </div>
       </div>
@@ -294,12 +294,12 @@ function KnowMorePage1() {
 
         </div>
         {/* Image */}
-        <div className="lg:w-1/2 flex justify-center">
+        <div className="lg:w-1/2 flex justify-center px-10">
           <img
             src={pass}
             alt="AI Automation"
-            className="rounded-lg shadow-lg h-64 w-full"
-            style={{ transform: "rotate(5deg)" }}
+            className="rounded-lg shadow-lg h-96 w-3/4"
+            // style={{ transform: "rotate(5deg)" }}
           />
         </div>
       </div>
@@ -311,7 +311,7 @@ function KnowMorePage1() {
      
 
       {/* Call to Action Section */}
-      <div className="relative top-52 flex flex-col justify-center items-center py-20 bg-gradient-to-r from-green-500 via-green-600 to-green-800 p-8 ">
+      <div className="relative top-10 flex flex-col justify-center items-center py-20 bg-gradient-to-r from-green-500 via-green-600 to-green-800 p-8 ">
         <h1 className="text-3xl md:text-4xl font-bold text-white text-center">
           Ready to reach product management mastery?
         </h1>

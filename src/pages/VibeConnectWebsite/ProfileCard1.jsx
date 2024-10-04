@@ -89,11 +89,15 @@ const ProfileCard1 = () => {
 
   return (
     <div className=' relative bottom-6'>
-    <div className="min-h-screen bg-cover bg-center" style={{ backgroundImage: 'url("https://reshapecxm.com/adobe-reshaping-cxm/media/694191382f8b1cafe71bc41bbc278ffa/in-3-1-at-1-38x-full.png")' }}>
-      <div className="absolute top-0 right-0 w-full lg:w-1/3  text-white px-4 py-2 md:px-8 md:py-2 rounded-bl-2xl shadow-lg" style={{ backgroundColor: '#c61376' }}>
+    <div className="min-h-screen bg-cover bg-center" >
+      <div className="absolute top-0 right-0 w-full lg:w-1/3  text-white px-4 py-2 md:px-8 md:py-2 rounded-bl-2xl shadow-lg bg-gradient-to-r from-purple-900  to-pink-700" >
         <p className="font-bold text-sm md:text-lg tracking-wide uppercase">Employee Productivity & Efficiency </p>
       </div>
-
+      <div className="absolute top-0 left-0 bg-gradient-to-r from-purple-900  to-pink-700 h-full">
+  <div className="w-20">
+    {/* Content inside the left sidebar */}
+  </div>
+</div>
 
       <div className="flex flex-col lg:flex-row justify-between gap-6 lg:gap-10 py-6 lg:py-10">
         {/* Sidebar with Profile Images */}
@@ -112,7 +116,7 @@ const ProfileCard1 = () => {
           <>
             {/* Profile Image First */}
             <div className='flex justify-between items-center w-96'>
-            <div className="w-16 h-16 md:w-28 md:h-28 rounded-full border-2  p-2 md:p-1 border-pink-800" style={{ backgroundColor: '#c61376' }}>
+            <div className="w-16 h-16 md:w-28 md:h-28 rounded-full border-2  p-2 md:p-1 bg-gradient-to-r from-purple-900  to-pink-700 border-pink-800" >
               <img
                 src={profile.image}
                 alt={profile.name}
@@ -143,7 +147,7 @@ const ProfileCard1 = () => {
               </h3>
             </div>
             {/* Profile Image */}
-            <div className="w-16 h-16 md:w-28 md:h-28 rounded-full border-2  p-2 md:p-1 border-pink-800" style={{ backgroundColor: '#c61376' }}>
+            <div className="w-16 h-16 md:w-28 md:h-28 rounded-full border-2  p-2 md:p-1 bg-gradient-to-r from-purple-900  to-pink-700 border-pink-800" >
               <img
                 src={profile.image}
                 alt={profile.name}

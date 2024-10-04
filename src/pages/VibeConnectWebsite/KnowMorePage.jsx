@@ -9,8 +9,8 @@ import permitnew from '../../../Website Image/permit2.jpeg';
 
 import cost from '../../../Website Image/cost2.jpeg';
 
-import compliancenew from '../../../Website Image/compliance2.jpeg';
-import auditnew from '../../../Website Image/audit2.jpeg';
+import compliancenew from '../../../Website Image/COMPLIANCE.jpeg';
+import auditnew from '../../../Website Image/AUDIT100.jpeg';
 import reportingnew from '../../../Website Image/document2.jpeg';
 import knowledgenew from '../../../Website Image/Knowledge2.jpeg';
 import purchasenew from '../../../Website Image/purchase2.jpeg';
@@ -51,10 +51,10 @@ function KnowMorePage() {
         {/* Form section */}
       
       </main>
-      <div className="flex justify-center text-base font-semibold relative top-64">
+      {/* <div className="flex justify-center text-base font-semibold relative top-64">
       <p className="text-gray-800">The Most Employee Centric and Customer Teams are using our tool VIBE to drive experience.</p>
-      </div>
-      <div className="relative top-64  text-gray-800 font-serif p-20">
+      </div> */}
+      <div className=" relative top-10 text-gray-800 font-serif px-20 ">
       {/* First Section */}
       {/* <h1 className="text-4xl font-bold font-serif leading-relaxed text-gray-800 mb-2">Management & Compliance </h1> */}
 {/* <p className="text-xl  mb-4 text-justify font-serif w-1/2 leading-relaxed ">Vibe Connect’s Compliance Tracker helps you stay ahead of regulatory requirements by continuously monitoring and updating compliance standards. The system automatically tracks updates in regulations, flags any potential risks, and keeps all your compliance documents organized and accessible.</p> */}
@@ -69,12 +69,12 @@ function KnowMorePage() {
 
         </div>
         {/* Image */}
-        <div className="lg:w-1/2 flex justify-center">
+        <div className="lg:w-1/2 flex justify-center ">
           <img
             src={compliancenew}
             alt="AI Automation"
-            className="rounded-lg shadow-lg h-64 w-full"
-            style={{ transform: "rotate(5deg)" }}
+            className="rounded-lg shadow-lg h-64 w-3/4"
+            // style={{ transform: "rotate(5deg)" }}
           />
         </div>
       </div>
@@ -90,12 +90,12 @@ function KnowMorePage() {
 
         </div>
         {/* Image */}
-        <div className="lg:w-1/2 flex justify-center">
+        <div className="lg:w-1/2 flex justify-center ">
           <img
             src={auditnew}
             alt="Team Taskforce"
-            className="rounded-lg shadow-lg h-72 w-full"
-            style={{ transform: "rotate(-5deg)" }}
+            className="rounded-lg shadow-lg h-80 w-3/4"
+            // style={{ transform: "rotate(-5deg)" }}
           />
         </div>
       </div>
@@ -111,12 +111,12 @@ function KnowMorePage() {
 
         </div>
         {/* Image */}
-        <div className="lg:w-1/2 flex justify-center">
+        <div className="lg:w-1/2 flex justify-center ">
           <img
             src={permitnew}
             alt="AI Automation"
-            className="rounded-lg shadow-lg h-64 w-full"
-            style={{ transform: "rotate(5deg)" }}
+            className="rounded-lg shadow-lg h-64 w-3/4"
+            // style={{ transform: "rotate(5deg)" }}
           />
         </div>
       </div>
@@ -137,12 +137,12 @@ function KnowMorePage() {
 
         </div>
         {/* Image */}
-        <div className="lg:w-1/2 flex justify-center">
+        <div className="lg:w-1/2 flex justify-center ">
           <img
             src={knowledgenew}
             alt="AI Automation"
-            className="rounded-lg shadow-lg h-64 w-full"
-            style={{ transform: "rotate(-5deg)" }}
+            className="rounded-lg shadow-lg h-64 w-3/4"
+            // style={{ transform: "rotate(-5deg)" }}
           />
         </div>
       </div>
@@ -160,12 +160,12 @@ function KnowMorePage() {
 
         </div>
         {/* Image */}
-        <div className="lg:w-1/2 flex justify-center">
+        <div className="lg:w-1/2 flex justify-center ">
           <img
             src={purchasenew}
             alt="AI Automation"
-            className="rounded-lg shadow-lg h-64 w-full"
-            style={{ transform: "rotate(5deg)" }}
+            className="rounded-lg shadow-lg h-72 w-3/4"
+            // style={{ transform: "rotate(5deg)" }}
           />
         </div>
       </div>
@@ -186,8 +186,8 @@ function KnowMorePage() {
           <img
             src={cost}
             alt="AI Automation"
-            className="rounded-lg shadow-lg h-64 w-full"
-            style={{ transform: "rotate(-5deg)" }}
+            className="rounded-lg shadow-lg h-72 w-3/4"
+            // style={{ transform: "rotate(-5deg)" }}
           />
         </div>
       </div>
@@ -206,12 +206,12 @@ function KnowMorePage() {
 
         </div>
         {/* Image */}
-        <div className="lg:w-1/2 flex justify-center">
+        <div className="lg:w-1/2 flex justify-center ">
           <img
             src={reportingnew}
             alt="AI Automation"
-            className="rounded-lg shadow-lg h-64 w-full"
-            style={{ transform: "rotate(5deg)" }}
+            className="rounded-lg shadow-lg h-72 w-3/4"
+            // style={{ transform: "rotate(5deg)" }}
           />
         </div>
       </div>
@@ -228,12 +228,12 @@ function KnowMorePage() {
 
         </div>
         {/* Image */}
-        <div className="lg:w-1/2 flex justify-center">
+        <div className="lg:w-1/2 flex justify-center ">
           <img
             src={reporting2}
             alt="AI Automation"
-            className="rounded-lg shadow-lg h-64 w-full"
-            style={{ transform: "rotate(-5deg)" }}
+            className="rounded-lg shadow-lg h-72 w-3/4"
+            // style={{ transform: "rotate(-5deg)" }}
           />
         </div>
       </div>
@@ -243,7 +243,7 @@ function KnowMorePage() {
      
 
       {/* Call to Action Section */}
-      <div className="relative top-52 flex flex-col justify-center items-center py-20 bg-gradient-to-r from-blue-500 to-purple-800 p-8 ">
+      <div className="relative top-10 flex flex-col justify-center items-center py-20 bg-gradient-to-r from-blue-500 to-purple-800 p-8 ">
         <h1 className="text-3xl md:text-4xl font-bold text-white text-center">
           Ready to reach product management mastery?
         </h1>

@@ -30,9 +30,9 @@ function KnowMorePage3() {
             <button className="bg-blue-500 text-white py-2 px-6 rounded-full">Learn More</button>
             
           </div> */}
-          <div className='absolute mt-4 flex justify-center w-full h-full bg-cover bg-center'>
-          {/* <img  src={compliance} alt="" className="z-20"/> */}
-          </div>
+          {/* <div className='absolute mt-4 flex justify-center w-full h-full bg-cover bg-center'>
+          <img  src={compliance} alt="" className="z-20"/>
+          </div> */}
           <div className="absolute bottom-0 w-full overflow-hidden leading-none">
     <svg className="relative block w-full h-auto" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320">
       <path fill="#ffffff" d="M0,320L80,316C160,312,320,304,480,292C640,280,800,264,960,250.7C1120,237,1280,227,1360,223.3L1440,220L1440,320L1360,320C1280,320,1120,320,960,320C800,320,640,320,480,320C320,320,160,320,80,320L0,320Z"></path>
@@ -42,17 +42,17 @@ function KnowMorePage3() {
         {/* Form section */}
       
       </main>
-      <div className="flex justify-center text-base font-semibold relative top-64">
+      {/* <div className="flex justify-center text-base font-semibold relative top-44">
       <p className="text-gray-800">The Most Employee Centric and Customer Teams are using our tool VIBE to drive experience.</p>
-      </div>
-      <div className="relative top-64 font-serif text-gray-800 p-8">
+      </div> */}
+      <div className="relative top-18 font-serif text-gray-800 p-8">
      
       
      
 
     
       {/* <h1 className="text-3xl font-bold  mb-4">	Finance & Personal Management </h1> */}
-      <p className="text-xl  mb-4 text-justify font-serif w-1/2 leading-relaxed">Finance & Personal Management tools helps individuals manage their finances, bills, insurance, healthcare, and wellness, offering comprehensive solutions for personal and financial well-being at one location. Finance and personal management tools provide individuals with a centralized platform to effectively manage various aspects of their financial lives. These tools encompass a wide range of functionalities designed to simplify tasks such as budgeting, bill tracking, insurance management, healthcare coordination, and overall wellness. Offering comprehensive solutions for personal finance and wellness in one location, these tools empower individuals to take control of their financial futures, enhance their decision-making, and improve their overall quality of life.</p>
+      <p className="text-xl  mb-4 text-justify font-serif  leading-relaxed">Finance & Personal Management tools helps individuals manage their finances, bills, insurance, healthcare, and wellness, offering comprehensive solutions for personal and financial well-being at one location. Finance and personal management tools provide individuals with a centralized platform to effectively manage various aspects of their financial lives. These tools encompass a wide range of functionalities designed to simplify tasks such as budgeting, bill tracking, insurance management, healthcare coordination, and overall wellness. Offering comprehensive solutions for personal finance and wellness in one location, these tools empower individuals to take control of their financial futures, enhance their decision-making, and improve their overall quality of life.</p>
       <div className="flex flex-col gap-8 lg:flex-row justify-between items-center mb-12">
         {/* Content */}
         <div className="lg:w-1/2 mb-8 lg:mb-0">
@@ -66,7 +66,7 @@ function KnowMorePage3() {
 <p className="text-xl  mb-4 text-justify font-serif  leading-relaxed">	<span className="font-bold ">Advance Salary Management:</span> Supports salary advances, loan management, and payroll integration for financial flexibility.</p>
         </div>
         {/* Image */}
-        <div className="lg:w-1/2 flex justify-center">
+        <div className="lg:w-1/2 flex justify-center px-10">
           <img
             src={permit}
             alt="AI Automation"
@@ -94,7 +94,7 @@ function KnowMorePage3() {
 </ul>
         </div>
         {/* Image */}
-        <div className="lg:w-1/2 flex justify-center">
+        <div className="lg:w-1/2 flex justify-center px-10">
           <img
             src={reporting}
             alt="Team Taskforce"
@@ -113,7 +113,7 @@ function KnowMorePage3() {
      
 
       {/* Call to Action Section */}
-      <div className="relative top-52 flex flex-col justify-center items-center py-20 bg-gradient-to-br from-[#662B96] to-[#0B205B] p-8 ">
+      <div className="relative top-10 flex flex-col justify-center items-center py-20 bg-gradient-to-br from-[#662B96] to-[#0B205B] p-8 ">
         <h1 className="text-3xl md:text-4xl font-bold text-white text-center">
           Ready to reach product management mastery?
         </h1>
@@ -122,7 +122,7 @@ function KnowMorePage3() {
         </button>
         
         {/* Features List */}
-        <div className="mt-4 flex gap-4 text-sm text-white">
+        <div className="mt-4 flex gap-4 text-sm text-white ">
           <span>Free 14-day trial</span>
           <span>Easy setup</span>
           <span>Cancel anytime</span>

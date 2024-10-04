@@ -3,7 +3,7 @@ import { FaFacebook, FaInstagram, FaLinkedin, FaTwitter } from 'react-icons/fa';
 
 const VibeConnectFooter = () => {
   return (
-    <footer className="bg-gray-900 text-gray-400  ">
+    <footer className="bg-gray-900 text-gray-400 relative z-10 ">
     <p className="text-2xl text-white text-center mb-4 font-bold">Vibe Connect</p>
     <div className="container  px-6">
       <div className="flex  justify-between w-full">

@@ -80,11 +80,15 @@ const ProfileCard = () => {
   }, []);
 
   return (
-    <div className="min-h-screen relative bottom-6 bg-cover bg-center" style={{ backgroundImage: 'url("https://reshapecxm.com/adobe-reshaping-cxm/media/86fb22b0b90206d418f7aa214cc1433f/in-2-at-1-38x-full.png")' }}>
-      <div className="absolute top-0 right-0 w-full lg:w-1/3  text-white px-4 lg:px-8 py-2 rounded-bl-2xl shadow-lg" style={{ backgroundColor: '#088E74' }}>
+    <div className="min-h-screen relative bottom-6 bg-cover bg-center" >
+      <div className="absolute top-0 right-0 w-full lg:w-1/3  text-white px-4 lg:px-8 py-2 rounded-bl-2xl bg-gradient-to-r from-green-500  to-green-700 shadow-lg" >
         <p className="font-bold text-lg tracking-wide uppercase">PROPERTY MANAGEMENT TOOLS</p>
       </div>
-
+      <div className="absolute top-0 left-0 bg-gradient-to-r from-green-500  to-green-700 h-full">
+  <div className="w-20">
+    {/* Content inside the left sidebar */}
+  </div>
+</div>
       <div className="flex flex-col lg:flex-row justify-between gap-1 lg:gap-10 py-14 lg:py-10">
         {/* Sidebar with Profile Images */}
         <div className="flex flex-col items-start space-y-2 md:space-y-2  lg:py-8 lg:ml-20 xl:ml-52">
@@ -102,7 +106,7 @@ const ProfileCard = () => {
           <>
             {/* Profile Image First */}
             <div className='flex justify-between items-center w-96'>
-            <div className="w-16 h-16 md:w-28 md:h-28 rounded-full border-2  p-2 md:p-1 border-green-800" style={{ backgroundColor: '#088E74' }}>
+            <div className="w-16 h-16 md:w-28 md:h-28 rounded-full border-2  p-2 md:p-1 bg-gradient-to-r from-green-500  to-green-700 border-green-800" >
               <img
                 src={profile.image}
                 alt={profile.name}
@@ -133,7 +137,7 @@ const ProfileCard = () => {
               </h3>
             </div>
             {/* Profile Image */}
-            <div className="w-16 h-16 md:w-28 md:h-28 rounded-full  border-2 p-1 border-green-800 " style={{ backgroundColor: '#088E74' }}>
+            <div className="w-16 h-16 md:w-28 md:h-28 rounded-full bg-gradient-to-r from-green-500  to-green-700 border-2 p-1 border-green-800 " >
               <img
                 src={profile.image}
                 alt={profile.name}
