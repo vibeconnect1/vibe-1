@@ -66,12 +66,12 @@ function KnowMorePage3() {
 <p className="text-xl  mb-4 text-justify font-serif  leading-relaxed">	<span className="font-bold ">Advance Salary Management:</span> Supports salary advances, loan management, and payroll integration for financial flexibility.</p>
         </div>
         {/* Image */}
-        <div className="lg:w-1/2 flex justify-center px-10">
+        <div className="lg:w-1/2 flex justify-center ">
           <img
             src={permit}
             alt="AI Automation"
-            className="rounded-lg shadow-lg h-80 w-full"
-            style={{ transform: "rotate(5deg)" }}
+            className="rounded-lg shadow-lg h-96 w-3/4"
+            // style={{ transform: "rotate(5deg)" }}
           />
         </div>
       </div>
@@ -94,12 +94,12 @@ function KnowMorePage3() {
 </ul>
         </div>
         {/* Image */}
-        <div className="lg:w-1/2 flex justify-center px-10">
+        <div className="lg:w-1/2 flex justify-center ">
           <img
             src={reporting}
             alt="Team Taskforce"
-            className="rounded-lg shadow-lg h-80 w-full"
-            style={{ transform: "rotate(-5deg)" }}
+            className="rounded-lg shadow-lg h-96 w-3/4"
+            // style={{ transform: "rotate(-5deg)" }}
           />
         </div>
       </div>

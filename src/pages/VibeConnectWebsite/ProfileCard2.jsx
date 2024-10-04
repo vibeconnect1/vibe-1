@@ -113,7 +113,7 @@ const ProfileCard2 = () => {
               <img
                 src={profile.image}
                 alt={profile.name}
-                className="w-full h-full p-2 filter invert"
+                className="w-full h-full p-2 filter invert object-cover"
               />
             </div>
             {/* Profile Name and Title */}
