@@ -72,7 +72,7 @@ function KnowMorePage1() {
           <img
             src={asset}
             alt="AI Automation"
-            className="rounded-lg shadow-lg h-64 w-3/4"
+            className=" h-64 w-3/4"
             // style={{ transform: "rotate(5deg)" }}
           />
         </div>
@@ -93,7 +93,7 @@ function KnowMorePage1() {
           <img
             src={work}
             alt="Team Taskforce"
-            className="rounded-lg shadow-lg h-80 w-3/4"
+            className=" h-80 w-3/4"
             // style={{ transform: "rotate(-5deg)" }}
           />
         </div>
@@ -114,7 +114,7 @@ function KnowMorePage1() {
           <img
             src={facility}
             alt="AI Automation"
-            className="rounded-lg shadow-lg h-64 w-3/4"
+            className=" h-64 w-3/4"
             // style={{ transform: "rotate(5deg)" }}
           />
         </div>
@@ -146,7 +146,7 @@ function KnowMorePage1() {
           <img
             src={softservice}
             alt="Team Taskforce"
-            className="rounded-lg shadow-lg w-full h-96 w-3/4"
+            className=" h-96 w-3/4"
             // style={{ transform: "rotate(-5deg)" }}
           />
         </div>
@@ -178,7 +178,7 @@ function KnowMorePage1() {
           <img
             src={main}
             alt="AI Automation"
-            className="rounded-lg shadow-lg h-72 w-3/4"
+            className=" h-72 w-3/4"
             // style={{ transform: "rotate(5deg)" }}
           />
         </div>
@@ -207,7 +207,7 @@ function KnowMorePage1() {
           <img
             src={logs}
             alt="Team Taskforce"
-            className="rounded-lg shadow-lg h-96 w-3/4"
+            className=" h-96 w-3/4"
             // style={{ transform: "rotate(-5deg)" }}
           />
         </div>
@@ -238,7 +238,7 @@ function KnowMorePage1() {
           <img
             src={vendor}
             alt="AI Automation"
-            className="rounded-lg shadow-lg h-96 w-3/4"
+            className=" h-96 w-3/4"
             // style={{ transform: "rotate(5deg)" }}
           />
         </div>
@@ -267,7 +267,7 @@ function KnowMorePage1() {
           <img
             src={utility}
             alt="Team Taskforce"
-            className="rounded-lg shadow-lg h-96 w-3/4"
+            className=" h-96 w-3/4"
             // style={{ transform: "rotate(-5deg)" }}
           />
         </div>
@@ -298,7 +298,7 @@ function KnowMorePage1() {
           <img
             src={pass}
             alt="AI Automation"
-            className="rounded-lg shadow-lg h-96 w-3/4"
+            className=" h-96 w-3/4"
             // style={{ transform: "rotate(5deg)" }}
           />
         </div>

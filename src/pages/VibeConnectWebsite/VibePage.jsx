@@ -82,8 +82,7 @@ const VibePage = () => {
             TOUCHPOINTS
           </h1>
           <p className="text-md md:text-lg leading-relaxed mb-10 text-center w-11/12 md:w-2/3">
-            Reaching people in the right place, at the right time, is essential. At every
-            point of interaction with our brands, customers demand quality and congruence. 
+          Connecting with the right people at the right time is essential in today’s dynamic work environment. At every interaction with Vibe Copilot, users demand quality, simplicity, and cohesion. 
           </p>
 
           {/* 95% Circle */}
@@ -95,17 +94,16 @@ const VibePage = () => {
             variants={circleVariants}
             transition={{ duration: 1, ease: 'easeOut' }}
           >
-            <div className='flex flex-col md:flex-row items-center gap-2 md:relative  ml-0 md:ml-56'>
-              <CircularProgress percentage={95} />
+            <div className='flex flex-col items-center gap-2 md:relative  ml-0 md:ml-10'>
+              <CircularProgress percentage={86} />
               <div>
-                <p className="text-center text-sm md:text-base">
-                  of customers use three or
+                <p className="text-center text-sm md:text-lg text-justify">
+                of professionals use multiple platforms for daily tasks,
                   <br />
-                  more channels to connect with a
+                    but Vibe Connect unifies  everything into one seamless
                   <br />
-                  company in a single service
-                  <br />
-                  interaction.
+                     experience.
+                  
                 </p>
               </div>
             </div>

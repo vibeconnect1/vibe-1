@@ -14,20 +14,22 @@ import auditnew from '../../../Website Image/AUDIT100.jpeg';
 import reportingnew from '../../../Website Image/document2.jpeg';
 import knowledgenew from '../../../Website Image/Knowledge2.jpeg';
 import purchasenew from '../../../Website Image/purchase2.jpeg';
+import VibeConnectNavbar1 from "./VibeConnectNavbar1";
 
 function KnowMorePage() {
   return (
     <div className="min-h-screen flex flex-col">
       {/* Header */}
+      <VibeConnectNavbar1/>
       <header className="flex justify-between p-4 bg-transparent absolute top-0 w-full z-10">
         <div></div> {/* Placeholder for logo */}
-        <nav className="space-x-6 text-white">
+        {/* <nav className="space-x-6 text-white">
           <a href="#integrations" className="hover:underline">Integrations</a>
           <a href="#pricing" className="hover:underline">Pricing</a>
           <a href="#login" className="hover:underline">Log in</a>
           <a href="#login" className="hover:underline">Get Demo</a>
           <a href="#demo" className="bg-blue-600 text-white py-2 px-4 rounded-full hover:bg-blue-500">Contact Us</a>
-        </nav>
+        </nav> */}
       </header>
 
       {/* Main section */}
@@ -73,7 +75,7 @@ function KnowMorePage() {
           <img
             src={compliancenew}
             alt="AI Automation"
-            className="rounded-lg shadow-lg h-64 w-3/4"
+            className=" h-64 w-3/4"
             // style={{ transform: "rotate(5deg)" }}
           />
         </div>
@@ -94,7 +96,7 @@ function KnowMorePage() {
           <img
             src={auditnew}
             alt="Team Taskforce"
-            className="rounded-lg shadow-lg h-80 w-3/4"
+            className=" h-80 w-3/4"
             // style={{ transform: "rotate(-5deg)" }}
           />
         </div>
@@ -115,7 +117,7 @@ function KnowMorePage() {
           <img
             src={permitnew}
             alt="AI Automation"
-            className="rounded-lg shadow-lg h-64 w-3/4"
+            className=" h-64 w-3/4"
             // style={{ transform: "rotate(5deg)" }}
           />
         </div>
@@ -124,13 +126,13 @@ function KnowMorePage() {
       <div className="flex flex-col gap-8 lg:flex-row-reverse justify-between  mb-12">
         {/* Content */}
         <div className="lg:w-1/2 mb-8 lg:mb-0">
-        <h3 className="text-3xl font-bold mb-2 ">Knowledge Base</h3>
+        <h3 className="text-3xl font-bold mb-2 ">Centralized Resource Hub</h3>
         <p className="text-xl  mb-4 text-justify font-serif  leading-relaxed">
-        	 Provides a repository of information, FAQs, and training materials to support knowledge sharing and learning.
+        The knowledge base serves as a comprehensive repository for essential information, FAQs, and training materials, ensuring employees can easily access the resources they need.
         </p>
         <h3 className="text-3xl font-bold mb-2 ">Learning Management System (LMS)</h3>
         <p className="text-xl  mb-4 text-justify font-serif  leading-relaxed">
-         Manages courses, defines learning paths, and tracks learner progress for employee development.
+        The LMS defines clear learning paths, guiding employees through various courses and materials tailored to their development needs.
         </p>
 
 
@@ -141,7 +143,7 @@ function KnowMorePage() {
           <img
             src={knowledgenew}
             alt="AI Automation"
-            className="rounded-lg shadow-lg h-64 w-3/4"
+            className=" h-64 w-3/4"
             // style={{ transform: "rotate(-5deg)" }}
           />
         </div>
@@ -164,7 +166,7 @@ function KnowMorePage() {
           <img
             src={purchasenew}
             alt="AI Automation"
-            className="rounded-lg shadow-lg h-72 w-3/4"
+            className=" h-72 w-3/4"
             // style={{ transform: "rotate(5deg)" }}
           />
         </div>
@@ -186,7 +188,7 @@ function KnowMorePage() {
           <img
             src={cost}
             alt="AI Automation"
-            className="rounded-lg shadow-lg h-72 w-3/4"
+            className=" h-72 w-3/4"
             // style={{ transform: "rotate(-5deg)" }}
           />
         </div>
@@ -210,7 +212,7 @@ function KnowMorePage() {
           <img
             src={reportingnew}
             alt="AI Automation"
-            className="rounded-lg shadow-lg h-72 w-3/4"
+            className=" h-72 w-3/4"
             // style={{ transform: "rotate(5deg)" }}
           />
         </div>
@@ -232,7 +234,7 @@ function KnowMorePage() {
           <img
             src={reporting2}
             alt="AI Automation"
-            className="rounded-lg shadow-lg h-72 w-3/4"
+            className=" h-72 w-3/4"
             // style={{ transform: "rotate(-5deg)" }}
           />
         </div>

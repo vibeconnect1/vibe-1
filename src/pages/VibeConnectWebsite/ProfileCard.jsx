@@ -20,7 +20,7 @@ const profiles = [
     id: 2,
     name: 'ASSET MANAGEMENT ',
     title: '',
-    text:" Tools  for tracking assets,scheduling maintenance, and managing asset inventory efficiently.Keep tabs on all your assets with ease using Vibe Connect’s Asset Management. Track the lifecycle of each asset, manage depreciation, and ensure optimal utilization with a streamlined system that integrates asset details into one central hub. Say goodbye to asset mismanagement and hello to organized, efficient tracking. ",
+    text:" Tools for tracking assets, scheduling maintenance, and managing asset inventory efficiently. Keep tabs on all your assets with ease using Vibe Connect’s Asset Management. Track the lifecycle of each asset, manage depreciation, and ensure optimal utilization with a streamlined system that integrates asset details into one central hub. Say goodbye to asset mismanagement and hello to organized, efficient tracking. Our solution enhances decision-making by providing real-time insights into asset performance and availability, enabling proactive maintenance scheduling. Furthermore, automated alerts and reminders ensure that critical tasks are never overlooked, maximizing operational efficiency. ",
     description: 'ASSET MANAGEMENT',
     image: asset,
   },
@@ -110,7 +110,7 @@ const ProfileCard = () => {
               <img
                 src={profile.image}
                 alt={profile.name}
-                className=" w-full h-full p-2 filter invert"
+                className=" w-full h-full p-3 filter invert object-cover"
               />
             </div>
             {/* Profile Name and Title */}
@@ -141,7 +141,7 @@ const ProfileCard = () => {
               <img
                 src={profile.image}
                 alt={profile.name}
-                className=" w-full h-full p-2 md:p-2 filter invert "
+                className=" w-full h-full p-2 md:p-2 filter invert object-cover"
               />
             </div>
             </div>

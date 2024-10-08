@@ -82,7 +82,7 @@ const VibePage1 = () => {
             DIFFERENTIATION
           </h1>
           <p className="text-sm md:text-xl leading-relaxed mb-10">
-            A good customer experience is satisfying. 
+          A seamless workspace experience is more than just convenience—it’s essential for productivity.
           </p>
 
           {/* 80% Circle */}
@@ -95,16 +95,16 @@ const VibePage1 = () => {
             transition={{ duration: 1, ease: 'easeOut' }}
           >
             {/* Replace with your actual CircularProgress component */}
-            <CircularProgress percentage={80}/>
+            <CircularProgress percentage={75}/>
             <div>
-              <p className="text-center text-lg md:text-base">
-                of companies believe they deliver
+              <p className="text-center text-lg md:text-lg text-justify">
+              of businesses think they offer an integrated solution, but only 10% of users feel  
                 <br />
-                they deliver a superior
+                their workflows are truly connected. Vibe Connect stands apart by providing a  
                 <br />
-                experience
+                unified platform that actually bridges this gap, giving users the tools they need  
                 <br />
-                8% of their customers agree.
+                without the complexity.
               </p>
             </div>
           </motion.div>

@@ -38,7 +38,7 @@ const profiles = [
     id: 4,
     name: 'KNOWLEDGE BASE ',
     title: '',
-    text:"	 Provides a repository of information, FAQs, and training materials to support knowledge sharing and learning. Manages courses, defines learning paths, and tracks learner progress for employee development. ",
+    text:"	 Provides a repository of information, FAQs, and training materials to support knowledge sharing and learning. Manages courses, defines learning paths, and tracks learner progress for employee development.A knowledge base centralizes essential resources, enabling employees to quickly access information and resolve queries. It supports ongoing learning by offering structured training materials and answers to frequently asked questions. It also helps define clear learning paths, making it easier to track employee progress and development. With a user-friendly interface, employees can efficiently manage their learning journey and enhance their skills. The knowledge base ultimately fosters a culture of continuous improvement and knowledge sharing across the organization. ",
     description: 'KNOWLEDGE BASE',
     image: knowledge,
   },
@@ -82,15 +82,14 @@ const ProfilePage = () => {
   }, []);
 
   return (
-    <div className="min-h-screen relative bottom-6 bg-cover bg-center" >
+    <div className="min-h-screen relative bottom-6 bg-cover bg-center" 
+    >
     {/* Gradient on top right section */}
     <div className="absolute top-0 right-0 w-full mt-2 lg:w-1/3 text-white px-4 py-2 md:px-8 md:py-2 bg-gradient-to-r from-blue-500 to-blue-700 rounded-bl-2xl shadow-lg">
       <p className="font-bold text-sm md:text-lg tracking-wide uppercase">Management and compliance tools</p>
     </div>
-    <div className="absolute top-0 left-0 bg-gradient-to-r from-blue-500 to-blue-700 h-full">
-  <div className="w-20">
-    {/* Content inside the left sidebar */}
-  </div>
+    <div className="absolute top-0 left-0 bg-gradient-to-r from-blue-500 to-blue-700 h-full w-20">
+ 
 </div>
 
 

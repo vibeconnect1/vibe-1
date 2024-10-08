@@ -70,7 +70,7 @@ function KnowMorePage3() {
           <img
             src={permit}
             alt="AI Automation"
-            className="rounded-lg shadow-lg h-96 w-3/4"
+            className=" h-96 w-3/4"
             // style={{ transform: "rotate(5deg)" }}
           />
         </div>
@@ -98,7 +98,7 @@ function KnowMorePage3() {
           <img
             src={reporting}
             alt="Team Taskforce"
-            className="rounded-lg shadow-lg h-96 w-3/4"
+            className=" h-96 w-3/4"
             // style={{ transform: "rotate(-5deg)" }}
           />
         </div>

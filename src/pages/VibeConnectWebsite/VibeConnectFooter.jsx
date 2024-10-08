@@ -19,7 +19,7 @@ const VibeConnectFooter = () => {
           <h3 className="text-white font-bold mb-2">Open Source</h3>
           <ul>
             <li className="mb-2"><a href="#" className="hover:text-white">Download</a></li>
-            <li className="mb-2"><a href="#" className="hover:text-white">Github</a></li>
+            {/* <li className="mb-2"><a href="#" className="hover:text-white">Github</a></li> */}
             <li className="mb-2"><a href="#" className="hover:text-white">Runbot</a></li>
             <li className="mb-2"><a href="#" className="hover:text-white">Translations</a></li>
           </ul>

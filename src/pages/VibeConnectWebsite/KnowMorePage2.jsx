@@ -80,7 +80,7 @@ Investing in strategies that enhance employee productivity and efficiency not on
           <img
             src={taskimage}
             alt="AI Automation"
-            className="rounded-lg shadow-lg h-64 w-3/4"
+            className=" h-64 w-3/4"
             // style={{ transform: "rotate(5deg)" }}
           />
         </div>
@@ -101,7 +101,7 @@ Investing in strategies that enhance employee productivity and efficiency not on
           <img
             src={communicationimage}
             alt="AI Automation"
-            className="rounded-lg shadow-lg h-72 w-full"
+            className=" h-72 w-full"
             // style={{ transform: "rotate(-5deg)" }}
           />
         </div>
@@ -121,7 +121,7 @@ Investing in strategies that enhance employee productivity and efficiency not on
           <img
             src={serviceimage}
             alt="AI Automation"
-            className="rounded-lg shadow-lg h-64 w-3/4"
+            className=" h-64 w-3/4"
             // style={{ transform: "rotate(5deg)" }}
           />
         </div>
@@ -142,7 +142,7 @@ Investing in strategies that enhance employee productivity and efficiency not on
           <img
             src={knowledgebase}
             alt="AI Automation"
-            className="rounded-lg shadow-lg h-64 w-3/4"
+            className=" h-64 w-3/4"
             // style={{ transform: "rotate(-5deg)" }}
           />
         </div>
@@ -162,7 +162,7 @@ Investing in strategies that enhance employee productivity and efficiency not on
           <img
             src={skill}
             alt="AI Automation"
-           className="rounded-lg shadow-lg h-64 w-3/4"
+           className=" h-64 w-3/4"
           //  style={{ transform: "rotate(5deg)" }}
           />
         </div>
@@ -181,7 +181,7 @@ Investing in strategies that enhance employee productivity and efficiency not on
           <img
             src={meetingimage}
             alt="AI Automation"
-            className="rounded-lg shadow-lg h-64 w-3/4"
+            className=" h-64 w-3/4"
             // style={{ transform: "rotate(-5deg)" }}
           />
         </div>
@@ -201,7 +201,7 @@ Investing in strategies that enhance employee productivity and efficiency not on
           <img
             src={reputationimage}
             alt="Team Taskforce"
-            className="rounded-lg shadow-lg h-64 w-3/4"
+            className=" h-64 w-3/4"
             // style={{ transform: "rotate(5deg)" }}
           />
         </div>

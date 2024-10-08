@@ -148,7 +148,7 @@ const VibeConnectNavbar = () => {
   )}
 </AnimatePresence>
 
-       <div className="flex justify-between items-center bg-black px-8 py-1 z-20">
+       <div className="flex justify-between items-center  px-8 py-1 z-20">
       <h1 className="text-xl font-sans font-bold text-white ml-10 z-10" ><Link to="/home">Vibe Connect</Link></h1>
       
       <div className="md:flex gap-8  hidden">
