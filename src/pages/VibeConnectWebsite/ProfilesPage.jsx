@@ -38,7 +38,7 @@ const profiles = [
     id: 4,
     name: 'KNOWLEDGE BASE ',
     title: '',
-    text:"	 Provides a repository of information, FAQs, and training materials to support knowledge sharing and learning. Manages courses, defines learning paths, and tracks learner progress for employee development.A knowledge base centralizes essential resources, enabling employees to quickly access information and resolve queries. It supports ongoing learning by offering structured training materials and answers to frequently asked questions. It also helps define clear learning paths, making it easier to track employee progress and development. With a user-friendly interface, employees can efficiently manage their learning journey and enhance their skills. The knowledge base ultimately fosters a culture of continuous improvement and knowledge sharing across the organization. ",
+    text:"	A knowledge base centralizes essential resources, enabling employees to quickly access information and resolve queries. It supports ongoing learning by offering structured training materials and answers to frequently asked questions. It also helps define clear learning paths, making it easier to track employee progress and development. With a user-friendly interface, employees can efficiently manage their learning journey and enhance their skills. The knowledge base ultimately fosters a culture of continuous improvement and knowledge sharing across the organization. ",
     description: 'KNOWLEDGE BASE',
     image: knowledge,
   },

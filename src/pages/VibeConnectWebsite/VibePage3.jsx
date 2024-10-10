@@ -117,10 +117,19 @@ const VibePage3 = () => {
       {/* Adobe Logo */}
       <div className="absolute top-5 right-4 md:right-10">
         <div className="flex items-center space-x-6">
-          <button onClick={toggleDropdown} className="text-white font-semibold">Apps</button>
-          <Link to="/AboutUs-website" className="text-white font-semibold hidden md:inline">About us</Link>
-          <Link to="/Contact-website" className="text-white font-semibold hidden md:inline">Contact</Link>
+          <button onClick={toggleDropdown} className="text-white font-semibold">Solutions</button>
+          <Link to="" className="text-white font-semibold hidden md:inline">Career</Link>
+          <Link 
+          // to="/AboutUs-website" 
+          className="text-white font-semibold hidden md:inline">About us</Link>
+          
+          <Link to="" className="text-white font-semibold hidden md:inline">FAQ</Link>
+          <Link to="" className="text-white font-semibold hidden md:inline">Media Section</Link>
+          <Link to="" className="text-white font-semibold hidden md:inline">Case studies</Link>
+          <Link to="" className="text-white font-semibold hidden md:inline">Testimonial</Link>
           <button onClick={openSignInModal} className="text-white font-semibold rounded">Login</button>
+          {/* <Link to="/Contact-website" className="text-white font-semibold hidden md:inline">Contact</Link> */}
+          
         </div>
       </div>
       
@@ -147,7 +156,7 @@ const VibePage3 = () => {
                  
                   <ul>
                     {section.links.map((link) => (
-                      <li key={link.url} className="py-1 font-medium text-sm mb-1 hover:text-gray-800">
+                      <li key={link.url} className="py-1   font-serif  hover:text-gray-800  leading-relaxed">
                         <Link to={link.url}>{link.name}</Link>
                       </li>
                     ))}
@@ -174,7 +183,7 @@ const VibePage3 = () => {
         </motion.h1>
 
         <motion.h1
-          style={{ fontFamily: 'Montserrat, sans-serif' }}
+          // style={{ fontFamily: 'Montserrat, sans-serif' }}
           className="text-4xl md:text-8xl w-full lg:ml-20 font-bold leading-tight"
           initial={{ opacity: 0, translateY: 10 }}
           animate={{ opacity: inView ? 1 : 0, translateY: inView ? 0 : 10 }}
@@ -184,7 +193,7 @@ const VibePage3 = () => {
         </motion.h1>
 
         <motion.h1
-          style={{ fontFamily: 'Montserrat, sans-serif' }}
+          // style={{ fontFamily: 'Montserrat, sans-serif' }}
           className="text-5xl md:text-9xl w-full lg:ml-20 font-bold leading-tight"
           initial={{ opacity: 0, translateY: 10 }}
           animate={{ opacity: inView ? 1 : 0, translateY: inView ? 0 : 10 }}

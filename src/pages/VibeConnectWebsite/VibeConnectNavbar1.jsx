@@ -20,56 +20,67 @@ const dropdownVariants = {
 };
 
 const VibeConnectNavbar1 = () => {
-    const sections = [
-        {
-          title: "FINANCE",
-          links: [
-            { name: "Personal Financial", url: "/Personal-Financial-website" },
-            { name: "Purchase", url: "/Purchase-website" },
-            { name: "Bill Pay", url: "/billpay-website" },
-            { name: "Audit", url: "/audit-website" },
-            { name: "Insurance", url: "/insurance-website" },
-            { name: "Advance Salary", url: "/advance-salary-website" },
-            { name: "Other Bills", url: "/other-bills-website" },
-          ],
-        },
-        {
-          title: "Employee",
-          links: [
-            { name: "Project Management", url: "/project-management-website" },
-            { name: "Task Management", url: "/task-management-website" },
-            { name: "Calendar", url: "/calendar-website" },
-            { name: "Communication", url: "/Communication-website" },
-            { name: "Birthday", url: "/birthday-website" },
-            { name: "Fitness", url: "/fitness-website" },
-            { name: "Doctor Appointment", url: "/doctor-appointment-website" },
-          ],
-        },
-        {
-          title: "Operations",
-          links: [
-            { name: "Suppliers", url: "/suppliers-website" },
-            { name: "Service PR/WO", url: "/Servicepr-wo-website" },
-            { name: "Asset", url: "/Asset-website" },
-            { name: "Soft Services", url: "/SoftServices-website" },
-            { name: "Service Desk", url: "/Service-desk-website" },
-            { name: "Transportation", url: "/Transportation-website" },
-            { name: "F&B", url: "/fb-website" },
-          ],
-        },
-        {
-          title: "HUMAN RESOURCES",
-          links: [
-            { name: "HRMS", url: "/HRMS-website" },
-            { name: "Integration", url: "/Integration-website" },
-            { name: "Passes", url: "/Passes-website" },
-            { name: "Permit", url: "/Permit-website" },
-            { name: "Attendance", url: "/Attendance-website" },
-            { name: "Incident", url: "/Incident-website" },
-            { name: "Meeting", url: "/Meeting-website" },
-          ],
-        },
-      ];
+  const sections = [
+    {
+      title: "FINANCE",
+      links: [
+        { name: "Personal Financial", url: "/Personal-Financial-website" },
+        { name: "Purchase", url: "/Purchase-website" },
+        { name: "Bill Pay", url: "/billpay-website" },
+        { name: "Audit", url: "/audit-website" },
+        { name: "Insurance", url: "/insurance-website" },
+        { name: "Advance Salary", url: "/advance-salary-website" },
+        { name: "Other Bills", url: "/other-bills-website" },
+      ],
+    },
+    {
+      title: "Employee",
+      links: [
+        { name: "Project Management", url: "/project-management-website" },
+        { name: "Task Management", url: "/task-management-website" },
+        { name: "Calendar", url: "/calendar-website" },
+        { name: "Communication", url: "/Communication-website" },
+        { name: "Birthday", url: "/birthday-website" },
+        { name: "Fitness", url: "/fitness-website" },
+        { name: "Doctor Appointment", url: "/doctor-appointment-website" },
+        { name: "Skill Grow", url: "/Skill-Grow-website" },
+        { name: "Document Pro", url: "/Document Pro-website" },
+
+      ],
+    },
+    {
+      title: "Operations",
+      links: [
+        { name: "Suppliers", url: "/suppliers-website" },
+        { name: "Service PR/WO", url: "/Servicepr-wo-website" },
+        { name: "Asset", url: "/Asset-website" },
+        { name: "Soft Services", url: "/SoftServices-website" },
+        { name: "Service Desk", url: "/Service-desk-website" },
+        { name: "Transportation", url: "/Transportation-website" },
+        { name: "F&B", url: "/fb-website" },
+        { name: "Integration", url: "/Integration-website" },
+        { name: "Passes", url: "/Passes-website" },
+        { name: "Permit", url: "/Permit-website" },
+        { name: "Attendance", url: "/Attendance-website" },
+        { name: "Incident", url: "/Incident-website" },
+        { name: "Meeting", url: "/Meeting-website" },
+      ],
+    },
+    {
+      title: "HUMAN RESOURCES",
+      links: [
+        // { name: "HRMS", url: "/HRMS-website" },
+        { name: "Employee Onboarding", url: "/HRMS-website" },
+        { name: "Payroll Management", url: "/HRMS-website" },
+        { name: "Attendance Tracking", url: "/HRMS-website" },
+        { name: "Roster Management", url: "/HRMS-website" },
+        { name: "Reports and Analytics", url: "/HRMS-website" },
+        { name: "Leave Management", url: "/HRMS-website" },
+       
+  
+      ],
+    },
+  ];
 
   const [modalType, setModalType] = useState(null);
   const openSignInModal = () => setModalType('signin');
@@ -115,40 +126,38 @@ const VibeConnectNavbar1 = () => {
         <header className="relative">
           <div>
             <AnimatePresence>
-              {isDropdownOpen && (
+            {isDropdownOpen && (
+          <motion.div
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            transition={{ duration: 0.3 }}
+            className="absolute left-0 top-14 w-full px-4 sm:px-8 lg:px-20 py-6 lg:py-6  bg-white/85 z-40 border border-gray-200 shadow-lg"
+          >
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+              {sections.map((section, index) => (
                 <motion.div
-                  initial={{ opacity: 0, y: -10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -10 }}
-                  transition={{ duration: 0.3 }}
-                  className="absolute left-0 top-10 w-full px-4 sm:px-8 lg:px-36 py-6 lg:py-14 bg-white border border-gray-200 shadow-lg"
+                  key={section.title}
+                  custom={index}
+                  initial="hidden"
+                  animate="visible"
+                  exit="exit"
+                  variants={dropdownVariants}
                 >
-                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 p-4">
-                    {sections.map((section, index) => (
-                      <motion.div
-                        key={section.title}
-                        custom={index}
-                        initial="hidden"
-                        animate="visible"
-                        exit="exit"
-                        variants={dropdownVariants}
-                      >
-                        <h3 className="font-bold text-base sm:text-lg mb-2">{section.title}</h3>
-                        <ul>
-                          {section.links.map((link) => (
-                            <li
-                              key={link.url}
-                              className="py-1 font-medium text-sm mb-1 hover:text-gray-800"
-                            >
-                              <Link to={link.url}>{link.name}</Link>
-                            </li>
-                          ))}
-                        </ul>
-                      </motion.div>
+                  <h3 className="font-bold text-base text-black sm:text-lg mb-2 border-b-2 w-64  border-gray-400">{section.title}</h3>
+                 
+                  <ul>
+                    {section.links.map((link) => (
+                      <li key={link.url} className="py-1   font-serif  hover:text-gray-800  leading-relaxed">
+                        <Link to={link.url}>{link.name}</Link>
+                      </li>
                     ))}
-                  </div>
+                  </ul>
                 </motion.div>
-              )}
+              ))}
+            </div>
+          </motion.div>
+        )}
             </AnimatePresence>
 
             <div className="flex justify-between items-center px-8 py-1 z-20">
@@ -172,7 +181,7 @@ const VibeConnectNavbar1 = () => {
               </div>
 
               <div className="md:flex hidden z-20">
-                <button onClick={openSignInModal} className={`font-bold ${textColor} px-4 py-2  rounded-md mr-4 z-10`}>
+                <button onClick={openSignInModal} className={`font-bold ${textColor} px-4 py-2  rounded-md mr-4 z-10 bg-blue-600 text-white  rounded-full hover:bg-blue-500`}>
                   Sign in
                 </button>
               </div>

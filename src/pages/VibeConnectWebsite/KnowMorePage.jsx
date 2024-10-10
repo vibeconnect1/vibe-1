@@ -107,7 +107,8 @@ function KnowMorePage() {
         <div className="lg:w-1/2 mb-8 lg:mb-0">
         <h3 className="text-3xl font-bold mb-2 ">Permit Tracking</h3>
     <p className="text-xl  mb-4 text-justify font-serif  leading-relaxed">
-    Enables digitalization of permits, monitors renewals, and sends expiry alerts.
+    
+    The Permit Tracking feature enables the digitalization of permit management processes, allowing organizations to efficiently monitor permit statuses and ensure compliance. This tool facilitates the tracking of renewals by providing timely notifications for upcoming expirations, thus preventing lapses in compliance. By sending expiry alerts, it helps organizations proactively manage their permits, ensuring that all necessary documentation is up to date and in order. This streamlined approach not only enhances operational efficiency but also minimizes the risk of penalties associated with expired permits.
     </p>
 
 
@@ -133,6 +134,14 @@ function KnowMorePage() {
         <h3 className="text-3xl font-bold mb-2 ">Learning Management System (LMS)</h3>
         <p className="text-xl  mb-4 text-justify font-serif  leading-relaxed">
         The LMS defines clear learning paths, guiding employees through various courses and materials tailored to their development needs.
+        </p>
+        <h3 className="text-3xl font-bold mb-2 ">Progress Tracking</h3>
+        <p className="text-xl  mb-4 text-justify font-serif  leading-relaxed">
+        Both the knowledge base and LMS track learner progress, enabling managers to monitor employee growth and identify areas for improvement.
+        </p>
+        <h3 className="text-3xl font-bold mb-2 ">Knowledge Sharing Culture</h3>
+        <p className="text-xl  mb-4 text-justify font-serif  leading-relaxed">
+        By providing accessible training materials and resources, the system fosters a culture of knowledge sharing, encouraging collaboration and continuous learning among employees.
         </p>
 
 

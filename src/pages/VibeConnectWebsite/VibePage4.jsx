@@ -75,7 +75,7 @@ const VibePage4 = () => {
             {/* Point A to Point B. The path to making a purchase was predictably linear, finite, and well traveled. */}
           </motion.p>
           <motion.p
-            className="text-sm md:text-lg lg:text-2xl ml-2 md:ml-4 mb-4 md:mb-6 text-justify"
+            className="text-sm md:text-xl lg:text-2xl ml-2 md:ml-4 mb-4 md:mb-6 text-justify font-serif  leading-relaxed"
             initial="hidden"
             animate={controls}
             variants={textVariants}

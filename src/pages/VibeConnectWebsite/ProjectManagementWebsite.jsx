@@ -36,13 +36,10 @@ function ProjectManagementWebsite() {
       {/* Main section */}
       <main className="flex-grow">
         {/* Gradient background */}
-        <section className="relative bg-gradient-to-r from-[#e98972] to-[#db5354] text-center py-32">
+        <section className="relative bg-gradient-to-r from-[#e98972] to-[#db5354] text-center py-40">
         <h1 className="text-5xl font-bold  text-white mb-4">Project Management</h1>
         <div className="flex justify-center">
-  <p className="text-xl mb-4 text-justify text-white font-serif leading-relaxed">
-    Effectively plan, execute, and monitor your projects with our comprehensive Project Management module.<br/>
-     Manage tasks, collaborate with your team, monitor timelines, and allocate resources efficiently.
-  </p>
+ 
 </div>
 
           {/* <div className="flex justify-center">
@@ -159,7 +156,7 @@ function ProjectManagementWebsite() {
      
 
       {/* Call to Action Section */}
-      <div className=" flex flex-col justify-center items-center py-8  bg-gradient-to-r from-[#e98972] to-[#db5354] p-8 ">
+      {/* <div className=" flex flex-col justify-center items-center py-8  bg-gradient-to-r from-[#e98972] to-[#db5354] p-8 ">
         <h1 className="text-3xl md:text-4xl font-bold text-white text-center">
           Ready to reach product management mastery?
         </h1>
@@ -167,13 +164,13 @@ function ProjectManagementWebsite() {
           Get a demo
         </button>
         
-        {/* Features List */}
+        
         <div className="mt-4 flex gap-4 text-sm text-white">
           <span>Free 14-day trial</span>
           <span>Easy setup</span>
           <span>Cancel anytime</span>
         </div>
-      </div>
+      </div> */}
 
    <div className="mt-4">
    <VibeConnectFooter/></div>

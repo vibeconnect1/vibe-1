@@ -75,7 +75,81 @@ function KnowMorePage3() {
           />
         </div>
       </div>
+      
       <div className="flex flex-col gap-8 lg:flex-row-reverse justify-between items-center mb-12">
+        {/* Content */}
+        <div className="lg:w-1/2 mb-8 lg:mb-0">
+        <h3 className="text-3xl font-bold  mb-2">		Insurance management</h3>
+    <p className="text-xl  mb-4 text-justify font-serif  leading-relaxed">
+    <span className="font-bold ">	Comprehensive Policy Management: </span>Easily monitor and manage multiple insurance policies in one place, ensuring clear visibility of coverage and protection against unforeseen risks.    </p>
+
+<p className="text-xl  mb-4 text-justify font-serif  leading-relaxed"><span className="font-bold ">	Claims Tracking and Review:</span> Simplify the claims process with seamless tracking, while reviewing existing policies to identify any gaps or opportunities for enhanced coverage.</p>
+<p className="text-xl  mb-4 text-justify font-serif  leading-relaxed"><span className="font-bold ">	Automated Reminders and Alerts:</span> Stay on top of critical dates with integrated reminders for policy renewals and claim submission deadlines, minimizing the risk of missed opportunities.</p>
+<p className="text-xl  mb-4 text-justify font-serif  leading-relaxed">	<span className="font-bold ">Optimized Coverage Review:</span> Gain insights into your insurance portfolio, allowing for quick adjustments and improvements to ensure optimal protection tailored to individual needs.</p>
+{/* <p className="text-xl  mb-4 text-justify font-serif  leading-relaxed">	<span className="font-bold ">Advance Salary Management:</span> Supports salary advances, loan management, and payroll integration for financial flexibility.</p> */}
+        </div>
+        {/* Image */}
+        <div className="lg:w-1/2 flex justify-center ">
+          <img
+            src={permit}
+            alt="AI Automation"
+            className=" h-96 w-3/4"
+            // style={{ transform: "rotate(5deg)" }}
+          />
+        </div>
+      </div>
+      <div className="flex flex-col gap-8 lg:flex-row justify-between items-center mb-12">
+        {/* Content */}
+        <div className="lg:w-1/2 mb-8 lg:mb-0">
+        <h4 className="text-3xl font-bold  mb-2">		Healthcare management </h4>
+    {/* <p className="text-xl  mb-4 text-justify font-serif  leading-relaxed">
+   <span className="font-bold ">Fitness Management:</span> Offers fitness tracking through App, online wellness programs, and health challenges to promote physical well-being and encourage a healthy lifestyle. Fitness and wellness programs for employees are essential components of a healthy workplace. These initiatives focus on promoting physical health, mental well-being, and overall life balance, ultimately enhancing employee satisfaction and productivity.   </p> */}
+
+<ul >
+    <li className="text-xl  mb-4 text-justify font-serif  leading-relaxed"><span className="font-bold ">Doctor Appointment Scheduling:</span>	 Simplify the process of booking and managing doctor appointments by providing a centralized platform where users can schedule, modify, and track all their healthcare appointments with ease.</li>
+<li className="text-xl  mb-4 text-justify font-serif  leading-relaxed"><span className="font-bold ">Health Records Management:</span>	Keep all your medical records, prescriptions, and test results in one secure location, ensuring easy access and organized storage for both immediate reference and long-term management.
+
+</li>
+<li className="text-xl  mb-4 text-justify font-serif  leading-relaxed"><span className="font-bold ">Wellness Program Participation:</span>	 Encourage proactive healthcare by enabling participation in wellness programs and tracking progress, helping users stay engaged with preventive care and lifestyle improvement initiatives.</li>
+
+<li className="text-xl  mb-4 text-justify font-serif  leading-relaxed"><span className="font-bold ">Personalized Health Reminders:</span>	 Stay informed with personalized reminders for upcoming appointments, medication schedules, and wellness activities, ensuring that critical healthcare commitments are never missed.</li>
+
+
+</ul>
+        </div>
+        {/* Image */}
+        <div className="lg:w-1/2 flex justify-center ">
+          <img
+            src={reporting}
+            alt="Team Taskforce"
+            className=" h-96 w-3/4"
+            // style={{ transform: "rotate(-5deg)" }}
+          />
+        </div>
+      </div>
+      <div className="flex flex-col gap-8 lg:flex-row-reverse justify-between items-center mb-12">
+        {/* Content */}
+        <div className="lg:w-1/2 mb-8 lg:mb-0">
+        <h3 className="text-3xl font-bold  mb-2">		Work-Life Balance Initiatives</h3>
+    <p className="text-xl  mb-4 text-justify font-serif  leading-relaxed">
+    <span className="font-bold ">		Flexible Work Schedules: </span>Offering employees the choice to adjust their working hours helps them balance personal obligations with professional demands, leading to increased job satisfaction and reduced stress levels.    </p>
+
+<p className="text-xl  mb-4 text-justify font-serif  leading-relaxed"><span className="font-bold ">		Remote Work Options:</span> Allowing employees to work remotely fosters autonomy and flexibility, enabling them to create a work environment that enhances focus and productivity while accommodating personal needs.</p>
+<p className="text-xl  mb-4 text-justify font-serif  leading-relaxed"><span className="font-bold ">		Wellness Days:</span> Implementing designated wellness days encourages employees to take time off specifically for self-care and mental health, which helps prevent burnout and maintains a sustainable work pace.</p>
+<p className="text-xl  mb-4 text-justify font-serif  leading-relaxed">	<span className="font-bold ">	Increased Engagement and Retention:</span> By promoting a healthy work-life balance, organizations not only enhance employee morale but also improve retention rates, as individuals feel valued and supported in both their personal and professional lives.</p>
+{/* <p className="text-xl  mb-4 text-justify font-serif  leading-relaxed">	<span className="font-bold ">Advance Salary Management:</span> Supports salary advances, loan management, and payroll integration for financial flexibility.</p> */}
+        </div>
+        {/* Image */}
+        <div className="lg:w-1/2 flex justify-center ">
+          <img
+            src={permit}
+            alt="AI Automation"
+            className=" h-96 w-3/4"
+            // style={{ transform: "rotate(5deg)" }}
+          />
+        </div>
+      </div>
+      <div className="flex flex-col gap-8 lg:flex-row justify-between items-center mb-12">
         {/* Content */}
         <div className="lg:w-1/2 mb-8 lg:mb-0">
         <h4 className="text-3xl font-bold  mb-2">		Fitness & Wellness </h4>
@@ -103,10 +177,6 @@ function KnowMorePage3() {
           />
         </div>
       </div>
-      
-      
-    
-    
     </div>
 
    

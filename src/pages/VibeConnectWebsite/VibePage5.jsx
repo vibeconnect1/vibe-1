@@ -1,30 +1,101 @@
-import React from 'react'
+import React, { useEffect, useState, useRef } from 'react';
+import { motion, useAnimation } from 'framer-motion';
+
+const textVariants = {
+  hidden: { opacity: 0, y: 50 },
+  visible: { opacity: 1, y: 0 },
+};
 
 const VibePage5 = () => {
+  const [textVisible, setTextVisible] = useState(false);
+  const controls = useAnimation();
+  const ref = useRef(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          controls.start('visible');
+        } else {
+          controls.start('hidden');
+        }
+      },
+      { threshold: 0.2 } // Trigger when 20% of the element is visible
+    );
+
+    if (ref.current) {
+      observer.observe(ref.current);
+    }
+
+    return () => {
+      if (ref.current) {
+        observer.unobserve(ref.current);
+      }
+    };
+  }, [controls]);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setTextVisible(true);
+    }, 500); // Delay for text animation
+
+    return () => clearTimeout(timer);
+  }, []);
+
   return (
-    <div className="relative min-h-screen bg-no-repeat bg-cover" style={{ backgroundImage: "url('https://reshapecxm.com/adobe-reshaping-cxm/media/f5877568151cd68b592fcf6ba3bfb24c/conclusion-full.jpg')" }}>
-      {/* Overlay */}
-      <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black opacity-50"></div>
-      
-      {/* Content */}
-      <div className="relative flex flex-col items-center justify-center min-h-screen text-center text-white px-4">
-        <h1 className="text-4xl md:text-5xl font-bold mb-4">
-          Reshape the Customer Experience. Transform Your Business.
-        </h1>
-        <p className="max-w-3xl text-lg md:text-xl mb-6 leading-relaxed">
-          The bar has been set. Delivering compelling, relevant, and memorable customer experiences is the present <em>and</em> future of doing business. And that means it’s time to transform your brand into an <span className="font-bold italic">experience business</span> with CXM.
-        </p>
-        <p className="max-w-3xl text-lg md:text-xl mb-6 leading-relaxed">
-          Data is the foundation, enabling you to unlock insights to personalize at scale. An adaptable tactical mix, plus the right method and timing of delivery, is the key to keeping pace with your customers' evolving expectations. And differentiation is your golden opportunity to make a lasting impact on your customers (and your competition).
-        </p>
-        <p className="text-lg font-semibold mb-12">Make experience your business. For now, your customers are waiting...</p>
-        
-       
-        
-       
+    <div className="min-h-screen bg-gradient-to-b from-orange-500 via-purple-800 to-blue-500 relative "  style={{
+      backgroundImage:
+        "url('https://reshapecxm.com/adobe-reshaping-cxm/media/f5877568151cd68b592fcf6ba3bfb24c/conclusion-full.jpg')",
+    }}>
+      {/* Background overlay */}
+     
+
+      <div className="relative p-4 md:p-8 flex items-center justify-center h-screen">
+        <div className="text-white max-w-4xl text-center">
+          <motion.h1
+            className="text-lg md:text-3xl lg:text-4xl font-bold mb-4 md:mb-6"
+            initial="hidden"
+            animate={controls}
+            variants={textVariants}
+            transition={{ duration: 1, ease: 'easeOut' }}
+            ref={ref}
+          >
+            {/* For most of history, customer experiences lived in the two-dimensional realm. */}
+          </motion.h1>
+          <motion.p
+            className="text-base md:text-lg lg:text-xl ml-2 md:ml-4 mb-4 md:mb-6"
+            initial="hidden"
+            animate={controls}
+            variants={textVariants}
+            transition={{ duration: 1.2, ease: 'easeOut' }}
+            ref={ref}
+          >
+            {/* Point A to Point B. The path to making a purchase was predictably linear, finite, and well traveled. */}
+          </motion.p>
+          <motion.p
+            className="text-sm md:text-lg lg:text-3xl ml-2 md:ml-4 mb-4 md:mb-6 text-justify font-serif  leading-relaxed"
+            initial="hidden"
+            animate={controls}
+            variants={textVariants}
+            transition={{ duration: 1.4, ease: 'easeOut' }}
+            ref={ref}
+          >
+        Vibe Connect reshapes customer experience by personalizing every interaction through data-driven insights. It adapts in real-time to evolving customer needs, ensuring timely, relevant responses. With unified solutions, it streamlines the customer journey across all touchpoints, enhancing satisfaction. Vibe Connect helps your brand stand out by offering consistent, memorable experiences. Stay ahead of the competition by turning customer experience into your biggest strength. Transform your business with Vibe Connect—your customers are ready.
+        </motion.p>
+        <motion.p
+            className="text-sm md:text-lg lg:text-xl ml-2 md:ml-4"
+            initial="hidden"
+            animate={controls}
+            variants={textVariants}
+            transition={{ duration: 1.6, ease: 'easeOut' }}
+            ref={ref}
+          >
+            {/* Join us as we enlist some of the most forward-thinking minds in business, and share their views on what it takes to deliver a comprehensive, holistic, unforgettable customer experience. */}
+          </motion.p>
+        </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default VibePage5
+export default VibePage5;
