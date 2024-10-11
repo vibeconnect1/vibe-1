@@ -166,7 +166,7 @@ const ProfilePage = () => {
               <div className="my-4">
                 <div className="w-full mx-auto h-0.5 bg-blue-500"></div>
                 <p className="text-center text-blue-500 mt-2 md:mt-4 font-semibold">
-                  <a href="/KnowMore-page">Know More...</a>
+                  <a href="/KnowMore-page">More Modules</a>
                 </p>
               </div>
             </motion.div>

@@ -10,7 +10,7 @@ import taskimage from '../../../Website Image/taskimage1.jpeg';
 import skill from '../../../Website Image/skillgrowimage1.jpeg';
 
 
-function KnowMorePage1() {
+function KnowMorePage2() {
   return (
     <div className="min-h-screen flex flex-col">
       {/* Header */}
@@ -241,4 +241,4 @@ Investing in strategies that enhance employee productivity and efficiency not on
   );
 }
 
-export default KnowMorePage1;
+export default KnowMorePage2;

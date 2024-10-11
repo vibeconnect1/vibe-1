@@ -53,7 +53,7 @@ const VibeConnectFooter = () => {
         </div>
       </div>
       <div className=" w-full md:w-2/4 mb-2">
-        <p>Vibe is a suite of open source business apps that cover all your company needs: CRM, eCommerce, accounting, inventory, point of sale, project management, etc.</p>
+        {/* <p>Vibe is a suite of open source business apps that cover all your company needs: CRM, eCommerce, accounting, inventory, point of sale, project management, etc.</p> */}
         <div className="flex gap-4 my-4">
           <FaTwitter size={20} />
           <FaLinkedin size={20} />

@@ -175,7 +175,7 @@ const ProfileCard2 = () => {
                  
                   <div className="w-full  h-0.5 bg-blue-500"></div>
                   <p className="text-center text-blue-500 mt-2 md:mt-2 font-semibold">
-                  <a href="/KnowMore-page3">Know More...</a>
+                  <a href="/KnowMore-page3">More Modules</a>
                   </p>
                 </div>
               </motion.div>

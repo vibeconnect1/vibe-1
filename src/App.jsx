@@ -668,6 +668,16 @@ import KnowMorePage from "./pages/VibeConnectWebsite/KnowMorePage.jsx";
 import KnowMorePage1 from "./pages/VibeConnectWebsite/KnowMorePage1.jsx";
 import KnowMorePage2 from "./pages/VibeConnectWebsite/KnowMorePage2.jsx";
 import KnowMorePage3 from "./pages/VibeConnectWebsite/KnowMorePage3.jsx";
+import PurchaseWebsite from "./pages/VibeConnectWebsite/PurchaseWebsite.jsx";
+import BillPayWebPage from "./pages/VibeConnectWebsite/BillPayWebPage.jsx";
+import AuditWebPage from "./pages/VibeConnectWebsite/AuditWebpage.jsx";
+import InsuranceWebPage from "./pages/VibeConnectWebsite/InsuranceWebPage.jsx";
+import CommunicationWebsite from "./pages/VibeConnectWebsite/CommunicationWebPage.jsx";
+import FitnessWebPage from "./pages/VibeConnectWebsite/FitnessWebPage.jsx";
+import SkillGrowWebPage from "./pages/VibeConnectWebsite/SkillgrowWebPage.jsx";
+import AssetWebPage from "./pages/VibeConnectWebsite/AssetWebPage.jsx";
+import SoftServicesWebPage from "./pages/VibeConnectWebsite/SoftServicesWebPage.jsx";
+import PassesWebPage from "./pages/VibeConnectWebsite/PassesWebpage.jsx";
 // new admin hrms
 
 function App() {
@@ -6364,6 +6374,74 @@ function App() {
             element={
             
            <KnowMorePage3/>
+            }
+          />
+        
+        <Route
+            path="/Purchase-website"
+            element={
+            
+           <PurchaseWebsite/>
+            }
+          />
+          <Route
+            path="/billpay-website"
+            element={
+            
+           <BillPayWebPage/>
+            }
+          />
+          <Route
+            path="/audit-website"
+            element={
+            
+           <AuditWebPage/>
+            }
+          />
+           <Route
+            path="/insurance-website"
+            element={
+            
+           <InsuranceWebPage/>
+            }
+          />
+          <Route
+            path="/communication-website"
+            element={
+            
+           <CommunicationWebsite/>
+            }
+          />
+          <Route
+            path="/fitness-website"
+            element={
+            
+           <FitnessWebPage/>
+            }
+          />
+          <Route
+            path="/skill-Grow-website"
+            element={
+            
+           <SkillGrowWebPage/>
+            }
+          />
+          <Route
+            path="/Asset-website"
+            element={
+           <AssetWebPage/>
+            }
+          />
+          <Route
+            path="/SoftServices-website"
+            element={
+           <SoftServicesWebPage/>
+            }
+          />
+          <Route
+            path="/Passes-website"
+            element={
+           <PassesWebPage/>
             }
           />
         </Routes>

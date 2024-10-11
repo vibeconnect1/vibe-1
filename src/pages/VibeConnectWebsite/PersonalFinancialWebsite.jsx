@@ -8,7 +8,7 @@ import reporting from '../../../Website Image/healthimage.jpeg';
 import VibeConnectNavbar1 from "./VibeConnectNavbar1";
 import VibeConnectFooter from "./VibeConnectFooter";
 
-function ProjectManagementWebsite() {
+function PersonalFinancialWebsite() {
   return (
     <div className="min-h-screen flex flex-col">
       {/* Header */}
@@ -208,4 +208,4 @@ function ProjectManagementWebsite() {
   );
 }
 
-export default ProjectManagementWebsite;
+export default PersonalFinancialWebsite;

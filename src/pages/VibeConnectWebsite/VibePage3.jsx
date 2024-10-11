@@ -35,8 +35,8 @@ const VibePage3 = () => {
     {
       title: "Employee",
       links: [
-        { name: "Project Management", url: "/project-management-website" },
-        { name: "Task Management", url: "/task-management-website" },
+        { name: "Project & Task Management", url: "/project-management-website" },
+        // { name: "Task Management", url: "/task-management-website" },
         { name: "Calendar", url: "/calendar-website" },
         { name: "Communication", url: "/Communication-website" },
         { name: "Birthday", url: "/birthday-website" },
