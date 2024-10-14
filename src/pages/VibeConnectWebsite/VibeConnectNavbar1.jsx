@@ -174,9 +174,9 @@ const VibeConnectNavbar1 = () => {
                     </span>
                   </button>
                 </div>
-                <p className={`font-bold ${textColor} z-10`}>About us</p>
+                <p className={`font-bold ${textColor} z-10`}><Link to="/AboutUs-website">About us</Link></p>
                 <p className={`font-bold ${textColor} z-10`}>
-                  <Link to="/contact">Contact</Link>
+                  <Link to="/Contact-website">Contact</Link>
                 </p>
               </div>
 

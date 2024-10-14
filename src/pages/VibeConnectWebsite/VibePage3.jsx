@@ -120,7 +120,7 @@ const VibePage3 = () => {
           <button onClick={toggleDropdown} className="text-white font-semibold">Solutions</button>
           <Link to="" className="text-white font-semibold hidden md:inline">Career</Link>
           <Link 
-          // to="/AboutUs-website" 
+          to="/AboutUs-website" 
           className="text-white font-semibold hidden md:inline">About us</Link>
           
           <Link to="" className="text-white font-semibold hidden md:inline">FAQ</Link>

@@ -1,58 +1,76 @@
 // src/components/ContactForm.jsx
 import React from 'react';
 import VibeConnectFooter from './VibeConnectFooter';
+import VibeConnectNavbar1 from './VibeConnectNavbar1';
+import contact from '../../../Website Image/contact-form.png';
+import contact2 from '../../../Website Image/contact2.jpeg';
+
 const ContactForm = () => {
   return (
-    <div>
-     
-      <div className="flex flex-col lg:flex-row justify-center gap-4 bg-gray-100 p-4 lg:p-8">
-        <div className="bg-gray-100 p-8 w-full lg:w-2/4 my-10 ">
-          <h2 className="text-2xl font-bold mb-6 text-center">Looking for something?</h2>
+    <div className="min-h-screen flex flex-col">
+      <VibeConnectNavbar1 />
+
+      {/* Gradient Background with Shadows and Layout */}
+      <div className="flex flex-col lg:flex-row justify-center px-20 py-8 bg-gradient-to-r from-[#3b25c5] to-[#0d126d] ">
+        
+        {/* Form Section */}
+        <div className="bg-blue-500 p-10 w-full text-white lg:w-2/4 my-8  shadow-2xl transition-all duration-500 ease-in-out transform " style={{ backgroundColor: '#4c3afc' }}>
+          <h2 className="text-4xl font-serif text-gray-800 mb-4 text-center text-white leading-tight tracking-wider">Looking for something?</h2>
+          {/* <p className="text-center text-gray-600 mb-6">We’d love to hear from you! Reach out with any questions or ideas.</p> */}
+
           <form>
-            <div className="mb-4">
-              <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="name">
-                Name *
+            {/* Full Name */}
+            <div className="mb-6 relative">
+              <label className="block text-gray-700 text-white text-medium font-semibold mb-2" htmlFor="name">
+                  Name *
               </label>
               <input
                 id="name"
                 type="text"
                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                placeholder=" Name"
                 required
               />
             </div>
             <div className="mb-4">
-              <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="phone">
+              <label className="block text-gray-700 text-medium text-white text-white font-semibold mb-2" htmlFor="phone">
                 Phone Number
               </label>
               <input
                 id="phone"
                 type="tel"
+                placeholder='Phone Number'
                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-              />
-            </div>
-            <div className="mb-4">
-              <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="email">
-                Email *
+              /></div>
+
+            {/* Email Address */}
+            <div className="mb-6 relative">
+              <label className="block text-gray-700 text-medium text-white font-semibold mb-2" htmlFor="email">
+                 Email Address *
               </label>
               <input
                 id="email"
                 type="email"
                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                placeholder="you@example.com"
                 required
               />
             </div>
+
+            {/* Message */}
             <div className="mb-4">
-              <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="company">
-                Company
+              <label className="block text-gray-700 text-medium text-white font-semibold mb-2" htmlFor="company">
+                Company *
               </label>
               <input
                 id="company"
                 type="text"
+                placeholder='company'
                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
               />
             </div>
             <div className="mb-4">
-              <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="subject">
+              <label className="block text-gray-700 text-medium text-white font-semibold mb-2" htmlFor="subject">
                 Subject *
               </label>
               <select
@@ -65,7 +83,7 @@ const ContactForm = () => {
               </select>
             </div>
             <div className="mb-4">
-              <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="company-size">
+              <label className="block text-gray-700 text-medium text-white font-semibold mb-2" htmlFor="company-size">
                 Your company size
               </label>
               <select
@@ -74,10 +92,13 @@ const ContactForm = () => {
               >
                 <option value="">Less than 5</option>
                 <option value="">5-20 employees</option>
+                <option value="">20-50 employees</option>
+                <option value="">50-250 employees</option>
+                <option value="">more than 250</option>
               </select>
             </div>
             <div className="mb-4">
-              <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="question">
+              <label className="block text-gray-700 text-medium text-white font-semibold mb-2" htmlFor="question">
                 Question *
               </label>
               <textarea
@@ -87,30 +108,29 @@ const ContactForm = () => {
                 required
               ></textarea>
             </div>
-            <div className="flex items-center justify-between">
+
+
+            {/* Submit Button */}
+            <div className="flex items-center justify-center mt-8">
               <button
                 type="submit"
-                className="bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                className="text-white font-semibold py-2 px-4 rounded-md shadow-lg transform  bg-blue-500" 
+                style={{ backgroundColor: '#e93842' }}
               >
                 Submit
               </button>
             </div>
           </form>
         </div>
-        <div className="mt-10 lg:mt-20 w-full lg:w-1/4">
-          <h3 className="text-lg font-bold mb-2">Direct Contacts</h3>
-          <ul className="space-y-2">
-            <li>Call or Schedule a video conference</li>
-            <li>📞 +91 79 4050 0100</li>
-            <li>📱 <a href="https://wa.me/916357077743" className="text-blue-600 hover:underline">https://wa.me/916357077743</a></li>
-            <li><a href="#" className="text-blue-600 hover:underline">Meet an expert</a></li>
-            <li><a href="#" className="text-blue-600 hover:underline">Become a partner</a></li>
-            <li><a href="#" className="text-blue-600 hover:underline">Request Custom Developments</a></li>
-            <li><a href="#" className="text-blue-600 hover:underline">Support Requests</a></li>
-          </ul>
+
+        {/* Optional Illustration or Text Side */}
+        <div className="hidden lg:block w-full lg:w-2/4 py-8">
+          {/* Add illustration or additional description here */}
+          <img src={contact2} alt="Illustration" className="w-full h-full  " />
         </div>
       </div>
-      <VibeConnectFooter/>
+
+      <VibeConnectFooter />
     </div>
   );
 };
