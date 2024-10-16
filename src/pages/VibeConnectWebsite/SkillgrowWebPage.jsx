@@ -80,7 +80,7 @@ function SkillGrowWebPage() {
           <img
             src={skill}
             alt="Team Taskforce"
-            className=" h-96 w-3/4"
+            // className=" h-96 w-3/4"
             // style={{ transform: "rotate(-5deg)" }}
           />
         </div>

@@ -3,19 +3,19 @@ import React from 'react';
 import VibeConnectFooter from './VibeConnectFooter';
 import VibeConnectNavbar1 from './VibeConnectNavbar1';
 import contact from '../../../Website Image/contact-form.png';
-import contact2 from '../../../Website Image/contact2.jpeg';
+import contact2 from '../../../Website Image/contact3.jpeg';
 
 const ContactForm = () => {
   return (
     <div className="min-h-screen flex flex-col">
-      <VibeConnectNavbar1 />
+      {/* <VibeConnectNavbar1 /> */}
 
       {/* Gradient Background with Shadows and Layout */}
-      <div className="flex flex-col lg:flex-row justify-center px-20 py-8 bg-gradient-to-r from-[#3b25c5] to-[#0d126d] ">
+      <div className="flex flex-col lg:flex-row justify-center px-20 py-8  " style={{ backgroundColor: '#e7f3ff' }}>
         
         {/* Form Section */}
-        <div className="bg-blue-500 p-10 w-full text-white lg:w-2/4 my-8  shadow-2xl transition-all duration-500 ease-in-out transform " style={{ backgroundColor: '#4c3afc' }}>
-          <h2 className="text-4xl font-serif text-gray-800 mb-4 text-center text-white leading-tight tracking-wider">Looking for something?</h2>
+        <div className=" p-10 w-full text-white lg:w-2/4 my-8  shadow-2xl transition-all duration-500 ease-in-out transform " style={{ backgroundColor: '#223a7a' }}>
+          <h2 className="text-4xl font-serif text-gray-800 mb-4 text-center text-white leading-tight tracking-wider">Contact Us</h2>
           {/* <p className="text-center text-gray-600 mb-6">We’d love to hear from you! Reach out with any questions or ideas.</p> */}
 
           <form>
@@ -34,7 +34,7 @@ const ContactForm = () => {
             </div>
             <div className="mb-4">
               <label className="block text-gray-700 text-medium text-white text-white font-semibold mb-2" htmlFor="phone">
-                Phone Number
+                Phone Number *
               </label>
               <input
                 id="phone"

@@ -50,17 +50,17 @@ const VibePage5 = () => {
       {/* Background overlay */}
      
 
-      <div className="relative p-4 md:p-8 flex items-center justify-center h-screen">
-        <div className="text-white max-w-4xl text-center">
+      <div className="relative p-4 md:p-6 flex items-center justify-center h-screen">
+        <div className="text-white  text-center">
           <motion.h1
-            className="text-lg md:text-3xl lg:text-4xl font-bold mb-4 md:mb-6"
+            className="text-lg md:text-3xl lg:text-5xl font-bold mb-4  md:mb-6"
             initial="hidden"
             animate={controls}
             variants={textVariants}
             transition={{ duration: 1, ease: 'easeOut' }}
             ref={ref}
           >
-            {/* For most of history, customer experiences lived in the two-dimensional realm. */}
+            Reshape the Customer Experience. Transform Your Business.
           </motion.h1>
           <motion.p
             className="text-base md:text-lg lg:text-xl ml-2 md:ml-4 mb-4 md:mb-6"
@@ -73,7 +73,7 @@ const VibePage5 = () => {
             {/* Point A to Point B. The path to making a purchase was predictably linear, finite, and well traveled. */}
           </motion.p>
           <motion.p
-            className="text-sm md:text-lg lg:text-3xl ml-2 md:ml-4 mb-4 md:mb-6 text-justify font-serif  leading-relaxed"
+            className="text-sm md:text-lg lg:text-3xl ml-2 md:ml-4 px-40 mb-4 md:mb-6 text-justify font-serif  leading-relaxed"
             initial="hidden"
             animate={controls}
             variants={textVariants}

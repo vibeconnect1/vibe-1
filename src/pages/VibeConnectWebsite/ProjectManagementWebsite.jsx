@@ -83,7 +83,7 @@ Investing in strategies that enhance employee productivity and efficiency not on
           <img
             src={taskimage}
             alt="AI Automation"
-            className=" p-4"
+            // className=" p-4"
             // style={{ transform: "rotate(5deg)" }}
           />
         </div>

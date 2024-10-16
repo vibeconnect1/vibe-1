@@ -678,6 +678,7 @@ import SkillGrowWebPage from "./pages/VibeConnectWebsite/SkillgrowWebPage.jsx";
 import AssetWebPage from "./pages/VibeConnectWebsite/AssetWebPage.jsx";
 import SoftServicesWebPage from "./pages/VibeConnectWebsite/SoftServicesWebPage.jsx";
 import PassesWebPage from "./pages/VibeConnectWebsite/PassesWebpage.jsx";
+import FAQ from "./pages/VibeConnectWebsite/FAQ.jsx";
 // new admin hrms
 
 function App() {
@@ -6442,6 +6443,12 @@ function App() {
             path="/Passes-website"
             element={
            <PassesWebPage/>
+            }
+          />
+          <Route
+            path="/FAQ"
+            element={
+           <FAQ/>
             }
           />
         </Routes>

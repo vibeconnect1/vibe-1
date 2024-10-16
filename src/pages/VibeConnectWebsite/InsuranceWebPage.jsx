@@ -9,6 +9,7 @@ import skill from '../../../Website Image/skillgrowimage1.jpeg';
 import purchasenew from '../../../Website Image/purchase2.jpeg';
 import auditnew from '../../../Website Image/AUDIT100.jpeg';
 import reporting from '../../../Website Image/healthimage.jpeg';
+import insurane from '../../../Website Image/insurance.jpeg';
 
 import VibeConnectNavbar1 from "./VibeConnectNavbar1";
 import VibeConnectFooter from "./VibeConnectFooter";
@@ -71,9 +72,9 @@ function InsuranceWebPage() {
         {/* Image */}
         <div className="lg:w-1/2 flex justify-center">
           <img
-            src={reporting}
+            src={insurane}
             alt="AI Automation"
-            className=" h-64 w-3/4"
+            // className=" h-64 w-3/4"
             // style={{ transform: "rotate(5deg)" }}
           />
         </div>

@@ -6,6 +6,7 @@ import reputationimage from '../../../Website Image/reputationimage1.jpeg';
 import serviceimage from '../../../Website Image/serviceimage1.jpeg';
 import taskimage from '../../../Website Image/taskimage1.jpeg';
 import skill from '../../../Website Image/skillgrowimage1.jpeg';
+import fitnessandwell from '../../../Website Image/fitnessandwell.jpeg';
 
 import VibeConnectNavbar1 from "./VibeConnectNavbar1";
 import VibeConnectFooter from "./VibeConnectFooter";
@@ -78,9 +79,9 @@ function FitnessWebPage() {
         {/* Image */}
         <div className="lg:w-1/2 flex justify-center ">
           <img
-            src={meetingimage}
+            src={fitnessandwell}
             alt="Team Taskforce"
-            className=" h-96 w-3/4"
+            // className=" h-96 w-3/4"
             // style={{ transform: "rotate(-5deg)" }}
           />
         </div>

@@ -13,20 +13,23 @@ import work from '../../../Website Image/workspaceimage.jpeg';
 import facility from '../../../Website Image/Facilityimage.jpeg';
 import main from '../../../Website Image/maintenanceimage.jpeg';
 import logs from '../../../Website Image/logsimage.jpeg';
+import VibeConnectFooter from "./VibeConnectFooter";
+import VibeConnectNavbar1 from "./VibeConnectNavbar1";
 
 function KnowMorePage1() {
   return (
     <div className="min-h-screen flex flex-col">
       {/* Header */}
+      <VibeConnectNavbar1/>
       <header className="flex justify-between p-4 bg-transparent absolute top-0 w-full z-10">
         <div></div> {/* Placeholder for logo */}
-        <nav className="space-x-6 text-white">
+        {/* <nav className="space-x-6 text-white">
           <a href="#integrations" className="hover:underline">Integrations</a>
           <a href="#pricing" className="hover:underline">Pricing</a>
           <a href="#login" className="hover:underline">Log in</a>
           <a href="#login" className="hover:underline">Get Demo</a>
           <a href="#demo" className="bg-blue-600 text-white py-2 px-4 rounded-full hover:bg-blue-500">Contact Us</a>
-        </nav>
+        </nav> */}
       </header>
 
       {/* Main section */}
@@ -58,7 +61,7 @@ function KnowMorePage1() {
       {/* First Section */}
       {/* <h1 className="text-4xl font-bold  mb-2">Property Management </h1> */}
 <p className="text-xl  mb-4 text-justify font-serif  leading-relaxed">Effortlessly manage your property with Vibe Connect’s Property Management. From tracking agreements and handling tenant requests to scheduling maintenance and managing payments, our tool centralizes all property-related tasks. Stay organized and efficient with our 15+ modules in Property Management system along with an intuitive dashboard that gives you complete control over your property management needs.  </p>
-      <div className="flex flex-col gap-8 lg:flex-row justify-between  mb-12">
+      <div className="flex flex-col gap-8 lg:flex-row justify-between items-center mb-12">
         {/* Content */}
         <div className="lg:w-1/2 mb-8 lg:mb-0">
         <h3 className="text-3xl font-bold  mb-2">	Asset Management</h3>
@@ -72,7 +75,7 @@ function KnowMorePage1() {
           <img
             src={asset}
             alt="AI Automation"
-            className=" h-64 w-3/4"
+            // className=" h-64 w-3/4"
             // style={{ transform: "rotate(5deg)" }}
           />
         </div>
@@ -93,7 +96,7 @@ function KnowMorePage1() {
           <img
             src={work}
             alt="Team Taskforce"
-            className=" h-80 w-3/4"
+            // className=" h-80 w-3/4"
             // style={{ transform: "rotate(-5deg)" }}
           />
         </div>
@@ -114,7 +117,7 @@ function KnowMorePage1() {
           <img
             src={facility}
             alt="AI Automation"
-            className=" h-64 w-3/4"
+            className=" h-full w-4/5"
             // style={{ transform: "rotate(5deg)" }}
           />
         </div>
@@ -146,7 +149,7 @@ function KnowMorePage1() {
           <img
             src={softservice}
             alt="Team Taskforce"
-            className=" h-96 w-3/4"
+            // className=" h-96 w-3/4"
             // style={{ transform: "rotate(-5deg)" }}
           />
         </div>
@@ -178,7 +181,7 @@ function KnowMorePage1() {
           <img
             src={main}
             alt="AI Automation"
-            className=" h-72 w-3/4"
+            // className=" h-72 w-3/4"
             // style={{ transform: "rotate(5deg)" }}
           />
         </div>
@@ -207,7 +210,7 @@ function KnowMorePage1() {
           <img
             src={logs}
             alt="Team Taskforce"
-            className=" h-96 w-3/4"
+            // className=" h-96 w-3/4"
             // style={{ transform: "rotate(-5deg)" }}
           />
         </div>
@@ -238,7 +241,7 @@ function KnowMorePage1() {
           <img
             src={vendor}
             alt="AI Automation"
-            className=" h-96 w-3/4"
+            className=" h-full w-4/5"
             // style={{ transform: "rotate(5deg)" }}
           />
         </div>
@@ -263,11 +266,11 @@ function KnowMorePage1() {
 {/* <p className="text-xl  mb-4 text-justify font-serif text-gray-800 leading-relaxed">		In summary, utility and logistics management are vital for operational efficiency, cost control, sustainability, and overall success in both properties and companies.</p> */}
         </div>
         {/* Image */}
-        <div className="lg:w-1/2 flex justify-center px-10">
+        <div className="lg:w-1/2 flex justify-center ">
           <img
             src={utility}
             alt="Team Taskforce"
-            className=" h-96 w-3/4"
+            // className=" h-96 w-3/4"
             // style={{ transform: "rotate(-5deg)" }}
           />
         </div>
@@ -294,11 +297,11 @@ function KnowMorePage1() {
 
         </div>
         {/* Image */}
-        <div className="lg:w-1/2 flex justify-center px-10">
+        <div className="lg:w-1/2 flex justify-center ">
           <img
             src={pass}
             alt="AI Automation"
-            className=" h-96 w-3/4"
+            // className=" h-96 w-3/4"
             // style={{ transform: "rotate(5deg)" }}
           />
         </div>
@@ -311,9 +314,9 @@ function KnowMorePage1() {
      
 
       {/* Call to Action Section */}
-      <div className="relative top-10 flex flex-col justify-center items-center py-20 bg-gradient-to-r from-green-500 via-green-600 to-green-800 p-8 ">
+      <div className=" flex flex-col justify-center items-center py-10 bg-gradient-to-r from-green-500 via-green-600 to-green-800  ">
         <h1 className="text-3xl md:text-4xl font-bold text-white text-center">
-          Ready to reach product management mastery?
+        Vibe Connect: Your All-in-One Command Center 
         </h1>
         <button className="mt-6 bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition">
           Get a demo
@@ -327,8 +330,8 @@ function KnowMorePage1() {
         </div>
       </div>
 
-   
-   
+   <div className="mt-4">
+   <VibeConnectFooter/></div>
     </div>
   );
 }

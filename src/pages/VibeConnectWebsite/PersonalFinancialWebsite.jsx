@@ -1,9 +1,9 @@
 import React, { useEffect } from "react";
 import audit from '../../../Website Image/Audit.jpeg'
-import compliance from '../../../Website Image/bg-compliance2.jpg';
+import worklifebalance from '../../../Website Image/worklifebalance.jpeg';
 import permit from '../../../Website Image/financeimage.jpeg';
-import knowledgebase from '../../../Website Image/Knowledge base-1.jpg';
-import purchase from '../../../Website Image/purchase.jpg';
+import insurane from '../../../Website Image/insurance.jpeg';
+import fitnessandwell from '../../../Website Image/fitnessandwell.jpeg';
 import reporting from '../../../Website Image/healthimage.jpeg';
 import VibeConnectNavbar1 from "./VibeConnectNavbar1";
 import VibeConnectFooter from "./VibeConnectFooter";
@@ -73,7 +73,7 @@ function PersonalFinancialWebsite() {
           <img
             src={permit}
             alt="AI Automation"
-            className=" h-96 w-3/4"
+            className=" h-full w-3/4"
             // style={{ transform: "rotate(5deg)" }}
           />
         </div>
@@ -94,9 +94,9 @@ function PersonalFinancialWebsite() {
         {/* Image */}
         <div className="lg:w-1/2 flex justify-center ">
           <img
-            src={permit}
+            src={insurane}
             alt="AI Automation"
-            className=" h-96 w-3/4"
+            // className=" h-96 w-3/4"
             // style={{ transform: "rotate(5deg)" }}
           />
         </div>
@@ -125,7 +125,7 @@ function PersonalFinancialWebsite() {
           <img
             src={reporting}
             alt="Team Taskforce"
-            className=" h-96 w-3/4"
+            // className=" h-96 w-3/4"
             // style={{ transform: "rotate(-5deg)" }}
           />
         </div>
@@ -145,9 +145,9 @@ function PersonalFinancialWebsite() {
         {/* Image */}
         <div className="lg:w-1/2 flex justify-center ">
           <img
-            src={permit}
+            src={worklifebalance}
             alt="AI Automation"
-            className=" h-96 w-3/4"
+            // className=" h-96 w-3/4"
             // style={{ transform: "rotate(5deg)" }}
           />
         </div>
@@ -173,9 +173,9 @@ function PersonalFinancialWebsite() {
         {/* Image */}
         <div className="lg:w-1/2 flex justify-center ">
           <img
-            src={reporting}
+            src={fitnessandwell}
             alt="Team Taskforce"
-            className=" h-96 w-3/4"
+            // className=" h-96 w-3/4"
             // style={{ transform: "rotate(-5deg)" }}
           />
         </div>

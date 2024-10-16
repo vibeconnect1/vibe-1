@@ -1,97 +1,50 @@
-import React, { useEffect } from "react";
-import communicationimage from '../../../Website Image/communicationimage1.jpeg';
-import knowledgebase from '../../../Website Image/employeeengagementimage1.jpeg';
-import meetingimage from '../../../Website Image/meetingimage1.jpeg';
-import reputationimage from '../../../Website Image/reputationimage1.jpeg';
-import serviceimage from '../../../Website Image/serviceimage1.jpeg';
-import taskimage from '../../../Website Image/taskimage1.jpeg';
-import skill from '../../../Website Image/skillgrowimage1.jpeg';
-import asset from '../../../Website Image/asset.jpeg';
+import React from 'react';
+import VibeConnectFooter from './VibeConnectFooter';
+import VibeConnectNavbar1 from './VibeConnectNavbar1';
+import contact2 from '../../../Website Image/AboutUsfinal.jpeg';
 
-import VibeConnectNavbar1 from "./VibeConnectNavbar1";
-import VibeConnectFooter from "./VibeConnectFooter";
-
-function AboutUs() {
+const AboutUs = () => {
   return (
     <div className="min-h-screen flex flex-col">
-      {/* Header */}
-      <VibeConnectNavbar1/>
-      <header className="flex justify-between p-4 bg-transparent absolute top-0 w-full z-10">
-        <div></div> {/* Placeholder for logo */}
-        {/* <nav className="space-x-6 text-white">
-          <a href="#integrations" className="hover:underline">Integrations</a>
-          <a href="#pricing" className="hover:underline">Pricing</a>
-          <a href="#login" className="hover:underline">Log in</a>
-          <a href="#login" className="hover:underline">Get Demo</a>
-          <a href="#demo" className="bg-blue-600 text-white py-2 px-4 rounded-full hover:bg-blue-500">Contact Us</a>
-        </nav> */}
-      </header>
+      {/* <VibeConnectNavbar1 /> */}
 
-      {/* Main section */}
-      <main className="flex-grow">
-        {/* Gradient background */}
-        <section className="relative bg-gradient-to-r from-[#e98972] to-[#db5354] text-center py-40">
-        <h1 className="text-5xl font-bold  text-white mb-4">About Us</h1>
-        <div className="flex justify-center">
- 
-</div>
+      {/* Gradient Background with Shadows and Layout */}
+      <div className="flex flex-col justify-center">
+        <main className="flex-grow">
+          {/* Gradient background */}
+          <section className="relative bg-gradient-to-r from-[#bae6e9] to-[#c7f0c4] text-center py-20 lg:py-40">
+          </section>
+          {/* Form section */}
+        </main>
 
-          {/* <div className="flex justify-center">
-            <button className="bg-blue-500 text-white py-2 px-6 rounded-full">Learn More</button>
-            
-          </div> */}
-          {/* <div className='absolute mt-4 flex justify-center w-full h-full bg-cover bg-center'>
-          <img  src={compliance} alt="" className="z-20"/>
-          </div> */}
-          <div className="absolute bottom-0 w-full overflow-hidden leading-none">
-    <svg className="relative block w-full h-auto" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320">
-      <path fill="#ffffff" d="M0,320L80,316C160,312,320,304,480,292C640,280,800,264,960,250.7C1120,237,1280,227,1360,223.3L1440,220L1440,320L1360,320C1280,320,1120,320,960,320C800,320,640,320,480,320C320,320,160,320,80,320L0,320Z"></path>
-    </svg>
-  </div>
-        </section>
-        {/* Form section */}
-      
-      </main>
-      {/* <div className="flex justify-center text-base font-semibold relative top-64">
-      <p className="text-gray-800">The Most Employee Centric and Customer Teams are using our tool VIBE to drive experience.</p>
-      </div> */}
-      <div className=" relative top-10 text-gray-800 font-serif px-20 ">
-     
- 
-      <div className="flex flex-col gap-8 lg:flex-row justify-between items-center mb-12">
-        {/* Content */}
-        <div className="lg:w-full mb-8 lg:mb-0">
-        {/* <h3 className="text-3xl font-bold  mb-2">			Asset Management</h3> */}
+        {/* About Us Section */}
+        <div className="flex flex-col lg:flex-row px-4 lg:px-20 absolute top-10 left-0 lg:left-30 w-full">
+          <div className="p-5 lg:p-10 w-full lg:w-1/2 my-8 bg-white transition-all duration-500 ease-in-out transform">
+            <h2 className="text-3xl lg:text-4xl font-serif text-gray-800 mb-4 text-center leading-tight tracking-wider">About Us</h2>
+            <p className="text-justify text-gray-600 text-base lg:text-xl font-serif mb-6">
+              At VIBE CONNECT, we are dedicated to transforming and digitalizing the way businesses and property management function. Our unified tool is designed to streamline operations, enhance efficiency, and simplify the management of both business and property-related tasks.
+            </p>
+            <p className="text-justify text-gray-600 text-base lg:text-xl font-serif mb-6">
+              We cater to a diverse range of users, including employees, business owners, property managers, and administrators, providing them with a comprehensive solution. Our all-in-one platform integrates essential functions such as project management, communication, scheduling, and property management into one intuitive interface.
+            </p>
+            <p className="text-justify text-gray-600 text-base lg:text-xl font-serif mb-6">
+              We eliminate the complexities and inefficiencies associated with using multiple disconnected tools. This unified approach ensures that users can manage their tasks more effectively, reduce administrative overhead, and focus on what truly matters—driving their business and property management goals forward.
+            </p>
+          </div>
 
-        <p className="text-xl  mb-4 text-justify font-serif text-gray-800 leading-relaxed">
-        At VIBE CONNECT we are dedicated to transforming and Digitalize the way businesses & property management functions. Our unified tool is designed to streamline operations, enhance efficiency, and simplify the management of both business and property-related tasks. <br/> <br/> We cater to a diverse range of users, including employees, business owners, property managers, and administrators, providing them with a comprehensive solution.
-        Our all-in-one platform integrates essential functions such as project management, communication, scheduling, and property management into one intuitive interface, we eliminate the complexities and inefficiencies associated with using multiple disconnected tools. This unified approach ensures that users can manage their tasks more effectively, reduce administrative overhead, and focus on what truly matters—driving their business and property management goals forward. </p>
-
+          {/* Image Section */}
+          <div className="w-full lg:w-1/2 py-8 ">
+            <img src={contact2} alt="Illustration" className="w-full h-auto lg:h-full " />
+          </div>
         </div>
-        {/* Image */}
-       
       </div>
-     
 
-     
-     
-     
-     
-     
-    
-     
-      
-    </div>
-
-   
-     
-
-     
-
-   <div className="mt-4">
-   <VibeConnectFooter/></div>
+      {/* Footer */}
+      <div className="relative top-96 mt-auto">
+        <VibeConnectFooter />
+      </div>
     </div>
   );
-}
+};
 
-export default AboutUs
+export default AboutUs;

@@ -71,7 +71,7 @@ function PurchaseWebsite() {
           <img
             src={purchasenew}
             alt="AI Automation"
-            className=" h-64 w-3/4"
+            // className=" h-64 w-3/4"
             // style={{ transform: "rotate(5deg)" }}
           />
         </div>

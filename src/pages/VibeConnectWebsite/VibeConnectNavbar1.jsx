@@ -165,10 +165,27 @@ const VibeConnectNavbar1 = () => {
                 <Link to="/home">Vibe Connect</Link>
               </h1>
 
-              <div className="md:flex gap-8 hidden">
+              {/* <div className="md:flex gap-8 hidden">
                 <div className="relative">
                   <button className={`font-bold flex ${textColor} items-center`} onClick={toggleDropdown}>
-                    Apps
+                    Solutions
+                    <span className="ml-1">
+                      <FaChevronDown size={12} />
+                    </span>
+                  </button>
+                </div>
+                <p className={`font-bold ${textColor} z-10`}><Link to="/AboutUs-website">About us</Link></p>
+                <p className={`font-bold ${textColor} z-10`}>
+                  <Link to="/Contact-website">Contact</Link>
+                </p>
+              </div> */}
+
+              <div className="md:flex gap-8 hidden z-20">
+              
+              <div className="md:flex gap-8 hidden p-2">
+                <div className="relative">
+                  <button className={`font-bold flex ${textColor} items-center`} onClick={toggleDropdown}>
+                    Solutions
                     <span className="ml-1">
                       <FaChevronDown size={12} />
                     </span>
@@ -179,8 +196,6 @@ const VibeConnectNavbar1 = () => {
                   <Link to="/Contact-website">Contact</Link>
                 </p>
               </div>
-
-              <div className="md:flex hidden z-20">
                 <button onClick={openSignInModal} className={`font-bold ${textColor} px-4 py-2  rounded-md mr-4 z-10 bg-blue-600 text-white  rounded-full hover:bg-blue-500`}>
                   Sign in
                 </button>

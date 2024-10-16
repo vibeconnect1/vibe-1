@@ -5,20 +5,25 @@ import permit from '../../../Website Image/financeimage.jpeg';
 import knowledgebase from '../../../Website Image/Knowledge base-1.jpg';
 import purchase from '../../../Website Image/purchase.jpg';
 import reporting from '../../../Website Image/healthimage.jpeg';
-
+import VibeConnectNavbar1 from "./VibeConnectNavbar1";
+import VibeConnectFooter from "./VibeConnectFooter";
+import worklifebalance from '../../../Website Image/worklifebalance.jpeg';
+import insurane from '../../../Website Image/insurance.jpeg';
+import fitnessandwell from '../../../Website Image/fitnessandwell.jpeg';
 function KnowMorePage3() {
   return (
     <div className="min-h-screen flex flex-col">
       {/* Header */}
+      <VibeConnectNavbar1/>
       <header className="flex justify-between p-4 bg-transparent absolute top-0 w-full z-10">
         <div></div> {/* Placeholder for logo */}
-        <nav className="space-x-6 text-white">
+        {/* <nav className="space-x-6 text-white">
           <a href="#integrations" className="hover:underline">Integrations</a>
           <a href="#pricing" className="hover:underline">Pricing</a>
           <a href="#login" className="hover:underline">Log in</a>
           <a href="#login" className="hover:underline">Get Demo</a>
           <a href="#demo" className="bg-blue-600 text-white py-2 px-4 rounded-full hover:bg-blue-500">Contact Us</a>
-        </nav>
+        </nav> */}
       </header>
 
       {/* Main section */}
@@ -45,7 +50,7 @@ function KnowMorePage3() {
       {/* <div className="flex justify-center text-base font-semibold relative top-44">
       <p className="text-gray-800">The Most Employee Centric and Customer Teams are using our tool VIBE to drive experience.</p>
       </div> */}
-      <div className="relative top-18 font-serif text-gray-800 p-8">
+      <div className="relative top-18 font-serif text-gray-800 p-8 px-20">
      
       
      
@@ -70,7 +75,7 @@ function KnowMorePage3() {
           <img
             src={permit}
             alt="AI Automation"
-            className=" h-96 w-3/4"
+            className=" h-full w-3/4"
             // style={{ transform: "rotate(5deg)" }}
           />
         </div>
@@ -91,9 +96,9 @@ function KnowMorePage3() {
         {/* Image */}
         <div className="lg:w-1/2 flex justify-center ">
           <img
-            src={permit}
+            src={insurane}
             alt="AI Automation"
-            className=" h-96 w-3/4"
+            // className=" h-96 w-3/4"
             // style={{ transform: "rotate(5deg)" }}
           />
         </div>
@@ -122,7 +127,7 @@ function KnowMorePage3() {
           <img
             src={reporting}
             alt="Team Taskforce"
-            className=" h-96 w-3/4"
+            // className=" h-96 w-3/4"
             // style={{ transform: "rotate(-5deg)" }}
           />
         </div>
@@ -142,9 +147,9 @@ function KnowMorePage3() {
         {/* Image */}
         <div className="lg:w-1/2 flex justify-center ">
           <img
-            src={permit}
-            alt="AI Automation"
-            className=" h-96 w-3/4"
+            src={worklifebalance}
+            // alt="AI Automation"
+            // className=" h-96 w-3/4"
             // style={{ transform: "rotate(5deg)" }}
           />
         </div>
@@ -170,9 +175,9 @@ function KnowMorePage3() {
         {/* Image */}
         <div className="lg:w-1/2 flex justify-center ">
           <img
-            src={reporting}
+            src={fitnessandwell}
             alt="Team Taskforce"
-            className=" h-96 w-3/4"
+            // className=" h-96 w-3/4"
             // style={{ transform: "rotate(-5deg)" }}
           />
         </div>
@@ -183,9 +188,9 @@ function KnowMorePage3() {
      
 
       {/* Call to Action Section */}
-      <div className="relative top-10 flex flex-col justify-center items-center py-20 bg-gradient-to-br from-[#662B96] to-[#0B205B] p-8 ">
+      <div className=" flex flex-col justify-center items-center py-10 bg-gradient-to-br from-[#662B96] to-[#0B205B]  ">
         <h1 className="text-3xl md:text-4xl font-bold text-white text-center">
-          Ready to reach product management mastery?
+        Vibe Connect: Your All-in-One Command Center 
         </h1>
         <button className="mt-6 bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition">
           Get a demo
@@ -199,8 +204,8 @@ function KnowMorePage3() {
         </div>
       </div>
 
-   
-   
+   <div className="mt-4">
+   <VibeConnectFooter/></div>
     </div>
   );
 }

@@ -68,11 +68,11 @@ function AssetWebPage() {
 
         </div>
         {/* Image */}
-        <div className="lg:w-1/2 flex justify-center px-10">
+        <div className="lg:w-1/2 flex justify-center ">
           <img
             src={asset}
             alt="AI Automation"
-            className=" h-96 w-full p-4"
+            // className=" h-96 w-full p-4"
             // style={{ transform: "rotate(-5deg)" }}
           />
         </div>

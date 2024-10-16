@@ -15,6 +15,7 @@ import reportingnew from '../../../Website Image/document2.jpeg';
 import knowledgenew from '../../../Website Image/Knowledge2.jpeg';
 import purchasenew from '../../../Website Image/purchase2.jpeg';
 import VibeConnectNavbar1 from "./VibeConnectNavbar1";
+import VibeConnectFooter from "./VibeConnectFooter";
 
 function KnowMorePage() {
   return (
@@ -56,11 +57,11 @@ function KnowMorePage() {
       {/* <div className="flex justify-center text-base font-semibold relative top-64">
       <p className="text-gray-800">The Most Employee Centric and Customer Teams are using our tool VIBE to drive experience.</p>
       </div> */}
-      <div className=" relative top-10 text-gray-800 font-serif px-20 ">
+      <div className=" relative top-2 text-gray-800 font-serif px-20 ">
       {/* First Section */}
       {/* <h1 className="text-4xl font-bold font-serif leading-relaxed text-gray-800 mb-2">Management & Compliance </h1> */}
 {/* <p className="text-xl  mb-4 text-justify font-serif w-1/2 leading-relaxed ">Vibe Connect’s Compliance Tracker helps you stay ahead of regulatory requirements by continuously monitoring and updating compliance standards. The system automatically tracks updates in regulations, flags any potential risks, and keeps all your compliance documents organized and accessible.</p> */}
-      <div className="flex flex-col gap-8 lg:flex-row justify-between  mb-12">
+      <div className="flex flex-col gap-8 lg:flex-row items-center justify-between  mb-12">
         {/* Content */}
         <div className="lg:w-1/2 mb-8 lg:mb-0">
         <h3 className="text-3xl font-bold mb-2 font-serif leading-relaxed text-gray-800">Compliance & Tracking</h3>
@@ -75,14 +76,14 @@ function KnowMorePage() {
           <img
             src={compliancenew}
             alt="AI Automation"
-            className=" h-64 w-3/4"
+            // className=" h-64 w-3/4"
             // style={{ transform: "rotate(5deg)" }}
           />
         </div>
       </div>
 
       {/* Second Section */}
-      <div className="flex flex-col gap-8 lg:flex-row-reverse justify-between  mb-12">
+      <div className="flex flex-col gap-8 lg:flex-row-reverse items-center justify-between  mb-12">
         {/* Content */}
         <div className="lg:w-1/2 mb-8 lg:mb-0">
         <h4 className="text-3xl font-bold  mb-2 text-gray-800">Audit Management</h4>
@@ -96,13 +97,13 @@ function KnowMorePage() {
           <img
             src={auditnew}
             alt="Team Taskforce"
-            className=" h-80 w-3/4"
+            // className=" h-80 w-3/4"
             // style={{ transform: "rotate(-5deg)" }}
           />
         </div>
       </div>
 
-      <div className="flex flex-col gap-8 lg:flex-row justify-between  mb-12">
+      <div className="flex flex-col gap-8 lg:flex-row items-center justify-between  mb-12">
         {/* Content */}
         <div className="lg:w-1/2 mb-8 lg:mb-0">
         <h3 className="text-3xl font-bold mb-2 ">Permit Tracking</h3>
@@ -118,13 +119,13 @@ function KnowMorePage() {
           <img
             src={permitnew}
             alt="AI Automation"
-            className=" h-64 w-3/4"
+            // className=" h-64 w-3/4"
             // style={{ transform: "rotate(5deg)" }}
           />
         </div>
       </div>
      
-      <div className="flex flex-col gap-8 lg:flex-row-reverse justify-between  mb-12">
+      <div className="flex flex-col gap-8 lg:flex-row-reverse items-center justify-between  mb-12">
         {/* Content */}
         <div className="lg:w-1/2 mb-8 lg:mb-0">
         <h3 className="text-3xl font-bold mb-2 ">Centralized Resource Hub</h3>
@@ -152,13 +153,13 @@ function KnowMorePage() {
           <img
             src={knowledgenew}
             alt="AI Automation"
-            className=" h-64 w-3/4"
+            // className=" h-64 w-3/4"
             // style={{ transform: "rotate(-5deg)" }}
           />
         </div>
       </div>
      
-      <div className="flex flex-col gap-8 lg:flex-row justify-between  mb-12">
+      <div className="flex flex-col gap-8 lg:flex-row items-center justify-between  mb-12">
         {/* Content */}
         <div className="lg:w-1/2 mb-8 lg:mb-0">
         <h3 className="text-3xl font-bold mb-2 ">Purchase Order Management </h3>
@@ -175,12 +176,12 @@ function KnowMorePage() {
           <img
             src={purchasenew}
             alt="AI Automation"
-            className=" h-72 w-3/4"
+            className=" h-full w-4/5 "
             // style={{ transform: "rotate(5deg)" }}
           />
         </div>
       </div>
-      <div className="flex flex-col gap-8 lg:flex-row-reverse justify-between  mb-12">
+      <div className="flex flex-col gap-8 lg:flex-row-reverse items-center justify-between  mb-12">
         {/* Content */}
         <div className="lg:w-1/2 mb-8 lg:mb-0">
         <h3 className="text-3xl font-bold mb-2 ">	Cost Management </h3>
@@ -197,14 +198,14 @@ function KnowMorePage() {
           <img
             src={cost}
             alt="AI Automation"
-            className=" h-72 w-3/4"
+            className=" h-full w-4/5"
             // style={{ transform: "rotate(-5deg)" }}
           />
         </div>
       </div>
       {/* <h1 className="text-4xl font-bold   mb-8">	Documentation & Reporting</h1> */}
     
-      <div className="flex flex-col gap-8 lg:flex-row justify-between  mb-12">
+      <div className="flex flex-col gap-8 lg:flex-row justify-between items-center mb-12">
         {/* Content */}
         <div className="lg:w-1/2 mb-8 lg:mb-0">
         <h3 className="text-3xl font-bold mb-2 ">	Document Management   </h3>
@@ -221,12 +222,12 @@ function KnowMorePage() {
           <img
             src={reportingnew}
             alt="AI Automation"
-            className=" h-72 w-3/4"
+            className=" h-full w-4/5"
             // style={{ transform: "rotate(5deg)" }}
           />
         </div>
       </div>
-      <div className="flex flex-col gap-8 lg:flex-row-reverse justify-between  mb-12">
+      <div className="flex flex-col gap-8 lg:flex-row-reverse justify-between items-center mb-12">
         {/* Content */}
         <div className="lg:w-1/2 mb-8 lg:mb-0">
         <h3 className="text-3xl font-bold mb-2 ">	Reporting  </h3>
@@ -243,7 +244,7 @@ function KnowMorePage() {
           <img
             src={reporting2}
             alt="AI Automation"
-            className=" h-72 w-3/4"
+            className=" h-full w-4/5"
             // style={{ transform: "rotate(-5deg)" }}
           />
         </div>
@@ -254,9 +255,9 @@ function KnowMorePage() {
      
 
       {/* Call to Action Section */}
-      <div className="relative top-10 flex flex-col justify-center items-center py-20 bg-gradient-to-r from-blue-500 to-purple-800 p-8 ">
+      <div className="py-10 flex flex-col justify-center items-center  bg-gradient-to-r from-blue-500 to-purple-800  ">
         <h1 className="text-3xl md:text-4xl font-bold text-white text-center">
-          Ready to reach product management mastery?
+        Vibe Connect: Your All-in-One Command Center 
         </h1>
         <button className="mt-6 bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition">
           Get a demo
@@ -270,8 +271,8 @@ function KnowMorePage() {
         </div>
       </div>
 
-   
-   
+   <div className="mt-4">
+   <VibeConnectFooter/></div>
     </div>
   );
 }
