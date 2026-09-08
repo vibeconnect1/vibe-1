@@ -19,6 +19,7 @@ import { getItemInLocalStorage } from "../../utils/localStorage";
 import toast from "react-hot-toast";
 import SiteHeader from "../../components/SiteHeader";
 import DisableEnableScheduleModal from "../../components/DisableEnableScheduleModal";
+import ScheduleStatusBadge from "../../components/ScheduleStatusBadge";
 
 const PPMActivity = () => {
   const [ppms, setPPms] = useState([]);
@@ -117,6 +118,9 @@ const PPMActivity = () => {
           <Link to={`/admin/copy-checklist/ppm/${row.id}`}>
             <FaCopy size={15} />
           </Link>
+          {/* Both shown when partially disabled (active schedule, some
+              occurrences hidden) — admin may want to disable more, or
+              bring the hidden ones back. */}
           {row.active === false ? (
             <button
               type="button"
@@ -126,13 +130,24 @@ const PPMActivity = () => {
               <FaCheckCircle size={15} className="text-green-600" />
             </button>
           ) : (
-            <button
-              type="button"
-              title="Disable Schedule"
-              onClick={() => setScheduleModal({ mode: "disable", checklist: row })}
-            >
-              <FaTimesCircle size={15} className="text-red-500" />
-            </button>
+            <>
+              {row.disabled_summary?.total > 0 && (
+                <button
+                  type="button"
+                  title="Enable Schedule"
+                  onClick={() => setScheduleModal({ mode: "enable", checklist: row })}
+                >
+                  <FaCheckCircle size={15} className="text-green-600" />
+                </button>
+              )}
+              <button
+                type="button"
+                title="Disable Schedule"
+                onClick={() => setScheduleModal({ mode: "disable", checklist: row })}
+              >
+                <FaTimesCircle size={15} className="text-red-500" />
+              </button>
+            </>
           )}
         </div>
       ),
@@ -145,12 +160,7 @@ const PPMActivity = () => {
     },
     {
       name: "Status",
-      selector: (row) =>
-        row.active === false ? (
-          <span className="text-red-500 font-medium">Disabled</span>
-        ) : (
-          <span className="text-green-600 font-medium">Active</span>
-        ),
+      selector: (row) => <ScheduleStatusBadge row={row} />,
       sortable: true,
     },
     {

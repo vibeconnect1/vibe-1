@@ -15,6 +15,7 @@ import {
   getChecklistGroups,
 } from "../api";
 import DisableEnableScheduleModal from "../components/DisableEnableScheduleModal";
+import ScheduleStatusBadge from "../components/ScheduleStatusBadge";
 import Table from "../components/table/Table";
 import { BiEdit } from "react-icons/bi";
 import { MdClose, MdDeleteForever, MdFileDownload } from "react-icons/md";
@@ -207,12 +208,7 @@ const Checklist = () => {
     { name: "End Date", selector: (row) => row.end_date, sortable: true },
     {
       name: "Status",
-      selector: (row) =>
-        row.active === false ? (
-          <span className="text-red-500 font-medium">Disabled</span>
-        ) : (
-          <span className="text-green-600 font-medium">Active</span>
-        ),
+      selector: (row) => <ScheduleStatusBadge row={row} />,
       sortable: true,
     },
     {
@@ -284,7 +280,9 @@ const Checklist = () => {
         <FaCopy size={15} />
       </Link>
 
-      {/* DISABLE / ENABLE SCHEDULE */}
+      {/* DISABLE / ENABLE SCHEDULE — both shown when partially disabled
+          (active schedule, some occurrences hidden), since the admin may
+          want to disable more or bring the hidden ones back. */}
       {row.active === false ? (
         <button
           type="button"
@@ -294,6 +292,16 @@ const Checklist = () => {
           <FaCheckCircle size={15} className="text-green-600" />
         </button>
       ) : (
+        <>
+        {row.disabled_summary?.total > 0 && (
+          <button
+            type="button"
+            title="Enable Schedule"
+            onClick={() => setScheduleModal({ mode: "enable", checklist: row })}
+          >
+            <FaCheckCircle size={15} className="text-green-600" />
+          </button>
+        )}
         <button
           type="button"
           title="Disable Schedule"
@@ -301,6 +309,7 @@ const Checklist = () => {
         >
           <FaTimesCircle size={15} className="text-red-500" />
         </button>
+        </>
       )}
 
     </div>
