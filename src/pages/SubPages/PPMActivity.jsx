@@ -6,7 +6,8 @@ import {
   getAssetPPMList,
   getVibeBackground,
 } from "../../api";
-import { FaCheckCircle, FaCopy, FaDownload, FaTimesCircle } from "react-icons/fa";
+import { FaCheckCircle, FaCopy, FaDownload } from "react-icons/fa";
+import Switch from "../../Buttons/Switch";
 import { BiEdit } from "react-icons/bi";
 import Table from "../../components/table/Table";
 import { Link } from "react-router-dom";
@@ -118,37 +119,35 @@ const PPMActivity = () => {
           <Link to={`/admin/copy-checklist/ppm/${row.id}`}>
             <FaCopy size={15} />
           </Link>
-          {/* Both shown when partially disabled (active schedule, some
-              occurrences hidden) — admin may want to disable more, or
-              bring the hidden ones back. */}
-          {row.active === false ? (
-            <button
-              type="button"
-              title="Enable Schedule"
-              onClick={() => setScheduleModal({ mode: "enable", checklist: row })}
-            >
-              <FaCheckCircle size={15} className="text-green-600" />
-            </button>
-          ) : (
-            <>
-              {row.disabled_summary?.total > 0 && (
-                <button
-                  type="button"
-                  title="Enable Schedule"
-                  onClick={() => setScheduleModal({ mode: "enable", checklist: row })}
-                >
-                  <FaCheckCircle size={15} className="text-green-600" />
-                </button>
-              )}
+          {/* DISABLE / ENABLE SCHEDULE — a toggle rather than a cross icon;
+              on = active, off = fully disabled ("All"). Clicking opens the
+              scope-picker modal instead of acting immediately. The extra
+              checkmark only appears when partially disabled (schedule
+              still active, some occurrences hidden), so the admin can
+              bring just the hidden subset back without a full re-enable. */}
+          <div
+            className="flex items-center gap-2"
+            title={row.active === false ? "Enable Schedule" : "Disable Schedule"}
+          >
+            <Switch
+              checked={row.active !== false}
+              onChange={() =>
+                setScheduleModal({
+                  mode: row.active === false ? "enable" : "disable",
+                  checklist: row,
+                })
+              }
+            />
+            {row.active !== false && row.disabled_summary?.total > 0 && (
               <button
                 type="button"
-                title="Disable Schedule"
-                onClick={() => setScheduleModal({ mode: "disable", checklist: row })}
+                title="Enable hidden occurrences"
+                onClick={() => setScheduleModal({ mode: "enable", checklist: row })}
               >
-                <FaTimesCircle size={15} className="text-red-500" />
+                <FaCheckCircle size={15} className="text-green-600" />
               </button>
-            </>
-          )}
+            )}
+          </div>
         </div>
       ),
     },
