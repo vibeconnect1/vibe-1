@@ -608,35 +608,49 @@ const Booking = () => {
     () => getItemInLocalStorage("SITEID")
   );
 
-  // Fetch bookings and facility setup from API
+  // Bookings — reload on page / search / site change. The table renders as
+  // soon as these arrive; facility name + slot time fill in from the
+  // separately-loaded facility list below.
   const loadBookings = async (pageNumber = page, search = searchText) => {
     try {
       setLoading(true);
       setError(null);
 
-      const response = await getAmenitiesBooking(pageNumber, perPage, 47, search);
-      console.log("Page:", pageNumber);
-      console.log("Fetching page:", pageNumber);
-      console.log("Response:", response.data);
-
+      const response = await getAmenitiesBooking(
+        pageNumber,
+        perPage,
+        activeSiteId || 47,
+        search,
+      );
       setBookings(response.data.amenity_bookings || []);
       setTotalRows(response.data.total_count || 0);
-
-      const facilityResponse = await getFacitilitySetup();
-      setBookingFacility(facilityResponse?.data?.amenities || []);
-
-      setLoading(false);
     } catch (err) {
-      console.error("Error fetching data:", err);
-      setError(`Failed to fetch data: ${err.message || err}`);
+      console.error("Error fetching bookings:", err);
+      setError(`Failed to fetch bookings: ${err.message || err}`);
+    } finally {
       setLoading(false);
     }
   };
 
-  // Fetch bookings whenever page, search or site changes
+  // Facilities — fetched once per site, not on every page/search. Only used
+  // to enrich each booking row (name, slot time); a 270 KB payload we don't
+  // want to refetch on every keystroke.
+  const loadFacilities = async () => {
+    try {
+      const facilityResponse = await getFacitilitySetup();
+      setBookingFacility(facilityResponse?.data?.amenities || []);
+    } catch (err) {
+      console.error("Error fetching facilities:", err);
+    }
+  };
+
   useEffect(() => {
     loadBookings(page, searchText);
   }, [page, searchText, activeSiteId]); // ✅ re-fetch when site changes
+
+  useEffect(() => {
+    loadFacilities();
+  }, [activeSiteId]);
 
   // Combine booking data with facility info
   const combinedData = bookings.map((booking) => {
