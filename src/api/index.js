@@ -2448,7 +2448,8 @@ export const editStaffDetails = async (id, data) =>
 export const amenityInvoicePdf = async (id) => axiosInstance.get(`/amenity_bookings/${id}/invoice_pdf.json`, {
   params: {
     token: token
-  }
+  },
+  responseType: "blob", // binary PDF — without this axios parses it as JSON and corrupts it
 })
 
 export const postStaff = async (data) =>
