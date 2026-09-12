@@ -25,7 +25,7 @@ const BookingDetails = () => {
   const [formData, setFormData] = useState({
     resource_id: id,
     resource_type: "AmenityBooking",
-    // total_amount: "",
+    total_amount: "",
     paid_amount: "",
     user_id: "",
     payment_method: "",
@@ -73,29 +73,28 @@ const BookingDetails = () => {
   }, [id]);
 
   const postPaymentBooking = async () => {
-    if (!formData.payment_method || !formData.paid_amount) {
-      toast.error("Payment Type and amount are mandatory!");
+    if (!formData.payment_method || !formData.paid_amount || !formData.total_amount) {
+      toast.error("Total amount, payment type and paid amount are mandatory!");
       return;
     }
 
-    // Validate that the payable amount matches the paid amount
+    // Validate against the total amount entered/confirmed for this booking
+    // (not bookingDetails.amount — that's blank for "Pay on Facility"
+    // bookings, where the amount is only decided here at capture time).
     if (
-      parseFloat(formData.paid_amount) !== parseFloat(bookingDetails.amount)
+      parseFloat(formData.paid_amount) !== parseFloat(formData.total_amount)
     ) {
-      toast.error("Paid amount must equal the payable amount!");
+      toast.error("Paid amount must equal the total amount!");
       return;
     }
 
     try {
       const postData = new FormData();
 
-      // Append all form data fields
+      // Append all form data fields (includes total_amount and paid_amount)
       Object.keys(formData).forEach((key) =>
         postData.append(`payment[${key}]`, formData[key]),
       );
-
-      // Append the total amount (payable amount) to the request
-      postData.append("payment[total_amount]", bookingDetails.amount);
 
       // Post payment data
       const response = await postPaymentBookings(postData);
@@ -299,7 +298,17 @@ const handleInvoice = async () => {
                   <button
                     className="rounded-md text-white p-2 w-[150px] cursor-pointer"
                     style={{ background: themeColor }}
-                    onClick={() => setShowModal(true)}
+                    onClick={() => {
+                      // Pre-fill from the booking's amount when it has one
+                      // (fixed-price facilities); otherwise leave it blank
+                      // for "Pay on Facility" bookings where the admin
+                      // enters the agreed amount here at capture time.
+                      setFormData((prev) => ({
+                        ...prev,
+                        total_amount: bookingDetails.amount || "",
+                      }));
+                      setShowModal(true);
+                    }}
                   >
                     Capture Payment
                   </button>
@@ -376,15 +385,15 @@ const handleInvoice = async () => {
                       className="border p-2 rounded-md w-full"
                     /> */}
                     <label>
-                      Total Amount
+                      Total Amount{" "}
+                      <label className="text-red-500 font-semibold">*</label>
                       <input
                         type="text"
                         name="total_amount"
                         placeholder="Total Amount"
-                        value={formData.total_amount || bookingDetails.amount} // Use formData.total_amount, fallback to bookingDetails.amount
+                        value={formData.total_amount}
                         onChange={handleInputChange}
-                        className="border p-2 bg-gray-100 rounded-md w-full"
-                        disabled // This will disable the input field
+                        className="border p-2 rounded-md w-full"
                       />
                     </label>
 

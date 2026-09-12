@@ -32,6 +32,7 @@ const FacilityBooking = () => {
   const [slots, setSlots] = useState([]);
   const [blockedDates, setBlockedDates] = useState([]);
   const [isOpen, setIsOpen] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [isTermOpen, setIsTermOpen] = useState(false);
   const [time, setTime] = useState("");
   const [date, setDate] = useState(formattedDate);
@@ -405,6 +406,7 @@ const FacilityBooking = () => {
 
   const postBookFacility = async () => {
     // const toastId = toast.loading("Facility Booking, please wait...");
+    if (isSubmitting) return; // guard against duplicate bookings from a double-click/second tap while the first submit is still in flight
 
     const postData = new FormData();
     const today = new Date();
@@ -447,6 +449,7 @@ const FacilityBooking = () => {
     }
 
     try {
+      setIsSubmitting(true);
       postData.append("amenity_booking[site_id]", formData.site_id || "");
       postData.append("amenity_booking[user_id]", formData.user_id || "");
       postData.append("amenity_booking[amenity_id]", formData.amenity_id || "");
@@ -502,6 +505,8 @@ const FacilityBooking = () => {
       console.error("Error in booking:", error);
       // alert("Error in booking. Please try again.", error);
       // toast.error("Booking limit exhausted! for this week");
+    } finally {
+      setIsSubmitting(false);
     }
   };
   // console.log("uuu", units);
@@ -1105,9 +1110,10 @@ const FacilityBooking = () => {
               </button>
               <button
                 onClick={postBookFacility}
-                className="p-2 px-4 flex items-center gap-2 bg-green-400 text-white rounded-md font-medium transition-all duration-300"
+                disabled={isSubmitting}
+                className="p-2 px-4 flex items-center gap-2 bg-green-400 text-white rounded-md font-medium transition-all duration-300 disabled:opacity-60 disabled:cursor-not-allowed"
               >
-                <FaCheck /> Submit
+                <FaCheck /> {isSubmitting ? "Submitting..." : "Submit"}
               </button>
             </div>
 
